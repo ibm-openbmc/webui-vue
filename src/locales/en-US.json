@@ -145,7 +145,7 @@
     "network": "Network",
     "overview": "Overview",
     "pageNotFound": "Page not found",
-    "postCodeLogs": "POST code logs",
+    "postCodeLogs": "Progress logs",
     "powerRestorePolicy": "Power restore policy",
     "profileSettings": "Profile settings",
     "rebootBmc": "Reboot BMC",
@@ -605,7 +605,7 @@
     "table": {
       "created": "Created",
       "bootCount": "Boot count",
-      "postCode": "POST code",
+      "postCode": "Code",
       "searchLogs": "Search logs",
       "timeStampOffset": "Time stamp offset"
     }

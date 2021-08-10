@@ -23,7 +23,7 @@ const PostCodeLogsStore = {
               date: new Date(Created),
               bootCount: MessageArgs[0],
               timeStampOffset: MessageArgs[1],
-              postCode: MessageArgs[2],
+              postCode: MessageArgs[3],
               uri: AdditionalDataURI,
             };
           });
