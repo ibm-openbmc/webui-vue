@@ -419,6 +419,7 @@
       "serviceEnabled": "Service enabled",
       "serviceEntryPointUuid": "Service entry point UUID",
       "sparePartNumber": "Spare part number",
+      "speedPercent": "Speed percent",
       "statusHealthRollup": "Status (Health rollup)",
       "statusState": "Status (State)",
       "subModel": "Sub model",
