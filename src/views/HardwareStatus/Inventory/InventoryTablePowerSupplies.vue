@@ -50,6 +50,20 @@
         {{ value }}
       </template>
 
+      <!-- Toggle identify LED -->
+      <template #cell(identifyLed)="row">
+        <b-form-checkbox
+          v-model="row.item.identifyLed"
+          name="switch"
+          switch
+          @change="toggleIdentifyLedValue(row.item)"
+        >
+          <span v-if="row.item.identifyLed">
+            {{ $t('global.status.on') }}
+          </span>
+          <span v-else> {{ $t('global.status.off') }} </span>
+        </b-form-checkbox>
+      </template>
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -83,9 +97,6 @@
                 <!-- Efficiency percent -->
                 <dt>{{ $t('pageInventory.table.efficiencyPercent') }}:</dt>
                 <dd>{{ tableFormatter(item.efficiencyPercent) }}</dd>
-                <!-- Power input watts -->
-                <dt>{{ $t('pageInventory.table.powerInputWatts') }}:</dt>
-                <dd>{{ tableFormatter(item.powerInputWatts) }}</dd>
               </dl>
             </b-col>
           </b-row>
@@ -199,6 +210,15 @@ export default {
     },
     onFiltered(filteredItems) {
       this.searchTotalFilteredRows = filteredItems.length;
+    },
+    toggleIdentifyLedValue(row) {
+      this.$store
+        .dispatch('powerSupply/updateIdentifyLedValue', {
+          uri: row.uri,
+          identifyLed: row.identifyLed,
+        })
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message));
     },
   },
 };
