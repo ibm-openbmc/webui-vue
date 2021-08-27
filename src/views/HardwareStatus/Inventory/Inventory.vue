@@ -47,7 +47,6 @@
 
 <script>
 import PageTitle from '@/components/Global/PageTitle';
-import ServiceIndicator from './InventoryServiceIndicator';
 import TableSystem from './InventoryTableSystem';
 import TablePowerSupplies from './InventoryTablePowerSupplies';
 import TableDimmSlot from './InventoryTableDimmSlot';
@@ -57,6 +56,7 @@ import TableChassis from './InventoryTableChassis';
 import TableProcessors from './InventoryTableProcessors';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import PageSection from '@/components/Global/PageSection';
+import ServiceIndicator from './InventoryServiceIndicator';
 import JumpLink16 from '@carbon/icons-vue/es/jump-link/16';
 import JumpLinkMixin from '@/components/Mixins/JumpLinkMixin';
 import { chunk } from 'lodash';
