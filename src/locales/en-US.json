@@ -376,7 +376,10 @@
     "system": "System",
     "systemIndicator": {
       "powerStatus": "Power status",
+      "attentionLed": "System attention LED",
       "identifyLed": "System identify LED",
+      "lampTest": "Lamp test",
+      "tooltipInfo": "Changes all indicators controlled by the BMC and hypervisor to the ON state for four minutes.",
       "sectionTitle": "System attention indicators"
     },
     "table": {
@@ -430,7 +433,9 @@
     },
     "toast": {
       "errorDisableIdentifyLed": "Error disabling Identify LED.",
-      "errorEnableIdentifyLed": "Error enabling Identify LED."
+      "errorEnableIdentifyLed": "Error enabling Identify LED.",
+      "errorDisableLampTest": "Error disabling Lamp test.",
+      "errorEnableLampTest": "Error enabling Lamp test."
     }
   },
   "pageKvm": {
