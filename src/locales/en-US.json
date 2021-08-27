@@ -131,7 +131,7 @@
   "appPageTitle": {
     "changePassword": "Change password",
     "power": "Power",
-    "sessions": "Sessions",
+    "sessions": "HMC and user sessions",
     "dateTime": "Date and time",
     "dumps": "Dumps",
     "eventLogs": "Event logs",
