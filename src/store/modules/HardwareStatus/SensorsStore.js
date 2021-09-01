@@ -15,23 +15,20 @@ const SensorsStore = {
     },
   },
   actions: {
-    async getAllSensors({ dispatch }) {
-      const collection = await dispatch('getChassisCollection');
-      if (!collection) return;
-      const promises = collection.reduce((acc, id) => {
-        acc.push(dispatch('getSensors', id));
-        acc.push(dispatch('getThermalSensors', id));
-        acc.push(dispatch('getPowerSensors', id));
-        return acc;
-      }, []);
-      return await api.all(promises);
-    },
     async getChassisCollection() {
       return await api
-        .get('/redfish/v1/Chassis')
+        .get('/redfish/v1/')
+        .then((response) => api.get(response.data.Chassis['@odata.id']))
         .then(({ data: { Members } }) =>
           Members.map((member) => member['@odata.id'])
         )
+        .catch((error) => console.log(error));
+    },
+    async getAllSensors({ dispatch }) {
+      const collection = await dispatch('getChassisCollection');
+      if (!collection) return;
+      return await api
+        .all(collection.map((chassis) => dispatch('getSensors', chassis)))
         .catch((error) => console.log(error));
     },
     async getSensors({ commit }, id) {
