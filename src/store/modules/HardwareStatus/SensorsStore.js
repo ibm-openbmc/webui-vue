@@ -15,23 +15,20 @@ const SensorsStore = {
     },
   },
   actions: {
-    async getAllSensors({ dispatch }) {
-      const collection = await dispatch('getChassisCollection');
-      if (!collection) return;
-      const promises = collection.reduce((acc, id) => {
-        acc.push(dispatch('getSensors', id));
-        acc.push(dispatch('getThermalSensors', id));
-        acc.push(dispatch('getPowerSensors', id));
-        return acc;
-      }, []);
-      return await api.all(promises);
-    },
     async getChassisCollection() {
       return await api
-        .get('/redfish/v1/Chassis')
+        .get('/redfish/v1/')
+        .then((response) => api.get(response.data.Chassis['@odata.id']))
         .then(({ data: { Members } }) =>
           Members.map((member) => member['@odata.id'])
         )
+        .catch((error) => console.log(error));
+    },
+    async getAllSensors({ dispatch }) {
+      const collection = await dispatch('getChassisCollection');
+      if (!collection) return;
+      return await api
+        .all(collection.map((chassis) => dispatch('getSensors', chassis)))
         .catch((error) => console.log(error));
     },
     async getSensors({ commit }, id) {
@@ -63,59 +60,6 @@ const SensorsStore = {
           commit('setSensors', sensorData);
         })
       );
-    },
-    async getThermalSensors({ commit }, id) {
-      return await api
-        .get(`${id}/Thermal`)
-        .then(({ data: { Fans = [], Temperatures = [] } }) => {
-          const sensorData = [];
-          Fans.forEach((sensor) => {
-            sensorData.push({
-              name: sensor.Name,
-              status: sensor.Status.Health,
-              currentValue: sensor.Reading,
-              lowerCaution: sensor.LowerThresholdNonCritical,
-              upperCaution: sensor.UpperThresholdNonCritical,
-              lowerCritical: sensor.LowerThresholdCritical,
-              upperCritical: sensor.UpperThresholdCritical,
-              units: sensor.ReadingUnits,
-            });
-          });
-          Temperatures.forEach((sensor) => {
-            sensorData.push({
-              name: sensor.Name,
-              status: sensor.Status.Health,
-              currentValue: sensor.ReadingCelsius,
-              lowerCaution: sensor.LowerThresholdNonCritical,
-              upperCaution: sensor.UpperThresholdNonCritical,
-              lowerCritical: sensor.LowerThresholdCritical,
-              upperCritical: sensor.UpperThresholdCritical,
-              units: '℃',
-            });
-          });
-          commit('setSensors', sensorData);
-        })
-        .catch((error) => console.log(error));
-    },
-    async getPowerSensors({ commit }, id) {
-      return await api
-        .get(`${id}/Power`)
-        .then(({ data: { Voltages = [] } }) => {
-          const sensorData = Voltages.map((sensor) => {
-            return {
-              name: sensor.Name,
-              status: sensor.Status.Health,
-              currentValue: sensor.ReadingVolts,
-              lowerCaution: sensor.LowerThresholdNonCritical,
-              upperCaution: sensor.UpperThresholdNonCritical,
-              lowerCritical: sensor.LowerThresholdCritical,
-              upperCritical: sensor.UpperThresholdCritical,
-              units: 'Volts',
-            };
-          });
-          commit('setSensors', sensorData);
-        })
-        .catch((error) => console.log(error));
     },
   },
 };

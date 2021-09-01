@@ -47,7 +47,10 @@
           show-empty
           :no-border-collapse="true"
           :items="filteredSensors"
+          :busy="isBusy"
           :fields="fields"
+          :per-page="perPage"
+          :current-page="currentPage"
           :sort-desc="true"
           :sort-compare="sortCompare"
           :filter="searchFilter"
@@ -96,6 +99,32 @@
         </b-table>
       </b-col>
     </b-row>
+    <!-- Table pagination -->
+    <b-row>
+      <b-col sm="6">
+        <b-form-group
+          class="table-pagination-select"
+          :label="$t('global.table.itemsPerPage')"
+          label-for="pagination-items-per-page"
+        >
+          <b-form-select
+            id="pagination-items-per-page"
+            v-model="perPage"
+            :options="itemsPerPageOptions"
+          />
+        </b-form-group>
+      </b-col>
+      <b-col sm="6">
+        <b-pagination
+          v-model="currentPage"
+          first-number
+          last-number
+          :per-page="perPage"
+          :total-rows="getTotalRowCount(filteredRows)"
+          aria-controls="table-sensors"
+        />
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -107,7 +136,11 @@ import TableFilter from '@/components/Global/TableFilter';
 import TableToolbar from '@/components/Global/TableToolbar';
 import TableToolbarExport from '@/components/Global/TableToolbarExport';
 import TableCellCount from '@/components/Global/TableCellCount';
-
+import BVPaginationMixin, {
+  currentPage,
+  perPage,
+  itemsPerPageOptions,
+} from '@/components/Mixins/BVPaginationMixin';
 import BVTableSelectableMixin, {
   selectedRows,
   tableHeaderCheckboxModel,
@@ -120,7 +153,6 @@ import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import SearchFilterMixin, {
   searchFilter,
 } from '@/components/Mixins/SearchFilterMixin';
-
 export default {
   name: 'Sensors',
   components: {
@@ -133,6 +165,7 @@ export default {
     TableToolbarExport,
   },
   mixins: [
+    BVPaginationMixin,
     TableFilterMixin,
     BVTableSelectableMixin,
     LoadingBarMixin,
@@ -173,7 +206,6 @@ export default {
           formatter: this.tableFormatter,
           label: this.$t('pageSensors.table.lowerWarning'),
         },
-
         {
           key: 'currentValue',
           formatter: this.tableFormatter,
@@ -198,6 +230,10 @@ export default {
         },
       ],
       activeFilters: [],
+      currentPage: currentPage,
+      itemsPerPageOptions: itemsPerPageOptions,
+      isBusy: false,
+      perPage: perPage,
       searchFilter: searchFilter,
       searchTotalFilteredRows: 0,
       selectedRows: selectedRows,
@@ -222,9 +258,16 @@ export default {
     this.startLoader();
     this.$store
       .dispatch('sensors/getAllSensors')
-      .finally(() => this.endLoader());
+      .then(this.toggleBusy())
+      .finally(() => {
+        this.endLoader();
+        this.toggleBusy();
+      });
   },
   methods: {
+    toggleBusy() {
+      this.isBusy = !this.isBusy;
+    },
     sortCompare(a, b, key) {
       if (key === 'status') {
         return this.sortStatus(a, b, key);
