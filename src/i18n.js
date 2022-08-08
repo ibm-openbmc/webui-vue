@@ -12,7 +12,18 @@ function loadLocaleMessages() {
   });
   return messages;
 }
-const supportedLocales = ['en-US'];
+const supportedLocales = [
+  'de',
+  'en-US',
+  'es',
+  'fr',
+  'it',
+  'ja',
+  'ko',
+  'pt-BR',
+  'zh-CN',
+  'zh-TW',
+];
 const storedLanguage = window.localStorage.getItem('storedLanguage');
 const defaultLocale = supportedLocales.includes(storedLanguage)
   ? storedLanguage
