@@ -1,0 +1,1900 @@
+{
+  "global": {
+    "action": {
+      "activate": "Aktivieren",
+      "add": "Hinzufügen",
+      "cancel": "Abbrechen",
+      "clearAll": "Alles löschen",
+      "confirm": "Bestätigen",
+      "copy": "Kopieren",
+      "delete": "Löschen",
+      "deleteAll": "Alles löschen",
+      "disable": "Inaktivieren",
+      "download": "Herunterladen",
+      "downloadAll": "Alles herunterladen",
+      "edit": "Bearbeiten",
+      "enable": "Aktivieren",
+      "export": "Export",
+      "exportAll": "Alles exportieren",
+      "filter": "Filter",
+      "openNewTab": "Auf einer neuen Registerkarte öffnen",
+      "refresh": "Aktualisieren",
+      "replace": "Ersetzen",
+      "reset": "Zurücksetzen",
+      "save": "Speichern",
+      "selected": "Ausgewählt"
+    },
+    "ariaLabel": {
+      "clearSearch": "Sucheingabe löschen",
+      "hidePassword": "Kennwort ausblenden",
+      "progressBar": "Fortschrittsanzeiger für das Laden von Seiten",
+      "scrollToTop": "Zum Seitenanfang blättern",
+      "showPassword": "Kennwort im Klartext anzeigen. Hinweis: Ihr Kennwort wird dadurch auf dem Bildschirm angezeigt.",
+      "tooltip": "QuickInfo"
+    },
+    "calendar": {
+      "dateFormat": "JJJJ-MM-TT",
+      "selectDate": "Datum auswählen",
+      "useCursorKeysToNavigateCalendarDates": "Cursortasten zum Navigieren in Kalenderdaten verwenden"
+    },
+    "fileUpload": {
+      "browseText": "Datei hinzufügen",
+      "clearSelectedFile": "Ausgewählte Datei löschen"
+    },
+    "form": {
+      "dateMustBeAfter": "Datum muss nach dem %{date} liegen",
+      "dateMustBeBefore": "Datum muss vor dem %{date} liegen",
+      "fieldRequired": "Erforderliches Feld",
+      "invalidCharacterLength": "Ungültige Zeichenlänge",
+      "invalidFormat": "Ungültiges Format",
+      "invalidValue": "Ungültiger Wert",
+      "lengthMustBeBetween": "Länge muss zwischen %{min} - %{max} Zeichen liegen",
+      "mustBeAtLeast": "Muss mindestens %{value} sein",
+      "optional": "Optional",
+      "passwordsDoNotMatch": "Kennwörter stimmen nicht überein",
+      "required": "Erforderlich",
+      "search": "Suchen",
+      "selectAnOption": "Option auswählen",
+      "valueMustBeBetween": "Wert muss zwischen %{min} - %{max} liegen"
+    },
+    "passwordValidation": {
+      "title": "Kennwort:",
+      "message1": "1. Muss mindestens 8 Zeichen enthalten",
+      "message2": "2. Darf kein Palindrome sein",
+      "message3": "3. Darf den Benutzernamen für das Konto nicht enthalten",
+      "message4": "4. Darf keinen Wörterbucheintrag enthalten",
+      "message5": "5. Darf keine sequenziellen Zeichen enthalten",
+      "message6": "6. Darf bei Verwendung für IPMI maximal 20 Zeichen lang sein",
+      "message7": "7. Muss zwei beliebige Kleinbuchstaben, Großbuchstaben, Ziffern und andere Zeichen enthalten"
+    },
+    "status": {
+      "absent": "Fehlt",
+      "copied": "Kopiert",
+      "connected": "Verbunden",
+      "critical": "Kritisch",
+      "disabled": "Inaktiviert",
+      "disconnected": "Getrennt",
+      "enabled": "Aktiviert",
+      "error": "Fehler",
+      "informational": "Information",
+      "locked": "Gesperrt",
+      "nextReboot": "Änderungen werden beim nächsten Booten wirksam.",
+      "notAvailable": "Nicht verfügbar",
+      "off": "Aus",
+      "ok": "OK",
+      "on": "Ein",
+      "present": "Vorhanden",
+      "success": "Erfolgreich",
+      "warning": "Warnung"
+    },
+    "table": {
+      "collapseTableRow": "Tabellenzeile ausblenden",
+      "emptyMessage": "Keine Elemente verfügbar",
+      "emptySearchMessage": "Keine Elemente stimmen mit der Suchabfrage überein",
+      "expandTableRow": "Tabellenzeile einblenden",
+      "fromDate": "Ab Datum",
+      "items": "%{count} Elemente",
+      "itemsPerPage": "Elemente pro Seite",
+      "selectAll": "Alles auswählen",
+      "selectedItems": "%{filterCount} von %{count} Elementen",
+      "selectItem": "Artikel auswählen",
+      "toDate": "Bis Datum",
+      "viewAll": "Alle anzeigen"
+    },
+    "toast": {
+      "unAuthDescription": "Auf die versuchte Aktion kann über den angemeldeten Account nicht zugegriffen werden. Wenden Sie sich zum Überprüfen Ihrer Berechtigungen bzw. Ihrer Rolle an Ihren Systemadministrator.",
+      "unAuthTitle": "Nicht berechtigt"
+    }
+  },
+  "appHeader": {
+    "applicationHeader": "Anwendungsheader",
+    "health": "Allgemeinzustand",
+    "logOut": "Abmelden",
+    "power": "Netzstrom",
+    "profileSettings": "@:appPageTitle.profileSettings",
+    "refresh": "Aktualisieren",
+    "skipToContent": "Zum Inhalt springen",
+    "titleHideNavigation": "Navigation ausblenden",
+    "titleProfile": "Profilmenü anzeigen",
+    "titleRefresh": "Anwendungsdaten aktualisieren",
+    "titleShowNavigation": "Navigation anzeigen"
+  },
+  "appNavigation": {
+    "capacityOnDemand": "@:appPageTitle.capacityOnDemand",
+    "certificates": "@:appPageTitle.certificates",
+    "concurrentMaintenance": "@:appPageTitle.concurrentMaintenance",
+    "dateTime": "@:appPageTitle.dateTime",
+    "deconfigurationHardware": "@:appPageTitle.deconfigurationHardware",
+    "deconfigurationRecords": "@:appPageTitle.deconfigurationRecords",
+    "dumps": "@:appPageTitle.dumps",
+    "eventLogs": "@:appPageTitle.eventLogs",
+    "factoryReset": "@:appPageTitle.factoryReset",
+    "fieldCoreOverride": "@:appPageTitle.fieldCoreOverride",
+    "firmware": "@:appPageTitle.firmware",
+    "hardwareStatus": "Hardwarestatus",
+    "hostConsole": "@:appPageTitle.hostConsole",
+    "inventory": "@:appPageTitle.inventory",
+    "keyClear": "@:appPageTitle.keyClear",
+    "kvm": "@:appPageTitle.kvm",
+    "systemParameters": "@:appPageTitle.systemParameters",
+    "ldap": "@:appPageTitle.ldap",
+    "logs": "Protokolle",
+    "memory": "@:appPageTitle.memory",
+    "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
+    "operations": "Operationen",
+    "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
+    "policies": "@:appPageTitle.policies",
+    "postCodeLogs": "@:appPageTitle.postCodeLogs",
+    "power": "@:appPageTitle.power",
+    "powerRestorePolicy": "@:appPageTitle.powerRestorePolicy",
+    "primaryNavigation": "Primäre Navigation",
+    "rebootBmc": "@:appPageTitle.rebootBmc",
+    "resourceManagement": "Ressourcenmanagement",
+    "securityAndAccess": "Sicherheit und Zugriff",
+    "sensors": "@:appPageTitle.sensors",
+    "serverPowerOperations": "@:appPageTitle.serverPowerOperations",
+    "serviceLogin": "@:appPageTitle.serviceLogin",
+    "sessions": "@:appPageTitle.sessions",
+    "settings": "Einstellungen",
+    "snmpAlerts": "SNMP-Alerts",
+    "userManagement": "@:appPageTitle.userManagement",
+    "virtualMedia": "@:appPageTitle.virtualMedia"
+  },
+  "appPageTitle": {
+    "capacityOnDemand": "Capacity on Demand",
+    "certificates": "Zertifikate",
+    "changePassword": "Kennwort ändern",
+    "concurrentMaintenance": "Parallelwartung",
+    "dateTime": "Datum und Uhrzeit",
+    "deconfigurationHardware": "Aufhebung der Hardwarekonfiguration",
+    "deconfigurationRecords": "Dekonfiguration - Datensätze",
+    "dumps": "Speicherauszüge",
+    "eventLogs": "Ereignisprotokolle",
+    "factoryReset": "Auf Werkseinstellungen zurücksetzen",
+    "fieldCoreOverride": "Field Core Override (FCO)",
+    "firmware": "Firmware",
+    "hostConsole": "Hostkonsole",
+    "inventory": "Inventar und LEDs",
+    "keyClear": "Schlüssel löschen",
+    "kvm": "KVM",
+    "systemParameters": "Systemparameter",
+    "ldap": "LDAP",
+    "login": "Anmeldung",
+    "memory": "Hauptspeicher",
+    "network": "Netz",
+    "notices": "Bemerkungen",
+    "overview": "Übersicht",
+    "pageNotFound": "Seite nicht gefunden",
+    "pcieTopology": "PCIe-Hardwaretopologie",
+    "policies": "Richtlinien",
+    "postCodeLogs": "Fortschrittsprotokolle",
+    "postCodes": "Fortschrittsprotokolle",
+    "power": "Netzstrom",
+    "powerRestorePolicy": "Richtlinie für Wiederherstellung der Stromversorgung",
+    "profileSettings": "Profileinstellungen",
+    "rebootBmc": "BMC neu starten",
+    "sensors": "Sensoren",
+    "serverPowerOperations": "Ein-/Ausschaltoperationen für Server",
+    "serviceLogin": "Serviceanmeldekonsolen",
+    "sessions": "HMC und Benutzersitzungen",
+    "snmpAlerts": "SNMP-Alerts",
+    "userManagement": "Benutzermanagement",
+    "virtualMedia": "Virtueller Datenträger"
+  },
+  "pageCapacityOnDemand": {
+    "absent": "Fehlt",
+    "deferring": "Verzögern",
+    "disabled": "Inaktiviert",
+    "enabled": "Aktiviert",
+    "inTest": "Im Test",
+    "starting": "Wird gestartet",
+    "standbyOffline": "Standby offline",
+    "standbySpare": "Standby-Ersatzspeicher",
+    "unavailableOffline": "Offline nicht verfügbar",
+    "updating": "Aktualisierung wird durchgeführt",
+    "qualified": "Qualified",
+    "quiesced": "Im Quiescemodus",
+    "vetCapabilities": "VET-Funktionen",
+    "quickLinks": "Schnelle Links",
+    "activation": {
+      "alert": "PHYP muss sich im Standby-Modus befinden oder laufen, um aktiviert zu werden.",
+      "helperText": "Muss 34 Zeichen enthalten. Einen neuen Zugriffsschlüssel erhalten Sie hier: ",
+      "helperTextIps": "Um einen neuen Zugangsschlüssel zu erhalten, rufen Sie bitte die Kundenservice-Hotline 400-940-0860 an",
+      "placeholder": "Aktivierungscode eingeben",
+      "sectionTitle": "Aktivierung",
+      "srLabel": "Aktivierungscode",
+      "toast": {
+        "error": "Aktivierung von Capacity on Demand fehlgeschlagen.",
+        "success": "Aktivierung von Capacity on Demand erfolgreich."
+      }
+    },
+    "alert": {
+      "description": "Das System muss eingeschaltet sein.",
+      "title": "Änderungen auf Capacity on Demand-Aktivierung anwenden."
+    },
+    "orderInfo": {
+      "activatedResources": "Aktivierte Ressourcen",
+      "accessKeyInfo": "Informationen für Zugriffschlüssel",
+      "aixAccessKeyExpiration": "Ablauf des AIX-Zugriffsschlüssels:",
+      "entryCheck": "Eingangsprüfung",
+      "firmwareAccessKeyExpiration": "Ablauf des Firmwarezugriffsschlüssels:",
+      "memoryInfo": "Speicherdaten",
+      "memoryLicensed": "Lizenzierter Speicher:",
+      "memoryResourceId": "Speicherressourcen-ID:",
+      "memorySequenceNumber": "Speicherfolgenummer:",
+      "previousActivated": "Zuvor aktiviert:",
+      "processorInfo": "Prozessordaten",
+      "processorResourceId": "Prozessorressourcen-ID:",
+      "processorSequenceNumber": "Prozessorfolgenummer:",
+      "processorsLicensed": "Lizenzierte Prozessoren:",
+      "resourceId": "Ressourcen-ID:",
+      "sequenceNumber": "Folgenummer:",
+      "systemCodPublicKey": "Öffentlicher Schlüssel für System-COD",
+      "systemCodUniqueId": "Eindeutige ID für System-COD:",
+      "systemAnchor": "Systemanker:",
+      "systemInfo": "Systeminformationen",
+      "systemSerialNumber": "Seriennummer des Systems:",
+      "systemType": "Systemtyp:",
+      "title": "Bestellinformationen für bedarfsgesteuerte Dienstprogramme",
+      "description": {
+        "message": "Wenn diese Informationen nicht verfügbar sind oder weitere Informationen erforderlich sind, erstellen Sie einen Ressourcenspeicherauszug (mit einem bestimmten Ressourcenselektor) über die  ",
+        "link": "Seite 'Speicherauszüge'."
+      }
+    },
+    "setting": {
+      "aixAllowed": "AIX zulässig",
+      "aixDiagnostics": "AIX-Diagnose",
+      "activeMemoryExpansion": "Aktive Speichererweiterung",
+      "activeMemoryMirroring": "Aktive Speicherspiegelung",
+      "capi": "CAPI",
+      "interactiveCapacity": "IBMi 100 % interaktive Kapazität",
+      "ibmiPartitions": "IBMi-Partitionen zulässig",
+      "inmiPermitted": "IBMi mit Berechtigung zur Verwendung der nativen Ein-/Ausgabe",
+      "lparCreationAllowed": "LPAR-Erstellung zulässig",
+      "livePartitionMobility": "Live Partition Mobility",
+      "perPartition": "Mehr als 128 Prozessoren pro Partition",
+      "subprocessorPartitioning": "Subprozessor-Partitionierung",
+      "virtualIoServer": "Für virtuellen E/A-Server geeignet",
+      "virtualTiersAllowed": "Zulässige virtuelle Schichten"
+    },
+    "table": {
+      "bitCapabilityStatus": "Bitfunktionsstatus",
+      "setting": "Einstellung"
+    }
+  },
+  "pageCertificates": {
+    "addNewCertificate": "Neues Zertifikat hinzufügen",
+    "caCertificate": "CA-Zertifikat",
+    "deleteCertificate": "Zertifikat löschen",
+    "generateCsr": "Zertifikatssignieranforderung generieren",
+    "httpsCertificate": "HTTPS-Zertifikat",
+    "ldapCertificate": "LDAP-Zertifikat",
+    "replaceCertificate": "Zertifikat ersetzen",
+    "serviceLoginCertificate": "Zertifikat für Serviceanmeldung",
+    "alert": {
+      "certificateExpiredMessage": "%{certificate} ist abgelaufen. Ersetzen Sie das Zertifikat gegebenenfalls durch ein neues Zertifikat.",
+      "certificateExpiringMessage": "%{certificate} läuft bald ab. Ersetzen Sie das Zertifikat gegebenenfalls durch ein neues Zertifikat.",
+      "certificatesExpiredMessage": "Einige Zertifikate sind abgelaufen. Ersetzen Sie sie gegebenenfalls durch neue Zertifikate.",
+      "certificatesExpiringMessage": "Einige Zertifikate laufen bald ab. Ersetzen Sie sie gegebenenfalls durch neue Zertifikate."
+    },
+    "modal": {
+      "alternateName": "Alternativer Name",
+      "alternateNameHelperText": "Mehrere durch Leerzeichen getrennte alternative Namen hinzufügen",
+      "certificateFile": "Zertifikatsdatei",
+      "certificateSigningRequest": "Zertifikatssignieranforderung",
+      "certificateType": "Zertifikatstyp",
+      "challengePassword": "Kennwortprüffrage",
+      "city": "Ort",
+      "commonName": "Allgemeiner Name",
+      "companyName": "Firmenname",
+      "companyUnit": "Unternehmenseinheit",
+      "contactPerson": "Ansprechpartner",
+      "country": "Land/Region",
+      "deleteConfirmMessage": "Möchten Sie '%{certificate}' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "duplicateAlternateName": "Doppelter alternativer Name",
+      "emailAddress": "E-Mail-Adresse",
+      "generateACertificateSigningRequest": "Zertifikatssignieranforderung generieren",
+      "keyBitLength": "Bitlänge von Schlüssel",
+      "keyCurveId": "Kurven-ID des Schlüssels",
+      "keyPairAlgorithm": "Algorithmus für Schlüsselpaar",
+      "privateKey": "Privater Schlüssel",
+      "state": "Status"
+    },
+    "table": {
+      "certificate": "Zertifikat",
+      "issuedBy": "Ausgestellt von",
+      "issuedTo": "Ausgestellt für",
+      "validFrom": "Gültig ab",
+      "validUntil": "Gültig bis"
+    },
+    "toast": {
+      "errorAddCertificate": "Fehler beim Hinzufügen des Zertifikats.",
+      "errorDeleteCertificate": "Fehler beim Löschen des Zertifikats.",
+      "errorReplaceCertificate": "Fehler beim Ersetzen des Zertifikats.",
+      "successAddCertificate": "%{certificate} wurde erfolgreich hinzugefügt.",
+      "successDeleteCertificate": "%{certificate} wurde erfolgreich gelöscht.",
+      "successReplaceCertificate": "%{certificate} wurde erfolgreich ersetzt."
+    }
+  },
+  "pageChangePassword": {
+    "changePassword": "Kennwort ändern",
+    "changePasswordAlertMessage": "Das Kennwort ist abgelaufen und muss geändert werden.",
+    "changePasswordError": "Fehler beim Ändern des Kennworts.",
+    "confirmNewPassword": "Neues Kennwort bestätigen",
+    "goBack": "Zurück",
+    "newPassword": "Neues Kennwort",
+    "username": "Benutzername"
+  },
+  "pageDateTime": {
+    "alert": {
+      "link": "Profileinstellungen auf.",
+      "message": "Rufen Sie zum Ändern von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung die ",
+      "messageText": "Um die Anzeige von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung zu ändern, rufen Sie die Profileinstellungen auf.",
+      "messageNtp": "Wenn NTP ausgewählt ist, aber kein NTP-Server angegeben ist oder der angegebene NTP-Server nicht erreichbar ist, wird time.google.com verwendet."
+    },
+    "configureSettings": "Einstellungen konfigurieren",
+    "form": {
+      "date": "Datum",
+      "manual": "Manuell",
+      "time": {
+        "label": "24-Stunden-Format",
+        "timezone": "@:pageDateTime.form.time.label (%{timezone})"
+      },
+      "ntpServers": {
+        "server1": "Server 1",
+        "server2": "Server 2",
+        "server3": "Server 3"
+      },
+      "validators": {
+        "serverExists": "Serveradresse bereits vorhanden"
+      }
+    },
+    "toast": {
+      "errorSaveDateTime": "Fehler beim Speichern der Einstellungen für Datum und Uhrzeit.",
+      "successSaveDateTime": "Einstellungen für Datum und Uhrzeit wurden erfolgreich gespeichert."
+    }
+  },
+  "pageConcurrentMaintenance": {
+    "concurrentMaintenance": "Parallelwartung",
+    "opPanelBase": "Wartung des Bedienerkonsolensockels",
+    "opPanelLcd": "Wartung der LCD-Anzeige der Bedienerkonsole",
+    "tod": "Wartung der Uhrzeitbatterie",
+    "alert": {
+      "message": "Zum Entfernen oder Austauschen der Batterie, des Bedienerkonsolensockels oder der LCD-Anzeige der Bedienerkonsole aktivieren Sie den entsprechenden Umschalter. Sobald dies geschehen ist, wird empfohlen, die Funktion zu inaktivieren, um in den normalen Modus zurückzukehren.",
+      "title": "Reparatur der Batterie, des Bedienerkonsolensockels und der LCD-Anzeige der Bedienerkonsole bei eingeschalteter Einheit"
+    },
+    "toast": {
+      "errorSaveReadyToRemove": "Fehler %{state} bereit zum Entfernen des Status.",
+      "successSaveReadyToRemove": "%{state} erfolgreich bereit zum Entfernen des Status."
+    }
+  },
+  "pageDeconfigurationHardware": {
+    "capacity": "Kapazität",
+    "clearRecords": "Datensätze löschen",
+    "configure": "Konfigurieren",
+    "configured": "Konfiguriert",
+    "deconfigure": "Dekonfigurieren",
+    "deconfigured": "Dekonfiguriert",
+    "description": "Zeigen Sie den Status aller Hardwareressourcen an oder ändern Sie den Status. Details zu den einzelnen dekonfigurierten Ressourcen finden Sie unter ",
+    "descriptionText": "Zeigen Sie den Status aller Hardwareressourcen an oder ändern Sie den Status.",
+    "fcoSetting": "FCO-Einstellung",
+    "initiateDump": "Speicherauszug einleiten",
+    "link": "Dekonfigurationsdatensätze.",
+    "linkText": "Um Details zu dekonfigurierten Ressourcen anzuzeigen, rufen Sie die Datensätze zur Dekonfiguration auf.",
+    "memoryDimms": "Speicher-DIMMs",
+    "node": "Knoten",
+    "overview": "Übersicht",
+    "pcieRootComplex": "PCIe-Stammkomplex",
+    "processorChips": "Prozessorchips",
+    "processorCores": "Prozessorkerne",
+    "totalCores": "Gesamtzahl der Kerne",
+    "alert": {
+      "message": "Speicher-DIMMs und Prozessorkerne können nur bei ausgeschaltetem Server konfiguriert oder dekonfiguriert werden."
+    },
+    "toast": {
+      "deleteReqFailed": "Die Löschanforderung ist fehlgeschlagen, da die angeforderte Ressource nicht gelöscht werden kann.",
+      "errorDisablingSetting": "Fehler beim Inaktivieren der Einstellung",
+      "errorEnablingSetting": "Fehler beim Aktivieren der Einstellung"
+    },
+    "table": {
+      "deconfigurationType": "Typ der Konfigurationsaufhebung",
+      "filter": {
+        "byAssociation": "Durch Zuordnung",
+        "error": "Fehler",
+        "fatal": "Fatal",
+        "fcoDeconfigured": "FCO-dekonfiguriert",
+        "invalid": "Ungültig",
+        "manual": "Manuell",
+        "none": "Keine",
+        "predictive": "Vorhersage",
+        "recovered": "Wiedergestellt",
+        "unknown": "Unbekannt"
+      },
+      "functionalState": "Funktionaler Zustand",
+      "id": "ID",
+      "locationCode": "Standortcode",
+      "name": "Name",
+      "pelId": "Pel-ID",
+      "settings": "Einstellungen",
+      "size": "Größe in Mebibyte"
+    }
+  },
+  "pageDeconfigurationRecords": {
+    "additionalDataUri": "Zusätzliche Daten herunterladen",
+    "clearAll": "Alle Datensätze löschen",
+    "fatal": "Fatal",
+    "manual": "Manuell",
+    "nextRebootInfoIcon": "@:global.status.nextReboot",
+    "predictive": "Vorhersage",
+    "resolved": "Aufgelöst",
+    "unresolved": "Nicht aufgelöst",
+    "pageDescription": {
+      "description": "Wählen Sie einen Datensatz aus, um Details zur Dekonfiguration anzuzeigen oder in eine .txt-Datei zu exportieren. Informationen zum Anzeigen und manuellen Ändern des Konfigurationsstatus aller Hardwareressourcen finden Sie unter ",
+      "decriptionText": "Wählen Sie einen Datensatz aus, um Details zur Dekonfiguration anzuzeigen oder in eine Datei '.txt' zu exportieren.",
+      "link": "Hardwaredekonfiguration.",
+      "linkText": "Um den Konfigurationsstatus anzuzeigen oder zu ändern, rufen Sie die Hardwaredekonfiguration auf."
+    },
+    "modal": {
+      "title": "Alle Datensätze löschen",
+      "subtileServiceRequired": "Serviceberechtigung erforderlich",
+      "messageServiceRequired": "Wenden Sie sich an Ihren IBM Ansprechpartner, wenn Sie bei dieser Operation Unterstützung benötigen.",
+      "confirm": "Sind Sie sicher?",
+      "confirmMessage": "Beim Löschen aller Dekonfigurationsdatensätze wird versucht, die gesamte Hardware in dem/den ausgewählten Knoten neu zu konfigurieren. Diese Änderungen werden beim nächsten Boot wirksam.",
+      "deleteAllMessage": "Möchten Sie wirklich alle Datensätze löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteAllTitle": "Alle Datensätze löschen",
+      "deleteMessage": "Möchten Sie %{count} Datensätze wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden. | Möchten Sie%{count} Datensätze wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteTitle": "Datensatz löschen | Datensätze löschen",
+      "goBack": "Zurück",
+      "continue": "Weiter"
+    },
+    "table": {
+      "alerts": "Alerts",
+      "date": "Datum",
+      "description": "Beschreibung",
+      "id": "Id",
+      "name": "Name",
+      "pelId": "Pel-ID",
+      "reference": "Referenz",
+      "resource": "Ressource",
+      "severity": "Fehlerkategorie",
+      "srcDetails": "SRC-Details",
+      "srcDetailsToolTip": "Details des Systemreferenzcodes. Für manuelle Schutzdatensätze sind keine SRC-Details vorhanden.",
+      "status": "status",
+      "type": "Dekonfigurationstyp"
+    },
+    "severityValues": {
+      "fatal": "Fatal",
+      "predictive": "Vorhersage",
+      "manual": "Manuell"
+    },
+    "toast": {
+      "errorDelete": "Fehler beim Löschen von %{count} Datensatz. | Fehler beim Löschen von%{count} Datensätzen.",
+      "errorResolveEntries": "Fehler beim Auflösen von %{count} Datensatz. | Fehler beim Auflösen von%{count} Datensätzen.",
+      "errorStartDownload": "Fehler beim Starten des Downloads.",
+      "errorUnresolveEntries": "Fehler beim Aufheben der Auflösung von %{count} Datensatz. | Fehler beim Aufheben der Auflösung von%{count} Datensätzen.",
+      "successStartDownload": "Zusätzliche Daten erfolgreich heruntergeladen.",
+      "successStartDownloadTitle": "Download erfolgreich",
+      "successDelete": "%{count} Datensatz erfolgreich gelöscht |%{count} Datensätze erfolgreich gelöscht."
+    }
+  },
+  "pageDumps": {
+    "dumpsAvailableOnBmc": "Auf BMC verfügbare Speicherauszüge",
+    "initiateDump": "Speicherauszug starten",
+    "alert": {
+      "bmcDumpHeading": "BMC-Speicherauszug",
+      "bmcDumpMessage": "Das Erstellen des Speicherauszugs beansprucht eine gewisse Zeit.",
+      "bmcDumpMessageHmcEnabled": "BMC-Speicherauszüge werden auf die HMC ausgelagert und in der folgenden Tabelle nicht angezeigt.",
+      "refreshMessage": "Aktualisieren Sie die Anwendung, um den abgeschlossenen Speicherauszug in der Tabelle anzuzeigen.",
+      "resourceDumpHeading": "Ressourcenspeicherauszug",
+      "resourceDumpMessage": "Der Ressourcenspeicherauszug ist ein Prozess mit langer Laufzeit.",
+      "resourceDumpMessage2": "Wenn der Speicherauszug nicht in der Tabelle \"Speicherauszüge\" aufgeführt ist und keine Fehlerprotokolle für Ressourcenspeicherauszüge vorhanden sind, wurde er in das Betriebssystem ausgelagert.",
+      "systemDumpHeading": "Systemspeicherauszug",
+      "systemDumpMessage": "Der Systemspeicherauszug ist ein Prozess mit langer Laufzeit.",
+      "systemDumpMessageHmcDisabled": "Systemspeicherauszüge werden auf das Betriebssystem ausgelagert und vom Betriebssystem gelöscht, sobald der Speicherauszug aus dem Hostspeicher gelöscht wird.",
+      "systemDumpMessageHmcEnabled": "Systemspeicherauszüge werden auf die HMC ausgelagert."
+    },
+    "form": {
+      "bmcDump": "BMC-Speicherauszug (unterbrechungsfrei)",
+      "initiateDump": "Speicherauszug starten",
+      "password": "Kennwort",
+      "passwordTooltip": "Erforderlich für Ressourcenselektoren, die eine Serviceberechtigung benötigen",
+      "resourceDump": "Ressourcenspeicherauszug",
+      "resourceSelector": "Ressourcenselektor",
+      "resourceSelectorTooltip": "Befehlslänge darf 80 Zeichen nicht überschreiten",
+      "selectDumpType": "Speicherauszugstyp auswählen",
+      "selectDumpTypeTooltip": "Ressourcenspeicherauszug und Systemspeicherauszug sind nur verfügbar, wenn das System eingeschaltet ist",
+      "systemDump": "Systemspeicherauszug (unterbrechend)"
+    },
+    "modal": {
+      "deleteDump": "Speicherauszug löschen | Speicherauszüge löschen",
+      "deleteDumpConfirmation": "Soll tatsächlich %{count} Speicherauszug gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden. | Sollen tatsächlich %{count} Speicherauszüge gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "initiateSystemDump": "Erstellung eines Systemspeicherauszugs starten",
+      "initiateSystemDumpMessage1": "Sind Sie sicher?",
+      "initiateSystemDumpMessage2": "Sie können keine weiteren Speicherauszüge starten, während ein Systemspeicherauszug in Bearbeitung ist.",
+      "initiateSystemDumpMessage3": "Durch das Starten eines Systemspeicherauszugs werden alle aktiven Systempartitionen abnormal beendet.",
+      "initiateSystemDumpMessage4": "Mit Speicherauszugsstart fortfahren"
+    },
+    "table": {
+      "dateAndTime": "Datum und Uhrzeit",
+      "dumpType": "Speicherauszugstyp",
+      "id": "ID",
+      "searchDumps": "Speicherauszüge suchen",
+      "size": "Größe",
+      "filter": {
+        "bmcDumpEntry": "BMC-Speicherauszugseintrag",
+        "hostbootDumpEntry": "Hostbootspeicherauszugseintrag",
+        "resourceDumpEntry": "Ressourcenspeicherauszugseintrag",
+        "systemDumpEntry": "Systemspeicherauszugseintrag"
+      }
+    },
+    "toast": {
+      "errorDeleteDump": "Fehler beim Löschen von %{count} Speicherauszug. | Fehler beim Löschen von %{count} Speicherauszügen.",
+      "errorPhypInStandby": "Der Speicherauszug kann erst eingeleitet werden, wenn das System im Bereitschaftsmodus mindestens zu PHYP gebootet wurde. Ist das System ausgeschaltet, warten Sie kurz, bis das System eingeschaltet ist, bevor Sie den Speicherauszug starten.",
+      "errorStartBmcDump": "Fehler beim Starten des neuen BMC-Speicherauszugs.",
+      "errorStartDumpAnotherInProgress": "Fehler beim Starten von neuem %{dump}. Ein weiterer Speicherauszug ist in Bearbeitung.",
+      "errorStartDumpResourceInStandby": "Fehler beim Starten von neuem %{dump}. Das System muss gebootet werden.",
+      "errorStartResourceDump": "Fehler beim Starten des neuen Ressourcenspeicherauszugs.",
+      "errorStartResourceDumpInvalidSelector": "Fehler beim Einleiten des Speicherauszugs. Der angegebene Ressourcenselektor ist ungültig.",
+      "errorStartResourceDumpInvalidPassword": "Fehler beim Einleiten des Speicherauszugs. Ungültiges Kennwort.",
+      "errorStartSystemDump": "Fehler beim Starten des neuen Systemspeicherauszugs.",
+      "successDeleteDump": "%{count} Speicherauszug wurde gelöscht. | %{count} Speicherauszüge wurden gelöscht.",
+      "successStartBmcDumpTitle": "BMC-Speicherauszug gestartet",
+      "successStartDump": "Das Erstellen des Speicherauszugs beansprucht eine gewisse Zeit.",
+      "successStartResourceDumpTitle": "Ressourcenspeicherauszug gestartet",
+      "successStartSystemDumpTitle": "Systemspeicherauszug gestartet"
+    }
+  },
+  "pageEventLogs": {
+    "additionalDataUri": "Zusätzliche Daten herunterladen",
+    "bmcManager": "OpenBmc-Manager",
+    "resolve": "Auflösen",
+    "resolved": "Aufgelöst",
+    "unresolve": "Auflösung rückgängig machen",
+    "unresolved": "Nicht aufgelöst",
+    "modal": {
+      "deleteAllMessage": "Sollen tatsächlich alle Protokolle gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteAllTitle": "Alle Protokolle löschen",
+      "deleteMessage": "Soll tatsächlich %{count} Protokoll gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden. | Sollen tatsächlich %{count} Protokolle gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteTitle": "Protokoll löschen | Protokolle löschen"
+    },
+    "table": {
+      "date": "Datum",
+      "description": "Beschreibung",
+      "srcDetails": "SRC-Details",
+      "srcDetailsToolTip": "Details zum Systemreferenzcode",
+      "id": "ID",
+      "modifiedDate": "Änderungsdatum",
+      "name": "Name",
+      "resolution": "Auflösung (Callout)",
+      "searchLogs": "Protokolle durchsuchen",
+      "severity": "Schweregrad",
+      "severityValues": {
+        "critical": "Kritisch",
+        "ok": "OK",
+        "warning": "Warnung"
+      },
+      "status": "Status",
+      "systemEventLogEntry": "Systemereignisprotokolleintrag",
+      "type": "Typ",
+      "typeValues": {
+        "event": "Ereignis",
+        "oem": "Oem",
+        "sel": "SEL"
+      },
+      "eventId": "Ereignis-ID"
+    },
+    "toast": {
+      "errorDelete": "Fehler beim Löschen von %{count} Protokoll. | Fehler beim Löschen von %{count} Protokollen.",
+      "errorLogStatusUpdate": "Fehler beim Aktualisieren des Protokollstatus.",
+      "errorResolveLogs": "Fehler beim Auflösen von %{count} Protokoll. | Fehler beim Auflösen von %{count} Protokollen.",
+      "errorUnresolveLogs": "Fehler beim Aufheben der Auflösung von %{count}. | Fehler beim Aufheben der Auflösung von %{count} Protokollen.",
+      "infoStartDownload": "Der Download kann einige Minuten dauern.",
+      "successDelete": "%{count} Protokoll gelöscht. | %{count} Protokolle gelöscht.",
+      "successResolveLogs": "%{count} Protokoll erfolgreich aufgelöst. | %{count} Protokolle wurden erfolgreich aufgelöst.",
+      "successUnresolveLogs": "Auflösung von %{count} Protokoll wurde erfolgreich aufgehoben. | Auflösung von %{count} Protokollen wurde erfolgreich aufgehoben."
+    }
+  },
+  "pageFactoryReset": {
+    "alert": "Das System muss zum Zurücksetzen ausgeschaltet sein",
+    "description": "Mit diesen Funktionen werden sensible Daten nicht unwiderruflich gelöscht.",
+    "form": {
+      "resetBiosOptionHelperText": "Setzt Servereinstellungen zurück, einschließlich von Plattformschlüsselspeicher, Partitions-NVRAM, Partitionskonfigurationen und Ereignisprotokollen.",
+      "resetBiosOptionLabel": "Nur Servereinstellungen zurücksetzen",
+      "resetOptionsLabel": "Optionen zurücksetzen",
+      "resetToDefaultsOptionHelperText": "Neben den Servereinstellungen setzt diese Option BMC-Einstellungen zurück, einschließlich aller BMC-Kontodaten, aller geänderten Kennwörter, aller Richtlinien, LDAP-Konfigurationen, Netzadressen und der Uhrzeit.",
+      "resetToDefaultsOptionLabel": "BMC- und Servereinstellungen zurücksetzen"
+    },
+    "modal": {
+      "resetBiosTitle": "Servereinstellungen zurücksetzen",
+      "resetBiosHeader": "Sollen die Servereinstellungen zurückgesetzt werden?",
+      "resetBiosSubmitText": "Servereinstellungen zurücksetzen",
+      "resetBiosSettingsList": {
+        "item1": "Alle manuellen Einstellungen werden gelöscht.",
+        "item2": "Partitionskonfigurationen und der Plattformschlüsselspeicher können wiederhergestellt werden, wenn Sicherungen vorhanden sind."
+      },
+      "resetToDefaultsHeader": "Sollen sowohl die BMC- als auch die Servereinstellungen zurückgesetzt werden?",
+      "resetToDefaultsSubmitText": "BMC- und Servereinstellungen zurücksetzen",
+      "resetToDefaultsTitle": "BMC- und Servereinstellungen zurücksetzen",
+      "resetToDefaultsSettingsList": {
+        "item1": "Alle manuellen Einstellungen werden gelöscht.",
+        "item2": "Partitionskonfigurationen und der Plattformschlüsselspeicher können wiederhergestellt werden, wenn Sicherungen vorhanden sind.",
+        "item3": "Alle BMC-Protokolle werden entfernt.",
+        "item4": "Derzeit aktive Sitzungen werden bei allen Netzschnittstellen unterbrochen.",
+        "item5": "Die Einstellungen für BMC-Standardaccount und -kennwort werden wiederhergestellt."
+      },
+      "resetWarningCheckLabel": "Ohne Herunterfahren des Systems fortfahren",
+      "resetWarningMessage": "Das Zurücksetzen ohne Herunterfahren des Systems kann einen nicht behebbaren Fehler verursachen."
+    },
+    "toast": {
+      "resetBiosError": "Zurücksetzen der Servereinstellungen auf Werkseinstellungen ist fehlgeschlagen.",
+      "resetBiosSuccess": "Servereinstellungen wurden erfolgreich auf Werkseinstellungen zurückgesetzt.",
+      "resetToDefaultsError": "Zurücksetzen der BMC- und Servereinstellungen auf die Werkseinstellungen ist fehlgeschlagen.",
+      "resetToDefaultsSuccess": "BMC- und Servereinstellungen wurden erfolgreich auf Werkseinstellungen zurückgesetzt. Wenn Sie nicht automatisch abgemeldet werden, aktualisieren Sie den Browser."
+    }
+  },
+  "pageFieldCoreOverride": {
+    "changeConfiguration": "Konfiguration ändern",
+    "configuredCores": "Konfigurierte Kerne",
+    "currentConfiguration": "Aktuelle Konfiguration",
+    "enableFieldCoreOverride": "FOC (Field Core Override) aktivieren",
+    "enterValue": "Wert eingeben",
+    "licensedCores": "Lizenzierte Kerne",
+    "pageDescription": "Zeigen Sie die Prozessorkerne an, die über die Firmware konfiguriert werden, oder ändern Sie sie.",
+    "scheduledForNextReboot": "@:global.status.nextReboot",
+    "totalInstalledCores": "Insgesamt installierte Kerne",
+    "alert": {
+      "description": "Die vorgenommenen Änderungen werden beim nächsten Neustart des Servers wirksam.",
+      "title": "Änderungen anwenden"
+    },
+    "toast": {
+      "configurationChangeError": "Die Konfiguration konnte nicht gespeichert werden.",
+      "configurationChangeSuccess": "Die Konfiguration wurde erfolgreich gespeichert."
+    }
+  },
+  "pageFirmware": {
+    "cardActionSwitchToRunning": "Zum aktiven wechseln",
+    "cardBodyVersion": "Version",
+    "cardTitleBackup": "Sicherungsimage",
+    "cardTitleRunning": "Aktives Image",
+    "permanent": "Permanent",
+    "sectionTitleBmcCards": "BMC",
+    "sectionTitleBmcCardsCombined": "BMC und Server",
+    "sectionTitleHostCards": "Host",
+    "sectionTitleUpdateFirmware": "Firmware aktualisieren",
+    "temporary": "Temporär",
+    "alert": {
+      "operationInProgress": "Die Operation zum Einschalten des Servers wird ausgeführt.",
+      "serverMustBePoweredOffTo": "Server muss ausgeschaltet sein für:",
+      "serverMustBePoweredOffToUpdateFirmware": "Server muss für die Firmwareaktualisierung ausgeschaltet sein",
+      "switchRunningAndBackupImages": "Aktive Image und Sicherungsimage wechseln",
+      "updateFirmware": "Firmware aktualisieren",
+      "viewServerPowerOperations": "Ein-/Ausschaltoperationen des Servers anzeigen"
+    },
+    "form": {
+      "updateFirmware": {
+        "accessKeyExpiration": "Ablauf des Zugriffsschlüssels",
+        "fileAddress": "Dateiadresse",
+        "fileSource": "Dateiquelle",
+        "imageFile": "Imagedatei",
+        "manageAccessKeys": "Zugriffsschlüssel verwalten",
+        "startUpdate": "Startdatum",
+        "tftpServer": "TFTP-Server",
+        "tftpServerInfo": "<server_ip>/<file_name>.tar",
+        "workstation": "Datenstation"
+      }
+    },
+    "modal": {
+      "switchImages": "Images wechseln",
+      "switchRunningImage": "Aktives Image wechseln",
+      "switchRunningImageInfo": "Zur Ausführung des Sicherungsimage ist ein BMC-Warmstart erforderlich. Die Anwendung reagiert während dieser Zeit möglicherweise nicht.",
+      "switchRunningImageInfo2": "Soll tatsächlich zum Sicherungsimage (%{backup}) gewechselt werden?",
+      "updateFirmwareInfo": "Der BMC wird während des Aktualisierungsprozesses neu gestartet. Der Server kann erst eingeschaltet werden, wenn die Aktualisierung abgeschlossen ist.",
+      "updateFirmwareInfo2": "Das aktive Image (%{running}) wird als Sicherung kopiert. Das Sicherungsimage wird gelöscht.",
+      "updateFirmwareInfo3": "Soll Aktualisierung tatsächlich fortgesetzt werden?",
+      "updateFirmwareInfoDefault": "Das neue Image wird hochgeladen und aktiviert. Danach wird der BMC oder Host automatisch neu gestartet, um über das neue Image ausgeführt zu werden."
+    },
+    "toast": {
+      "errorSwitchImages": "Fehler beim Wechsel zwischen aktivem Image und Sicherungsimage.",
+      "errorActivation": "Fehler beim Starten der Firmwareaktivierung.",
+      "errorUpdateFirmware": "Fehler beim Starten des Firmware-Updates.",
+      "errorUploadFirmware": "Fehler beim Hochladen der Firmware.",
+      "rebootStarted": "Warmstart gestartet",
+      "rebootStartedMessage": "Warmstart über Sicherungsimage erfolgreich gestartet. Der Warmstart kann mehrere Minuten dauern.",
+      "taskComplete": "Task abgeschlossen",
+      "taskCompleteMessage": "Task abgeschlossen. Warten auf BMC-Warmstart",
+      "updateFirmware": {
+        "step1": "Schritt 1 von 4 - Hochladen",
+        "step1Message": "Aktualisierung gestartet. Firmware-Upload in Bearbeitung.",
+        "step2": "Schritt 2 von 4 - Aktivierung",
+        "step2Message": "Hochladen der Firmware abgeschlossen. Aktivierungstask wird ausgeführt.",
+        "step3": "Schritt 3 von 4 - Warmstart",
+        "step3Message": "Aktivierungstask abgeschlossen. BMC-Warmstart wird ausgeführt.",
+        "step4": "Schritt 4 von 4 - Abgeschlossen",
+        "step4Message": "Firmware-Update erfolgreich. Klicken Sie auf Aktualisieren, um die Firmware-Version zu überprüfen."
+      },
+      "switchToRunning": {
+        "step1": "Schritt 1 von 3 - Firmware-Switching",
+        "step1Message": "Prozess gestartet. Firmware-Switching in Bearbeitung.",
+        "step2": "Schritt 2 von 3 - Warmstart",
+        "step2Message": "Firmware-Switching abgeschlossen. BMC-Warmstart wird ausgeführt.",
+        "step3": "Schritt 3 von 3 - Abschließen",
+        "step3Message": "Firmware-Switch erfolgreich. Klicken Sie auf Aktualisieren, um zu überprüfen, ob die aktiven Images und die Sicherungsimages gewechselt wurden."
+      }
+    }
+  },
+  "pageHostConsole": {
+    "subTitle": "Die Hostkonsole leitet die Ausgabe des seriellen Serverports an dieses Fenster um.",
+    "status": "Status"
+  },
+  "pageInventory": {
+    "assemblies": "Assemblys",
+    "baseboardManagementController": "Baseboard-Management-Controller",
+    "bmcManager": "BMC-Manager",
+    "chassis": "Chassis",
+    "dimmSlot": "DIMM-Steckplatz",
+    "fabricAdapters": "Fabric-Adapter",
+    "false": "Falsch",
+    "fans": "Lüfter",
+    "identifyLedInfo": "Bei Teilen ohne LEDs schaltet der Umschalter für die Identifikations-LED nur die Gehäuseanzeige ein.",
+    "pcieSlots": "PCIe-Steckplätze",
+    "pcieTopologyLink": "PCIe-Hardwaretopologie.",
+    "pcieTopologyLinkDescription": "Erfahren Sie mehr über PCIe-Steckplätze auf ",
+    "powerSupplies": "Netzteile",
+    "processors": "Prozessoren",
+    "processorModule": "Prozessormodul",
+    "quicklinkTitle": "Schnelle Links zu Hardwarekomponenten",
+    "system": "System",
+    "true": "Ja",
+    "enclosures": {
+      "title": "E/A-Gehäuse",
+      "traceLabel": "Trace für E/A-Gehäuse erfassen",
+      "traceDescription": "Ressourcenspeicherauszug (mit bestimmtem Ressourcenselektor) erstellen aus ",
+      "DumpsLink": "Seite 'Speicherauszüge'."
+    },
+    "systemIndicator": {
+      "attentionLed": "Systemkontrollanzeige",
+      "attentionLedToolTipInfo": "Systemkontroll-LED kann nur inaktiviert werden",
+      "identifyLed": "Identifikations-LED des Systems",
+      "lampTest": "Anzeigentest",
+      "powerStatus": "Stromversorgungsstatus",
+      "sectionTitle": "Systemanzeigen",
+      "tooltipInfo": "Schaltet alle Anzeigen, die von BMC und Hypervisor gesteuert werden, für vier Minuten ein (Status ON)."
+    },
+    "alert": {
+      "enclosureAlertTitle": "Gehäusekonfiguration anzeigen",
+      "enclosureAlertMessage": "Das System muss eingeschaltet sein.",
+      "viewServerPowerOperations": "Ein-/Ausschaltoperationen des Servers anzeigen"
+    },
+    "modal": {
+      "assemblies": {
+        "id": "@:pageInventory.table.id",
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "message": "Dieser Vorgang kann 2 Minuten dauern.",
+        "remove": "@:pageInventory.table.remove",
+        "selected": "'%{assemblyName}' ausgewählt -",
+        "subTitle": "Sind Sie sicher?",
+        "title": "'%{assemblyName}' entfernen?"
+      },
+      "enclosures": {
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "serialNumber": "@:pageInventory.table.serialNumber",
+        "serialNumberHelperText": "Geben Sie eine siebenstellige Seriennummer für die Seriennummer des Gehäuses ein. Alle alphanumerischen Zeichen außer \"o\", \"i\" und \"q\" sind zulässig. Alle Kleinbuchstaben werden in Großbuchstaben umgewandelt.",
+        "title": "Gehäuseeinstellungen ändern",
+        "typeModel": "@:pageInventory.table.typeModel",
+        "typeModelHelperText": "Der Gehäusemaschinentyp darf nicht \"0000\" sein. Alle alphanumerischen Zeichen sind ungültig."
+      }
+    },
+    "table": {
+      "action": "Aktion",
+      "assetTag": "Systemkennnummer",
+      "assetTagInfo": "Systemname",
+      "bmcManagerModel": "Modell (CCIN)",
+      "capacityMiB": "Kapazität in MiB",
+      "coreCount": "Anzahl Kerne",
+      "processorCount": "Anzahl der Prozessoren",
+      "currentNext": "(aktueller und nächster)",
+      "description": "Beschreibung",
+      "enabled": "Aktiviert",
+      "firmwareVersion": "Firmwareversion",
+      "health": "Allgemeinzustand",
+      "healthRollup": "Rollup des Allgemeinzustands",
+      "id": "ID",
+      "identifyLed": "Identifikations-LED",
+      "install": "Installieren",
+      "locationNumber": "Standortnummer",
+      "model": "Model",
+      "name": "Name",
+      "partNumber": "Teilenummer",
+      "power": "Netzstrom",
+      "processorType": "Prozessortyp",
+      "remove": "Entfernen",
+      "serialNumber": "Seriennummer",
+      "slotType": "Steckplatztyp",
+      "sparePartNumber": "Ersatzteilnummer (FRU-Nummer)",
+      "totalCores": "Gesamtzahl der Kerne",
+      "totalSystemMemoryGiB": "Gesamter Systemspeicher",
+      "typeModel": "Typ - Modell"
+    },
+    "toast": {
+      "errorDisableIdentifyLed": "Fehler beim Inaktivieren der Identifikations-LED",
+      "errorDisableLampTest": "Fehler beim Inaktivieren des Anzeigentests",
+      "errorDisableSystemAttentionLed": "Fehler beim Inaktivieren der Systemkontroll-LED.",
+      "errorEnableIdentifyLed": "Fehler beim Aktivieren der Identifikations-LED",
+      "errorEnableLampTest": "Fehler beim Aktivieren des Anzeigentests",
+      "errorEnableSystemAttentionLed": "Fehler beim Aktivieren der Systemkontroll-LED.",
+      "errorEnclosureSettings": "Fehler beim Aktualisieren der Gehäuseeinstellungen.",
+      "infoRemoveAssembly": "Aktualisieren Sie die Anzeige, um festzustellen, ob '%{assemblyName}' zum Entfernen bereit ist.",
+      "successEnclosureSettings": "Die Gehäuseeinstellungen wurden erfolgreich aktualisiert.",
+      "successEnableIdentifyLed": "Identifikations-LED erfolgreich aktiviert.",
+      "successDisableIdentifyLed": "Identifikations-LED erfolgreich inaktiviert."
+    }
+  },
+  "pageKeyClear": {
+    "description": "Unwiderrufliches Löschen sensibler Daten im System",
+    "alert": {
+      "description": "Aufgrund der Sicherheitsstufe der zu löschenden Daten muss diese Operation durch eine Verifizierung mit persönlicher Anwesenheit autorisiert werden.",
+      "title": "Diese Operation erfordert physische Anwesenheit und einen Warmstart des Systems."
+    },
+    "form": {
+      "clear": "Löschen",
+      "clearAllHelperText": "Alle sensiblen Daten löschen, die von der Plattformfirmware gesteuert werden",
+      "clearAllLabel": "Alles löschen",
+      "clearAllSetGenesisIPL": "Alles löschen und Genesis-IPL festlegen",
+      "clearHypervisorSystemKeyHelperText": "Der Hypervisor wird dadurch aufgefordert, den Systemschlüssel zu löschen.",
+      "clearHypervisorSystemKeyLabel": "Hypervisorsystemschlüssel löschen",
+      "clearOperatingSystemKeysHelperText": "OPAL (OpenPower Abstraction Layer) wird dadurch aufgefordert, den Betriebssystemschlüssel für sicheres Booten zu löschen.",
+      "clearSystemSecurityKeyHelperText": "Dies bedeutet, dass zum Löschen der Schlüssel für den Systemsicherheitsbeauftragten OPAL/PEF verwendet werden muss.",
+      "clearSystemSecurityKeyLabel": "Schlüssel des Systemsicherheitsbeauftragten löschen",
+      "keyClearNotRequested": "Löschen des Schlüssels nicht angefordert",
+      "keyClearOptionsLabel": "Optionen zum Löschen des Schlüssels",
+      "none": "Keine",
+      "setFactoryDefault": "Werkseinstellung festlegen"
+    },
+    "modal": {
+      "clear": "Schlüssel löschen",
+      "clearAllMessage": "Alle Verschlüsselungsschlüssel in den ausgewählten Daten gehen verloren. Das System kann anschließend keine Daten entschlüsseln, die diese Schlüssel erfordern.",
+      "clearAllTitle": "Warnung: Diese Operation kann nicht rückgängig gemacht werden"
+    },
+    "toast": {
+      "selectedKeyClearedError": "Fehler beim Löschen von Schlüsseln",
+      "selectedKeyClearedSuccess": "Schlüssel erfolgreich gelöscht"
+    }
+  },
+  "pageKvm": {
+    "buttonCtrlAltDelete": "Strg+Alt+Entf senden",
+    "connected": "Verbunden",
+    "connecting": "Verbindung wird hergestellt",
+    "disconnected": "Getrennt",
+    "openNewTab": "Auf einer neuen Registerkarte öffnen",
+    "status": "Status"
+  },
+  "pageSystemParameters": {
+    "aggressivePrefetch": "Aggressiver Vorablesezugriff",
+    "aggressivePrefetchDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, da dies die Systemleistung beeinträchtigen kann. Gibt an, ob der aggressive Vorablesezugriff durch den Prozessor inaktiviert oder aktiviert ist",
+    "alert": {
+      "message": "Das System muss ausgeschaltet werden. Vorgenommene Änderungen werden beim nächsten Warmstart wirksam",
+      "title": "Änderungen anwenden"
+    },
+    "button": {
+      "saveSettings": "Einstellungen speichern"
+    },
+    "frequencyCap": "Frequenzbegrenzung",
+    "frequencyCapDescription": "Ist dieser Parameter aktiviert, wird verhindert, dass alle Prozessoren im System die angegebene maximale Betriebsfrequenz in MHz überschreiten.",
+    "frequencyCapHelpText": "Wenn diese Option inaktiviert ist, ist möglicherweise ein initiales Booten erforderlich, damit die maximale und die minimale Frequenz festgelegt werden können.",
+    "lateralCastOut": "Laterales Castout",
+    "lateralCastOutDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, dies kann die Systemleistung beeinträchtigen.",
+    "toast": {
+      "errorSavingAggressivePrefetch": "Fehler beim Speichern des aggressiven Vorablesezugriffs",
+      "errorSavingFrequencyCap": "Fehler beim Speichern der Frequenzbegrenzung",
+      "errorSavingLateralCastOut": "Fehler beim Speichern des Modus für laterales Castout",
+      "successSavingAggressivePrefetch": "Aggressiver Vorablesezugriff erfolgreich gespeichert",
+      "successSavingFrequencyCap": "Frequenzbegrenzung erfolgreich gespeichert",
+      "successSavingLateralCastOut": "Modus für laterales Castout erfolgreich gespeichert"
+    }
+  },
+  "pageLdap": {
+    "addRoleGroup": "Rollengruppe hinzufügen",
+    "pageDescription": "LDAP-Einstellungen konfigurieren und Rollengruppen verwalten",
+    "roleGroups": "Rollengruppen",
+    "settings": "Einstellungen",
+    "ariaLabel": {
+      "ldapSettings": "LDAP-Einstellungen"
+    },
+    "form": {
+      "baseDn": "Basis-DN",
+      "bindDn": "DN für Bindung",
+      "bindPassword": "Kennwort für Bindung",
+      "caCertificateValidUntil": "CA-Zertifikat gültig bis",
+      "groupIdAttribute": "Attribut für Gruppen-ID",
+      "ldapAuthentication": "LDAP-Authentifizierung",
+      "ldapCertificateValidUntil": "LDAP-Zertifikat gültig bis",
+      "manageSslCertificates": "SSL-Zertifikate verwalten",
+      "secureLdapHelper": "Für sicheres LDAP werden ein CA-Zertifikat und ein LDAP-Zertifikat benötigt.",
+      "secureLdapUsingSsl": "Sicheres LDAP mit SSL",
+      "serverUri": "Server-URL",
+      "serverUriTooltip": "Änderung des URI-Schemas durch Secure LDAP in LDAPS aktivieren",
+      "serviceType": "Servicetyp",
+      "userIdAttribute": "Attribut für Benutzer-ID"
+    },
+    "modal": {
+      "addNewRoleGroup": "Neue Rollengruppe hinzufügen",
+      "deleteRoleGroup": "Rollengruppe löschen",
+      "deleteRoleGroupBatchConfirmMessage": "Soll tatsächlich %{count} Rollengruppe gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden. | Sollen tatsächlich %{count} Rollengruppen gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteRoleGroupConfirmMessage": "Soll '%{groupName}' tatsächlich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "editRoleGroup": "Rollengruppe bearbeiten",
+      "groupName": "Gruppenname",
+      "groupPrivilege": "Gruppenberechtigung"
+    },
+    "tableRoleGroups": {
+      "alertContent": "Zum Ändern von Rollengruppen muss die LDAP-Authentifizierung aktiviert sein.",
+      "groupName": "Gruppenname",
+      "groupPrivilege": "Gruppenberechtigung"
+    },
+    "toast": {
+      "errorAddRoleGroup": "Fehler beim Hinzufügen der Rollengruppe.",
+      "errorDeleteRoleGroup": "Fehler beim Löschen der Rollengruppe. | Fehler beim Löschen von Rollengruppen.",
+      "errorSaveActiveDirectorySettings": "Fehler beim Speichern von Active Directory-Einstellungen.",
+      "errorSaveLdapSettings": "Fehler beim Speichern von Open LDAP-Einstellungen.",
+      "errorSaveRoleGroup": "Fehler beim Speichern von Rollengruppe.",
+      "successAddRoleGroup": "Rollengruppe '%{groupName}' wurde erfolgreich hinzugefügt.",
+      "successDeleteRoleGroup": "Rollengruppe wurde erfolgreich gelöscht. | Rollengruppen wurden erfolgreich gelöscht.",
+      "successSaveActiveDirectorySettings": "Active Directory-Einstellungen wurden erfolgreich gespeichert.",
+      "successSaveLdapSettings": "Die Open LDAP-Einstellungen wurden erfolgreich gespeichert.",
+      "successSaveRoleGroup": "Die Rollengruppe '%{groupName}' wurde erfolgreich gespeichert."
+    }
+  },
+  "pageLogin": {
+    "asmi": "Advanced System Management Interface (ASMI)",
+    "dateAndTime": "Datum und Uhrzeit",
+    "language": "Sprache",
+    "logIn": "Anmelden",
+    "model": "Model",
+    "password": "Kennwort",
+    "serialNumber": "Seriennummer",
+    "uploadServiceLoginCertificate": "Serviceanmeldezertifikat hochladen",
+    "username": "Benutzername",
+    "alert": {
+      "unauthorizedMessage": "Benutzer nicht berechtigt",
+      "message": "Benutzername oder Kennwort ungültig"
+    },
+    "modal": {
+      "addNewServiceLoginCertificate": "Neues Serviceanmeldezertifikat hinzufügen",
+      "certificateFile": "Zertifikatsdatei"
+    }
+  },
+  "pageMemory": {
+    "activeMemoryMirroring": "Aktiver Modus für Speicherspiegelung",
+    "activeMemoryMirroringDescription": "Active Memory Mirroring für Hypervisor wurde entwickelt, um sicherzustellen, dass der Systembetrieb auch bei einem der seltenen nicht korrigierbaren Fehler im Hauptspeicher, der durch den Hypervisor des Systems verwendet wird, nicht unterbrochen wird.",
+    "activeMemoryMirroringHelpText": "Gibt an, ob die Speicherspiegelung aktiviert ist. Macht einen Neustart erforderlich, damit die Änderung angewendet wird.",
+    "activeMemoryMirroringTitle": "Aktive Speicherspiegelung",
+    "ioAdapterEnlargedCapacity": "Diese Option steuert die Größe des PCI-Hauptspeicherplatzes, der den einzelnen PCI-Steckplätzen zugewiesen wird.",
+    "ioAdapterEnlargedCapacityTitle": "Erhöhte E/A-Adapterkapazität",
+    "logicalMemorySize": "Größe logischer Speicherblöcke",
+    "logicalMemorySizeHeading": "Die Größe für logische Speicherblöcke wird zur Partitionierung verwendet. Eine Änderung der Größe für logische Speicherblöcke wirkt sich auf das Systemressourcenmanagement aus.",
+    "maxNumHugePages": "Max. Anzahl Huge Pages",
+    "memoryBlockSize": "Speicherblockgröße",
+    "requestedHugePageMemory": "Angeforderter Huge-Page-Speicher",
+    "slotCountForNode0": "Steckplatzanzahl für Knoten 0",
+    "systemMemoryPageSetup": "Verbessern Sie die Leistung der Anwendung, indem Sie Größe des virtuellen Speichers für große Seiten mit jeweils 16GB festlegen.",
+    "systemMemoryPageSetupTitle": "Seitenaufbau des Systemspeichers",
+    "updateIoAdapterEnlargedCapacity": "Erhöhte E/A-Adapterkapazität aktualisieren",
+    "updateLogicalMemoryPageSetup": "Seitenkonfiguration für Systemspeicher aktualisieren",
+    "updateLogicalMemorySize": "Größe logischer Speicherblöcke aktualisieren",
+    "updatePageSetup": "Seitenkonfiguration für Systemspeicher aktualisieren",
+    "alert": {
+      "heading": "Änderungen anwenden",
+      "message": "Das System muss ausgeschaltet sein und darf nicht von der HMC verwaltet werden. Vorgenommene Änderungen werden beim nächsten Warmstart wirksam.",
+      "serverMustBePoweredOffTo": "Server muss ausgeschaltet sein für:",
+      "updateActiveMemoryMirroring": "Aktiven Modus für Speicherspiegelung aktualisieren",
+      "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
+      "updateLogicalMemoryPage": "@:pageMemory.updateLogicalMemorySize",
+      "updateSystemMemoryPageSetup": "Seitenkonfiguration für Systemspeicher aktualisieren (Server sollte nicht mit HMC verbunden sein)"
+    },
+    "toast": {
+      "errorSavingActiveMemoryMirroringMode": "Fehler beim Aktualisieren des Active Memory Mirroring-Modus",
+      "errorSavingAdapterEnlargedCapacity": "Fehler beim Aktualisieren der erhöhten E/A-Adapterkapazität",
+      "errorSavingLogicalMemory": "Fehler beim Aktualisieren der Größe logischer Speicherblöcke ",
+      "errorSavingPageSetup": "Fehler beim Aktualisieren der Konfiguration der Systemspeicherseite",
+      "message": "System muss ausgeschaltet sein, damit Änderungen vorgenommen werden können",
+      "successSavingAdapterEnlargedCapacity": "Erhöhte E/A-Adapterkapazität wurde erfolgreich aktualisiert",
+      "successSavingLogicalMemory": "Die Größe logischer Speicherblöcke wurde erfolgreich aktualisiert",
+      "successSavingActiveMemoryMirroringMode": "Active Memory Mirroring-Modus erfolgreich aktualisiert",
+      "successSavingPageSetup": "Seitenkonfiguration für Systemspeicher erfolgreich aktualisiert"
+    }
+  },
+  "pageNetwork": {
+    "dhcp": "DHCP",
+    "dns": "DNS-Server",
+    "domainName": "Domänenname",
+    "hostname": "Hostname",
+    "hostnameAlert": "Wird der Hostname geändert, werden Sie abgemeldet. Änderungen werden bei der nächsten Anmeldung wirksam.",
+    "interfaceSection": "Schnittstelleneinstellungen",
+    "ipv4": "IPv4",
+    "ipv4Addresses": "IPv4-Adressen",
+    "ipv6": "IPv6",
+    "ipv6DefaultGateway": "IPv6-Standardgateway",
+    "macAddress": "MAC-Adresse",
+    "network": "Netz",
+    "networkSettings": "Netzeinstellungen",
+    "ntp": "NTP-Server",
+    "operatingMode": "Betriebsmodus",
+    "pageDescription": "BMC-Netzeinstellungen konfigurieren",
+    "staticDns": "Statisches DNS",
+    "useDns": "DNS-Server verwenden",
+    "useDomainName": "Domänennamen verwenden",
+    "useNtp": "NTP-Server verwenden",
+    "modal": {
+      "confirmDeleteIpv4": "Möchten Sie '%{address}' wirklich löschen?",
+      "confirmDisableDhcp": "Möchten Sie DHCP wirklich inaktivieren?",
+      "confirmEnableDhcp": "Wenn DHCP aktiviert ist, ist kein Zugriff auf statische IP-Adressen möglich.",
+      "dhcpConfirmTitle": "%{dhcpState} DHCP",
+      "deleteIpv4": "IPv4-Adresse löschen",
+      "editHostnameTitle": "Hostnamen bearbeiten",
+      "gateway": "Gateway",
+      "ipAddress": "IP-Adresse",
+      "staticDns": "Statisches DNS",
+      "subnetMask": "Teilnetzmaske"
+    },
+    "table": {
+      "addDnsAddress": "IP-Adresse hinzufügen",
+      "addIpv4Address": "Statische IPv4-Adresse hinzufügen",
+      "addIpv6Address": "Statische IPv6-Adresse hinzufügen",
+      "addressOrigin": "Adressursprung",
+      "addressState": "Status der Adresse",
+      "deleteDns": "DNS-Adresse löschen",
+      "deleteIpv4": "IPv4-Adresse löschen",
+      "editDns": "DNS-Adresse bearbeiten",
+      "editIpv4": "Statische IPv4-Adresse bearbeiten",
+      "editIpv6": "Statische IPv6-Adresse bearbeiten",
+      "gateway": "Gateway",
+      "ipAddress": "IP-Adresse",
+      "prefixLength": "Länge des Präfix",
+      "subnet": "Teilnetzmaske"
+    },
+    "toast": {
+      "errorSaveNetworkSettings": "Fehler beim Aktualisieren der Einstellungen für %{setting}.",
+      "successSaveNetworkSettings": "Einstellungen für %{setting} wurden erfolgreich aktualisiert."
+    }
+  },
+  "pageOverview": {
+    "assetTag": "Systemkennnummer",
+    "accessKeyExpiration": "Ablauf des Zugriffsschlüssels",
+    "backupVersion": "Sicherung",
+    "bmcTime": "BMC-Datum und -Uhrzeit",
+    "criticalEvents": "Kritisch",
+    "dhcp": "DHCPv4",
+    "dumps": "Speicherauszüge",
+    "eventLogs": "Ereignisprotokolle",
+    "firmwareInformation": "Firmwareinformationen",
+    "hostConsole": "Hostkonsole",
+    "hostName": "Hostname",
+    "inventory": "Inventar und LEDs",
+    "ipv4": "IPv4",
+    "manual": "Manuell",
+    "model": "Model",
+    "networkInformation": "Netzinformationen",
+    "normal": "Normal",
+    "operatingMode": "Betriebsmodus",
+    "powerCap": "Leistungsbegrenzung",
+    "powerConsumption": "Stromverbrauch",
+    "powerInformation": "Leistungsinformationen",
+    "powerMode": "Energiemodus",
+    "runningVersion": "Aktiv",
+    "safeMode": "Abgesicherter Modus",
+    "serialNumber": "Seriennummer",
+    "serverInformation": "Serverinformationen",
+    "serviceLogin": "Serviceanmeldung",
+    "statusInformation": "Statusinformationen",
+    "systemIdentifyLed": "Identifikations-LED des Systems",
+    "systemInformation": "Systeminformationen",
+    "total": "Summe",
+    "viewMore": "Mehr anzeigen",
+    "warningEvents": "Warnung",
+    "powerPerformanceModes": {
+      "maximumPerformance": "Maximale Leistung",
+      "powerSaving": "Energiesparmodus",
+      "static": "Statisch"
+    },
+    "modal": {
+      "editAssetTag": "Asset-Tag bearbeiten"
+    },
+    "toast": {
+      "successSaveAssetTag": "Asset-Tag erfolgreich aktualisiert.",
+      "errorSaveAssetTag": "Fehler beim Aktualisieren des Asset-Tags."
+    }
+  },
+  "pagePageNotFound": {
+    "description": "Die angeforderte Ressource konnte nicht gefunden werden."
+  },
+  "pagePcieTopology": {
+    "alert": "Das Laden dieser Seite kann einige Minuten dauern.",
+    "bridgeOrHost": "PCIe-Bridge oder CAPI-Host",
+    "cableLength": "Kabellänge",
+    "cableStatus": "Kabelstatus",
+    "cableType": "Kabeltyp",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "Identifikations-LEDs",
+    "ioSlots": "E/A-Steckplätze",
+    "linkProperties": "Eigenschaften der Verbindung",
+    "linkStatus": "Verbindungsstatus",
+    "localPort": "Lokaler Port",
+    "localPortLocation": "Position des lokalen Ports",
+    "parentId": "Übergeordnete ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "Ferner Port",
+    "remotePortLocation": "Position des fernen Ports",
+    "resetLink": "Verbindung zurücksetzen",
+    "savePcieTopology": "PCIe-Topologie speichern",
+    "speed": "Geschwindigkeit",
+    "type": "Typ",
+    "warning": "Das System muss sich mindestens im PHYP-Standby befinden. Zum Einschalten wechseln Sie zu ",
+    "width": "Breite",
+    "modal": {
+      "resetConfirm": "Sind Sie sicher?",
+      "resetLinkDescription": "Das Zurücksetzen einer Verbindung während der Ausführung von Systempartitionen kann Fehler verursachen. Diese Operation muss unter Anleitung eines Support-Teammitglieds ausgeführt werden.",
+      "resetLinkHeader": "Verbindung %{id} zurücksetzen"
+    },
+    "table": {
+      "search": "Suchen"
+    },
+    "toast": {
+      "errorReset": "Fehler beim Zurücksetzen der Verbindung %{id}",
+      "errorSavePcieTopology": "Fehler beim Speichern der PCIe-Topologieinformationen.",
+      "errorSwitchingLed": "Fehleranzeige LED %{operation} für %{value}",
+      "resetInfoTitle": "Verbindungs-ID %{id} wird zurückgesetzt.",
+      "resetInfoDescription": "Die Ausführung dieser Operation kann einige Sekunden dauern.",
+      "successReset": "Zurücksetzen der Verbindung %{id} erfolgreich eingeleitet. Überprüfen Sie die Ereignisprotokolle auf Probleme.",
+      "successSavePcieTopology": "PCIe-Topologieinformationen wurden erfolgreich gespeichert."
+    }
+  },
+  "pagePolicies": {
+    "hostTpm": "Host-TPM",
+    "hostTpmDescription": "Aktivieren Sie diese Option, um sicherzustellen, dass das System nur neu startet, wenn das TPM funktionsfähig ist.",
+    "hostUsb": "Host-USB-Aktivierung",
+    "hostUsbDescription": "Gibt an, ob Host-USB aus Sicherheitsgründen inaktiviert oder aktiviert ist.",
+    "ipmi": "Netz-IPMI (Out-of-band-IPMI)",
+    "ipmiDescription": "Ermöglichen Sie die Fernverwaltung der Plattform über IPMI. Für Tools wie ipmitool muss diese Einstellung aktiviert sein. Führen Sie nach der Aktivierung die Prozedur in der Dokumentation zur Onlineunterstützung aus, um IPMI-Benutzer hinzuzufügen.",
+    "rtad": "RTAD",
+    "rtadDescription": "Über diese Option wird RTAD (Remote Trusted Attestation Daemon) für Host-Firmware aktiviert bzw. inaktiviert.",
+    "rtadInfoIcon": "@:global.status.nextReboot",
+    "secureVersion": "Sichere Versionssperre",
+    "secureVersionDescription": "Gibt an, ob die sichere Versionssperrfunktion aktiviert ist.",
+    "ssh": "BMC-Shell (über SSH)",
+    "sshDescription": "Ermöglichen Sie den Zugriff auf Shellsitzungen über SSH über Port 22 des BMC.",
+    "usbFirmwareUpdatePolicy": "Aktualisierungsrichtlinie für USB-Firmware",
+    "usbFirmwareUpdatePolicyDescription": "Durch Aktivieren der Aktualisierungsrichtlinie für USB-Firmware wird die Funktionalität aktiviert, die Firmware-Updates über einen USB-Schlüssel ermöglicht.",
+    "toast": {
+      "errorNetworkPolicyUpdate": "Fehler beim Aktualisieren von %{policy}.",
+      "successDisableBmcShell": "BMC-Shell wurde erfolgreich inaktiviert (über SSH). Bitte warten Sie 15 Sekunden, bis die Inaktivierung wirksam wird.",
+      "successEnableBmcShell": "BMC-Shell erfolgreich aktiviert (über SSH)",
+      "successNetworkPolicyUpdate": "%{policy} erfolgreich aktualisiert.",
+      "successNextBootToast": "Änderungen werden auf %{policy} angewendet. Änderungen an %{policy} werden beim nächsten Warmstart wirksam."
+    },
+    "vtpm": "VirtualTPM",
+    "vtpmDescription": "Durch die Aktivierung von vTPM wird ein TPM für das Gastsystem verfügbar."
+  },
+  "pagePostCodeLogs": {
+    "allExportFilePrefix": "All_POST_codes_log_",
+    "downloadFilePrefix": "POST_codes_additional_details_",
+    "exportFilePrefix": "POST_codes_log_",
+    "viewCodesInRealtime": "Fortschrittscodes in Echtzeit anzeigen",
+    "action": {
+      "downloadDetails": "Weitere Details herunterladen",
+      "exportLogs": "Protokoll exportieren"
+    },
+    "button": {
+      "exportAll": "Alles exportieren"
+    },
+    "table": {
+      "bootCount": "Anzahl der Bootvorgänge",
+      "created": "Erstellungsdatum",
+      "postCode": "Code",
+      "searchLogs": "Protokolle durchsuchen",
+      "timeStampOffset": "Zeitmarkenoffset"
+    }
+  },
+  "pagePower": {
+    "delayTime": "Verzögerungszeit (in Sekunden)",
+    "description": "Legen Sie eine Leistungsbegrenzung fest, um den Stromverbrauch bei oder unter dem in Watt angegebenen Wert zu halten.",
+    "enableIdlePower": "Energiesparfunktion für Leerlauf aktivieren",
+    "idlePower": "Energiesparfunktion für Leerlauf",
+    "idlePowerSubmitUpdate": "Energiesparfunktion für Leerlauf aktualisieren",
+    "idlePowerSubmitReset": "Auf Standardwert zurücksetzen",
+    "powerConsumptionTooltip": "Stromverbrauch ist verfügbar, sobald PHYP ausgeführt wird",
+    "powerCapLabel": "Leistungsbegrenzungswert (in Watt)",
+    "powerCapLabelTextInfo": "Wert muss zwischen %{min} und %{max} liegen",
+    "powerCapSettingData": "Leistungsbegrenzung anwenden",
+    "powerCapSettingLabel": "Einstellung für Leistungsbegrenzung",
+    "powerConsumption": "Aktueller Leistungsaufnahme",
+    "powerPerformanceModesDropdownLabel": "Auswirkungen der einzelnen Modi anzeigen",
+    "powerPerformanceModesTitle": "Netz- und Leistungsmodus",
+    "selectModeLabel": "Modus auswählen",
+    "submitButton": "Energiesparmodus aktualisieren",
+    "toEnter": "Eingabe",
+    "toExit": "Beenden",
+    "utilizationThreshold": "Auslastungsschwellenwert (in%)",
+    "alert": {
+      "message": "Das System arbeitet aktuell mit verringerter Leistung, da es sich im abgesicherten Modus befindet. Auf die Stromversorgungseinstellungen kann im abgesicherten Modus nicht zugegriffen werden. ",
+      "message2": "Um die Ursache zu ermitteln, wechseln Sie zu",
+      "message2Link": "Ereignisprotokolle",
+      "message3": "Das System versucht, den abgesicherten Modus beim nächsten Einschaltversuch zu verlassen. Um den Server neu zu starten, wechseln Sie zu",
+      "message3Link": "Ein-/Ausschaltoperationen für Server"
+    },
+    "delayTimeValidation": {
+      "delayTimeRange": "Der Wert muss zwischen %{min} und %{max} liegen.",
+      "enterDelayTime": "Wert darf nicht kleiner als die Verzögerungszeit zum Beenden sein.",
+      "exitDelayTime": "Wert darf nicht größer als die einzugebende Verzögerungszeit sein."
+    },
+    "modalEnablePowerPerformanceMode": {
+      "cancelButton": "Abbrechen",
+      "content": "Wenn Sie einen Energiesparmodus aktivieren, führt dies zu Änderungen bei Prozessorfrequenzen, Prozessorauslastung, Leistungsaufnahme und Leistung.",
+      "subTitle": "Sind Sie sicher?",
+      "titleMaximumPerformance": "Modus für maximale Leistung aktivieren",
+      "titlePowerSaving": "Stromsparmodus aktivieren",
+      "titleStatic": "Statischen Modus aktivieren"
+    },
+    "selectMode": {
+      "maximumPerformance": "Maximale Leistung",
+      "powerSaving": "Energiesparmodus",
+      "static": "Statisch"
+    },
+    "tableRoles": {
+      "descMaximumPerformance": "Die Prozessorfrequenz variiert. Dieser Modus ermöglicht dem System, die maximale Frequenz zu erreichen, indem die Wärme- und Leistungsaufnahmereserven genutzt werden, die durch inaktive Kerne, geringere Arbeitslasten und günstige Umgebungsbedingungen vorliegen.",
+      "descPowerSaving": "Die Prozessorfrequenz wird auf einen festen Mindestwert gesetzt, wodurch sich die Leistungsaufnahme des Systems verringert und gleichzeitig eine vorhersehbare Leistung erzielt wird.",
+      "descStatic": "Für die Prozessorfrequenz wird ein fester Wert festgelegt, der für normale Workloads unter normalen Umgebungsbedingungen ausgelegt ist.",
+      "description": "Beschreibung",
+      "setting": "Einstellung"
+    },
+    "utilizationPercentValidation": {
+      "enterUtilization": "Wert darf den Inaktivierungsschwellenwert nicht überschreiten.",
+      "exitUtilization": "Wert darf den Aktivierungsschwellenwert nicht unterschreiten.",
+      "utilizationRange": "Der Wert muss zwischen %{min} und %{max} liegen."
+    },
+    "toast": {
+      "errorIdlePower": "Fehler beim Speichern der Einstellungen für inaktive Stromversorgung",
+      "errorIdlePowerReset": "Fehler beim Zurücksetzen der Einstellungen für inaktive Stromversorgung",
+      "errorPowerPerformanceModes": "Fehler beim Speichern von Stromversorgungs- und Leistungsmodus",
+      "successIdlePower": "Einstellungen für inaktive Stromversorgung erfolgreich gespeichert",
+      "successIdlePowerReset": "Einstellungen für inaktive Stromversorgung erfolgreich zurückgesetzt",
+      "successPowerPerformanceModes": "Energiesparmodus erfolgreich gespeichert"
+    }
+  },
+  "pagePowerRestorePolicy": {
+    "description": "Konfigurieren Sie die Stromversorgungsrichtlinie, um festzulegen, wie das System nach einem Problem mit der Stromversorgung gestartet wird.",
+    "powerPoliciesLabel": "Richtlinien für Wiederherstellung der Stromversorgung",
+    "policies": {
+      "AlwaysOff": "Immer AUS",
+      "AlwaysOn": "Immer EIN",
+      "LastState": "Letzter Status"
+    },
+    "policiesDesc": {
+      "AlwaysOff": "Immer AUS - Das System bleibt immer ausgeschaltet, wenn die Stromversorgung wiederhergestellt wird.",
+      "AlwaysOn": "Immer EIN - Das System wird immer eingeschaltet, wenn die Stromversorgung wiederhergestellt wird.",
+      "LastState": "Letzter Status - Das System kehrt zum letzten Betriebszustand (Ein/Aus) zurück, wenn die Stromversorgung wiederhergestellt wird."
+    },
+    "alert": {
+      "changeServerOpMode": "Serverbetriebsmodus ändern",
+      "manualOperatingMode": "Die Richtlinie für die Wiederherstellung der Stromversorgung kann im manuellen Betriebsmodus nicht geändert werden."
+    },
+    "toast": {
+      "errorIdlePower": "Fehler beim Speichern von Leerlaufleistungsdaten",
+      "errorPowerSaver": "Fehler beim Speichern des Energiesparmodus",
+      "errorSaveSettings": "Fehler beim Speichern von Einstellungen.",
+      "successIdlePower": "Daten für inaktive Stromversorgung erfolgreich gespeichert",
+      "successPowerSaver": "Energiesparmodus erfolgreich gespeichert",
+      "successSaveSettings": "Richtlinie für Wiederherstellung der Stromversorgung wurde erfolgreich aktualisiert."
+    }
+  },
+  "pageProfileSettings": {
+    "browserOffset": "Browser-Offset (%{timezone})",
+    "changePassword": "Kennwort ändern",
+    "confirmPassword": "Neues Kennwort bestätigen",
+    "defaultUTC": "Standard (UTC)",
+    "newPassLabelTextInfo": "Kennwort muss zwischen %{min} - %{max} Zeichen enthalten",
+    "newPassword": "Neues Kennwort",
+    "passwordsDoNotMatch": "Kennwörter stimmen nicht überein",
+    "profileInfoTitle": "Profilinformationen",
+    "timezone": "Zeitzone",
+    "timezoneDisplay": "Anzeigevorgabe für Zeitzone",
+    "timezoneDisplayDesc": "Wählen Sie aus, wie die Zeit in der gesamten Anwendung angezeigt wird",
+    "username": "Benutzername",
+    "toast": {
+      "successUpdatingTimeZone": "Zeitzone erfolgreich aktualisiert."
+    }
+  },
+  "pageRebootBmc": {
+    "lastReboot": "Letzter BMC-Warmstart",
+    "rebootBmc": "BMC neu starten",
+    "rebootInformation": "Wenn Sie den BMC neu starten, verliert Ihr Web-Browser einige Minuten lang den Kontakt zum BMC. Wenn der BMC wieder online ist, müssen Sie sich möglicherweise erneut anmelden.",
+    "modal": {
+      "confirmMessage": "Soll der BMC tatsächlich neu gestartet werden?",
+      "confirmMessage2": "Ein Systemspeicherauszug wird ausgelagert. Wird der BMC neu gestartet, geht der Speicherauszug verloren.",
+      "confirmTitle": "BMC-Warmstart bestätigen"
+    },
+    "toast": {
+      "errorRebootStart": "Fehler beim Warmstart des BMC.",
+      "successRebootStart": "BMC wird neu gestartet."
+    }
+  },
+  "pageSensors": {
+    "alert": "Das Laden dieser Seite kann mehrere Minuten beanspruchen.",
+    "exportFilePrefix": "sensors_",
+    "searchForSensors": "Nach Sensoren suchen",
+    "table": {
+      "currentValue": "Aktueller Wert",
+      "lowerCritical": "Untergrenze für kritisch",
+      "lowerWarning": "Untergrenze für Warnung",
+      "name": "Name",
+      "status": "Status",
+      "upperCritical": "Obergrenze für kritisch",
+      "upperWarning": "Obergrenze für Warnung"
+    }
+  },
+  "pageServerPowerOperations": {
+    "currentStatus": "Aktueller Status",
+    "immediateReboot": "Sofort - Server führt einen Warmstart durch, ohne das Betriebssystem herunterzufahren. Dies kann zu Datenverlust führen",
+    "immediateShutdown": "Sofort - Server wird beendet, ohne das Betriebssystem herunterzufahren. Dies kann zu Datenverlust führen",
+    "lastPowerOperation": "Letzter Chassis-Aus-/Einschaltvorgang",
+    "oneTimeBootWarning": "Einmaliger Bootvorgang steht an. Der nächste Bootvorgang wird mit den angegebenen Einstellungen für einmalige Bootvergänge ausgeführt. Für nachfolgende Bootvergänge werden die Standardeinstellungen verwendet.",
+    "operationInProgress": "Während eines Ein-/Auschaltvorgangs ist keine Optionsanzeige verfügbar. Nach Abschluss des Vorgangs werden hier Ein-/Ausschaltoptionen angezeigt.",
+    "operations": "Operationen",
+    "orderlyReboot": "Ordnungsgemäß - Betriebssystem wird heruntergefahren und der Server anschließend neu gestartet",
+    "orderlyShutdown": "Ordnungsgemäß - Betriebssystem und Server werden nacheinander heruntergefahren.",
+    "osRuntimeButton": "Mit dem Betriebsstatus des Betriebssystems fortfahren",
+    "osRuntimeMessage": "Fahren Sie mit dem Betriebsstatus des Betriebssystems fort, um mit der Laufzeit fortzufahren.",
+    "phypStandby": "Das System befindet sich im PHYP-Bereitschaftsmodus.",
+    "powerOn": "Einschalten",
+    "reboot": "Neu starten",
+    "rebootServer": "Server neu starten",
+    "serverBootSettings": "Einstellungen",
+    "serverStatus": "Serverstatus",
+    "shutDown": "Herunterfahren",
+    "shutdownServer": "Server herunterfahren",
+    "biosSettings": {
+      "aixLinux": "Bootmodus der AIX/LINUX-Partition",
+      "automatic": "Automatisch",
+      "currentOperatingModeManual": "Aktueller Betriebsmodus Manuell",
+      "currentOperatingModeNormal": "Aktueller Betriebsmodus Normal",
+      "defaultPartition": "Standardpartitionsumgebung",
+      "ibmIPartition": "Bootmodus der IBM i-Partition",
+      "nonHMCManaged": "Nur aktiviert, wenn das System nicht von HMC verwaltet wird",
+      "powPolicySection": "wird mit %{powerPolicy} definiert",
+      "powerOff": "Ausschalten",
+      "pvm_default_os_type": "Standardpartitionsumgebung",
+      "pvm_os_boot_type": "Bootmodus der IBM i-Partition",
+      "pvm_rpa_boot_mode": "Bootmodus der AIX/LINUX-Partition",
+      "pvm_stop_at_standby": "Richtlinie für Server-Firmwarestart",
+      "pvm_system_operating_mode": "Betriebsmodus des Servers",
+      "pvm_system_power_off_policy": "Ein-/Ausschaltrichtlinie des Servers",
+      "selectedOperatingModeManual": "Beim Speichern wird der Betriebsmodus auf Manuell gesetzt.",
+      "serverFirmware": "Richtlinie für Server-Firmwarestart",
+      "powerSettingDescription": "Beschreibungen der Stromversorgungseinstellungen anzeigen",
+      "stayOn": "Eingeschaltet lassen",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "Nur automatischer Start",
+          "autoStartAlways": "Immer automatischer Start",
+          "standBy": "Bereitschaft"
+        },
+        "description": {
+          "autoStartOnly": "Aktivieren Sie Server-Firmware und Partitionen nur dann automatisch, wenn die Wiederherstellung nach einer abnormalen Beendigung eingeschaltet wird (z. B. automatischer Neustart der Stromversorgung oder automatischer Neustart der Systembeendigung).",
+          "autoStartAlways": "Aktivieren Sie bestimmte Partitionen automatisch. Wenn der Server über das HMC- oder ASMI-Menü eingeschaltet wird, aktiviert der Server automatisch die Partitionen, die für das automatische Starten konfiguriert sind. Wenn der Server fehlerhaft stoppt und ein automatischer Neustart oder Warmstart ausgeführt wird, aktiviert der Server die Partitionen, die zur Zeit des Stopps aktiv waren.",
+          "standBy": "Aktivieren Sie die Server-Firmware und die Partitionen nicht automatisch beim Einschalten durch den Benutzer oder bei einer Wiederherstellung."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "Standardwert"
+        },
+        "description": {
+          "aix": "Systemfirmware wählt AIX/Linux als Standardpartitionsumgebung aus.",
+          "linux": "Systemfirmware wählt AIX/Linux als Standardpartitionsumgebung aus.",
+          "ibmI": "Server-Firmware wählt IBM i als Standardpartitionsumgebung aus.",
+          "default": "Die Systemfirmware wählt automatisch die Standardpartitionsumgebung basierend auf dem Systemmarkentyp aus."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "Diese Partition bootet direkt in das Betriebssystem",
+          "serviceBoot": "Service-Bootmodus aus gespeicherter Liste",
+          "bootToSms": "Booten über SMS-Menü",
+          "bootToOpenFirware": "Booten mit Open Firmware-Eingabeaufforderung",
+          "serviceBootMode": "Booten im Servicemodus von Standardliste"
+        },
+        "description": {
+          "partitionBoot": "Die Partition bootet ohne Unterbrechung in das Betriebssystem.",
+          "serviceBoot": "Das System bootet über die gespeicherte Bootliste für den Servicemodus. Dies ist normalerweise eine Kurzform für die Ausführung des Diagnoseprogramms der Partition.  Damit diese Option genutzt werden kann, muss das Betriebssystem das Booten im Diagnosemodus unterstützen, und das Diagnoseprogramm muss sich auf dem Plattenlaufwerk der Partition befinden.",
+          "bootToSms": "Die Partition wird im SMS-Menü (System Management Services) gestoppt.",
+          "bootToOpenFirware": "Das System stoppt an der Eingabeaufforderung der Open Firmware.",
+          "serviceBootMode": "Das System bootet über die Standardbootliste.  Diese Option ist die bevorzugte Methode zum Ausführen des eigenständigen Diagnoseprogramms von einem CD-ROM-Laufwerk."
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "IPL von Platte unter Verwendung von Kopie A des Licensed Internal Code des Systems.",
+          "b": "IPL von Platte mit Kopie B des Licensed Internal Code des Systems.",
+          "c": "Nur für die Hardware-Service-Verwendung reserviert.",
+          "d": "IPL von einem anderen Datenträger als der IPL-Platte durchführen. Alternatives IPL für die Unterstützung der Codeinstallation."
+        }
+      },
+      "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "Standardwert"
+        },
+        "pvm_os_boot_type": {
+          "A_Mode": "A (Mit Kopie A von Platte booten)",
+          "B_Mode": "B (Mit Kopie B von Platte booten)",
+          "C_Mode": "C (Für Verwendung in IBM Labor reserviert)",
+          "D_Mode": "D (Über Datenträger/Laufwerke booten)"
+        },
+        "pvm_rpa_boot_mode": {
+          "DefaultList": "Booten im Servicemodus von Standardliste",
+          "Normal": "Die Partition wird direkt mit dem Betriebssystem gestartet.",
+          "OkPrompt": "Booten mit Open Firmware-Eingabeaufforderung",
+          "PblBootLid": "Partitionsboot erfolgt über Bootladeprogramm 'Petitboot'",
+          "SavedList": "Booten im Servicemodus von gespeicherter Liste",
+          "SmsMenu": "Booten über SMS-Menü"
+        },
+        "pvm_stop_at_standby": {
+          "Disabled": "Immer automatischer Start",
+          "Enabled": "Standby (benutzerinitiiert)",
+          "ManualOnly": "Nur automatischer Start"
+        },
+        "pvm_system_operating_mode": {
+          "Manual": "Manuell - Service/Wartung",
+          "Normal": "Normal - Automatisch"
+        },
+        "pvm_system_power_off_policy": {
+          "automaticHelperText": "Bei dieser Einstellung ist das Verhalten des Systems, wenn es nicht partitioniert ist, dasselbe wie beim Ausschalten, und wenn das System partitioniert ist, ist das Verhalten des Systems dasselbe wie beim System, wenn es eingeschaltet bleibt.",
+          "powerOffHelperText": "Der Server wird im Anschluss an das Abschalten der letzten Partition ausgeschaltet",
+          "stayOnHelperText": "Der Server bleibt im Anschluss an das Abschalten der letzten Partition eingeschaltet"
+        }
+      }
+    },
+    "modal": {
+      "confirmRebootMessage": "Möchten Sie den Neustart wirklich durchführen?",
+      "confirmRebootMessage2": "Ein Systemspeicherauszug wird ausgelagert. Bei einem Neustart geht der Speicherauszug verloren.",
+      "confirmRebootTitle": "Der Warmstart des Servers führt zu einer Ausfallzeit",
+      "confirmShutdownMessage": "Soll das System tatsächlich heruntergefahren werden?",
+      "confirmShutdownMessage2": "Ein Systemspeicherauszug wird ausgelagert. Wird das System heruntergefahren, geht der Speicherauszug verloren.",
+      "confirmShutdownTitle": "Das Herunterfahren des Servers führt zu einer Ausfallzeit"
+    },
+    "toast": {
+      "errorPowerOn": "BMC ist nicht zum Einschalten des Hosts bereit.",
+      "errorSaveSettings": "Fehler beim Speichern von Einstellungen.",
+      "successSaveSettings": "Die Einstellungen wurden erfolgreich gespeichert."
+    }
+  },
+  "pageServiceLoginConsoles": {
+    "bmcConsole": "BMC-Konsole",
+    "hypervisorConsole": "Hypervisorkonsole",
+    "selectConsoleType": "Konsole auswählen",
+    "status": "Status"
+  },
+  "pageSessions": {
+    "action": {
+      "disconnect": "Verbindung trennen"
+    },
+    "alert": {
+      "heading": "Warnung",
+      "message": "Ist die HMC aktiv, versucht sie, die Verbindung wiederherzustellen. Um die Verbindung zu einer aktiven HMC zu trennen, trennen Sie die Verbindung zur HMC selbst."
+    },
+    "modal": {
+      "disconnectMessage": "Sollen %{count} Sitzungen tatsächlich getrennt werden? Diese Aktion kann nicht rückgängig gemacht werden. | Sollen tatsächlich %{count} Sitzungen getrennt werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "disconnectTitle": "Sitzung unterbrechen | Sitzungen unterbrechen"
+    },
+    "table": {
+      "clientID": "Client-ID",
+      "ipAddress": "IP-Adresse",
+      "searchSessions": "Sitzungen suchen",
+      "username": "Benutzername"
+    },
+    "toast": {
+      "errorDelete": "Fehler beim Unterbrechen von %{count} Sitzung. | Fehler beim Unterbrechen von %{count} Sitzungen.",
+      "successDelete": "%{count} Sitzung erfolgreich unterbrochen. | %{count} Sitzungen wurden erfolgreich unterbrochen."
+    }
+  },
+  "pageSnmpAlerts": {
+    "addDestination": "Ziel hinzufügen",
+    "deleteDestination": "Ziel löschen | Ziele löschen",
+    "pageDescription": "Legen Sie die SNMP-Traps (SNMP - Simple Network Management Protocol) mit einer IP-Adresse und einem Port fest.",
+    "modal": {
+      "addSnmpDestinationTitle": "SNMP-Alertziel hinzufügen",
+      "batchDeleteConfirmMessage": "Soll das SNMP-Alertziel tatsächlich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden. | Sollen tatsächlich %{count} SNMP-Alertziele gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteConfirmMessage": "Soll das SNMP-Alertziel tatsächlich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteSnmpDestinationTitle": "SNMP-Alertziel löschen | SNMP-Alertziele löschen",
+      "ipaddress": "IP-Adresse",
+      "ipaddressFqdn": "IP-Adresse/FQDN",
+      "ipaddressFqdnInfo": "IP-Adresse oder somehost.example.com",
+      "port": "Port"
+    },
+    "table": {
+      "ipaddress": "IP-Adresse",
+      "port": "Port"
+    },
+    "toast": {
+      "errorAddDestination": "Fehler beim Hinzufügen des SNMP-Alertziels",
+      "errorBatchDelete": "Fehler beim Löschen des SNMP-Alertziels. | Fehler beim Löschen von SNMP-Alertzielen.",
+      "errorDeleteDestination": "Fehler beim Löschen des SNMP-Alertziels.",
+      "errorLoadSnmpDetails": "Fehler beim Laden von SNMP-Alertdetails.",
+      "successAddDestination": "SNMP-Alertziel wurde erfolgreich hinzugefügt.",
+      "successBatchDelete": "SNMP-Alertziel wurde gelöscht. | %{count} SNMP-Alertziele wurden gelöscht.",
+      "successDeleteDestination": "SNMP-Alertziel wurde gelöscht."
+    }
+  },
+  "pageUserManagement": {
+    "accountPolicySettings": "Einstellungen für Kontenrichtlinien",
+    "addUser": "Benutzer hinzufügen",
+    "deleteUser": "Einzelnen Benutzer löschen | Benutzer löschen",
+    "editUser": "Benutzer bearbeiten",
+    "viewPrivilegeRoleDescriptions": "Beschreibungen von Berechtigungsrollen anzeigen",
+    "modal": {
+      "accountLocked": "Account gesperrt",
+      "accountStatus": "Accountstatus",
+      "automaticAfterTimeout": "Automatisch nach Zeitlimitüberschreitung",
+      "batchDeleteConfirmMessage": "Soll der Benutzer %{count} tatsächlich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden. | Sollen tatsächlich %{count} Benutzer gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "cannotStartWithANumber": "Der Name darf nicht mit einer Zahl beginnen.",
+      "clickSaveToUnlockAccount": "Klicken Sie auf \"Speichern\", um das Konto zu entsperren",
+      "confirmUserPassword": "Benutzerkennwort bestätigen",
+      "deleteConfirmMessage": "Soll der Benutzer '%{user}' tatsächlich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "manual": "Manuell",
+      "maxFailedLoginAttempts": "Max. Fehlversuche bei Anmeldung",
+      "noSpecialCharactersExceptUnderscore": "Keine Sonderzeichen außer Unterstreichungszeichen",
+      "passwordMustBeBetween": "Kennwort muss zwischen %{min} - %{max} Zeichen enthalten",
+      "passwordsDoNotMatch": "Kennwörter stimmen nicht überein",
+      "privilege": "Berechtigung",
+      "timeoutDurationSeconds": "Zeitlimit (Sekunden)",
+      "unlock": "Entsperren",
+      "username": "Benutzername",
+      "userPassword": "Benutzerkennwort",
+      "userUnlockMethod": "Methode zum Entsperren von Benutzern",
+      "zeroLoginAttempts": "Bei \"0\" wird das Konto nie gesperrt."
+    },
+    "table": {
+      "administrator": "Administrator",
+      "privilege": "Berechtigung",
+      "readOnly": "Lesezugriff",
+      "status": "Status",
+      "username": "Benutzername"
+    },
+    "tableRoles": {
+      "administrator": "Administrator",
+      "configureComponentsManagedByThisService": "Von diesem Service verwaltete Komponenten konfigurieren",
+      "configureManagerResources": "Managerressourcen konfigurieren",
+      "configureUsersAndTheirAccounts": "Benutzer und deren Accounts konfigurieren",
+      "logInToTheServiceAndReadResources": "Beim Service anmelden und Ressourcen lesen",
+      "privilege": "Berechtigung",
+      "readOnly": "NurLesen",
+      "updatePasswordForCurrentUserAccount": "Kennwort für aktuellen Benutzeraccount aktualisieren"
+    },
+    "toast": {
+      "errorBatchDelete": "Fehler beim Löschen von %{count} Benutzer. | Fehler beim Löschen von %{count} Benutzern.",
+      "errorBatchDisable": "Fehler beim Inaktivieren von %{count} Benutzer. | Fehler beim Inaktivieren von %{count} Benutzern.",
+      "errorBatchEnable": "Fehler beim Aktivieren von %{count} Benutzer. | Fehler beim Aktivieren von %{count} Benutzern.",
+      "errorCreateUser": "Fehler beim Erstellen des Benutzers '%{username}'.",
+      "errorCreateUserMaxUsers": "Fehler beim Erstellen von Benutzer '%{username}', da dieses System die maximale Anzahl zulässiger Benutzer erreicht hat.",
+      "errorCreateUserPasswordNotAccepted": "Fehler beim Erstellen des Benutzers '%{username}', da das Kennwort nicht akzeptiert wurde.",
+      "errorDeleteUser": "Fehler beim Löschen des Benutzers '%{username}'.",
+      "errorLoadAccountSettings": "Fehler beim Laden von Kontoeinstellungen",
+      "errorLoadUsers": "Fehler beim Laden von Benutzern.",
+      "errorSaveSettings": "Fehler beim Speichern von Kontoeinstellungen.",
+      "errorUpdateUser": "Fehler beim Aktualisieren des Benutzers '%{username}'.",
+      "errorUpdateUserPasswordNotAccepted": "Fehler beim Aktualisieren von Benutzer '%{username}', da das Kennwort nicht akzeptiert wurde.",
+      "successBatchDelete": "%{count} Benutzer wurde erfolgreich gelöscht. | %{count} Benutzer wurden erfolgreich gelöscht.",
+      "successBatchDisable": "%{count} Benutzer wurde erfolgreich inaktiviert. | %{count} Benutzer wurden erfolgreich inaktiviert.",
+      "successBatchEnable": "%{count} Benutzer wurde erfolgreich aktiviert. | %{count} Benutzer wurden erfolgreich aktiviert.",
+      "successCreateUser": "Benutzer '%{username}' wurde erstellt.",
+      "successDeleteUser": "Benutzer '%{username}' wurde gelöscht.",
+      "successSaveSettings": "Kontoeinstellungen erfolgreich gespeichert.",
+      "successUpdateUser": "Benutzer '%{username}' wurde aktualisiert."
+    }
+  },
+  "pageVirtualMedia": {
+    "configureConnection": "Verbindung konfigurieren",
+    "defaultDeviceName": "Virtuelle Datenträgereinheit",
+    "start": "Starten",
+    "stop": "Stoppen",
+    "virtualMediaSubTitleFirst": "Image über Web-Browser laden",
+    "virtualMediaSubTitleSecond": "Image vom externen Server laden",
+    "modal": {
+      "password": "Kennwort",
+      "serverUri": "URI des externen Servers",
+      "title": "Konfiguration des traditionellen Modus",
+      "username": "Benutzername"
+    },
+    "toast": {
+      "errorMounting": "Fehler beim Anhängen",
+      "errorReadingFile": "Fehler beim Lesen von Datei. Server wird geschlossen.",
+      "errorUnmounting": "Fehler beim Abhängen",
+      "serverClosedSuccessfully": "Server erfolgreich geschlossen",
+      "serverClosedWithErrors": "Server mit Fehlern geschlossen",
+      "serverConnectionEstablished": "Serververbindung hergestellt",
+      "serverRunning": "Server aktiv"
+    }
+  },
+  "countries": {
+    "AF": "Afghanistan",
+    "AL": "Albanien",
+    "DZ": "Algerien",
+    "AS": "Amerikanisch-Samoa",
+    "AD": "Andorra",
+    "AO": "Angola",
+    "AI": "Anguilla",
+    "AQ": "Antarktis",
+    "AG": "Antigua und Barbuda",
+    "AR": "Argentinien",
+    "AM": "Armenien",
+    "AW": "Aruba",
+    "AU": "Australien",
+    "AT": "Österreich",
+    "AZ": "Aserbaidschan",
+    "BS": "Bahamas",
+    "BH": "Bahrain",
+    "BD": "Bangladesch",
+    "BB": "Barbados",
+    "BY": "Weißrussland",
+    "BE": "Belgien",
+    "BZ": "Belize",
+    "BJ": "Benin",
+    "BM": "Bermuda",
+    "BT": "Bhutan",
+    "BO": "Bolivien",
+    "BQ": "Bonaire, Sint Eustatius und Saba",
+    "BA": "Bosnien-Herzegowina ",
+    "BW": "Bostwana",
+    "BV": "Bouvetinsel",
+    "BR": "Brasilien",
+    "IO": "Britisches Territorium im Indischen Ozean",
+    "BN": "Brunei Darussalam ",
+    "BG": "Bulgarien",
+    "BF": "Burkina Faso",
+    "BI": "Burundi",
+    "CV": "Kap Verde",
+    "KH": "Kambodscha",
+    "CM": "Kamerun",
+    "CA": "Kanada",
+    "KY": "Kaimaninseln",
+    "CF": "Zentralafrikanische Republik",
+    "TD": "Tschad",
+    "CL": "Chile",
+    "CN": "China",
+    "CX": "Weihnachtsinsel ",
+    "CC": "Kokosinseln (Keelinginseln)",
+    "CO": "Kolumbien",
+    "KM": "Komoren",
+    "CD": "Kongo, Demokratische Republik",
+    "CG": "Kongo",
+    "CK": "Cookinseln",
+    "CR": "Costa Rica",
+    "HR": "Kroatien",
+    "CU": "Kuba",
+    "CW": "Curaçao",
+    "CY": "Zypern",
+    "CZ": "Tschechien",
+    "CI": "Elfenbeinküste",
+    "DK": "Dänemark",
+    "DJ": "Dschibuti",
+    "DM": "Dominica",
+    "DO": "Dominikanische Republik",
+    "EC": "Ecuador",
+    "EG": "Ägypten",
+    "SV": "El Salvador",
+    "GQ": "Äquatorialguinea ",
+    "ER": "Eritrea",
+    "EE": "Estland",
+    "SZ": "Eswatini",
+    "ET": "Äthiopien",
+    "FK": "Falklandinseln (Malwinen)",
+    "FO": "Färöer",
+    "FJ": "Fidschi",
+    "FI": "Finnland",
+    "FR": "Frankreich",
+    "GF": "Französisch-Guayana",
+    "PF": "Französisch-Polynesien",
+    "TF": "Französische Südpolar-Territorien",
+    "GA": "Gabun",
+    "GM": "Gambia",
+    "GE": "Georgien",
+    "DE": "Deutschland",
+    "GH": "Ghana",
+    "GI": "Gibraltar",
+    "GR": "Griechenland",
+    "GL": "Grönland",
+    "GD": "Grenada",
+    "GP": "Guadeloupe",
+    "GU": "Guam",
+    "GT": "Guatemala",
+    "GG": "Guernsey",
+    "GN": "Guinea",
+    "GW": "Guinea-Bissau",
+    "GY": "Guyana",
+    "HT": "Haiti",
+    "HM": "Heard- und McDonald-Inseln",
+    "VA": "Vatikan",
+    "HN": "Honduras",
+    "HK": "Hongkong",
+    "HU": "Ungarn",
+    "IS": "Island",
+    "IN": "Indien",
+    "ID": "Indonesien",
+    "IR": "Iran, Islamische Republik",
+    "IQ": "Irak",
+    "IE": "Irland",
+    "IM": "Isle of Man",
+    "IL": "Israel",
+    "IT": "Italien",
+    "JM": "Jamaika",
+    "JP": "Japan",
+    "JE": "Jersey",
+    "JO": "Jordanien",
+    "KZ": "Kasachstan",
+    "KE": "Kenia",
+    "KI": "Kiribati",
+    "KR": "Korea, Republik",
+    "KP": "Korea, Demokratische Volksrepublik",
+    "KW": "Kuwait",
+    "KG": "Kirgisistan",
+    "LA": "Laos, Demokratische Volksrepublik",
+    "LV": "Lettland",
+    "LB": "Libanon",
+    "LS": "Lesotho",
+    "LR": "Liberia",
+    "LY": "Libyen",
+    "LI": "Liechtenstein",
+    "LT": "Litauen",
+    "LU": "Luxemburg",
+    "MO": "Macau",
+    "MK": "Mazedonien, Ehemalige Jugoslawische Republik",
+    "MG": "Madagaskar",
+    "MW": "Malawi",
+    "MY": "Malaysia",
+    "MV": "Malediven",
+    "ML": "Mali",
+    "MT": "Malta",
+    "MH": "Marshallinseln",
+    "MQ": "Martinique",
+    "MR": "Mauretanien",
+    "MU": "Mauritius",
+    "YT": "Mayotte",
+    "MX": "Mexiko",
+    "FM": "Mikronesien, Föderierte Staaten von",
+    "MD": "Moldau, Republik",
+    "MC": "Monaco",
+    "MN": "Mongolei",
+    "ME": "Montenegro",
+    "MS": "Montserrat",
+    "MA": "Marokko",
+    "MZ": "Mosambik",
+    "MM": "Myanmar",
+    "NA": "Namibia",
+    "NR": "Nauru",
+    "NP": "Nepal",
+    "NL": "Niederlande",
+    "NC": "Neukaledonien",
+    "NZ": "Neuseeland",
+    "NI": "Nicaragua",
+    "NE": "Niger",
+    "NG": "Nigeria",
+    "NU": "Niue",
+    "NF": "Norfolkinsel",
+    "MP": "Nördliche Marianen",
+    "NO": "Norwegen",
+    "OM": "Oman",
+    "PK": "Pakistan",
+    "PW": "Palau",
+    "PS": "Palästina",
+    "PA": "Panama",
+    "PG": "Papua-Neuguinea",
+    "PY": "Paraguay",
+    "PE": "Peru",
+    "PH": "Philippinen",
+    "PN": "Pitcairninseln",
+    "PL": "Polen",
+    "PT": "Portugal",
+    "PR": "Puerto Rico",
+    "QA": "Katar",
+    "RO": "Rumänien",
+    "RU": "Russische Föderation",
+    "RW": "Ruanda",
+    "RE": "Réunion",
+    "BL": "Sankt Bartholomäus",
+    "SH": "St. Helena, Ascension und Tristan da Cunha",
+    "KN": "St. Kitts und Nevis ",
+    "LC": "St. Lucia",
+    "MF": "Saint Martin",
+    "PM": "St. Pierre und Miquelon",
+    "VC": "St. Vincent und die Grenadinen",
+    "WS": "Samoa",
+    "SM": "San Marino ",
+    "ST": "São Tomé und Príncipe",
+    "SA": "Saudi-Arabien",
+    "SN": "Senegal",
+    "RS": "Serbien",
+    "SC": "Seychellen",
+    "SL": "Sierra Leone",
+    "SG": "Singapur",
+    "SX": "Sint Maarten",
+    "SK": "Slowakei",
+    "SI": "Slowenien",
+    "SB": "Salomonen",
+    "SO": "Somalia",
+    "ZA": "Südafrika ",
+    "GS": "Südgeorgien und die Südlichen Sandwichinseln",
+    "SS": "Südsudan",
+    "ES": "Spanisch",
+    "LK": "Sri Lanka",
+    "SD": "Sudan",
+    "SR": "Surinam",
+    "SJ": "Svalbard und Jan Mayen",
+    "SE": "Schweden",
+    "CH": "Schweiz",
+    "SY": "Syrien, Arabische Republik",
+    "TW": "Taiwan",
+    "TJ": "Tadschikistan",
+    "TZ": "Tansania, Vereinigte Republik",
+    "TH": "Thailand",
+    "TL": "Timor-Leste",
+    "TG": "Togo",
+    "TK": "Tokelau",
+    "TO": "Tonga",
+    "TT": "Trinidad und Tobago",
+    "TN": "Tunesien",
+    "TR": "Türkei",
+    "TM": "Turkmenistan",
+    "TC": "Turks- und Caicosinseln",
+    "TV": "Tuvalu",
+    "UG": "Uganda",
+    "UA": "Ukraine",
+    "AE": "Vereinigte Arabische Emirate",
+    "GB": "Großbritannien",
+    "UM": "Kleinere Amerikanische Überseeinseln",
+    "US": "USA",
+    "UY": "Uruguay",
+    "UZ": "Usbekistan",
+    "VU": "Vanuatu",
+    "VE": "Venezuela",
+    "VN": "Vietnam",
+    "VG": "Jungferninseln, Britische",
+    "VI": "Jungferninseln, AmerikanischeS",
+    "WF": "Wallis und Futuna",
+    "EH": "Westsahara",
+    "YE": "Jemen",
+    "ZM": "Sambia",
+    "ZW": "Simbabwe",
+    "AX": "Åland"
+  }
+}
