@@ -114,6 +114,7 @@ import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import IconUpload from '@carbon/icons-vue/es/upload/20';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+
 export default {
   name: 'Login',
   components: {
@@ -134,8 +135,44 @@ export default {
       disableSubmitButton: false,
       languages: [
         {
+          value: 'de',
+          text: 'German',
+        },
+        {
           value: 'en-US',
           text: 'English',
+        },
+        {
+          value: 'es',
+          text: 'Español',
+        },
+        {
+          value: 'fr',
+          text: 'French',
+        },
+        {
+          value: 'it',
+          text: 'Italian',
+        },
+        {
+          value: 'ja',
+          text: 'Japanese',
+        },
+        {
+          value: 'ko',
+          text: 'Korean',
+        },
+        {
+          value: 'pt-BR',
+          text: 'Brazilian Portuguese',
+        },
+        {
+          value: 'zh-CN',
+          text: '简体中文 - Chinese simplified',
+        },
+        {
+          value: 'zh-TW',
+          text: '繁体中文 - Chinese traditional',
         },
       ],
     };
@@ -150,6 +187,9 @@ export default {
   },
   created() {
     this.startLoader();
+    if (this.getLang() == 'zh-CN' || this.getLang() == 'zh-TW') {
+      i18n.locale = this.getLang();
+    }
     this.$store.dispatch('authentication/dateAndTime').finally(() => {
       this.endLoader();
       this.isBusy = false;
@@ -215,6 +255,10 @@ export default {
         })
         .then((success) => this.successToast(success))
         .catch(({ message }) => this.errorToast(message));
+    },
+    getLang() {
+      if (navigator.languages !== undefined) return navigator.languages[0];
+      return navigator.language;
     },
   },
 };
