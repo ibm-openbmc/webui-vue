@@ -1,0 +1,1900 @@
+{
+  "global": {
+    "action": {
+      "activate": "活動化する",
+      "add": "追加",
+      "cancel": "キャンセル",
+      "clearAll": "すべてクリア",
+      "confirm": "確認",
+      "copy": "コピー",
+      "delete": "削除",
+      "deleteAll": "すべて削除",
+      "disable": "無効にする",
+      "download": "ダウンロード",
+      "downloadAll": "すべてをダウンロード",
+      "edit": "編集",
+      "enable": "有効にする",
+      "export": "エクスポート",
+      "exportAll": "すべてをエクスポートします。",
+      "filter": "フィルター",
+      "openNewTab": "新しいタブで開きます。",
+      "refresh": "リフレッシュ",
+      "replace": "置換",
+      "reset": "リセット",
+      "save": "保存",
+      "selected": "件選択中"
+    },
+    "ariaLabel": {
+      "clearSearch": "検索入力のクリア",
+      "hidePassword": "パスワードを非表示にする",
+      "progressBar": "ページ読み込みの進行状況バー",
+      "scrollToTop": "トップまでスクロールします。",
+      "showPassword": "パスワードをプレーン・テキストで表示します。 注：これにより、パスワードが画面に視覚的に表示されます。",
+      "tooltip": "ツールチップ"
+    },
+    "calendar": {
+      "dateFormat": "YYYY-MM-DD",
+      "selectDate": "日付の選択",
+      "useCursorKeysToNavigateCalendarDates": "日付を移動するにはカーソル・キーを使用します"
+    },
+    "fileUpload": {
+      "browseText": "ファイルの追加",
+      "clearSelectedFile": "選択したファイルをクリアします。"
+    },
+    "form": {
+      "dateMustBeAfter": "日付は %{date} の後でなければなりません。",
+      "dateMustBeBefore": "日付は %{date} の前でなければなりません。",
+      "fieldRequired": "必須なフィールド",
+      "invalidCharacterLength": "無効な文字長",
+      "invalidFormat": "フォーマットが無効です",
+      "invalidValue": "値が無効です",
+      "lengthMustBeBetween": "長さは %{min} から %{max} 文字の間でなければなりません",
+      "mustBeAtLeast": "最小値: %{value}",
+      "optional": "オプション",
+      "passwordsDoNotMatch": "パスワードが一致しません",
+      "required": "必須",
+      "search": "検索",
+      "selectAnOption": "オプションを選択します。",
+      "valueMustBeBetween": "値は %{min} から %{max} の間でなければなりません。"
+    },
+    "passwordValidation": {
+      "title": "パスワードは次のようにする必要があります:",
+      "message1": "1. 8 文字以上",
+      "message2": "2. 回文ではない",
+      "message3": "3. アカウントのユーザー名が含まれていない",
+      "message4": "4. 辞書の単語を含まない",
+      "message5": "5. 連続文字を含まない",
+      "message6": "6. IPMI に使用する場合は 20 文字以下",
+      "message7": "7. 小文字、大文字、数字、およびその他の文字のいずれか 2 つが含まれている必要があります。"
+    },
+    "status": {
+      "absent": "不在",
+      "copied": "コピー済み",
+      "connected": "接続済み",
+      "critical": "深刻な",
+      "disabled": "無効",
+      "disconnected": "切断",
+      "enabled": "有効",
+      "error": "エラー",
+      "informational": "通知",
+      "locked": "ロック済み",
+      "nextReboot": "変更内容は次回のブート時に有効になります。",
+      "notAvailable": "使用不可",
+      "off": "Off",
+      "ok": "OK",
+      "on": "オン",
+      "present": "存在する",
+      "success": "成功",
+      "warning": "警告"
+    },
+    "table": {
+      "collapseTableRow": "表の行の省略",
+      "emptyMessage": "使用可能な項目がありません。",
+      "emptySearchMessage": "検索照会に一致する項目がありません。",
+      "expandTableRow": "表の行を展開します。",
+      "fromDate": "開始日",
+      "items": "%{count} 項目",
+      "itemsPerPage": "1 ページあたりの部品",
+      "selectAll": "すべて選択",
+      "selectedItems": "%{count} アイテムの%{filterCount} %",
+      "selectItem": "項目の選択",
+      "toDate": "終了日",
+      "viewAll": "すべて表示"
+    },
+    "toast": {
+      "unAuthDescription": "試行されたアクションは、ログイン・アカウントからアクセスできません。 システム管理者に連絡して、権限ロールを確認してください。",
+      "unAuthTitle": "無許可"
+    }
+  },
+  "appHeader": {
+    "applicationHeader": "アプリケーション・ヘッダー",
+    "health": "正常性",
+    "logOut": "ログアウト",
+    "power": "べき乗",
+    "profileSettings": "@:appPageTitle.profileSettings",
+    "refresh": "リフレッシュ",
+    "skipToContent": "コンテンツにスキップ",
+    "titleHideNavigation": "ナビゲーションの非表示",
+    "titleProfile": "プロファイル・メニューの表示",
+    "titleRefresh": "アプリケーション・データの更新",
+    "titleShowNavigation": "ナビゲーションの表示"
+  },
+  "appNavigation": {
+    "capacityOnDemand": "@:appPageTitle.capacityOnDemand",
+    "certificates": "@:appPageTitle.certificates",
+    "concurrentMaintenance": "@:appPageTitle.concurrentMaintenance",
+    "dateTime": "@:appPageTitle.dateTime",
+    "deconfigurationHardware": "@:appPageTitle.deconfigurationHardware",
+    "deconfigurationRecords": "@:appPageTitle.deconfigurationRecords",
+    "dumps": "@:appPageTitle.dumps",
+    "eventLogs": "@:appPageTitle.eventLogs",
+    "factoryReset": "@:appPageTitle.factoryReset",
+    "fieldCoreOverride": "@:appPageTitle.fieldCoreOverride",
+    "firmware": "@:appPageTitle.firmware",
+    "hardwareStatus": "ハードウェア状況",
+    "hostConsole": "@:appPageTitle.hostConsole",
+    "inventory": "@:appPageTitle.inventory",
+    "keyClear": "@:appPageTitle.keyClear",
+    "kvm": "@:appPageTitle.kvm",
+    "systemParameters": "@:appPageTitle.systemParameters",
+    "ldap": "@:appPageTitle.ldap",
+    "logs": "ログ",
+    "memory": "@:appPageTitle.memory",
+    "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
+    "operations": "操作",
+    "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
+    "policies": "@:appPageTitle.policies",
+    "postCodeLogs": "@:appPageTitle.postCodeLogs",
+    "power": "@:appPageTitle.power",
+    "powerRestorePolicy": "@:appPageTitle.powerRestorePolicy",
+    "primaryNavigation": "プライマリナビゲーション",
+    "rebootBmc": "@:appPageTitle.rebootBmc",
+    "resourceManagement": "リソースの管理",
+    "securityAndAccess": "セキュリティーとアクセス",
+    "sensors": "@:appPageTitle.sensors",
+    "serverPowerOperations": "@:appPageTitle.serverPowerOperations",
+    "serviceLogin": "@:appPageTitle.serviceLogin",
+    "sessions": "@:appPageTitle.sessions",
+    "settings": "設定",
+    "snmpAlerts": "SNMP 警告",
+    "userManagement": "@:appPageTitle.userManagement",
+    "virtualMedia": "@:appPageTitle.virtualMedia"
+  },
+  "appPageTitle": {
+    "capacityOnDemand": "デマンド容量",
+    "certificates": "認証",
+    "changePassword": "パスワードの変更",
+    "concurrentMaintenance": "並行保守",
+    "dateTime": "日付/時刻",
+    "deconfigurationHardware": "ハードウェア構成解除",
+    "deconfigurationRecords": "構成解除レコード",
+    "dumps": "ダンプ",
+    "eventLogs": "イベント・ログ",
+    "factoryReset": "ファクトリー・リセット",
+    "fieldCoreOverride": "フィールド・コア・オーバーライド",
+    "firmware": "ファームウェア",
+    "hostConsole": "ホスト・コンソール",
+    "inventory": "インベントリーとLED",
+    "keyClear": "鍵のクリア",
+    "kvm": "KVM",
+    "systemParameters": "システム・パラメーター",
+    "ldap": "LDAP",
+    "login": "ログイン",
+    "memory": "メモリー",
+    "network": "ネットワーク",
+    "notices": "特記事項",
+    "overview": "概要",
+    "pageNotFound": "ページが見つからない",
+    "pcieTopology": "PCIe ハードウェア・トポロジー",
+    "policies": "ポリシー",
+    "postCodeLogs": "進行状況ログ",
+    "postCodes": "進行状況ログ",
+    "power": "べき乗",
+    "powerRestorePolicy": "電源復元ポリシー",
+    "profileSettings": "プロファイル設定",
+    "rebootBmc": "BMC のリブート",
+    "sensors": "センサー",
+    "serverPowerOperations": "サーバーの電源操作",
+    "serviceLogin": "サービス・ログイン・コンソール",
+    "sessions": "HMC とユーザー・セッション",
+    "snmpAlerts": "SNMP 警告",
+    "userManagement": "ユーザー管理",
+    "virtualMedia": "仮想メディア"
+  },
+  "pageCapacityOnDemand": {
+    "absent": "不在",
+    "deferring": "延期",
+    "disabled": "無効",
+    "enabled": "有効",
+    "inTest": "テスト中",
+    "starting": "始動",
+    "standbyOffline": "スタンド・バイ・オフライン",
+    "standbySpare": "スタンバイ・バイ・スペア",
+    "unavailableOffline": "オフラインで使用不可",
+    "updating": "更新",
+    "qualified": "有資格",
+    "quiesced": "静止",
+    "vetCapabilities": "VET 機能",
+    "quickLinks": "クイック・リンク",
+    "activation": {
+      "alert": "PHYP を活動化にするには、スタンバイ状態または実行中である必要があります。",
+      "helperText": "34 文字でなければなりません。 新しいアクセス・キーを取得するには、以下にアクセスしてください。 ",
+      "helperTextIps": "新しいアクセス・キーを取得するには、カスタマー・サービス・ホットライン 400-940-0860 に電話してください。",
+      "placeholder": "活動化コードを入力します",
+      "sectionTitle": "活動化",
+      "srLabel": "アクティベーション・コード",
+      "toast": {
+        "error": "デマンド容量のアクティブ化に失敗しました。",
+        "success": "デマンド容量のアクティブ化が成功しました。"
+      }
+    },
+    "alert": {
+      "description": "システムの電源をオンに設定しななければなりません。",
+      "title": "デマンド容量のアクティブ化への変更内容の適用。"
+    },
+    "orderInfo": {
+      "activatedResources": "アクティブされたリソース",
+      "accessKeyInfo": "アクセス・キー情報",
+      "aixAccessKeyExpiration": "AIX アクセス・キーの有効期限:",
+      "entryCheck": "入力チェック",
+      "firmwareAccessKeyExpiration": "ファームウェア・アクセス・キーの有効期限:",
+      "memoryInfo": "メモリー情報",
+      "memoryLicensed": "ライセンス交付を受けたメモリー:",
+      "memoryResourceId": "メモリー・リソース ID:",
+      "memorySequenceNumber": "メモリー・シーケンス番号:",
+      "previousActivated": "前回の活動化:",
+      "processorInfo": "プロセッサー情報",
+      "processorResourceId": "プロセッサー・リソース ID:",
+      "processorSequenceNumber": "プロセッサー・シーケンス番号:",
+      "processorsLicensed": "ライセンス交付を受けたプロセッサー:",
+      "resourceId": "リソース ID:",
+      "sequenceNumber": "順序番号:",
+      "systemCodPublicKey": "システム COD 公開鍵",
+      "systemCodUniqueId": "システム COD 固有 ID:",
+      "systemAnchor": "システム・アンカー:",
+      "systemInfo": "システム情報",
+      "systemSerialNumber": "システム製造番号:",
+      "systemType": "システム・タイプ:",
+      "title": "オンデマンド・ユーティリティーのオーダー情報",
+      "description": {
+        "message": "この情報が利用できない場合、または他の情報が必要な場合は、(特定のリソース・セレクターを使用して) リソース・ダンプを作成します。作成元:  ",
+        "link": "ページをダンプします。"
+      }
+    },
+    "setting": {
+      "aixAllowed": "AIX 許可",
+      "aixDiagnostics": "AIX 診断",
+      "activeMemoryExpansion": "アクティブ・メモリー拡張",
+      "activeMemoryMirroring": "アクティブ・メモリー・ミラーリング",
+      "capi": "カピ",
+      "interactiveCapacity": "IBMi 100% 対話式容量",
+      "ibmiPartitions": "許可される IBMi パーティション",
+      "inmiPermitted": "ネイティブ I/O の使用が許可されている IBMi",
+      "lparCreationAllowed": "LPAR 作成許可",
+      "livePartitionMobility": "Live partition mobility",
+      "perPartition": "区画当たり 128 を超えるプロセッサー",
+      "subprocessorPartitioning": "サブプロセッサー区画化",
+      "virtualIoServer": "Virtual I/O Server 対応",
+      "virtualTiersAllowed": "許可される仮想層"
+    },
+    "table": {
+      "bitCapabilityStatus": "ビット関数状況",
+      "setting": "設定"
+    }
+  },
+  "pageCertificates": {
+    "addNewCertificate": "新規認証の追加",
+    "caCertificate": "CA 認証",
+    "deleteCertificate": "認証の削除",
+    "generateCsr": "CSR の生成",
+    "httpsCertificate": "HTTPS認証",
+    "ldapCertificate": "LDAP 認証",
+    "replaceCertificate": "認証の置換",
+    "serviceLoginCertificate": "サービスログイン認証",
+    "alert": {
+      "certificateExpiredMessage": "%{certificate} の有効期限が切れました。 新しい認証に置き換えることを検討してください。",
+      "certificateExpiringMessage": "%{certificate} の有効期限がまもなく切れます。 新しい認証に置き換えることを検討してください。",
+      "certificatesExpiredMessage": "一部の認証の有効期限が切れました。 それらを新しい認証に置き換えることを検討してください。",
+      "certificatesExpiringMessage": "一部の認証の有効期限がまもなく切れます。 それらを新しい認証に置き換えることを検討してください。"
+    },
+    "modal": {
+      "alternateName": "代替名",
+      "alternateNameHelperText": "スペースで区切って複数の別名を追加します。",
+      "certificateFile": "認証ファイル",
+      "certificateSigningRequest": "証明書署名要求 (CSR)",
+      "certificateType": "認証タイプ",
+      "challengePassword": "チャレンジ・パスワード",
+      "city": "市",
+      "commonName": "共通名",
+      "companyName": "企業名",
+      "companyUnit": "企業単位",
+      "contactPerson": "担当者",
+      "country": "国/地域",
+      "deleteConfirmMessage": "'%{certificate}' を削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "duplicateAlternateName": "重複別名",
+      "emailAddress": "E メール・アドレス",
+      "generateACertificateSigningRequest": "証明書署名要求 (CSR) の生成",
+      "keyBitLength": "鍵ビット長",
+      "keyCurveId": "鍵曲線 ID",
+      "keyPairAlgorithm": "鍵ペア・アルゴリズム",
+      "privateKey": "プライベート・キー",
+      "state": "都道府県"
+    },
+    "table": {
+      "certificate": "認証",
+      "issuedBy": "発行元",
+      "issuedTo": "発行先",
+      "validFrom": "有効期限開始日",
+      "validUntil": "有効期限"
+    },
+    "toast": {
+      "errorAddCertificate": "認証の追加中にエラーが発生しました。",
+      "errorDeleteCertificate": "認証の削除中にエラーが発生しました。",
+      "errorReplaceCertificate": "認証の置き換え中にエラーが発生しました。",
+      "successAddCertificate": "%{certificate}が正常に追加されました。",
+      "successDeleteCertificate": "%{certificate}が正常に削除されました。",
+      "successReplaceCertificate": "%{certificate}を正常に置換されました。"
+    }
+  },
+  "pageChangePassword": {
+    "changePassword": "パスワード変更",
+    "changePasswordAlertMessage": "パスワードの有効期限が切れているため、変更する必要があります。",
+    "changePasswordError": "パスワードの変更中にエラーが発生しました。",
+    "confirmNewPassword": "新規パスワードの確認",
+    "goBack": "戻る",
+    "newPassword": "新規パスワード",
+    "username": "ユーザー名"
+  },
+  "pageDateTime": {
+    "alert": {
+      "link": "プロファイル設定",
+      "message": "アプリケーション全体で日付と時刻の表示方法 (UTC またはブラウザ・オフセット) を変更するには、次に移動します。 ",
+      "messageText": "アプリケーション全体での日時の表示方法 (UTC またはブラウザーのオフセット) を変更するには、「プロファイル設定 (Profile Settings)」にアクセスしてください。",
+      "messageNtp": "NTP が選択されているが、NTP サーバーが指定されていない場合、または指定された NTP サーバーに到達できない場合は、time.google.com が使用されます。"
+    },
+    "configureSettings": "設定を構成する",
+    "form": {
+      "date": "日付",
+      "manual": "手動",
+      "time": {
+        "label": "24 時間",
+        "timezone": "@:pageDateTime.form.time.label (%{timezone})"
+      },
+      "ntpServers": {
+        "server1": "サーバー 1",
+        "server2": "サーバー 2",
+        "server3": "サーバー 3"
+      },
+      "validators": {
+        "serverExists": "サーバー・アドレスは既に存在しています"
+      }
+    },
+    "toast": {
+      "errorSaveDateTime": "日付と時刻の設定を保存中にエラーが発生しました。",
+      "successSaveDateTime": "日付と時刻の設定が正常に保存されました。"
+    }
+  },
+  "pageConcurrentMaintenance": {
+    "concurrentMaintenance": "並行保守",
+    "opPanelBase": "オペレーター・パネルの基本保守",
+    "opPanelLcd": "オペレーター・パネル LCD の保守",
+    "tod": "時刻バッテリー保守",
+    "alert": {
+      "message": "バッテリーの取り外しまたは交換を行うために、オペレーター・パネル・ベースまたはオペレーター・パネル LCD では、それぞれトグル・スイッチが使用可能です。 完了したら、これを無効にして、通常モードに戻ることをお勧めします。",
+      "title": "バッテリー、オペレーター・パネル・ベース、およびオペレーター・パネル LCD の並行修復"
+    },
+    "toast": {
+      "errorSaveReadyToRemove": "状態を削除する準備中にエラー %{state} が発生しました。",
+      "successSaveReadyToRemove": "正常に %{state} になり、状態を削除する準備ができました。"
+    }
+  },
+  "pageDeconfigurationHardware": {
+    "capacity": "容量",
+    "clearRecords": "レコードのクリア",
+    "configure": "構成",
+    "configured": "構成済み",
+    "deconfigure": "構成解除",
+    "deconfigured": "構成解除済み",
+    "description": "すべてのハードウェア・リソースの状態を表示または変更します。 構成解除された各リソースの詳細を表示するには、次を参照してください。 ",
+    "descriptionText": "すべてのハードウェア・リソースの状態を表示または変更します。",
+    "fcoSetting": "FCO 設定",
+    "initiateDump": "ダンプの開始",
+    "link": "構成解除レコード。",
+    "linkText": "構成解除されたリソースの詳細を表示するには、構成解除レコードにアクセスしてください。",
+    "memoryDimms": "メモリー DIMM",
+    "node": "ノード",
+    "overview": "概要",
+    "pcieRootComplex": "PCIe ルート・コンプレックス",
+    "processorChips": "プロセッサー・チップ",
+    "processorCores": "プロセッサー・コア",
+    "totalCores": "合計スコア",
+    "alert": {
+      "message": "メモリー DIMM とプロセッサー・コアは、サーバーの電源がオフのときにのみ構成または構成解除できます。"
+    },
+    "toast": {
+      "deleteReqFailed": "要求されたリソースを削除できないため、削除要求は失敗しました。",
+      "errorDisablingSetting": "設定の無効化エラー",
+      "errorEnablingSetting": "設定の有効化エラー"
+    },
+    "table": {
+      "deconfigurationType": "構成解除タイプ",
+      "filter": {
+        "byAssociation": "関連別",
+        "error": "エラー",
+        "fatal": "致命的",
+        "fcoDeconfigured": "FCO 構成解除済み",
+        "invalid": "無効",
+        "manual": "手動",
+        "none": "なし",
+        "predictive": "予測的",
+        "recovered": "リカバリー済み",
+        "unknown": "不明"
+      },
+      "functionalState": "機能状態",
+      "id": "ID",
+      "locationCode": "ロケーション・コード",
+      "name": "名前",
+      "pelId": "ピクセル ID",
+      "settings": "設定",
+      "size": "サイズ (メビバイト単位)"
+    }
+  },
+  "pageDeconfigurationRecords": {
+    "additionalDataUri": "追加データのダウンロード",
+    "clearAll": "すべてのレコードをクリア",
+    "fatal": "致命的",
+    "manual": "手動",
+    "nextRebootInfoIcon": "@:global.status.nextReboot",
+    "predictive": "予測的",
+    "resolved": "解決済み",
+    "unresolved": "未解決",
+    "pageDescription": {
+      "description": "構成解除の詳細を表示するレコードを選択するか、.txt ファイルにエクスポートします。すべてのハードウェア・リソースの構成状態を表示して手動で変更するには、以下を参照してください。 ",
+      "decriptionText": "表示するレコードを選択するか、構成解除の詳細を .txt ファイルにエクスポートします。",
+      "link": "ハードウェアの構成解除。",
+      "linkText": "構成状態を表示または変更するには、ハードウェア構成解除にアクセスしてください。"
+    },
+    "modal": {
+      "title": "すべてのレコードをクリア",
+      "subtileServiceRequired": "サービス特権が必要です",
+      "messageServiceRequired": "この操作の支援については、サービス担当員にお問い合わせください。",
+      "confirm": "よろしいですか?",
+      "confirmMessage": "すべての構成解除レコードをクリアすると、選択したノード内のすべてのハードウェアの再構成が試行されます。 これらの変更は、次回のブート時に有効になります。",
+      "deleteAllMessage": "すべてのレコードを削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "deleteAllTitle": "すべてのレコードを削除",
+      "deleteMessage": "%{count} 個のレコードを削除してもよろしいですか? このアクションを元に戻すことはできません。 | %{count} 個のレコードを削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "deleteTitle": "レコードの削除 | レコードの削除",
+      "goBack": "戻る",
+      "continue": "続行"
+    },
+    "table": {
+      "alerts": "アラート",
+      "date": "日付",
+      "description": "説明",
+      "id": "ID",
+      "name": "名前",
+      "pelId": "ピクセル Id",
+      "reference": "参照",
+      "resource": "リソース",
+      "severity": "重大度",
+      "srcDetails": "SRC の詳細",
+      "srcDetailsToolTip": "システム参照コードの詳細。 手動ガード・レコードの SRC 詳細はありません。",
+      "status": "状況",
+      "type": "構成解除タイプ"
+    },
+    "severityValues": {
+      "fatal": "致命的",
+      "predictive": "予測的",
+      "manual": "手動"
+    },
+    "toast": {
+      "errorDelete": "%{count} 件のレコードを削除中にエラーが発生しました。| {count} 件のレコードを削除中にエラーが発生しました。",
+      "errorResolveEntries": "エラー解決%{count} 記録。 |エラー解決%{count}記録。",
+      "errorStartDownload": "ダウンロード開始中にエラーが発生しました。",
+      "errorUnresolveEntries": "エラー未解決%{count}記録。 |エラー未解決%{count}記録。",
+      "successStartDownload": "追加データが正常にダウンロードされました。",
+      "successStartDownloadTitle": "ダウンロード成功",
+      "successDelete": "正常削除%{count} 記録。|正常削除%{count}記録。"
+    }
+  },
+  "pageDumps": {
+    "dumpsAvailableOnBmc": "BMC で使用可能なダンプ",
+    "initiateDump": "ダンプの開始",
+    "alert": {
+      "bmcDumpHeading": "BMC ダンプ",
+      "bmcDumpMessage": "ダンプが完了するまでしばらく時間がかかります。",
+      "bmcDumpMessageHmcEnabled": "BMC ダンプは HMC にオフロードされ、以下の表には表示されません。",
+      "refreshMessage": "アプリケーションを更新して、完了したダンプをテーブルに表示します。",
+      "resourceDumpHeading": "リソース・ダンプ",
+      "resourceDumpMessage": "リソース・ダンプは長時間実行プロセスです。",
+      "resourceDumpMessage2": "ダンプがダンプ・テーブルにリストされておらず、リソース・ダンプ・エラー・ログがない場合は、オペレーティング・システムにオフロードされています。",
+      "systemDumpHeading": "システム・ダンプ",
+      "systemDumpMessage": "システム・ダンプは長時間実行プロセスです。",
+      "systemDumpMessageHmcDisabled": "システム・ダンプはオペレーティング・システムにオフロードされ、ダンプがホスト・メモリーから削除されると、オペレーティング・システムによって削除されます。",
+      "systemDumpMessageHmcEnabled": "システム・ダンプは HMC にオフロードされます。"
+    },
+    "form": {
+      "bmcDump": "BMC ダンプ (無停止)",
+      "initiateDump": "ダンプの開始",
+      "password": "パスワード",
+      "passwordTooltip": "サービス権限を必要とするリソース・セレクターの場合は必須です。",
+      "resourceDump": "リソース・ダンプ",
+      "resourceSelector": "リソース・セレクター",
+      "resourceSelectorTooltip": "コマンドの長さは 80 文字を超えてはなりません。",
+      "selectDumpType": "ダンプ・タイプの選択",
+      "selectDumpTypeTooltip": "リソース・ダンプとシステム・ダンプは、システムの電源がオンの場合にのみ使用可能です。",
+      "systemDump": "システム・ダンプ (中断）"
+    },
+    "modal": {
+      "deleteDump": "ダンプの削除 | ダンプの削除",
+      "deleteDumpConfirmation": "%{count} のダンプを削除しますか? このアクションを元に戻すことはできません。 |%{count} のダンプを削除しますか? このアクションを元に戻すことはできません。",
+      "initiateSystemDump": "システム・ダンプの開始",
+      "initiateSystemDumpMessage1": "よろしいですか?",
+      "initiateSystemDumpMessage2": "システム・ダンプの進行中、他のダンプを開始してはなりません。",
+      "initiateSystemDumpMessage3": "システムダンプを開始すると、アクティブなすべてのシステムパーティションが異常終了します。",
+      "initiateSystemDumpMessage4": "ダンプ開始の続行"
+    },
+    "table": {
+      "dateAndTime": "日付/時刻",
+      "dumpType": "ダンプ・タイプ",
+      "id": "ID",
+      "searchDumps": "ダンプの検索",
+      "size": "容量",
+      "filter": {
+        "bmcDumpEntry": "BMC ダンプ項目",
+        "hostbootDumpEntry": "ホストブート・ダンプ項目",
+        "resourceDumpEntry": "リソース・ダンプ項目",
+        "systemDumpEntry": "システム・ダンプ項目"
+      }
+    },
+    "toast": {
+      "errorDeleteDump": "%{count} ダンプの削除中にエラーが発生しました。 |%{count} ダンプの削除中にエラーが発生しました。",
+      "errorPhypInStandby": "ダンプは、システムが少なくともスタンバイ状態の PHYP にブートされるまで開始できません。 電源がオフになっている場合は、ダンプを開始する前に、システムの電源がオンになるまでしばらく待機してください。",
+      "errorStartBmcDump": "新規 BMC ダンプの開始中にエラーが発生しました。",
+      "errorStartDumpAnotherInProgress": "新規 %{dump} の開始中にエラーが発生しました。 別のダンプが進行中です。",
+      "errorStartDumpResourceInStandby": "新規 %{dump} の開始中にエラーが発生しました。 システムをブートする必要があります。",
+      "errorStartResourceDump": "新しいリソースダンプの開始中にエラーが発生しました。",
+      "errorStartResourceDumpInvalidSelector": "ダンプの開始中にエラーが発生しました。 リソース・セレクターが無効です。",
+      "errorStartResourceDumpInvalidPassword": "ダンプの開始中にエラーが発生しました。 パスワードが無効です。",
+      "errorStartSystemDump": "新規システム・ダンプの開始中にエラーが発生しました。",
+      "successDeleteDump": "%{count} ダンプが正常に削除されました。 |%{count} のダンプが正常に削除されました。",
+      "successStartBmcDumpTitle": "BMC ダンプが開始しました。",
+      "successStartDump": "ダンプが完了するまでしばらく時間がかかります。",
+      "successStartResourceDumpTitle": "リソース・ダンプが開始しました",
+      "successStartSystemDumpTitle": "システム・ダンプが開始しました"
+    }
+  },
+  "pageEventLogs": {
+    "additionalDataUri": "追加データのダウンロード",
+    "bmcManager": "OpenBmc マネージャー",
+    "resolve": "解決",
+    "resolved": "解決済み",
+    "unresolve": "未解決",
+    "unresolved": "未解決",
+    "modal": {
+      "deleteAllMessage": "すべてのログを削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "deleteAllTitle": "全ログの削除",
+      "deleteMessage": "%{count} 件のログを削除してもよろしいですか? このアクションを元に戻すことはできません。 |%{count} 件のログを削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "deleteTitle": "ログの削除 | ログの削除"
+    },
+    "table": {
+      "date": "日付",
+      "description": "説明",
+      "srcDetails": "SRC の詳細",
+      "srcDetailsToolTip": "システム参照コードの詳細",
+      "id": "ID",
+      "modifiedDate": "変更日",
+      "name": "名前",
+      "resolution": "解決 (コールアウト)",
+      "searchLogs": "ログの検索",
+      "severity": "重大度",
+      "severityValues": {
+        "critical": "深刻な",
+        "ok": "OK",
+        "warning": "警告"
+      },
+      "status": "状況",
+      "systemEventLogEntry": "システム・イベント・ログ・エントリー",
+      "type": "タイプ",
+      "typeValues": {
+        "event": "イベント",
+        "oem": "OEM",
+        "sel": "SEL"
+      },
+      "eventId": "イベントID"
+    },
+    "toast": {
+      "errorDelete": "%{count} ログの削除中にエラーが発生しました。 |%{count} ログの削除中にエラーが発生しました。",
+      "errorLogStatusUpdate": "ログ状況の更新でエラーが発生しました。",
+      "errorResolveLogs": "%{count} ログの解決中にエラーが発生しました。 |%{count} ログの解決中にエラーが発生しました。",
+      "errorUnresolveLogs": "%{count} ログの解決解除中にエラーが発生しました。 |%{count} ログの解決解除中にエラーが発生しました。",
+      "infoStartDownload": "ダウンロードが完了するまで数分かかる場合があります。",
+      "successDelete": "%{count} 件のログが正常に削除されました。 |%{count} 件のログが正常に削除されました。",
+      "successResolveLogs": "%{count} 件のログが正常に解決されました。 |%{count} 件のログが正常に解決されました。",
+      "successUnresolveLogs": "%{count} ログが正常に未解決です。 |%{count} のログが正常に未解決です。"
+    }
+  },
+  "pageFactoryReset": {
+    "alert": "リセットするにはシステムの電源をオフにする必要があります",
+    "description": "これらの機能では、機密データを安全に削除できません。",
+    "form": {
+      "resetBiosOptionHelperText": "プラットフォーム鍵ストア、区画 NVRAM、区画構成、イベント・ログなどのサーバー設定をリセットします。",
+      "resetBiosOptionLabel": "サーバー設定のみをリセット",
+      "resetOptionsLabel": "オプションのリセット",
+      "resetToDefaultsOptionHelperText": "サーバー設定に加えて、このオプションは、すべての BMC アカウント・データ、すべての変更済みパスワード、すべてのポリシー、LDAP 構成、ネットワーク・アドレス、時刻など、BMC 設定をリセットします。",
+      "resetToDefaultsOptionLabel": "BMC とサーバー設定の初期化"
+    },
+    "modal": {
+      "resetBiosTitle": "サーバー設定の初期化",
+      "resetBiosHeader": "サーバー設定をリセットしますか?",
+      "resetBiosSubmitText": "サーバー設定の初期化",
+      "resetBiosSettingsList": {
+        "item1": "手動設定はすべて削除されます。",
+        "item2": "バックアップが存在する場合、パーティション構成とプラットフォームキーストアが回復される可能性があります。"
+      },
+      "resetToDefaultsHeader": "BMC とサーバーの両方の設定をリセットしますか?",
+      "resetToDefaultsSubmitText": "BMC とサーバー設定の初期化",
+      "resetToDefaultsTitle": "BMC とサーバー設定の初期化",
+      "resetToDefaultsSettingsList": {
+        "item1": "手動設定はすべて削除されます。",
+        "item2": "バックアップが存在する場合、パーティション構成とプラットフォームキーストアが回復される可能性があります。",
+        "item3": "すべての BMC ログが削除されます。",
+        "item4": "現在、すべてのネットワークインターフェイスでアクティブなセッションが切断されます。",
+        "item5": "BMCのデフォルトのアカウントとパスワードの設定が復元されます。"
+      },
+      "resetWarningCheckLabel": "システムをシャットダウンせずに続行します。",
+      "resetWarningMessage": "システムをシャットダウンせずにリセットすると、回復不能なエラーが発生する可能性があります。"
+    },
+    "toast": {
+      "resetBiosError": "サーバーの工場出荷時のリセットが失敗しました。",
+      "resetBiosSuccess": "サーバーの工場出荷時のリセットが成功しました。",
+      "resetToDefaultsError": "BMC とサーバーの工場出荷時設定へのリセットが失敗しました。",
+      "resetToDefaultsSuccess": "BMC とサーバーの工場出荷時のリセットが成功しました。 自動的にログアウトしない場合は、ブラウザーを更新してください。"
+    }
+  },
+  "pageFieldCoreOverride": {
+    "changeConfiguration": "構成の変更",
+    "configuredCores": "構成済みコア",
+    "currentConfiguration": "現行の構成",
+    "enableFieldCoreOverride": "フィールド・コア・オーバーライドの有効化",
+    "enterValue": "値を入力します",
+    "licensedCores": "ライセンス交付を受けたコア",
+    "pageDescription": "ファームウェアに構成されるプロセッサー・コアを表示、変更します。",
+    "scheduledForNextReboot": "@:global.status.nextReboot",
+    "totalInstalledCores": "インストール済みコアの合計",
+    "alert": {
+      "description": "加えられた変更は、次回のサーバーの再起動時に有効になります。",
+      "title": "変更適用"
+    },
+    "toast": {
+      "configurationChangeError": "構成を保存できませんでした。",
+      "configurationChangeSuccess": "構成が正常に保存されました。"
+    }
+  },
+  "pageFirmware": {
+    "cardActionSwitchToRunning": "実行に切り替えます。",
+    "cardBodyVersion": "バージョン",
+    "cardTitleBackup": "バックアップ画像",
+    "cardTitleRunning": "実行中の画像",
+    "permanent": "Permanent",
+    "sectionTitleBmcCards": "BMC",
+    "sectionTitleBmcCardsCombined": "BMC とサーバー",
+    "sectionTitleHostCards": "ホスト",
+    "sectionTitleUpdateFirmware": "ファームウェアの更新",
+    "temporary": "一時",
+    "alert": {
+      "operationInProgress": "サーバーの電源操作が進行中です。",
+      "serverMustBePoweredOffTo": "以下を行うには、サーバーの電源をオフにしてください。",
+      "serverMustBePoweredOffToUpdateFirmware": "ファームウェアを更新するには、サーバーの電源をオフにしなければなりません。",
+      "switchRunningAndBackupImages": "実行画像とバックアップ画像を切り替えます。",
+      "updateFirmware": "ファームウェアの更新",
+      "viewServerPowerOperations": "サーバーの電源操作を表示します。"
+    },
+    "form": {
+      "updateFirmware": {
+        "accessKeyExpiration": "アクセス・キーの有効期限",
+        "fileAddress": "ファイル・アドレス",
+        "fileSource": "ファイル・ソース",
+        "imageFile": "画像ファイル",
+        "manageAccessKeys": "アクセス・キーの管理",
+        "startUpdate": "更新の開始",
+        "tftpServer": "TFTP サーバー",
+        "tftpServerInfo": "<server_ip>/<file_name>.tar",
+        "workstation": "ワークステーション"
+      }
+    },
+    "modal": {
+      "switchImages": "画像の切り替え",
+      "switchRunningImage": "実行中画像の切り替え",
+      "switchRunningImageInfo": "バックアップ画像を実行するには、BMC をリブートする必要があります。 この間、アプリケーションが応答しない可能性があります。",
+      "switchRunningImageInfo2": "バックアップ画像 (%{backup}) に切り替えてもよろしいですか?",
+      "updateFirmwareInfo": "BMC は更新処理中にリブートします。 更新が完了するまで、サーバーの電源をオンにすることはできません。",
+      "updateFirmwareInfo2": "実行中画像(%{running}) がバックアップにコピーされました。 バックアップ画像は削除されます。",
+      "updateFirmwareInfo3": "更新を続行してもよろしいですか?",
+      "updateFirmwareInfoDefault": "新規画像がアップロードされ、アクティブ化されます。 その後、BMCまたはホストは自動的に再起動して新しい画像から実行されます。"
+    },
+    "toast": {
+      "errorSwitchImages": "実行中画像とバックアップ画像の切り替え中にエラーが発生しました。",
+      "errorActivation": "ファームウェア活動化の開始中にエラーが発生しました。",
+      "errorUpdateFirmware": "ファームウェアアップデートの開始中にエラーが発生しました。",
+      "errorUploadFirmware": "ファームウェアのアップロード中にエラーが発生しました。",
+      "rebootStarted": "リブートが開始しました。",
+      "rebootStartedMessage": "バックアップ・イメージから正常にリブートしました。 リブートが完了するまで数分かかるかもしれません。",
+      "taskComplete": "タスク完了",
+      "taskCompleteMessage": "タスクが完了しました。 BMC のリブートの待機中",
+      "updateFirmware": {
+        "step1": "ステップ 1/4 - アップロード",
+        "step1Message": "更新が開始されました。 ファームウェアのアップロードが進行中です。",
+        "step2": "ステップ 2/4 - アクティブ化",
+        "step2Message": "ファームウェアのアップロードが完了しました。 アクティブ化タスクが進行中です。",
+        "step3": "ステップ 3/4 - リブート",
+        "step3Message": "アクティブ化タスクが完了しました。 BMC リブートが進行中です。",
+        "step4": "ステップ 4/4 - 完了",
+        "step4Message": "ファームウェア更新が成功しました。 「更新」をクリックして、ファームウェア・レベルを確認してください。"
+      },
+      "switchToRunning": {
+        "step1": "ステップ 1/3 - ファームウェアの切り替え",
+        "step1Message": "プロセスが開始されました。 ファームウェアの切り替えが進行中です。",
+        "step2": "ステップ 2/3 - リブート",
+        "step2Message": "ファームウェアの切り替えが完了しました。 BMC リブートが進行中です。",
+        "step3": "ステップ 3/3 - 完了",
+        "step3Message": "ファームウェア・スイッチが正常に完了しました。 実行中のイメージと切り替えられたバックアップ・イメージを確認するには、「リフレッシュ」をクリックします。"
+      }
+    }
+  },
+  "pageHostConsole": {
+    "subTitle": "ホスト・コンソールは、サーバーのシリアル・ポート出力をこのウィンドウにリダイレクトします。",
+    "status": "状況"
+  },
+  "pageInventory": {
+    "assemblies": "アセンブリー",
+    "baseboardManagementController": "ベースボード管理コントローラー",
+    "bmcManager": "BMC マネージャー",
+    "chassis": "シャーシ",
+    "dimmSlot": "DIMM スロット",
+    "fabricAdapters": "ファブリック・アダプター",
+    "false": "いいえ",
+    "fans": "ファン",
+    "identifyLedInfo": "LED がない部品の場合、識別 LED トグル・スイッチはエンクロージャー LED のみをオンにします。",
+    "pcieSlots": "PCIe スロット",
+    "pcieTopologyLink": "PCIe ハードウェア・トポロジー。",
+    "pcieTopologyLinkDescription": "PCIe スロットについて詳しくは、以下にアクセスしてください。 ",
+    "powerSupplies": "電源機構",
+    "processors": "プロセッサー",
+    "processorModule": "プロセッサー・モジュール",
+    "quicklinkTitle": "ハードウェア・コンポーネントへのクイック・リンク",
+    "system": "システム",
+    "true": "はい",
+    "enclosures": {
+      "title": "入出力エンクロージャー",
+      "traceLabel": "入出力エンクロージャーのトレースの収集",
+      "traceDescription": "次からリソース・ダンプを作成します (特定のリソース・セレクターを使用): ",
+      "DumpsLink": "ページをダンプします。"
+    },
+    "systemIndicator": {
+      "attentionLed": "システム・アテンション LED",
+      "attentionLedToolTipInfo": "システム・アテンション LED を無効にします",
+      "identifyLed": "システム識別 LED",
+      "lampTest": "ランプ・テスト",
+      "powerStatus": "電源状況",
+      "sectionTitle": "システム標識",
+      "tooltipInfo": "BMC とハイパーバイザーに制御されるすべてのインディケーターを、4 分間 ON 状態に変更します。"
+    },
+    "alert": {
+      "enclosureAlertTitle": "エンクロージャー構成の表示",
+      "enclosureAlertMessage": "システムの電源をオンに設定しななければなりません。",
+      "viewServerPowerOperations": "サーバーの電源操作を表示します。"
+    },
+    "modal": {
+      "assemblies": {
+        "id": "@:pageInventory.table.id",
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "message": "この操作は、完了までに 2 分かかる場合があります。",
+        "remove": "@:pageInventory.table.remove",
+        "selected": "選択された '%{assemblyName}'-",
+        "subTitle": "よろしいですか?",
+        "title": "'%{assemblyName}' を削除しますか?"
+      },
+      "enclosures": {
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "serialNumber": "@:pageInventory.table.serialNumber",
+        "serialNumberHelperText": "エンクロージャーのシリアル番号を 7 文字で入力してください。 o、i、q 以外のすべての英数字が有効です。 小文字は、すべて大文字に変換されます。",
+        "title": "エンクロージャー設定の変更",
+        "typeModel": "@:pageInventory.table.typeModel",
+        "typeModelHelperText": "エンクロージャーのマシン・タイプを 0000 にすることはできません。 すべての英数字が無効です。"
+      }
+    },
+    "table": {
+      "action": "アクション",
+      "assetTag": "資産タグ",
+      "assetTagInfo": "システム名",
+      "bmcManagerModel": "モデル (CCIN)",
+      "capacityMiB": "容量 (MiB)",
+      "coreCount": "コア数",
+      "processorCount": "プロセッサー数",
+      "currentNext": "(現在および次)",
+      "description": "説明",
+      "enabled": "有効",
+      "firmwareVersion": "ファームウェアのバージョン",
+      "health": "正常性",
+      "healthRollup": "正常性ロールアップ",
+      "id": "ID",
+      "identifyLed": "ID LED",
+      "install": "インストール",
+      "locationNumber": "ロケーション番号",
+      "model": "モデル",
+      "name": "名前",
+      "partNumber": "部品番号",
+      "power": "べき乗",
+      "processorType": "プロセッサー・タイプ",
+      "remove": "削除",
+      "serialNumber": "シリアル番号",
+      "slotType": "スロット・タイプ",
+      "sparePartNumber": "予備部品番号 (FRU 番号)",
+      "totalCores": "合計スコア",
+      "totalSystemMemoryGiB": "合計システム・メモリー",
+      "typeModel": "タイプ - モデル"
+    },
+    "toast": {
+      "errorDisableIdentifyLed": "識別LEDの無効化中にエラーが発生しました。",
+      "errorDisableLampTest": "ランプテストの無効化中にエラーが発生しました。",
+      "errorDisableSystemAttentionLed": "システム・アテンション LED を無効化しているときにエラーが発生しました。",
+      "errorEnableIdentifyLed": "識別LEDの有効化中にエラーが発生しました。",
+      "errorEnableLampTest": "ランプテストの有効化中にエラーが発生しました。",
+      "errorEnableSystemAttentionLed": "システム・アテンション LED を有効化しているときにエラーが発生しました。",
+      "errorEnclosureSettings": "エンクロージャー設定の更新中にエラーが発生しました。",
+      "infoRemoveAssembly": "更新して、'%{assemblyName}' を削除する準備ができているかどうかを確認してください。",
+      "successEnclosureSettings": "エンクロージャー設定が正常に更新されました。",
+      "successEnableIdentifyLed": "識別 LED が正常に使用可能になりました。",
+      "successDisableIdentifyLed": "識別 LED が正常に使用不可になりました。"
+    }
+  },
+  "pageKeyClear": {
+    "description": "システムの機密データを安全に削除します。",
+    "alert": {
+      "description": "クリアするデータは機密性が高いため、この操作を許可するには、物理​​的プレゼンスによる検証が必要です。",
+      "title": "この操作には物理的プレゼンスとシステムのリブートが必要"
+    },
+    "form": {
+      "clear": "クリア",
+      "clearAllHelperText": "プラットフォーム・ファームウェアに制御されるすべての機密データをクリアする",
+      "clearAllLabel": "すべてクリア",
+      "clearAllSetGenesisIPL": "すべてクリアしてジェネシス IPL を設定します。",
+      "clearHypervisorSystemKeyHelperText": "システム鍵をクリアするハイパーバイザーを示す",
+      "clearHypervisorSystemKeyLabel": "ハイパーバイザー・システム鍵のクリア",
+      "clearOperatingSystemKeysHelperText": "これは、オペレーティング・システムの安全ブート・キーをクリアするための OPAL を示します。",
+      "clearSystemSecurityKeyHelperText": "これは、OPAL/PEF がシステム・セキュリティー担当者のキーをクリアすることを示します。",
+      "clearSystemSecurityKeyLabel": "システム機密保護担当者キーの消去",
+      "keyClearNotRequested": "鍵クリアは不要",
+      "keyClearOptionsLabel": "鍵クリア・オプション",
+      "none": "なし",
+      "setFactoryDefault": "出荷時のデフォルト値を設定します。"
+    },
+    "modal": {
+      "clear": "鍵のクリア",
+      "clearAllMessage": "選択したデータに含まれている暗号鍵はすべて失われます。 システムは、これらの鍵を必要とするデータを暗号化解除できません。",
+      "clearAllTitle": "警告: この操作は元に戻せません。"
+    },
+    "toast": {
+      "selectedKeyClearedError": "エラークリア・キー",
+      "selectedKeyClearedSuccess": "キーが正常にクリアされました。"
+    }
+  },
+  "pageKvm": {
+    "buttonCtrlAltDelete": "Ctrl + Alt + Delete を送信します。",
+    "connected": "接続済み",
+    "connecting": "接続中",
+    "disconnected": "切断",
+    "openNewTab": "新しいタブで開きます。",
+    "status": "状況"
+  },
+  "pageSystemParameters": {
+    "aggressivePrefetch": "アグレッシブ・プリフェッチ",
+    "aggressivePrefetchDescription": "この値は、システム・パフォーマンスを低下させる可能性があるので、サービス提供元から指示された場合にのみ変更してください。 プロセッサーがアグレッシブ・プリフェッチを優先するかどうかを指定します。",
+    "alert": {
+      "message": "システムの電源をオフにしなければなりません。 変更内容は次回のリブート時に有効になります",
+      "title": "変更適用"
+    },
+    "button": {
+      "saveSettings": "設定を保存します。"
+    },
+    "frequencyCap": "頻度キャップ",
+    "frequencyCapDescription": "有効にすると、システム内のすべてのプロセッサーが、指定された最大動作頻度 (MHz) を超えないようにします。",
+    "frequencyCapHelpText": "使用不可にすると、最大頻度と最小頻度を設定するために初期ブートが必要になる場合があります。",
+    "lateralCastOut": "ラテラル・キャストアウト",
+    "lateralCastOutDescription": "この値を変更するとシステムのパフォーマンスが低下する可能性があるため、サービス・プロバイダーから指示された場合にのみ変更してください。",
+    "toast": {
+      "errorSavingAggressivePrefetch": "アグレッシブ・プリフェッチの保存エラー",
+      "errorSavingFrequencyCap": "頻度キャップの保存エラー",
+      "errorSavingLateralCastOut": "ラテラル・キャストアウト・モードの保存中にエラーが発生しました",
+      "successSavingAggressivePrefetch": "アグレッシブ・プリフェッチが正常に保存されました",
+      "successSavingFrequencyCap": "頻度キャップが正常に保存されました",
+      "successSavingLateralCastOut": "ラテラル・キャストアウト・モードが正常に保存されました"
+    }
+  },
+  "pageLdap": {
+    "addRoleGroup": "役割グループの追加",
+    "pageDescription": "LDAP 設定の構成と役割グループを管理します。",
+    "roleGroups": "役割グループ",
+    "settings": "設定",
+    "ariaLabel": {
+      "ldapSettings": "LDAP 設定"
+    },
+    "form": {
+      "baseDn": "基本 DN",
+      "bindDn": "バインド DN",
+      "bindPassword": "バインド・パスワード",
+      "caCertificateValidUntil": "CA 認証の有効期限",
+      "groupIdAttribute": "グループ ID 属性",
+      "ldapAuthentication": "LDAP 認証",
+      "ldapCertificateValidUntil": "LDAP 認証の有効期限",
+      "manageSslCertificates": "SSL 認証の管理",
+      "secureLdapHelper": "セキュア LDAP を有効にするには、CA 認証と LDAP 認証が必要です。",
+      "secureLdapUsingSsl": "SSL を使ったセキュア LDAP",
+      "serverUri": "サーバー URI",
+      "serverUriTooltip": "セキュア LDAP を有効にすると、URI スキームが LDAPS に変更されます",
+      "serviceType": "サービス・タイプ",
+      "userIdAttribute": "ユーザー ID 属性"
+    },
+    "modal": {
+      "addNewRoleGroup": "新規役割グループの追加",
+      "deleteRoleGroup": "役割グループの削除",
+      "deleteRoleGroupBatchConfirmMessage": "%{count} ロール・グループを削除しますか? このアクションを元に戻すことはできません。 |%{count} の役割グループを削除しますか? このアクションを元に戻すことはできません。",
+      "deleteRoleGroupConfirmMessage": "'%{groupName}' を削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "editRoleGroup": "役割グループの編集",
+      "groupName": "グループ名",
+      "groupPrivilege": "グループ特権"
+    },
+    "tableRoleGroups": {
+      "alertContent": "役割グループを変更するには、LDAP 認証を有効にしなければなりません。",
+      "groupName": "グループ名",
+      "groupPrivilege": "グループ特権"
+    },
+    "toast": {
+      "errorAddRoleGroup": "ロールグループの追加中にエラーが発生しました。",
+      "errorDeleteRoleGroup": "ロールグループの削除中にエラーが発生しました。 | ロールグループの削除中にエラーが発生しました。",
+      "errorSaveActiveDirectorySettings": "Active Directory 設定保存中にエラーが発生しました",
+      "errorSaveLdapSettings": "Open LDAP 設定の保存中にエラーが発生しました。",
+      "errorSaveRoleGroup": "ロールグループの保存中にエラーが発生しました。",
+      "successAddRoleGroup": "ロールグループ 「%{groupName}」が正常に追加されました。",
+      "successDeleteRoleGroup": "ロールグループが正常に削除されました。 | ロールグループが正常に削除されました。",
+      "successSaveActiveDirectorySettings": "Active Directory 設定が正常に保存されました。",
+      "successSaveLdapSettings": "Open LDAP 設定が正常に保存されました。",
+      "successSaveRoleGroup": "ロールグループ「%{groupName}」が正常に保存されました。"
+    }
+  },
+  "pageLogin": {
+    "asmi": "拡張システム管理インターフェース (ASMI) (Advanced System Management Interface (ASMI))",
+    "dateAndTime": "日付/時刻",
+    "language": "言語",
+    "logIn": "ログイン",
+    "model": "モデル",
+    "password": "パスワード",
+    "serialNumber": "シリアル番号",
+    "uploadServiceLoginCertificate": "サービス・ログイン認証のアップロード",
+    "username": "ユーザー名",
+    "alert": {
+      "unauthorizedMessage": "無許可のユーザー",
+      "message": "ユーザー名またはパスワードが無効です"
+    },
+    "modal": {
+      "addNewServiceLoginCertificate": "新規サービス・ログイン認証の追加",
+      "certificateFile": "証明書ファイル"
+    }
+  },
+  "pageMemory": {
+    "activeMemoryMirroring": "アクティブ・メモリー・ミラー・モード",
+    "activeMemoryMirroringDescription": "Active Memory Mirroring for hypervisor は、システム・ハイパーバイザーによって使用されるメイン・メモリーにおいて訂正不能エラーが万一発生した場合でも\nシステム操作が継続されるように設計されています。",
+    "activeMemoryMirroringHelpText": "メモリー・ミラーリングが有効かどうかを指定します。変更を適用するにはリブートが必要です。",
+    "activeMemoryMirroringTitle": "アクティブ・メモリー・ミラーリング",
+    "ioAdapterEnlargedCapacity": "このオプションは、各 PCI スロットに割り当てられる PCI メモリー・スペースのサイズを制御します。",
+    "ioAdapterEnlargedCapacityTitle": "I/O アダプターの容量拡大",
+    "logicalMemorySize": "論理メモリー・ブロック・サイズ",
+    "logicalMemorySizeHeading": "論理メモリー・ブロック・サイズは区画化に使用されます。 論理メモリー・ブロック・サイズを変更すると、システム・リソースの管理に影響を及ぼします。",
+    "maxNumHugePages": "ヒュージ・ページの最大数",
+    "memoryBlockSize": "メモリー・ブロック・サイズ",
+    "requestedHugePageMemory": "要求されるヒュージ・ページ・メモリー",
+    "slotCountForNode0": "ノード 0 のスロット数",
+    "systemMemoryPageSetup": "それぞれ 16 GB の大きな仮想メモリー・ページ・サイズを設定することにより、アプリケーションのパフォーマンスを向上します。",
+    "systemMemoryPageSetupTitle": "システム・メモリー・ページのセットアップ",
+    "updateIoAdapterEnlargedCapacity": "I/O アダプターの容量拡大の更新",
+    "updateLogicalMemoryPageSetup": "システム・メモリー・ページ・セットアップの更新",
+    "updateLogicalMemorySize": "論理メモリー・ブロック・サイズの更新",
+    "updatePageSetup": "システム・メモリー・ページ・セットアップの更新",
+    "alert": {
+      "heading": "変更適用",
+      "message": "システムの電源はオフにする必要があり、HMC によって管理されていてはなりません。 加えられた変更は、次回の再起動時に有効になります。",
+      "serverMustBePoweredOffTo": "以下を行うには、サーバーの電源をオフにしてください。",
+      "updateActiveMemoryMirroring": "アクティブ・メモリー・ミラー・モードの更新",
+      "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
+      "updateLogicalMemoryPage": "@:pageMemory.updateLogicalMemorySize",
+      "updateSystemMemoryPageSetup": "システム・メモリー・ページ・セットアップの更新 (サーバーが HMC に接続されていてはなりません)"
+    },
+    "toast": {
+      "errorSavingActiveMemoryMirroringMode": "アクティブ・メモリー・ミラーリング・モードの更新中にエラーが発生しました",
+      "errorSavingAdapterEnlargedCapacity": "I/Oアダプターの拡張容量の更新中にエラーが発生しました。",
+      "errorSavingLogicalMemory": "論理メモリのブロック容量の更新中にエラーが発生しました。 ",
+      "errorSavingPageSetup": "システム・メモリー・ページ・セットアップの更新中にエラーが発生しました",
+      "message": "変更を行うには、システムの電源をつけなければなりません。",
+      "successSavingAdapterEnlargedCapacity": "I/O アダプターの容量拡大が正常に更新されました。",
+      "successSavingLogicalMemory": "論理メモリー・ブロック・サイズが正常に更新されました。",
+      "successSavingActiveMemoryMirroringMode": "アクティブ・メモリー・ミラーリング・モードが正常に更新されました",
+      "successSavingPageSetup": "システム・メモリー・ページ・セットアップが正常に更新されました"
+    }
+  },
+  "pageNetwork": {
+    "dhcp": "DHCP",
+    "dns": "DNSサーバー",
+    "domainName": "ドメイン名",
+    "hostname": "ホスト名",
+    "hostnameAlert": "ホスト名が変更されるとログアウトされます。 変更内容は次回ログイン時に有効になります。",
+    "interfaceSection": "インターフェース設定",
+    "ipv4": "IPv4",
+    "ipv4Addresses": "IPv4 アドレス",
+    "ipv6": "IPv6",
+    "ipv6DefaultGateway": "IPv6 デフォルト・ゲートウェイ",
+    "macAddress": "MAC アドレス",
+    "network": "ネットワーク",
+    "networkSettings": "ネットワーク設定",
+    "ntp": "NTP サーバー",
+    "operatingMode": "操作モード",
+    "pageDescription": "BMC ネットワーク設定の構成",
+    "staticDns": "静的 DNS",
+    "useDns": "DNS サーバーの使用",
+    "useDomainName": "ドメイン名の使用",
+    "useNtp": "NTP サーバーの使用",
+    "modal": {
+      "confirmDeleteIpv4": "'%{address}' を削除してもよろしいですか?",
+      "confirmDisableDhcp": "DHCP を無効にしますか?",
+      "confirmEnableDhcp": "DHCPを有効にすると、静的IPアドレスにアクセスできなくなります。",
+      "dhcpConfirmTitle": "%{dhcpState} DHCP",
+      "deleteIpv4": "IPv4 アドレスの削除",
+      "editHostnameTitle": "ホスト名の編集",
+      "gateway": "ゲートウェイ",
+      "ipAddress": "IP アドレス",
+      "staticDns": "静的 DNS",
+      "subnetMask": "サブネット・マスク"
+    },
+    "table": {
+      "addDnsAddress": "IP アドレスの追加",
+      "addIpv4Address": "静的 IPv4 アドレスの追加",
+      "addIpv6Address": "静的 IPv6 アドレスの追加",
+      "addressOrigin": "アドレス起点",
+      "addressState": "アドレス状態",
+      "deleteDns": "DNS アドレスの削除",
+      "deleteIpv4": "IPv4 アドレスの削除",
+      "editDns": "DNS アドレスの編集",
+      "editIpv4": "静的 IPv4 アドレスの編集",
+      "editIpv6": "静的 IPv6 アドレスの編集",
+      "gateway": "ゲートウェイ",
+      "ipAddress": "IP アドレス",
+      "prefixLength": "接頭部の長さ",
+      "subnet": "サブネット・マスク"
+    },
+    "toast": {
+      "errorSaveNetworkSettings": "%{setting} 設定の更新中にエラーが発生しました。",
+      "successSaveNetworkSettings": "%{setting} の設定が正常に更新されました。"
+    }
+  },
+  "pageOverview": {
+    "assetTag": "資産タグ",
+    "accessKeyExpiration": "アクセス・キーの有効期限",
+    "backupVersion": "バックアップ",
+    "bmcTime": "BMC の日時",
+    "criticalEvents": "深刻な",
+    "dhcp": "DHCPv4",
+    "dumps": "ダンプ",
+    "eventLogs": "イベント・ログ",
+    "firmwareInformation": "ファームウェア情報",
+    "hostConsole": "ホスト・コンソール",
+    "hostName": "ホスト名",
+    "inventory": "インベントリーとLED",
+    "ipv4": "IPv4",
+    "manual": "手動",
+    "model": "モデル",
+    "networkInformation": "ネットワーク情報",
+    "normal": "標準",
+    "operatingMode": "操作モード",
+    "powerCap": "電源キャップ",
+    "powerConsumption": "電力使用量",
+    "powerInformation": "電源情報",
+    "powerMode": "電力モード",
+    "runningVersion": "実行中",
+    "safeMode": "セーフ・モード",
+    "serialNumber": "シリアル番号",
+    "serverInformation": "サーバー情報",
+    "serviceLogin": "サービス・ログイン",
+    "statusInformation": "状況情報",
+    "systemIdentifyLed": "システム識別 LED",
+    "systemInformation": "システム情報",
+    "total": "合計",
+    "viewMore": "さらに表示",
+    "warningEvents": "警告",
+    "powerPerformanceModes": {
+      "maximumPerformance": "最大パフォーマンス",
+      "powerSaving": "電力節約",
+      "static": "静的"
+    },
+    "modal": {
+      "editAssetTag": "資産タグの編集"
+    },
+    "toast": {
+      "successSaveAssetTag": "資産タグが正常に更新されました。",
+      "errorSaveAssetTag": "資産タグの更新中にエラーが発生しました。"
+    }
+  },
+  "pagePageNotFound": {
+    "description": "要求されたリソースが見つかりませんでした。"
+  },
+  "pagePcieTopology": {
+    "alert": "このページのロードには数分かかるかもしれません。",
+    "bridgeOrHost": "PCIe ブリッジまたは CAPI ホスト",
+    "cableLength": "ケーブルの長さ",
+    "cableStatus": "ケーブル状況",
+    "cableType": "ケーブル・タイプ",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "識別 LED",
+    "ioSlots": "入出力スロット",
+    "linkProperties": "リンク・プロパティー",
+    "linkStatus": "リンク状況",
+    "localPort": "ローカル・ポート",
+    "localPortLocation": "ローカル・ポートのロケーション",
+    "parentId": "親 ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "リモート・ポート",
+    "remotePortLocation": "リモート・ポートのロケーション",
+    "resetLink": "リンクのリセット",
+    "savePcieTopology": "PCIe トポロジーの保存",
+    "speed": "速度",
+    "type": "タイプ",
+    "warning": "システムは少なくとも PHYP スタンバイ状態でなければなりません。 電源オンするには、以下にアクセスしてください。 ",
+    "width": "幅",
+    "modal": {
+      "resetConfirm": "よろしいですか?",
+      "resetLinkDescription": "システム区画の実行中にリンクをリセットすると、エラーが発生する可能性があります。 この操作は、サポート・チーム・メンバーの指示に従って実行する必要があります。",
+      "resetLinkHeader": "リンク %{id} のリセット"
+    },
+    "table": {
+      "search": "検索"
+    },
+    "toast": {
+      "errorReset": "リンク %{id} のリセット中にエラーが発生しました",
+      "errorSavePcieTopology": "PCIe トポロジー情報の保存中にエラーが発生しました。",
+      "errorSwitchingLed": "%{value} の %{operation} LED の転換中にエラーが発生しました",
+      "resetInfoTitle": "リンク ID %{id} をリセットしています。",
+      "resetInfoDescription": "この操作が完了するまでに数秒かかることがあります。",
+      "successReset": "リンク %{id} のリセットが正常に開始されました。 問題がないかイベント・ログを確認してください。",
+      "successSavePcieTopology": "PCIe トポロジー情報が正常に保存されました。"
+    }
+  },
+  "pagePolicies": {
+    "hostTpm": "ホスト TPM",
+    "hostTpmDescription": "TPM が機能しているときにのみシステムがブートするように有効にします。",
+    "hostUsb": "ホスト USB の有効化",
+    "hostUsbDescription": "セキュリティー上の理由から、ホスト USB を無効にするか有効にするかを指定します。",
+    "ipmi": "ネットワーク IPMI (アウト・オブ・バンド IPMI)",
+    "ipmiDescription": "IPMI を介したプラットフォームのリモート管理を許可します。 ipmitool などのツールでは、この設定を有効にする必要があります。 有効にしたら、オンライン・サポート資料の手順に従って IPMI ユーザーを追加してください。",
+    "rtad": "RTAD",
+    "rtadDescription": "このオプションは、ホスト・ファームウェアのリモート・トラステッド認証デーモンを有効または無効にします。",
+    "rtadInfoIcon": "@:global.status.nextReboot",
+    "secureVersion": "セキュア・バージョン・ロックイン",
+    "secureVersionDescription": "セキュア・バージョン・ロックイン機能を有効にするかどうかを指定します。",
+    "ssh": "BMC シェル (SSH 経由)",
+    "sshDescription": "BMC のポート 22 を介して、SSH 経由でシェル・セッションへのアクセスを許可します。",
+    "usbFirmwareUpdatePolicy": "USB ファームウェア更新ポリシー",
+    "usbFirmwareUpdatePolicyDescription": "USB ファームウェア更新ポリシーを有効にすると、USB キーを使用したファームウェア更新を許可する機能が有効になります。",
+    "toast": {
+      "errorNetworkPolicyUpdate": "%{policy} の更新中にエラーが発生しました。",
+      "successDisableBmcShell": "BMC シェルが (SSH 経由で) 正常に無効化されました。無効化が有効になるまで 15 秒待ってください。",
+      "successEnableBmcShell": "BMC シェルが (SSH 経由で) 正常に有効になりました",
+      "successNetworkPolicyUpdate": "%{policy} が正常に更新されました。",
+      "successNextBootToast": "%{policy} に変更を適用しています。 %{policy} に対して行われた変更は、次回のリブート時に有効になります。"
+    },
+    "vtpm": "仮想 TPM",
+    "vtpmDescription": "vTPM を有効にすると、ゲスト・オペレーティング・システムで TPM が使用できるようになります。"
+  },
+  "pagePostCodeLogs": {
+    "allExportFilePrefix": "All_POST_codes_log_",
+    "downloadFilePrefix": "POST_codes_additional_details_",
+    "exportFilePrefix": "POST_codes_log_",
+    "viewCodesInRealtime": "進行コードをリアルタイムで表示",
+    "action": {
+      "downloadDetails": "追加の詳細をダウンロードします。",
+      "exportLogs": "エクスポート・ログ"
+    },
+    "button": {
+      "exportAll": "すべてをエクスポートします。"
+    },
+    "table": {
+      "bootCount": "ブート数",
+      "created": "作成日",
+      "postCode": "コード",
+      "searchLogs": "ログの検索",
+      "timeStampOffset": "タイム・スタンプ・オフセット"
+    }
+  },
+  "pagePower": {
+    "delayTime": "遅延時間 (秒)",
+    "description": "電力使用量を指定値 (ワット数) 以下に維持するための電源キャップを設定します。",
+    "enableIdlePower": "アイドル省電力を有効にする",
+    "idlePower": "アイドル省電力",
+    "idlePowerSubmitUpdate": "アイドル省電力の更新",
+    "idlePowerSubmitReset": "デフォルトにリセット",
+    "powerConsumptionTooltip": "PHYP が稼働すると、電力消費が有効になります",
+    "powerCapLabel": "電源キャップ値 (ワット単位)",
+    "powerCapLabelTextInfo": "値は ％{min} と ％{max} の間でなければなりません",
+    "powerCapSettingData": "電源キャップの適用",
+    "powerCapSettingLabel": "電源キャップ設定",
+    "powerConsumption": "現行の電力消費量",
+    "powerPerformanceModesDropdownLabel": "各モード効果の表示",
+    "powerPerformanceModesTitle": "電力とパフォーマンス・モード",
+    "selectModeLabel": "モードの選択",
+    "submitButton": "省電力モードの更新",
+    "toEnter": "開始",
+    "toExit": "終了",
+    "utilizationThreshold": "使用率しきい値 (%)",
+    "alert": {
+      "message": "現在、システムはセーフ・モードであるため、パフォーマンスが低下した状態で動作しています。 セーフ・モードでは電源設定にアクセスできません。 ",
+      "message2": "原因を判別するには、以下にアクセスしてください。",
+      "message2Link": "イベント・ログ",
+      "message3": "システムは次の電源オンでセーフ・モードを終了しようとします。 サーバーをリブートするには、以下にアクセスしてください。",
+      "message3Link": "サーバーの電源操作"
+    },
+    "delayTimeValidation": {
+      "delayTimeRange": "値は %{min} と %{max} の間でなければなりません。",
+      "enterDelayTime": "値は、終了するまでの遅延時間より小さくすることはできません。",
+      "exitDelayTime": "値は、入力の遅延時間を超えてはなりません。"
+    },
+    "modalEnablePowerPerformanceMode": {
+      "cancelButton": "キャンセル",
+      "content": "いずれかの省電力モードを有効にすると、プロセッサー周波数の変化、プロセッサー使用率の変化、電力消費量の変化、パフォーマンスの変化が生じます。",
+      "subTitle": "よろしいですか?",
+      "titleMaximumPerformance": "最大パフォーマンス・モードの有効化",
+      "titlePowerSaving": "省電力モードの有効化",
+      "titleStatic": "静的モードの有効化"
+    },
+    "selectMode": {
+      "maximumPerformance": "最大パフォーマンス",
+      "powerSaving": "電力節約",
+      "static": "静的"
+    },
+    "tableRoles": {
+      "descMaximumPerformance": "プロセッサー周波数は変化します。 このモードでは、アイドル状態のコア、低いワークロード、良好な環境条件に提供される熱と電力のヘッドルームを利用して、システムを最大周波数に向上させることが可能です。",
+      "descPowerSaving": "プロセッサー周波数は固定最小値に設定され、予測可能なパフォーマンスを維持しながら、システムの電力消費量を削減します。",
+      "descStatic": "プロセッサー周波数は、通常の環境条件で通常のワークロードを実行できる固定値に設定されます。",
+      "description": "説明",
+      "setting": "設定"
+    },
+    "utilizationPercentValidation": {
+      "enterUtilization": "値は、終了のしきい値を超えてはなりません。",
+      "exitUtilization": "入力値をしきい値より小さくすることはできません。",
+      "utilizationRange": "値は %{min} と %{max} の間でなければなりません。"
+    },
+    "toast": {
+      "errorIdlePower": "アイドル電力設定の保存中にエラーが発生しました",
+      "errorIdlePowerReset": "アイドル電力設定のリセット中にエラーが発生しました",
+      "errorPowerPerformanceModes": "電力およびパフォーマンス・モードの保存中にエラーが発生しました",
+      "successIdlePower": "アイドル電力設定が正常に保存されました",
+      "successIdlePowerReset": "アイドル電力設定が正常にリセットされました",
+      "successPowerPerformanceModes": "省電力モードが正常に保存されました。"
+    }
+  },
+  "pagePowerRestorePolicy": {
+    "description": "電源ポリシーを構成して、電源障害後のシステムの起動方法を決定します。",
+    "powerPoliciesLabel": "電源復元ポリシー",
+    "policies": {
+      "AlwaysOff": "常時オフ",
+      "AlwaysOn": "常時オン",
+      "LastState": "最後の状態"
+    },
+    "policiesDesc": {
+      "AlwaysOff": "常にオフ - 電源が入ると、システムの電源は常にオフになります。",
+      "AlwaysOn": "常時オン - 電源が入ると、システムの電源は常にオンになります。",
+      "LastState": "最後の状態 - 電源が入ると、システムは最後のオンまたはオフの電源状態に戻ります。"
+    },
+    "alert": {
+      "changeServerOpMode": "サーバー操作モードの変更",
+      "manualOperatingMode": "手動操作モードの間は、電力復元ポリシーを変更できません。"
+    },
+    "toast": {
+      "errorIdlePower": "アイドル電源データの保管中にエラーが発生しました。",
+      "errorPowerSaver": "省電力モードの保存中にエラーが発生しました。",
+      "errorSaveSettings": "設定の保存エラー。",
+      "successIdlePower": "アイドル電力データが正常に保存されました",
+      "successPowerSaver": "省電力モードが正常に保存されました。",
+      "successSaveSettings": "電源復元ポリシーが正常に更新されました。"
+    }
+  },
+  "pageProfileSettings": {
+    "browserOffset": "ブラウザーのオフセット (%{timezone})",
+    "changePassword": "パスワードの変更",
+    "confirmPassword": "新規パスワードの確認",
+    "defaultUTC": "デフォルト (UTC)",
+    "newPassLabelTextInfo": "パスワードは %{min} から %{max} 文字の間でなければなりません",
+    "newPassword": "新規パスワード",
+    "passwordsDoNotMatch": "パスワードが一致しません",
+    "profileInfoTitle": "プロファイル情報",
+    "timezone": "タイム・ゾーン",
+    "timezoneDisplay": "タイム・ゾーンの表示設定",
+    "timezoneDisplayDesc": "アプリケーション全体で時間の表示方法を選択します。",
+    "username": "ユーザー名",
+    "toast": {
+      "successUpdatingTimeZone": "タイム・ゾーンが正常に更新されました。"
+    }
+  },
+  "pageRebootBmc": {
+    "lastReboot": "最後の BMC リブート",
+    "rebootBmc": "BMC のリブート",
+    "rebootInformation": "BMC をリブートすると、Web ブラウザーは数分間 BMC との接続を失います。 BMC がオンラインに戻ったら、再度ログインしなければならない場合があります。",
+    "modal": {
+      "confirmMessage": "BMC をリブートしてもよろしいですか?",
+      "confirmMessage2": "システム・ダンプがオフロードされています。 BMC をリブートすると、ダンプが失われます。",
+      "confirmTitle": "BMC リブートの確認"
+    },
+    "toast": {
+      "errorRebootStart": "BMC のリブート中にエラーが発生しました。",
+      "successRebootStart": "BMC をリブートしています。"
+    }
+  },
+  "pageSensors": {
+    "alert": "このページのロードには数分間かかる場合があります",
+    "exportFilePrefix": "sensors_",
+    "searchForSensors": "センサーの検索",
+    "table": {
+      "currentValue": "現行値",
+      "lowerCritical": "重要度（低）",
+      "lowerWarning": "警告 (低)",
+      "name": "名前",
+      "status": "状況",
+      "upperCritical": "上位クリティカル",
+      "upperWarning": "上位の警告"
+    }
+  },
+  "pageServerPowerOperations": {
+    "currentStatus": "現在の状況",
+    "immediateReboot": "Immediate-サーバーはオペレーティング・システムをシャットダウンせずにリブートします。データ破損の原因となる可能性があります。",
+    "immediateShutdown": "即時-オペレーティングシステムをシャットダウンせずにサーバーをシャットダウンします。 データ破壊を引き起こす可能性があります",
+    "lastPowerOperation": "最後のシャーシ電源操作",
+    "oneTimeBootWarning": "1 回限りのブートを保留しています。 次のブートは、指定されたワンタイム・ブート設定で実行されます。 後続のブートは、デフォルト設定で実行されます。",
+    "operationInProgress": "電源操作の進行中に表示オプションはありません。 完了すると、電源操作がここに表示されます。",
+    "operations": "操作",
+    "orderlyReboot": "正常 - オペレーティング・システムがシャットダウンし、サーバーがリブートします。",
+    "orderlyShutdown": "正常 - オペレーティング・システムがシャットダウンし、サーバーがシャットダウンします。",
+    "osRuntimeButton": "OS を実行し続ける",
+    "osRuntimeMessage": "ランタイムに進むには、OS の実行状態に進みます。",
+    "phypStandby": "システムは PHYP スタンバイ状態です。",
+    "powerOn": "電源オン",
+    "reboot": "再起動",
+    "rebootServer": "サーバーのリブート",
+    "serverBootSettings": "設定",
+    "serverStatus": "サーバー状況",
+    "shutDown": "シャットダウン",
+    "shutdownServer": "サーバーのシャットダウン",
+    "biosSettings": {
+      "aixLinux": "AIX/LINUX パーティション・ブート・モード",
+      "automatic": "自動",
+      "currentOperatingModeManual": "現行操作モード手動",
+      "currentOperatingModeNormal": "現行操作モード通常",
+      "defaultPartition": "デフォルトの区画環境",
+      "ibmIPartition": "IBM i 区画ブート・モード",
+      "nonHMCManaged": "システムが非 HMC 管理の場合にのみ使用可能",
+      "powPolicySection": "は「%{powerPolicy}」に設定されます",
+      "powerOff": "電源オフ",
+      "pvm_default_os_type": "デフォルトの区画環境",
+      "pvm_os_boot_type": "IBM i 区画ブート・モード",
+      "pvm_rpa_boot_mode": "AIX/LINUX パーティション・ブート・モード",
+      "pvm_stop_at_standby": "サーバー・ファームウェア始動ポリシー",
+      "pvm_system_operating_mode": "サーバー操作モード",
+      "pvm_system_power_off_policy": "サーバー電源ポリシー",
+      "selectedOperatingModeManual": "保存時に操作モードが「手動」に設定されます",
+      "serverFirmware": "サーバー・ファームウェア始動ポリシー",
+      "powerSettingDescription": "電源設定の説明の表示",
+      "stayOn": "常時電源オン",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "自動開始のみ",
+          "autoStartAlways": "常に自動開始",
+          "standBy": "スタンバイ"
+        },
+        "description": {
+          "autoStartOnly": "サーバー・ファームウェアおよび区画を自動的に活動化するのは、異常終了 (例えば、自動電源再始動またはシステム終了の自動リブート) 後にリカバリー電源がオンになった場合のみです。",
+          "autoStartAlways": "特定のパーティションを自動的に活動化します。 HMC または ASMI メニューを使用してサーバーの電源をオンにすると、サーバーは「自動始動」に構成された区画を自動的に活動化します。 サーバーの異常停止の後に自動電源再始動またはリブートが行われると、サーバーは、システム停止時に実行されていた区画を活動化します。",
+          "standBy": "ユーザーが開始した電源オンまたはリカバリー電源オンのいずれに対しても、サーバー・ファームウェアおよび区画を自動的に活動化しません。"
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "Default"
+        },
+        "description": {
+          "aix": "システム・ファームウェアは、デフォルトの区画環境として AIX/Linux を選択します。",
+          "linux": "システム・ファームウェアは、デフォルトの区画環境として AIX/Linux を選択します。",
+          "ibmI": "サーバー・ファームウェアは、デフォルトの区画環境として IBM i を選択します。",
+          "default": "システム・ファームウェアは、システム・ブランド・タイプに基づいてデフォルトの区画環境を自動的に選択します。"
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "この区画は、オペレーティング・システムに対して直接ブートされます",
+          "serviceBoot": "保管リストからのサービス・ブート・モード",
+          "bootToSms": "SMS メニューにブート",
+          "bootToOpenFirware": "オープン・ファームウェア・プロンプトにブート",
+          "serviceBootMode": "デフォルト・リストからサービス・モード・ブート"
+        },
+        "description": {
+          "partitionBoot": "区画は、停止せずにオペレーティング・システムにブートされます。",
+          "serviceBoot": "システムは、保管されたサービス・モード・ブート・リストからブートします。 これは通常、区画の診断を実行する簡単な方法です。  このオプションを有効に活用するには、区画のオペレーティング・システムが診断ブートをサポートしている必要があり、区画のディスク・ドライブに診断をロードしておく必要があります。",
+          "bootToSms": "区画はシステム管理サービス (SMS) メニューで停止します。",
+          "bootToOpenFirware": "システムはオープン・ファームウェア・プロンプトで停止します。",
+          "serviceBootMode": "システムはデフォルトのブート・リストからブートします。  このオプションは、CD-ROM ドライブからスタンドアロン診断を実行する場合に推奨される方法です。"
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "システムのライセンス内部コードのコピー A を使用してディスクから IPL を実行します。",
+          "b": "システムのライセンス内部コードのコピー B を使用してディスクから IPL を実行します。",
+          "c": "ハードウェア・サービスの使用専用に予約済みです。",
+          "d": "ロード・ソース・ディスク以外のメディアから IPL を実行します。 コード・インストールをサポートするための代替 IPL です。"
+        }
+      },
+      "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "Default"
+        },
+        "pvm_os_boot_type": {
+          "A_Mode": "A (コピー A を使用してディスクからブート)",
+          "B_Mode": "B (コピー B を使用してディスクからブート)",
+          "C_Mode": "C (IBM ラボ使用のために予約済み)",
+          "D_Mode": "D (メディア/ドライブからブート)"
+        },
+        "pvm_rpa_boot_mode": {
+          "DefaultList": "デフォルト・リストからサービス・モード・ブート",
+          "Normal": "区画はオペレーティング・システムから直接ブート",
+          "OkPrompt": "オープン・ファームウェア・プロンプトにブート",
+          "PblBootLid": "区画は Petitboot ブート・ローダーからブート",
+          "SavedList": "保管リストからサービス・モード・ブート",
+          "SmsMenu": "SMS メニューにブート"
+        },
+        "pvm_stop_at_standby": {
+          "Disabled": "常に自動開始",
+          "Enabled": "スタンバイ (ユーザーによる開始)",
+          "ManualOnly": "自動開始のみ"
+        },
+        "pvm_system_operating_mode": {
+          "Manual": "手動-サービス/保守",
+          "Normal": "通常-自動"
+        },
+        "pvm_system_power_off_policy": {
+          "automaticHelperText": "この設定では、システムが区画に分割されていない場合、動作は電源オフと同じです。また、システムが区画に分割されている場合、システムの動作は「オンのまま」と同じです。",
+          "powerOffHelperText": "最後の区画電源がオフになると、サーバーの電源もオフになります。",
+          "stayOnHelperText": "最後の区画電源がオフになっても、サーバーの電源はオンのままになります。"
+        }
+      }
+    },
+    "modal": {
+      "confirmRebootMessage": "リブートしてよろしいですか?",
+      "confirmRebootMessage2": "システム・ダンプがオフロードされています。 リブートすると、ダンプが失われます。",
+      "confirmRebootTitle": "サーバーを再起動すると停止します。",
+      "confirmShutdownMessage": "シャットダウンしてもよろしいですか?",
+      "confirmShutdownMessage2": "システム・ダンプがオフロードされています。 システムをシャットダウンすると、ダンプが失われます。",
+      "confirmShutdownTitle": "サーバーのシャットダウンが原因で障害が発生します。"
+    },
+    "toast": {
+      "errorPowerOn": "BMC はホストの電源をオンにする準備ができていません。",
+      "errorSaveSettings": "設定の保存エラー。",
+      "successSaveSettings": "設定が正常に保存されました。"
+    }
+  },
+  "pageServiceLoginConsoles": {
+    "bmcConsole": "BMC コンソール",
+    "hypervisorConsole": "ハイパーバイザー・コンソール",
+    "selectConsoleType": "コンソールの選択",
+    "status": "状況"
+  },
+  "pageSessions": {
+    "action": {
+      "disconnect": "切断"
+    },
+    "alert": {
+      "heading": "警告",
+      "message": "HMC がアクティブの場合は、再接続を試みます。 作動中の HMC を切断するには、HMC 自体から切断します。"
+    },
+    "modal": {
+      "disconnectMessage": "%{count} 件のセッションを切断してもよろしいですか? このアクションを元に戻すことはできません。 |%{count} のセッションを切断しますか? このアクションを元に戻すことはできません。",
+      "disconnectTitle": "セッションの切断 | セッションの切断"
+    },
+    "table": {
+      "clientID": "クライアント ID",
+      "ipAddress": "IP アドレス",
+      "searchSessions": "セッションの検索",
+      "username": "ユーザー名"
+    },
+    "toast": {
+      "errorDelete": "%{count} セッションの切断中にエラーが発生しました。 |%{count} セッションの切断中にエラーが発生しました。",
+      "successDelete": "%{count} セッションを正常に切断しました。 |%{count} のセッションが正常に切断されました。"
+    }
+  },
+  "pageSnmpAlerts": {
+    "addDestination": "宛先の追加",
+    "deleteDestination": "宛先の削除 | 宛先の削除",
+    "pageDescription": "IP アドレスとポートを使って Simple Network Management Protocol (SNMP) トラップを設定します。",
+    "modal": {
+      "addSnmpDestinationTitle": "SNMP 警告宛先の追加",
+      "batchDeleteConfirmMessage": "SNMP 警告宛先を削除してもよろしいですか? このアクションを元に戻すことはできません。 |%{count} 個の SNMP 警告宛先を削除しますか? このアクションを元に戻すことはできません。",
+      "deleteConfirmMessage": "SNMP 警告宛先を削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "deleteSnmpDestinationTitle": "SNMP 警告宛先の削除 | SNMP 警告宛先の削除",
+      "ipaddress": "IP アドレス",
+      "ipaddressFqdn": "IP アドレス / FQDN",
+      "ipaddressFqdnInfo": "IP アドレスまたは somehost.example.com",
+      "port": "ポート"
+    },
+    "table": {
+      "ipaddress": "IP アドレス",
+      "port": "ポート"
+    },
+    "toast": {
+      "errorAddDestination": "SNMP 警告宛先の追加中にエラーが発生しました。",
+      "errorBatchDelete": "SNMP 警告宛先の削除中にエラーが発生しました。 | SNMP 警告宛先の削除中にエラーが発生しました。",
+      "errorDeleteDestination": "SNMP 警告宛先の削除中にエラーが発生しました。",
+      "errorLoadSnmpDetails": "SNMP 警告詳細のロード中にエラーが発生しました。",
+      "successAddDestination": "SNMP 警告宛先が正常に追加されました。",
+      "successBatchDelete": "SNMP 警告宛先が正常に削除されました。 |%{count} 件の SNMP 警告宛先が正常に削除されました。",
+      "successDeleteDestination": "SNMP 警告宛先が正常に削除されました。"
+    }
+  },
+  "pageUserManagement": {
+    "accountPolicySettings": "アカウント・ポリシー設定",
+    "addUser": "ユーザーの追加",
+    "deleteUser": "ユーザーの削除 | ユーザーの削除",
+    "editUser": "ユーザーの編集",
+    "viewPrivilegeRoleDescriptions": "特権役割の説明の表示",
+    "modal": {
+      "accountLocked": "アカウントがロックされました",
+      "accountStatus": "アカウント状況",
+      "automaticAfterTimeout": "タイムアウト後に自動",
+      "batchDeleteConfirmMessage": "%{count} 人のユーザーを削除してもよろしいですか? このアクションを元に戻すことはできません。 |%{count} のユーザーを削除しますか? このアクションを元に戻すことはできません。",
+      "cannotStartWithANumber": "先頭を数字にすることはできません。",
+      "clickSaveToUnlockAccount": "アカウントをアンロックするには「保存」をクリックしてください。",
+      "confirmUserPassword": "ユーザー・パスワードの確認",
+      "deleteConfirmMessage": "ユーザー「%{user}」を削除してもよろしいですか? このアクションを元に戻すことはできません。",
+      "manual": "手動",
+      "maxFailedLoginAttempts": "ログイン試行の最大失敗回数",
+      "noSpecialCharactersExceptUnderscore": "下線以外の特殊文字なし",
+      "passwordMustBeBetween": "パスワードは %{min} から %{max} 文字の間でなければなりません",
+      "passwordsDoNotMatch": "パスワードが一致しません",
+      "privilege": "特権",
+      "timeoutDurationSeconds": "タイムアウト期間 (秒)",
+      "unlock": "アンロック",
+      "username": "ユーザー名",
+      "userPassword": "ユーザー・パスワード",
+      "userUnlockMethod": "ユーザー・アンロック方式",
+      "zeroLoginAttempts": "「0」の場合、アカウントはロックされません。"
+    },
+    "table": {
+      "administrator": "管理者",
+      "privilege": "特権",
+      "readOnly": "読み取り専用",
+      "status": "状況",
+      "username": "ユーザー名"
+    },
+    "tableRoles": {
+      "administrator": "管理者",
+      "configureComponentsManagedByThisService": "このサービスに管理されるコンポーネントの構成",
+      "configureManagerResources": "マネージャー・リソースの構成",
+      "configureUsersAndTheirAccounts": "ユーザーとそのアカウントの構成",
+      "logInToTheServiceAndReadResources": "サービスへのログインとリソースの読み取り",
+      "privilege": "特権",
+      "readOnly": "読み取り専用",
+      "updatePasswordForCurrentUserAccount": "現行ユーザー・アカウントのパスワードの更新"
+    },
+    "toast": {
+      "errorBatchDelete": "%{count} ユーザーの削除中にエラーが発生しました。 |%{count} ユーザーの削除中にエラーが発生しました。",
+      "errorBatchDisable": "%{count} ユーザーの無効化でエラーが発生しました。 |%{count} ユーザーの無効化中にエラーが発生しました。",
+      "errorBatchEnable": "%{count} ユーザーの有効化でエラーが発生しました。 |%{count} ユーザーの有効化中にエラーが発生しました。",
+      "errorCreateUser": "ユーザー 「%{username}」 の作成中にエラーが発生しました。",
+      "errorCreateUserMaxUsers": "このシステムの最大許容ユーザー数に達したため、ユーザー '%{username}' の作成中にエラーが発生しました。",
+      "errorCreateUserPasswordNotAccepted": "パスワードが受け入れられなかったため、ユーザー '%{username}' の作成中にエラーが発生しました。",
+      "errorDeleteUser": "ユーザー「%{username}」の削除中にエラーが発生しました。",
+      "errorLoadAccountSettings": "アカウント設定中にエラーが発生しました。",
+      "errorLoadUsers": "ユーザーの読み込み中にエラーが発生しました。",
+      "errorSaveSettings": "アカウント設定の保存でエラーが発生しました。",
+      "errorUpdateUser": "ユーザー 「%{username}」の更新中にエラーが発生しました。",
+      "errorUpdateUserPasswordNotAccepted": "パスワードが受け入れられなかったため、ユーザー '%{username}' の更新中にエラーが発生しました。",
+      "successBatchDelete": "%{count} 人のユーザーが正常に削除されました。 |%{count} 人のユーザーが正常に削除されました。",
+      "successBatchDisable": "%{count} 人のユーザーが正常に無効化されました。 |%{count} 人のユーザーが正常に無効化されました。",
+      "successBatchEnable": "%{count} 人のユーザーが正常に有効化されました。 |%{count} 人のユーザーが正常に有効化されました。",
+      "successCreateUser": "ユーザー 「%{username}」が作成されました。",
+      "successDeleteUser": "ユーザー「%{username}」が削除されました。",
+      "successSaveSettings": "アカウント設定が正常に保存されました。",
+      "successUpdateUser": "ユーザー「%{username}」が更新されました。"
+    }
+  },
+  "pageVirtualMedia": {
+    "configureConnection": "接続の構成",
+    "defaultDeviceName": "仮想メディア装置",
+    "start": "Start",
+    "stop": "停止",
+    "virtualMediaSubTitleFirst": "Web ブラウザーから画像をロードします。",
+    "virtualMediaSubTitleSecond": "外部サーバーから画像をロードします。",
+    "modal": {
+      "password": "パスワード",
+      "serverUri": "外部サーバー URI",
+      "title": "レガシー・モード構成",
+      "username": "ユーザー名"
+    },
+    "toast": {
+      "errorMounting": "マウント・エラー",
+      "errorReadingFile": "ファイルの読み込み中にエラーが発生しました。 サーバーを閉じています。",
+      "errorUnmounting": "アンマウント中にエラーが発生しました。",
+      "serverClosedSuccessfully": "サーバーが正常に閉じられました。",
+      "serverClosedWithErrors": "サーバーがエラーで閉じられました。",
+      "serverConnectionEstablished": "サーバー接続が確立されました。",
+      "serverRunning": "サーバーが実行中です。"
+    }
+  },
+  "countries": {
+    "AF": "アフガニスタン",
+    "AL": "アルバニア",
+    "DZ": "アルジェリア",
+    "AS": "アメリカ領サモア",
+    "AD": "アンドラ",
+    "AO": "アンゴラ",
+    "AI": "アンギラ",
+    "AQ": "南極大陸",
+    "AG": "アンティグア・バーブーダ",
+    "AR": "アルゼンチン",
+    "AM": "アルメニア",
+    "AW": "アルバ",
+    "AU": "オーストラリア",
+    "AT": "オーストリア",
+    "AZ": "アゼルバイジャン",
+    "BS": "Bahamas, その",
+    "BH": "バーレーン",
+    "BD": "バングラデシュ",
+    "BB": "バルバドス",
+    "BY": "ベラルーシ",
+    "BE": "ベルギー",
+    "BZ": "ベリーズ",
+    "BJ": "ベナン",
+    "BM": "バミューダ",
+    "BT": "ブータン",
+    "BO": "ボリビア",
+    "BQ": "ボネール、シント・ユースタティウスおよびサバ",
+    "BA": "ボスニア・ヘルツェゴビナ ",
+    "BW": "ボストワナ",
+    "BV": "ブーベ島",
+    "BR": "ブラジル",
+    "IO": "イギリス領インド洋地域",
+    "BN": "ブルネイ・ダルサラーム国 ",
+    "BG": "ブルガリア",
+    "BF": "ブルキナファソ",
+    "BI": "ブルンジ",
+    "CV": "カーボベルデ",
+    "KH": "カンボジア",
+    "CM": "カメルーン",
+    "CA": "カナダ",
+    "KY": "ケイマン諸島",
+    "CF": "中央アフリカ共和国",
+    "TD": "チャド",
+    "CL": "チリ",
+    "CN": "中国",
+    "CX": "クリスマス島 ",
+    "CC": "ココス (キーリング) 諸島",
+    "CO": "コロンビア",
+    "KM": "コモロ",
+    "CD": "コンゴ民主共和国",
+    "CG": "コンゴ",
+    "CK": "クック諸島",
+    "CR": "コスタリカ",
+    "HR": "クロアチア",
+    "CU": "キューバ",
+    "CW": "キュラソー",
+    "CY": "キプロス",
+    "CZ": "チェコ共和国",
+    "CI": "Côte d\"Ivoire",
+    "DK": "デンマーク",
+    "DJ": "ジブチ",
+    "DM": "ドミニカ国",
+    "DO": "ドミニカ共和国",
+    "EC": "エクアドル",
+    "EG": "エジプト",
+    "SV": "エルサルバドル",
+    "GQ": "赤道ギニア ",
+    "ER": "エリトリア",
+    "EE": "エストニア",
+    "SZ": "エスワティニ",
+    "ET": "エチオピア",
+    "FK": "フォークランド諸島",
+    "FO": "フェロー諸島",
+    "FJ": "フィジー",
+    "FI": "フィンランド",
+    "FR": "フランス",
+    "GF": "フランス領ギアナ",
+    "PF": "フランス領ポリネシア",
+    "TF": "フランス領南方・南極地域",
+    "GA": "ガボン",
+    "GM": "Gambia, その",
+    "GE": "ジョージア",
+    "DE": "ドイツ",
+    "GH": "ガーナ",
+    "GI": "ジブラルタル",
+    "GR": "ギリシャ",
+    "GL": "グリーンランド",
+    "GD": "グレナダ",
+    "GP": "グアドループ",
+    "GU": "グアム",
+    "GT": "グアテマラ",
+    "GG": "ガーンジー",
+    "GN": "ギニア",
+    "GW": "ギニアビサウ",
+    "GY": "ガイアナ",
+    "HT": "ハイチ",
+    "HM": "ハード・アンド・マクドナルド・アイランズ",
+    "VA": "教皇聖座",
+    "HN": "ホンジュラス",
+    "HK": "香港",
+    "HU": "ハンガリー",
+    "IS": "アイスランド",
+    "IN": "インド",
+    "ID": "インドネシア",
+    "IR": "イラン・イスラム共和国",
+    "IQ": "イラク",
+    "IE": "アイルランド",
+    "IM": "マン島",
+    "IL": "イスラエル",
+    "IT": "イタリア",
+    "JM": "ジャマイカ",
+    "JP": "日本",
+    "JE": "ジャージー",
+    "JO": "ヨルダン",
+    "KZ": "カザフスタン",
+    "KE": "ケニア",
+    "KI": "キリバス",
+    "KR": "大韓民国",
+    "KP": "朝鮮民主主義人民共和国",
+    "KW": "クウェート",
+    "KG": "キルギス",
+    "LA": "ラオ人民民主共和国",
+    "LV": "ラトビア",
+    "LB": "レバノン",
+    "LS": "レソト",
+    "LR": "リベリア",
+    "LY": "リビア",
+    "LI": "リヒテンシュタイン",
+    "LT": "リトアニア",
+    "LU": "ルクセンブルク",
+    "MO": "マカオ",
+    "MK": "マケドニア旧ユーゴスラビア共和国",
+    "MG": "マダガスカル",
+    "MW": "マラウイ",
+    "MY": "マレーシア",
+    "MV": "モルディブ",
+    "ML": "マリ",
+    "MT": "マルタ",
+    "MH": "マーシャル諸島",
+    "MQ": "マルティニーク",
+    "MR": "モーリタニア",
+    "MU": "モーリシャス",
+    "YT": "マヨット",
+    "MX": "メキシコ",
+    "FM": "ミクロネシア連邦",
+    "MD": "モルドバ共和国",
+    "MC": "モナコ",
+    "MN": "モンゴル",
+    "ME": "モンテネグロ",
+    "MS": "モントセラト",
+    "MA": "モロッコ",
+    "MZ": "モザンビーク",
+    "MM": "ミャンマー",
+    "NA": "ナミビア",
+    "NR": "ナウル",
+    "NP": "ネパール",
+    "NL": "オランダ",
+    "NC": "ニューカレドニア",
+    "NZ": "ニュージーランド",
+    "NI": "ニカラグア",
+    "NE": "ニジェール",
+    "NG": "ナイジェリア",
+    "NU": "ニウエ",
+    "NF": "ノーフォーク島",
+    "MP": "北マリアナ諸島",
+    "NO": "ノルウェー",
+    "OM": "オマーン",
+    "PK": "パキスタン",
+    "PW": "パラオ",
+    "PS": "パレスチナ",
+    "PA": "パナマ",
+    "PG": "パプアニューギニア",
+    "PY": "パラグアイ",
+    "PE": "ペルー",
+    "PH": "フィリピン",
+    "PN": "ピトケアン",
+    "PL": "ポーランド",
+    "PT": "ポルトガル",
+    "PR": "プエルトリコ",
+    "QA": "カタール",
+    "RO": "ルーマニア",
+    "RU": "ロシア連邦",
+    "RW": "ルワンダ",
+    "RE": "レユニオン",
+    "BL": "サン・バルテルミー島",
+    "SH": "セントヘレナ、アセンションおよびトリスタン・ダ・クーニャ",
+    "KN": "セントクリストファー・ネイビス ",
+    "LC": "セントルシア",
+    "MF": "サンマルタン島",
+    "PM": "サンピエール島・ミクロン島",
+    "VC": "セントビンセント・グレナディーン諸島",
+    "WS": "サモア",
+    "SM": "サンマリノ ",
+    "ST": "サントメ・プリンシペ",
+    "SA": "サウジアラビア",
+    "SN": "セネガル",
+    "RS": "セルビア",
+    "SC": "セーシェル",
+    "SL": "シエラレオネ",
+    "SG": "シンガポール",
+    "SX": "シント・マールテン島",
+    "SK": "スロバキア",
+    "SI": "スロベニア",
+    "SB": "ソロモン諸島",
+    "SO": "ソマリア",
+    "ZA": "南アフリカ ",
+    "GS": "南ジョージア島・南サンドイッチ諸島",
+    "SS": "南スーダン",
+    "ES": "スペイン",
+    "LK": "スリランカ",
+    "SD": "スーダン",
+    "SR": "スリナム",
+    "SJ": "スヴァールバル諸島およびヤンマイエン島",
+    "SE": "スウェーデン",
+    "CH": "スイス",
+    "SY": "シリアアラブ共和国",
+    "TW": "台湾",
+    "TJ": "タジキスタン",
+    "TZ": "タンザニア連合共和国",
+    "TH": "タイ",
+    "TL": "東ティモール",
+    "TG": "トーゴ",
+    "TK": "トケラウ",
+    "TO": "トンガ",
+    "TT": "トリニダード・トバゴ",
+    "TN": "チュニジア",
+    "TR": "トルコ",
+    "TM": "トルクメニスタン",
+    "TC": "タークス・カイコス諸島",
+    "TV": "ツバル",
+    "UG": "ウガンダ",
+    "UA": "ウクライナ",
+    "AE": "アラブ首長国連邦",
+    "GB": "英国",
+    "UM": "米領太平洋諸島",
+    "US": "アメリカ合衆国",
+    "UY": "ウルグアイ",
+    "UZ": "ウズベキスタン",
+    "VU": "バヌアツ",
+    "VE": "ベネズエラ",
+    "VN": "ベトナム",
+    "VG": "米領バージン諸島",
+    "VI": "バージン諸島、U.S",
+    "WF": "ウォリス・フツナ",
+    "EH": "西サハラ",
+    "YE": "イエメン",
+    "ZM": "ザンビア",
+    "ZW": "ジンバブエ",
+    "AX": "オーランド諸島"
+  }
+}
