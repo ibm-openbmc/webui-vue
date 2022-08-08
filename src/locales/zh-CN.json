@@ -1,0 +1,1674 @@
+{
+  "global": {
+    "action": {
+      "activate": "激活",
+      "add": "添加",
+      "cancel": "取消",
+      "clearAll": "全部清除",
+      "confirm": "确认",
+      "copy": "复制",
+      "delete": "删除",
+      "deleteAll": "全部删除",
+      "disable": "禁用",
+      "download": "下载",
+      "downloadAll": "全部下载",
+      "edit": "编辑",
+      "enable": "启用",
+      "export": "导出",
+      "exportAll": "全部导出",
+      "filter": "过滤器",
+      "openNewTab": "在新选项卡中打开",
+      "refresh": "刷新",
+      "replace": "替换",
+      "reset": "重置",
+      "save": "保存",
+      "saveSettings": "保存设置",
+      "selected": "个已选中"
+    },
+    "ariaLabel": {
+      "clearSearch": "清除搜索输入",
+      "hidePassword": "隐藏密码",
+      "progressBar": "页面装入进度条",
+      "scrollToTop": "滚动到顶部",
+      "showPassword": "以纯文本形式显示密码。 注意：这将在屏幕上直观地公开您的密码。",
+      "tooltip": "工具提示"
+    },
+    "calendar": {
+      "selectDate": "选择日期",
+      "useCursorKeysToNavigateCalendarDates": "使用光标键浏览日历日期"
+    },
+    "fileUpload": {
+      "browseText": "添加文件",
+      "clearSelectedFile": "清除所选文件"
+    },
+    "form": {
+      "dateMustBeAfter": "日期必须晚于 %{date}",
+      "dateMustBeBefore": "日期必须早于 %{date}",
+      "fieldRequired": "必填字段",
+      "invalidCharacterLength": "字符长度无效",
+      "invalidFormat": "格式无效",
+      "invalidValue": "无效值",
+      "lengthMustBeBetween": "长度必须在 %{min} 到 %{max} 个字符之间",
+      "mustBeAtLeast": "必须至少为 %{value}",
+      "optional": "可选",
+      "passwordsDoNotMatch": "密码不匹配",
+      "required": "必需",
+      "search": "搜索",
+      "selectAnOption": "选择一个选项",
+      "valueMustBeBetween": "值必须介于 %{min} 到 %{max} 之间"
+    },
+    "passwordValidation": {
+      "title": "密码必须：",
+      "message1": "1. 至少为 8 个字符",
+      "message2": "2. 不是 palindrome",
+      "message3": "3. 不包含帐户用户名",
+      "message4": "4. 不包含字典单词",
+      "message5": "5. 不包含连续字符",
+      "message6": "6. 如果用于 IPMI，那么必须不超过 20 个字符"
+    },
+    "status": {
+      "absent": "不存在",
+      "copied": "已复制",
+      "connected": "已连接",
+      "disabled": "已禁用",
+      "disconnected": "已断开连接",
+      "enabled": "已启用",
+      "error": "错误",
+      "informational": "参考",
+      "nextReboot": "更改将在下一次引导时生效。",
+      "notAvailable": "未提供",
+      "off": "关闭",
+      "on": "开启",
+      "present": "已存在",
+      "success": "成功",
+      "warning": "警告"
+    },
+    "table": {
+      "collapseTableRow": "折叠表行",
+      "emptyMessage": "没有任何项",
+      "emptySearchMessage": "没有与搜索查询匹配的项",
+      "expandTableRow": "展开表行",
+      "fromDate": "起始日期",
+      "items": "%{count} 项",
+      "itemsPerPage": "项/页",
+      "selectAll": "全选",
+      "selectedItems": "%{filterCount} 项（共 %{count} 项）",
+      "selectItem": "选择项目",
+      "toDate": "结束日期",
+      "viewAll": "查看全部"
+    },
+    "toast": {
+      "unAuthDescription": "无法从已登录的帐户访问所尝试的操作。 请与系统管理员联系以检查您的特权角色。",
+      "unAuthTitle": "未经授权"
+    }
+  },
+  "appHeader": {
+    "applicationHeader": "应用程序头",
+    "health": "运行状况",
+    "logOut": "注销",
+    "power": "电源",
+    "profileSettings": "@:appPageTitle.profileSettings",
+    "refresh": "刷新",
+    "skipToContent": "跳转至内容",
+    "titleHideNavigation": "隐藏导航",
+    "titleProfile": "显示概要文件菜单",
+    "titleRefresh": "刷新应用程序数据",
+    "titleShowNavigation": "显示导航"
+  },
+  "appNavigation": {
+    "capacityOnDemand": "@:appPageTitle.capacityOnDemand",
+    "certificates": "@:appPageTitle.certificates",
+    "concurrentMaintenance": "@:appPageTitle.concurrentMaintenance",
+    "dateTime": "@:appPageTitle.dateTime",
+    "deconfigurationHardware": "@:appPageTitle.deconfigurationHardware",
+    "deconfigurationRecords": "@:appPageTitle.deconfigurationRecords",
+    "dumps": "@:appPageTitle.dumps",
+    "eventLogs": "@:appPageTitle.eventLogs",
+    "factoryReset": "@:appPageTitle.factoryReset",
+    "fieldCoreOverride": "@:appPageTitle.fieldCoreOverride",
+    "firmware": "@:appPageTitle.firmware",
+    "hardwareStatus": "硬件状态",
+    "hostConsole": "@:appPageTitle.hostConsole",
+    "inventory": "@:appPageTitle.inventory",
+    "keyClear": "@:appPageTitle.keyClear",
+    "kvm": "@:appPageTitle.kvm",
+    "lateralCastOutControl": "@:appPageTitle.lateralCastOutControl",
+    "ldap": "@:appPageTitle.ldap",
+    "logs": "日志",
+    "memory": "@:appPageTitle.memory",
+    "network": "@:appPageTitle.network",
+    "operations": "操作",
+    "overview": "@:appPageTitle.overview",
+    "policies": "@:appPageTitle.policies",
+    "postCodeLogs": "@:appPageTitle.postCodeLogs",
+    "power": "@:appPageTitle.power",
+    "powerRestorePolicy": "@:appPageTitle.powerRestorePolicy",
+    "primaryNavigation": "主导航",
+    "rebootBmc": "@:appPageTitle.rebootBmc",
+    "resourceManagement": "资源管理",
+    "securityAndAccess": "安全性和访问",
+    "sensors": "@:appPageTitle.sensors",
+    "serverPowerOperations": "@:appPageTitle.serverPowerOperations",
+    "serviceLogin": "@:appPageTitle.serviceLogin",
+    "sessions": "@:appPageTitle.sessions",
+    "settings": "设置",
+    "snmpAlerts": "SNMP 警报",
+    "userManagement": "@:appPageTitle.userManagement",
+    "virtualMedia": "@:appPageTitle.virtualMedia"
+  },
+  "appPageTitle": {
+    "capacityOnDemand": "按需扩容",
+    "certificates": "证书",
+    "changePassword": "更改密码",
+    "concurrentMaintenance": "并发维护",
+    "dateTime": "日期和时间",
+    "deconfigurationHardware": "硬件取消配置",
+    "deconfigurationRecords": "取消配置记录",
+    "dumps": "转储",
+    "eventLogs": "事件日志",
+    "factoryReset": "恢复出厂设置",
+    "fieldCoreOverride": "现场核心覆盖",
+    "firmware": "固件",
+    "hostConsole": "主机控制台",
+    "inventory": "库存和指示灯",
+    "keyClear": "密钥清除",
+    "kvm": "KVM",
+    "lateralCastOutControl": "横向强制类型转换控件",
+    "ldap": "LDAP",
+    "login": "登录",
+    "memory": "内存",
+    "network": "网络",
+    "overview": "概况",
+    "pageNotFound": "找不到页面",
+    "policies": "策略",
+    "postCodeLogs": "进度日志",
+    "postCodes": "进度日志",
+    "power": "电源",
+    "powerRestorePolicy": "电源恢复策略",
+    "profileSettings": "概要文件设置",
+    "rebootBmc": "重新引导 BMC",
+    "sensors": "传感器",
+    "serverPowerOperations": "服务器电源操作",
+    "serviceLogin": "服务登录控制台",
+    "sessions": "HMC 和用户会话",
+    "snmpAlerts": "SNMP 警报",
+    "userManagement": "用户管理",
+    "virtualMedia": "虚拟介质"
+  },
+  "pageCapacityOnDemand": {
+    "vetCapabilities": "VET 功能",
+    "quickLinks": "快速链接",
+    "activation": {
+      "alert": "PHYP 必须处于备用或正在运行状态才能激活。",
+      "helperText": "必须为 34 个字符。 要获取新的访问密钥，请访问 ",
+      "placeholder": "输入激活码",
+      "sectionTitle": "激活",
+      "srLabel": "激活码 (activation code)",
+      "toast": {
+        "error": "按需扩容激活失败。",
+        "success": "按需扩容激活成功。"
+      }
+    },
+    "alert": {
+      "description": "需要打开系统的电源。",
+      "title": "正在对按需扩容激活应用更改。"
+    },
+    "orderInfo": {
+      "activatedResources": "已激活的资源",
+      "accessKeyInfo": "访问密钥信息",
+      "aixAccessKeyExpiration": "AIX 访问密钥到期：",
+      "entryCheck": "入口校验",
+      "firmwareAccessKeyExpiration": "固件访问密钥到期：",
+      "memoryInfo": "内存信息",
+      "memoryLicensed": "许可内存：",
+      "memoryResourceId": "内存资源标识：",
+      "memorySequenceNumber": "内存序号：",
+      "previousActivated": "先前已激活：",
+      "processorInfo": "处理器信息",
+      "processorResourceId": "处理器资源标识：",
+      "processorSequenceNumber": "处理器序号：",
+      "processorsLicensed": "许可的处理器数：",
+      "resourceId": "资源标识：",
+      "sequenceNumber": "序列号：",
+      "systemCodPublicKey": "系统 COD 公用密钥",
+      "systemCodUniqueId": "系统 COD 唯一标识：",
+      "systemAnchor": "系统锚点：",
+      "systemInfo": "系统信息",
+      "systemSerialNumber": "系统序列号：",
+      "systemType": "系统类型：",
+      "title": "随需应变实用程序的订单信息",
+      "description": {
+        "message": "如果此信息不可用，或者需要更多信息，请在此页面创建资源转储（使用特定资源选择器）：  ",
+        "link": "转储页面。"
+      }
+    },
+    "table": {
+      "bitCapabilityStatus": "位功能状态",
+      "setting": "设置"
+    }
+  },
+  "pageCertificates": {
+    "addNewCertificate": "添加新证书",
+    "caCertificate": "CA 证书",
+    "deleteCertificate": "删除证书",
+    "generateCsr": "生成 CSR",
+    "httpsCertificate": "HTTPS 证书",
+    "ldapCertificate": "LDAP 证书",
+    "replaceCertificate": "替换证书",
+    "serviceLoginCertificate": "服务登录证书",
+    "alert": {
+      "certificateExpiredMessage": "%{certificate} 已到期。 请考虑将其替换为新证书。",
+      "certificateExpiringMessage": "%{certificate} 即将到期。 请考虑将其替换为新证书。",
+      "certificatesExpiredMessage": "某些证书已到期。 请考虑将其替换为新证书。",
+      "certificatesExpiringMessage": "某些证书即将到期。 请考虑将其替换为新证书。"
+    },
+    "modal": {
+      "alternateName": "备用名称",
+      "alternateNameHelperText": "添加多个备用名称（以空格分隔）",
+      "certificateFile": "证书文件",
+      "certificateSigningRequest": "证书签名请求 (CSR)",
+      "certificateType": "证书类型",
+      "challengePassword": "质询密码",
+      "city": "市/县",
+      "commonName": "公共名称",
+      "companyName": "公司名称",
+      "companyUnit": "公司单位",
+      "contactPerson": "联系人",
+      "country": "国家/地区",
+      "deleteConfirmMessage": "确定要删除“%{certificate}”吗？ 此操作无法撤销。",
+      "duplicateAlternateName": "备用名重复",
+      "emailAddress": "电子邮件地址",
+      "generateACertificateSigningRequest": "生成证书签名请求 (CSR)",
+      "keyBitLength": "密钥位长度",
+      "keyCurveId": "密钥曲线标识",
+      "keyPairAlgorithm": "密钥对算法",
+      "privateKey": "专用密钥",
+      "state": "省/自治区/直辖市"
+    },
+    "table": {
+      "certificate": "证书",
+      "issuedBy": "颁发者",
+      "issuedTo": "颁发给",
+      "validFrom": "生效时间",
+      "validUntil": "有效期至"
+    },
+    "toast": {
+      "errorAddCertificate": "添加证书时出错。",
+      "errorDeleteCertificate": "删除证书时出错。",
+      "errorReplaceCertificate": "替换证书时出错。",
+      "successAddCertificate": "已成功添加 %{certificate}。",
+      "successDeleteCertificate": "已成功删除 %{certificate}。",
+      "successReplaceCertificate": "已成功替换 %{certificate}。"
+    }
+  },
+  "pageChangePassword": {
+    "changePassword": "更改密码",
+    "changePasswordAlertMessage": "密码已到期，必须进行更改。",
+    "changePasswordError": "更改密码时发生了错误。",
+    "confirmNewPassword": "确认新密码：",
+    "goBack": "后退",
+    "newPassword": "新密码",
+    "username": "用户名"
+  },
+  "pageDateTime": {
+    "alert": {
+      "link": "概要文件设置",
+      "message": "要更改在整个应用程序中显示日期和时间的方式（UTC 或浏览器偏移量），请访问 "
+    },
+    "configureSettings": "配置设置",
+    "form": {
+      "date": "日期",
+      "manual": "手动",
+      "time": {
+        "label": "24 小时制",
+        "timezone": "@:pageDateTime.form.time.label (%{timezone})"
+      },
+      "ntpServers": {
+        "server1": "服务器 1",
+        "server2": "服务器 2",
+        "server3": "服务器 3"
+      }
+    },
+    "toast": {
+      "errorSaveDateTime": "保存日期和时间设置时出错。",
+      "successSaveDateTime": "已成功保存日期和时间设置。"
+    }
+  },
+  "pageConcurrentMaintenance": {
+    "concurrentMaintenance": "并发维护",
+    "tod": "一天中的电池维护时间",
+    "alert": {
+      "message": "启用此项以卸下或更换电池。 完成之后，建议将其禁用以返回正常方式。",
+      "title": "电池的并发修复"
+    },
+    "toast": {
+      "errorSaveReadyToRemove": "错误 %{state} 已准备好除去状态。",
+      "successSaveReadyToRemove": "已成功 %{state} 准备好除去状态。"
+    }
+  },
+  "pageDeconfigurationHardware": {
+    "capacity": "容量",
+    "clearRecords": "清除记录",
+    "configure": "配置",
+    "configured": "已配置",
+    "deconfigure": "取消配置",
+    "deconfigured": "已取消配置",
+    "description": "查看或更改所有硬件资源的状态。 要查看有关每个已取消配置的资源的详细信息，请访问 ",
+    "fcoSetting": "FCO 设置",
+    "initiateDump": "启动转储",
+    "link": "取消配置记录。",
+    "memoryDimms": "内存 DIMM",
+    "node": "节点",
+    "overview": "概述",
+    "pcieRootComplex": "PCIe 根复合体",
+    "processorChips": "处理器芯片",
+    "processorCores": "处理器核心",
+    "totalCores": "总核心数",
+    "alert": {
+      "message": "只有在服务器电源关闭时，才可以配置或取消配置内存 DIMM 和处理器核心。"
+    },
+    "toast": {
+      "errorDisablingSetting": "禁用设置时出错",
+      "errorEnablingSetting": "启用设置时出错"
+    },
+    "table": {
+      "deconfigurationType": "取消配置类型",
+      "functionalState": "功能状态",
+      "id": "标识",
+      "locationCode": "位置码",
+      "name": "名称",
+      "settings": "设置",
+      "size": "大小（以兆比字节计）"
+    }
+  },
+  "pageDeconfigurationRecords": {
+    "additionalDataUri": "下载其他数据",
+    "clearAll": "清除所有记录",
+    "fatal": "致命",
+    "manual": "手动",
+    "nextRebootInfoIcon": "@:global.status.nextReboot",
+    "predictive": "预测的",
+    "resolved": "已解决",
+    "unresolved": "未解决",
+    "pageDescription": {
+      "description": "选择要查看的记录或将取消配置详细信息导出到 .txt 文件。 要查看并手动更改所有硬件资源的配置状态，请访问 ",
+      "link": "硬件取消配置。"
+    },
+    "modal": {
+      "title": "清除所有记录",
+      "subtileServiceRequired": "需要服务特权",
+      "messageServiceRequired": "请与服务代表联系以协助您执行此操作。",
+      "confirm": "您确定吗？",
+      "confirmMessage": "清除所有取消配置记录，将尝试对所选节点中的所有硬件进行重新配置。 这些更改将在下一次引导时生效。",
+      "deleteAllMessage": "确定要删除所有记录吗？ 此操作无法撤销。",
+      "deleteAllTitle": "删除所有记录",
+      "deleteMessage": "确定要删除 %{count} 条记录吗？ 此操作无法撤销。| 确定要删除 %{count} 条记录吗？ 此操作无法撤销。",
+      "deleteTitle": "删除记录 | 删除记录",
+      "goBack": "后退",
+      "continue": "继续"
+    },
+    "table": {
+      "alerts": "警报",
+      "date": "日期",
+      "description": "描述",
+      "id": "标识",
+      "name": "名称",
+      "reference": "参考",
+      "resource": "资源",
+      "severity": "严重性",
+      "srcDetails": "SRC 详细信息",
+      "srcDetailsToolTip": "系统参考码详细信息",
+      "status": "状态",
+      "type": "取消配置类型"
+    },
+    "toast": {
+      "errorDelete": "删除 %{count} 条记录时出错。 | 删除 %{count} 条记录时出错。",
+      "errorResolveEntries": "解析 %{count} 条记录时出错。 | 解析 %{count} 条记录时出错。",
+      "errorUnresolveEntries": "取消解析 %{count} 条记录时出错。| 取消解析 %{count} 条记录时出错。",
+      "successDelete": "已成功删除 %{count} 条记录。 | 已成功删除 %{count} 条记录。"
+    }
+  },
+  "pageDumps": {
+    "dumpsAvailableOnBmc": "BMC 上可用的转储",
+    "initiateDump": "启动转储",
+    "alert": {
+      "bmcDumpHeading": "BMC 转储",
+      "bmcDumpMessage": "转储需要一些时间才能完成。",
+      "bmcDumpMessageHmcEnabled": "BMC 转储将卸载到 HMC，并且不会显示在下表中。",
+      "refreshMessage": "刷新应用程序以查看表中已完成的转储。",
+      "resourceDumpHeading": "资源转储",
+      "resourceDumpMessage": "资源转储是一个长时间运行的进程。",
+      "resourceDumpMessage2": "如果该转储未列在“转储”表中，并且没有资源转储错误日志，那么它已被卸载到操作系统。",
+      "systemDumpHeading": "系统转储",
+      "systemDumpMessage": "系统转储是一个长时间运行的过程。",
+      "systemDumpMessageHmcDisabled": "系统转储将卸载到操作系统，当从主机内存中删除转储时，操作系统将删除这些转储。",
+      "systemDumpMessageHmcEnabled": "系统转储将卸载到 HMC。"
+    },
+    "form": {
+      "bmcDump": "BMC 转储（无中断）",
+      "initiateDump": "启动转储",
+      "password": "密码",
+      "passwordTooltip": "对于需要服务授权的资源选择器是必需的",
+      "resourceDump": "资源转储",
+      "resourceSelector": "资源选择器",
+      "resourceSelectorTooltip": "命令长度不能超过 80 个字符",
+      "selectDumpType": "选择转储类型",
+      "selectDumpTypeTooltip": "仅当系统电源打开时，资源转储和系统转储才可用",
+      "systemDump": "系统转储（中断）"
+    },
+    "modal": {
+      "deleteDump": "删除转储 | 删除转储",
+      "deleteDumpConfirmation": "确定要删除 %{count} 个转储吗？ 此操作无法撤销。| 确定要删除 %{count} 个转储吗？ 此操作无法撤销。",
+      "initiateSystemDump": "启动系统转储",
+      "initiateSystemDumpMessage1": "您确定吗？",
+      "initiateSystemDumpMessage2": "当系统转储正在进行时，您将无法启动任何其他转储。",
+      "initiateSystemDumpMessage3": "启动系统转储将异常终止所有活动系统分区。",
+      "initiateSystemDumpMessage4": "继续转储启动"
+    },
+    "table": {
+      "dateAndTime": "日期和时间",
+      "dumpType": "转储类型",
+      "id": "标识",
+      "searchDumps": "搜索转储",
+      "size": "大小"
+    },
+    "toast": {
+      "errorDeleteDump": "删除 %{count} 转储时出错。| 删除 %{count} 个转储时出错。",
+      "errorPhypInStandby": "只有在将系统引导到至少 PHYP 处于备用状态时，才能启动转储。 如果已关闭电源，那么在启动转储之前，请等待一段时间以使系统通电。",
+      "errorStartBmcDump": "启动新的 BMC 转储时出错。",
+      "errorStartDumpAnotherInProgress": "启动新 %{dump} 时出错。 另一个转储正在进行中。",
+      "errorStartDumpResourceInStandby": "启动新 %{dump} 时出错。 必须引导系统。",
+      "errorStartResourceDump": "启动新的资源转储时出错。",
+      "errorStartResourceDumpInvalidSelector": "启动转储时出错。 无效资源选择器。",
+      "errorStartResourceDumpInvalidPassword": "启动转储时出错。 密码无效。",
+      "errorStartSystemDump": "启动新的系统转储时出错。",
+      "successDeleteDump": "已成功删除 %{count} 个转储。| 已成功删除 %{count} 个转储。",
+      "successStartBmcDumpTitle": "BMC 转储已启动",
+      "successStartDump": "转储需要一些时间才能完成。",
+      "successStartResourceDumpTitle": "资源转储已启动",
+      "successStartSystemDumpTitle": "系统转储已启动"
+    }
+  },
+  "pageEventLogs": {
+    "additionalDataUri": "下载其他数据",
+    "resolve": "解决",
+    "resolved": "已解决",
+    "unresolve": "取消解决",
+    "unresolved": "未解决",
+    "modal": {
+      "deleteAllMessage": "确定要删除所有日志吗？ 此操作无法撤销。",
+      "deleteAllTitle": "删除所有日志",
+      "deleteMessage": "确定要删除 %{count} 个日志吗？ 此操作无法撤销。| 确定要删除 %{count} 个日志吗？ 此操作无法撤销。",
+      "deleteTitle": "删除日志 | 删除日志"
+    },
+    "table": {
+      "date": "日期",
+      "description": "描述",
+      "srcDetails": "SRC 详细信息",
+      "srcDetailsToolTip": "系统参考码详细信息",
+      "id": "标识",
+      "modifiedDate": "修改日期",
+      "name": "名称",
+      "resolution": "解决方案",
+      "searchLogs": "搜索日志",
+      "severity": "严重性",
+      "status": "状态",
+      "type": "类型",
+      "eventId": "事件标识"
+    },
+    "toast": {
+      "errorDelete": "删除 %{count} 日志时出错。| 删除 %{count} 个日志时出错。",
+      "errorLogStatusUpdate": "更新日志状态时出错。",
+      "errorResolveLogs": "解决 %{count} 个日志时出错。| 解决 %{count} 个日志时出错。",
+      "errorUnresolveLogs": "取消解决 %{count} 个日志时出错。| 取消解决 %{count} 个日志时出错。",
+      "infoStartDownload": "下载可能需要几分钟才能完成。",
+      "successDelete": "已成功删除 %{count} 个日志。| 已成功删除 %{count} 个日志。",
+      "successResolveLogs": "已成功解决 %{count} 个日志。| 已成功解决 %{count} 个日志。",
+      "successUnresolveLogs": "已成功取消解决 %{count} 个日志。| 已成功取消解决 %{count} 个日志。"
+    }
+  },
+  "pageFactoryReset": {
+    "alert": "必须关闭系统电源才能重置",
+    "description": "这些功能不会对任何敏感数据执行安全删除操作。",
+    "form": {
+      "resetBiosOptionHelperText": "重置服务器设置，包括：平台密钥库、分区 NVRAM、分区配置和事件日志。",
+      "resetBiosOptionLabel": "仅重置服务器设置",
+      "resetOptionsLabel": "重置选项",
+      "resetToDefaultsOptionHelperText": "除了服务器设置之外，此选项还会重置 BMC 设置，包括：所有 BMC 帐户数据、所有更改的密码、所有策略、LDAP 配置、网络地址以及一天中的时间。",
+      "resetToDefaultsOptionLabel": "重置 BMC 和服务器设置"
+    },
+    "modal": {
+      "resetBiosTitle": "重置服务器设置",
+      "resetBiosHeader": "要重置服务器设置吗？",
+      "resetBiosSubmitText": "重置服务器设置",
+      "resetBiosSettingsList": {
+        "item1": "将删除所有手动设置。",
+        "item2": "如果存在备份，那么可以恢复分区配置和平台密钥库。"
+      },
+      "resetToDefaultsHeader": "要同时重置 BMC 和服务器设置吗？",
+      "resetToDefaultsSubmitText": "重置 BMC 和服务器设置",
+      "resetToDefaultsTitle": "重置 BMC 和服务器设置",
+      "resetToDefaultsSettingsList": {
+        "item1": "将删除所有手动设置。",
+        "item2": "如果存在备份，那么可以恢复分区配置和平台密钥库。",
+        "item3": "将除去所有 BMC 日志。",
+        "item4": "所有网络接口上当前处于活动状态的会话将断开连接。",
+        "item5": "将会恢复 BMC 缺省帐户和密码设置。"
+      },
+      "resetWarningCheckLabel": "在不关闭系统的情况下继续",
+      "resetWarningMessage": "在不关闭系统的情况下进行重置可能会导致不可恢复错误。"
+    },
+    "toast": {
+      "resetBiosError": "服务器设置的出厂重置失败。",
+      "resetBiosSuccess": "服务器设置的出厂重置成功。",
+      "resetToDefaultsError": "BMC 和服务器设置的出厂重置失败。",
+      "resetToDefaultsSuccess": "BMC 和服务器设置的出厂重置成功。"
+    }
+  },
+  "pageFieldCoreOverride": {
+    "changeConfiguration": "更改配置",
+    "configuredCores": "已配置的核心数",
+    "currentConfiguration": "当前配置",
+    "enableFieldCoreOverride": "启用现场核心覆盖",
+    "enterValue": "输入值",
+    "licensedCores": "许可核心数",
+    "pageDescription": "查看或更改将通过固件配置的处理器核心。",
+    "scheduledForNextReboot": "@:global.status.nextReboot",
+    "totalInstalledCores": "已安装的核心总数",
+    "alert": {
+      "description": "所作的更改将在下一次服务器重新引导时生效。",
+      "title": "应用更改"
+    },
+    "toast": {
+      "configurationChangeError": "未能保存配置。",
+      "configurationChangeSuccess": "已成功保存配置。"
+    }
+  },
+  "pageFirmware": {
+    "cardActionSwitchToRunning": "切换到正在运行的映像",
+    "cardBodyVersion": "版本",
+    "cardTitleBackup": "备份映像",
+    "cardTitleRunning": "正在运行的映像",
+    "sectionTitleBmcCards": "BMC",
+    "sectionTitleBmcCardsCombined": "BMC 和服务器",
+    "sectionTitleHostCards": "主机",
+    "sectionTitleUpdateFirmware": "更新固件",
+    "alert": {
+      "operationInProgress": "正在进行服务器电源操作。",
+      "serverMustBePoweredOffTo": "必须关闭服务器电源以执行以下操作：",
+      "serverMustBePoweredOffToUpdateFirmware": "必须关闭服务器电源才能更新固件",
+      "switchRunningAndBackupImages": "切换运行和备份映像",
+      "updateFirmware": "更新固件",
+      "viewServerPowerOperations": "查看服务器电源操作"
+    },
+    "form": {
+      "updateFirmware": {
+        "accessKeyExpiration": "访问密钥到期",
+        "fileAddress": "文件地址",
+        "fileSource": "文件源",
+        "imageFile": "图像文件",
+        "manageAccessKeys": "管理访问密钥",
+        "startUpdate": "开始更新",
+        "tftpServer": "TFTP 服务器",
+        "tftpServerInfo": "<server_ip>/<file_name>.tar",
+        "workstation": "工作站"
+      }
+    },
+    "modal": {
+      "switchImages": "切换映像",
+      "switchRunningImage": "切换正在运行的映像",
+      "switchRunningImageInfo": "需要执行 BMC 重新引导以运行备份映像。 在此期间，应用程序可能无响应。",
+      "switchRunningImageInfo2": "确定要切换到备份映像 (%{backup}) 吗？",
+      "updateFirmwareInfo": "BMC 将在更新过程中重新引导。 直到完成更新之后，才能打开服务器的电源。",
+      "updateFirmwareInfo2": "正在运行的映像 (%{running}) 将复制到备份。 将删除该备份映像。",
+      "updateFirmwareInfo3": "确定要继续进行更新吗？",
+      "updateFirmwareInfoDefault": "新图像将被上传并激活。 在此之后，BMC 或主机将自动重新引导以从新映像运行。"
+    },
+    "toast": {
+      "errorSwitchImages": "切换运行和备份映像时出错。",
+      "errorUpdateFirmware": "启动固件更新时出错。",
+      "rebootStarted": "已启动重新引导",
+      "rebootStartedMessage": "已成功从备份映像启动重新引导。",
+      "updateStarted": "更新已开始",
+      "updateStartedMessage": "在进行任何更改之前，请等待固件更新通知。",
+      "verifySwitch": "验证交换机",
+      "verifySwitchMessage": "刷新应用程序以验证正在运行的映像和已切换的备份映像。",
+      "verifyUpdate": "验证更新",
+      "verifyUpdateMessage": "刷新应用程序以验证固件已成功更新"
+    }
+  },
+  "pageHostConsole": {
+    "subTitle": "主机控制台会将服务器的串口输出重定向到此窗口。",
+    "status": "状态"
+  },
+  "pageInventory": {
+    "assemblies": "组合件",
+    "bmcManager": "BMC 管理器",
+    "chassis": "机箱",
+    "dimmSlot": "DIMM 插槽",
+    "fans": "风扇",
+    "powerSupplies": "电源",
+    "processors": "处理器",
+    "quicklinkTitle": "硬件组件的快速链接",
+    "system": "系统",
+    "enclosures": {
+      "title": "I/O 机柜",
+      "traceLabel": "收集 I/O 机柜跟踪信息",
+      "traceDescription": "在此页面创建资源转储（使用特定资源选择器）： ",
+      "DumpsLink": "转储页面。"
+    },
+    "pcie": {
+      "bridgeOrHost": "PCIe 网桥或 CAPI 主机",
+      "cable": "电缆",
+      "cableLength": "电缆长度",
+      "cableStatus": "电缆状态",
+      "cableType": "电缆类型",
+      "degraded": "已降级",
+      "failed": "失败",
+      "id": "@:pageInventory.table.id",
+      "identifyLed": "标识指示灯",
+      "inactive": "不活动",
+      "ioSlots": "I/O 插槽",
+      "linkProperties": "链接属性",
+      "linkStatus": "链路状态",
+      "localPort": "本地端口",
+      "localPortLocation": "本地端口位置",
+      "open": "打开",
+      "operational": "运作",
+      "parentId": "父标识",
+      "partNumber": "@:pageInventory.table.partNumber",
+      "remotePort": "远程端口",
+      "remotePortLocation": "远程端口位置",
+      "resetLink": "重置链路",
+      "speed": "速度",
+      "title": "PCIe 硬件拓扑",
+      "type": "类型",
+      "unknown": "未知",
+      "width": "宽度"
+    },
+    "systemIndicator": {
+      "attentionLed": "系统提醒指示灯",
+      "attentionLedToolTipInfo": "只能禁用系统提醒指示灯",
+      "identifyLed": "系统标识指示灯",
+      "lampTest": "指示灯测试",
+      "powerStatus": "电源状态",
+      "sectionTitle": "系统指标器",
+      "tooltipInfo": "将 BMC 和系统管理程序控制的所有指示器更改为“开启”状态 4 分钟。"
+    },
+    "alert": {
+      "enclosureAlertTitle": "查看机柜配置",
+      "enclosureAlertMessage": "需要打开系统的电源。",
+      "viewServerPowerOperations": "查看服务器电源操作"
+    },
+    "modal": {
+      "assemblies": {
+        "id": "@:pageInventory.table.id",
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "message": "此操作可能需要 2 分钟才能完成。",
+        "remove": "@:pageInventory.table.remove",
+        "selected": "已选择 \"%{assemblyName}\" -",
+        "subTitle": "您确定吗？",
+        "title": "要除去 \"%{assemblyName}\" 吗？"
+      },
+      "enclosures": {
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "serialNumber": "@:pageInventory.table.serialNumber",
+        "serialNumberHelperText": "输入 7 个字符来作为机箱序列号。 除 o、i 和 q 之外的所有字母数字字符都有效。 所有小写字母都将转换为大写字母。",
+        "title": "更改机柜设置",
+        "typeModel": "@:pageInventory.table.typeModel",
+        "typeModelHelperText": "机箱机器类型不能是 0000。 所有字母数字字符都无效。"
+      },
+      "pcie": {
+        "confirmMessage": "在系统分区正在运行时重置链路可能会导致错误。 必须在支持团队成员的指导下执行该操作。",
+        "resetLink": "重置链接 \"%{linkId}\"",
+        "subTitle": "您确定吗？",
+        "title": "重置链接 \"%{linkId}\""
+      }
+    },
+    "table": {
+      "action": "操作",
+      "assetTag": "资产标记",
+      "assetTagInfo": "系统名称",
+      "bmcManagerModel": "模型 (CCIN)",
+      "capacityMiB": "容量 MiB",
+      "coreCount": "核心计数",
+      "processorCount": "处理器计数",
+      "currentNext": "（当前步和下一步）",
+      "description": "描述",
+      "enabled": "已启用",
+      "firmwareVersion": "固件版本",
+      "health": "运行状况",
+      "healthRollup": "运行状况汇总",
+      "id": "标识",
+      "identifyLed": "标识指示灯",
+      "install": "安装",
+      "locationNumber": "位置编号",
+      "model": "模型",
+      "name": "名称",
+      "partNumber": "部件号",
+      "power": "电源",
+      "processorType": "处理器类型",
+      "remove": "除去",
+      "serialNumber": "序列号",
+      "sparePartNumber": "备件编号（FRU 编号）",
+      "totalCores": "总核心数",
+      "totalSystemMemoryGiB": "系统内存总量",
+      "typeModel": "类型/型号"
+    },
+    "toast": {
+      "errorDisableIdentifyLed": "禁用标识指示灯时出错。",
+      "errorDisableLampTest": "禁用灯具测试时出错。",
+      "errorDisableSystemAttentionLed": "禁用系统提醒指示灯时出错。",
+      "errorEnableIdentifyLed": "启用标识指示灯时出错。",
+      "errorEnableLampTest": "启用灯具测试时出错。",
+      "errorEnableSystemAttentionLed": "启用系统提醒指示灯时出错。",
+      "errorEnclosureSettings": "更新机柜设置时出错。",
+      "errorPcieLinkReset": "重置链接 \"%{linkId}\" 时出错。",
+      "infoPcieLinkResetMessage": "完成此操作可能需要一些时间。",
+      "infoPcieLinkResetTitle": "正在重置链接标识 \"%{linkId}\"。",
+      "infoRemoveAssembly": "刷新以确认是否已准备好移除 \"%{assemblyName}\"。",
+      "successEnclosureSettings": "已成功更新机柜设置。",
+      "successPcieLinkReset": "\"%{linkId}\" 已成功重置。"
+    }
+  },
+  "pageKeyClear": {
+    "description": "安全地清除系统上的敏感数据",
+    "alert": {
+      "description": "由于将要清除的数据很敏感，因此需要通过物理存在进行验证，以授权此操作。",
+      "title": "此操作需要物理存在和系统重新引导"
+    },
+    "form": {
+      "clear": "清除",
+      "clearAllHelperText": "清除所有受平台固件控制的敏感数据",
+      "clearAllLabel": "全部清除",
+      "clearAllSetGenesisIPL": "全部清除并设置起源 IPL",
+      "clearHypervisorSystemKeyHelperText": "表示系统管理程序将清除系统密钥。",
+      "clearHypervisorSystemKeyLabel": "清除系统管理程序系统密钥",
+      "clearOperatingSystemKeysHelperText": "这指示 OPAL 清除操作系统“安全引导”密钥。",
+      "clearSystemSecurityKeyHelperText": "这表示 OPAL/PEF 将清除系统安全主管密钥。",
+      "clearSystemSecurityKeyLabel": "清除系统安全主管密钥",
+      "keyClearNotRequested": "未请求密钥清除",
+      "keyClearOptionsLabel": "密钥清除选项",
+      "none": "无",
+      "setFactoryDefault": "设置出厂缺省值"
+    },
+    "modal": {
+      "clear": "清除密钥",
+      "clearAllMessage": "所选数据中包含的任何加密密钥都将丢失。 系统将无法对需要这些密钥的任何数据进行解密。",
+      "clearAllTitle": "警告：此操作不可撤销"
+    },
+    "toast": {
+      "selectedKeyClearedError": "清除密钥时出错",
+      "selectedKeyClearedSuccess": "已成功清除密钥"
+    }
+  },
+  "pageKvm": {
+    "buttonCtrlAltDelete": "发送 Ctrl + Alt + Delete",
+    "connected": "已连接",
+    "connecting": "连接",
+    "disconnected": "已断开连接",
+    "openNewTab": "在新选项卡中打开",
+    "status": "状态"
+  },
+  "pageLateralCastOutControl": {
+    "lateralCastOut": "横向强制类型转换",
+    "lateralCastOutControl": "横向强制类型转换控件",
+    "lateralCastOutControlDescription": "仅在服务提供者指示的情况下更改此值，因为它可能会降低系统性能。",
+    "alert": {
+      "message": "必须关闭系统的电源。 所作的更改将在下一次重新引导时生效",
+      "title": "应用更改"
+    },
+    "button": {
+      "saveSettings": "保存设置"
+    },
+    "toast": {
+      "errorSavingLateralCastOut": "保存横向强制类型转换方式时出错",
+      "successSavingLateralCastOut": "已成功保存横向强制类型转换方式"
+    }
+  },
+  "pageLdap": {
+    "addRoleGroup": "添加角色组",
+    "pageDescription": "配置 LDAP 设置和管理角色组",
+    "roleGroups": "角色组",
+    "settings": "设置",
+    "ariaLabel": {
+      "ldapSettings": "LDAP 设置"
+    },
+    "form": {
+      "baseDn": "基本 DN",
+      "bindDn": "绑定 DN",
+      "bindPassword": "绑定密码",
+      "caCertificateValidUntil": "CA 证书有效期至",
+      "groupIdAttribute": "组标识属性",
+      "ldapAuthentication": "LDAP 认证",
+      "ldapCertificateValidUntil": "LDAP 证书有效期至",
+      "manageSslCertificates": "管理 SSL 证书",
+      "secureLdapHelper": "要启用安全 LDAP，需要 CA 证书和 LDAP 证书",
+      "secureLdapUsingSsl": "使用 SSL 保护 LDAP",
+      "serverUri": "服务器 URI",
+      "serverUriTooltip": "启用安全 LDAP 会将 URI 方案更改为 LDAPS",
+      "serviceType": "服务类型",
+      "userIdAttribute": "用户标识属性"
+    },
+    "modal": {
+      "addNewRoleGroup": "添加新角色组",
+      "deleteRoleGroup": "删除角色组",
+      "deleteRoleGroupBatchConfirmMessage": "确定要删除 %{count} 个角色组吗？ 此操作无法撤销。| 确定要删除 %{count} 个角色组吗？ 此操作无法撤销。",
+      "deleteRoleGroupConfirmMessage": "确定要删除“%{groupName}”吗？ 此操作无法撤销。",
+      "editRoleGroup": "编辑角色组",
+      "groupName": "组名",
+      "groupPrivilege": "组特权"
+    },
+    "tableRoleGroups": {
+      "alertContent": "必须启用 LDAP 认证才能修改角色组。",
+      "groupName": "组名",
+      "groupPrivilege": "组特权"
+    },
+    "toast": {
+      "errorAddRoleGroup": "添加角色组时出错。",
+      "errorDeleteRoleGroup": "删除角色组时出错。| 删除角色组时出错。",
+      "errorSaveActiveDirectorySettings": "保存 Active Directory 设置时出错。",
+      "errorSaveLdapSettings": "保存 Open LDAP 设置时出错。",
+      "errorSaveRoleGroup": "保存角色组时出错。",
+      "successAddRoleGroup": "已成功添加角色组“%{groupName}”。",
+      "successDeleteRoleGroup": "已成功删除角色组。| 已成功删除角色组。",
+      "successSaveActiveDirectorySettings": "已成功保存 Active Directory 个设置。",
+      "successSaveLdapSettings": "已成功保存 Open LDAP 设置。",
+      "successSaveRoleGroup": "已成功保存角色组“%{groupName}”。"
+    }
+  },
+  "pageLogin": {
+    "dateAndTime": "日期和时间",
+    "language": "语言",
+    "logIn": "登录",
+    "model": "模型",
+    "password": "密码",
+    "serialNumber": "序列号",
+    "uploadServiceLoginCertificate": "上载服务登录证书",
+    "username": "用户名",
+    "alert": {
+      "message": "用户名或密码无效"
+    },
+    "modal": {
+      "addNewServiceLoginCertificate": "添加新的服务登录证书",
+      "certificateFile": "证书文件"
+    }
+  },
+  "pageMemory": {
+    "activeMemoryMirroring": "活动内存镜像方式",
+    "activeMemoryMirroringDescription": "系统管理程序的活动内存镜像旨在确保系统操作继续进行，甚至在系统管理程序使用的主内存中出现无法更正的错误（不太可能发生）时也是如此。",
+    "activeMemoryMirroringHelpText": "指定是否已启用内存镜像，是否需要重新引导以应用更改。",
+    "activeMemoryMirroringTitle": "活动内存镜像",
+    "ioAdapterEnlargedCapacity": "此选项控制分配给每个 PCI 插槽 的 PCI 内存空间的大小。",
+    "ioAdapterEnlargedCapacityTitle": "I/O 适配器扩大容量",
+    "logicalMemorySize": "逻辑内存块大小",
+    "logicalMemorySizeHeading": "逻辑内存块大小在分区时使用。 更改逻辑内存块大小会影响系统资源管理。",
+    "maxNumHugePages": "最大超大页面数",
+    "memoryBlockSize": "内存块大小",
+    "requestedHugePageMemory": "请求的超大页面内存",
+    "slotCountForNode0": "节点 0 的插槽计数",
+    "systemMemoryPageSetup": "通过设置每个 16GB 的大型虚拟内存页面大小来提高应用程序的性能。",
+    "systemMemoryPageSetupTitle": "系统内存页面设置",
+    "updateIoAdapterEnlargedCapacity": "更新 I/O 适配器扩大容量",
+    "updateLogicalMemoryPageSetup": "更新系统内存页面设置",
+    "updateLogicalMemorySize": "更新逻辑内存块大小",
+    "updatePageSetup": "更新系统内存页面设置",
+    "alert": {
+      "heading": "应用更改",
+      "message": "必须关闭系统的电源。 所作的更改将在下次重新引导时生效。",
+      "serverMustBePoweredOffTo": "必须关闭服务器电源以执行以下操作：",
+      "updateActiveMemoryMirroring": "更新活动内存镜像方式",
+      "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
+      "updateLogicalMemoryPage": "@:pageMemory.updateLogicalMemorySize",
+      "updateSystemMemoryPageSetup": "更新系统内存页面设置（服务器不应该与 HMC 连接）"
+    },
+    "toast": {
+      "errorSavingActiveMemoryMirroringMode": "更新活动内存镜像方式时出错",
+      "errorSavingAdapterEnlargedCapacity": "更新 I/O 适配器扩大容量时出错",
+      "errorSavingLogicalMemory": "更新逻辑内存块大小时出错 ",
+      "errorSavingPageSetup": "更新系统内存页面设置时出错",
+      "message": "必须关闭系统电源才能进行更改",
+      "successSavingAdapterEnlargedCapacity": "已成功更新 I/O 适配器扩大容量",
+      "successSavingLogicalMemory": "已成功更新逻辑内存块大小",
+      "successSavingActiveMemoryMirroringMode": "已成功更新活动内存镜像方式",
+      "successSavingPageSetup": "已成功更新系统内存页面设置"
+    }
+  },
+  "pageNetwork": {
+    "dhcp": "DHCP",
+    "dns": "DNS 服务器",
+    "domainName": "域名",
+    "hostname": "主机名",
+    "hostnameAlert": "更改主机名时，您将注销。 更改将在下一次登录时生效。",
+    "interfaceSection": "接口设置",
+    "ipv4": "IPv4",
+    "ipv4Addresses": "IPv4 地址",
+    "ipv6": "IPv6",
+    "ipv6DefaultGateway": "IPv6 缺省网关",
+    "macAddress": "MAC 地址",
+    "network": "network",
+    "networkSettings": "网络设置",
+    "ntp": "NTP 服务器",
+    "operatingMode": "操作方式",
+    "pageDescription": "配置 BMC 网络设置",
+    "staticDns": "静态 DNS",
+    "useDns": "使用 DNS 服务器",
+    "useDomainName": "使用域名",
+    "useNtp": "使用 NTP 服务器",
+    "modal": {
+      "confirmDeleteIpv4": "确定要删除“%{address}”吗？",
+      "confirmDisableDhcp": "确定要禁用 DHCP 吗？",
+      "confirmEnableDhcp": "如果启用了 DHCP，那么静态 IP 地址将不可访问。",
+      "dhcpConfirmTitle": "%{dhcpState} DHCP",
+      "deleteIpv4": "删除 IPv4 地址",
+      "editHostnameTitle": "编辑主机名",
+      "gateway": "网关",
+      "ipAddress": "IP 地址",
+      "staticDns": "静态 DNS",
+      "subnetMask": "子网掩码"
+    },
+    "table": {
+      "addDnsAddress": "添加 IP 地址",
+      "addIpv4Address": "添加静态 IPv4 地址",
+      "addIpv6Address": "添加静态 IPv6 地址",
+      "addressOrigin": "地址来源",
+      "addressState": "地址状态",
+      "deleteDns": "删除 DNS 地址",
+      "deleteIpv4": "删除 IPv4 地址",
+      "editDns": "编辑 DNS 地址",
+      "editIpv4": "编辑静态 IPv4 地址",
+      "editIpv6": "编辑静态 IPv6 地址",
+      "gateway": "网关",
+      "ipAddress": "IP 地址",
+      "prefixLength": "前缀长度",
+      "subnet": "子网掩码"
+    },
+    "toast": {
+      "errorSaveNetworkSettings": "更新 %{setting} 设置时出错。",
+      "successSaveNetworkSettings": "已成功更新 %{setting} 个设置。"
+    }
+  },
+  "pageOverview": {
+    "assetTag": "资产标记",
+    "accessKeyExpiration": "访问密钥到期",
+    "backupVersion": "备份",
+    "bmcTime": "BMC 日期和时间",
+    "criticalEvents": "临界",
+    "dhcp": "DHCPv4",
+    "dumps": "转储",
+    "eventLogs": "事件日志",
+    "firmwareInformation": "固件信息",
+    "hostConsole": "主机控制台",
+    "hostName": "主机名",
+    "inventory": "库存和指示灯",
+    "ipv4": "IPv4",
+    "model": "模型",
+    "networkInformation": "网络信息",
+    "operatingMode": "操作方式",
+    "powerCap": "电源上限",
+    "powerConsumption": "功耗",
+    "powerInformation": "电源信息",
+    "powerMode": "电源方式",
+    "runningVersion": "正在运行",
+    "serialNumber": "序列号",
+    "serverInformation": "服务器信息",
+    "serviceLogin": "服务登录",
+    "statusInformation": "状态信息",
+    "systemIdentifyLed": "系统标识指示灯",
+    "systemInformation": "系统信息",
+    "total": "总计",
+    "viewMore": "查看更多",
+    "warningEvents": "警告",
+    "powerPerformanceModes": {
+      "maximumPerformance": "最高性能",
+      "powerSaving": "省电",
+      "static": "静态"
+    },
+    "modal": {
+      "editAssetTag": "编辑资产标记"
+    },
+    "toast": {
+      "successSaveAssetTag": "已成功更新资产标记。",
+      "errorSaveAssetTag": "更新资产标记时出错。"
+    }
+  },
+  "pagePageNotFound": {
+    "description": "找不到所请求的资源。"
+  },
+  "pagePolicies": {
+    "hostTpm": "主机 TPM",
+    "hostTpmDescription": "启用以确保系统仅在 TPM 正常运行时引导。",
+    "hostUsb": "主机 USB 支持",
+    "hostUsbDescription": "指定是否出于安全原因禁用或启用主机 USB。",
+    "ipmi": "网络 IPMI（带外 IPMI）",
+    "ipmiDescription": "允许通过 IPMI 对平台进行远程管理。 诸如 ipmitool 之类的工具需要启用此设置。",
+    "rtad": "RTAD",
+    "rtadDescription": "此选项对主机固件启用或禁用“远程可信认证守护程序”。",
+    "rtadInfoIcon": "@:global.status.nextReboot",
+    "secureVersion": "安全版本锁定",
+    "secureVersionDescription": "指定是否启用安全版本锁定功能。",
+    "ssh": "BMC shell（通过 SSH）",
+    "sshDescription": "允许通过 BMC 上的端口 22 通过 SSH 来访问 shell 会话。",
+    "usbFirmwareUpdatePolicy": "USB 固件更新策略",
+    "usbFirmwareUpdatePolicyDescription": "启用“USB 固件更新策略”将启用允许通过 USB 密钥更新固件的功能。",
+    "toast": {
+      "errorNetworkPolicyUpdate": "更新 %{policy} 时出错。",
+      "successNetworkPolicyUpdate": "已成功更新 %{policy}。",
+      "successNextBootToast": "正在将更改应用于 %{policy}。 对 %{policy} 所作的更改将在下一次重新引导时生效。"
+    },
+    "vtpm": "虚拟 TPM",
+    "vtpmDescription": "启用 vTPM 使 TPM 可供访客操作系统使用。"
+  },
+  "pagePostCodeLogs": {
+    "allExportFilePrefix": "All_POST_codes_log_",
+    "downloadFilePrefix": "POST_codes_additional_details_",
+    "exportFilePrefix": "POST_codes_log_",
+    "viewCodesInRealtime": "实时查看进度代码",
+    "action": {
+      "downloadDetails": "下载其他详细信息",
+      "exportLogs": "导出日志"
+    },
+    "button": {
+      "exportAll": "全部导出"
+    },
+    "table": {
+      "bootCount": "引导计数",
+      "created": "创建时间",
+      "postCode": "代码",
+      "searchLogs": "搜索日志",
+      "timeStampOffset": "时间戳记偏移量"
+    }
+  },
+  "pagePower": {
+    "delayTime": "延迟时间（以秒计）",
+    "description": "设置电源上限以将功耗保持在或低于指定值（以瓦特为单位）",
+    "enableIdlePower": "启用空闲省电模式",
+    "idlePower": "空闲省电模式",
+    "idlePowerSubmitUpdate": "更新空闲省电模式",
+    "idlePowerSubmitReset": "重置为缺省值",
+    "powerConsumptionTooltip": "在 PHYP 运行后，功耗将可用",
+    "powerCapLabel": "电源上限值（以瓦特为单位）",
+    "powerCapLabelTextInfo": "值必须介于 %{min} 到 %{max} 之间",
+    "powerCapSettingData": "应用电源上限",
+    "powerCapSettingLabel": "电源上限设置",
+    "powerConsumption": "当前功耗",
+    "powerPerformanceModesDropdownLabel": "查看每种方式的效果",
+    "powerPerformanceModesTitle": "电源和性能方式",
+    "selectModeLabel": "选择方式",
+    "submitButton": "更新省电方式",
+    "toEnter": "进入",
+    "toExit": "退出",
+    "utilizationThreshold": "利用率阈值 (%)",
+    "delayTimeValidation": {
+      "delayTimeRange": "值必须介于 %{min} 到 %{max} 之间。",
+      "enterDelayTime": "值不能小于退出延迟时间。",
+      "exitDelayTime": "值不能大于进入延迟时间。"
+    },
+    "modalEnablePowerPerformanceMode": {
+      "cancelButton": "取消",
+      "content": "启用任何省电方式都将导致处理器频率的更改，处理器利用率的更改，功耗的更改以及性能的变化。",
+      "subTitle": "您确定吗？",
+      "titleMaximumPerformance": "启用最高性能方式",
+      "titlePowerSaving": "启用省电方式",
+      "titleStatic": "启用静态方式"
+    },
+    "selectMode": {
+      "maximumPerformance": "最高性能",
+      "powerSaving": "省电",
+      "static": "静态"
+    },
+    "tableRoles": {
+      "descMaximumPerformance": "处理器频率将变化。 此模式允许系统通过利用空闲核心提供的热量和功率空余空间、更低的工作负载以及有利的环境条件来达到最大频率。",
+      "descPowerSaving": "处理器频率设置为固定最小值，从而降低系统功耗，同时仍提供可预测的性能。",
+      "descStatic": "处理器频率设置为固定值，可在正常环境条件下运行正常工作负载。"
+    },
+    "utilizationPercentValidation": {
+      "enterUtilization": "值不能大于退出阈值。",
+      "exitUtilization": "值不能小于进入阈值。",
+      "utilizationRange": "值必须介于 %{min} 到 %{max} 之间。"
+    },
+    "toast": {
+      "errorIdlePower": "保存空闲电源设置时出错",
+      "errorIdlePowerReset": "重置空闲电源设置时出错",
+      "errorPowerPerformanceModes": "保存电源和性能方式时出错",
+      "successIdlePower": "已成功保存空闲电源设置",
+      "successIdlePowerReset": "已成功重置空闲电源设置",
+      "successPowerPerformanceModes": "已成功保存省电方式"
+    }
+  },
+  "pagePowerRestorePolicy": {
+    "description": "配置电源策略以确定系统在发生功率干扰后的启动方式。",
+    "powerPoliciesLabel": "电源恢复策略",
+    "policies": {
+      "AlwaysOff": "始终关闭",
+      "AlwaysOn": "始终打开",
+      "LastState": "最新状态"
+    },
+    "policiesDesc": {
+      "AlwaysOff": "始终关闭 - 在接通电源时系统始终保持断电状态。",
+      "AlwaysOn": "始终打开 - 在接通电源时系统始终打开电源。",
+      "LastState": "上次状态 - 在接通电源时系统将回到上次打开或关闭电源状态。"
+    },
+    "alert": {
+      "changeServerOpMode": "更改服务器操作方式",
+      "manualOperatingMode": "在手动操作方式下，无法更改电源恢复策略。"
+    },
+    "toast": {
+      "errorIdlePower": "保存空闲电源数据时出错",
+      "errorPowerSaver": "保存省电方式时出错",
+      "errorSaveSettings": "保存设置时出错。",
+      "successIdlePower": "已成功保存空闲电源数据",
+      "successPowerSaver": "已成功保存省电方式",
+      "successSaveSettings": "已成功更新电源恢复策略。"
+    }
+  },
+  "pageProfileSettings": {
+    "browserOffset": "浏览器偏移量 (%{timezone})",
+    "changePassword": "更改密码",
+    "confirmPassword": "确认新密码：",
+    "defaultUTC": "缺省值 (UTC)",
+    "newPassLabelTextInfo": "密码必须在 %{min} 到 %{max} 个字符之间",
+    "newPassword": "新密码",
+    "passwordsDoNotMatch": "密码不匹配",
+    "profileInfoTitle": "概要文件信息",
+    "timezone": "时区",
+    "timezoneDisplay": "时区显示首选项",
+    "timezoneDisplayDesc": "选择在整个应用程序中显示时间的方式",
+    "username": "用户名",
+    "toast": {
+      "successUpdatingTimeZone": "已成功更新时区。"
+    }
+  },
+  "pageRebootBmc": {
+    "lastReboot": "上次 BMC 重新引导",
+    "rebootBmc": "重新引导 BMC",
+    "rebootInformation": "当您重新引导 BMC 时，Web 浏览器将失去与 BMC 的联系几分钟。 当 BMC 重新联机时，您可能需要再次登录。",
+    "modal": {
+      "confirmMessage": "确定要重新引导 BMC 吗？",
+      "confirmMessage2": "正在卸载系统转储。 重新引导 BMC 将导致该转储丢失。",
+      "confirmTitle": "确认 BMC 重新引导"
+    },
+    "toast": {
+      "errorRebootStart": "重新引导 BMC 时出错。",
+      "successRebootStart": "正在重新引导 BMC。"
+    }
+  },
+  "pageSensors": {
+    "alert": "装入此页面可能需要几分钟时间",
+    "exportFilePrefix": "sensors_",
+    "searchForSensors": "搜索传感器",
+    "table": {
+      "currentValue": "当前值",
+      "lowerCritical": "低临界",
+      "lowerWarning": "下限警告",
+      "name": "名称",
+      "status": "状态",
+      "upperCritical": "上临界",
+      "upperWarning": "上限警告"
+    }
+  },
+  "pageServerPowerOperations": {
+    "currentStatus": "当前状态",
+    "immediateReboot": "立即 - 服务器在不关闭操作系统的情况下重新引导；可能导致数据损坏",
+    "immediateShutdown": "立即 - 服务器在不关闭操作系统的情况下关闭；可能导致数据损坏",
+    "lastPowerOperation": "上次机箱电源操作",
+    "oneTimeBootWarning": "暂挂一次引导。 将使用指定的一次性引导设置执行下一次引导。 将使用缺省设置来执行后续引导。",
+    "operationInProgress": "当电源操作正在进行时，没有任何选项可显示。 完成后，将在此处显示电源操作。",
+    "operations": "操作",
+    "orderlyReboot": "有序 - 操作系统将关闭，然后服务器重新引导",
+    "orderlyShutdown": "有序 - 操作系统将关闭，然后服务器将关闭",
+    "powerOn": "通电",
+    "reboot": "重启",
+    "rebootServer": "重新引导服务器",
+    "serverBootSettings": "设置",
+    "serverStatus": "服务器状态",
+    "shutDown": "关闭",
+    "shutdownServer": "关闭服务器",
+    "biosSettings": {
+      "currentOperatingMode": "当前操作方式 %{currOptMode}",
+      "powPolicySection": "将设置为 %{powerPolicy}",
+      "pvm_default_os_type": "缺省分区环境",
+      "pvm_os_boot_type": "IBM i 分区引导方式",
+      "pvm_rpa_boot_mode": "AIX/LINUX 分区引导方式",
+      "pvm_stop_at_standby": "服务器固件启动策略",
+      "pvm_system_operating_mode": "服务器操作方式",
+      "pvm_system_power_off_policy": "服务器电源策略",
+      "selectedOperatingMode": "当保存时，操作方式将设置为 %{selectedOptMode}",
+      "attributeValues": {
+        "pvm_os_boot_type": {
+          "A_Mode": "A（使用副本 A 从磁盘引导）",
+          "B_Mode": "B（使用副本 B 从磁盘引导）",
+          "C_Mode": "C（保留仅供 IBM 实验室使用）",
+          "D_Mode": "D（从介质/驱动器引导）"
+        },
+        "pvm_rpa_boot_mode": {
+          "DefaultList": "从缺省列表以服务方式引导",
+          "Normal": "分区将直接引导至操作系统",
+          "OkPrompt": "引导至开放式固件提示对话框",
+          "PblBootLid": "分区从 petitboot 引导装入程序引导",
+          "SavedList": "从保存的列表以服务方式引导",
+          "SmsMenu": "引导至 SMS 菜单"
+        },
+        "pvm_stop_at_standby": {
+          "Disabled": "始终自动启动",
+          "Enabled": "备用（用户启动）",
+          "ManualOnly": "仅自动启动"
+        },
+        "pvm_system_operating_mode": {
+          "Manual": "手动 - 服务/维护",
+          "Normal": "正常 - 自动"
+        },
+        "pvm_system_power_off_policy": {
+          "automaticHelperText": "系统自动断电",
+          "powerOffHelperText": "当最后一个分区断电时，服务器将关闭电源",
+          "stayOnHelperText": "当最后一个分区断电时，服务器将保持开启"
+        }
+      }
+    },
+    "modal": {
+      "confirmRebootMessage": "确定要重启吗？",
+      "confirmRebootMessage2": "正在卸载系统转储。 重新引导将导致该转储丢失。",
+      "confirmRebootTitle": "服务器重新引导将导致停运",
+      "confirmShutdownMessage": "确定要关闭吗？",
+      "confirmShutdownMessage2": "正在卸载系统转储。 关闭系统将导致该转储丢失。",
+      "confirmShutdownTitle": "服务器关闭将导致停运"
+    },
+    "toast": {
+      "errorPowerOn": "BMC 未准备好打开主机电源。",
+      "errorSaveSettings": "保存设置时出错。",
+      "successSaveSettings": "已成功保存设置。"
+    }
+  },
+  "pageServiceLoginConsoles": {
+    "bmcConsole": "BMC 控制台",
+    "hypervisorConsole": "系统管理程序控制台",
+    "selectConsoleType": "选择控制台",
+    "status": "状态"
+  },
+  "pageSessions": {
+    "action": {
+      "disconnect": "断开连接"
+    },
+    "alert": {
+      "heading": "警告",
+      "message": "如果 HMC 处于活动状态，那么它将会尝试重新连接。 要断开工作中 HMC 的连接，请断开该 HMC 自身的连接。"
+    },
+    "modal": {
+      "disconnectMessage": "确定要断开 %{count} 个会话的连接吗？ 此操作无法撤销。| 确定要断开%{count} 个会话的连接吗？ 此操作无法撤销。",
+      "disconnectTitle": "断开会话连接 | 断开会话连接"
+    },
+    "table": {
+      "clientID": "客户机标识",
+      "ipAddress": "IP 地址",
+      "searchSessions": "搜索会话",
+      "username": "用户名"
+    },
+    "toast": {
+      "errorDelete": "断开 %{count} 个会话的连接时发生错误。| 断开 %{count} 个会话的连接时出错。",
+      "successDelete": "已成功断开 %{count} 个会话的连接。| 已成功断开 %{count} 个会话的连接。"
+    }
+  },
+  "pageSnmpAlerts": {
+    "addDestination": "添加目标",
+    "deleteDestination": "删除目标 | 删除目标",
+    "pageDescription": "为简单网络管理协议 (SNMP) 陷阱设置 IP 地址和端口。",
+    "modal": {
+      "addSnmpDestinationTitle": "添加 SNMP 警报目标",
+      "batchDeleteConfirmMessage": "确定要删除该 SNMP 警报目标吗？ 此操作无法撤销。| 确定要删除 %{count} 个 SNMP 警报目标吗？ 此操作无法撤销。",
+      "deleteConfirmMessage": "确定要删除该 SNMP 警报目标吗？ 此操作无法撤销。",
+      "deleteSnmpDestinationTitle": "删除 SNMP 警报目标 | 删除 SNMP 警报目标",
+      "ipaddress": "IP 地址",
+      "ipaddressFqdn": "IP 地址/FQDN",
+      "ipaddressFqdnInfo": "IP 地址或 somehost.example.com",
+      "port": "端口"
+    },
+    "table": {
+      "ipaddress": "IP 地址",
+      "port": "端口"
+    },
+    "toast": {
+      "errorAddDestination": "添加 SNMP 警报目标时出错",
+      "errorBatchDelete": "删除 SNMP 警报目标时出错。| 删除 SNMP 警报目标时出错。",
+      "errorDeleteDestination": "删除 SNMP 警报目标时出错。",
+      "errorLoadSnmpDetails": "装入 SNMP 警报详细信息时出错。",
+      "successAddDestination": "已成功添加 SNMP 警报目标。",
+      "successBatchDelete": "已成功删除 SNMP 警报目标。| 已成功删除 %{count} 个 SNMP 警报目标。",
+      "successDeleteDestination": "已成功删除 SNMP 警报目标。"
+    }
+  },
+  "pageUserManagement": {
+    "accountPolicySettings": "帐户策略设置",
+    "addUser": "添加用户",
+    "deleteUser": "删除用户 | 删除用户",
+    "editUser": "编辑用户",
+    "viewPrivilegeRoleDescriptions": "查看特权角色描述",
+    "modal": {
+      "accountLocked": "帐户已锁定",
+      "accountStatus": "帐户状态",
+      "automaticAfterTimeout": "超时后自动",
+      "batchDeleteConfirmMessage": "确定要删除 %{count} 个用户吗？ 此操作无法撤销。| 确定要删除 %{count} 个用户吗？ 此操作无法撤销。",
+      "cannotStartWithANumber": "不能以数字开头",
+      "clickSaveToUnlockAccount": "单击“保存”以解锁帐户",
+      "confirmUserPassword": "确认用户密码",
+      "deleteConfirmMessage": "确定要删除用户“%{user}”吗？ 此操作无法撤销。",
+      "manual": "手动",
+      "maxFailedLoginAttempts": "最大失败登录尝试次数",
+      "noSpecialCharactersExceptUnderscore": "除了下划线之外没有任何特殊字符",
+      "passwordMustBeBetween": "密码必须在 %{min} 到 %{max} 个字符之间",
+      "passwordsDoNotMatch": "密码不匹配",
+      "privilege": "特权",
+      "timeoutDurationSeconds": "超时持续时间（秒）",
+      "unlock": "解锁",
+      "username": "用户名",
+      "userPassword": "用户密码",
+      "userUnlockMethod": "用户解锁方法"
+    },
+    "table": {
+      "privilege": "特权",
+      "status": "状态",
+      "username": "用户名"
+    },
+    "tableRoles": {
+      "configureComponentsManagedByThisService": "配置此服务管理的组件",
+      "configureManagerResources": "配置管理器资源",
+      "configureUsersAndTheirAccounts": "配置用户及其帐户",
+      "logInToTheServiceAndReadResources": "登录到服务并读取资源",
+      "updatePasswordForCurrentUserAccount": "更新当前用户帐户的密码"
+    },
+    "toast": {
+      "errorBatchDelete": "删除 %{count} 个用户时出错。| 删除 %{count} 个用户时出错。",
+      "errorBatchDisable": "禁用 %{count} 用户时出错。| 禁用 %{count} 个用户时出错。",
+      "errorBatchEnable": "启用 %{count} 用户时出错。| 启用 %{count} 个用户时出错。",
+      "errorCreateUser": "创建用户“%{username}”时出错。",
+      "errorCreateUserMaxUsers": "创建用户 \"%{username}\" 时出错，因为此系统已达到允许的最大用户数。",
+      "errorCreateUserPasswordNotAccepted": "创建用户 \"%{username}\" 时出错，因为密码错误。",
+      "errorDeleteUser": "删除用户“%{username}”时出错。",
+      "errorLoadAccountSettings": "装入帐户设置时出错",
+      "errorLoadUsers": "装入用户时出错。",
+      "errorSaveSettings": "保存帐户设置时出错。",
+      "errorUpdateUser": "更新用户“%{username}”时出错。",
+      "errorUpdateUserPasswordNotAccepted": "更新用户 \"%{username}\" 时出错，因为密码错误。",
+      "successBatchDelete": "已成功删除 %{count} 个用户。| 已成功删除 %{count} 个用户。",
+      "successBatchDisable": "已成功禁用 %{count} 个用户。| 已成功禁用 %{count} 个用户。",
+      "successBatchEnable": "已成功启用 %{count} 个用户。| 已成功启用 %{count} 个用户。",
+      "successCreateUser": "已创建用户“%{username}”。",
+      "successDeleteUser": "已删除用户“%{username}”。",
+      "successSaveSettings": "已成功保存帐户设置。",
+      "successUpdateUser": "已更新用户“%{username}”。"
+    }
+  },
+  "pageVirtualMedia": {
+    "configureConnection": "配置连接",
+    "defaultDeviceName": "虚拟介质设备",
+    "start": "开始",
+    "stop": "停止",
+    "virtualMediaSubTitleFirst": "从 Web 浏览器装入图像",
+    "virtualMediaSubTitleSecond": "从外部服务器装入映像",
+    "modal": {
+      "password": "密码",
+      "serverUri": "外部服务器 URI",
+      "title": "旧方式配置",
+      "username": "用户名"
+    },
+    "toast": {
+      "errorMounting": "安装时出错",
+      "errorReadingFile": "读文件时出错。 正在关闭服务器。",
+      "errorUnmounting": "卸载时出错",
+      "serverClosedSuccessfully": "已成功关闭服务器",
+      "serverClosedWithErrors": "服务器已关闭，但有错误",
+      "serverConnectionEstablished": "已建立服务器连接",
+      "serverRunning": "服务器正在运行"
+    }
+  },
+  "countries": {
+    "AF": "阿富汗",
+    "AL": "阿尔巴尼亚",
+    "DZ": "阿尔及利亚",
+    "AS": "美属萨摩亚",
+    "AD": "安道尔",
+    "AO": "安哥拉",
+    "AI": "安圭拉",
+    "AQ": "南极洲",
+    "AG": "安提瓜和巴布达",
+    "AR": "阿根廷",
+    "AM": "亚美尼亚",
+    "AW": "阿鲁巴",
+    "AU": "澳大利亚",
+    "AT": "奥地利",
+    "AZ": "阿塞拜疆",
+    "BS": "巴哈马",
+    "BH": "巴林",
+    "BD": "孟加拉国",
+    "BB": "巴巴多斯",
+    "BY": "白俄罗斯",
+    "BE": "比利时",
+    "BZ": "伯利兹",
+    "BJ": "贝宁",
+    "BM": "百慕大",
+    "BT": "不丹",
+    "BO": "玻利维亚",
+    "BQ": "波内赫、圣尤斯特歇斯和萨巴",
+    "BA": "波斯尼亚和黑塞哥维那 ",
+    "BW": "博斯特瓦纳",
+    "BV": "布维岛",
+    "BR": "巴西",
+    "IO": "英属印度洋领地",
+    "BN": "文莱达鲁萨兰国 ",
+    "BG": "保加利亚",
+    "BF": "布基纳法索",
+    "BI": "布隆迪",
+    "CV": "佛得角",
+    "KH": "柬埔寨",
+    "CM": "喀麦隆",
+    "CA": "加拿大",
+    "KY": "开曼群岛",
+    "CF": "中非共和国",
+    "TD": "乍得",
+    "CL": "智利",
+    "CN": "中国",
+    "CX": "圣延岛 ",
+    "CC": "科科斯（奇林）群岛",
+    "CO": "哥伦比亚",
+    "KM": "科摩罗",
+    "CD": "刚果民主共和国",
+    "CG": "刚果",
+    "CK": "库克群岛",
+    "CR": "哥斯达黎加",
+    "HR": "克罗地亚",
+    "CU": "古巴",
+    "CW": "库拉索",
+    "CY": "塞浦路斯",
+    "CZ": "捷克",
+    "CI": "科特迪瓦",
+    "DK": "丹麦",
+    "DJ": "吉布提",
+    "DM": "多米尼克国",
+    "DO": "多米尼加共和国",
+    "EC": "厄瓜多尔",
+    "EG": "埃及",
+    "SV": "萨尔瓦多",
+    "GQ": "赤道几内亚 ",
+    "ER": "厄立特里亚",
+    "EE": "爱沙尼亚",
+    "SZ": "斯威士兰",
+    "ET": "埃塞俄比亚",
+    "FK": "福兰克群岛（马尔维纳斯）",
+    "FO": "法罗群岛",
+    "FJ": "斐济",
+    "FI": "芬兰",
+    "FR": "法国",
+    "GF": "法属圭亚那",
+    "PF": "法属玻利尼西亚",
+    "TF": "法属南半球领地",
+    "GA": "加蓬",
+    "GM": "冈比亚",
+    "GE": "格鲁吉亚",
+    "DE": "徳国",
+    "GH": "加纳",
+    "GI": "直布罗陀",
+    "GR": "希腊",
+    "GL": "格陵兰群岛",
+    "GD": "格林纳达",
+    "GP": "瓜德罗普岛",
+    "GU": "关岛",
+    "GT": "危地马拉",
+    "GG": "根西岛",
+    "GN": "几内亚",
+    "GW": "几内亚比绍",
+    "GY": "圭亚纳",
+    "HT": "海地",
+    "HM": "赫德岛和麦克唐纳群岛",
+    "VA": "罗马教廷",
+    "HN": "洪都拉斯",
+    "HK": "中国香港",
+    "HU": "匈牙利",
+    "IS": "冰岛",
+    "IN": "印度",
+    "ID": "印度尼西亚",
+    "IR": "伊朗伊斯兰共和国",
+    "IQ": "伊拉克",
+    "IE": "爱尔兰",
+    "IM": "马恩岛",
+    "IL": "以色列",
+    "IT": "意大利",
+    "JM": "牙买加",
+    "JP": "日本",
+    "JE": "泽西岛",
+    "JO": "约旦",
+    "KZ": "哈萨克斯坦",
+    "KE": "肯尼亚",
+    "KI": "基里巴斯",
+    "KR": "大韩民国",
+    "KP": "朝鲜民主主义人民共和国",
+    "KW": "科威特",
+    "KG": "吉尔吉斯斯坦",
+    "LA": "老挝人民民主共和国",
+    "LV": "拉托维亚",
+    "LB": "黎巴嫩",
+    "LS": "莱索托",
+    "LR": "利比里亚",
+    "LY": "利比亚",
+    "LI": "列支敦士登",
+    "LT": "立陶宛",
+    "LU": "卢森堡",
+    "MO": "中国澳门特别行政区",
+    "MK": "马其顿",
+    "MG": "马达加斯加",
+    "MW": "马拉维",
+    "MY": "马来西亚",
+    "MV": "马尔代夫",
+    "ML": "马里",
+    "MT": "马尔他",
+    "MH": "马绍尔群岛",
+    "MQ": "马提尼克",
+    "MR": "毛里塔尼亚",
+    "MU": "毛里求斯",
+    "YT": "马约特",
+    "MX": "墨西哥",
+    "FM": "密克罗尼西亚联邦共和国",
+    "MD": "摩尔多瓦共和国",
+    "MC": "摩纳哥",
+    "MN": "蒙古",
+    "ME": "黑山共和国",
+    "MS": "蒙塞拉特岛",
+    "MA": "摩洛哥",
+    "MZ": "莫桑比克",
+    "MM": "缅甸",
+    "NA": "纳米比亚",
+    "NR": "瑙鲁",
+    "NP": "尼泊尔",
+    "NL": "荷兰",
+    "NC": "新喀里多尼亚",
+    "NZ": "新西兰",
+    "NI": "尼加拉瓜",
+    "NE": "尼日尔",
+    "NG": "尼日利亚",
+    "NU": "纽埃",
+    "NF": "诺福克岛",
+    "MP": "北马里亚纳群岛",
+    "NO": "挪威",
+    "OM": "阿曼",
+    "PK": "巴基斯坦",
+    "PW": "帕劳",
+    "PS": "巴勒斯坦",
+    "PA": "巴拿马",
+    "PG": "巴布亚新几内亚",
+    "PY": "巴拉圭",
+    "PE": "秘鲁",
+    "PH": "菲律宾",
+    "PN": "皮特凯恩群岛",
+    "PL": "波兰",
+    "PT": "葡萄牙",
+    "PR": "波多黎各",
+    "QA": "卡塔尔",
+    "RO": "罗马尼亚",
+    "RU": "俄罗斯联邦",
+    "RW": "卢旺达",
+    "RE": "留尼旺省",
+    "BL": "圣巴托洛缪岛",
+    "SH": "圣赫勒拿、阿森松与特里斯坦达库尼亚",
+    "KN": "圣基茨和尼维斯 ",
+    "LC": "圣卢西亚岛",
+    "MF": "圣马丁",
+    "PM": "圣皮埃尔和密克隆群岛",
+    "VC": "圣文森特和格林纳丁斯",
+    "WS": "萨摩亚",
+    "SM": "圣马力诺 ",
+    "ST": "圣多美和普林西比",
+    "SA": "沙特阿拉伯",
+    "SN": "塞内加尔",
+    "RS": "塞尔维亚",
+    "SC": "塞舌尔",
+    "SL": "塞拉利昂",
+    "SG": "新加坡",
+    "SX": "圣马丁岛",
+    "SK": "斯洛伐克",
+    "SI": "斯洛文尼亚",
+    "SB": "所罗门群岛",
+    "SO": "索马里",
+    "ZA": "南非 ",
+    "GS": "南乔治亚岛和南桑德韦奇岛",
+    "SS": "南苏丹",
+    "ES": "西班牙",
+    "LK": "斯里兰卡",
+    "SD": "苏丹",
+    "SR": "苏里南",
+    "SJ": "斯瓦尔巴和扬马延",
+    "SE": "瑞典",
+    "CH": "瑞士",
+    "SY": "阿拉伯叙利亚共和国",
+    "TW": "中国台湾",
+    "TJ": "塔吉克斯坦",
+    "TZ": "坦桑尼亚联合共和国",
+    "TH": "泰国",
+    "TL": "东帝汶",
+    "TG": "多哥",
+    "TK": "托克劳群岛",
+    "TO": "汤加",
+    "TT": "特立尼达和多巴哥",
+    "TN": "突尼斯",
+    "TR": "土耳其",
+    "TM": "土库曼斯坦",
+    "TC": "特克斯和凯科斯群岛",
+    "TV": "图瓦卢",
+    "UG": "乌干达",
+    "UA": "乌克兰",
+    "AE": "阿拉伯联合酋长国",
+    "GB": "英国",
+    "UM": "美国 Minor Outlying 群岛",
+    "US": "美利坚合众国",
+    "UY": "乌拉圭",
+    "UZ": "乌兹别克斯坦",
+    "VU": "瓦努阿图",
+    "VE": "委内瑞拉",
+    "VN": "越南",
+    "VG": "英属维尔京群岛",
+    "VI": "美属维尔京群岛S",
+    "WF": "瓦利斯和富图纳群岛",
+    "EH": "西撒哈拉",
+    "YE": "也门",
+    "ZM": "赞比亚",
+    "ZW": "津巴布韦",
+    "AX": "奥兰群岛"
+  }
+}
