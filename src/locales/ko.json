@@ -1,0 +1,1802 @@
+{
+  "global": {
+    "action": {
+      "activate": "활성화",
+      "add": "추가",
+      "cancel": "취소",
+      "clearAll": "모두 지우기",
+      "confirm": "확인",
+      "copy": "복사",
+      "delete": "삭제",
+      "deleteAll": "모두 삭제",
+      "disable": "사용 안함",
+      "download": "다운로드",
+      "downloadAll": "전체 다운로드",
+      "edit": "편집",
+      "enable": "사용",
+      "export": "내보내기",
+      "exportAll": "모두 내보내기",
+      "filter": "필터",
+      "openNewTab": "새 탭에서 열기",
+      "refresh": "새로 고치기",
+      "replace": "교체",
+      "reset": "재설정",
+      "save": "저장",
+      "selected": "선택됨"
+    },
+    "ariaLabel": {
+      "clearSearch": "검색 입력 지우기",
+      "hidePassword": "비밀번호 숨기기",
+      "progressBar": "페이지 로딩 진행 표시줄",
+      "scrollToTop": "맨 위로 스크롤",
+      "showPassword": "일반 텍스트로 비밀번호를 표시합니다. 참고: 이는 화면에서 비밀번호를 시각적으로 노출합니다.",
+      "tooltip": "도구 팁"
+    },
+    "calendar": {
+      "selectDate": "날짜 선택",
+      "useCursorKeysToNavigateCalendarDates": "커서 키를 사용하여 달력 날짜 탐색"
+    },
+    "fileUpload": {
+      "browseText": "파일 추가",
+      "clearSelectedFile": "선택한 파일 지우기"
+    },
+    "form": {
+      "dateMustBeAfter": "날짜는 %{date} 이후여야 함",
+      "dateMustBeBefore": "날짜는 %{date} 이전이어야 함",
+      "fieldRequired": "필수 필드",
+      "invalidCharacterLength": "올바르지 않은 문자 길이",
+      "invalidFormat": "올바르지 않은 형식",
+      "invalidValue": "유효하지 않은 값",
+      "lengthMustBeBetween": "길이는 %{min} – %{max}자 사이여야 함",
+      "mustBeAtLeast": "최소한 %{value} 이상이어야 함",
+      "optional": "선택사항",
+      "passwordsDoNotMatch": "비밀번호가 일치하지 않음",
+      "required": "필수",
+      "search": "검색",
+      "selectAnOption": "옵션 선택",
+      "valueMustBeBetween": "값은 %{min} – %{max} 사이여야 함"
+    },
+    "passwordValidation": {
+      "title": "비밀번호는 다음과 같아야 합니다.",
+      "message1": "1. 최소한 8자가 되어야 합니다.",
+      "message2": "2. 회문이 되지 않아야 합니다.",
+      "message3": "3. 계정 사용자 이름이 포함되지 않아야 합니다.",
+      "message4": "4. 사전 단어를 포함하지 않아야 합니다.",
+      "message5": "5. 순차 문자가 포함되지 않아야 합니다.",
+      "message6": "6. IPMI에 사용하는 경우 20자 이하여야 합니다.",
+      "message7": "7. 소문자, 대문자, 숫자 및 기타 문자에서 두 가지를 포함해야 합니다."
+    },
+    "status": {
+      "absent": "없음",
+      "copied": "복사됨",
+      "connected": "연결됨",
+      "disabled": "사용 안함",
+      "disconnected": "연결이 끊어짐",
+      "enabled": "사용 가능",
+      "error": "오류",
+      "informational": "정보용",
+      "nextReboot": "다음 부트 시 변경 사항이 적용됩니다.",
+      "notAvailable": "사용 불가능",
+      "off": "꺼짐",
+      "on": "설정",
+      "present": "있음",
+      "success": "성공",
+      "warning": "경고"
+    },
+    "table": {
+      "collapseTableRow": "테이블 행 접기",
+      "emptyMessage": "사용 가능한 항목이 없음",
+      "emptySearchMessage": "검색 쿼리와 일치하는 항목이 없음",
+      "expandTableRow": "테이블 행 펼치기",
+      "fromDate": "시작 날짜",
+      "items": "%{count}개 항목",
+      "itemsPerPage": "페이지당 항목 수",
+      "selectAll": "모두 선택",
+      "selectedItems": "%{count}개 중 %{filterCount}개 항목",
+      "selectItem": "항목 선택",
+      "toDate": "종료 날짜",
+      "viewAll": "모두 보기"
+    },
+    "toast": {
+      "unAuthDescription": "시도된 조치는 로그인한 계정에서 액세스할 수 없습니다. 시스템 관리자에게 문의하여 자신의 권한 역할을 확인하십시오.",
+      "unAuthTitle": "권한 없음"
+    }
+  },
+  "appHeader": {
+    "applicationHeader": "애플리케이션 헤더",
+    "health": "상태",
+    "logOut": "로그아웃",
+    "power": "전원",
+    "profileSettings": "@:appPageTitle.profileSettings",
+    "refresh": "새로 고치기",
+    "skipToContent": "컨텐츠로 건너뛰기",
+    "titleHideNavigation": "탐색 숨기기",
+    "titleProfile": "프로파일 메뉴 표시",
+    "titleRefresh": "애플리케이션 데이터 새로 고치기",
+    "titleShowNavigation": "탐색 표시"
+  },
+  "appNavigation": {
+    "capacityOnDemand": "@:appPageTitle.capacityOnDemand",
+    "certificates": "@:appPageTitle.certificates",
+    "concurrentMaintenance": "@:appPageTitle.concurrentMaintenance",
+    "dateTime": "@:appPageTitle.dateTime",
+    "deconfigurationHardware": "@:appPageTitle.deconfigurationHardware",
+    "deconfigurationRecords": "@:appPageTitle.deconfigurationRecords",
+    "dumps": "@:appPageTitle.dumps",
+    "eventLogs": "@:appPageTitle.eventLogs",
+    "factoryReset": "@:appPageTitle.factoryReset",
+    "fieldCoreOverride": "@:appPageTitle.fieldCoreOverride",
+    "firmware": "@:appPageTitle.firmware",
+    "hardwareStatus": "하드웨어 상태",
+    "hostConsole": "@:appPageTitle.hostConsole",
+    "inventory": "@:appPageTitle.inventory",
+    "keyClear": "@:appPageTitle.keyClear",
+    "kvm": "@:appPageTitle.kvm",
+    "systemParameters": "@:appPageTitle.systemParameters",
+    "ldap": "@:appPageTitle.ldap",
+    "logs": "로그",
+    "memory": "@:appPageTitle.memory",
+    "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
+    "operations": "조작",
+    "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
+    "policies": "@:appPageTitle.policies",
+    "postCodeLogs": "@:appPageTitle.postCodeLogs",
+    "power": "@:appPageTitle.power",
+    "powerRestorePolicy": "@:appPageTitle.powerRestorePolicy",
+    "primaryNavigation": "기본 탐색",
+    "rebootBmc": "@:appPageTitle.rebootBmc",
+    "resourceManagement": "자원 관리",
+    "securityAndAccess": "보안 및 액세스",
+    "sensors": "@:appPageTitle.sensors",
+    "serverPowerOperations": "@:appPageTitle.serverPowerOperations",
+    "serviceLogin": "@:appPageTitle.serviceLogin",
+    "sessions": "@:appPageTitle.sessions",
+    "settings": "설정",
+    "snmpAlerts": "SNMP 경보",
+    "userManagement": "@:appPageTitle.userManagement",
+    "virtualMedia": "@:appPageTitle.virtualMedia"
+  },
+  "appPageTitle": {
+    "capacityOnDemand": "온디맨드 용량 업그레이드",
+    "certificates": "인증서",
+    "changePassword": "비밀번호 변경",
+    "concurrentMaintenance": "동시 유지보수",
+    "dateTime": "날짜 및 시간",
+    "deconfigurationHardware": "하드웨어 구성 해제",
+    "deconfigurationRecords": "구성 해제 레코드",
+    "dumps": "덤프",
+    "eventLogs": "이벤트 로그",
+    "factoryReset": "공장 초기화",
+    "fieldCoreOverride": "필드 코어 재정의",
+    "firmware": "펌웨어",
+    "hostConsole": "호스트 콘솔",
+    "inventory": "인벤토리 및 LED",
+    "keyClear": "키 지우기",
+    "kvm": "KVM",
+    "systemParameters": "시스템 매개변수",
+    "ldap": "LDAP",
+    "login": "로그인",
+    "memory": "메모리",
+    "network": "네트워크",
+    "notices": "주의사항",
+    "overview": "개요",
+    "pageNotFound": "페이지를 찾을 수 없음",
+    "pcieTopology": "PCIe 하드웨어 토폴로지",
+    "policies": "정책",
+    "postCodeLogs": "진행 상태 로그",
+    "postCodes": "진행 상태 로그",
+    "power": "전원",
+    "powerRestorePolicy": "전원 복원 정책",
+    "profileSettings": "프로파일 설정",
+    "rebootBmc": "BMC 재부팅",
+    "sensors": "센서",
+    "serverPowerOperations": "서버 전원 조작",
+    "serviceLogin": "서비스 로그인 콘솔",
+    "sessions": "HMC 및 사용자 세션",
+    "snmpAlerts": "SNMP 경보",
+    "userManagement": "사용자 관리",
+    "virtualMedia": "가상 매체"
+  },
+  "pageCapacityOnDemand": {
+    "vetCapabilities": "VET 기능",
+    "quickLinks": "빠른 링크",
+    "activation": {
+      "alert": "활성화하려면 PHYP가 대기 중이거나 실행 중이어야 합니다.",
+      "helperText": "34자여야 합니다. 새 액세스 키를 받으려면 다음을 방문하십시오. ",
+      "placeholder": "활성 코드 입력",
+      "sectionTitle": "활성화",
+      "srLabel": "활성 코드",
+      "toast": {
+        "error": "온디맨드 용량 활성화에 실패했습니다.",
+        "success": "온디맨드 용량 활성화에 성공했습니다."
+      }
+    },
+    "alert": {
+      "description": "시스템에 전원이 켜져 있어야 합니다.",
+      "title": "온디맨드 용량 활성화에 대한 변경사항을 적용합니다."
+    },
+    "orderInfo": {
+      "activatedResources": "활성화된 자원",
+      "accessKeyInfo": "액세스 키 정보",
+      "aixAccessKeyExpiration": "AIX 액세스 키 만료:",
+      "entryCheck": "항목 검사",
+      "firmwareAccessKeyExpiration": "펌웨어 액세스 키 만료:",
+      "memoryInfo": "메모리 정보",
+      "memoryLicensed": "라이센싱된 메모리:",
+      "memoryResourceId": "메모리 자원 ID:",
+      "memorySequenceNumber": "메모리 순서 번호:",
+      "previousActivated": "이전 활성화:",
+      "processorInfo": "프로세서 정보",
+      "processorResourceId": "프로세서 자원 ID:",
+      "processorSequenceNumber": "프로세서 순서 번호:",
+      "processorsLicensed": "라이센싱된 프로세서:",
+      "resourceId": "자원 ID:",
+      "sequenceNumber": "순번:",
+      "systemCodPublicKey": "시스템 COD 공개 키",
+      "systemCodUniqueId": "시스템 COD 고유 ID:",
+      "systemAnchor": "시스템 앵커:",
+      "systemInfo": "시스템 정보",
+      "systemSerialNumber": "시스템 일련 번호:",
+      "systemType": "시스템 유형:",
+      "title": "온디맨드 유틸리티의 주문 정보",
+      "description": {
+        "message": "이 정보를 사용할 수 없거나 추가 정보가 필요한 경우,  ",
+        "link": "덤프 페이지에서 자원 덤프를 작성하십시오(특정 자원 선택기를 사용하여)."
+      }
+    },
+    "table": {
+      "bitCapabilityStatus": "비트 기능 상태",
+      "setting": "설정"
+    }
+  },
+  "pageCertificates": {
+    "addNewCertificate": "새 인증서 추가",
+    "caCertificate": "CA 인증서",
+    "deleteCertificate": "인증서 삭제",
+    "generateCsr": "CSR 생성",
+    "httpsCertificate": "HTTPS 인증서",
+    "ldapCertificate": "LDAP 인증서",
+    "replaceCertificate": "인증서 교체",
+    "serviceLoginCertificate": "서비스 로그인 인증서",
+    "alert": {
+      "certificateExpiredMessage": "%{certificate}이(가) 만료되었습니다. 새 인증서로 이의 대체를 고려하십시오.",
+      "certificateExpiringMessage": "%{certificate}이(가) 곧 만료됩니다. 새 인증서로 이의 대체를 고려하십시오.",
+      "certificatesExpiredMessage": "일부 인증서가 만료되었습니다. 새 인증서로 이의 대체를 고려하십시오.",
+      "certificatesExpiringMessage": "일부 인증서가 곧 만료됩니다. 새 인증서로 이의 대체를 고려하십시오."
+    },
+    "modal": {
+      "alternateName": "대체 이름",
+      "alternateNameHelperText": "공백으로 분리된 다수의 대체 이름 추가",
+      "certificateFile": "인증서 파일",
+      "certificateSigningRequest": "인증서 서명 요청(CSR)",
+      "certificateType": "인증서 유형",
+      "challengePassword": "인증 확인 비밀번호",
+      "city": "구/군/시",
+      "commonName": "공통 이름",
+      "companyName": "회사 이름",
+      "companyUnit": "회사 단위",
+      "contactPerson": "담당자",
+      "country": "국가/지역",
+      "deleteConfirmMessage": "'%{certificate}'을(를) 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "duplicateAlternateName": "대체 이름 복제",
+      "emailAddress": "이메일 주소",
+      "generateACertificateSigningRequest": "인증서 서명 요청(CSR) 생성",
+      "keyBitLength": "키 비트 길이",
+      "keyCurveId": "키 커브 ID",
+      "keyPairAlgorithm": "키 쌍 알고리즘",
+      "privateKey": "개인 키",
+      "state": "상태"
+    },
+    "table": {
+      "certificate": "인증서",
+      "issuedBy": "발행자",
+      "issuedTo": "발행 대상",
+      "validFrom": "유효 시작일",
+      "validUntil": "유효 종료일"
+    },
+    "toast": {
+      "errorAddCertificate": "인증서 추가 중 오류가 발생했습니다.",
+      "errorDeleteCertificate": "인증서 삭제 중 오류가 발생했습니다.",
+      "errorReplaceCertificate": "인증서 대체 중 오류가 발생했습니다.",
+      "successAddCertificate": "%{certificate}을(를) 추가했습니다.",
+      "successDeleteCertificate": "%{certificate}을(를) 삭제했습니다.",
+      "successReplaceCertificate": "%{certificate}을(를) 교체했습니다."
+    }
+  },
+  "pageChangePassword": {
+    "changePassword": "비밀번호 변경",
+    "changePasswordAlertMessage": "비밀번호가 만료되었으며, 이를 변경해야 합니다.",
+    "changePasswordError": "암호를 변경하는 동안 오류가 발생했습니다.",
+    "confirmNewPassword": "새 비밀번호 확인",
+    "goBack": "되돌아가기",
+    "newPassword": "새 비밀번호",
+    "username": "사용자 이름"
+  },
+  "pageDateTime": {
+    "alert": {
+      "link": "프로파일 설정",
+      "message": "애플리케이션 전체에서 날짜와 시간의 표시 방법(UTC 또는 브라우저 오프셋)을 변경하려면 다음을 방문하십시오. ",
+      "messageNtp": "NTP가 선택되었지만 NTP 서버가 지정되어 있지 않거나 지정된 NTP 서버에 도달할 수 없는 경우 time.google.com이 사용됩니다."
+    },
+    "configureSettings": "설정 구성",
+    "form": {
+      "date": "날짜",
+      "manual": "수동",
+      "time": {
+        "label": "24시간",
+        "timezone": "@:pageDateTime.form.time.label (%{timezone})"
+      },
+      "ntpServers": {
+        "server1": "서버 1",
+        "server2": "서버 2",
+        "server3": "서버 3"
+      },
+      "validators": {
+        "serverExists": "서버 주소가 이미 있습니다."
+      }
+    },
+    "toast": {
+      "errorSaveDateTime": "날짜 및 시간 설정의 저장 중 오류가 발생했습니다.",
+      "successSaveDateTime": "날짜 및 시간 설정이 저장되었습니다."
+    }
+  },
+  "pageConcurrentMaintenance": {
+    "concurrentMaintenance": "동시 유지보수",
+    "opPanelBase": "오퍼레이터 패널 기본 유지보수",
+    "opPanelLcd": "오퍼레이터 패널 LCD 유지보수",
+    "tod": "배터리 유지보수 시간",
+    "alert": {
+      "message": "배터리를 제거하거나 교체하기 위해 오퍼레이터 패널 기본 또는 오퍼레이터 패널 LCD는 각각의 토글 스위치를 사용으로 설정합니다. 완료되면 일반 모드로 돌아가기 위해 비활성화하는 것이 좋습니다.",
+      "title": "배터리의 동시 수리, 오퍼레이터 패널 기본, 오퍼레이터 패널 LCD"
+    },
+    "toast": {
+      "errorSaveReadyToRemove": "오류 %{state} 상태를 제거할 준비가 되었습니다.",
+      "successSaveReadyToRemove": "성공적으로 %{state} 상태를 제거할 준비가 되었습니다."
+    }
+  },
+  "pageDeconfigurationHardware": {
+    "capacity": "용량",
+    "clearRecords": "레코드 지우기",
+    "configure": "구성",
+    "configured": "구성됨",
+    "deconfigure": "구성 해제",
+    "deconfigured": "구성 해제됨",
+    "description": "모든 하드웨어 자원의 상태를 보거나 변경하십시오. 구성 해제된 각 자원에 대한 세부사항을 보려면 다음을 방문하십시오. ",
+    "fcoSetting": "FCO 설정",
+    "initiateDump": "덤프 시작",
+    "link": "구성 해제 레코드",
+    "memoryDimms": "메모리 DIMM",
+    "node": "노드",
+    "overview": "개요",
+    "pcieRootComplex": "PCIe 루트 컴플렉스",
+    "processorChips": "프로세서 칩",
+    "processorCores": "프로세서 코어",
+    "totalCores": "코어 총계",
+    "alert": {
+      "message": "메모리 딤 및 프로세서 코어는 서버의 전원이 꺼진 경우에만 구성하거나 구성 해제할 수 있습니다."
+    },
+    "toast": {
+      "deleteReqFailed": "요청된 자원을 삭제할 수 없어 삭제 요청이 실패했습니다.",
+      "errorDisablingSetting": "설정의 사용 안함 설정 중 오류 발생",
+      "errorEnablingSetting": "설정의 사용 설정 중 오류 발생"
+    },
+    "table": {
+      "deconfigurationType": "구성 해제 유형",
+      "functionalState": "작동 상태",
+      "id": "ID",
+      "locationCode": "위치 코드",
+      "name": "이름",
+      "pelId": "Pel ID",
+      "settings": "설정",
+      "size": "크기(메비바이트)"
+    }
+  },
+  "pageDeconfigurationRecords": {
+    "additionalDataUri": "추가 데이터 다운로드",
+    "clearAll": "모든 레코드 지우기",
+    "fatal": "심각",
+    "manual": "수동",
+    "nextRebootInfoIcon": "@:global.status.nextReboot",
+    "predictive": "예측",
+    "resolved": "해결",
+    "unresolved": "미해결",
+    "pageDescription": {
+      "description": "구성 해제 세부사항을 보거나 .txt 파일로 내보낼 레코드를 선택하십시오. 모든 하드웨어 자원의 구성 상태를 보고 수동으로 변경하려면 다음을 방문하십시오. ",
+      "link": "하드웨어 구성 해제"
+    },
+    "modal": {
+      "title": "모든 레코드 지우기",
+      "subtileServiceRequired": "서비스 권한 필수",
+      "messageServiceRequired": "이 조작을 지원하려면 서비스 담당자에게 문의하십시오.",
+      "confirm": "확실합니까?",
+      "confirmMessage": "모든 구성 해제 레코드를 지우면 선택된 노드의 모든 하드웨어를 재구성하려고 시도합니다. 이러한 변경사항은 다음 부트에 적용됩니다.",
+      "deleteAllMessage": "모든 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteAllTitle": "모든 레코드 삭제",
+      "deleteMessage": "%{count}개의 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteTitle": "레코드 삭제 | 레코드 삭제",
+      "goBack": "되돌아가기",
+      "continue": "계속"
+    },
+    "table": {
+      "alerts": "경보",
+      "date": "날짜",
+      "description": "설명",
+      "id": "ID",
+      "name": "이름",
+      "pelId": "Pel ID",
+      "reference": "참조",
+      "resource": "자원",
+      "severity": "심각도",
+      "srcDetails": "SRC 세부사항",
+      "srcDetailsToolTip": "시스템 참조 코드 세부사항. 수동 보호 레코드에 대한 SRC 세부사항이 없습니다.",
+      "status": "상태",
+      "type": "구성 해제 유형"
+    },
+    "toast": {
+      "errorDelete": "%{count}개의 레코드를 삭제하는 중에 오류가 발생했습니다. | %{count}개의 레코드를 삭제하는 중에 오류가 발생했습니다.",
+      "errorResolveEntries": "%{count}개의 레코드를 분석하는 중에 오류가 발생했습니다. | %{count}개의 레코드를 분석하는 중에 오류가 발생했습니다.",
+      "errorStartDownload": "다운로드 시작 중에 오류가 발생했습니다.",
+      "errorUnresolveEntries": "%{count}개의 레코드를 분석 취소하는 중에 오류가 발생했습니다. | %{count}개의 레코드를 분석 취소하는 중에 오류가 발생했습니다.",
+      "successStartDownload": "추가 데이터가 다운로드되었습니다.",
+      "successStartDownloadTitle": "다운로드 성공",
+      "successDelete": "%{count}개의 레코드가 삭제되었습니다. | %{count}개의 레코드가 삭제되었습니다."
+    }
+  },
+  "pageDumps": {
+    "dumpsAvailableOnBmc": "BMC에서 사용 가능한 덤프",
+    "initiateDump": "덤프 시작",
+    "alert": {
+      "bmcDumpHeading": "BMC 덤프",
+      "bmcDumpMessage": "덤프를 완료하려면 일정 시간이 소요됩니다.",
+      "bmcDumpMessageHmcEnabled": "BMC 덤프가 HMC로 오프로드되며 아래 테이블에 표시되지 않습니다.",
+      "refreshMessage": "테이블에서 완료된 덤프를 보려면 애플리케이션을 새로 고치십시오.",
+      "resourceDumpHeading": "자원 덤프",
+      "resourceDumpMessage": "자원 덤프는 장기 실행 프로세스입니다.",
+      "resourceDumpMessage2": "덤프가 덤프 테이블에 나열되지 않으며 자원 덤프 오류 로그가 없는 경우, 이는 운영 체제로 오프로드되었습니다.",
+      "systemDumpHeading": "시스템 덤프",
+      "systemDumpMessage": "시스템 덤프는 장기 실행 프로세스입니다.",
+      "systemDumpMessageHmcDisabled": "시스템 덤프는 운영 체제로 오프로드되며 덤프가 호스트 메모리에서 삭제될 때 운영 체제에 의해 삭제됩니다.",
+      "systemDumpMessageHmcEnabled": "시스템 덤프가 HMC로 오프로드됩니다."
+    },
+    "form": {
+      "bmcDump": "BMC 덤프 (무중단)",
+      "initiateDump": "덤프 시작",
+      "password": "비밀번호",
+      "passwordTooltip": "서비스 권한이 필요한 자원 선택기에 필요함",
+      "resourceDump": "자원 덤프",
+      "resourceSelector": "자원 선택기",
+      "resourceSelectorTooltip": "명령 길이는 80자를 초과할 수 없음",
+      "selectDumpType": "덤프 유형 선택",
+      "selectDumpTypeTooltip": "자원 덤프와 시스템 덤프는 시스템 전원이 켜진 경우에만 사용 가능함",
+      "systemDump": "시스템 덤프(중단)"
+    },
+    "modal": {
+      "deleteDump": "덤프 삭제 | 덤프 삭제",
+      "deleteDumpConfirmation": "%{count}개의 덤프를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 덤프를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "initiateSystemDump": "시스템 덤프 시작",
+      "initiateSystemDumpMessage1": "확실합니까?",
+      "initiateSystemDumpMessage2": "시스템 덤프의 진행 중에는 다른 덤프를 시작할 수 없습니다.",
+      "initiateSystemDumpMessage3": "시스템 덤프를 시작하면 모든 활성 시스템 파티션이 비정상적으로 종료됩니다.",
+      "initiateSystemDumpMessage4": "덤프 초기화 진행"
+    },
+    "table": {
+      "dateAndTime": "날짜 및 시간",
+      "dumpType": "덤프 유형",
+      "id": "ID",
+      "searchDumps": "덤프 검색",
+      "size": "크기"
+    },
+    "toast": {
+      "errorDeleteDump": "%{count}개의 덤프를 삭제하는 중 오류가 발생했습니다. | %{count}개의 덤프를 삭제하는 중 오류가 발생했습니다.",
+      "errorPhypInStandby": "시스템이 최소한 PHYP를 대기 상태로 부팅할 때까지 덤프를 시작할 수 없습니다. 전원이 꺼진 경우, 덤프 시작 전에 시스템 전원이 켜질 때까지 잠시 대기하십시오.",
+      "errorStartBmcDump": "새 BMC 덤프를 시작하는 중 오류가 발생했습니다.",
+      "errorStartDumpAnotherInProgress": "새 %{dump}을(를) 시작하는 동안 오류가 발생했습니다. 또 다른 덤프가 진행 중입니다.",
+      "errorStartDumpResourceInStandby": "새 %{dump}을(를) 시작하는 동안 오류가 발생했습니다. 시스템을 부팅해야 합니다.",
+      "errorStartResourceDump": "새 자원 덤프를 시작하는 중 오류가 발생했습니다.",
+      "errorStartResourceDumpInvalidSelector": "덤프 시작 오류. 올바르지 않은 자원 선택자입니다.",
+      "errorStartResourceDumpInvalidPassword": "덤프 시작 오류. 올바르지 않은 비밀번호입니다.",
+      "errorStartSystemDump": "새 시스템 덤프를 시작하는 중 오류가 발생했습니다.",
+      "successDeleteDump": "%{count}개의 덤프가 삭제되었습니다. | %{count}개의 덤프가 삭제되었습니다.",
+      "successStartBmcDumpTitle": "BMC 덤프가 시작됨",
+      "successStartDump": "덤프를 완료하려면 일정 시간이 소요됩니다.",
+      "successStartResourceDumpTitle": "자원 덤프가 시작됨",
+      "successStartSystemDumpTitle": "시스템 덤프가 시작됨"
+    }
+  },
+  "pageEventLogs": {
+    "additionalDataUri": "추가 데이터 다운로드",
+    "resolve": "분석",
+    "resolved": "해결",
+    "unresolve": "분석 해제",
+    "unresolved": "미해결",
+    "modal": {
+      "deleteAllMessage": "모든 로그를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteAllTitle": "모든 로그 삭제",
+      "deleteMessage": "%{count}개의 로그를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 로그를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteTitle": "로그 삭제 | 로그 삭제"
+    },
+    "table": {
+      "date": "날짜",
+      "description": "설명",
+      "srcDetails": "SRC 세부사항",
+      "srcDetailsToolTip": "시스템 참조 코드 세부사항",
+      "id": "ID",
+      "modifiedDate": "수정된 날짜",
+      "name": "이름",
+      "resolution": "분석",
+      "searchLogs": "로그 검색",
+      "severity": "심각도",
+      "status": "상태",
+      "type": "유형",
+      "eventId": "이벤트 ID"
+    },
+    "toast": {
+      "errorDelete": "%{count}개의 로그를 삭제하는 중 오류가 발생했습니다. | %{count}개의 로그를 삭제하는 중 오류가 발생했습니다.",
+      "errorLogStatusUpdate": "로그 상태의 업데이트 중 오류가 발생했습니다.",
+      "errorResolveLogs": "%{count}개의 로그를 분석하는 중 오류가 발생했습니다. | %{count}개의 로그를 분석하는 중 오류가 발생했습니다.",
+      "errorUnresolveLogs": "%{count}개의 로그를 분석 해제하는 중 오류가 발생했습니다. | %{count}개의 로그를 분석 해제하는 중 오류가 발생했습니다.",
+      "infoStartDownload": "다운로드를 완료하는 데 몇 분이 걸릴 수 있습니다.",
+      "successDelete": "%{count}개의 로그를 삭제했습니다. | %{count}개의 로그를 삭제했습니다.",
+      "successResolveLogs": "%{count}개의 로그가 해결되었습니다. | %{count}개의 로그가 해결되었습니다.",
+      "successUnresolveLogs": "%{count}개의 로그가 해결되지 못했습니다. | %{count}개의 로그가 해결되지 못했습니다."
+    }
+  },
+  "pageFactoryReset": {
+    "alert": "시스템을 재설정하려면 시스템 전원을 꺼야 합니다.",
+    "description": "이러한 기능은 중요한 데이터의 보안 삭제를 수행하지 않습니다.",
+    "form": {
+      "resetBiosOptionHelperText": "플랫폼 키 저장소, 파티션 NVRAM, 파티션 구성 및 이벤트 로그를 포함한 서버 설정을 재설정합니다.",
+      "resetBiosOptionLabel": "서버 설정만 재설정",
+      "resetOptionsLabel": "재설정 옵션",
+      "resetToDefaultsOptionHelperText": "서버 설정 외에도, 이 옵션은 모든 BMC 계정 데이터, 변경된 모든 비밀번호, 모든 정책, LDAP 구성, 네트워크 주소 및 일중 시간을 포함한 BMC 설정을 재설정합니다.",
+      "resetToDefaultsOptionLabel": "BMC 및 서버 설정 재설정"
+    },
+    "modal": {
+      "resetBiosTitle": "서버 설정 재설정",
+      "resetBiosHeader": "서버 설정을 재설정하시겠습니까?",
+      "resetBiosSubmitText": "서버 설정 재설정",
+      "resetBiosSettingsList": {
+        "item1": "모든 수동 설정이 삭제됩니다.",
+        "item2": "백업이 있으면 파티션 구성 및 플랫폼 키 저장소를 복구할 수 있습니다."
+      },
+      "resetToDefaultsHeader": "BMC 및 서버 설정을 모두 재설정하시겠습니까?",
+      "resetToDefaultsSubmitText": "BMC 및 서버 설정 재설정",
+      "resetToDefaultsTitle": "BMC 및 서버 설정 재설정",
+      "resetToDefaultsSettingsList": {
+        "item1": "모든 수동 설정이 삭제됩니다.",
+        "item2": "백업이 있으면 파티션 구성 및 플랫폼 키 저장소를 복구할 수 있습니다.",
+        "item3": "모든 BMC 로그가 제거됩니다.",
+        "item4": "현재 모든 네트워크 인터페이스의 활성 세션의 연결이 끊어집니다.",
+        "item5": "BMC 기본 계정 및 비밀번호 설정이 복원됩니다."
+      },
+      "resetWarningCheckLabel": "시스템을 종료하지 않고 계속 진행",
+      "resetWarningMessage": "시스템을 종료하지 않고 재설정하면 복구할 수 없는 오류가 발생할 수 있습니다."
+    },
+    "toast": {
+      "resetBiosError": "서버 설정의 공장 초기화에 실패했습니다.",
+      "resetBiosSuccess": "서버 설정의 공장 초기화에 성공했습니다.",
+      "resetToDefaultsError": "BMC 및 서버 설정의 공장 초기화에 실패했습니다.",
+      "resetToDefaultsSuccess": "BMC 및 서버 설정의 공장 초기화에 성공했습니다. 자동으로 로그아웃되지 않으면 브라우저를 새로 고치십시오."
+    }
+  },
+  "pageFieldCoreOverride": {
+    "changeConfiguration": "구성 변경",
+    "configuredCores": "구성된 코어",
+    "currentConfiguration": "현재 구성",
+    "enableFieldCoreOverride": "필드 코어 재정의 사용",
+    "enterValue": "값 입력",
+    "licensedCores": "라이센싱된 코어",
+    "pageDescription": "펌웨어에 의해 구성될 프로세서 코어를 보거나 변경하십시오.",
+    "scheduledForNextReboot": "@:global.status.nextReboot",
+    "totalInstalledCores": "설치된 코어 총계",
+    "alert": {
+      "description": "변경사항은 다음 서버 재부팅 시에 적용됩니다.",
+      "title": "변경사항 적용"
+    },
+    "toast": {
+      "configurationChangeError": "구성을 저장하는 데 실패했습니다.",
+      "configurationChangeSuccess": "구성이 저장되었습니다."
+    }
+  },
+  "pageFirmware": {
+    "cardActionSwitchToRunning": "실행으로 전환",
+    "cardBodyVersion": "버전",
+    "cardTitleBackup": "백업 이미지",
+    "cardTitleRunning": "실행 이미지",
+    "permanent": "영구",
+    "sectionTitleBmcCards": "BMC",
+    "sectionTitleBmcCardsCombined": "BMC 및 서버",
+    "sectionTitleHostCards": "호스트",
+    "sectionTitleUpdateFirmware": "펌웨어 업데이트",
+    "temporary": "임시",
+    "alert": {
+      "operationInProgress": "서버 전원 조작이 진행 중입니다.",
+      "serverMustBePoweredOffTo": "다음을 수행하려면 서버 전원을 꺼야 함:",
+      "serverMustBePoweredOffToUpdateFirmware": "펌웨어를 업데이트하려면 서버 전원을 꺼야 함",
+      "switchRunningAndBackupImages": "실행 및 백업 이미지 전환",
+      "updateFirmware": "펌웨어 업데이트",
+      "viewServerPowerOperations": "서버 전원 조작 보기"
+    },
+    "form": {
+      "updateFirmware": {
+        "accessKeyExpiration": "액세스 키 만료",
+        "fileAddress": "파일 주소",
+        "fileSource": "파일 소스",
+        "imageFile": "이미지 파일",
+        "manageAccessKeys": "액세스 키 관리",
+        "startUpdate": "업데이트 시작",
+        "tftpServer": "TFTP 서버",
+        "tftpServerInfo": "<server_ip>/<file_name>.tar",
+        "workstation": "워크스테이션"
+      }
+    },
+    "modal": {
+      "switchImages": "이미지 전환",
+      "switchRunningImage": "실행 이미지 전환",
+      "switchRunningImageInfo": "백업 이미지를 실행하려면 BMC 재부팅이 필요합니다. 이 시간 중에는 애플리케이션이 응답하지 않을 수 있습니다.",
+      "switchRunningImageInfo2": "백업 이미지(%{backup})로 전환하시겠습니까?",
+      "updateFirmwareInfo": "BMC는 업데이트 프로세스 중에 재부팅됩니다. 업데이트가 완료될 때까지는 서버에 전원을 공급할 수 없습니다.",
+      "updateFirmwareInfo2": "실행 이미지(%{running})가 백업에 복사됩니다. 백업 이미지가 삭제됩니다.",
+      "updateFirmwareInfo3": "업데이트를 진행하시겠습니까?",
+      "updateFirmwareInfoDefault": "새 이미지가 업로드되고 활성화됩니다. 그 이후에, BMC 또는 호스트는 새 이미지에서 실행하도록 자동으로 재부팅됩니다."
+    },
+    "toast": {
+      "errorSwitchImages": "실행 및 백업 이미지의 전환 중 오류가 발생했습니다.",
+      "errorActivation": "펌웨어 활성화 시작 중에 오류가 발생했습니다.",
+      "errorUpdateFirmware": "펌웨어 업데이트의 시작 중 오류가 발생했습니다.",
+      "errorUploadFirmware": "펌웨어 업로드 중에 오류가 발생했습니다.",
+      "rebootStarted": "재부팅이 시작됨",
+      "rebootStartedMessage": "백업 이미지에서 재부팅을 시작했습니다. 재부팅은 완료하는 데 몇 분 정도 소요될 수 있습니다.",
+      "taskComplete": "태스크 완료",
+      "taskCompleteMessage": "태스크가 완료되었습니다. BMC 재부팅 대기 중",
+      "updateFirmware": {
+        "step1": "4단계 중 1단계 - 업로드",
+        "step1Message": "업데이트가 시작되었습니다. 펌웨어 업로드가 진행 중입니다.",
+        "step2": "4단계 중 2단계 - 활성화",
+        "step2Message": "펌웨어 업로드가 완료되었습니다. 활성화 태스크가 진행 중입니다.",
+        "step3": "4단계 중 3단계 - 재부팅",
+        "step3Message": "활성화 태스크가 완료되었습니다. BMC 재부팅이 진행 중입니다.",
+        "step4": "4단계 중 4단계 - 완료",
+        "step4Message": "펌웨어 업데이트가 성공했습니다. 펌웨어 레벨을 확인하려면 새로 고치기를 클릭하십시오."
+      },
+      "switchToRunning": {
+        "step1": "3단계 중 1단계 - 펌웨어 전환",
+        "step1Message": "프로세스가 시작되었습니다. 펌웨어 전환이 진행 중입니다.",
+        "step2": "3단계 중 2단계 - 재부팅",
+        "step2Message": "펌웨어 전환이 완료되었습니다. BMC 재부팅이 진행 중입니다.",
+        "step3": "3단계 중 3단계 - 완료",
+        "step3Message": "펌웨어 전환이 성공했습니다. 실행 중인 이미지와 백업 이미지가 전환되었는지 확인하려면 새로 고치기를 클릭하십시오."
+      }
+    }
+  },
+  "pageHostConsole": {
+    "subTitle": "호스트 콘솔이 서버의 직렬 포트 출력을 이 창으로 경로 재지정합니다.",
+    "status": "상태"
+  },
+  "pageInventory": {
+    "assemblies": "어셈블리",
+    "bmcManager": "BMC 관리자",
+    "chassis": "섀시",
+    "dimmSlot": "DIMM 슬롯",
+    "fabricAdapters": "패브릭 어댑터",
+    "fans": "팬",
+    "identifyLedInfo": "LED가 없는 부품의 경우, 식별 LED 토글 스위치는 격납장치 LED만 켬",
+    "pcieSlots": "PCIe 슬롯",
+    "pcieTopologyLink": "PCIe 하드웨어 토폴로지입니다.",
+    "pcieTopologyLinkDescription": "PCIe 슬롯에 대해 자세히 알아보려면 다음 위치로 이동하십시오 ",
+    "powerSupplies": "전원 공급 장치",
+    "processors": "프로세서",
+    "quicklinkTitle": "하드웨어 컴포넌트에 대한 빠른 링크",
+    "system": "시스템",
+    "enclosures": {
+      "title": "I/O 격납장치",
+      "traceLabel": "I/O 격납장치 추적 수집",
+      "traceDescription": "다음에서 자원 덤프(특정 자원 선택기를 사용하여)를 작성하십시오. ",
+      "DumpsLink": "덤프 페이지에서 자원 덤프를 작성하십시오(특정 자원 선택기를 사용하여)."
+    },
+    "systemIndicator": {
+      "attentionLed": "시스템 주의 LED",
+      "attentionLedToolTipInfo": "시스템 주의 LED는 사용 안함으로만 설정할 수 있음",
+      "identifyLed": "시스템 식별 LED",
+      "lampTest": "램프 테스트",
+      "powerStatus": "전원 상태",
+      "sectionTitle": "시스템 표시기",
+      "tooltipInfo": "BMC 및 하이퍼바이저에 의해 제어되는 모든 표시기를 4분 동안 켜짐 상태로 변경합니다."
+    },
+    "alert": {
+      "enclosureAlertTitle": "격납장치 구성 보기",
+      "enclosureAlertMessage": "시스템에 전원이 켜져 있어야 합니다.",
+      "viewServerPowerOperations": "서버 전원 조작 보기"
+    },
+    "modal": {
+      "assemblies": {
+        "id": "@:pageInventory.table.id",
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "message": "이 조작을 완료하는 데 2분이 소요될 수 있습니다.",
+        "remove": "@:pageInventory.table.remove",
+        "selected": "선택된 '%{assemblyName}' -",
+        "subTitle": "확실합니까?",
+        "title": "'%{assemblyName}'을(를) 제거하시겠습니까?"
+      },
+      "enclosures": {
+        "locationNumber": "@:pageInventory.table.locationNumber",
+        "serialNumber": "@:pageInventory.table.serialNumber",
+        "serialNumberHelperText": "격납장치 일련 번호로 7자를 입력하십시오. o, i, q를 제외한 모든 영숫자를 사용할 수 있습니다. 모든 소문자가 대문자로 변환됩니다.",
+        "title": "격납장치 설정 변경",
+        "typeModel": "@:pageInventory.table.typeModel",
+        "typeModelHelperText": "격납장치 시스템 유형은 0000이 될 수 없습니다. 모든 영숫자 문자가 올바르지 않습니다."
+      }
+    },
+    "table": {
+      "action": "조치",
+      "assetTag": "자산 태그",
+      "assetTagInfo": "시스템 이름",
+      "bmcManagerModel": "모델(CCIN)",
+      "capacityMiB": "용량 MiB",
+      "coreCount": "코어 개수",
+      "processorCount": "프로세서 수",
+      "currentNext": "(현재 및 다음)",
+      "description": "설명",
+      "enabled": "사용 가능",
+      "firmwareVersion": "펌웨어 버전",
+      "health": "상태",
+      "healthRollup": "상태 롤업",
+      "id": "ID",
+      "identifyLed": "식별 LED",
+      "install": "설치",
+      "locationNumber": "위치 번호",
+      "model": "모델",
+      "name": "이름",
+      "partNumber": "부품 번호",
+      "power": "전원",
+      "processorType": "프로세서 유형",
+      "remove": "제거",
+      "serialNumber": "일련 번호",
+      "slotType": "슬롯 유형",
+      "sparePartNumber": "예비 부품 번호(FRU 번호)",
+      "totalCores": "코어 총계",
+      "totalSystemMemoryGiB": "시스템 메모리 총계",
+      "typeModel": "유형 - 모델"
+    },
+    "toast": {
+      "errorDisableIdentifyLed": "식별 LED의 사용 안함 설정 중 오류가 발생했습니다.",
+      "errorDisableLampTest": "램프 테스트의 사용 안함 설정 중 오류가 발생했습니다.",
+      "errorDisableSystemAttentionLed": "시스템 주의 LED를 사용 안함으로 설정하는 동안 오류가 발생했습니다.",
+      "errorEnableIdentifyLed": "식별 LED의 사용 설정 중 오류가 발생했습니다.",
+      "errorEnableLampTest": "램프 테스트의 사용 설정 중 오류가 발생했습니다.",
+      "errorEnableSystemAttentionLed": "시스템 주의 LED를 사용으로 설정하는 동안 오류가 발생했습니다.",
+      "errorEnclosureSettings": "격납장치 설정을 업데이트하는 중에 오류가 발생했습니다.",
+      "infoRemoveAssembly": "'%{assemblyName}'을(를) 제거할 준비가 되었는지 확인하려면 새로 고치십시오.",
+      "successEnclosureSettings": "격납장치 설정을 업데이트했습니다.",
+      "successEnableIdentifyLed": "식별 LED를 사용으로 설정했습니다.",
+      "successDisableIdentifyLed": "식별 LED를 사용 안함으로 설정했습니다."
+    }
+  },
+  "pageKeyClear": {
+    "description": "시스템에서 중요한 데이터를 안전하게 지우기",
+    "alert": {
+      "description": "지울 데이터의 민감도로 인해 이 조작을 권한 부여하려면 물리적 존재를 통한 검증이 필요합니다.",
+      "title": "이 조작에서 물리적 존재 및 시스템 재부팅이 필요함"
+    },
+    "form": {
+      "clear": "지우기",
+      "clearAllHelperText": "플랫폼 펌웨어에 의해 제어되는 모든 중요한 데이터 지우기",
+      "clearAllLabel": "모두 지우기",
+      "clearAllSetGenesisIPL": "모두 지우기 및 초기 IPL 설정",
+      "clearHypervisorSystemKeyHelperText": "이는 시스템 키를 지우도록 하이퍼바이저에 지시합니다.",
+      "clearHypervisorSystemKeyLabel": "하이퍼바이저 시스템 키 지우기",
+      "clearOperatingSystemKeysHelperText": "이는 운영 체제 보안 부트 키를 지우도록 OPAL에 지시합니다.",
+      "clearSystemSecurityKeyHelperText": "이는 시스템 보안 담당자 키를 지우기 위한 OPAL/PEF를 표시합니다.",
+      "clearSystemSecurityKeyLabel": "시스템 보안 담당자 키 지우기",
+      "keyClearNotRequested": "키 지우기가 요청되지 않음",
+      "keyClearOptionsLabel": "키 지우기 옵션",
+      "none": "없음",
+      "setFactoryDefault": "공장 출하 기본값 설정"
+    },
+    "modal": {
+      "clear": "키 지우기",
+      "clearAllMessage": "선택된 데이터에 포함된 모든 암호화 키가 유실됩니다. 시스템은 해당 키가 필요한 데이터를 암호 해독할 수 없습니다.",
+      "clearAllTitle": "경고: 이 조작은 되돌릴 수 없습니다."
+    },
+    "toast": {
+      "selectedKeyClearedError": "키 지우기 오류",
+      "selectedKeyClearedSuccess": "키 지우기에 성공함"
+    }
+  },
+  "pageKvm": {
+    "buttonCtrlAltDelete": "Ctrl+Alt+Delete 전송",
+    "connected": "연결됨",
+    "connecting": "연결 중",
+    "disconnected": "연결이 끊어짐",
+    "openNewTab": "새 탭에서 열기",
+    "status": "상태"
+  },
+  "pageSystemParameters": {
+    "aggressivePrefetch": "적극적 프리페치",
+    "aggressivePrefetchDescription": "이 값을 변경하면 시스템 성능이 저하될 수 있으므로, 서비스 제공자의 지시를 받은 경우에만 변경하십시오. 프로세서의 적극적 프리페치 선호를 사용 안함으로 설정할지, 또는 사용으로 설정할지 지정함",
+    "alert": {
+      "message": "시스템의 전원을 꺼야 합니다. 변경된 사항은 다음 재부팅 시 적용됩니다.",
+      "title": "변경사항 적용"
+    },
+    "button": {
+      "saveSettings": "설정 저장"
+    },
+    "frequencyCap": "주파수 상한",
+    "frequencyCapDescription": "사용으로 설정되면 시스템의 모든 프로세서가 지정된 최대 작동 주파수(MHz)를 초과하지 않도록 함",
+    "frequencyCapHelpText": "사용 안함으로 설정한 경우 최대 및 최소 빈도를 설정하려면 초기 부팅이 필요할 수 있습니다.",
+    "lateralCastOut": "측면 캐스트 아웃",
+    "lateralCastOutDescription": "시스템 성능을 저하시킬 수 있으므로 서비스 제공자의 지시가 있는 경우에만 이 값을 변경하십시오.",
+    "toast": {
+      "errorSavingAggressivePrefetch": "적극적 프리페치 저장 중에 오류가 발생함",
+      "errorSavingFrequencyCap": "주파수 상한 저장 중에 오류가 발생함",
+      "errorSavingLateralCastOut": "측면 캐스트 아웃 모드를 저장하는 동안 오류가 발생했습니다.",
+      "successSavingAggressivePrefetch": "적극적 프리페치가 저장됨",
+      "successSavingFrequencyCap": "주파수 상한이 저장됨",
+      "successSavingLateralCastOut": "측면 캐스트 아웃 모드가 성공적으로 저장됨"
+    }
+  },
+  "pageLdap": {
+    "addRoleGroup": "역할 그룹 추가",
+    "pageDescription": "LDAP 설정 구성 및 역할 그룹 관리",
+    "roleGroups": "역할 그룹",
+    "settings": "설정",
+    "ariaLabel": {
+      "ldapSettings": "LDAP 설정"
+    },
+    "form": {
+      "baseDn": "기본 DN",
+      "bindDn": "바인드 DN",
+      "bindPassword": "바인드 비밀번호",
+      "caCertificateValidUntil": "CA 인증서 유효 기한",
+      "groupIdAttribute": "그룹 ID 속성",
+      "ldapAuthentication": "LDAP 인증",
+      "ldapCertificateValidUntil": "LDAP 인증서 유효 기한",
+      "manageSslCertificates": "SSL 인증서 관리",
+      "secureLdapHelper": "보안 LDAP를 사용하려면 CA 인증서와 LDAP 인증서가 필요합니다.",
+      "secureLdapUsingSsl": "SSL을 사용한 보안 LDAP",
+      "serverUri": "서버 URI",
+      "serverUriTooltip": "보안 LDAP을 사용으로 설정하면 URI 스킴이 LDAPS로 변경됨",
+      "serviceType": "서비스 유형",
+      "userIdAttribute": "사용자 ID 속성"
+    },
+    "modal": {
+      "addNewRoleGroup": "새 역할 그룹 추가",
+      "deleteRoleGroup": "역할 그룹 삭제",
+      "deleteRoleGroupBatchConfirmMessage": "%{count}개의 역할 그룹을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 역할 그룹을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteRoleGroupConfirmMessage": "'%{groupName}'을(를) 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "editRoleGroup": "역할 그룹 편집",
+      "groupName": "그룹 이름",
+      "groupPrivilege": "그룹 권한"
+    },
+    "tableRoleGroups": {
+      "alertContent": "역할 그룹을 수정하려면 LDAP 인증을 사용해야 합니다.",
+      "groupName": "그룹 이름",
+      "groupPrivilege": "그룹 권한"
+    },
+    "toast": {
+      "errorAddRoleGroup": "역할 그룹 추가 중 오류가 발생했습니다.",
+      "errorDeleteRoleGroup": "역할 그룹 삭제 중 오류가 발생했습니다. | 역할 그룹 삭제 중 오류가 발생했습니다.",
+      "errorSaveActiveDirectorySettings": "Active Directory 설정 저장 중 오류가 발생했습니다.",
+      "errorSaveLdapSettings": "Open LDAP 설정 저장 중 오류가 발생했습니다.",
+      "errorSaveRoleGroup": "역할 그룹 저장 중 오류가 발생했습니다.",
+      "successAddRoleGroup": "역할 그룹 '%{groupName}'을(를) 추가했습니다.",
+      "successDeleteRoleGroup": "역할 그룹이 삭제되었습니다. | 역할 그룹이 삭제되었습니다.",
+      "successSaveActiveDirectorySettings": "Active Directory 설정을 저장했습니다.",
+      "successSaveLdapSettings": "Open LDAP 설정을 저장했습니다.",
+      "successSaveRoleGroup": "역할 그룹 '%{groupName}'을(를) 저장했습니다."
+    }
+  },
+  "pageLogin": {
+    "dateAndTime": "날짜　및　시간",
+    "language": "언어",
+    "logIn": "로그인",
+    "model": "모델",
+    "password": "비밀번호",
+    "serialNumber": "일련 번호",
+    "uploadServiceLoginCertificate": "서비스 로그인 인증서 업로드",
+    "username": "사용자 이름",
+    "alert": {
+      "message": "올바르지 않은 사용자 이름 또는 비밀번호"
+    },
+    "modal": {
+      "addNewServiceLoginCertificate": "새 서비스 로그인 인증서 추가",
+      "certificateFile": "인증서 파일"
+    }
+  },
+  "pageMemory": {
+    "activeMemoryMirroring": "활성 메모리 미러 모드",
+    "activeMemoryMirroringDescription": "하이퍼바이저용 활성 메모리 미러링은 시스템 하이퍼바이저에 사용된 주 메모리에서 해결 불가능한 오류의 이벤트가 발생하더라도 시스템 작동을 계속할 수 있도록 설계된 기능입니다.",
+    "activeMemoryMirroringHelpText": "메모리 미러링의 사용 설정을 지정합니다. 변경을 적용하려면 재부팅해야 합니다.",
+    "activeMemoryMirroringTitle": "활성 메모리 미러링",
+    "ioAdapterEnlargedCapacity": "이 옵션은 각 PCI 슬롯에 할당된 PCI 메모리 공간의 크기를 제어합니다.",
+    "ioAdapterEnlargedCapacityTitle": "I/O 어댑터 확장 용량",
+    "logicalMemorySize": "논리 메모리 블록 크기",
+    "logicalMemorySizeHeading": "논리 메모리 블록 크기가 파티셔닝에 사용됩니다. 논리 메모리 블록 크기를 변경하면 시스템 자원 관리에 영향을 줍니다.",
+    "maxNumHugePages": "대용량 페이지의 최대 수",
+    "memoryBlockSize": "메모리 블록 크기",
+    "requestedHugePageMemory": "요청된 대용량 페이지 메모리",
+    "slotCountForNode0": "노드 0의 슬롯 계수",
+    "systemMemoryPageSetup": "각각 16GB의 대형 가상 메모리 페이지 크기를 설정하여 애플리케이션의 성능을 높이십시오.",
+    "systemMemoryPageSetupTitle": "시스템 메모리 페이지 설정",
+    "updateIoAdapterEnlargedCapacity": "I/O 어댑터 확장 용량 업데이트",
+    "updateLogicalMemoryPageSetup": "시스템 메모리 페이지 설정 업데이트",
+    "updateLogicalMemorySize": "논리 메모리 블록 크기 업데이트",
+    "updatePageSetup": "시스템 메모리 페이지 설정 업데이트",
+    "alert": {
+      "heading": "변경사항 적용",
+      "message": "시스템의 전원이 꺼져 있어야 하며 이를 HMC에서 관리하지 않아야 합니다. 변경사항은 다음 재부팅 시에 적용됩니다.",
+      "serverMustBePoweredOffTo": "다음을 수행하려면 서버 전원을 꺼야 함:",
+      "updateActiveMemoryMirroring": "활성 메모리 미러 모드 업데이트",
+      "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
+      "updateLogicalMemoryPage": "@:pageMemory.updateLogicalMemorySize",
+      "updateSystemMemoryPageSetup": "시스템 메모리 페이지 설정 업데이트(서버가 HMC에 연결되어 있지 않아야 함)"
+    },
+    "toast": {
+      "errorSavingActiveMemoryMirroringMode": "활성 메모리 미러링 모드를 업데이트하는 중에 오류 발생",
+      "errorSavingAdapterEnlargedCapacity": "I/O 어댑터 확장 용량 업데이트 오류",
+      "errorSavingLogicalMemory": "논리 메모리 블록 크기 업데이트 오류 ",
+      "errorSavingPageSetup": "시스템 메모리 페이지 설정을 업데이트하는 중에 오류 발생",
+      "message": "변경하려면 시스템의 전원을 꺼야 합니다.",
+      "successSavingAdapterEnlargedCapacity": "I/O 어댑터 확장 용량이 업데이트됨",
+      "successSavingLogicalMemory": "논리 메모리 블록 크기가 업데이트됨",
+      "successSavingActiveMemoryMirroringMode": "활성 메모리 미러링 모드가 업데이트되었습니다.",
+      "successSavingPageSetup": "시스템 메모리 페이지 설정을 업데이트했습니다."
+    }
+  },
+  "pageNetwork": {
+    "dhcp": "DHCP",
+    "dns": "DNS 서버",
+    "domainName": "도메인 이름",
+    "hostname": "호스트 이름",
+    "hostnameAlert": "호스트 이름이 변경되면 로그아웃됩니다. 변경사항은 다음 로그인에 적용됩니다.",
+    "interfaceSection": "인터페이스 설정",
+    "ipv4": "IPv4",
+    "ipv4Addresses": "IPv4 주소",
+    "ipv6": "IPv6",
+    "ipv6DefaultGateway": "IPv6 기본 게이트웨이",
+    "macAddress": "MAC 주소",
+    "network": "네트워크",
+    "networkSettings": "네트워크 설정",
+    "ntp": "NTP 서버",
+    "operatingMode": "작동 모드",
+    "pageDescription": "BMC 네트워크 설정 구성",
+    "staticDns": "정적 DNS",
+    "useDns": "DNS 서버 사용",
+    "useDomainName": "도메인 이름 사용",
+    "useNtp": "NTP 서버 사용",
+    "modal": {
+      "confirmDeleteIpv4": "'%{address}'을(를) 삭제하시겠습니까?",
+      "confirmDisableDhcp": "DHCP를 사용 안함으로 설정하시겠습니까?",
+      "confirmEnableDhcp": "DHCP가 사용으로 설정된 경우 정적 IP 주소에 액세스할 수 없습니다.",
+      "dhcpConfirmTitle": "%{dhcpState} DHCP",
+      "deleteIpv4": "IPv4 주소 삭제",
+      "editHostnameTitle": "호스트 이름 편집",
+      "gateway": "게이트웨이",
+      "ipAddress": "IP 주소",
+      "staticDns": "정적 DNS",
+      "subnetMask": "서브넷 마스크"
+    },
+    "table": {
+      "addDnsAddress": "IP 주소 추가",
+      "addIpv4Address": "정적 IPv4 주소 추가",
+      "addIpv6Address": "정적 IPv6 주소 추가",
+      "addressOrigin": "주소 원본",
+      "addressState": "주소 상태",
+      "deleteDns": "DNS 주소 삭제",
+      "deleteIpv4": "IPv4 주소 삭제",
+      "editDns": "DNS 주소 편집",
+      "editIpv4": "정적 IPv4 주소 편집",
+      "editIpv6": "정적 IPv6 주소 편집",
+      "gateway": "게이트웨이",
+      "ipAddress": "IP 주소",
+      "prefixLength": "접두부 길이",
+      "subnet": "서브넷 마스크"
+    },
+    "toast": {
+      "errorSaveNetworkSettings": "%{setting} 설정의 업데이트 중 오류가 발생했습니다.",
+      "successSaveNetworkSettings": "%{setting} 설정값을 업데이트했습니다."
+    }
+  },
+  "pageOverview": {
+    "assetTag": "자산 태그",
+    "accessKeyExpiration": "액세스 키 만료",
+    "backupVersion": "백업",
+    "bmcTime": "BMC 날짜 및 시간",
+    "criticalEvents": "위험",
+    "dhcp": "DHCPv4",
+    "dumps": "덤프",
+    "eventLogs": "이벤트 로그",
+    "firmwareInformation": "펌웨어 정보",
+    "hostConsole": "호스트 콘솔",
+    "hostName": "호스트 이름",
+    "inventory": "인벤토리 및 LED",
+    "ipv4": "IPv4",
+    "model": "모델",
+    "networkInformation": "네트워크 정보",
+    "operatingMode": "작동 모드",
+    "powerCap": "전력 용량",
+    "powerConsumption": "소비 전력",
+    "powerInformation": "전원 정보",
+    "powerMode": "전원 모드",
+    "runningVersion": "실행 중",
+    "safeMode": "안전 모드",
+    "serialNumber": "일련 번호",
+    "serverInformation": "서버 정보",
+    "serviceLogin": "서비스 로그인",
+    "statusInformation": "상태 정보",
+    "systemIdentifyLed": "시스템 식별 LED",
+    "systemInformation": "시스템 정보",
+    "total": "총계",
+    "viewMore": "상세 보기",
+    "warningEvents": "경고",
+    "powerPerformanceModes": {
+      "maximumPerformance": "최대 성능",
+      "powerSaving": "전원 절약",
+      "static": "정적"
+    },
+    "modal": {
+      "editAssetTag": "자산 태그 편집"
+    },
+    "toast": {
+      "successSaveAssetTag": "자산 태그 업데이트를 완료했습니다.",
+      "errorSaveAssetTag": "자산 태그 업데이트 중 오류가 발생했습니다."
+    }
+  },
+  "pagePageNotFound": {
+    "description": "요청된 자원을 찾을 수 없습니다."
+  },
+  "pagePcieTopology": {
+    "alert": "이 페이지는 로드하는 데 몇 분이 소요될 수 있습니다.",
+    "bridgeOrHost": "PCIe 브릿지 또는 CAPI 호스트",
+    "cableLength": "케이블 길이",
+    "cableStatus": "케이블 상태",
+    "cableType": "케이블 유형",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "LED 식별",
+    "ioSlots": "I/O 슬롯",
+    "linkProperties": "링크 특성",
+    "linkStatus": "링크 상태",
+    "localPort": "로컬 포트",
+    "localPortLocation": "로컬 포트 위치",
+    "parentId": "상위 ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "원격 포트",
+    "remotePortLocation": "원격 포트 위치",
+    "resetLink": "링크 다시 설정",
+    "savePcieTopology": "PCIe 토폴로지 저장",
+    "speed": "속도",
+    "type": "유형",
+    "warning": "시스템은 최소한 PHYP 대기 상태여야 합니다. 전원을 켜려면 다음 위치로 이동하십시오 ",
+    "width": "너비",
+    "modal": {
+      "resetConfirm": "확실합니까?",
+      "resetLinkDescription": "시스템 파티션이 실행 중인 상태에서 링크를 재설정하면 오류가 발생할 수 있습니다. 이 조작은 지원 팀 구성원의 안내를 받아 수행해야 합니다.",
+      "resetLinkHeader": "링크 %{id} 재설정"
+    },
+    "table": {
+      "search": "검색"
+    },
+    "toast": {
+      "errorReset": "링크 %{id}을(를) 재설정하는 중에 오류가 발생함",
+      "errorSavePcieTopology": "PCIe 토폴로지 정보를 저장하는 중에 오류가 발생했습니다.",
+      "errorSwitchingLed": "%{value}에 대해 %{operation} LED를 전환하는 중에 오류가 발생함",
+      "resetInfoTitle": "링크 ID %{id}이(가) 재설정되는 중입니다.",
+      "resetInfoDescription": "이 조작은 완료하는 데 몇 초가 소요될 수 있습니다.",
+      "successReset": "링크 %{id} 재설정이 시작되었습니다. 문제 여부는 이벤트 로그를 확인하십시오.",
+      "successSavePcieTopology": "PCIe 토폴로지 정보를 저장했습니다."
+    }
+  },
+  "pagePolicies": {
+    "hostTpm": "호스트 TPM",
+    "hostTpmDescription": "TPM이 작동할 때만 시스템이 부팅되도록 합니다.",
+    "hostUsb": "호스트 USB 사용 가능",
+    "hostUsbDescription": "보안상 이유로 호스트 USB를 사용할지 또는 사용 안 할지 여부를 지정합니다.",
+    "ipmi": "네트워크 IPMI(아웃오브밴드 IPMI)",
+    "ipmiDescription": "IPMI를 통한 플랫폼의 원격 관리를 허용합니다. ipmitool 등의 도구를 사용하려면 이 설정을 사용할 수 있어야 합니다. 사용으로 설정되고 나면 온라인 지원 문서에 있는 절차에 따라 IPMI 사용자를 추가하십시오.",
+    "rtad": "RTAD",
+    "rtadDescription": "이 옵션은 호스트 펌웨어에 대해 원격 신뢰 증명 디먼을 사용 또는 사용 안함으로 설정합니다.",
+    "rtadInfoIcon": "@:global.status.nextReboot",
+    "secureVersion": "보안 버전 잠금",
+    "secureVersionDescription": "보안 버전 잠금 기능의 사용 여부를 지정합니다.",
+    "ssh": "BMC 쉘(SSH를 통해)",
+    "sshDescription": "BMC에서 포트 22를 통해, SSH를 통한 쉘 세션의 액세스를 허용합니다.",
+    "usbFirmwareUpdatePolicy": "USB 펌웨어 업데이트 정책",
+    "usbFirmwareUpdatePolicyDescription": "USB 펌웨어 업데이트 정책을 사용하면 USB 키를 통한 펌웨어 업데이트를 허용하는 기능을 사용할 수 있습니다.",
+    "toast": {
+      "errorNetworkPolicyUpdate": "%{policy}을(를) 업데이트하는 중",
+      "successDisableBmcShell": "BMC 쉘을 사용 안함으로 설정했습니다(SSH를 통해). 사용 안함 설정을 적용하는 데 15초를 허용하십시오.",
+      "successEnableBmcShell": "BMC 쉘을 사용으로 설정했습니다(SSH를 통해).",
+      "successNetworkPolicyUpdate": "%{policy}을(를) 업데이트했습니다.",
+      "successNextBootToast": "%{policy}에 변경사항 적용. %{policy}에 대한 변경사항은 다음 재부팅 시 적용됩니다."
+    },
+    "vtpm": "가상 TPM",
+    "vtpmDescription": "vTPM을 사용하면 게스트 운영 체제에서 TPM을 사용할 수 있습니다."
+  },
+  "pagePostCodeLogs": {
+    "allExportFilePrefix": "All_POST_codes_log_",
+    "downloadFilePrefix": "POST_codes_additional_details_",
+    "exportFilePrefix": "POST_codes_log_",
+    "viewCodesInRealtime": "진행 코드를 실시간으로 보기",
+    "action": {
+      "downloadDetails": "추가 세부사항 다운로드",
+      "exportLogs": "로그 내보내기"
+    },
+    "button": {
+      "exportAll": "모두 내보내기"
+    },
+    "table": {
+      "bootCount": "부트 계수",
+      "created": "작성 날짜",
+      "postCode": "코드",
+      "searchLogs": "로그 검색",
+      "timeStampOffset": "시간소인 오프셋"
+    }
+  },
+  "pagePower": {
+    "delayTime": "지연 시간(초)",
+    "description": "지정된 값(와트) 이하의 소비 전력을 유지하도록 전력 용량 설정",
+    "enableIdlePower": "유휴 전원 절약 사용",
+    "idlePower": "유휴 전원 절약",
+    "idlePowerSubmitUpdate": "유휴 전원 절약 업데이트",
+    "idlePowerSubmitReset": "기본값으로 재설정",
+    "powerConsumptionTooltip": "PHYP가 실행되면 전력 소비를 사용할 수 있습니다.",
+    "powerCapLabel": "전력 용량 값(와트)",
+    "powerCapLabelTextInfo": "값은 %{min} 및 %{max} 사이여야 함",
+    "powerCapSettingData": "전력 용량 적용",
+    "powerCapSettingLabel": "전력 용량 설정",
+    "powerConsumption": "현재 소비 전력",
+    "powerPerformanceModesDropdownLabel": "각 모드의 효과 보기",
+    "powerPerformanceModesTitle": "전원 및 성능 모드",
+    "selectModeLabel": "모드 선택",
+    "submitButton": "전원 절약 모드 업데이트",
+    "toEnter": "시작",
+    "toExit": "종료",
+    "utilizationThreshold": "활용도 임계값(%)",
+    "alert": {
+      "message": "안전 모드이므로 시스템은 현재 축소된 성능으로 작동하는 중입니다. 안전 모드에서는 전원 설정에 액세스할 수 없습니다. ",
+      "message2": "원인을 판별하려면 다음 위치로 이동하십시오",
+      "message2Link": "이벤트 로그",
+      "message3": "시스템이 다음 전원 켜기 시 안전 모드를 종료하려 합니다. 서버를 재부팅하려면 다음 위치로 이동하십시오",
+      "message3Link": "서버 전원 조작"
+    },
+    "delayTimeValidation": {
+      "delayTimeRange": "값은 %{min} - %{max} 사이여야 합니다.",
+      "enterDelayTime": "값은 종료 지연 시간보다 클 수 없습니다.",
+      "exitDelayTime": "값은 시작 지연 시간보다 클 수 없습니다."
+    },
+    "modalEnablePowerPerformanceMode": {
+      "cancelButton": "취소",
+      "content": "전원 절약 모드를 사용하면 프로세서 빈도의 변경, 프로세서 활용도의 변경 및 소비 전력의 변경이 발생하며, 성능 상의 변화도 발생합니다.",
+      "subTitle": "확실합니까?",
+      "titleMaximumPerformance": "최대 성능 모드 사용",
+      "titlePowerSaving": "전원 절약 모드 사용",
+      "titleStatic": "정적 모드 사용"
+    },
+    "selectMode": {
+      "maximumPerformance": "최대 성능",
+      "powerSaving": "전원 절약",
+      "static": "정적"
+    },
+    "tableRoles": {
+      "descMaximumPerformance": "프로세서 빈도는 다양합니다. 이 모드는 유휴 코어, 낮은 워크로드 및 선호하는 환경 조건에서 제공하는 열 및 전원 헤드룸을 활용하여 시스템이 최대 빈도에 도달할 수 있도록 허용합니다.",
+      "descPowerSaving": "프로세서 빈도는 고정된 최소값으로 설정되며, 예측 가능한 성능을 여전히 제공하면서도 시스템의 소비 전력을 줄여줍니다.",
+      "descStatic": "프로세서 빈도는 정상적인 환경 조건 하에서 정상적인 워크로드를 실행할 수 있는 고정값으로 설정됩니다."
+    },
+    "utilizationPercentValidation": {
+      "enterUtilization": "값은 종료 임계값보다 클 수 없습니다.",
+      "exitUtilization": "값은 시작 임계값보다 작을 수 없습니다.",
+      "utilizationRange": "값은 %{min} - %{max} 사이여야 합니다."
+    },
+    "toast": {
+      "errorIdlePower": "유휴 전원 설정 저장 중에 오류 발생",
+      "errorIdlePowerReset": "유휴 전원 설정을 재설정하는 중에 오류 발생",
+      "errorPowerPerformanceModes": "전원 및 성능 모드를 저장하는 중에 오류 발생",
+      "successIdlePower": "유휴 전원 설정이 저장됨",
+      "successIdlePowerReset": "유휴 전원 설정을 재설정했습니다.",
+      "successPowerPerformanceModes": "전원 절약 모드가 저장됨"
+    }
+  },
+  "pagePowerRestorePolicy": {
+    "description": "전원 장애 이후 시스템의 시작 방법을 결정하는 전원 정책을 구성하십시오.",
+    "powerPoliciesLabel": "전원 복원 정책",
+    "policies": {
+      "AlwaysOff": "항상 꺼짐",
+      "AlwaysOn": "항상 켜짐",
+      "LastState": "마지막 상태"
+    },
+    "policiesDesc": {
+      "AlwaysOff": "항상 꺼짐 - 전원이 공급될 때 항상 시스템의 전원이 꺼져 있습니다.",
+      "AlwaysOn": "항상 켜짐 - 전원이 공급될 때 항상 시스템의 전원이 켜집니다.",
+      "LastState": "마지막 상태 - 전원이 공급될 때 시스템이 마지막 켜짐/꺼짐 전원 상태로 돌아갑니다."
+    },
+    "alert": {
+      "changeServerOpMode": "서버 작동 모드 변경",
+      "manualOperatingMode": "수동 작동 모드에서는 전원 복원 정책을 변경할 수 없습니다."
+    },
+    "toast": {
+      "errorIdlePower": "유휴 전원 데이터 저장 오류",
+      "errorPowerSaver": "전원 절약 모드 저장 오류",
+      "errorSaveSettings": "설정 저장 중 오류가 발생했습니다.",
+      "successIdlePower": "유휴 전력 데이터가 저장됨",
+      "successPowerSaver": "전원 절약 모드가 저장됨",
+      "successSaveSettings": "전원 복원 정책이 업데이트되었습니다."
+    }
+  },
+  "pageProfileSettings": {
+    "browserOffset": "브라우저 오프셋(%{timezone})",
+    "changePassword": "비밀번호 변경",
+    "confirmPassword": "새 비밀번호 확인",
+    "defaultUTC": "기본값(UTC)",
+    "newPassLabelTextInfo": "비밀번호는 %{min} - %{max}자 사이여야 함",
+    "newPassword": "새 비밀번호",
+    "passwordsDoNotMatch": "비밀번호가 일치하지 않음",
+    "profileInfoTitle": "프로파일 정보",
+    "timezone": "시간대",
+    "timezoneDisplay": "시간대 표시 환경 설정",
+    "timezoneDisplayDesc": "애플리케이션 전체에서 시간의 표시 방법 선택",
+    "username": "사용자 이름",
+    "toast": {
+      "successUpdatingTimeZone": "시간대가 업데이트되었습니다."
+    }
+  },
+  "pageRebootBmc": {
+    "lastReboot": "마지막 BMC 재부팅",
+    "rebootBmc": "BMC 재부팅",
+    "rebootInformation": "BMC를 재부팅하는 경우, 웹 브라우저가 몇 분 동안 BMC와 연결되지 않습니다. BMC가 다시 온라인 상태가 되면, 다시 로그인해야 할 수 있습니다.",
+    "modal": {
+      "confirmMessage": "BMC를 재부팅하시겠습니까?",
+      "confirmMessage2": "시스템 덤프가 오프로드되고 있습니다. BMC를 다시 부팅하면 덤프가 유실됩니다.",
+      "confirmTitle": "BMC 재부팅 확인"
+    },
+    "toast": {
+      "errorRebootStart": "BMC를 재부팅하는 중 오류가 발생했습니다.",
+      "successRebootStart": "BMC를 재부팅 중입니다."
+    }
+  },
+  "pageSensors": {
+    "alert": "이 페이지를 로드하는 데는 수 분이 소요될 수 있음",
+    "exportFilePrefix": "sensors_",
+    "searchForSensors": "센서 검색",
+    "table": {
+      "currentValue": "현재 값",
+      "lowerCritical": "하위 위험",
+      "lowerWarning": "하위 경고",
+      "name": "이름",
+      "status": "상태",
+      "upperCritical": "상위 위험",
+      "upperWarning": "상위 경고"
+    }
+  },
+  "pageServerPowerOperations": {
+    "currentStatus": "현재 상태",
+    "immediateReboot": "즉시 - 운영 체제 종료 없이 서버를 재부팅하며, 데이터가 손상될 수 있음",
+    "immediateShutdown": "즉시 - 운영 체제 종료 없이 서버를 종료하며, 데이터가 손상될 수 있음",
+    "lastPowerOperation": "최종 섀시 전원 조작",
+    "oneTimeBootWarning": "일회성 부팅을 보류 중입니다. 다음 부팅은 지정된 일회성 부팅 설정으로 수행됩니다. 후속 부트가 기본 설정으로 수행됩니다.",
+    "operationInProgress": "전원 조작의 진행 중에 표시할 옵션이 없습니다. 완료되면 전원 조작이 여기에 표시됩니다.",
+    "operations": "조작",
+    "orderlyReboot": "순차적 - 운영 체제가 종료되면 서버가 재부팅됨",
+    "orderlyShutdown": "순차적 - 운영 체제가 종료되면 서버가 종료됨",
+    "osRuntimeButton": "OS 실행으로 진행",
+    "osRuntimeMessage": "런타임으로 진행하려면 OS 실행 상태로 진행하십시오.",
+    "phypStandby": "시스템이 PHYP 대기 상태입니다.",
+    "powerOn": "전원 켜기",
+    "reboot": "재부팅",
+    "rebootServer": "서버 재부팅",
+    "serverBootSettings": "설정",
+    "serverStatus": "서버 상태",
+    "shutDown": "종료",
+    "shutdownServer": "서버 종료",
+    "biosSettings": {
+      "aixLinux": "AIX/LINUX 파티션 부트 모드",
+      "currentOperatingMode": "현재 작동 모드 %{currOptMode}",
+      "defaultPartition": "기본 파티션 환경",
+      "ibmIPartition": "IBM i 파티션 부트 모드",
+      "nonHMCManaged": "시스템이 비HMC 관리인 경우에만 사용",
+      "powPolicySection": "은(는) %{powerPolicy}(으)로 설정됩니다.",
+      "pvm_default_os_type": "기본 파티션 환경",
+      "pvm_os_boot_type": "IBM i 파티션 부트 모드",
+      "pvm_rpa_boot_mode": "AIX/LINUX 파티션 부트 모드",
+      "pvm_stop_at_standby": "서버 펌웨어 시작 정책",
+      "pvm_system_operating_mode": "서버 작동 모드",
+      "pvm_system_power_off_policy": "서버 전원 정책",
+      "selectedOperatingMode": "저장 시에 작동 모드는 %{selectedOptMode}(으)로 설정됩니다.",
+      "serverFirmware": "서버 펌웨어 시작 정책",
+      "powerSettingDescription": "전원 설정 설명 보기",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "자동 시작만",
+          "autoStartAlways": "항상 자동 시작",
+          "standBy": "대기"
+        },
+        "description": {
+          "autoStartOnly": "비정상 종료 후 복구 전원 켜기(예: 자동 전원 다시 시작 또는 시스템 종료 자동 재부팅)의 경우에만 서버 펌웨어 및 파티션을 자동으로 활성화합니다.",
+          "autoStartAlways": "특정 파티션을 자동으로 활성화합니다. 서버가 HMC 또는 ASMI 메뉴를 사용하여 켜진 경우 서버는 '자동 시작'에 대해 구성된 파티션을 자동으로 활성화합니다. 서버가 비정상적으로 중지된 후 자동 전원 재시작 또는 다시 부팅이 수행되면, 서버는 시스템 중지 시 실행 중이던 파티션을 활성화합니다.",
+          "standBy": "사용자가 시작한 전원 켜기 또는 복구 전원 켜기의 경우에는 서버 펌웨어 및 파티션을 자동으로 활성화하지 않습니다."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "기본값"
+        },
+        "description": {
+          "aix": "시스템 펌웨어는 AIX/Linux를 기본 파티션 환경으로 선택합니다.",
+          "linux": "시스템 펌웨어는 AIX/Linux를 기본 파티션 환경으로 선택합니다.",
+          "ibmI": "서버 펌웨어는 IBM i를 기본 파티션 환경으로 선택합니다.",
+          "default": "시스템 펌웨어는 시스템 브랜드 유형에 따라 기본 파티션 환경을 자동으로 선택합니다."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "이 파티션은 운영 체제로 직접 부팅됨",
+          "serviceBoot": "저장된 목록으로부터의 서비스 부트 모드",
+          "bootToSms": "SMS 메뉴로 부팅",
+          "bootToOpenFirware": "개방형 펌웨어 프롬프트로 부팅",
+          "serviceBootMode": "기본 목록에서 서비스 모드 부팅"
+        },
+        "description": {
+          "partitionBoot": "파티션이 멈추는 일 없이 운영 체제로 부팅됩니다.",
+          "serviceBoot": "시스템이 저장된 서비스 모드 부트 목록으로부터 부팅됩니다. 이는 일반적으로 파티션의 진단을 실행하는 편법입니다.  이 옵션을 유용하게 사용하려면, 파티션 운영 체제가 진단 부팅을 지원하고 진단을 파티션의 디스크 드라이브에 로드해야 합니다.",
+          "bootToSms": "파티션이 시스템 관리 서비스(SMS) 메뉴에서 멈춥니다.",
+          "bootToOpenFirware": "시스템이 열린 펌웨어 프롬프트에서 멈춥니다.",
+          "serviceBootMode": "시스템이 기본 부트 목록으로부터 부팅됩니다.  이 옵션은 CD-ROM 드라이브로부터 독립형 진단을 실행하는 데 선호되는 방법입니다."
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "시스템 라이센스가 부여된 내부코드의 사본 A를 사용한 디스크에서의 IPL입니다.",
+          "b": "시스템 라이센스가 부여된 내부코드의 사본 B를 사용한 디스크에서의 IPL입니다.",
+          "c": "하드웨어 서비스용으로 예약되어 있습니다.",
+          "d": "로드 소스 디스크 외 매체에서의 IPL입니다. 코드 설치 지원을 위한 대체 IPL입니다."
+        }
+      },
+      "attributeValues": {
+        "pvm_os_boot_type": {
+          "A_Mode": "A(사본 A를 사용하여 디스크에서 부팅)",
+          "B_Mode": "B(사본 B를 사용하여 디스크에서 부팅)",
+          "C_Mode": "C(IBM 연구소 전용으로 예약됨)",
+          "D_Mode": "D(매체/드라이브에서 부팅)"
+        },
+        "pvm_rpa_boot_mode": {
+          "DefaultList": "기본 목록에서 서비스 모드 부팅",
+          "Normal": "파티션이 운영 체제로 직접 부팅",
+          "OkPrompt": "개방형 펌웨어 프롬프트로 부팅",
+          "PblBootLid": "petitboot 부트 로더에서 파티션 부팅",
+          "SavedList": "저장된 목록에서 서비스 모드 부팅",
+          "SmsMenu": "SMS 메뉴로 부팅"
+        },
+        "pvm_stop_at_standby": {
+          "Disabled": "항상 자동 시작",
+          "Enabled": "대기(사용자 시작)",
+          "ManualOnly": "자동 시작만"
+        },
+        "pvm_system_operating_mode": {
+          "Manual": "수동 - 서비스/유지보수",
+          "Normal": "정상 - 자동"
+        },
+        "pvm_system_power_off_policy": {
+          "automaticHelperText": "이 설정을 사용할 때, 시스템이 파티셔닝되지 않은 경우에는 시스템 동작이 전원 끄기와 동일하며, 시스템이 파티셔닝된 경우에는 시스템 동작이 전원을 계속 켜 두는 것과 동일함",
+          "powerOffHelperText": "최종 파티션의 전원이 꺼지는 경우, 서버의 전원이 꺼짐",
+          "stayOnHelperText": "최종 파티션의 전원이 꺼지는 경우, 서버 전원은 켜진 상태를 유지함"
+        }
+      }
+    },
+    "modal": {
+      "confirmRebootMessage": "재부팅하시겠습니까?",
+      "confirmRebootMessage2": "시스템 덤프가 오프로드되고 있습니다. 재부팅하면 덤프가 유실됩니다.",
+      "confirmRebootTitle": "서버 재부팅으로 인해 가동 중단이 발생함",
+      "confirmShutdownMessage": "종료하시겠습니까?",
+      "confirmShutdownMessage2": "시스템 덤프가 오프로드되고 있습니다. 시스템을 종료하면 덤프가 유실됩니다.",
+      "confirmShutdownTitle": "서버 종료로 인해 가동 중단이 발생함"
+    },
+    "toast": {
+      "errorPowerOn": "BMC가 호스트의 전원을 켤 준비가 되지 않았습니다.",
+      "errorSaveSettings": "설정 저장 중 오류가 발생했습니다.",
+      "successSaveSettings": "설정을 저장했습니다."
+    }
+  },
+  "pageServiceLoginConsoles": {
+    "bmcConsole": "BMC 콘솔",
+    "hypervisorConsole": "하이퍼바이저 콘솔",
+    "selectConsoleType": "콘솔 선택",
+    "status": "상태"
+  },
+  "pageSessions": {
+    "action": {
+      "disconnect": "연결 끊기"
+    },
+    "alert": {
+      "heading": "경고",
+      "message": "HMC가 활성 상태이면 다시 연결을 시도합니다. 작동 중인 HMC의 연결을 끊으려면 HMC 자체에서 연결을 끊으십시오."
+    },
+    "modal": {
+      "disconnectMessage": "%{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "disconnectTitle": "세션 연결 끊기 | 세션 연결 끊기"
+    },
+    "table": {
+      "clientID": "클라이언트 ID",
+      "ipAddress": "IP 주소",
+      "searchSessions": "세션 검색",
+      "username": "사용자 이름"
+    },
+    "toast": {
+      "errorDelete": "%{count}개 세션의 연결을 끊는 중 오류가 발생했습니다. | %{count}개 세션의 연결을 끊는 중 오류가 발생했습니다.",
+      "successDelete": "%{count}개 세션의 연결이 끊어졌습니다. | %{count}개 세션의 연결이 끊어졌습니다."
+    }
+  },
+  "pageSnmpAlerts": {
+    "addDestination": "대상 추가",
+    "deleteDestination": "대상 삭제 | 대상 삭제",
+    "pageDescription": "IP 주소 및 포트로 SNMP(Simple Network Management Protocol) 트랩을 설정합니다.",
+    "modal": {
+      "addSnmpDestinationTitle": "SNMP 경보 대상 추가",
+      "batchDeleteConfirmMessage": "SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteConfirmMessage": "SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteSnmpDestinationTitle": "SNMP 경보 대상 삭제 | SNMP 경보 대상 삭제",
+      "ipaddress": "IP 주소",
+      "ipaddressFqdn": "IP 주소/FQDN",
+      "ipaddressFqdnInfo": "IP 주소 또는 somehost.example.com",
+      "port": "포트"
+    },
+    "table": {
+      "ipaddress": "IP 주소",
+      "port": "포트"
+    },
+    "toast": {
+      "errorAddDestination": "SNMP 경보 대상 추가 오류",
+      "errorBatchDelete": "SNMP 경보 대상 삭제 중 오류가 발생했습니다. | SNMP 경보 대상 삭제 중 오류가 발생했습니다.",
+      "errorDeleteDestination": "SNMP 경보 대상 삭제 중 오류가 발생했습니다.",
+      "errorLoadSnmpDetails": "SNMP 경보 세부사항 로드 중 오류가 발생했습니다.",
+      "successAddDestination": "SNMP 경보 대상을 추가했습니다.",
+      "successBatchDelete": "SNMP 경보 대상을 삭제했습니다. | %{count}개의 SNMP 경보 대상을 삭제했습니다.",
+      "successDeleteDestination": "SNMP 경보 대상을 삭제했습니다."
+    }
+  },
+  "pageUserManagement": {
+    "accountPolicySettings": "계정 정책 설정",
+    "addUser": "사용자 추가",
+    "deleteUser": "사용자 삭제 | 사용자 삭제",
+    "editUser": "사용자 편집",
+    "viewPrivilegeRoleDescriptions": "권한 역할 설명 보기",
+    "modal": {
+      "accountLocked": "계정이 잠김",
+      "accountStatus": "계정 상태",
+      "automaticAfterTimeout": "제한시간 초과 후 자동",
+      "batchDeleteConfirmMessage": "%{count}명의 사용자를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}명의 사용자를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "cannotStartWithANumber": "숫자로 시작할 수 없음",
+      "clickSaveToUnlockAccount": "계정을 잠금 해제하려면 \"저장\"을 클릭하십시오.",
+      "confirmUserPassword": "사용자 비밀번호 확인",
+      "deleteConfirmMessage": "'%{user}' 사용자를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "manual": "수동",
+      "maxFailedLoginAttempts": "최대 로그인 시도 실패 횟수",
+      "noSpecialCharactersExceptUnderscore": "밑줄을 제외한 특수 문자 사용 불가",
+      "passwordMustBeBetween": "비밀번호는 %{min} – %{max}자 사이여야 합니다.",
+      "passwordsDoNotMatch": "비밀번호가 일치하지 않음",
+      "privilege": "권한",
+      "timeoutDurationSeconds": "제한시간 초과 기간(초)",
+      "unlock": "잠금 해제",
+      "username": "사용자 이름",
+      "userPassword": "사용자 비밀번호",
+      "userUnlockMethod": "사용자 잠금 해제 방법",
+      "zeroLoginAttempts": "`0`인 경우 계정이 잠기지 않습니다."
+    },
+    "table": {
+      "privilege": "권한",
+      "status": "상태",
+      "username": "사용자 이름"
+    },
+    "tableRoles": {
+      "configureComponentsManagedByThisService": "이 서비스에서 관리하는 컴포넌트 구성",
+      "configureManagerResources": "관리자 자원 구성",
+      "configureUsersAndTheirAccounts": "사용자 및 해당 계정 구성",
+      "logInToTheServiceAndReadResources": "서비스에 로그인 및 자원 읽기",
+      "updatePasswordForCurrentUserAccount": "현재 사용자 계정의 비밀번호 업데이트"
+    },
+    "toast": {
+      "errorBatchDelete": "%{count}명의 사용자를 삭제하는 중 오류가 발생했습니다. | %{count}명의 사용자를 삭제하는 중 오류가 발생했습니다.",
+      "errorBatchDisable": "%{count}명의 사용자를 사용 안함으로 설정하는 중 오류가 발생했습니다. | %{count}명의 사용자를 사용 안함으로 설정하는 중 오류가 발생했습니다.",
+      "errorBatchEnable": "%{count}명의 사용자를 사용으로 설정하는 중 오류가 발생했습니다. | %{count}명의 사용자를 사용으로 설정하는 중 오류가 발생했습니다.",
+      "errorCreateUser": "'%{username}' 사용자를 작성하는 중 오류가 발생했습니다.",
+      "errorCreateUserMaxUsers": "이 시스템이 허용 가능한 최대 사용자 수에 도달했으므로 사용자 '%{username}' 을(를) 작성하는 중에 오류가 발생했습니다.",
+      "errorCreateUserPasswordNotAccepted": "비밀번호가 채택되지 않았으므로 사용자 '%{username}'을(를) 작성하는 중에 오류가 발생했습니다.",
+      "errorDeleteUser": "'%{username}' 사용자를 삭제하는 중 오류가 발생했습니다.",
+      "errorLoadAccountSettings": "계정 설정 로드 오류",
+      "errorLoadUsers": "사용자 로딩 중 오류가 발생했습니다.",
+      "errorSaveSettings": "계정 설정 저장 중 오류가 발생했습니다.",
+      "errorUpdateUser": "'%{username}' 사용자를 업데이트하는 중 오류가 발생했습니다.",
+      "errorUpdateUserPasswordNotAccepted": "비밀번호가 채택되지 않았으므로 사용자 '%{username}'을(를) 업데이트하는 중에 오류가 발생했습니다.",
+      "successBatchDelete": "%{count}명의 사용자를 삭제했습니다. | %{count}명의 사용자를 삭제했습니다.",
+      "successBatchDisable": "%{count}명의 사용자를 사용 안함으로 설정했습니다. | %{count}명의 사용자를 사용 안함으로 설정했습니다.",
+      "successBatchEnable": "%{count}명의 사용자를 사용으로 설정했습니다. | %{count}명의 사용자를 사용으로 설정했습니다.",
+      "successCreateUser": "'%{username}' 사용자를 작성했습니다.",
+      "successDeleteUser": "'%{username}' 사용자를 삭제했습니다.",
+      "successSaveSettings": "계정 설정을 저장했습니다.",
+      "successUpdateUser": "'%{username}' 사용자를 업데이트했습니다."
+    }
+  },
+  "pageVirtualMedia": {
+    "configureConnection": "연결 구성",
+    "defaultDeviceName": "가상 매체 장치",
+    "start": "시작",
+    "stop": "중지",
+    "virtualMediaSubTitleFirst": "웹 브라우저에서 이미지 로드",
+    "virtualMediaSubTitleSecond": "외부 서버에서 이미지 로드",
+    "modal": {
+      "password": "비밀번호",
+      "serverUri": "외부 서버 URI",
+      "title": "레거시 모드 구성",
+      "username": "사용자 이름"
+    },
+    "toast": {
+      "errorMounting": "마운팅 오류",
+      "errorReadingFile": "파일 읽기 중 오류가 발생했습니다. 서버를 닫습니다.",
+      "errorUnmounting": "언마운팅 오류",
+      "serverClosedSuccessfully": "서버가 닫힘",
+      "serverClosedWithErrors": "오류로 서버가 닫힘",
+      "serverConnectionEstablished": "서버 연결이 설정됨",
+      "serverRunning": "서버 실행 중"
+    }
+  },
+  "countries": {
+    "AF": "아프가니스탄",
+    "AL": "알바니아",
+    "DZ": "알제리",
+    "AS": "미국령 사모아",
+    "AD": "안도라",
+    "AO": "앙골라",
+    "AI": "앙귈라",
+    "AQ": "남극 대륙",
+    "AG": "앤티가 바부다",
+    "AR": "아르헨티나",
+    "AM": "아르메니아",
+    "AW": "아루바",
+    "AU": "호주",
+    "AT": "오스트리아",
+    "AZ": "아제르바이잔",
+    "BS": "바하마",
+    "BH": "바레인",
+    "BD": "방글라데시",
+    "BB": "바베이도스",
+    "BY": "벨라루스",
+    "BE": "벨기에",
+    "BZ": "벨리즈",
+    "BJ": "베냉",
+    "BM": "버뮤다",
+    "BT": "부탄",
+    "BO": "볼리비아",
+    "BQ": "보네르, 신트외스타티우스 및 사바",
+    "BA": "보스니아 헤르체고비나 ",
+    "BW": "보츠와나",
+    "BV": "부베섬",
+    "BR": "브라질",
+    "IO": "영국령 인도양 식민지",
+    "BN": "브루나이 다루살람 ",
+    "BG": "불가리아",
+    "BF": "부르키나파소",
+    "BI": "부룬디",
+    "CV": "카보베르데",
+    "KH": "캄보디아",
+    "CM": "카메룬",
+    "CA": "캐나다",
+    "KY": "케이맨 제도",
+    "CF": "중앙아프리카 공화국",
+    "TD": "차드",
+    "CL": "칠레",
+    "CN": "중국",
+    "CX": "크리스마스 제도 ",
+    "CC": "코코스(킬링) 제도",
+    "CO": "컬럼비아",
+    "KM": "코모로",
+    "CD": "콩고　민주공화국",
+    "CG": "콩고",
+    "CK": "쿡 제도",
+    "CR": "코스타리카",
+    "HR": "크로아티아",
+    "CU": "쿠바",
+    "CW": "쿠라사우",
+    "CY": "키프로스",
+    "CZ": "체코",
+    "CI": "코트디부아르",
+    "DK": "덴마크",
+    "DJ": "지부티",
+    "DM": "도미니카",
+    "DO": "도미니카 공화국",
+    "EC": "에콰도르",
+    "EG": "이집트",
+    "SV": "엘살바도르",
+    "GQ": "적도 기니 ",
+    "ER": "에리트레아",
+    "EE": "에스토니아",
+    "SZ": "에스와티니",
+    "ET": "에티오피아",
+    "FK": "포클랜드 제도(말비나스)",
+    "FO": "페로 제도",
+    "FJ": "피지",
+    "FI": "핀란드",
+    "FR": "프랑스",
+    "GF": "프랑스령 기아나",
+    "PF": "프랑스령 폴리네시아",
+    "TF": "프랑스 남부 지역",
+    "GA": "가봉",
+    "GM": "감비아",
+    "GE": "조지아",
+    "DE": "독일",
+    "GH": "가나",
+    "GI": "지브롤터",
+    "GR": "그리스",
+    "GL": "그린랜드",
+    "GD": "그레나다",
+    "GP": "과들루프",
+    "GU": "괌",
+    "GT": "과테말라",
+    "GG": "건지",
+    "GN": "기니",
+    "GW": "기니비사우",
+    "GY": "가이아나",
+    "HT": "아이티",
+    "HM": "허드 맥도널드 제도",
+    "VA": "교황청",
+    "HN": "온두라스",
+    "HK": "홍콩",
+    "HU": "헝가리",
+    "IS": "아이슬란드",
+    "IN": "인도",
+    "ID": "인도네시아",
+    "IR": "이란 회교 공화국",
+    "IQ": "이라크",
+    "IE": "아일랜드",
+    "IM": "맨 섬",
+    "IL": "이스라엘",
+    "IT": "이탈리아",
+    "JM": "자메이카",
+    "JP": "일본",
+    "JE": "저지",
+    "JO": "요르단",
+    "KZ": "카자흐스탄",
+    "KE": "케냐",
+    "KI": "키리바시",
+    "KR": "대한민국",
+    "KP": "조선 민주주의 인민공화국",
+    "KW": "쿠웨이트",
+    "KG": "키르기스스탄",
+    "LA": "라오 인민 민주공화국",
+    "LV": "라트비아",
+    "LB": "레바논",
+    "LS": "레소토",
+    "LR": "리베리아",
+    "LY": "리비아",
+    "LI": "리히텐슈타인",
+    "LT": "리투아니아",
+    "LU": "룩셈부르크",
+    "MO": "마카오",
+    "MK": "마세도니아",
+    "MG": "마다가스카르",
+    "MW": "말라위",
+    "MY": "말레이시아",
+    "MV": "몰디브",
+    "ML": "말리",
+    "MT": "몰타",
+    "MH": "마셜 제도",
+    "MQ": "마르티니크",
+    "MR": "모리타니아",
+    "MU": "모리셔스",
+    "YT": "마요트",
+    "MX": "멕시코",
+    "FM": "미크로네시아 연방공화국",
+    "MD": "몰도바 공화국",
+    "MC": "모나코",
+    "MN": "몽골",
+    "ME": "몬테네그로",
+    "MS": "몬트세라트",
+    "MA": "모로코",
+    "MZ": "모잠비크",
+    "MM": "미얀마",
+    "NA": "나미비아",
+    "NR": "나우루",
+    "NP": "네팔",
+    "NL": "네덜란드",
+    "NC": "뉴칼레도니아",
+    "NZ": "뉴질랜드",
+    "NI": "니카라과",
+    "NE": "니제르",
+    "NG": "나이지리아",
+    "NU": "니우에",
+    "NF": "노퍽 제도",
+    "MP": "북마리아나 제도",
+    "NO": "노르웨이",
+    "OM": "오만",
+    "PK": "파키스탄",
+    "PW": "팔라우",
+    "PS": "팔레스타인",
+    "PA": "파나마",
+    "PG": "파푸아뉴기니",
+    "PY": "파라과이",
+    "PE": "페루",
+    "PH": "필리핀",
+    "PN": "핏케언",
+    "PL": "폴란드",
+    "PT": "포르투갈",
+    "PR": "푸에르토리코",
+    "QA": "카타르",
+    "RO": "루마니아",
+    "RU": "러시아",
+    "RW": "르완다",
+    "RE": "레위니옹",
+    "BL": "생바르텔레미",
+    "SH": "세인트헬레나 어센션 트리스탄다쿠냐",
+    "KN": "세인트키츠네비스 ",
+    "LC": "세인트루시아",
+    "MF": "세인트마틴",
+    "PM": "생피에르 미클롱",
+    "VC": "세인트빈센트　그레나딘　제도",
+    "WS": "사모아",
+    "SM": "산마리노 ",
+    "ST": "상투메 프린시페",
+    "SA": "사우디아라비아",
+    "SN": "세네갈",
+    "RS": "세르비아",
+    "SC": "세이셸",
+    "SL": "시에라리온",
+    "SG": "싱가포르",
+    "SX": "신트마르텐",
+    "SK": "슬로바키아",
+    "SI": "슬로베니아",
+    "SB": "솔로몬 제도",
+    "SO": "소말리아",
+    "ZA": "남아프리카 ",
+    "GS": "사우스조지아 사우스샌드위치 제도",
+    "SS": "남수단",
+    "ES": "스페인",
+    "LK": "스리랑카",
+    "SD": "수단",
+    "SR": "수리남",
+    "SJ": "스발바르 얀마옌 제도",
+    "SE": "스웨덴",
+    "CH": "스위스",
+    "SY": "시리아 아랍공화국",
+    "TW": "대만",
+    "TJ": "타지키스탄",
+    "TZ": "탄자니아 연방공화국",
+    "TH": "태국",
+    "TL": "동티모르",
+    "TG": "토고",
+    "TK": "토켈라우",
+    "TO": "통가",
+    "TT": "트리니다드 토바고",
+    "TN": "튀니지",
+    "TR": "터키",
+    "TM": "투르크메니스탄",
+    "TC": "터크스카이코스 제도",
+    "TV": "투발루",
+    "UG": "우간다",
+    "UA": "우크라이나",
+    "AE": "아랍에미리트 연방",
+    "GB": "영국",
+    "UM": "미국령　군소　제도",
+    "US": "미국",
+    "UY": "우루과이",
+    "UZ": "우즈베키스탄",
+    "VU": "바누아투",
+    "VE": "베네수엘라",
+    "VN": "베트남",
+    "VG": "영국령 버진 아일랜드",
+    "VI": "버진 제도, U.S",
+    "WF": "월리스푸투나 제도",
+    "EH": "서사하라",
+    "YE": "예멘",
+    "ZM": "잠비아",
+    "ZW": "짐바브웨",
+    "AX": "올란드 제도"
+  }
+}
