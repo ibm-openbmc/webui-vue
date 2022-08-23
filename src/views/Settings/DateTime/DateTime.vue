@@ -161,9 +161,15 @@
                   <b-form-input
                     id="input-ntp-2"
                     v-model="form.ntp.secondAddress"
+                    :state="getValidationState($v.form.ntp.secondAddress)"
                     :disabled="manualOptionSelected"
                     data-test-id="dateTime-input-ntpServer2"
                   />
+                  <b-form-invalid-feedback role="alert">
+                    <div v-if="!$v.form.ntp.secondAddress.isSameAsFirstAddress">
+                      {{ $t('pageDateTime.form.validators.serverExists') }}
+                    </div>
+                  </b-form-invalid-feedback>
                 </b-input-group>
               </b-form-group>
             </b-col>
@@ -176,9 +182,20 @@
                   <b-form-input
                     id="input-ntp-3"
                     v-model="form.ntp.thirdAddress"
+                    :state="getValidationState($v.form.ntp.thirdAddress)"
                     :disabled="manualOptionSelected"
                     data-test-id="dateTime-input-ntpServer3"
                   />
+                  <b-form-invalid-feedback role="alert">
+                    <div
+                      v-if="
+                        !$v.form.ntp.thirdAddress.isSameAsFirstAddress ||
+                        !$v.form.ntp.thirdAddress.isSameAsSecondAddress
+                      "
+                    >
+                      {{ $t('pageDateTime.form.validators.serverExists') }}
+                    </div>
+                  </b-form-invalid-feedback>
                 </b-input-group>
               </b-form-group>
             </b-col>
@@ -208,7 +225,7 @@ import LocalTimezoneLabelMixin from '@/components/Mixins/LocalTimezoneLabelMixin
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
 
 import { mapState } from 'vuex';
-import { requiredIf, helpers } from 'vuelidate/lib/validators';
+import { requiredIf, helpers, sameAs, not } from 'vuelidate/lib/validators';
 
 const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -262,6 +279,13 @@ export default {
             required: requiredIf(function () {
               return this.form.configurationSelected === 'ntp';
             }),
+          },
+          secondAddress: {
+            isSameAsFirstAddress: not(sameAs('firstAddress')),
+          },
+          thirdAddress: {
+            isSameAsFirstAddress: not(sameAs('firstAddress')),
+            isSameAsSecondAddress: not(sameAs('secondAddress')),
           },
         },
       },

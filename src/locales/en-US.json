@@ -331,6 +331,9 @@
         "server1": "Server 1",
         "server2": "Server 2",
         "server3": "Server 3"
+      },
+      "validators": {
+        "serverExists": "Server address already exists"
       }
     },
     "toast": {
