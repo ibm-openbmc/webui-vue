@@ -74,11 +74,12 @@ import Alert from '@/components/Global/Alert';
 import PageSection from '@/components/Global/PageSection';
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 
 export default {
   name: 'CapacityOnDemandAcvitation',
   components: { Alert, PageSection },
-  mixins: [VuelidateMixin, BVToastMixin],
+  mixins: [VuelidateMixin, BVToastMixin, LoadingBarMixin],
   data() {
     return {
       licenseKey: '',
@@ -122,10 +123,12 @@ export default {
     submitForm() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        this.startLoader();
         this.$store
           .dispatch('licenses/activateLicense', this.licenseKey)
           .then((success) => this.successToast(success))
-          .catch(({ message }) => this.errorToast(message));
+          .catch(({ message }) => this.errorToast(message))
+          .finally(() => this.endLoader());
       }
     },
   },
