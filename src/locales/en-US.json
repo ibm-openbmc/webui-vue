@@ -1282,6 +1282,7 @@
       "currentOperatingMode": "Current operating mode %{currOptMode}",
       "defaultPartition": "Default partition environment",
       "ibmIPartition": "IBM i partition boot mode",
+      "nonHMCManaged": "Enabled only when the system is non HMC-managed",
       "powPolicySection": "will be set to %{powerPolicy}",
       "pvm_default_os_type": "Default partition environment",
       "pvm_os_boot_type": "IBM i partition boot mode",
