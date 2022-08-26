@@ -58,13 +58,16 @@ const AuthenticationStore = {
         .then(() => router.replace('/login'))
         .catch((error) => console.log(error));
     },
-    async checkPasswordChangeRequired(_, username) {
+    async checkPasswordChangeRequired({ commit }, username) {
       return api
         .get(`/redfish/v1/AccountService/Accounts/${username}`)
         .then(({ data: { PasswordChangeRequired } }) => {
           return PasswordChangeRequired;
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          commit('authError');
+          console.log(error);
+        });
     },
     async dateAndTime({ commit }) {
       return api
