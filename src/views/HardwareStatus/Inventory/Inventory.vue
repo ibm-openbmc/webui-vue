@@ -111,6 +111,13 @@
                   :chassis="chassis[currentTab].uri"
                 />
 
+                <!-- Fabric Adapters -->
+                <table-fabric-adapters
+                  v-if="currentTab === 0"
+                  ref="fabricAdapters"
+                  :chassis="chassis[currentTab].uri"
+                />
+
                 <!-- Mex Chassis -->
                 <!-- Fans table -->
                 <table-fans
@@ -139,6 +146,13 @@
                   ref="pcieSlots"
                   :chassis="chassis[currentTab].uri"
                 />
+
+                <!-- Fabric Adapters -->
+                <table-fabric-adapters
+                  v-if="currentTab > 0"
+                  ref="fabricAdapters"
+                  :chassis="chassis[currentTab].uri"
+                />
               </b-container>
             </b-tab>
           </b-tabs>
@@ -158,6 +172,7 @@ import TableBmcManager from './InventoryTableBmcManager';
 import TableChassis from './InventoryTableChassis';
 import TableProcessors from './InventoryTableProcessors';
 import TableAssembly from './InventoryTableAssembly';
+import TableFabricAdapters from './InventoryFabricAdapters';
 import TablePcieSlots from './InventoryTablePcieSlots';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import PageSection from '@/components/Global/PageSection';
@@ -179,6 +194,7 @@ export default {
     TableProcessors,
     TableAssembly,
     TablePcieSlots,
+    TableFabricAdapters,
     PageSection,
     JumpLink: JumpLink16,
   },
@@ -241,6 +257,12 @@ export default {
           href: '#pcieSlots',
           linkText: this.$t('pageInventory.pcieSlots'),
         },
+        {
+          id: 'fabricAdapters',
+          dataRef: 'fabricAdapters',
+          href: '#fabricAdapters',
+          linkText: this.$t('pageInventory.fabricAdapters'),
+        },
       ],
       mexLinks: [
         {
@@ -266,6 +288,12 @@ export default {
           dataRef: 'pcieSlots',
           href: '#pcieSlots',
           linkText: this.$t('pageInventory.pcieSlots'),
+        },
+        {
+          id: 'fabricAdapters',
+          dataRef: 'fabricAdapters',
+          href: '#fabricAdapters',
+          linkText: this.$t('pageInventory.fabricAdapters'),
         },
       ],
     };
@@ -318,6 +346,11 @@ export default {
     const pcieSlotsTablePromise = new Promise((resolve) => {
       this.$root.$on('hardware-status-pcie-slots-complete', () => resolve());
     });
+    const fabricAdaptersTablePromise = new Promise((resolve) => {
+      this.$root.$on('hardware-status-fabric-adapters-complete', () =>
+        resolve()
+      );
+    });
     // Combine all child component Promises to indicate
     // when page data load complete
     Promise.all([
@@ -331,6 +364,7 @@ export default {
       systemTablePromise,
       assemblyTablePromise,
       pcieSlotsTablePromise,
+      fabricAdaptersTablePromise,
     ]).finally(() => this.endLoader());
   },
   methods: {

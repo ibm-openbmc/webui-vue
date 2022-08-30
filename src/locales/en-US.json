@@ -674,6 +674,7 @@
     "bmcManager": "BMC manager",
     "chassis": "Chassis",
     "dimmSlot": "DIMM slot",
+    "fabricAdapters": "Fabric Adapters",
     "fans": "Fans",
     "identifyLedInfo": "For parts with no LEDs, the Identify LED toggle switch will only turn on the Enclosure LED",
     "pcieSlots": "PCIe slots",
