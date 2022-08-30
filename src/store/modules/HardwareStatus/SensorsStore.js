@@ -37,25 +37,26 @@ const SensorsStore = {
         .then((response) => response.data.Members)
         .catch((error) => console.log(error));
       if (!sensors) return;
+      let sensorData = [];
       const promises = sensors.map((sensor) => {
-        return api.get(sensor['@odata.id']).catch((error) => {
-          console.log(error);
-          return error;
-        });
-      });
-      return await api.all(promises).then(
-        api.spread((...responses) => {
-          const sensorData = responses.map(({ data }) => {
-            return {
+        return api
+          .get(sensor['@odata.id'])
+          .then(({ data }) => {
+            const oneSensordata = {
               name: data.Name,
               status: data.Status.Health,
               currentValue: data.Reading,
               units: data.ReadingUnits,
             };
+            sensorData.push(oneSensordata);
+            commit('setSensors', sensorData);
+          })
+          .catch((error) => {
+            console.log(error);
+            return error;
           });
-          commit('setSensors', sensorData);
-        })
-      );
+      });
+      return await api.all(promises);
     },
     async getThermalSensors({ commit }, id) {
       return await api
