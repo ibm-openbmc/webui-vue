@@ -519,7 +519,7 @@
       "id": "ID",
       "modifiedDate": "Modified Date",
       "name": "Name",
-      "resolution": "Resolution",
+      "resolution": "Resolution (callout)",
       "searchLogs": "Search logs",
       "severity": "Severity",
       "status": "Status",
