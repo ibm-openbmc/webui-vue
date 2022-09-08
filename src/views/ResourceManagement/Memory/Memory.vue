@@ -326,9 +326,6 @@ export default {
     serverStatus() {
       return this.$store.getters['global/serverStatus'];
     },
-    hmcManaged() {
-      return this.$store.getters['resourceMemory/hmcManaged'];
-    },
   },
   watch: {
     logicalMemorySize: function (value) {
@@ -368,11 +365,8 @@ export default {
     isServerOff() {
       return this.serverStatus === 'off' ? true : false;
     },
-    isHmcManaged() {
-      return this.hmcManaged === 'Enabled' ? true : false;
-    },
     isSectionEditable() {
-      return this.isServerOff() && !this.isHmcManaged();
+      return this.isServerOff();
     },
     handleSubmit() {
       this.startLoader();
