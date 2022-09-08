@@ -276,6 +276,7 @@ const AppNavigationMixin = {
     },
     navigationItems() {
       return this.navigationData.map((section) => {
+        let restrictedPages = [];
         section.children?.map((page) => {
           if (page.restrictTo.length > 0) {
             const isPageNeeded =
@@ -283,10 +284,15 @@ const AppNavigationMixin = {
                 (requiredRole) =>
                   requiredRole === this.roleId || requiredRole === this.model
               ).length > 0;
-            if (!isPageNeeded)
-              return section.children.splice(section.children.indexOf(page), 1);
+            if (!isPageNeeded) restrictedPages.push(page);
           }
         });
+        if (section?.children && section?.children.length > 0) {
+          let finalSection = section?.children.filter(
+            (item) => !restrictedPages.includes(item)
+          );
+          section.children = finalSection;
+        }
         return section;
       });
     },
