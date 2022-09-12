@@ -50,9 +50,9 @@
         {{ value }}
       </template>
       <!-- Status -->
-      <template #cell(state)="row">
+      <template #cell(status)="row">
         {{
-          row.item.statusState === 'Absent'
+          row.item.status === 'Absent'
             ? $t('global.status.absent')
             : $t('global.status.present')
         }}
@@ -143,12 +143,14 @@ export default {
           key: 'health',
           label: this.$t('pageInventory.table.health'),
           formatter: this.dataFormatter,
+          sortable: true,
           tdClass: 'text-nowrap',
         },
         {
-          key: 'state',
+          key: 'status',
           label: this.$t('pageUserManagement.table.status'),
           formatter: this.dataFormatter,
+          sortable: true,
           tdClass: 'text-nowrap',
         },
         {

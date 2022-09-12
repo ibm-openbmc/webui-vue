@@ -35,7 +35,7 @@ const PowerSupplyStore = {
           model: Model,
           name: Name,
           sparePartNumber: SparePartNumber,
-          statusState: Status.State,
+          status: Status.State,
           uri: powerSupply['@odata.id'],
         };
       });

@@ -31,7 +31,7 @@ const MemoryStore = {
           enabled: Enabled,
           partNumber: PartNumber,
           serialNumber: SerialNumber,
-          statusState: Status.State,
+          status: Status.State,
           sparePartNumber: SparePartNumber,
           model: Model,
           identifyLed: LocationIndicatorActive,

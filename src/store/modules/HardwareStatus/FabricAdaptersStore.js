@@ -30,7 +30,7 @@ const FabricAdaptersStore = {
           partNumber: PartNumber,
           serialNumber: SerialNumber,
           sparePartNumber: SparePartNumber,
-          state: Status?.State,
+          status: Status?.State,
           uri: adapter['@odata.id'],
         };
       });
