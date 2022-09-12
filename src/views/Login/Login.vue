@@ -191,6 +191,9 @@ export default {
   },
   created() {
     this.startLoader();
+    if (this.getLang() == 'zh-CN' || this.getLang() == 'zh-TW') {
+      i18n.locale = this.getLang();
+    }
     this.$store.dispatch('authentication/dateAndTime').finally(() => {
       this.endLoader();
       this.isBusy = false;
@@ -256,6 +259,10 @@ export default {
         })
         .then((success) => this.successToast(success))
         .catch(({ message }) => this.errorToast(message));
+    },
+    getLang() {
+      if (navigator.languages !== undefined) return navigator.languages[0];
+      return navigator.language;
     },
   },
 };
