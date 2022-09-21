@@ -63,7 +63,8 @@
       "message3": "3. Not contain the account username",
       "message4": "4. Not contain a dictionary word",
       "message5": "5. Not contain sequential characters",
-      "message6": "6. Must be 20 characters or less if used for IPMI"
+      "message6": "6. Must be 20 characters or less if used for IPMI",
+      "message7": "7. Must contain any two from lowercase letters, uppercase letters, digits and other characters"
     },
     "status": {
       "absent": "Absent",
