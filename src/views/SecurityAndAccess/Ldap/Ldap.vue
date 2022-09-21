@@ -375,10 +375,11 @@ export default {
       const serverUri = serviceAddress
         ? serviceAddress.replace(/ldaps?:\/\//, '')
         : '';
-      this.form.secureLdapEnabled =
-        !this.caCertificateExpiration || !this.ldapCertificateExpiration
-          ? false
-          : secureLdap;
+      this.form.secureLdapEnabled = !this.form.ldapAuthenticationEnabled
+        ? false
+        : !this.caCertificateExpiration || !this.ldapCertificateExpiration
+        ? false
+        : secureLdap;
       this.form.serverUri = serverUri;
       this.form.bindDn = bindDn;
       this.form.bindPassword = '';
