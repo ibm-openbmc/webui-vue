@@ -1,5 +1,4 @@
 import api from '@/store/api';
-import { uniqBy } from 'lodash';
 
 const SensorsStore = {
   namespaced: true,
@@ -10,9 +9,7 @@ const SensorsStore = {
     sensors: (state) => state.sensors,
   },
   mutations: {
-    setSensors: (state, sensors) => {
-      state.sensors = uniqBy([...state.sensors, ...sensors], 'name');
-    },
+    setSensors: (state, sensors) => (state.sensors = sensors),
   },
   actions: {
     async getChassisCollection() {
@@ -24,7 +21,8 @@ const SensorsStore = {
         )
         .catch((error) => console.log(error));
     },
-    async getAllSensors({ dispatch }) {
+    async getAllSensors({ commit, dispatch }) {
+      commit('setSensors', []);
       const collection = await dispatch('getChassisCollection');
       if (!collection) return;
       return await api
