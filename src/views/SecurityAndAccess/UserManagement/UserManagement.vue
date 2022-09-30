@@ -216,6 +216,9 @@ export default {
         return user;
       });
     },
+    currentUser() {
+      return this.$store.getters['global/currentUser'];
+    },
     tableItems() {
       // transform user data to table data
       return this.allUsers.map((user) => {
@@ -247,7 +250,16 @@ export default {
       return this.$store.getters['userManagement/accountSettings'];
     },
     passwordRequirements() {
-      return this.$store.getters['userManagement/accountPasswordRequirements'];
+      if (this.currentUser?.AccountTypes?.includes('IPMI')) {
+        return {
+          minLength: 8,
+          maxLength: 20,
+        };
+      } else {
+        return this.$store.getters[
+          'userManagement/accountPasswordRequirements'
+        ];
+      }
     },
   },
   created() {
