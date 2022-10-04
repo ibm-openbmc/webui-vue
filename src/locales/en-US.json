@@ -1098,6 +1098,8 @@
     "usbFirmwareUpdatePolicyDescription": "Enabling the USB Firmware Update Policy will enable the functionality to allow firmware updates through a USB key.",
     "toast": {
       "errorNetworkPolicyUpdate": "Error updating %{policy}.",
+      "successDisableBmcShell": "Successfully disabled BMC shell (via SSH), Please allow 15 seconds for the disable to become effective.",
+      "successEnableBmcShell": "Successfully enabled BMC shell (via SSH)",
       "successNetworkPolicyUpdate": "Successfully updated %{policy}.",
       "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
     },

@@ -177,9 +177,11 @@ const PoliciesStore = {
       return await api
         .patch('/redfish/v1/Managers/bmc/NetworkProtocol', ssh)
         .then(() => {
-          return i18n.t('pagePolicies.toast.successNetworkPolicyUpdate', {
-            policy: i18n.t('pagePolicies.ssh'),
-          });
+          if (protocolEnabled) {
+            return i18n.t('pagePolicies.toast.successEnableBmcShell');
+          } else {
+            return i18n.t('pagePolicies.toast.successDisableBmcShell');
+          }
         })
         .catch((error) => {
           console.log(error);
