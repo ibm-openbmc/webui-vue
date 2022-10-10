@@ -106,7 +106,13 @@
               <dl>
                 <!-- Enabled-->
                 <dt>{{ $t('pageInventory.table.enabled') }}</dt>
-                <dd>{{ dataFormatter(item.enabled) }}</dd>
+                <dd>
+                  {{
+                    item.enabled
+                      ? $t('pageInventory.true')
+                      : $t('pageInventory.false')
+                  }}
+                </dd>
               </dl>
             </b-col>
           </b-row>

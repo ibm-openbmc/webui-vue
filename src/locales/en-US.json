@@ -691,6 +691,7 @@
     "chassis": "Chassis",
     "dimmSlot": "DIMM slot",
     "fabricAdapters": "Fabric Adapters",
+    "false": "False",
     "fans": "Fans",
     "identifyLedInfo": "For parts with no LEDs, the Identify LED toggle switch will only turn on the Enclosure LED",
     "pcieSlots": "PCIe slots",
@@ -700,6 +701,7 @@
     "processors": "Processors",
     "quicklinkTitle": "Quick links to hardware components",
     "system": "System",
+    "true": "True",
     "enclosures": {
       "title": "I/O enclosures",
       "traceLabel": "Collect I/O enclosure trace",
