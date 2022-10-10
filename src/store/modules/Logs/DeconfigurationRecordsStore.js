@@ -80,14 +80,7 @@ const DeconfigurationRecordsStore = {
                 srcDetails: AdditionalData?.EventId,
                 status: AdditionalData?.Resolved, //true or false
                 uri: log['@odata.id'],
-                severity:
-                  Severity === 'Critical'
-                    ? 'Fatal'
-                    : Severity === 'Warning'
-                    ? 'Predictive'
-                    : Severity === 'OK'
-                    ? 'Manual'
-                    : '--',
+                severity: Severity,
                 location: LocationCode,
                 pelID: pelId,
               };

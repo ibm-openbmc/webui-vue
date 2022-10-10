@@ -142,6 +142,17 @@
             <p class="mb-0">{{ value | formatDate }}</p>
             <p class="mb-0">{{ value | formatTime }}</p>
           </template>
+          <template #cell(severity)="{ value }">
+            {{
+              value === 'Critical'
+                ? $t('pageDeconfigurationRecords.severityValues.fatal')
+                : value === 'Warning'
+                ? $t('pageDeconfigurationRecords.severityValues.predictive')
+                : value === 'OK'
+                ? $t('pageDeconfigurationRecords.severityValues.manual')
+                : '--'
+            }}
+          </template>
           <!-- Status column -->
           <template #cell(status)="row">
             <span v-if="row.item.status">

@@ -434,6 +434,11 @@
       "status": "Status",
       "type": "Deconfiguration type"
     },
+    "severityValues": {
+      "fatal": "Fatal",
+      "predictive": "Predictive",
+      "manual": "Manual"
+    },
     "toast": {
       "errorDelete": "Error deleting %{count} record. | Error deleting %{count} records.",
       "errorResolveEntries": "Error resolving %{count} record. | Error resolving %{count} records.",
