@@ -1508,7 +1508,9 @@
       "zeroLoginAttempts": "If `0`, then account shall never be locked."
     },
     "table": {
+      "administrator": "Administrator",
       "privilege": "Privilege",
+      "readOnly": "Read only",
       "status": "Status",
       "username": "Username"
     },

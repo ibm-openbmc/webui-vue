@@ -70,9 +70,20 @@ export default {
         },
       ],
       fields: [
-        { key: 'description', label: 'Privilege' },
-        { key: 'administrator', label: 'Administrator', class: 'text-center' },
-        { key: 'readonly', label: 'ReadOnly', class: 'text-center' },
+        {
+          key: 'description',
+          label: this.$t('pageUserManagement.table.privilege'),
+        },
+        {
+          key: 'administrator',
+          label: this.$t('pageUserManagement.table.administrator'),
+          class: 'text-center',
+        },
+        {
+          key: 'readonly',
+          label: this.$t('pageUserManagement.table.readOnly'),
+          class: 'text-center',
+        },
       ],
     };
   },
