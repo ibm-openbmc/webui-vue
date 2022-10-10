@@ -22,7 +22,12 @@
       <b-col sm="6" lg="6">
         <dl>
           <dt>{{ $t('pageOverview.operatingMode') }}</dt>
-          <dd>{{ dataFormatter(operatingMode) }}</dd>
+          <dd v-if="operatingMode === 'Manual'">
+            {{ $t('pageOverview.manual') }}
+          </dd>
+          <dd v-else-if="operatingMode === 'Normal'">
+            {{ $t('pageOverview.normal') }}
+          </dd>
           <dt>{{ $t('pageOverview.serviceLogin') }}</dt>
           <dd>
             <status-icon :status="serviceLoginStatusIcon" />
