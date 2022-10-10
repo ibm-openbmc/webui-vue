@@ -1192,7 +1192,9 @@
     "tableRoles": {
       "descMaximumPerformance": "Processor frequency will vary. This mode allows the system to reach the maximum frequency by taking advantage of the thermal and power headroom provided by idle cores, lower workloads, and favorable environmental conditions.",
       "descPowerSaving": "Processor frequency is set to a fixed minimum value, reducing the power consumption of the system while still delivering predictable performance.",
-      "descStatic": "Processor frequency is set to a fixed value that can run normal workloads under normal environmental conditions."
+      "descStatic": "Processor frequency is set to a fixed value that can run normal workloads under normal environmental conditions.",
+      "description": "Description",
+      "setting": "Setting"
     },
     "utilizationPercentValidation": {
       "enterUtilization": "Value cannot be greater than threshold to exit.",
