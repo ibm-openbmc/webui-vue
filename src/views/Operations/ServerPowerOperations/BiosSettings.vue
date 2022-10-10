@@ -80,16 +80,14 @@
                     <p>
                       {{
                         $t(
-                          `pageServerPowerOperations.biosSettings.currentOperatingMode`,
-                          { currOptMode: currentOperatingMode }
+                          'pageServerPowerOperations.biosSettings.currentOperatingModeNormal'
                         )
                       }}
                     </p>
                     <p>
                       {{
                         $t(
-                          `pageServerPowerOperations.biosSettings.selectedOperatingMode`,
-                          { selectedOptMode: selectedOperatingMode }
+                          'pageServerPowerOperations.biosSettings.selectedOperatingModeManual'
                         )
                       }}
                     </p>
@@ -142,7 +140,15 @@
                     :value="values.value"
                     :aria-describedby="values.value"
                   >
-                    {{ values.value }}
+                    <template v-if="values.value === 'Power Off'">{{
+                      $t('pageServerPowerOperations.biosSettings.powerOff')
+                    }}</template>
+                    <template v-if="values.value === 'Stay On'">{{
+                      $t('pageServerPowerOperations.biosSettings.stayOn')
+                    }}</template>
+                    <template v-if="values.value === 'Automatic'">{{
+                      $t('pageServerPowerOperations.biosSettings.automatic')
+                    }}</template>
                   </b-form-radio>
                   <b-form-text
                     v-if="values.value === 'Power Off'"
