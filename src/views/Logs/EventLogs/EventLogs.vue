@@ -175,7 +175,13 @@
           <!-- Severity column -->
           <template #cell(severity)="{ value }">
             <status-icon v-if="value" :status="statusIcon(value)" />
-            {{ value }}
+            {{
+              value === 'OK'
+                ? $t('pageEventLogs.table.severityValues.ok')
+                : value === 'Critical'
+                ? $t('pageEventLogs.table.severityValues.critical')
+                : $t('pageEventLogs.table.severityValues.warning')
+            }}
           </template>
           <!-- Date column -->
           <template #cell(date)="{ value }">

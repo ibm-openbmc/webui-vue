@@ -528,6 +528,11 @@
       "resolution": "Resolution",
       "searchLogs": "Search logs",
       "severity": "Severity",
+      "severityValues": {
+        "critical": "Critical",
+        "ok": "OK",
+        "warning": "Warning"
+      },
       "status": "Status",
       "type": "Type",
       "eventId": "Event ID"
