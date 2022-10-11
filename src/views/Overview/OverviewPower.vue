@@ -30,8 +30,14 @@
             <status-icon status="danger" />
             {{ $t('pageOverview.safeMode') }}
           </dd>
-          <dd v-else>
-            {{ dataFormatter(powerPerformanceMode) }}
+          <dd v-else-if="powerPerformanceMode === 'Static'">
+            {{ $t('pageOverview.powerPerformanceModes.static') }}
+          </dd>
+          <dd v-else-if="powerPerformanceMode === 'MaximumPerformance'">
+            {{ $t('pageOverview.powerPerformanceModes.maximumPerformance') }}
+          </dd>
+          <dd v-else-if="powerPerformanceMode === 'PowerSaving'">
+            {{ $t('pageOverview.powerPerformanceModes.powerSaving') }}
           </dd>
         </dl>
       </b-col>
