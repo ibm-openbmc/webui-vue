@@ -1308,6 +1308,7 @@
     "biosSettings": {
       "aixLinux": "AIX/LINUX partition boot mode",
       "automatic": "Automatic",
+      "currentOperatingModeManual": "Current operating mode Manual",
       "currentOperatingModeNormal": "Current operating mode Normal",
       "defaultPartition": "Default partition environment",
       "ibmIPartition": "IBM i partition boot mode",
@@ -1381,6 +1382,12 @@
 }
 },
       "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "Default"
+        },
         "pvm_os_boot_type": {
           "A_Mode": "A (Boot from disk using copy A)",
           "B_Mode": "B (Boot from disk using copy B)",

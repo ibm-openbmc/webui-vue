@@ -100,7 +100,12 @@
                       $t(
                         `pageServerPowerOperations.biosSettings.powPolicySection`,
                         {
-                          powerPolicy: powerPolicy,
+                          powerPolicy:
+                            powerPolicy === 'AlwaysOff'
+                              ? $t(`pagePowerRestorePolicy.policies.AlwaysOff`)
+                              : powerPolicy === 'AlwaysOn'
+                              ? $t(`pagePowerRestorePolicy.policies.AlwaysOn`)
+                              : $t(`pagePowerRestorePolicy.policies.LastState`),
                         }
                       )
                     }}
@@ -111,7 +116,7 @@
                     <p>
                       {{
                         $t(
-                          `pageServerPowerOperations.biosSettings.currentOperatingMode`,
+                          `pageServerPowerOperations.biosSettings.currentOperatingModeManual`,
                           { currOptMode: currentOperatingMode }
                         )
                       }}
@@ -125,7 +130,12 @@
                       $t(
                         'pageServerPowerOperations.biosSettings.powPolicySection',
                         {
-                          powerPolicy: powerPolicy,
+                          powerPolicy:
+                            powerPolicy === 'AlwaysOff'
+                              ? $t(`pagePowerRestorePolicy.policies.AlwaysOff`)
+                              : powerPolicy === 'AlwaysOn'
+                              ? $t(`pagePowerRestorePolicy.policies.AlwaysOn`)
+                              : $t(`pagePowerRestorePolicy.policies.LastState`),
                         }
                       )
                     }}

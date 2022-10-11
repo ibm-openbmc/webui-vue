@@ -122,6 +122,7 @@ const BootSettingsStore = {
                         value: item.ValueName,
                         text:
                           [
+                            'pvm_default_os_type',
                             'pvm_os_boot_type',
                             'pvm_rpa_boot_mode',
                             'pvm_stop_at_standby',
