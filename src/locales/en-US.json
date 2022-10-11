@@ -75,6 +75,7 @@
       "enabled": "Enabled",
       "error": "Error",
       "informational": "Informational",
+      "locked": "Locked",
       "nextReboot": "Changes will take effect on next boot.",
       "notAvailable": "Not available",
       "off": "Off",
@@ -1518,10 +1519,13 @@
       "username": "Username"
     },
     "tableRoles": {
+      "administrator": "Administrator",
       "configureComponentsManagedByThisService": "Configure components managed by this service",
       "configureManagerResources": "Configure manager resources",
       "configureUsersAndTheirAccounts": "Configure users and their accounts",
       "logInToTheServiceAndReadResources": "Log in to the service and read resources",
+      "privilege": "Privilege",
+      "readOnly": "ReadOnly",
       "updatePasswordForCurrentUserAccount": "Update password for current user account"
     },
     "toast": {

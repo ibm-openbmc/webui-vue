@@ -223,10 +223,10 @@ export default {
           username: user.UserName,
           privilege: user.Description,
           status: user.Locked
-            ? 'Locked'
+            ? this.$t('global.status.locked')
             : user.Enabled
-            ? 'Enabled'
-            : 'Disabled',
+            ? this.$t('global.status.enabled')
+            : this.$t('global.status.disabled'),
           actions: [
             {
               value: 'edit',

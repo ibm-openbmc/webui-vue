@@ -72,16 +72,16 @@ export default {
       fields: [
         {
           key: 'description',
-          label: this.$t('pageUserManagement.table.privilege'),
+          label: this.$t('pageUserManagement.tableRoles.privilege'),
         },
         {
           key: 'administrator',
-          label: this.$t('pageUserManagement.table.administrator'),
+          label: this.$t('pageUserManagement.tableRoles.administrator'),
           class: 'text-center',
         },
         {
           key: 'readonly',
-          label: this.$t('pageUserManagement.table.readOnly'),
+          label: this.$t('pageUserManagement.tableRoles.readOnly'),
           class: 'text-center',
         },
       ],
