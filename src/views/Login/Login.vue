@@ -194,6 +194,7 @@ export default {
               this.$store.dispatch('global/getSystemInfo'),
             ]).then(() => {
               this.$router.push('/');
+              location.reload();
             });
           }
         })
