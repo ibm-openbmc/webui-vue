@@ -60,7 +60,9 @@
                 :label="$t('pageDateTime.form.date')"
                 label-for="input-manual-date"
               >
-                <b-form-text id="date-format-help">YYYY-MM-DD</b-form-text>
+                <b-form-text id="date-format-help">{{
+                  $t('global.calendar.dateFormat')
+                }}</b-form-text>
                 <b-input-group>
                   <b-form-input
                     id="input-manual-date"

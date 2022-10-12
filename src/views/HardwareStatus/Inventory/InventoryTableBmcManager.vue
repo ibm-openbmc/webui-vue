@@ -22,11 +22,24 @@
           <span class="sr-only">{{ expandRowLabel }}</span>
         </b-button>
       </template>
-
+      <!-- Name -->
+      <template #cell(name)="row">
+        {{
+          row.item.name === 'OpenBmc Manager'
+            ? $t('pageEventLogs.bmcManager')
+            : row.item.name
+        }}
+      </template>
       <!-- Health -->
       <template #cell(health)="{ value }">
         <status-icon :status="statusIcon(value)" />
-        {{ value }}
+        {{
+          value === 'OK'
+            ? $t('global.status.ok')
+            : value === 'Warning'
+            ? $t('global.status.warning')
+            : $t('global.status.critical')
+        }}
       </template>
       <!-- Status -->
       <template #cell(status)="row">

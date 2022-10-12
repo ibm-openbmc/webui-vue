@@ -47,7 +47,13 @@
       <!-- Health -->
       <template #cell(health)="{ value }">
         <status-icon :status="statusIcon(value)" />
-        {{ value }}
+        {{
+          value === 'OK'
+            ? $t('global.status.ok')
+            : value === 'Warning'
+            ? $t('global.status.warning')
+            : $t('global.status.critical')
+        }}
       </template>
       <!-- Status -->
       <template #cell(status)="row">

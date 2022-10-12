@@ -33,6 +33,7 @@
       "tooltip": "Tooltip"
     },
     "calendar": {
+      "dateFormat": "YYYY-MM-DD",
       "selectDate": "Select date",
       "useCursorKeysToNavigateCalendarDates": "Use cursor keys to navigate calendar dates"
     },
@@ -70,6 +71,7 @@
       "absent": "Absent",
       "copied": "Copied",
       "connected": "Connected",
+      "critical": "Critical",
       "disabled": "Disabled",
       "disconnected": "Disconnected",
       "enabled": "Enabled",
@@ -79,6 +81,7 @@
       "nextReboot": "Changes will take effect on next boot.",
       "notAvailable": "Not available",
       "off": "Off",
+      "ok": "OK",
       "on": "On",
       "present": "Present",
       "success": "Success",
@@ -559,6 +562,7 @@
   },
   "pageEventLogs": {
     "additionalDataUri": "Download additional data",
+    "bmcManager": "OpenBmc Manager",
     "resolve": "Resolve",
     "resolved": "Resolved",
     "unresolve": "Unresolve",

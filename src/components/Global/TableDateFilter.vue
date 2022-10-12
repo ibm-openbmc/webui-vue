@@ -10,7 +10,7 @@
           <b-form-input
             id="input-from-date"
             v-model="fromDate"
-            placeholder="YYYY-MM-DD"
+            :placeholder="$t('global.calendar.dateFormat')"
             :state="getValidationState($v.fromDate)"
             class="form-control-with-button mb-3 mb-md-0"
             @blur="$v.fromDate.$touch()"
@@ -56,7 +56,7 @@
           <b-form-input
             id="input-to-date"
             v-model="toDate"
-            placeholder="YYYY-MM-DD"
+            :placeholder="$t('global.calendar.dateFormat')"
             :state="getValidationState($v.toDate)"
             class="form-control-with-button"
             @blur="$v.toDate.$touch()"
