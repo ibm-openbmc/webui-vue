@@ -149,12 +149,28 @@
                   <dl>
                     <!-- Name -->
                     <dt>{{ $t('pageEventLogs.table.name') }}:</dt>
-                    <dd>{{ dataFormatter(item.name) }}</dd>
+                    <dd>
+                      {{
+                        item.name === 'System Event Log Entry'
+                          ? $t('pageEventLogs.table.systemEventLogEntry')
+                          : dataFormatter(item.name)
+                      }}
+                    </dd>
                   </dl>
                   <dl>
                     <!-- Type -->
                     <dt>{{ $t('pageEventLogs.table.type') }}:</dt>
-                    <dd>{{ dataFormatter(item.type) }}</dd>
+                    <dd>
+                      {{
+                        item.type === 'Event'
+                          ? $t('pageEventLogs.table.typeValues.event')
+                          : item.type === 'SEL'
+                          ? $t('pageEventLogs.table.typeValues.sel')
+                          : item.type === 'Oem'
+                          ? $t('pageEventLogs.table.typeValues.oem')
+                          : '--'
+                      }}
+                    </dd>
                   </dl>
                 </b-col>
                 <b-col>

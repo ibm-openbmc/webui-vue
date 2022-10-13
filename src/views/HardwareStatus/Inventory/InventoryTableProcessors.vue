@@ -82,7 +82,13 @@
               <dl>
                 <!-- Name -->
                 <dt>{{ $t('pageInventory.table.name') }}</dt>
-                <dd>{{ dataFormatter(item.name) }}</dd>
+                <dd>
+                  {{
+                    item.name === 'Processor Module'
+                      ? $t('pageInventory.processorModule')
+                      : dataFormatter(item.name)
+                  }}
+                </dd>
                 <!-- Part Number -->
                 <dt>{{ $t('pageInventory.table.partNumber') }}</dt>
                 <dd>{{ dataFormatter(item.partNumber) }}</dd>

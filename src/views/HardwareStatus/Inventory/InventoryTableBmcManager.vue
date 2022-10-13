@@ -60,7 +60,13 @@
               <dl>
                 <!-- Description -->
                 <dt>{{ $t('pageInventory.table.description') }}</dt>
-                <dd>{{ dataFormatter(item.description) }}</dd>
+                <dd>
+                  {{
+                    item.description === 'Baseboard Management Controller'
+                      ? $t('pageInventory.baseboardManagementController')
+                      : dataFormatter(item.description)
+                  }}
+                </dd>
                 <!-- Part number -->
                 <dt>{{ $t('pageInventory.table.partNumber') }}</dt>
                 <dd>{{ dataFormatter(item.partNumber) }}</dd>

@@ -577,7 +577,7 @@
       "id": "ID",
       "modifiedDate": "Modified Date",
       "name": "Name",
-      "resolution": "Resolution",
+      "resolution": "Resolution (callout)",
       "searchLogs": "Search logs",
       "severity": "Severity",
       "severityValues": {
@@ -586,7 +586,13 @@
         "warning": "Warning"
       },
       "status": "Status",
+      "systemEventLogEntry": "System Event Log Entry",
       "type": "Type",
+      "typeValues": {
+        "event": "Event",
+        "oem": "Oem",
+        "sel": "SEL"
+      },
       "eventId": "Event ID"
     },
     "toast": {
@@ -734,6 +740,7 @@
   },
   "pageInventory": {
     "assemblies": "Assemblies",
+    "baseboardManagementController": "Baseboard Management Controller",
     "bmcManager": "BMC manager",
     "chassis": "Chassis",
     "dimmSlot": "DIMM slot",
@@ -746,6 +753,7 @@
     "pcieTopologyLinkDescription": "To know more about PCIe slots, visit ",
     "powerSupplies": "Power supplies",
     "processors": "Processors",
+    "processorModule": "Processor Module",
     "quicklinkTitle": "Quick links to hardware components",
     "system": "System",
     "true": "True",
