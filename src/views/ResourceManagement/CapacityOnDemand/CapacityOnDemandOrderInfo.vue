@@ -30,7 +30,7 @@
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.systemAnchor') }}
                 <span class="font-weight-bold">
-                  {{ systemInfo.model || '--' }}
+                  {{ systemAnchor || '--' }}
                 </span>
               </p>
               <p>
@@ -224,6 +224,9 @@ export default {
     },
     systemInfo() {
       return this.$store.getters['system/systems']?.[0] || {};
+    },
+    systemAnchor() {
+      return this.licenses?.SystemAnchor?.SerialNumber;
     },
   },
 };
