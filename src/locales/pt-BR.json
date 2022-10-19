@@ -22,7 +22,6 @@
       "replace": "Substituir",
       "reset": "Reconfigurar",
       "save": "Salvar",
-      "saveSettings": "Salvar configurações",
       "selected": "Selecionado"
     },
     "ariaLabel": {
@@ -64,7 +63,8 @@
       "message3": "3. Não conter o nome do usuário da conta",
       "message4": "4. Não conter uma palavra de dicionário",
       "message5": "5. Não conter caracteres sequenciais",
-      "message6": "6. Deve ter 20 caracteres ou menos se usada para IPMI"
+      "message6": "6. Deve ter 20 caracteres ou menos se usada para IPMI",
+      "message7": "7. Deve conter quaisquer duas de letras minúsculas, letras maiúsculas, dígitos e outros caracteres"
     },
     "status": {
       "absent": "Ausente",
@@ -88,13 +88,13 @@
       "emptyMessage": "Nenhum item disponível",
       "emptySearchMessage": "Nenhum item corresponde à consulta de procura",
       "expandTableRow": "Expandir linha da tabela",
-      "fromDate": "Data inicial",
+      "fromDate": "Data de início",
       "items": "%{count} itens",
       "itemsPerPage": "Itens por página",
       "selectAll": "Selecionar todos",
       "selectedItems": "%{filterCount} de%{count} itens",
       "selectItem": "Selecionar item",
-      "toDate": "Até a data",
+      "toDate": "Data de encerramento",
       "viewAll": "Visualizar todos"
     },
     "toast": {
@@ -132,13 +132,15 @@
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
-    "lateralCastOutControl": "@:appPageTitle.lateralCastOutControl",
+    "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
     "logs": "Logs",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
     "operations": "Operações",
     "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
     "policies": "@:appPageTitle.policies",
     "postCodeLogs": "@:appPageTitle.postCodeLogs",
     "power": "@:appPageTitle.power",
@@ -165,21 +167,23 @@
     "deconfigurationHardware": "Desconfiguração de Hardware",
     "deconfigurationRecords": "Registros de desconfiguração",
     "dumps": "Dumps",
-    "eventLogs": "Logs de Eventos",
+    "eventLogs": "Logs de eventos",
     "factoryReset": "Reconfigurar para padrões de fábrica",
     "fieldCoreOverride": "Substituição no núcleo de campo",
     "firmware": "Firmware",
     "hostConsole": "Console do host",
     "inventory": "Inventário e LEDs",
-    "keyClear": "Chave limpa",
+    "keyClear": "Limpeza de chave",
     "kvm": "KVM",
-    "lateralCastOutControl": "Controle de expulsão lateral",
+    "systemParameters": "Parâmetros do sistema",
     "ldap": "LDAP",
     "login": "Login",
     "memory": "Memória",
     "network": "Rede",
+    "notices": "Avisos",
     "overview": "Visão geral",
     "pageNotFound": "Página não localizada",
+    "pcieTopology": "Topologia de hardware de PCIe",
     "policies": "Políticas",
     "postCodeLogs": "Logs de progresso",
     "postCodes": "Logs de progresso",
@@ -199,7 +203,7 @@
     "vetCapabilities": "Capacidades VET",
     "quickLinks": "Links rápidos",
     "activation": {
-      "alert": "O PHYP deve estar em espera ou em execução para ativar.",
+      "alert": "O PHYP deve estar em espera ou em execução para ser ativado.",
       "helperText": "Deve ter 34 caracteres. Para obter uma nova chave de acesso, visite ",
       "placeholder": "Inserir código de ativação",
       "sectionTitle": "Ativação",
@@ -244,7 +248,7 @@
     },
     "table": {
       "bitCapabilityStatus": "Status de recurso do bit",
-      "setting": "Configurando"
+      "setting": "Configuração"
     }
   },
   "pageCertificates": {
@@ -266,19 +270,19 @@
       "alternateName": "Nome alternativo",
       "alternateNameHelperText": "Incluir diversos nomes alternativos separados por espaço",
       "certificateFile": "Arquivo de certificado",
-      "certificateSigningRequest": "CSR (Certificate Signing Request)",
+      "certificateSigningRequest": "Solicitação de assinatura de certificado (CSR)",
       "certificateType": "Tipo de certificado",
       "challengePassword": "Senha de desafio",
       "city": "Cidade",
       "commonName": "Nome comum",
-      "companyName": "Nome da Empresa",
+      "companyName": "Nome da empresa",
       "companyUnit": "Unidade da empresa",
       "contactPerson": "Pessoa para contato",
       "country": "País/Região",
       "deleteConfirmMessage": "Tem certeza de que deseja excluir '%{certificate}'? Não é possível desfazer essa ação.",
       "duplicateAlternateName": "Nome alternativo duplicado",
       "emailAddress": "Endereço de e-mail",
-      "generateACertificateSigningRequest": "Gerar uma CSR (Certificate Signing Request)",
+      "generateACertificateSigningRequest": "Gerar uma solicitação de assinatura de certificado (CSR)",
       "keyBitLength": "Comprimento do bit de chave",
       "keyCurveId": "ID da curva de chave",
       "keyPairAlgorithm": "Algoritmo de par de chaves",
@@ -313,9 +317,10 @@
   "pageDateTime": {
     "alert": {
       "link": "Configurações de perfil",
-      "message": "Para mudar como a data e hora são exibidas (ou o deslocamento da UTC ou do navegador) em todo o aplicativo, visite "
+      "message": "Para mudar como a data e a hora são exibidas (UTC ou deslocamento do navegador) em todo o aplicativo, visite ",
+      "messageNtp": "Se o NTP for selecionado, mas um servidor NTP não for fornecido ou o servidor NTP fornecido não for alcançável, time.google.com será usado."
     },
-    "configureSettings": "Definindo configurações",
+    "configureSettings": "Definir configurações",
     "form": {
       "date": "Data",
       "manual": "Manual",
@@ -327,6 +332,9 @@
         "server1": "Servidor 1",
         "server2": "Servidor 2",
         "server3": "Servidor 3"
+      },
+      "validators": {
+        "serverExists": "O endereço do servidor já existe"
       }
     },
     "toast": {
@@ -336,10 +344,12 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "Manutenção simultânea",
+    "opPanelBase": "Manutenção do painel do operador base",
+    "opPanelLcd": "Manutenção do painel do operador LCD",
     "tod": "Manutenção da bateria em horário do dia",
     "alert": {
-      "message": "Ative isso para remover ou substituir a bateria. Uma vez concluído, recomenda-se desativar para voltar ao modo normal.",
-      "title": "Reparo simultâneo da bateria"
+      "message": "Para remover ou substituir a bateria, o painel do operador base ou o painel do operador LCD, ative o respectivo interruptor de duas posições. Uma vez concluído, recomenda-se desativar para voltar ao modo normal.",
+      "title": "Reparo simultâneo da bateria, do painel do operador base e do painel do operador LCD"
     },
     "toast": {
       "errorSaveReadyToRemove": "Erro de %{state}, pronto para remover o estado.",
@@ -353,7 +363,7 @@
     "configured": "Configurado",
     "deconfigure": "Remover configuração",
     "deconfigured": "Desconfigurado",
-    "description": "Visualizar ou modificar o estado de todos os recursos de hardware. Para visualizar detalhes sobre cada recurso desconfigurado, visite ",
+    "description": "Visualize ou modifique o estado de todos os recursos de hardware. Para visualizar detalhes sobre cada recurso desconfigurado, visite ",
     "fcoSetting": "Configuração do FCO",
     "initiateDump": "Inicializar dump",
     "link": "Registros de desconfiguração.",
@@ -368,6 +378,7 @@
       "message": "Os dimms de memória e os núcleos de processador podem ser configurados ou desconfigurados apenas quando o servidor é desligado."
     },
     "toast": {
+      "deleteReqFailed": "A solicitação de exclusão falhou porque o recurso solicitado não pode ser excluído.",
       "errorDisablingSetting": "Erro ao desativar a configuração",
       "errorEnablingSetting": "Erro ao ativar a configuração"
     },
@@ -377,6 +388,7 @@
       "id": "ID",
       "locationCode": "Código do local",
       "name": "Nome",
+      "pelId": "ID do pixel",
       "settings": "Configurações",
       "size": "Tamanho em mebibytes"
     }
@@ -413,18 +425,22 @@
       "description": "Descrição",
       "id": "ID",
       "name": "Nome",
+      "pelId": "ID do pixel",
       "reference": "Referência",
       "resource": "Recurso",
-      "severity": "Gravidade",
+      "severity": "Severidade",
       "srcDetails": "Detalhes do SRC",
-      "srcDetailsToolTip": "Detalhes do código de referência do sistema",
+      "srcDetailsToolTip": "Detalhes do código de referência do sistema. Os detalhes do SRC não estão presentes para um registro de guarda manual.",
       "status": "Status",
       "type": "Tipo de desconfiguração"
     },
     "toast": {
       "errorDelete": "Erro ao excluir %{count} registro. | Erro ao excluir %{count} registros.",
       "errorResolveEntries": "Erro ao resolver %{count} registro. | Erro ao resolver %{count} registros.",
+      "errorStartDownload": "Erro ao iniciar o download.",
       "errorUnresolveEntries": "Erro ao desfazer resolução de %{count} registro. | Erro ao desfazer resolução de %{count} registros.",
+      "successStartDownload": "Dados adicionais transferidos por download com sucesso.",
+      "successStartDownloadTitle": "Download com sucesso",
       "successDelete": "Exclusão bem-sucedida de %{count} registro. | Exclusão bem-sucedida de %{count} registros."
     }
   },
@@ -436,9 +452,9 @@
       "bmcDumpMessage": "O dump levará algum tempo para ser concluído.",
       "bmcDumpMessageHmcEnabled": "Dumps do BMC serão transferidos para o HMC e não aparecerão na tabela abaixo.",
       "refreshMessage": "Atualize o aplicativo para consultar o dump concluído na tabela.",
-      "resourceDumpHeading": "Dump de Recurso",
-      "resourceDumpMessage": "O dump de Recurso é um longo processo de execução.",
-      "resourceDumpMessage2": "Se o Dump não estiver listado na tabela Dumps e não houver logs de erros do dump de Recurso, ele foi descarregado para o sistema operacional.",
+      "resourceDumpHeading": "Dump de recurso",
+      "resourceDumpMessage": "O dump de recurso é um longo processo de execução.",
+      "resourceDumpMessage2": "Se o dump não estiver listado na tabela dumps e não houver logs de erros do dump de recurso, ele foi descarregado para o sistema operacional.",
       "systemDumpHeading": "Dump de Sistema",
       "systemDumpMessage": "O dump de Sistema é um longo processo de execução.",
       "systemDumpMessageHmcDisabled": "Os dumps do sistema serão transferidos para o sistema operacional e serão excluídos pelo sistema operacional quando o dump for excluído da memória do host.",
@@ -449,8 +465,8 @@
       "initiateDump": "Inicializar dump",
       "password": "Senha",
       "passwordTooltip": "Necessário para seletores de recursos que precisam de autorização de serviço",
-      "resourceDump": "Dump de Recurso",
-      "resourceSelector": "Seletor de Recurso",
+      "resourceDump": "Dump de recurso",
+      "resourceSelector": "Seletor de recurso",
       "resourceSelectorTooltip": "Comprimento do comando não pode exceder 80 caracteres",
       "selectDumpType": "Selecionar tipo de dump",
       "selectDumpTypeTooltip": "O dump de recurso e o dump de sistema estão disponíveis apenas quando o sistema está ligado",
@@ -469,12 +485,12 @@
       "dateAndTime": "Data e hora",
       "dumpType": "Tipo de dump",
       "id": "ID",
-      "searchDumps": "Dumps de procura",
+      "searchDumps": "Procurar dumps",
       "size": "Tamanho"
     },
     "toast": {
       "errorDeleteDump": "Erro ao excluir %{count} dump. | Erro ao excluir %{count} dumps.",
-      "errorPhypInStandby": "O dump não pode ser iniciado até que o sistema seja inicializado para pelo menos o PHYP em espera. Se for desligado, espere algum tempo para o sistema ligar antes do inicializar o dump.",
+      "errorPhypInStandby": "O dump não pode ser iniciado até que o sistema seja inicializado para pelo menos o PHYP em espera. Se for desligado, espere algum tempo para o sistema ligar antes de inicializar o dump.",
       "errorStartBmcDump": "Erro ao iniciar novo dump do BMC.",
       "errorStartDumpAnotherInProgress": "Erro ao iniciar novo %{dump}. Outro dump está em andamento.",
       "errorStartDumpResourceInStandby": "Erro ao iniciar novo %{dump}. O sistema deve ser inicializado.",
@@ -511,10 +527,10 @@
       "name": "Nome",
       "resolution": "Resolução",
       "searchLogs": "Procurar logs",
-      "severity": "Gravidade",
+      "severity": "Severidade",
       "status": "Status",
       "type": "Tipo",
-      "eventId": "ID do Evento"
+      "eventId": "ID do evento"
     },
     "toast": {
       "errorDelete": "Erro ao excluir %{count} log. | Erro ao excluir %{count} logs.",
@@ -533,7 +549,7 @@
     "form": {
       "resetBiosOptionHelperText": "Reconfigura as configurações do servidor incluindo: keystore de plataforma, partição NVRAM, configurações de partição e logs de eventos.",
       "resetBiosOptionLabel": "Reconfigurar configurações do servidor apenas",
-      "resetOptionsLabel": "Reconfigurar opções",
+      "resetOptionsLabel": "Opções de reconfiguração",
       "resetToDefaultsOptionHelperText": "Além das configurações do servidor, esta opção reconfigura as configurações do BMC, incluindo: todos os dados da conta BMC, todas as senhas modificadas, todas as políticas, configurações LDAP, endereços de rede e horário do dia.",
       "resetToDefaultsOptionLabel": "Reconfigurar as configurações do BMC e do servidor"
     },
@@ -562,16 +578,16 @@
       "resetBiosError": "Falha na reconfiguração para os padrões de fábrica de configurações do servidor.",
       "resetBiosSuccess": "Sucesso na reconfiguração para os padrões de fábrica de configurações do servidor.",
       "resetToDefaultsError": "Falha na reconfiguração para os padrões de fábrica de configurações do BMC e do servidor.",
-      "resetToDefaultsSuccess": "Sucesso na reconfiguração para os padrões de fábrica de configurações BMC e servidor."
+      "resetToDefaultsSuccess": "Sucesso na reconfiguração para os padrões de fábrica de configurações BMC e servidor. Se você não estiver logado automaticamente, atualize o navegador."
     }
   },
   "pageFieldCoreOverride": {
     "changeConfiguration": "Modificar a configuração",
-    "configuredCores": "Cores configuradas",
+    "configuredCores": "Núcleos configurados",
     "currentConfiguration": "Configuração atual",
     "enableFieldCoreOverride": "Ativar substituição do núcleo de campo",
     "enterValue": "Inserir valor",
-    "licensedCores": "Cores licenciadas",
+    "licensedCores": "Núcleos licenciados",
     "pageDescription": "Visualize ou modifique os núcleos de processador que serão configurados pelo firmware.",
     "scheduledForNextReboot": "@:global.status.nextReboot",
     "totalInstalledCores": "Total de núcleos instalados",
@@ -589,10 +605,12 @@
     "cardBodyVersion": "Versão",
     "cardTitleBackup": "Imagem de backup",
     "cardTitleRunning": "Imagem de execução",
+    "permanent": "Permanente",
     "sectionTitleBmcCards": "BMC",
     "sectionTitleBmcCardsCombined": "BMC e servidor",
     "sectionTitleHostCards": "Host",
     "sectionTitleUpdateFirmware": "Atualizar o firmware",
+    "temporary": "Temporário",
     "alert": {
       "operationInProgress": "Operação de energia do servidor em andamento.",
       "serverMustBePoweredOffTo": "O servidor deve ser desligado para:",
@@ -626,15 +644,31 @@
     },
     "toast": {
       "errorSwitchImages": "Erro ao alternar imagens de execução e de backup.",
+      "errorActivation": "Erro ao iniciar a ativação do firmware.",
       "errorUpdateFirmware": "Erro ao iniciar atualização de firmware.",
+      "errorUploadFirmware": "Erro ao fazer upload do firmware.",
       "rebootStarted": "Reinicialização iniciada",
-      "rebootStartedMessage": "Sucesso na reinicialização da imagem de backup.",
-      "updateStarted": "Atualização iniciada",
-      "updateStartedMessage": "Aguarde a notificação de atualização do firmware antes de fazer qualquer alteração mudança.",
-      "verifySwitch": "Verificar comutador",
-      "verifySwitchMessage": "Atualize o aplicativo para verificar as imagens alternadas de execução e de backup.",
-      "verifyUpdate": "Verificar atualização",
-      "verifyUpdateMessage": "Atualize o aplicativo para verificar se o firmware foi atualizado com sucesso"
+      "rebootStartedMessage": "Sucesso na reinicialização da imagem de backup. A reinicialização pode levar vários minutos para ser concluída.",
+      "taskComplete": "Tarefa concluída",
+      "taskCompleteMessage": "Tarefa concluída. Aguardando a reinicialização do BMC",
+      "updateFirmware": {
+        "step1": "Etapa 1 de 4 - Upload",
+        "step1Message": "Atualização iniciada. Upload de firmware em andamento.",
+        "step2": "Etapa 2 de 4 - Ativação",
+        "step2Message": "Upload de firmware completo. Tarefa de ativação em andamento.",
+        "step3": "Etapa 3 de 4 - Reinicializar",
+        "step3Message": "Tarefa de ativação completa. A reinicialização do BMC está em andamento.",
+        "step4": "Etapa 4 de 4 - Completo",
+        "step4Message": "Atualização de firmware bem-sucedida. Clique em atualizar para verificar o nível de firmware."
+      },
+      "switchToRunning": {
+        "step1": "Etapa 1 de 3 - Comutação de firmware",
+        "step1Message": "Processo iniciado. Mudança de firmware em andamento.",
+        "step2": "Etapa 2 de 3 - Reinicializar",
+        "step2Message": "Comutação de firmware completa. A reinicialização do BMC está em andamento.",
+        "step3": "Etapa 3 de 3 - Completo",
+        "step3Message": "Comutador de firmware bem-sucedido. Clique em atualizar para verificar as imagens de execução e backup alternadas."
+      }
     }
   },
   "pageHostConsole": {
@@ -646,7 +680,12 @@
     "bmcManager": "Gerenciador do BMC",
     "chassis": "Chassi",
     "dimmSlot": "Slot DIMM",
+    "fabricAdapters": "Adaptadores de malha",
     "fans": "Ventiladores",
+    "identifyLedInfo": "Para peças sem LEDs, o interruptor de duas posições do LED de identificação irá ligar apenas o LED de Gabinete",
+    "pcieSlots": "Slots do PCIe",
+    "pcieTopologyLink": "Topologia de hardware do PCIe.",
+    "pcieTopologyLinkDescription": "Para saber mais sobre os slots do PCIe, visite ",
     "powerSupplies": "Fontes de alimentação",
     "processors": "Processadores",
     "quicklinkTitle": "Links rápidos para componentes de hardware",
@@ -657,35 +696,6 @@
       "traceDescription": "Crie um dump de recurso (usando um seletor de recursos específico) do ",
       "DumpsLink": "página Dumps."
     },
-    "pcie": {
-      "bridgeOrHost": "do host do CAPI ou da ponte de PCIe",
-      "cable": "Cabo",
-      "cableLength": "Comprimento do cabo",
-      "cableStatus": "Status do cabo",
-      "cableType": "Tipo de cabo",
-      "degraded": "Comprometido",
-      "failed": "Com falha",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "Identificar LEDs",
-      "inactive": "Inativo",
-      "ioSlots": "Slots de E/S",
-      "linkProperties": "Propriedades do link",
-      "linkStatus": "Status do link",
-      "localPort": "Porta local",
-      "localPortLocation": "Localização da porta local",
-      "open": "Abrir",
-      "operational": "Operacional",
-      "parentId": "ID-pai",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "Porta remota",
-      "remotePortLocation": "Localização da porta remota",
-      "resetLink": "Reconfigurar link",
-      "speed": "Velocidade",
-      "title": "Topologia de hardware de PCIe",
-      "type": "Tipo",
-      "unknown": "Desconhecido",
-      "width": "Largura"
-    },
     "systemIndicator": {
       "attentionLed": "LED de atenção do sistema",
       "attentionLedToolTipInfo": "O LED de atenção do sistema só pode ser desativado",
@@ -693,7 +703,7 @@
       "lampTest": "Teste de lâmpada",
       "powerStatus": "Status de energia",
       "sectionTitle": "Indicadores do sistema",
-      "tooltipInfo": "Modifica todos os indicadores controlados pelo BMC e hypervisor para o estado ON por quatro minutos."
+      "tooltipInfo": "Modifica todos os indicadores controlados pelo BMC e hypervisor para o estado ATIVADO por quatro minutos."
     },
     "alert": {
       "enclosureAlertTitle": "Visualizando a configuração do gabinete",
@@ -717,12 +727,6 @@
         "title": "Mudar as configurações do gabinete",
         "typeModel": "@:pageInventory.table.typeModel",
         "typeModelHelperText": "O tipo de máquina do gabinete não pode ser 0000. Todos os caracteres alfanuméricos são inválidos."
-      },
-      "pcie": {
-        "confirmMessage": "Redefinir um link durante a execução das partições do sistema pode causar erros. A operação deve ser realizada com orientação de um membro da equipe de suporte.",
-        "resetLink": "Reajustar o link '%{linkId}'",
-        "subTitle": "Tem certeza?",
-        "title": "Reajustar o link '%{linkId}'"
       }
     },
     "table": {
@@ -750,7 +754,8 @@
       "processorType": "Tipo de processador",
       "remove": "Remover",
       "serialNumber": "Número de série",
-      "sparePartNumber": "Número da peça sobressalente (número FRU)",
+      "slotType": "Tipo de slot",
+      "sparePartNumber": "Número da peça sobressalente (número de FRU)",
       "totalCores": "Total de núcleos",
       "totalSystemMemoryGiB": "Memória total do sistema",
       "typeModel": "Tipo - modelo"
@@ -763,16 +768,14 @@
       "errorEnableLampTest": "Erro ao ativar o teste de lâmpada.",
       "errorEnableSystemAttentionLed": "Erro ao ativar o LED de atenção do sistema.",
       "errorEnclosureSettings": "Erro ao atualizar as configurações do gabinete.",
-      "errorPcieLinkReset": "Erro ao reconfigurar o link  '%{linkId}'.",
-      "infoPcieLinkResetMessage": "Essa operação\npode demorar um pouco para ser concluída.",
-      "infoPcieLinkResetTitle": "O ID do link '%{linkId}' está sendo reconfigurado.",
       "infoRemoveAssembly": "Atualize para confirmar se '%{assemblyName}' está pronto para ser removido.",
       "successEnclosureSettings": "Configurações do gabinete atualizadas com sucesso.",
-      "successPcieLinkReset": "A reconfiguração de '%{linkId}' foi bem-sucedida."
+      "successEnableIdentifyLed": "LED de identificação ativado com sucesso.",
+      "successDisableIdentifyLed": "LED de identificação desativado com sucesso."
     }
   },
   "pageKeyClear": {
-    "description": "Dados sensíveis limpos de forma segura no sistema",
+    "description": "Limpe com segurança os dados sensíveis no sistema",
     "alert": {
       "description": "Devido à sensibilidade dos dados que serão limpos, é necessária a verificação por meio de presença física para autorizar a operação.",
       "title": "Esta operação requer presença física e a reinicialização do sistema"
@@ -787,13 +790,13 @@
       "clearOperatingSystemKeysHelperText": "Isso indica ao OPAL para limpar as chaves Secure Boot do sistema operacional.",
       "clearSystemSecurityKeyHelperText": "Isso indica que OPAL/PEF deve limpar as chaves do representante de segurança do sistema.",
       "clearSystemSecurityKeyLabel": "Limpar a chave oficial de segurança do sistema",
-      "keyClearNotRequested": "Chave limpa não solicitada",
-      "keyClearOptionsLabel": "Opções de chave limpa",
+      "keyClearNotRequested": "Limpeza de chave não solicitada",
+      "keyClearOptionsLabel": "Opções de limpeza de chave",
       "none": "Nenhum",
       "setFactoryDefault": "Configurar o padrão de fábrica"
     },
     "modal": {
-      "clear": "Chaves limpas",
+      "clear": "Limpar chaves",
       "clearAllMessage": "Quaisquer chaves de criptografia contidas nos dados selecionados serão perdidas. O sistema não será capaz de descriptografar nenhum dado que necessite dessas chaves.",
       "clearAllTitle": "Aviso: Esta operação não é reversível"
     },
@@ -810,10 +813,9 @@
     "openNewTab": "Abrir em uma nova guia",
     "status": "Status"
   },
-  "pageLateralCastOutControl": {
-    "lateralCastOut": "Expulsão lateral",
-    "lateralCastOutControl": "Controle de expulsão lateral",
-    "lateralCastOutControlDescription": "Mude este valor somente se instruído por seu provedor de serviços, pois isso pode comprometer o desempenho do sistema.",
+  "pageSystemParameters": {
+    "aggressivePrefetch": "Pré-busca agressiva",
+    "aggressivePrefetchDescription": "Mude este valor somente se instruído por seu provedor de serviços, pois isso pode comprometer o desempenho do sistema. Especifica se a pré-busca agressiva do processador está desativada ou ativada",
     "alert": {
       "message": "O sistema tem que ser desligado. As mudanças feitas entrarão em vigor na próxima reinicialização",
       "title": "Aplicar mudanças"
@@ -821,8 +823,17 @@
     "button": {
       "saveSettings": "Salvar configurações"
     },
+    "frequencyCap": "Valor máximo de frequência",
+    "frequencyCapDescription": "Quando ativado, evita que todos os processadores no sistema excedam a frequência de operação máxima especificada, em MHz",
+    "frequencyCapHelpText": "Se desativado, poderá ser necessária uma inicialização inicial para obter as frequências máxima e mínima para ser capaz de configurar.",
+    "lateralCastOut": "Expulsão lateral",
+    "lateralCastOutDescription": "Mude este valor somente se instruído por seu provedor de serviços, pois isso pode comprometer o desempenho do sistema.",
     "toast": {
+      "errorSavingAggressivePrefetch": "Erro ao salvar a pré-busca agressiva",
+      "errorSavingFrequencyCap": "Erro ao salvar o valor máximo de frequência",
       "errorSavingLateralCastOut": "Erro ao salvar o modo de expulsão lateral",
+      "successSavingAggressivePrefetch": "Pré-busca agressiva salva com sucesso",
+      "successSavingFrequencyCap": "Valor máximo de frequência salvo com sucesso",
       "successSavingLateralCastOut": "Modo de expulsão lateral salvo com sucesso"
     }
   },
@@ -839,13 +850,13 @@
       "bindDn": "DN de ligação",
       "bindPassword": "Senha de ligação",
       "caCertificateValidUntil": "Certificado de autoridade de certificação válido até",
-      "groupIdAttribute": "Atributo do ID do grupo",
+      "groupIdAttribute": "Atributo de ID do grupo",
       "ldapAuthentication": "Autenticação LDAP",
       "ldapCertificateValidUntil": "Certificado LDAP válido até",
       "manageSslCertificates": "Gerenciar certificados SSL",
       "secureLdapHelper": "Um certificado de autoridade de certificação e um certificado LDAP são necessários para ativar o LDAP seguro",
       "secureLdapUsingSsl": "LDAP seguro usando SSL",
-      "serverUri": "URI do Servidor",
+      "serverUri": "URI do servidor",
       "serverUriTooltip": "Ativar o LDAP seguro muda o esquema de URI para LDAPS",
       "serviceType": "Tipo de serviço",
       "userIdAttribute": "Atributo de ID do usuário"
@@ -896,26 +907,26 @@
   },
   "pageMemory": {
     "activeMemoryMirroring": "Modo de espelho de memória ativa",
-    "activeMemoryMirroringDescription": "O Active Memory Mirroring for hypervisor é projetado para assegurar que a operação do sistema continue mesmo no\ncaso improvável de um erro incorrigível ocorrer na memória principal usada pelo hypervisor do sistema.",
+    "activeMemoryMirroringDescription": "O Active Memory Mirroring for Hypervisor é projetado para assegurar que a operação do sistema continue mesmo no caso improvável de um erro incorrigível ocorrer na memória principal usada pelo hypervisor do sistema.",
     "activeMemoryMirroringHelpText": "Especifica se o espelhamento de memória está ativado e requer uma reinicialização para que a mudança seja aplicada.",
     "activeMemoryMirroringTitle": "Espelhamento de memória ativa",
     "ioAdapterEnlargedCapacity": "Esta opção controla o tamanho do espaço de memória PCI alocado para cada slot PCI.",
     "ioAdapterEnlargedCapacityTitle": "Capacidade aumentada do adaptador de E/S",
-    "logicalMemorySize": "Tamanho do bloco de memória lógico",
+    "logicalMemorySize": "Tamanho do bloco de memória lógica",
     "logicalMemorySizeHeading": "O tamanho do bloco de memória lógica é usado para o particionamento. A mudança do tamanho do bloco de memória lógica afeta o gerenciamento de recursos do sistema.",
     "maxNumHugePages": "Número máximo de páginas grandes",
     "memoryBlockSize": "Tamanho do bloco de memória",
     "requestedHugePageMemory": "Memória de página muito grande solicitada",
-    "slotCountForNode0": "Contagem de slot para o nó 0",
-    "systemMemoryPageSetup": "Melhorar o desempenho do aplicativo configurando grandes tamanhos de página de memória virtual de 16GB cada.",
+    "slotCountForNode0": "Contagem de slots para o nó 0",
+    "systemMemoryPageSetup": "Melhore o desempenho do aplicativo configurando grandes tamanhos de página de memória virtual de 16GB cada.",
     "systemMemoryPageSetupTitle": "Configuração da página de memória do sistema",
     "updateIoAdapterEnlargedCapacity": "Atualizar a capacidade ampliada do adaptador de E/S",
     "updateLogicalMemoryPageSetup": "Atualizar a configuração da página de memória do sistema",
-    "updateLogicalMemorySize": "Atualizar tamanho do bloco de memória lógico",
+    "updateLogicalMemorySize": "Atualizar tamanho do bloco de memória lógica",
     "updatePageSetup": "Atualizar a configuração da página de memória do sistema",
     "alert": {
       "heading": "Aplicar mudanças",
-      "message": "O sistema tem que ser desligado. A mudanças feitas entrarão em vigor na próxima reinicialização.",
+      "message": "O sistema deve ser desligado e não gerenciado pelo HMC. A mudanças feitas entrarão em vigor na próxima reinicialização.",
       "serverMustBePoweredOffTo": "O servidor deve ser desligado para:",
       "updateActiveMemoryMirroring": "Atualizar o modo de espelho de memória ativa",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -925,11 +936,11 @@
     "toast": {
       "errorSavingActiveMemoryMirroringMode": "Erro ao atualizar o modo de espelhamento da memória ativa",
       "errorSavingAdapterEnlargedCapacity": "Erro ao atualizar a capacidade ampliada do adaptador",
-      "errorSavingLogicalMemory": "Erro ao atualizar tamanho do bloco de memória lógico ",
+      "errorSavingLogicalMemory": "Erro ao atualizar tamanho do bloco de memória lógica ",
       "errorSavingPageSetup": "Erro ao atualizar a configuração da página de memória do sistema",
       "message": "Sistema deve ser desligado para fazer alterações",
       "successSavingAdapterEnlargedCapacity": "Sucesso ao atualizar a capacidade ampliada de adaptador de E/S",
-      "successSavingLogicalMemory": "Sucesso ao atualizar o tamanho do bloco de memória lógico",
+      "successSavingLogicalMemory": "Sucesso ao atualizar o tamanho do bloco de memória lógica",
       "successSavingActiveMemoryMirroringMode": "Modo de espelhamento da memória ativa atualizado com sucesso",
       "successSavingPageSetup": "Configuração da página de memória do sistema atualizada com sucesso"
     }
@@ -945,14 +956,14 @@
     "ipv4Addresses": "endereços IPv4",
     "ipv6": "IPv6",
     "ipv6DefaultGateway": "Gateway padrão IPv6",
-    "macAddress": "endereço MAC",
+    "macAddress": "Endereço MAC",
     "network": "rede",
     "networkSettings": "Configurações de rede",
     "ntp": "NTP server",
     "operatingMode": "Modo operacional",
     "pageDescription": "Configure as configurações de rede do BMC",
     "staticDns": "DNS estático",
-    "useDns": "Utilizar servidores DNS",
+    "useDns": "Usar servidores DNS",
     "useDomainName": "Usar nome de domínio",
     "useNtp": "Usar servidores NTP",
     "modal": {
@@ -996,7 +1007,7 @@
     "criticalEvents": "Crítico",
     "dhcp": "DHCPv4",
     "dumps": "Dumps",
-    "eventLogs": "Logs de Eventos",
+    "eventLogs": "Logs de eventos",
     "firmwareInformation": "Informações do firmware",
     "hostConsole": "Console do host",
     "hostName": "Nome do host",
@@ -1010,6 +1021,7 @@
     "powerInformation": "Informações de energia",
     "powerMode": "Modo de energia",
     "runningVersion": "Em execução",
+    "safeMode": "Modo de segurança",
     "serialNumber": "Número de série",
     "serverInformation": "Informações do servidor",
     "serviceLogin": "Login de serviço",
@@ -1035,13 +1047,54 @@
   "pagePageNotFound": {
     "description": "O recurso solicitado não pôde ser localizado."
   },
+  "pagePcieTopology": {
+    "alert": "Esta página pode levar alguns minutos para carregar.",
+    "bridgeOrHost": "do host do CAPI ou da ponte de PCIe",
+    "cableLength": "Comprimento do cabo",
+    "cableStatus": "Status do cabo",
+    "cableType": "Tipo de cabo",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "Identificar LEDs",
+    "ioSlots": "Slots de E/S",
+    "linkProperties": "Propriedades do link",
+    "linkStatus": "Status do link",
+    "localPort": "Porta local",
+    "localPortLocation": "Localização da porta local",
+    "parentId": "ID-pai",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "Porta remota",
+    "remotePortLocation": "Localização da porta remota",
+    "resetLink": "Reconfigurar link",
+    "savePcieTopology": "Salvar topologia do PCIe",
+    "speed": "Velocidade",
+    "type": "Tipo",
+    "warning": "O sistema deve estar pronto pelo menos para PHYP. Para ativação, visite ",
+    "width": "Largura",
+    "modal": {
+      "resetConfirm": "Tem certeza?",
+      "resetLinkDescription": "Reconfigurar um link enquanto as partições do sistema estão em execução pode causar erros. Esta operação deve ser realizada com orientação de um membro da equipe de suporte.",
+      "resetLinkHeader": "Reconfigurar o link %{id}"
+    },
+    "table": {
+      "search": "Procurar"
+    },
+    "toast": {
+      "errorReset": "Erro ao reconfigurar o link%{id}",
+      "errorSavePcieTopology": "Erro ao salvar as informações da topologia do PCIe.",
+      "errorSwitchingLed": "Erro ao transformar o LED da %{operation} para %{value}",
+      "resetInfoTitle": "O ID do link %{id} está sendo reconfigurado.",
+      "resetInfoDescription": "Esta operação pode levar alguns segundos para ser concluída.",
+      "successReset": "Reconfiguração de link %{id} iniciada com sucesso. Verifique os logs de eventos para quaisquer problemas.",
+      "successSavePcieTopology": "Informações de topologia do PCIe salvas com sucesso."
+    }
+  },
   "pagePolicies": {
     "hostTpm": "TPM do host",
     "hostTpmDescription": "Ative para garantir que o sistema apenas reinicializa quando o TPM estiver funcional.",
     "hostUsb": "Ativação do USB do host",
     "hostUsbDescription": "Especifica se o USB do host está desativado ou ativado por motivos de segurança.",
     "ipmi": "Rede IPMI (IPMI fora da banda)",
-    "ipmiDescription": "Permitir o gerenciamento remoto da plataforma via IPMI. As ferramentas como o ipmitool requerem que essa configuração seja ativada.",
+    "ipmiDescription": "Permitir o gerenciamento remoto da plataforma via IPMI. As ferramentas como o ipmitool requerem que essa configuração seja ativada. Uma vez ativado, siga o procedimento na documentação de suporte on-line para adicionar usuários de IPMI.",
     "rtad": "RTAD",
     "rtadDescription": "Esta opção ativa ou desativa o daemon de atestado de confiança remoto para o firmware do host.",
     "rtadInfoIcon": "@:global.status.nextReboot",
@@ -1053,6 +1106,8 @@
     "usbFirmwareUpdatePolicyDescription": "A ativação da Política de atualização de firmware USB ativará a funcionalidade para permitir atualizações do firmware por meio de uma chave USB.",
     "toast": {
       "errorNetworkPolicyUpdate": "Erro ao atualizar %{policy}.",
+      "successDisableBmcShell": "Shell BMC (via SSH) desativado com sucesso. Aguarde 15 segundos para que a desativação seja efetivada.",
+      "successEnableBmcShell": "Shell BMC ativado com sucesso (via SSH)",
       "successNetworkPolicyUpdate": "%{policy} atualizada com sucesso.",
       "successNextBootToast": "Aplicando mudanças em %{policy}. As mudanças feitas em %{policy} entrarão em vigor na próxima reinicialização."
     },
@@ -1081,10 +1136,10 @@
   },
   "pagePower": {
     "delayTime": "Tempo de atraso (em segundos)",
-    "description": "Configure uma limitação de energia para manter o consumo de energia em ou abaixo do valor especificado em watts",
+    "description": "Configure um limite de energia para manter o consumo de energia igual ou abaixo do valor especificado em watts",
     "enableIdlePower": "Ativar economia de energia ociosa",
-    "idlePower": "Economizador de energia ociosa",
-    "idlePowerSubmitUpdate": "Atualizar o economizador de energia ociosa",
+    "idlePower": "Economia de energia ociosa",
+    "idlePowerSubmitUpdate": "Atualizar economia de energia ociosa",
     "idlePowerSubmitReset": "Reconfigurar para o padrão",
     "powerConsumptionTooltip": "O consumo de energia estará disponível assim que o PHYP estiver em execução",
     "powerCapLabel": "Valor da limitação de energia (em watts)",
@@ -1095,10 +1150,17 @@
     "powerPerformanceModesDropdownLabel": "Visualizar efeitos de cada modo",
     "powerPerformanceModesTitle": "Modo de energia e desempenho",
     "selectModeLabel": "Selecionar modo",
-    "submitButton": "Atualizar o modo economizador de energia",
+    "submitButton": "Atualizar o modo de economia de energia",
     "toEnter": "Para entrar",
     "toExit": "Para sair",
     "utilizationThreshold": "Limite de utilização (em %)",
+    "alert": {
+      "message": "O sistema está operando atualmente com desempenho reduzido devido ao modo de segurança. As configurações de ativação não são acessíveis no modo seguro. ",
+      "message2": "Para determinar a causa, visite",
+      "message2Link": "Logs de eventos",
+      "message3": "O sistema tentará sair do Modo Seguro na próxima tentativa de ativação. Para reinicializar o servidor, visite",
+      "message3Link": "Operações de ativação do servidor"
+    },
     "delayTimeValidation": {
       "delayTimeRange": "O valor deve estar entre %{min} e %{max}.",
       "enterDelayTime": "Valor não pode ser menor que o tempo de atraso para sair.",
@@ -1106,7 +1168,7 @@
     },
     "modalEnablePowerPerformanceMode": {
       "cancelButton": "Cancelar",
-      "content": "A ativação de qualquer um dos modos do economizador de energia causará mudanças nas frequências do processador, mudanças na utilização do processador, mudanças no consumo de energia e o desempenho variar.",
+      "content": "A ativação de qualquer um dos modos de economia de energia fará com que as alterações nas frequências do processador, na utilização do processador, no consumo de energia e no desempenho variem.",
       "subTitle": "Tem certeza?",
       "titleMaximumPerformance": "Ativar o modo de desempenho máximo",
       "titlePowerSaving": "Ativar modo de economia de energia",
@@ -1123,7 +1185,7 @@
       "descStatic": "A frequência do processador é configurada para um valor fixo que pode executar cargas de trabalho normais em condições ambientais normais."
     },
     "utilizationPercentValidation": {
-      "enterUtilization": "O valor não pode ser maior que limite para sair.",
+      "enterUtilization": "O valor não pode ser maior que o limite para sair.",
       "exitUtilization": "O valor não pode ser menor que limite para entrar.",
       "utilizationRange": "O valor deve estar entre %{min} e %{max}."
     },
@@ -1137,7 +1199,7 @@
     }
   },
   "pagePowerRestorePolicy": {
-    "description": "Configurar a política de energia para determinar como o sistema inicia após uma perturbação de energia.",
+    "description": "Configure a política de energia para determinar como o sistema inicia após uma perturbação de energia.",
     "powerPoliciesLabel": "Políticas de restauração de energia",
     "policies": {
       "AlwaysOff": "Sempre desligado",
@@ -1146,8 +1208,8 @@
     },
     "policiesDesc": {
       "AlwaysOff": "Sempre desligado - O sistema sempre permanece desligado quando a energia é aplicada.",
-      "AlwaysOn": "Sempre ligado - O sistema sempre liga sobre quando a energia é aplicada.",
-      "LastState": "Último estado - O sistema retorna para o seu último sobre o estado de energia ligada ou desligada quando a energia é aplicada."
+      "AlwaysOn": "Sempre ligado - O sistema sempre liga quando a energia é aplicada.",
+      "LastState": "Último estado - O sistema retorna ao seu último estado ligado ou desligado quando a energia é aplicada."
     },
     "alert": {
       "changeServerOpMode": "Mudar o modo de operação do servidor",
@@ -1155,7 +1217,7 @@
     },
     "toast": {
       "errorIdlePower": "Erro ao salvar os dados de energia ociosa",
-      "errorPowerSaver": "Erro ao salvar o modo economizador de energia",
+      "errorPowerSaver": "Erro ao salvar o modo de economia de energia",
       "errorSaveSettings": "Erro ao salvar as configurações.",
       "successIdlePower": "Dados de energia ociosa salvos com sucesso",
       "successPowerSaver": "Sucesso ao salvar o modo economizador de energia",
@@ -1170,10 +1232,10 @@
     "newPassLabelTextInfo": "A senha deve ter entre %{min} e %{max} caracteres",
     "newPassword": "Nova senha",
     "passwordsDoNotMatch": "As senhas não correspondem",
-    "profileInfoTitle": "Informações do Perfil",
-    "timezone": "Fuso Horário",
+    "profileInfoTitle": "Informações do perfil",
+    "timezone": "Fuso horário",
     "timezoneDisplay": "Preferência de exibição do fuso horário",
-    "timezoneDisplayDesc": "Selecionar como o horário será exibido ao em todo aplicativo",
+    "timezoneDisplayDesc": "Selecionar como o horário será exibido no aplicativo",
     "username": "Nome do usuário",
     "toast": {
       "successUpdatingTimeZone": "Sucesso ao atualizar o fuso horário."
@@ -1182,7 +1244,7 @@
   "pageRebootBmc": {
     "lastReboot": "Última reinicialização do BMC",
     "rebootBmc": "Reinicializar o BMC",
-    "rebootInformation": "Ao reinicializar o BMC, seu navegador da web perde o contato com o BMC por vários minutos. Quando o BMC estiver de volta on-line, pode-se precisar efetuar o login novamente.",
+    "rebootInformation": "Ao reinicializar o BMC, seu navegador da web perde o contato com o BMC por vários minutos. Quando o BMC estiver on-line novamente, pode-se precisar efetuar o login novamente.",
     "modal": {
       "confirmMessage": "Tem certeza de que deseja reinicializar o BMC?",
       "confirmMessage2": "Um dump do sistema está sendo transferido. A reinicialização do BMC resultará na perda do dump.",
@@ -1198,7 +1260,7 @@
     "exportFilePrefix": "sensors_",
     "searchForSensors": "Procurar por sensores",
     "table": {
-      "currentValue": "Valor Atual:",
+      "currentValue": "Valor atual",
       "lowerCritical": "Abaixar crítico",
       "lowerWarning": "Abaixar aviso",
       "name": "Nome",
@@ -1217,6 +1279,9 @@
     "operations": "Operações",
     "orderlyReboot": "Ordenadamente - o sistema operacional é encerrado e, em seguida, o servidor reinicializa",
     "orderlyShutdown": "Ordenadamente - o sistema operacional é encerrado e, em seguida, o servidor encerra",
+    "osRuntimeButton": "Continuar para execução do S.O.",
+    "osRuntimeMessage": "Continue para que o S.O. permaneça no estado em execução.",
+    "phypStandby": "O sistema está pronto para PHYP.",
     "powerOn": "Ligar",
     "reboot": "Reinicializar",
     "rebootServer": "Reinicializar servidor",
@@ -1225,7 +1290,11 @@
     "shutDown": "Encerrar",
     "shutdownServer": "Encerrar o servidor",
     "biosSettings": {
-      "currentOperatingMode": "O modo de operação atual %{currOptMode}",
+      "aixLinux": "Modo de inicialização da partição AIX/LINUX",
+      "currentOperatingMode": "Modo de operação atual %{currOptMode}",
+      "defaultPartition": "Ambiente de partição padrão",
+      "ibmIPartition": "Modo de inicialização da partição IBM i",
+      "nonHMCManaged": "Ativado somente quando o sistema não é gerenciado pelo HMC",
       "powPolicySection": "será configurado como %{powerPolicy}",
       "pvm_default_os_type": "Ambiente de partição padrão",
       "pvm_os_boot_type": "Modo de inicialização da partição IBM i",
@@ -1233,7 +1302,65 @@
       "pvm_stop_at_standby": "Política de início do firmware do servidor",
       "pvm_system_operating_mode": "Modo de operação do servidor",
       "pvm_system_power_off_policy": "Política de energia do servidor",
-      "selectedOperatingMode": "Ao salvar o modo de operação será configurado para %{selectedOptMode}",
+      "selectedOperatingMode": "Ao salvar o modo de operação será configurado como %{selectedOptMode}",
+      "serverFirmware": "Política de início do firmware do servidor",
+      "powerSettingDescription": "Visualizar descrições de configuração de ativação",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "Apenas autoinicialização",
+          "autoStartAlways": "Sempre autoinicialização",
+          "standBy": "de espera"
+        },
+        "description": {
+          "autoStartOnly": "Ative o firmware do servidor e as partições automaticamente apenas no caso de uma recuperação de energia após uma finalização de modo anormal (por exemplo, reinicialização automática de energia ou do sistema).",
+          "autoStartAlways": "Ativar determinadas partições automaticamente. Se o servidor estiver ligado usando os menus HMC ou ASMI, o servidor ativa automaticamente as partições configuradas para 'auto-start'. Se um reinício automático de energia ou uma reinicialização for executada após o servidor parar anormalmente, o servidor ativará as partições que estavam em execução no momento da parada do sistema.",
+          "standBy": "Não ative o firmware do servidor e as partições automaticamente para uma ativação iniciada pelo usuário ou uma ativação de recuperação."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "Padrão"
+        },
+        "description": {
+          "aix": "O firmware do sistema selecionará o AIX/Linux como o ambiente de partição padrão.",
+          "linux": "O firmware do sistema selecionará o AIX/Linux como o ambiente de partição padrão.",
+          "ibmI": "O firmware do servidor selecionará o IBM i como o ambiente de partição padrão.",
+          "default": "O firmware do sistema selecionará automaticamente o ambiente de partição padrão com base no tipo de marca do sistema."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "Esta partição será inicializada diretamente no sistema operacional",
+          "serviceBoot": "Modo de inicialização do serviço da lista salva",
+          "bootToSms": "Reinicializar para menu do SMS",
+          "bootToOpenFirware": "Inicializar para abrir o prompt do firmware",
+          "serviceBootMode": "Inicialização do modo de serviço a partir de lista padrão"
+        },
+        "description": {
+          "partitionBoot": "A partição é inicializada no sistema operacional sem parar.",
+          "serviceBoot": "O sistema é inicializado na lista de inicialização do modo de serviço salvo. Este é normalmente um método prático para executar os diagnósticos da partição.  Para tornar essa opção útil, o sistema operacional da partição deve suportar inicialização de diagnóstico e os diagnósticos devem estar carregados na unidade de disco da partição.",
+          "bootToSms": "A partição para no menu Serviços de Gerenciamento de Sistemas (SMS).",
+          "bootToOpenFirware": "O sistema para no prompt de firmware aberto.",
+          "serviceBootMode": "O sistema é inicializado a partir da lista de inicialização padrão.  Esta opção é a maneira preferida de executar diagnósticos independentes a partir de uma unidade de CD-ROM."
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "IPL do disco que utiliza a cópia A do Licensed Internal Code do sistema.",
+          "b": "IPL do disco que utiliza a cópia B do Licensed Internal Code do sistema.",
+          "c": "Reservado apenas para uso de serviços de hardware.",
+          "d": "IPL de mídia diferente do disco de origem de carregamento. IPL alternativo para suporte de instalação de código."
+        }
+      },
       "attributeValues": {
         "pvm_os_boot_type": {
           "A_Mode": "A (Inicialização do disco usando a cópia A)",
@@ -1251,15 +1378,15 @@
         },
         "pvm_stop_at_standby": {
           "Disabled": "Sempre autoinicialização",
-          "Enabled": "Espera (Iniciada pelo usuário)",
+          "Enabled": "Espera (Iniciado pelo usuário)",
           "ManualOnly": "Apenas autoinicialização"
         },
         "pvm_system_operating_mode": {
-          "Manual": "Manual - Serviço / Manutenção",
+          "Manual": "Manual - Serviço/Manutenção",
           "Normal": "Normal - Automático"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "Desligamento automático do sistema",
+          "automaticHelperText": "Com essa configuração, quando o sistema não é particionado, o comportamento é o mesmo de desligamento, e quando o sistema é particionado, o comportamento do sistema é o mesmo que ficar ligado",
           "powerOffHelperText": "Quando a última partição desligar, o servidor desligará",
           "stayOnHelperText": "Quando a última partição desligar, o servidor permanecerá ligado"
         }
@@ -1319,7 +1446,7 @@
       "deleteSnmpDestinationTitle": "Excluir destino de alerta SNMP | Excluir destinos de alerta SNMP",
       "ipaddress": "Endereço IP",
       "ipaddressFqdn": "Endereço IP/FQDN",
-      "ipaddressFqdnInfo": "Endereço IP ou somehost.example.com",
+      "ipaddressFqdnInfo": "Endereço IP ou algumhost.exemplo.com",
       "port": "Porta"
     },
     "table": {
@@ -1361,7 +1488,8 @@
       "unlock": "Desbloquear",
       "username": "Nome do usuário",
       "userPassword": "Senha de usuário",
-      "userUnlockMethod": "Método de desbloqueio do usuário"
+      "userUnlockMethod": "Método de desbloqueio do usuário",
+      "zeroLoginAttempts": "Se `0`, a conta nunca deverá ser bloqueada."
     },
     "table": {
       "privilege": "Privilégio",
@@ -1391,10 +1519,10 @@
       "successBatchDelete": "Sucesso ao excluir %{count} usuário. | Sucesso ao excluir %{count} usuários.",
       "successBatchDisable": "Sucesso ao desativar %{count} usuário. | Sucesso ao desativar %{count} usuários.",
       "successBatchEnable": "Sucesso ao ativar %{count} usuário. | Sucesso ao ativar %{count} usuários.",
-      "successCreateUser": "Criado o usuário '%{username}'.",
+      "successCreateUser": "Usuário '%{username}' criado.",
       "successDeleteUser": "Excluído o usuário '%{username}'.",
       "successSaveSettings": "Sucesso ao salvar as configurações da conta.",
-      "successUpdateUser": "Atualzado o usuário '%{username}'."
+      "successUpdateUser": "Usuário '%{username}' atualizado."
     }
   },
   "pageVirtualMedia": {
