@@ -14,7 +14,7 @@
       "downloadAll": "Alles herunterladen",
       "edit": "Bearbeiten",
       "enable": "Aktivieren",
-      "export": "Exportieren",
+      "export": "Export",
       "exportAll": "Alles exportieren",
       "filter": "Filter",
       "openNewTab": "Auf einer neuen Registerkarte öffnen",
@@ -22,7 +22,6 @@
       "replace": "Ersetzen",
       "reset": "Zurücksetzen",
       "save": "Speichern",
-      "saveSettings": "Einstellungen speichern",
       "selected": "Ausgewählt"
     },
     "ariaLabel": {
@@ -64,7 +63,8 @@
       "message3": "3. Darf den Benutzernamen für das Konto nicht enthalten",
       "message4": "4. Darf keinen Wörterbucheintrag enthalten",
       "message5": "5. Darf keine sequenziellen Zeichen enthalten",
-      "message6": "6. Darf bei Verwendung für IPMI maximal 20 Zeichen lang sein"
+      "message6": "6. Darf bei Verwendung für IPMI maximal 20 Zeichen lang sein",
+      "message7": "7. Muss zwei beliebige Kleinbuchstaben, Großbuchstaben, Ziffern und andere Zeichen enthalten"
     },
     "status": {
       "absent": "Fehlt",
@@ -132,13 +132,15 @@
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
-    "lateralCastOutControl": "@:appPageTitle.lateralCastOutControl",
+    "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
     "logs": "Protokolle",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
     "operations": "Operationen",
     "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
     "policies": "@:appPageTitle.policies",
     "postCodeLogs": "@:appPageTitle.postCodeLogs",
     "power": "@:appPageTitle.power",
@@ -160,7 +162,7 @@
     "capacityOnDemand": "Capacity on Demand",
     "certificates": "Zertifikate",
     "changePassword": "Kennwort ändern",
-    "concurrentMaintenance": "Gleichzeitige Wartung",
+    "concurrentMaintenance": "Parallelwartung",
     "dateTime": "Datum und Uhrzeit",
     "deconfigurationHardware": "Aufhebung der Hardwarekonfiguration",
     "deconfigurationRecords": "Dekonfiguration - Datensätze",
@@ -173,13 +175,15 @@
     "inventory": "Inventar und LEDs",
     "keyClear": "Schlüssel löschen",
     "kvm": "KVM",
-    "lateralCastOutControl": "Steuerung für laterales Castout",
+    "systemParameters": "Systemparameter",
     "ldap": "LDAP",
-    "login": "Anmelden",
+    "login": "Anmeldung",
     "memory": "Hauptspeicher",
     "network": "Netz",
+    "notices": "Bemerkungen",
     "overview": "Übersicht",
     "pageNotFound": "Seite nicht gefunden",
+    "pcieTopology": "PCIe-Hardwaretopologie",
     "policies": "Richtlinien",
     "postCodeLogs": "Fortschrittsprotokolle",
     "postCodes": "Fortschrittsprotokolle",
@@ -313,7 +317,8 @@
   "pageDateTime": {
     "alert": {
       "link": "Profileinstellungen auf.",
-      "message": "Rufen Sie zum Ändern von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung die "
+      "message": "Rufen Sie zum Ändern von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung die ",
+      "messageNtp": "Wenn NTP ausgewählt ist, aber kein NTP-Server angegeben ist oder der angegebene NTP-Server nicht erreichbar ist, wird time.google.com verwendet."
     },
     "configureSettings": "Einstellungen konfigurieren",
     "form": {
@@ -327,6 +332,9 @@
         "server1": "Server 1",
         "server2": "Server 2",
         "server3": "Server 3"
+      },
+      "validators": {
+        "serverExists": "Serveradresse bereits vorhanden"
       }
     },
     "toast": {
@@ -336,10 +344,12 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "Parallelwartung",
+    "opPanelBase": "Basiswartung der Bedienerkonsole",
+    "opPanelLcd": "LCD-Wartung an der Bedienerkonsole",
     "tod": "Wartung der Uhrzeitbatterie",
     "alert": {
-      "message": "Aktivieren Sie diese Option, um die Batterie zu entfernen oder auszutauschen. Sobald dies geschehen ist, wird empfohlen, die Funktion zu inaktivieren, um in den normalen Modus zurückzukehren.",
-      "title": "Reparatur der Batterie bei eingeschalteter Einheit"
+      "message": "Zum Entfernen oder Austauschen der Batterie, des Bedienerkonsolensockels oder der LCD-Anzeige der Bedienerkonsole aktivieren Sie den entsprechenden Kippschalter. Sobald dies geschehen ist, wird empfohlen, die Funktion zu inaktivieren, um in den normalen Modus zurückzukehren.",
+      "title": "Reparatur der Batterie, des Bedienerkonsolensockels und der LCD-Anzeige der Bedienerkonsole bei eingeschalteter Einheit"
     },
     "toast": {
       "errorSaveReadyToRemove": "Fehler %{state} bereit zum Entfernen des Status.",
@@ -368,6 +378,7 @@
       "message": "Speicher-DIMMs und Prozessorkerne können nur bei ausgeschaltetem Server konfiguriert oder dekonfiguriert werden."
     },
     "toast": {
+      "deleteReqFailed": "Die Löschanforderung ist fehlgeschlagen, da die angeforderte Ressource nicht gelöscht werden kann.",
       "errorDisablingSetting": "Fehler beim Inaktivieren der Einstellung",
       "errorEnablingSetting": "Fehler beim Aktivieren der Einstellung"
     },
@@ -377,6 +388,7 @@
       "id": "ID",
       "locationCode": "Standortcode",
       "name": "Name",
+      "pelId": "Pel-ID",
       "settings": "Einstellungen",
       "size": "Größe in Mebibyte"
     }
@@ -413,18 +425,22 @@
       "description": "Beschreibung",
       "id": "Id",
       "name": "Name",
+      "pelId": "Pel-ID",
       "reference": "Referenz",
       "resource": "Ressource",
       "severity": "Fehlerkategorie",
       "srcDetails": "SRC-Details",
-      "srcDetailsToolTip": "Details zum Systemreferenzcode",
+      "srcDetailsToolTip": "Details des Systemreferenzcodes Für manuelle Schutzdatensätze sind keine SRC-Details vorhanden.",
       "status": "status",
       "type": "Dekonfigurationstyp"
     },
     "toast": {
       "errorDelete": "Fehler beim Löschen von %{count} Datensatz. | Fehler beim Löschen von%{count} Datensätzen.",
       "errorResolveEntries": "Fehler beim Auflösen von %{count} Datensatz. | Fehler beim Auflösen von%{count} Datensätzen.",
+      "errorStartDownload": "Fehler beim Starten des Downloads.",
       "errorUnresolveEntries": "Fehler beim Aufheben der Auflösung von %{count} Datensatz. | Fehler beim Aufheben der Auflösung von%{count} Datensätzen.",
+      "successStartDownload": "Zusätzliche Daten erfolgreich heruntergeladen.",
+      "successStartDownloadTitle": "Download erfolgreich",
       "successDelete": "%{count} Datensatz erfolgreich gelöscht |%{count} Datensätze erfolgreich gelöscht."
     }
   },
@@ -562,7 +578,7 @@
       "resetBiosError": "Zurücksetzen der Servereinstellungen auf Werkseinstellungen ist fehlgeschlagen.",
       "resetBiosSuccess": "Servereinstellungen wurden erfolgreich auf Werkseinstellungen zurückgesetzt.",
       "resetToDefaultsError": "Zurücksetzen der BMC- und Servereinstellungen auf die Werkseinstellungen ist fehlgeschlagen.",
-      "resetToDefaultsSuccess": "BMC- und Servereinstellungen wurden erfolgreich auf Werkseinstellungen zurückgesetzt."
+      "resetToDefaultsSuccess": "BMC- und Servereinstellungen wurden erfolgreich auf Werkseinstellungen zurückgesetzt. Wenn Sie nicht automatisch abgemeldet werden, aktualisieren Sie den Browser."
     }
   },
   "pageFieldCoreOverride": {
@@ -589,10 +605,12 @@
     "cardBodyVersion": "Version",
     "cardTitleBackup": "Sicherungsimage",
     "cardTitleRunning": "Aktives Image",
+    "permanent": "Permanent",
     "sectionTitleBmcCards": "BMC",
     "sectionTitleBmcCardsCombined": "BMC und Server",
     "sectionTitleHostCards": "Host",
     "sectionTitleUpdateFirmware": "Firmware aktualisieren",
+    "temporary": "Temporär",
     "alert": {
       "operationInProgress": "Die Operation zum Einschalten des Servers wird ausgeführt.",
       "serverMustBePoweredOffTo": "Server muss ausgeschaltet sein für:",
@@ -626,15 +644,31 @@
     },
     "toast": {
       "errorSwitchImages": "Fehler beim Wechsel zwischen aktivem Image und Sicherungsimage.",
+      "errorActivation": "Fehler beim Starten der Firmwareaktivierung.",
       "errorUpdateFirmware": "Fehler beim Starten des Firmware-Updates.",
+      "errorUploadFirmware": "Fehler beim Hochladen der Firmware.",
       "rebootStarted": "Warmstart gestartet",
-      "rebootStartedMessage": "Warmstart über Sicherungsimage erfolgreich gestartet.",
-      "updateStarted": "Aktualisierung gestartet",
-      "updateStartedMessage": "Warten Sie auf die Firmwareaktualisierungsbenachrichtigung, bevor Sie Änderungen vornehmen.",
-      "verifySwitch": "Wechsel überprüfen",
-      "verifySwitchMessage": "Aktualisieren Sie die Anwendung, um zu überprüfen, ob das aktive Image und das Sicherungsimage gewechselt wurden.",
-      "verifyUpdate": "Aktualisierung überprüfen",
-      "verifyUpdateMessage": "Aktualisieren Sie die Anwendung, um zu überprüfen, ob die Firmware erfolgreich aktualisiert wurde."
+      "rebootStartedMessage": "Warmstart über Sicherungsimage erfolgreich gestartet. Der Warmstart kann mehrere Minuten dauern.",
+      "taskComplete": "Task abgeschlossen",
+      "taskCompleteMessage": "Task abgeschlossen. Warten auf BMC-Warmstart",
+      "updateFirmware": {
+        "step1": "Schritt 1 von 4 - Hochladen",
+        "step1Message": "Aktualisierung gestartet. Firmware-Upload in Bearbeitung.",
+        "step2": "Schritt 2 von 4 - Aktivierung",
+        "step2Message": "Hochladen der Firmware abgeschlossen. Aktivierungstask wird ausgeführt.",
+        "step3": "Schritt 3 von 4 - Warmstart",
+        "step3Message": "Aktivierungstask abgeschlossen. BMC-Warmstart wird ausgeführt.",
+        "step4": "Schritt 4 von 4 - Abgeschlossen",
+        "step4Message": "Firmware-Update erfolgreich. Klicken Sie auf Aktualisieren, um die Firmware-Version zu überprüfen."
+      },
+      "switchToRunning": {
+        "step1": "Schritt 1 von 3 - Firmware-Switching",
+        "step1Message": "Prozess gestartet. Firmware-Switching in Bearbeitung.",
+        "step2": "Schritt 2 von 3 - Warmstart",
+        "step2Message": "Firmware-Switching abgeschlossen. BMC-Warmstart wird ausgeführt.",
+        "step3": "Schritt 3 von 3 - Abschließen",
+        "step3Message": "Firmware-Switch erfolgreich. Klicken Sie auf Aktualisieren, um zu überprüfen, ob die aktiven Images und die Sicherungsimages gewechselt wurden."
+      }
     }
   },
   "pageHostConsole": {
@@ -646,7 +680,12 @@
     "bmcManager": "BMC-Manager",
     "chassis": "Chassis",
     "dimmSlot": "DIMM-Steckplatz",
+    "fabricAdapters": "Fabric-Adapter",
     "fans": "Lüfter",
+    "identifyLedInfo": "Bei Teilen ohne LEDs schaltet der Umschalter für die Identifikations-LED nur die Gehäuseanzeige ein.",
+    "pcieSlots": "PCIe-Steckplätze",
+    "pcieTopologyLink": "PCIe-Hardwaretopologie.",
+    "pcieTopologyLinkDescription": "Wenn Sie mehr über PCIe-Steckplätze erfahren möchten, besuchen Sie ",
     "powerSupplies": "Netzteile",
     "processors": "Prozessoren",
     "quicklinkTitle": "Quick Links zu Hardwarekomponenten",
@@ -656,35 +695,6 @@
       "traceLabel": "Trace für E/A-Gehäuse erfassen",
       "traceDescription": "Ressourcenspeicherauszug (mit bestimmtem Ressourcenselektor) erstellen aus ",
       "DumpsLink": "Seite 'Speicherauszüge'."
-    },
-    "pcie": {
-      "bridgeOrHost": "PCIe-Bridge oder CAPI-Host",
-      "cable": "Kabel",
-      "cableLength": "Kabellänge",
-      "cableStatus": "Kabelstatus",
-      "cableType": "Kabeltyp",
-      "degraded": "Vermindert",
-      "failed": "Fehlgeschlagen",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "Kennzeichnungs-LEDs",
-      "inactive": "Inaktiv",
-      "ioSlots": "E/A-Steckplätze",
-      "linkProperties": "Verbindungseigenschaften",
-      "linkStatus": "Verbindungsstatus",
-      "localPort": "Lokaler Port",
-      "localPortLocation": "Position des lokalen Ports",
-      "open": "Geöffnet",
-      "operational": "Betriebsbereit",
-      "parentId": "Übergeordnete ID",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "Ferner Port",
-      "remotePortLocation": "Position des fernen Ports",
-      "resetLink": "Verbindung zurücksetzen",
-      "speed": "Geschwindigkeit",
-      "title": "PCIe-Hardwaretopologie",
-      "type": "Typ",
-      "unknown": "Unbekannt",
-      "width": "Breite"
     },
     "systemIndicator": {
       "attentionLed": "Systemkontrollanzeige",
@@ -717,12 +727,6 @@
         "title": "Gehäuseeinstellungen ändern",
         "typeModel": "@:pageInventory.table.typeModel",
         "typeModelHelperText": "Der Gehäusemaschinentyp darf nicht \"0000\" sein. Alle alphanumerischen Zeichen sind ungültig."
-      },
-      "pcie": {
-        "confirmMessage": "Das Zurücksetzen einer Verbindung während der Ausführung der Systempartitionen kann zu Fehlern führen. Die Operation muss unter Anleitung eines Mitarbeiters des Support-Teams durchgeführt werden.",
-        "resetLink": "Verbindung '%{linkId}' zurücksetzen",
-        "subTitle": "Sind Sie sicher?",
-        "title": "Verbindung '%{linkId}' zurücksetzen"
       }
     },
     "table": {
@@ -743,13 +747,14 @@
       "identifyLed": "Kennzeichnungsanzeige",
       "install": "Installieren",
       "locationNumber": "Standortnummer",
-      "model": "Modell",
+      "model": "Model",
       "name": "Name",
       "partNumber": "Teilenummer",
       "power": "Netzstrom",
       "processorType": "Prozessortyp",
       "remove": "Entfernen",
       "serialNumber": "Seriennummer",
+      "slotType": "Steckplatztyp",
       "sparePartNumber": "Ersatzteilnummer (FRU-Nummer)",
       "totalCores": "Gesamtzahl der Kerne",
       "totalSystemMemoryGiB": "Gesamter Systemspeicher",
@@ -763,12 +768,10 @@
       "errorEnableLampTest": "Fehler beim Aktivieren des Anzeigentests",
       "errorEnableSystemAttentionLed": "Fehler beim Aktivieren der Systemkontroll-LED.",
       "errorEnclosureSettings": "Fehler beim Aktualisieren der Gehäuseeinstellungen.",
-      "errorPcieLinkReset": "Fehler beim Zurücksetzen der Verbindung '%{linkId}'.",
-      "infoPcieLinkResetMessage": "Dieser Vorgang kann einige Zeit dauern.",
-      "infoPcieLinkResetTitle": "Verbindung mit ID '%{linkId}' wird zurückgesetzt.",
       "infoRemoveAssembly": "Aktualisieren Sie die Anzeige, um festzustellen, ob '%{assemblyName}' zum Entfernen bereit ist.",
       "successEnclosureSettings": "Die Gehäuseeinstellungen wurden erfolgreich aktualisiert.",
-      "successPcieLinkReset": "'%{linkId}' erfolgreich zurückgesetzt."
+      "successEnableIdentifyLed": "Identifikations-LED erfolgreich aktiviert.",
+      "successDisableIdentifyLed": "Identifikations-LED erfolgreich inaktiviert."
     }
   },
   "pageKeyClear": {
@@ -810,10 +813,9 @@
     "openNewTab": "Auf einer neuen Registerkarte öffnen",
     "status": "Status"
   },
-  "pageLateralCastOutControl": {
-    "lateralCastOut": "Laterales Castout",
-    "lateralCastOutControl": "Steuerung für laterales Castout",
-    "lateralCastOutControlDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, dies kann die Systemleistung beeinträchtigen.",
+  "pageSystemParameters": {
+    "aggressivePrefetch": "Aggressiver Vorablesezugriff",
+    "aggressivePrefetchDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, da dies die Systemleistung beeinträchtigen kann. Gibt an, ob der aggressive Vorablesezugriff durch den Prozessor inaktiviert oder aktiviert ist",
     "alert": {
       "message": "Das System muss ausgeschaltet werden. Vorgenommene Änderungen werden beim nächsten Warmstart wirksam",
       "title": "Änderungen anwenden"
@@ -821,8 +823,17 @@
     "button": {
       "saveSettings": "Einstellungen speichern"
     },
+    "frequencyCap": "Häufigkeitsbegrenzung",
+    "frequencyCapDescription": "Ist dieser Parameter aktiviert, wird verhindert, dass alle Prozessoren im System die angegebene maximale Betriebsfrequenz in MHz überschreiten.",
+    "frequencyCapHelpText": "Wenn diese Option inaktiviert ist, ist möglicherweise ein initiales Booten erforderlich, damit die maximale und die minimale Häufigkeit festgelegt werden können.",
+    "lateralCastOut": "Laterales Castout",
+    "lateralCastOutDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, dies kann die Systemleistung beeinträchtigen.",
     "toast": {
+      "errorSavingAggressivePrefetch": "Fehler beim Speichern des aggressiven Vorablesezugriffs",
+      "errorSavingFrequencyCap": "Fehler beim Speichern der Häufigkeitsbegrenzung",
       "errorSavingLateralCastOut": "Fehler beim Speichern des Modus für die laterale Umsetzung",
+      "successSavingAggressivePrefetch": "Aggressiver Vorablesezugriff erfolgreich gespeichert",
+      "successSavingFrequencyCap": "Häufigkeitsbegrenzung erfolgreich gespeichert",
       "successSavingLateralCastOut": "Modus für die laterale Umsetzung erfolgreich gespeichert"
     }
   },
@@ -880,8 +891,8 @@
   "pageLogin": {
     "dateAndTime": "Datum und Uhrzeit",
     "language": "Sprache",
-    "logIn": "Anmelden",
-    "model": "Modell",
+    "logIn": "Anmeldung",
+    "model": "Model",
     "password": "Kennwort",
     "serialNumber": "Seriennummer",
     "uploadServiceLoginCertificate": "Serviceanmeldezertifikat hochladen",
@@ -915,7 +926,7 @@
     "updatePageSetup": "Seitenkonfiguration für Systemspeicher aktualisieren",
     "alert": {
       "heading": "Änderungen anwenden",
-      "message": "Das System muss ausgeschaltet werden. Vorgenommene Änderungen werden beim nächsten Warmstart wirksam.",
+      "message": "Das System muss ausgeschaltet sein und darf nicht von der HMC verwaltet werden. Vorgenommene Änderungen werden beim nächsten Warmstart wirksam.",
       "serverMustBePoweredOffTo": "Server muss ausgeschaltet sein für:",
       "updateActiveMemoryMirroring": "Aktiven Modus für Speicherspiegelung aktualisieren",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1002,7 +1013,7 @@
     "hostName": "Hostname",
     "inventory": "Inventar und LEDs",
     "ipv4": "IPv4",
-    "model": "Modell",
+    "model": "Model",
     "networkInformation": "Netzinformationen",
     "operatingMode": "Betriebsmodus",
     "powerCap": "Leistungsbegrenzung",
@@ -1010,6 +1021,7 @@
     "powerInformation": "Leistungsinformationen",
     "powerMode": "Energiemodus",
     "runningVersion": "Aktiv",
+    "safeMode": "Abgesicherter Modus",
     "serialNumber": "Seriennummer",
     "serverInformation": "Serverinformationen",
     "serviceLogin": "Serviceanmeldung",
@@ -1035,13 +1047,54 @@
   "pagePageNotFound": {
     "description": "Die angeforderte Ressource konnte nicht gefunden werden."
   },
+  "pagePcieTopology": {
+    "alert": "Das Laden dieser Seite kann einige Minuten dauern.",
+    "bridgeOrHost": "PCIe-Bridge oder CAPI-Host",
+    "cableLength": "Kabellänge",
+    "cableStatus": "Kabelstatus",
+    "cableType": "Kabeltyp",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "Kennzeichnungs-LEDs",
+    "ioSlots": "E/A-Steckplätze",
+    "linkProperties": "Verbindungseigenschaften",
+    "linkStatus": "Verbindungsstatus",
+    "localPort": "Lokaler Port",
+    "localPortLocation": "Position des lokalen Ports",
+    "parentId": "Übergeordnete ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "Ferner Port",
+    "remotePortLocation": "Position des fernen Ports",
+    "resetLink": "Verbindung zurücksetzen",
+    "savePcieTopology": "PCIe-Topologie speichern",
+    "speed": "Geschwindigkeit",
+    "type": "Typ",
+    "warning": "Das System muss sich mindestens im PHYP-Standby befinden. Zum Einschalten besuchen Sie ",
+    "width": "Breite",
+    "modal": {
+      "resetConfirm": "Sind Sie sicher?",
+      "resetLinkDescription": "Das Zurücksetzen einer Verbindung während der Ausführung von Systempartitionen kann Fehler verursachen. Diese Operation muss unter Anleitung eines Support-Teammitglieds ausgeführt werden.",
+      "resetLinkHeader": "Link %{id} zurücksetzen"
+    },
+    "table": {
+      "search": "Suchen"
+    },
+    "toast": {
+      "errorReset": "Fehler beim Zurücksetzen des Links %{id}",
+      "errorSavePcieTopology": "Fehler beim Speichern der PCIe-Topologieinformationen.",
+      "errorSwitchingLed": "Fehleranzeige LED %{operation} für %{value}",
+      "resetInfoTitle": "Link-ID %{id} wird zurückgesetzt.",
+      "resetInfoDescription": "Die Ausführung dieser Operation kann einige Sekunden dauern.",
+      "successReset": "Zurücksetzen des Links %{id} erfolgreich eingeleitet. Überprüfen Sie die Ereignisprotokolle auf Probleme.",
+      "successSavePcieTopology": "PCIe-Topologieinformationen wurden erfolgreich gespeichert."
+    }
+  },
   "pagePolicies": {
     "hostTpm": "Host-TPM",
     "hostTpmDescription": "Aktivieren Sie diese Option, um sicherzustellen, dass das System nur neu startet, wenn das TPM funktionsfähig ist.",
     "hostUsb": "Host-USB-Aktivierung",
     "hostUsbDescription": "Gibt an, ob Host-USB aus Sicherheitsgründen inaktiviert oder aktiviert ist.",
     "ipmi": "Netz-IPMI (Out-of-band-IPMI)",
-    "ipmiDescription": "Ermöglichen Sie die Fernverwaltung der Plattform über IPMI. Für Tools wie ipmitool muss diese Einstellung aktiviert sein.",
+    "ipmiDescription": "Ermöglichen Sie die Fernverwaltung der Plattform über IPMI. Für Tools wie ipmitool muss diese Einstellung aktiviert sein. Führen Sie nach der Aktivierung die Prozedur in der Dokumentation zur Onlineunterstützung aus, um IPMI-Benutzer hinzuzufügen.",
     "rtad": "RTAD",
     "rtadDescription": "Über diese Option wird RTAD (Remote Trusted Attestation Daemon) für Host-Firmware aktiviert bzw. inaktiviert.",
     "rtadInfoIcon": "@:global.status.nextReboot",
@@ -1053,6 +1106,8 @@
     "usbFirmwareUpdatePolicyDescription": "Durch Aktivieren der Aktualisierungsrichtlinie für USB-Firmware wird die Funktionalität aktiviert, die Firmware-Updates über einen USB-Schlüssel ermöglicht.",
     "toast": {
       "errorNetworkPolicyUpdate": "Fehler beim Aktualisieren von %{policy}.",
+      "successDisableBmcShell": "BMC-Shell wurde erfolgreich inaktiviert (über SSH). Bitte warten Sie 15 Sekunden, bis die Inaktivierung wirksam wird.",
+      "successEnableBmcShell": "BMC-Shell erfolgreich aktiviert (über SSH)",
       "successNetworkPolicyUpdate": "%{policy} erfolgreich aktualisiert.",
       "successNextBootToast": "Änderungen werden auf %{policy} angewendet. Änderungen an %{policy} werden beim nächsten Warmstart wirksam."
     },
@@ -1096,9 +1151,16 @@
     "powerPerformanceModesTitle": "Netz- und Leistungsmodus",
     "selectModeLabel": "Modus auswählen",
     "submitButton": "Energiesparmodus aktualisieren",
-    "toEnter": "Eintritt",
+    "toEnter": "Eingabe",
     "toExit": "Beenden",
     "utilizationThreshold": "Auslastungsschwellenwert (in%)",
+    "alert": {
+      "message": "Das System arbeitet aktuell mit verringerter Leistung, da es sich im abgesicherten Modus befindet. Auf die Stromversorgungseinstellungen kann im abgesicherten Modus nicht zugegriffen werden. ",
+      "message2": "Um die Ursache zu ermitteln, besuchen Sie",
+      "message2Link": "Ereignisprotokolle",
+      "message3": "Das System versucht, den abgesicherten Modus beim nächsten Einschaltversuch zu verlassen. Um den Server neu zu starten, besuchen Sie",
+      "message3Link": "Ein-/Ausschaltoperationen für Server"
+    },
     "delayTimeValidation": {
       "delayTimeRange": "Der Wert muss zwischen %{min} und %{max} liegen.",
       "enterDelayTime": "Wert darf nicht kleiner als die Verzögerungszeit zum Beenden sein.",
@@ -1217,6 +1279,9 @@
     "operations": "Operationen",
     "orderlyReboot": "Ordnungsgemäß - Betriebssystem wird heruntergefahren und der Server anschließend neu gestartet",
     "orderlyShutdown": "Ordnungsgemäß - Betriebssystem und Server werden nacheinander heruntergefahren.",
+    "osRuntimeButton": "Mit dem Betriebsstatus des Betriebssystems fortfahren",
+    "osRuntimeMessage": "Fahren Sie mit dem Betriebsstatus des Betriebssystems fort, um mit der Laufzeit fortzufahren.",
+    "phypStandby": "Das System befindet sich im PHYP-Bereitschaftsmodus.",
     "powerOn": "Einschalten",
     "reboot": "Neu starten",
     "rebootServer": "Server neu starten",
@@ -1225,7 +1290,11 @@
     "shutDown": "Herunterfahren",
     "shutdownServer": "Server herunterfahren",
     "biosSettings": {
+      "aixLinux": "Bootmodus der AIX/LINUX-Partition",
       "currentOperatingMode": "Aktueller Betriebsmodus %{currOptMode}",
+      "defaultPartition": "Standardpartitionsumgebung",
+      "ibmIPartition": "Bootmodus der IBM i-Partition",
+      "nonHMCManaged": "Nur aktiviert, wenn das System nicht von HMC verwaltet wird",
       "powPolicySection": "wird mit %{powerPolicy} definiert",
       "pvm_default_os_type": "Standardpartitionsumgebung",
       "pvm_os_boot_type": "Bootmodus der IBM i-Partition",
@@ -1234,6 +1303,64 @@
       "pvm_system_operating_mode": "Betriebsmodus des Servers",
       "pvm_system_power_off_policy": "Ein-/Ausschaltrichtlinie des Servers",
       "selectedOperatingMode": "Beim Speichern wird für den Betriebsmodus %{selectedOptMode} festgelegt",
+      "serverFirmware": "Richtlinie für Server-Firmwarestart",
+      "powerSettingDescription": "Beschreibungen der Stromversorgungseinstellungen anzeigen",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "Nur automatischer Start",
+          "autoStartAlways": "Immer automatischer Start",
+          "standBy": "Bereitschaft"
+        },
+        "description": {
+          "autoStartOnly": "Aktivieren Sie Server-Firmware und Partitionen nur dann automatisch, wenn die Wiederherstellung nach einer abnormalen Beendigung eingeschaltet wird (z. B. automatischer Neustart der Stromversorgung oder automatischer Neustart der Systembeendigung).",
+          "autoStartAlways": "Aktivieren Sie bestimmte Partitionen automatisch. Wenn der Server über das HMC- oder ASMI-Menü eingeschaltet wird, aktiviert der Server automatisch die Partitionen, die für das automatische Starten konfiguriert sind. Wenn der Server fehlerhaft stoppt und ein automatischer Neustart oder Warmstart ausgeführt wird, aktiviert der Server die Partitionen, die zur Zeit des Stopps aktiv waren.",
+          "standBy": "Aktivieren Sie die Server-Firmware und die Partitionen nicht automatisch beim Einschalten durch den Benutzer oder bei einer Wiederherstellung."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "Standardwert"
+        },
+        "description": {
+          "aix": "Systemfirmware wählt AIX/Linux als Standardpartitionsumgebung aus.",
+          "linux": "Systemfirmware wählt AIX/Linux als Standardpartitionsumgebung aus.",
+          "ibmI": "Server-Firmware wählt IBM i als Standardpartitionsumgebung aus.",
+          "default": "Die Systemfirmware wählt automatisch die Standardpartitionsumgebung basierend auf dem Systemmarkentyp aus."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "Diese Partition bootet direkt in das Betriebssystem",
+          "serviceBoot": "Service-Bootmodus aus gespeicherter Liste",
+          "bootToSms": "Booten über SMS-Menü",
+          "bootToOpenFirware": "Booten mit Open Firmware-Eingabeaufforderung",
+          "serviceBootMode": "Booten im Servicemodus von Standardliste"
+        },
+        "description": {
+          "partitionBoot": "Die Partition bootet ohne Unterbrechung in das Betriebssystem.",
+          "serviceBoot": "Das System bootet über die gespeicherte Bootliste für den Servicemodus. Dies ist normalerweise eine Kurzform für die Ausführung des Diagnoseprogramms der Partition.  Damit diese Option genutzt werden kann, muss das Betriebssystem das Booten im Diagnosemodus unterstützen, und das Diagnoseprogramm muss sich auf dem Plattenlaufwerk der Partition befinden.",
+          "bootToSms": "Die Partition wird im SMS-Menü (System Management Services) gestoppt.",
+          "bootToOpenFirware": "Das System stoppt an der Eingabeaufforderung der Open Firmware.",
+          "serviceBootMode": "Das System bootet über die Standardbootliste.  Diese Option ist die bevorzugte Methode zum Ausführen des eigenständigen Diagnoseprogramms von einem CD-ROM-Laufwerk."
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "IPL von Platte unter Verwendung von Kopie A des Licensed Internal Code des Systems.",
+          "b": "IPL von Platte mit Kopie B des Licensed Internal Code des Systems.",
+          "c": "Nur für die Hardware-Service-Verwendung reserviert.",
+          "d": "IPL von einem anderen Datenträger als der IPL-Platte durchführen. Alternatives IPL für die Unterstützung der Codeinstallation."
+        }
+      },
       "attributeValues": {
         "pvm_os_boot_type": {
           "A_Mode": "A (Mit Kopie A von Platte booten)",
@@ -1259,7 +1386,7 @@
           "Normal": "Normal - Automatisch"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "Automatisches Ausschalten des Systems",
+          "automaticHelperText": "Bei dieser Einstellung ist das Verhalten des Systems, wenn es nicht partitioniert ist, dasselbe wie beim Ausschalten, und wenn das System partitioniert ist, ist das Verhalten des Systems dasselbe wie beim System, wenn es eingeschaltet bleibt.",
           "powerOffHelperText": "Der Server wird im Anschluss an das Abschalten der letzten Partition ausgeschaltet",
           "stayOnHelperText": "Der Server bleibt im Anschluss an das Abschalten der letzten Partition eingeschaltet"
         }
@@ -1361,7 +1488,8 @@
       "unlock": "Entsperren",
       "username": "Benutzername",
       "userPassword": "Benutzerkennwort",
-      "userUnlockMethod": "Methode zum Entsperren von Benutzern"
+      "userUnlockMethod": "Methode zum Entsperren von Benutzern",
+      "zeroLoginAttempts": "Bei \"0\" wird das Konto nie gesperrt."
     },
     "table": {
       "privilege": "Berechtigung",
