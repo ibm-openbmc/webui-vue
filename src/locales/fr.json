@@ -4,14 +4,14 @@
       "activate": "Activer",
       "add": "Ajouter",
       "cancel": "Annuler",
-      "clearAll": "Tout désélectionner",
+      "clearAll": "Tout effacer",
       "confirm": "Confirmer",
       "copy": "Copier",
       "delete": "Supprimer",
       "deleteAll": "Supprimer tout",
       "disable": "Désactiver",
       "download": "Télécharger",
-      "downloadAll": "Tout recevoir par téléchargement",
+      "downloadAll": "Télécharger tout",
       "edit": "Editer",
       "enable": "Activer",
       "export": "Exporter",
@@ -19,10 +19,9 @@
       "filter": "Filtrer",
       "openNewTab": "Ouvrir dans un nouvel onglet",
       "refresh": "Actualiser",
-      "replace": "Remplacement",
+      "replace": "Remplacer",
       "reset": "Réinitialiser",
       "save": "Sauvegarder",
-      "saveSettings": "Sauvegarder les paramètres",
       "selected": "Sélectionné"
     },
     "ariaLabel": {
@@ -34,7 +33,7 @@
       "tooltip": "Infobulle"
     },
     "calendar": {
-      "selectDate": "Choisir une date",
+      "selectDate": "Sélectionnez la date",
       "useCursorKeysToNavigateCalendarDates": "Utiliser les touches de curseur pour naviguer parmi les dates du calendrier"
     },
     "fileUpload": {
@@ -51,10 +50,10 @@
       "lengthMustBeBetween": "La longueur doit être comprise entre %{min} et %{max}caractères",
       "mustBeAtLeast": "Ce nombre doit être au moins égale à %{value}",
       "optional": "facultatif",
-      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "passwordsDoNotMatch": "Les mots de passe ne concordent pas",
       "required": "Requis",
       "search": "Rechercher",
-      "selectAnOption": "Sélectionner une option",
+      "selectAnOption": "Sélectionnez une option",
       "valueMustBeBetween": "La valeur doit être comprise entre %{min} et %{max}"
     },
     "passwordValidation": {
@@ -64,7 +63,8 @@
       "message3": "3. Ne doit pas contenir le nom d'utilisateur du compte",
       "message4": "4. Ne doit pas contenir de mot de dictionnaire",
       "message5": "5. Ne doit pas contenir de caractères séquentiels",
-      "message6": "6. Doit comporter 20 caractères ou moins s'il est utilisé pour IPMI"
+      "message6": "6. Doit comporter 20 caractères ou moins s'il est utilisé pour IPMI",
+      "message7": "7. Doit contenir deux caractères qui soient des lettres minuscules, des lettres majuscules, des chiffres ou d'autres caractères"
     },
     "status": {
       "absent": "Absent",
@@ -72,7 +72,7 @@
       "connected": "Connecté",
       "disabled": "Désactivé",
       "disconnected": "Déconnecté",
-      "enabled": "Activé",
+      "enabled": "Activée",
       "error": "Erreur",
       "informational": "Information",
       "nextReboot": "Les modifications prendront effet au prochain démarrage.",
@@ -132,13 +132,15 @@
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
-    "lateralCastOutControl": "@:appPageTitle.lateralCastOutControl",
+    "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
     "logs": "Journaux",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
     "operations": "Opérations",
     "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
     "policies": "@:appPageTitle.policies",
     "postCodeLogs": "@:appPageTitle.postCodeLogs",
     "power": "@:appPageTitle.power",
@@ -173,20 +175,22 @@
     "inventory": "Inventaire et voyants",
     "keyClear": "Effacer la clé",
     "kvm": "KVM",
-    "lateralCastOutControl": "Contrôle de la conversion latérale",
+    "systemParameters": "Paramètres système",
     "ldap": "LDAP",
     "login": "Connexion",
     "memory": "Mémoire",
     "network": "Réseau",
+    "notices": "Remarques",
     "overview": "Présentation",
     "pageNotFound": "Page introuvable",
+    "pcieTopology": "Topologie matérielle PCIe",
     "policies": "Stratégies",
     "postCodeLogs": "Journaux de progression",
     "postCodes": "Journaux de progression",
     "power": "Alimentation",
     "powerRestorePolicy": "Stratégie de restauration de l'alimentation",
     "profileSettings": "Paramètres de profil",
-    "rebootBmc": "Réamorçage du contrôleur BMC",
+    "rebootBmc": "Réamorçage du contrôleur de gestion de la carte mère (BMC)",
     "sensors": "Détecteurs",
     "serverPowerOperations": "Opérations d'alimentation du serveur",
     "serviceLogin": "Consoles de connexion de service",
@@ -313,7 +317,8 @@
   "pageDateTime": {
     "alert": {
       "link": "Paramètres de profil",
-      "message": "Pour changer le mode d'affichage de la date et de l'heure (horaire décalé du navigateur ou UTC), voir "
+      "message": "Pour changer le mode d'affichage de la date et de l'heure (horaire décalé du navigateur ou UTC), voir ",
+      "messageNtp": "Si NTP est sélectionné mais qu'aucun serveur NTP n'est indiqué ou que le serveur NTP indiqué n'est pas accessible, c'est time.google.com qui est utilisé."
     },
     "configureSettings": "Configurer les paramètres",
     "form": {
@@ -327,6 +332,9 @@
         "server1": "Serveur 1",
         "server2": "Serveur 2",
         "server3": "Serveur 3"
+      },
+      "validators": {
+        "serverExists": "L'adresse de serveur existe déjà"
       }
     },
     "toast": {
@@ -336,10 +344,12 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "Maintenance simultanée",
+    "opPanelBase": "Maintenance de base du panneau de commande",
+    "opPanelLcd": "Maintenance de l'écran LCD du panneau de commande",
     "tod": "Heure de maintenance de la batterie",
     "alert": {
-      "message": "Activez cette option pour retirer ou remplacer la batterie. Une fois que vous avez terminé, il est recommandé de désactiver l'option pour revenir en mode normal.",
-      "title": "Réparation simultanée de la batterie"
+      "message": "Pour retirer ou remplacer la batterie, la base du panneau de commande ou l'écran LCD du panneau de commande, actionnez le commutateur correspondant. Une fois que vous avez terminé, il est recommandé de désactiver l'option pour revenir en mode normal.",
+      "title": "Réparation simultanée de la batterie, de la base du panneau de commande et de l'écran LCD du panneau de commande"
     },
     "toast": {
       "errorSaveReadyToRemove": "Erreur de suppression d'état %{state}.",
@@ -368,6 +378,7 @@
       "message": "Les coeurs de processeur et les barrettes DIMM de mémoire peuvent être configurés ou déconfigurés uniquement lorsque le serveur est hors tension."
     },
     "toast": {
+      "deleteReqFailed": "La demande de suppression a échoué car la ressource demandée ne peut pas être supprimée.",
       "errorDisablingSetting": "Erreur de désactivation du paramètre",
       "errorEnablingSetting": "Erreur d'activation du paramètre"
     },
@@ -377,6 +388,7 @@
       "id": "ID",
       "locationCode": "Code d'emplacement",
       "name": "Nom",
+      "pelId": "ID Pel",
       "settings": "Paramètres",
       "size": "Taille en mégaoctets"
     }
@@ -413,18 +425,22 @@
       "description": "Description",
       "id": "Id",
       "name": "Nom",
+      "pelId": "ID Pel",
       "reference": "Référence",
       "resource": "Ressource",
-      "severity": "Gravité",
+      "severity": "Sévérité",
       "srcDetails": "Détails SRC",
-      "srcDetailsToolTip": "Détails de code SRC",
+      "srcDetailsToolTip": "Détails du code de référence du système. Les détails SRC ne sont pas présents pour les enregistrements de garde manuelle.",
       "status": "Statut",
       "type": "Type de déconfiguration"
     },
     "toast": {
       "errorDelete": "Erreur de suppression de %{count} enregistrements. | Erreur de suppression de {count} % enregistrements.",
       "errorResolveEntries": "Erreur de résolution de %{count} enregistrement. | Erreur de résolution de %{count} enregistrements.",
+      "errorStartDownload": "Erreur lors du démarrage du téléchargement.",
       "errorUnresolveEntries": "Erreur d'annulation de la résolution de %{count} enregistrement. | Erreur d'annulation de résolution de %{count} enregistrements.",
+      "successStartDownload": "Données supplémentaires téléchargées avec succès.",
+      "successStartDownloadTitle": "Téléchargement réussi",
       "successDelete": "%{count} enregistrement supprimé. | %{count} enregistrements supprimés."
     }
   },
@@ -440,7 +456,7 @@
       "resourceDumpMessage": "Le cliché de ressource est un processus long.",
       "resourceDumpMessage2": "Si le cliché n'est pas répertorié dans la table des clichés et qu'il n'existe pas de journal des erreurs pour le cliché de ressource, cela signifie qu'il a été déchargé sur le système d'exploitation.",
       "systemDumpHeading": "Cliché système",
-      "systemDumpMessage": "Le cliché système est un processus interruptible.",
+      "systemDumpMessage": "Le cliché système est un processus de longue durée.",
       "systemDumpMessageHmcDisabled": "Les clichés système seront déchargés sur le système d'exploitation et seront supprimés par le système d'exploitation lorsque le cliché est supprimé de la mémoire hôte.",
       "systemDumpMessageHmcEnabled": "Les clichés système seront déchargés sur la console HMC."
     },
@@ -511,7 +527,7 @@
       "name": "Nom",
       "resolution": "Résolution",
       "searchLogs": "Rechercher des journaux",
-      "severity": "Gravité",
+      "severity": "Sévérité",
       "status": "Statut",
       "type": "Type",
       "eventId": "ID d'événement"
@@ -562,7 +578,7 @@
       "resetBiosError": "La réinitialisation aux paramètres d'usine du serveur a échoué.",
       "resetBiosSuccess": "La réinitialisation aux paramètres d'usine du serveur a abouti.",
       "resetToDefaultsError": "La réinitialisation aux paramètres d'usine du serveur et du contrôleur de gestion de la carte mère (BMC) a échoué.",
-      "resetToDefaultsSuccess": "La réinitialisation aux paramètres d'usine du serveur et du contrôleur de gestion de la carte mère (BMC) a abouti."
+      "resetToDefaultsSuccess": "La réinitialisation aux paramètres d'usine du serveur et du contrôleur de gestion de la carte mère (BMC) a abouti. Si vous n'êtes pas déconnecté automatiquement, actualisez le navigateur."
     }
   },
   "pageFieldCoreOverride": {
@@ -589,10 +605,12 @@
     "cardBodyVersion": "Version",
     "cardTitleBackup": "Image de sauvegarde",
     "cardTitleRunning": "Image en cours d'exécution",
+    "permanent": "Permanent",
     "sectionTitleBmcCards": "BMC",
     "sectionTitleBmcCardsCombined": "Contrôleur BMC et serveur",
     "sectionTitleHostCards": "Hôte",
     "sectionTitleUpdateFirmware": "Mettre à jour le microprogramme",
+    "temporary": "Temporaire",
     "alert": {
       "operationInProgress": "Opération d'alimentation du serveur en cours.",
       "serverMustBePoweredOffTo": "Le serveur doit être mis hors tension pour :",
@@ -626,15 +644,31 @@
     },
     "toast": {
       "errorSwitchImages": "Erreur lors du basculement entre l'image en cours d'exécution et l'image de sauvegarde.",
+      "errorActivation": "Erreur lors du démarrage de l'activation du microprogramme.",
       "errorUpdateFirmware": "Erreur lors du démarrage de la mise à jour du microprogramme.",
+      "errorUploadFirmware": "Erreur lors du téléchargement du microprogramme.",
       "rebootStarted": "La réamorçage a démarré",
-      "rebootStartedMessage": "Le reamorçage a démarré à partir de l'image de sauvegarde.",
-      "updateStarted": "Mise à jour démarrée",
-      "updateStartedMessage": "Attendez la notification de mise à jour du microprogramme avant de procéder à des modifications.",
-      "verifySwitch": "Vérification du basculement",
-      "verifySwitchMessage": "Actualisez l'application pour vérifier que le passage de l'image en cours d'exécution à l'image de sauvegarde a abouti.",
-      "verifyUpdate": "Vérifier la mise à jour",
-      "verifyUpdateMessage": "Actualisez l'application pour vérifier que la mise à jour du microprogramme a abouti"
+      "rebootStartedMessage": "Le reamorçage a démarré à partir de l'image de sauvegarde. Le réamorçage peut prendre plusieurs minutes.",
+      "taskComplete": "Tâche terminée",
+      "taskCompleteMessage": "Tâche terminée. En attente du réamorçage du contrôleur de gestion de la carte mère",
+      "updateFirmware": {
+        "step1": "Etape 1 sur 4 - Téléchargement",
+        "step1Message": "Mise à jour démarrée. Téléchargement du microprogramme en cours.",
+        "step2": "Etape 2 sur 4 - Activation",
+        "step2Message": "Téléchargement du microprogramme terminé. Tâche d'activation en cours.",
+        "step3": "Etape 3 sur 4 - Réamorçage",
+        "step3Message": "Tâche d'activation terminée. Réamorçage du contrôleur de gestion de la carte mère en cours.",
+        "step4": "Etape 4 sur 4 - Terminaison",
+        "step4Message": "La mise à jour du microprogramme a abouti. Cliquez sur Actualiser pour vérifier le niveau du microprogramme."
+      },
+      "switchToRunning": {
+        "step1": "Etape 1 sur 3 - Commutation de microprogramme",
+        "step1Message": "Processus démarré. Commutation du microprogramme en cours.",
+        "step2": "Etape 2 sur 3 - Réamorçage",
+        "step2Message": "Commutation du microprogramme terminée. Réamorçage du contrôleur de gestion de la carte mère en cours.",
+        "step3": "Etape 3 sur 3 - Terminaison",
+        "step3Message": "La commutation du microprogramme a abouti. Cliquez sur Actualiser pour vérifier que les images en cours d'exécution et de sauvegarde ont commuté."
+      }
     }
   },
   "pageHostConsole": {
@@ -646,7 +680,12 @@
     "bmcManager": "Gestionnaire BMC",
     "chassis": "Châssis",
     "dimmSlot": "Emplacement DIMM",
+    "fabricAdapters": "Adaptateurs de matrice",
     "fans": "Ventilateurs",
+    "identifyLedInfo": "Pour les éléments sans LED, le commutateur à LED d'identification allume uniquement la LED du boîtier",
+    "pcieSlots": "Emplacements PCIe",
+    "pcieTopologyLink": "Topologie matérielle PCIe.",
+    "pcieTopologyLinkDescription": "Pour en savoir plus sur les emplacements PCIe, visitez ",
     "powerSupplies": "Alimentations électriques",
     "processors": "Processeurs",
     "quicklinkTitle": "Liens rapides vers les composants matériels",
@@ -656,35 +695,6 @@
       "traceLabel": "Collecter la trace des boîtiers d'E-S",
       "traceDescription": "Créer un cliché de ressource (à l'aide d'un sélecteur de ressource spécifique) à partir de ",
       "DumpsLink": "la page Clichés."
-    },
-    "pcie": {
-      "bridgeOrHost": "Pont PCIe ou hôte CAPI",
-      "cable": "Câble",
-      "cableLength": "Longueur du câble",
-      "cableStatus": "Etat du câble",
-      "cableType": "Type de câble",
-      "degraded": "Dégradé",
-      "failed": "Echec",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "Identifier les voyants",
-      "inactive": "Inactif",
-      "ioSlots": "Emplacements d'E-S",
-      "linkProperties": "Propriétés de lien",
-      "linkStatus": "Statut de la liaison",
-      "localPort": "Port local",
-      "localPortLocation": "Emplacement de port local",
-      "open": "Ouverture",
-      "operational": "Opérationnel",
-      "parentId": "ID parent",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "Port distant",
-      "remotePortLocation": "Emplacement de port distant",
-      "resetLink": "Réinitialiser le lien",
-      "speed": "Vitesse",
-      "title": "Topologie matérielle PCIe",
-      "type": "Type",
-      "unknown": "Inconnu",
-      "width": "Largeur"
     },
     "systemIndicator": {
       "attentionLed": "Voyant d'avertissement du système",
@@ -717,12 +727,6 @@
         "title": "Modifier les paramètres du boîtier",
         "typeModel": "@:pageInventory.table.typeModel",
         "typeModelHelperText": "Le type machine du boîtier doit être différent de 0000. Tous les caractères alphanumériques sont non valides."
-      },
-      "pcie": {
-        "confirmMessage": "La réinitialisation d'un lien pendant l'exécution des partitions système peut entraîner des erreurs. L'opération doit être effectuée avec les conseils d'un membre de l'équipe de support.",
-        "resetLink": "Réinitialiser le lien '%{linkId}'",
-        "subTitle": "Confirmez-vous ?",
-        "title": "Réinitialiser le lien '%{linkId}'"
       }
     },
     "table": {
@@ -735,7 +739,7 @@
       "processorCount": "Nombre de processeurs",
       "currentNext": "(en cours et suivant)",
       "description": "Description",
-      "enabled": "Activé",
+      "enabled": "Activée",
       "firmwareVersion": "Version du microprogramme",
       "health": "Santé",
       "healthRollup": "Cumul de santé",
@@ -750,6 +754,7 @@
       "processorType": "Type de processeur",
       "remove": "Supprimer",
       "serialNumber": "Numéro de série",
+      "slotType": "Type d'emplacement",
       "sparePartNumber": "Numéro de référence de la pièce détachée (numéro FRU)",
       "totalCores": "Nombre total de coeurs",
       "totalSystemMemoryGiB": "Mémoire système totale",
@@ -763,12 +768,10 @@
       "errorEnableLampTest": "Erreur lors de l'activation du test des ampoules.",
       "errorEnableSystemAttentionLed": "Erreur lors de l'activation du voyant d'avertissement système.",
       "errorEnclosureSettings": "Erreur lors de la mise à jour des paramètres du boîtier.",
-      "errorPcieLinkReset": "Erreur lors de la réinitialisation du lien '%{linkId}'.",
-      "infoPcieLinkResetMessage": "Cette opération peut prendre un certain temps.",
-      "infoPcieLinkResetTitle": "L'ID de lien '%{linkId}' est en cours de réinitialisation.",
       "infoRemoveAssembly": "Actualisez pour confirmer si '%{assemblyName}' est prêt à être supprimé.",
       "successEnclosureSettings": "Les paramètres du boîtier ont été mis à jour.",
-      "successPcieLinkReset": "'%{linkId}' a été réinitialisé."
+      "successEnableIdentifyLed": "Le voyant d'identification a été activé.",
+      "successDisableIdentifyLed": "Le voyant d'identification a été désactivé."
     }
   },
   "pageKeyClear": {
@@ -810,10 +813,9 @@
     "openNewTab": "Ouvrir dans un nouvel onglet",
     "status": "Statut"
   },
-  "pageLateralCastOutControl": {
-    "lateralCastOut": "Conversion latérale",
-    "lateralCastOutControl": "Contrôle de la conversion latérale",
-    "lateralCastOutControlDescription": "Ne modifiez cette valeur qu'à la demande de votre fournisseur de services, car cela pourrait entraîner une dégradation des performances du système.",
+  "pageSystemParameters": {
+    "aggressivePrefetch": "Préextraction agressive",
+    "aggressivePrefetchDescription": "Ne modifiez cette valeur que si le fournisseur de services vous y invite car cela peut dégrader les performances du système. Indique si la préextraction agressive de faveur de processeur est désactivée ou activée",
     "alert": {
       "message": "Le système doit être mis hors tension. Les modifications apportées prendront effet lors du prochain redémarrage",
       "title": "Application des changements"
@@ -821,8 +823,17 @@
     "button": {
       "saveSettings": "Enregistrer les paramètres"
     },
+    "frequencyCap": "Plafond de fréquence",
+    "frequencyCapDescription": "Lorsque cette option est activée, elle empêche tous les processeurs du système de dépasser la fréquence de fonctionnement maximale spécifiée, en MHz",
+    "frequencyCapHelpText": "Si cette option est désactivée, un amorçage initial peut être nécessaire pour pouvoir fixer les fréquences maximale et minimale.",
+    "lateralCastOut": "Conversion latérale",
+    "lateralCastOutDescription": "Ne modifiez cette valeur qu'à la demande de votre fournisseur de services, car cela pourrait entraîner une dégradation des performances du système.",
     "toast": {
+      "errorSavingAggressivePrefetch": "Erreur lors de la sauvegarde de la préextraction agressive",
+      "errorSavingFrequencyCap": "Erreur lors de la sauvegarde du plafond de fréquence",
       "errorSavingLateralCastOut": "Erreur lors de la sauvegarde du mode de conversion latérale",
+      "successSavingAggressivePrefetch": "La préextraction agressive a été sauvegardée avec succès",
+      "successSavingFrequencyCap": "Le plafond de fréquence a été sauvegardé avec succès",
       "successSavingLateralCastOut": "Le mode de conversion latérale a été correctement sauvegardé"
     }
   },
@@ -915,7 +926,7 @@
     "updatePageSetup": "Mettre à jour la configuration de la page de mémoire système",
     "alert": {
       "heading": "Application des changements",
-      "message": "Le système doit être mis hors tension. Les changements effectués seront appliqués au prochain réamorçage.",
+      "message": "Le système doit être mis hors tension et non géré par le HMC. Les changements effectués seront appliqués au prochain réamorçage.",
       "serverMustBePoweredOffTo": "Le serveur doit être mis hors tension pour :",
       "updateActiveMemoryMirroring": "Mettre à jour le mode miroir de la mémoire active",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -951,7 +962,7 @@
     "ntp": "Serveur NTP",
     "operatingMode": "Mode de fonctionnement",
     "pageDescription": "Configurer les paramètres réseau du contrôleur BMC",
-    "staticDns": "Serveur DNS statique",
+    "staticDns": "Serveur de noms de domaine (DNS) statique",
     "useDns": "Utiliser des serveurs DNS",
     "useDomainName": "Utiliser le nom de domaine",
     "useNtp": "Utiliser des serveurs NTP",
@@ -964,7 +975,7 @@
       "editHostnameTitle": "Editer le nom d'hôte",
       "gateway": "Passerelle",
       "ipAddress": "Adresse IP",
-      "staticDns": "Serveur DNS statique",
+      "staticDns": "Serveur de noms de domaine (DNS) statique",
       "subnetMask": "Masque de sous-réseau"
     },
     "table": {
@@ -1010,6 +1021,7 @@
     "powerInformation": "Informations sur l'alimentation",
     "powerMode": "Mode d'alimentation",
     "runningVersion": "En cours d'exécution",
+    "safeMode": "Mode sans échec",
     "serialNumber": "Numéro de série",
     "serverInformation": "Informations sur le serveur",
     "serviceLogin": "Connexion de service",
@@ -1035,13 +1047,54 @@
   "pagePageNotFound": {
     "description": "La ressource demandée est introuvable."
   },
+  "pagePcieTopology": {
+    "alert": "Le chargement de cette page peut prendre quelques minutes.",
+    "bridgeOrHost": "Pont PCIe ou hôte CAPI",
+    "cableLength": "Longueur du câble",
+    "cableStatus": "Etat du câble",
+    "cableType": "Type de câble",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "Identifier les voyants",
+    "ioSlots": "Emplacements d'E-S",
+    "linkProperties": "Propriétés de lien",
+    "linkStatus": "Statut de la liaison",
+    "localPort": "Port local",
+    "localPortLocation": "Emplacement de port local",
+    "parentId": "ID parent",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "Port distant",
+    "remotePortLocation": "Emplacement de port distant",
+    "resetLink": "Réinitialiser le lien",
+    "savePcieTopology": "Sauvegarde de la topologie PCIe",
+    "speed": "Vitesse",
+    "type": "Type",
+    "warning": "Le système doit être au moins en veille PHYP. Pour mettre sous tension, visitez ",
+    "width": "Largeur",
+    "modal": {
+      "resetConfirm": "Confirmez-vous ?",
+      "resetLinkDescription": "La réinitialisation d'une liaison alors que des partitions système sont en cours d'exécution peut entraîner des erreurs. Cette opération doit être effectuée avec l'aide d'un membre de l'équipe de support.",
+      "resetLinkHeader": "Réinitialiser la liaison %{id}"
+    },
+    "table": {
+      "search": "Rechercher"
+    },
+    "toast": {
+      "errorReset": "Erreur lors de la réinitialisation de la liaison %{id}",
+      "errorSavePcieTopology": "Erreur lors de la sauvegarde des informations de topologie PCIe.",
+      "errorSwitchingLed": "Erreur lors de l'activation de la LED %{operation} pour %{value}",
+      "resetInfoTitle": "La liaison d'ID %{id} est en cours de réinitialisation.",
+      "resetInfoDescription": "cette opération peut prendre quelques secondes.",
+      "successReset": "La réinitialisation de la liaison %{id} a été lancée. Vérifiez dans les journaux d'événements s'il y a eu des problèmes.",
+      "successSavePcieTopology": "La sauvegarde des informations de topologie PCIe a abouti."
+    }
+  },
   "pagePolicies": {
     "hostTpm": "Module TPM hôte",
     "hostTpmDescription": "Activez cette option pour vous assurer que le système n'est réamorcé que lorsque le module TPM est fonctionnel.",
     "hostUsb": "Activation du port USB hôte",
     "hostUsbDescription": "Indique si le port USB hôte est désactivé ou activé pour des raisons de sécurité.",
     "ipmi": "IPMI réseau (IPMI hors bande)",
-    "ipmiDescription": "Autoriser la gestion à distance de la plateforme via IPMI. Les outils tels qu'ipmitool requièrent l'activation de ce paramètre.",
+    "ipmiDescription": "Autoriser la gestion à distance de la plateforme via IPMI. Les outils tels qu'ipmitool requièrent l'activation de ce paramètre. Une fois l'activation effectuée, suivez la procédure de la documentation de support en ligne pour ajouter des utilisateurs IPMI.",
     "rtad": "RTAD",
     "rtadDescription": "Cette option active ou désactive le démon d'attestation sécurisé distant pour le microprogramme de l'hôte.",
     "rtadInfoIcon": "@:global.status.nextReboot",
@@ -1053,6 +1106,8 @@
     "usbFirmwareUpdatePolicyDescription": "Si vous activez la stratégie de mise à jour du microprogramme via USB, les mises à jour seront possibles via une clé USB.",
     "toast": {
       "errorNetworkPolicyUpdate": "Erreur de mise à jour de %{policy}.",
+      "successDisableBmcShell": "Le shell BMC a été désactivé (via SSH). La désactivation prendra effet d'ici 15 secondes.",
+      "successEnableBmcShell": "Le shell BMC a été activé (via SSH)",
       "successNetworkPolicyUpdate": "La mise à jour de %{policy} a abouti.",
       "successNextBootToast": "Application des modifications à %{policy}. Les modifications apportées à %{policy} prendront effet lors du prochain redémarrage."
     },
@@ -1099,6 +1154,13 @@
     "toEnter": "En entrée",
     "toExit": "En sortie",
     "utilizationThreshold": "Seuil d'utilisation (en %)",
+    "alert": {
+      "message": "Le système fonctionne à un niveau de performance réduit car il est en mode sans échec. Les paramètres d'alimentation ne sont pas accessibles en mode sans échec. ",
+      "message2": "Pour déterminer la cause, visitez",
+      "message2Link": "journaux d'événements",
+      "message3": "Le système tentera de quitter le mode sans échec à la prochaine mise sous tension. Pour réamorcer le serveur, visitez",
+      "message3Link": "opérations d'alimentation du serveur"
+    },
     "delayTimeValidation": {
       "delayTimeRange": "La valeur doit être comprise entre %{min} et %{max}.",
       "enterDelayTime": "La valeur ne peut pas être inférieure au délai de sortie.",
@@ -1166,10 +1228,10 @@
     "browserOffset": "Horaire décalé du navigateur (%{timezone})",
     "changePassword": "Modifier le mot de passe",
     "confirmPassword": "Confirmer le nouveau mot de passe",
-    "defaultUTC": "Par défaut (TUC)",
+    "defaultUTC": "Par défaut (UTC)",
     "newPassLabelTextInfo": "Le mot de passe doit comporter entre %{min} et %{max} caractères",
     "newPassword": "Nouveau mot de passe",
-    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+    "passwordsDoNotMatch": "Les mots de passe ne concordent pas",
     "profileInfoTitle": "Informations relatives au profil",
     "timezone": "Fuseau horaire",
     "timezoneDisplay": "Préférence d'affichage du fuseau horaire",
@@ -1181,7 +1243,7 @@
   },
   "pageRebootBmc": {
     "lastReboot": "Dernier réamorçage du contrôleur BMC",
-    "rebootBmc": "Réamorçage du contrôleur BMC",
+    "rebootBmc": "Réamorçage du contrôleur de gestion de la carte mère (BMC)",
     "rebootInformation": "Lorsque vous réamorcez le contrôleur de gestion de la carte mère (BMC), votre navigateur Web perd le contact avec le BMC pendant plusieurs minutes. Lorsque le BMC revient en ligne, il peut être nécessaire de se reconnecter.",
     "modal": {
       "confirmMessage": "Voulez-vous vraiment réamorcer le contrôleur de gestion de la carte mère (BMC) ?",
@@ -1217,6 +1279,9 @@
     "operations": "Opérations",
     "orderlyReboot": "Méthodique : le système d'exploitation est arrêté, puis le serveur est réamorcé",
     "orderlyShutdown": "Méthodique : le système d'exploitation est arrêté, puis le serveur est arrêté",
+    "osRuntimeButton": "Passer au système d'exploitation exécuté",
+    "osRuntimeMessage": "Passez à l'état d'exécution du système d'exploitation pour passer à l'exécution.",
+    "phypStandby": "Le système est en veille PHYP.",
     "powerOn": "Mettre sous tension",
     "reboot": "Réamorçage",
     "rebootServer": "Réamorcer le serveur",
@@ -1225,7 +1290,11 @@
     "shutDown": "Arrêter",
     "shutdownServer": "Arrêter le serveur",
     "biosSettings": {
+      "aixLinux": "Mode d'amorçage de la partition AIX/LINUX",
       "currentOperatingMode": "Mode d'exploitation en cours : %{currOptMode}",
+      "defaultPartition": "Environnement de partition par défaut",
+      "ibmIPartition": "Mode d'amorçage de la partition IBM i",
+      "nonHMCManaged": "Activé uniquement lorsque le système n'est pas géré par la console HMC",
       "powPolicySection": "sera défini sur %{powerPolicy}",
       "pvm_default_os_type": "Environnement de partition par défaut",
       "pvm_os_boot_type": "Mode d'amorçage de la partition IBM i",
@@ -1234,6 +1303,64 @@
       "pvm_system_operating_mode": "Mode de fonctionnement du serveur",
       "pvm_system_power_off_policy": "Stratégie d'alimentation du serveur",
       "selectedOperatingMode": "Le mode d'exploitation lors de la sauvegarde sera défini sur %{selectedOptMode}",
+      "serverFirmware": "Stratégie de démarrage du microprogramme du serveur",
+      "powerSettingDescription": "Afficher la description des paramètres d'alimentation",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "Démarrage automatique uniquement",
+          "autoStartAlways": "Démarrage automatique systématique",
+          "standBy": "Veille"
+        },
+        "description": {
+          "autoStartOnly": "N'activez automatiquement le microprogramme et les partitions du serveur que dans le cas d'une mise sous tension de reprise après un arrêt anormal (par exemple, redémarrage automatique de l'alimentation ou réamorçage automatique d'arrêt du système).",
+          "autoStartAlways": "Activez certaines partitions automatiquement. Si le serveur est mis sous tension à l'aide des menus de la console HMC ou de l'interface ASMI, il active automatiquement les partitions configurées pour le démarrage automatique. Si un redémarrage automatique ou un réamorçage à la mise sous tension ou un réamorçage a lieu après un arrêt anormal du serveur, les partitions qui s'exécutaient au moment où le système s'est arrêté sont activées.",
+          "standBy": "N'activez pas automatiquement le microprogramme et les partitions du serveur pour une mise sous tension par l'utilisateur ou de reprise."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "Par défaut"
+        },
+        "description": {
+          "aix": "Le microprogramme du système sélectionnera AIX/Linux comme environnement de partition par défaut.",
+          "linux": "Le microprogramme du système sélectionnera AIX/Linux comme environnement de partition par défaut.",
+          "ibmI": "Le microprogramme du serveur sélectionnera IBM i comme environnement de partition par défaut.",
+          "default": "Le microprogramme du système sélectionnera automatiquement l'environnement de partition par défaut en fonction du type de la marque du système."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "Cette partition s'amorce directement sur le système d'exploitation",
+          "serviceBoot": "Mode d'amorçage de service de la liste sauvegardée",
+          "bootToSms": "Amorçage sur le menu SMS",
+          "bootToOpenFirware": "Amorçage sur l'invite d'Open Firmware",
+          "serviceBootMode": "Amorçage du mode service à partir de la liste par défaut"
+        },
+        "description": {
+          "partitionBoot": "La partition s'amorce sur le système d'exploitation sans s'arrêter.",
+          "serviceBoot": "Le système s'amorce à partir de la liste d'amorçage en mode service sauvegardée. Il s'agit généralement d'une méthode rapide pour exécuter les diagnostics de la partition.  Pour que cette option soit efficace, le système d'exploitation de la partition doit prendre en charge l'amorçage des diagnostics et ces derniers doivent être chargés sur l'unité de disque de la partition.",
+          "bootToSms": "La partition s'arrête au menu SMS (System Management Services).",
+          "bootToOpenFirware": "Le système s'arrête à l'invite d'ouverture du microprogramme.",
+          "serviceBootMode": "Le système s'amorce à partir de la liste d'amorçage par défaut.  Cette option est la méthode privilégiée pour exécuter des diagnostics autonomes à partir d'une unité de CD-ROM."
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "IPL à partir du disque dur utilisant la copie A du microcode sous licence du système.",
+          "b": "IPL à partir du disque dur utilisant la copie B du microcode sous licence du système.",
+          "c": "Réservé pour l'utilisation de la maintenance du matériel.",
+          "d": "IPL à partir d'un support autre que le disque de source IPL. IPL secondaire pour le support d'installation du code."
+        }
+      },
       "attributeValues": {
         "pvm_os_boot_type": {
           "A_Mode": "A (Amorçage à partir du disque à l'aide de la copie A)",
@@ -1259,7 +1386,7 @@
           "Normal": "Normal - Automatique"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "Mise hors tension automatique du système",
+          "automaticHelperText": "Avec ce réglage, le comportement est identique à la mise hors tension lorsque le système n'est pas partitionné, et au maintien sous tension lorsqu'il l'est.",
           "powerOffHelperText": "Le serveur est mis hors tension lorsque la dernière partition est mise hors tension.",
           "stayOnHelperText": "Lorsque la dernière partition est mise hors tension, le serveur reste sous tension"
         }
@@ -1355,13 +1482,14 @@
       "maxFailedLoginAttempts": "Nombre maximal d'échecs de tentative de connexion",
       "noSpecialCharactersExceptUnderscore": "Aucun caractère spécial sauf le trait de soulignement",
       "passwordMustBeBetween": "Le mot de passe doit comporter entre %{min} et %{max} caractères",
-      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "passwordsDoNotMatch": "Les mots de passe ne concordent pas",
       "privilege": "Privilège",
       "timeoutDurationSeconds": "Durée du délai d'attente (secondes)",
       "unlock": "Déverrouiller",
       "username": "Nom d'utilisateur",
       "userPassword": "Mot de passe utilisateur",
-      "userUnlockMethod": "Mode de déverrouillage d'utilisateur"
+      "userUnlockMethod": "Mode de déverrouillage d'utilisateur",
+      "zeroLoginAttempts": "Si la valeur est '0', le compte ne sera jamais verrouillé."
     },
     "table": {
       "privilege": "Privilège",
