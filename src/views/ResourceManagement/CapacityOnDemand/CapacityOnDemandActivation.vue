@@ -14,12 +14,7 @@
           </b-col>
         </b-row>
         <div>
-          {{ $t('pageCapacityOnDemand.activation.helperText') }}
-          <b-link
-            target="_blank"
-            href="https://www.ibm.com/servers/eserver/ess"
-            >{{ accessKeyLink }}</b-link
-          >
+          {{ $t('pageCapacityOnDemand.activation.helperTextIps') }}
         </div>
         <b-row>
           <b-col sm="12" md="9" lg="9" xl="8">
@@ -84,7 +79,6 @@ export default {
     return {
       licenseKey: '',
       maxLength: 34,
-      accessKeyLink: 'www.ibm.com/servers/eserver/ess',
     };
   },
   validations() {
