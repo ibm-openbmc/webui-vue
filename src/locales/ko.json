@@ -22,7 +22,6 @@
       "replace": "교체",
       "reset": "재설정",
       "save": "저장",
-      "saveSettings": "설정 저장",
       "selected": "선택됨"
     },
     "ariaLabel": {
@@ -64,7 +63,8 @@
       "message3": "3. 계정 사용자 이름이 포함되지 않아야 합니다.",
       "message4": "4. 사전 단어를 포함하지 않아야 합니다.",
       "message5": "5. 순차 문자가 포함되지 않아야 합니다.",
-      "message6": "6. IPMI에 사용하는 경우 20자 이하여야 합니다."
+      "message6": "6. IPMI에 사용하는 경우 20자 이하여야 합니다.",
+      "message7": "7. 소문자, 대문자, 숫자 및 기타 문자에서 두 가지를 포함해야 합니다."
     },
     "status": {
       "absent": "없음",
@@ -72,13 +72,13 @@
       "connected": "연결됨",
       "disabled": "사용 안함",
       "disconnected": "연결이 끊어짐",
-      "enabled": "사용",
+      "enabled": "사용 가능",
       "error": "오류",
       "informational": "정보용",
       "nextReboot": "다음 부트 시 변경 사항이 적용됩니다.",
       "notAvailable": "사용 불가능",
-      "off": "끄기",
-      "on": "켜기",
+      "off": "꺼짐",
+      "on": "설정",
       "present": "있음",
       "success": "성공",
       "warning": "경고"
@@ -132,13 +132,15 @@
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
-    "lateralCastOutControl": "@:appPageTitle.lateralCastOutControl",
+    "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
     "logs": "로그",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
     "operations": "조작",
     "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
     "policies": "@:appPageTitle.policies",
     "postCodeLogs": "@:appPageTitle.postCodeLogs",
     "power": "@:appPageTitle.power",
@@ -173,13 +175,15 @@
     "inventory": "인벤토리 및 LED",
     "keyClear": "키 지우기",
     "kvm": "KVM",
-    "lateralCastOutControl": "측면 캐스트 아웃 제어",
+    "systemParameters": "시스템 매개변수",
     "ldap": "LDAP",
     "login": "로그인",
     "memory": "메모리",
     "network": "네트워크",
+    "notices": "주의사항",
     "overview": "개요",
     "pageNotFound": "페이지를 찾을 수 없음",
+    "pcieTopology": "PCIe 하드웨어 토폴로지",
     "policies": "정책",
     "postCodeLogs": "진행 상태 로그",
     "postCodes": "진행 상태 로그",
@@ -275,7 +279,7 @@
       "companyUnit": "회사 단위",
       "contactPerson": "담당자",
       "country": "국가/지역",
-      "deleteConfirmMessage": "'%{certificate}'을(를) 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteConfirmMessage": "'%{certificate}'을(를) 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "duplicateAlternateName": "대체 이름 복제",
       "emailAddress": "이메일 주소",
       "generateACertificateSigningRequest": "인증서 서명 요청(CSR) 생성",
@@ -290,7 +294,7 @@
       "issuedBy": "발행자",
       "issuedTo": "발행 대상",
       "validFrom": "유효 시작일",
-      "validUntil": "유효 기간"
+      "validUntil": "유효 종료일"
     },
     "toast": {
       "errorAddCertificate": "인증서 추가 중 오류가 발생했습니다.",
@@ -313,7 +317,8 @@
   "pageDateTime": {
     "alert": {
       "link": "프로파일 설정",
-      "message": "애플리케이션 전체에서 날짜와 시간의 표시 방법(UTC 또는 브라우저 오프셋)을 변경하려면 다음을 방문하십시오. "
+      "message": "애플리케이션 전체에서 날짜와 시간의 표시 방법(UTC 또는 브라우저 오프셋)을 변경하려면 다음을 방문하십시오. ",
+      "messageNtp": "NTP가 선택되었지만 NTP 서버가 지정되어 있지 않거나 지정된 NTP 서버에 도달할 수 없는 경우 time.google.com이 사용됩니다."
     },
     "configureSettings": "설정 구성",
     "form": {
@@ -327,6 +332,9 @@
         "server1": "서버 1",
         "server2": "서버 2",
         "server3": "서버 3"
+      },
+      "validators": {
+        "serverExists": "서버 주소가 이미 있습니다."
       }
     },
     "toast": {
@@ -336,10 +344,12 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "동시 유지보수",
+    "opPanelBase": "오퍼레이터 패널 기본 유지보수",
+    "opPanelLcd": "오퍼레이터 패널 LCD 유지보수",
     "tod": "배터리 유지보수 시간",
     "alert": {
-      "message": "배터리를 제거하거나 교체하려면 이 옵션을 사용하십시오. 완료되면 일반 모드로 돌아가기 위해 비활성화하는 것이 좋습니다.",
-      "title": "배터리의 동시 수리"
+      "message": "배터리를 제거하거나 교체하기 위해 오퍼레이터 패널 기본 또는 오퍼레이터 패널 LCD는 각각의 토글 스위치를 사용으로 설정합니다. 완료되면 일반 모드로 돌아가기 위해 비활성화하는 것이 좋습니다.",
+      "title": "배터리의 동시 수리, 오퍼레이터 패널 기본, 오퍼레이터 패널 LCD"
     },
     "toast": {
       "errorSaveReadyToRemove": "오류 %{state} 상태를 제거할 준비가 되었습니다.",
@@ -368,6 +378,7 @@
       "message": "메모리 딤 및 프로세서 코어는 서버의 전원이 꺼진 경우에만 구성하거나 구성 해제할 수 있습니다."
     },
     "toast": {
+      "deleteReqFailed": "요청된 자원을 삭제할 수 없어 삭제 요청이 실패했습니다.",
       "errorDisablingSetting": "설정의 사용 안함 설정 중 오류 발생",
       "errorEnablingSetting": "설정의 사용 설정 중 오류 발생"
     },
@@ -377,6 +388,7 @@
       "id": "ID",
       "locationCode": "위치 코드",
       "name": "이름",
+      "pelId": "Pel ID",
       "settings": "설정",
       "size": "크기(메비바이트)"
     }
@@ -400,9 +412,9 @@
       "messageServiceRequired": "이 조작을 지원하려면 서비스 담당자에게 문의하십시오.",
       "confirm": "확실합니까?",
       "confirmMessage": "모든 구성 해제 레코드를 지우면 선택된 노드의 모든 하드웨어를 재구성하려고 시도합니다. 이러한 변경사항은 다음 부트에 적용됩니다.",
-      "deleteAllMessage": "모든 레코드를 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteAllMessage": "모든 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "deleteAllTitle": "모든 레코드 삭제",
-      "deleteMessage": "%{count}개의 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 레코드를 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteMessage": "%{count}개의 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "deleteTitle": "레코드 삭제 | 레코드 삭제",
       "goBack": "되돌아가기",
       "continue": "계속"
@@ -413,18 +425,22 @@
       "description": "설명",
       "id": "ID",
       "name": "이름",
+      "pelId": "Pel ID",
       "reference": "참조",
       "resource": "자원",
       "severity": "심각도",
       "srcDetails": "SRC 세부사항",
-      "srcDetailsToolTip": "시스템 참조 코드 세부사항",
+      "srcDetailsToolTip": "시스템 참조 코드 세부사항. 수동 보호 레코드에 대한 SRC 세부사항이 없습니다.",
       "status": "상태",
       "type": "구성 해제 유형"
     },
     "toast": {
       "errorDelete": "%{count}개의 레코드를 삭제하는 중에 오류가 발생했습니다. | %{count}개의 레코드를 삭제하는 중에 오류가 발생했습니다.",
       "errorResolveEntries": "%{count}개의 레코드를 분석하는 중에 오류가 발생했습니다. | %{count}개의 레코드를 분석하는 중에 오류가 발생했습니다.",
+      "errorStartDownload": "다운로드 시작 중에 오류가 발생했습니다.",
       "errorUnresolveEntries": "%{count}개의 레코드를 분석 취소하는 중에 오류가 발생했습니다. | %{count}개의 레코드를 분석 취소하는 중에 오류가 발생했습니다.",
+      "successStartDownload": "추가 데이터가 다운로드되었습니다.",
+      "successStartDownloadTitle": "다운로드 성공",
       "successDelete": "%{count}개의 레코드가 삭제되었습니다. | %{count}개의 레코드가 삭제되었습니다."
     }
   },
@@ -458,7 +474,7 @@
     },
     "modal": {
       "deleteDump": "덤프 삭제 | 덤프 삭제",
-      "deleteDumpConfirmation": "%{count}개의 덤프를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 덤프를 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteDumpConfirmation": "%{count}개의 덤프를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 덤프를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "initiateSystemDump": "시스템 덤프 시작",
       "initiateSystemDumpMessage1": "확실합니까?",
       "initiateSystemDumpMessage2": "시스템 덤프의 진행 중에는 다른 덤프를 시작할 수 없습니다.",
@@ -496,9 +512,9 @@
     "unresolve": "분석 해제",
     "unresolved": "미해결",
     "modal": {
-      "deleteAllMessage": "모든 로그를 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteAllMessage": "모든 로그를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "deleteAllTitle": "모든 로그 삭제",
-      "deleteMessage": "%{count}개의 로그를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 로그를 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteMessage": "%{count}개의 로그를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 로그를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "deleteTitle": "로그 삭제 | 로그 삭제"
     },
     "table": {
@@ -562,7 +578,7 @@
       "resetBiosError": "서버 설정의 공장 초기화에 실패했습니다.",
       "resetBiosSuccess": "서버 설정의 공장 초기화에 성공했습니다.",
       "resetToDefaultsError": "BMC 및 서버 설정의 공장 초기화에 실패했습니다.",
-      "resetToDefaultsSuccess": "BMC 및 서버 설정의 공장 초기화에 성공했습니다."
+      "resetToDefaultsSuccess": "BMC 및 서버 설정의 공장 초기화에 성공했습니다. 자동으로 로그아웃되지 않으면 브라우저를 새로 고치십시오."
     }
   },
   "pageFieldCoreOverride": {
@@ -589,10 +605,12 @@
     "cardBodyVersion": "버전",
     "cardTitleBackup": "백업 이미지",
     "cardTitleRunning": "실행 이미지",
+    "permanent": "영구",
     "sectionTitleBmcCards": "BMC",
     "sectionTitleBmcCardsCombined": "BMC 및 서버",
     "sectionTitleHostCards": "호스트",
     "sectionTitleUpdateFirmware": "펌웨어 업데이트",
+    "temporary": "임시",
     "alert": {
       "operationInProgress": "서버 전원 조작이 진행 중입니다.",
       "serverMustBePoweredOffTo": "다음을 수행하려면 서버 전원을 꺼야 함:",
@@ -626,15 +644,31 @@
     },
     "toast": {
       "errorSwitchImages": "실행 및 백업 이미지의 전환 중 오류가 발생했습니다.",
+      "errorActivation": "펌웨어 활성화 시작 중에 오류가 발생했습니다.",
       "errorUpdateFirmware": "펌웨어 업데이트의 시작 중 오류가 발생했습니다.",
+      "errorUploadFirmware": "펌웨어 업로드 중에 오류가 발생했습니다.",
       "rebootStarted": "재부팅이 시작됨",
-      "rebootStartedMessage": "백업 이미지에서 재부팅을 시작했습니다.",
-      "updateStarted": "업데이트가 시작됨",
-      "updateStartedMessage": "변경 전에 펌웨어 업데이트 알림을 대기하십시오.",
-      "verifySwitch": "전환 확인",
-      "verifySwitchMessage": "실행 및 백업 이미지의 전환을 확인하려면 애플리케이션을 새로 고치십시오.",
-      "verifyUpdate": "업데이트 확인",
-      "verifyUpdateMessage": "펌웨어의 업데이트를 확인하려면 애플리케이션을 새로 고치십시오."
+      "rebootStartedMessage": "백업 이미지에서 재부팅을 시작했습니다. 재부팅은 완료하는 데 몇 분 정도 소요될 수 있습니다.",
+      "taskComplete": "태스크 완료",
+      "taskCompleteMessage": "태스크가 완료되었습니다. BMC 재부팅 대기 중",
+      "updateFirmware": {
+        "step1": "4단계 중 1단계 - 업로드",
+        "step1Message": "업데이트가 시작되었습니다. 펌웨어 업로드가 진행 중입니다.",
+        "step2": "4단계 중 2단계 - 활성화",
+        "step2Message": "펌웨어 업로드가 완료되었습니다. 활성화 태스크가 진행 중입니다.",
+        "step3": "4단계 중 3단계 - 재부팅",
+        "step3Message": "활성화 태스크가 완료되었습니다. BMC 재부팅이 진행 중입니다.",
+        "step4": "4단계 중 4단계 - 완료",
+        "step4Message": "펌웨어 업데이트가 성공했습니다. 펌웨어 레벨을 확인하려면 새로 고치기를 클릭하십시오."
+      },
+      "switchToRunning": {
+        "step1": "3단계 중 1단계 - 펌웨어 전환",
+        "step1Message": "프로세스가 시작되었습니다. 펌웨어 전환이 진행 중입니다.",
+        "step2": "3단계 중 2단계 - 재부팅",
+        "step2Message": "펌웨어 전환이 완료되었습니다. BMC 재부팅이 진행 중입니다.",
+        "step3": "3단계 중 3단계 - 완료",
+        "step3Message": "펌웨어 전환이 성공했습니다. 실행 중인 이미지와 백업 이미지가 전환되었는지 확인하려면 새로 고치기를 클릭하십시오."
+      }
     }
   },
   "pageHostConsole": {
@@ -646,7 +680,12 @@
     "bmcManager": "BMC 관리자",
     "chassis": "섀시",
     "dimmSlot": "DIMM 슬롯",
+    "fabricAdapters": "패브릭 어댑터",
     "fans": "팬",
+    "identifyLedInfo": "LED가 없는 부품의 경우, 식별 LED 토글 스위치는 격납장치 LED만 켬",
+    "pcieSlots": "PCIe 슬롯",
+    "pcieTopologyLink": "PCIe 하드웨어 토폴로지입니다.",
+    "pcieTopologyLinkDescription": "PCIe 슬롯에 대해 자세히 알아보려면 다음 위치로 이동하십시오 ",
     "powerSupplies": "전원 공급 장치",
     "processors": "프로세서",
     "quicklinkTitle": "하드웨어 컴포넌트에 대한 빠른 링크",
@@ -656,35 +695,6 @@
       "traceLabel": "I/O 격납장치 추적 수집",
       "traceDescription": "다음에서 자원 덤프(특정 자원 선택기를 사용하여)를 작성하십시오. ",
       "DumpsLink": "덤프 페이지에서 자원 덤프를 작성하십시오(특정 자원 선택기를 사용하여)."
-    },
-    "pcie": {
-      "bridgeOrHost": "PCIe 브릿지 또는 CAPI 호스트",
-      "cable": "케이블",
-      "cableLength": "케이블 길이",
-      "cableStatus": "케이블 상태",
-      "cableType": "케이블 유형",
-      "degraded": "저하됨",
-      "failed": "실패함",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "LED 식별",
-      "inactive": "비활성",
-      "ioSlots": "I/O 슬롯",
-      "linkProperties": "링크 특성",
-      "linkStatus": "링크 상태",
-      "localPort": "로컬 포트",
-      "localPortLocation": "로컬 포트 위치",
-      "open": "열림",
-      "operational": "작동",
-      "parentId": "상위 ID",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "원격 포트",
-      "remotePortLocation": "원격 포트 위치",
-      "resetLink": "링크 다시 설정",
-      "speed": "속도",
-      "title": "PCIe 하드웨어 토폴로지",
-      "type": "유형",
-      "unknown": "알 수 없음",
-      "width": "너비"
     },
     "systemIndicator": {
       "attentionLed": "시스템 주의 LED",
@@ -717,12 +727,6 @@
         "title": "격납장치 설정 변경",
         "typeModel": "@:pageInventory.table.typeModel",
         "typeModelHelperText": "격납장치 시스템 유형은 0000이 될 수 없습니다. 모든 영숫자 문자가 올바르지 않습니다."
-      },
-      "pcie": {
-        "confirmMessage": "시스템 파티션이 실행 중인 동안 링크를 재설정하면 오류가 발생할 수 있습니다. 지원 팀 구성원의 안내에 따라 조작을 수행해야 합니다.",
-        "resetLink": "'%{linkId}' 링크 재설정",
-        "subTitle": "확실합니까?",
-        "title": "'%{linkId}' 링크 재설정"
       }
     },
     "table": {
@@ -735,7 +739,7 @@
       "processorCount": "프로세서 수",
       "currentNext": "(현재 및 다음)",
       "description": "설명",
-      "enabled": "사용",
+      "enabled": "사용 가능",
       "firmwareVersion": "펌웨어 버전",
       "health": "상태",
       "healthRollup": "상태 롤업",
@@ -750,6 +754,7 @@
       "processorType": "프로세서 유형",
       "remove": "제거",
       "serialNumber": "일련 번호",
+      "slotType": "슬롯 유형",
       "sparePartNumber": "예비 부품 번호(FRU 번호)",
       "totalCores": "코어 총계",
       "totalSystemMemoryGiB": "시스템 메모리 총계",
@@ -763,12 +768,10 @@
       "errorEnableLampTest": "램프 테스트의 사용 설정 중 오류가 발생했습니다.",
       "errorEnableSystemAttentionLed": "시스템 주의 LED를 사용으로 설정하는 동안 오류가 발생했습니다.",
       "errorEnclosureSettings": "격납장치 설정을 업데이트하는 중에 오류가 발생했습니다.",
-      "errorPcieLinkReset": "'%{linkId}' 링크를 재설정하는 중에 오류가 발생했습니다.",
-      "infoPcieLinkResetMessage": "이 조작을 완료하는\n데 시간이 다소 걸릴 수 있습니다.",
-      "infoPcieLinkResetTitle": "링크 ID '%{linkId}'이(가) 재설정되고 있습니다.",
       "infoRemoveAssembly": "'%{assemblyName}'을(를) 제거할 준비가 되었는지 확인하려면 새로 고치십시오.",
       "successEnclosureSettings": "격납장치 설정을 업데이트했습니다.",
-      "successPcieLinkReset": "'%{linkId}'이(가) 재설정되었습니다."
+      "successEnableIdentifyLed": "식별 LED를 사용으로 설정했습니다.",
+      "successDisableIdentifyLed": "식별 LED를 사용 안함으로 설정했습니다."
     }
   },
   "pageKeyClear": {
@@ -810,10 +813,9 @@
     "openNewTab": "새 탭에서 열기",
     "status": "상태"
   },
-  "pageLateralCastOutControl": {
-    "lateralCastOut": "측면 캐스트 아웃",
-    "lateralCastOutControl": "측면 캐스트 아웃 제어",
-    "lateralCastOutControlDescription": "시스템 성능을 저하시킬 수 있으므로 서비스 제공자의 지시가 있는 경우에만 이 값을 변경하십시오.",
+  "pageSystemParameters": {
+    "aggressivePrefetch": "적극적 프리페치",
+    "aggressivePrefetchDescription": "이 값을 변경하면 시스템 성능이 저하될 수 있으므로, 서비스 제공자의 지시를 받은 경우에만 변경하십시오. 프로세서의 적극적 프리페치 선호를 사용 안함으로 설정할지, 또는 사용으로 설정할지 지정함",
     "alert": {
       "message": "시스템의 전원을 꺼야 합니다. 변경된 사항은 다음 재부팅 시 적용됩니다.",
       "title": "변경사항 적용"
@@ -821,8 +823,17 @@
     "button": {
       "saveSettings": "설정 저장"
     },
+    "frequencyCap": "주파수 상한",
+    "frequencyCapDescription": "사용으로 설정되면 시스템의 모든 프로세서가 지정된 최대 작동 주파수(MHz)를 초과하지 않도록 함",
+    "frequencyCapHelpText": "사용 안함으로 설정한 경우 최대 및 최소 빈도를 설정하려면 초기 부팅이 필요할 수 있습니다.",
+    "lateralCastOut": "측면 캐스트 아웃",
+    "lateralCastOutDescription": "시스템 성능을 저하시킬 수 있으므로 서비스 제공자의 지시가 있는 경우에만 이 값을 변경하십시오.",
     "toast": {
+      "errorSavingAggressivePrefetch": "적극적 프리페치 저장 중에 오류가 발생함",
+      "errorSavingFrequencyCap": "주파수 상한 저장 중에 오류가 발생함",
       "errorSavingLateralCastOut": "측면 캐스트 아웃 모드를 저장하는 동안 오류가 발생했습니다.",
+      "successSavingAggressivePrefetch": "적극적 프리페치가 저장됨",
+      "successSavingFrequencyCap": "주파수 상한이 저장됨",
       "successSavingLateralCastOut": "측면 캐스트 아웃 모드가 성공적으로 저장됨"
     }
   },
@@ -853,8 +864,8 @@
     "modal": {
       "addNewRoleGroup": "새 역할 그룹 추가",
       "deleteRoleGroup": "역할 그룹 삭제",
-      "deleteRoleGroupBatchConfirmMessage": "%{count}개의 역할 그룹을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 역할 그룹을 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
-      "deleteRoleGroupConfirmMessage": "'%{groupName}'을(를) 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteRoleGroupBatchConfirmMessage": "%{count}개의 역할 그룹을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 역할 그룹을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteRoleGroupConfirmMessage": "'%{groupName}'을(를) 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "editRoleGroup": "역할 그룹 편집",
       "groupName": "그룹 이름",
       "groupPrivilege": "그룹 권한"
@@ -915,7 +926,7 @@
     "updatePageSetup": "시스템 메모리 페이지 설정 업데이트",
     "alert": {
       "heading": "변경사항 적용",
-      "message": "시스템의 전원을 꺼야 합니다. 변경사항은 다음 재부팅 시에 적용됩니다.",
+      "message": "시스템의 전원이 꺼져 있어야 하며 이를 HMC에서 관리하지 않아야 합니다. 변경사항은 다음 재부팅 시에 적용됩니다.",
       "serverMustBePoweredOffTo": "다음을 수행하려면 서버 전원을 꺼야 함:",
       "updateActiveMemoryMirroring": "활성 메모리 미러 모드 업데이트",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1010,6 +1021,7 @@
     "powerInformation": "전원 정보",
     "powerMode": "전원 모드",
     "runningVersion": "실행 중",
+    "safeMode": "안전 모드",
     "serialNumber": "일련 번호",
     "serverInformation": "서버 정보",
     "serviceLogin": "서비스 로그인",
@@ -1035,13 +1047,54 @@
   "pagePageNotFound": {
     "description": "요청된 자원을 찾을 수 없습니다."
   },
+  "pagePcieTopology": {
+    "alert": "이 페이지는 로드하는 데 몇 분이 소요될 수 있습니다.",
+    "bridgeOrHost": "PCIe 브릿지 또는 CAPI 호스트",
+    "cableLength": "케이블 길이",
+    "cableStatus": "케이블 상태",
+    "cableType": "케이블 유형",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "LED 식별",
+    "ioSlots": "I/O 슬롯",
+    "linkProperties": "링크 특성",
+    "linkStatus": "링크 상태",
+    "localPort": "로컬 포트",
+    "localPortLocation": "로컬 포트 위치",
+    "parentId": "상위 ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "원격 포트",
+    "remotePortLocation": "원격 포트 위치",
+    "resetLink": "링크 다시 설정",
+    "savePcieTopology": "PCIe 토폴로지 저장",
+    "speed": "속도",
+    "type": "유형",
+    "warning": "시스템은 최소한 PHYP 대기 상태여야 합니다. 전원을 켜려면 다음 위치로 이동하십시오 ",
+    "width": "너비",
+    "modal": {
+      "resetConfirm": "확실합니까?",
+      "resetLinkDescription": "시스템 파티션이 실행 중인 상태에서 링크를 재설정하면 오류가 발생할 수 있습니다. 이 조작은 지원 팀 구성원의 안내를 받아 수행해야 합니다.",
+      "resetLinkHeader": "링크 %{id} 재설정"
+    },
+    "table": {
+      "search": "검색"
+    },
+    "toast": {
+      "errorReset": "링크 %{id}을(를) 재설정하는 중에 오류가 발생함",
+      "errorSavePcieTopology": "PCIe 토폴로지 정보를 저장하는 중에 오류가 발생했습니다.",
+      "errorSwitchingLed": "%{value}에 대해 %{operation} LED를 전환하는 중에 오류가 발생함",
+      "resetInfoTitle": "링크 ID %{id}이(가) 재설정되는 중입니다.",
+      "resetInfoDescription": "이 조작은 완료하는 데 몇 초가 소요될 수 있습니다.",
+      "successReset": "링크 %{id} 재설정이 시작되었습니다. 문제 여부는 이벤트 로그를 확인하십시오.",
+      "successSavePcieTopology": "PCIe 토폴로지 정보를 저장했습니다."
+    }
+  },
   "pagePolicies": {
     "hostTpm": "호스트 TPM",
     "hostTpmDescription": "TPM이 작동할 때만 시스템이 부팅되도록 합니다.",
     "hostUsb": "호스트 USB 사용 가능",
     "hostUsbDescription": "보안상 이유로 호스트 USB를 사용할지 또는 사용 안 할지 여부를 지정합니다.",
     "ipmi": "네트워크 IPMI(아웃오브밴드 IPMI)",
-    "ipmiDescription": "IPMI를 통한 플랫폼의 원격 관리를 허용합니다. ipmitool 등의 도구를 사용하려면 이 설정을 사용할 수 있어야 합니다.",
+    "ipmiDescription": "IPMI를 통한 플랫폼의 원격 관리를 허용합니다. ipmitool 등의 도구를 사용하려면 이 설정을 사용할 수 있어야 합니다. 사용으로 설정되고 나면 온라인 지원 문서에 있는 절차에 따라 IPMI 사용자를 추가하십시오.",
     "rtad": "RTAD",
     "rtadDescription": "이 옵션은 호스트 펌웨어에 대해 원격 신뢰 증명 디먼을 사용 또는 사용 안함으로 설정합니다.",
     "rtadInfoIcon": "@:global.status.nextReboot",
@@ -1053,6 +1106,8 @@
     "usbFirmwareUpdatePolicyDescription": "USB 펌웨어 업데이트 정책을 사용하면 USB 키를 통한 펌웨어 업데이트를 허용하는 기능을 사용할 수 있습니다.",
     "toast": {
       "errorNetworkPolicyUpdate": "%{policy}을(를) 업데이트하는 중",
+      "successDisableBmcShell": "BMC 쉘을 사용 안함으로 설정했습니다(SSH를 통해). 사용 안함 설정을 적용하는 데 15초를 허용하십시오.",
+      "successEnableBmcShell": "BMC 쉘을 사용으로 설정했습니다(SSH를 통해).",
       "successNetworkPolicyUpdate": "%{policy}을(를) 업데이트했습니다.",
       "successNextBootToast": "%{policy}에 변경사항 적용. %{policy}에 대한 변경사항은 다음 재부팅 시 적용됩니다."
     },
@@ -1099,6 +1154,13 @@
     "toEnter": "시작",
     "toExit": "종료",
     "utilizationThreshold": "활용도 임계값(%)",
+    "alert": {
+      "message": "안전 모드이므로 시스템은 현재 축소된 성능으로 작동하는 중입니다. 안전 모드에서는 전원 설정에 액세스할 수 없습니다. ",
+      "message2": "원인을 판별하려면 다음 위치로 이동하십시오",
+      "message2Link": "이벤트 로그",
+      "message3": "시스템이 다음 전원 켜기 시 안전 모드를 종료하려 합니다. 서버를 재부팅하려면 다음 위치로 이동하십시오",
+      "message3Link": "서버 전원 조작"
+    },
     "delayTimeValidation": {
       "delayTimeRange": "값은 %{min} - %{max} 사이여야 합니다.",
       "enterDelayTime": "값은 종료 지연 시간보다 클 수 없습니다.",
@@ -1131,7 +1193,7 @@
       "errorIdlePower": "유휴 전원 설정 저장 중에 오류 발생",
       "errorIdlePowerReset": "유휴 전원 설정을 재설정하는 중에 오류 발생",
       "errorPowerPerformanceModes": "전원 및 성능 모드를 저장하는 중에 오류 발생",
-      "successIdlePower": "유휴 전원 설정을 저장됨",
+      "successIdlePower": "유휴 전원 설정이 저장됨",
       "successIdlePowerReset": "유휴 전원 설정을 재설정했습니다.",
       "successPowerPerformanceModes": "전원 절약 모드가 저장됨"
     }
@@ -1157,7 +1219,7 @@
       "errorIdlePower": "유휴 전원 데이터 저장 오류",
       "errorPowerSaver": "전원 절약 모드 저장 오류",
       "errorSaveSettings": "설정 저장 중 오류가 발생했습니다.",
-      "successIdlePower": "유휴 전력 데이터 저장됨",
+      "successIdlePower": "유휴 전력 데이터가 저장됨",
       "successPowerSaver": "전원 절약 모드가 저장됨",
       "successSaveSettings": "전원 복원 정책이 업데이트되었습니다."
     }
@@ -1217,6 +1279,9 @@
     "operations": "조작",
     "orderlyReboot": "순차적 - 운영 체제가 종료되면 서버가 재부팅됨",
     "orderlyShutdown": "순차적 - 운영 체제가 종료되면 서버가 종료됨",
+    "osRuntimeButton": "OS 실행으로 진행",
+    "osRuntimeMessage": "런타임으로 진행하려면 OS 실행 상태로 진행하십시오.",
+    "phypStandby": "시스템이 PHYP 대기 상태입니다.",
     "powerOn": "전원 켜기",
     "reboot": "재부팅",
     "rebootServer": "서버 재부팅",
@@ -1225,8 +1290,12 @@
     "shutDown": "종료",
     "shutdownServer": "서버 종료",
     "biosSettings": {
+      "aixLinux": "AIX/LINUX 파티션 부트 모드",
       "currentOperatingMode": "현재 작동 모드 %{currOptMode}",
-      "powPolicySection": "%{powerPolicy}(으)로 설정됩니다.",
+      "defaultPartition": "기본 파티션 환경",
+      "ibmIPartition": "IBM i 파티션 부트 모드",
+      "nonHMCManaged": "시스템이 비HMC 관리인 경우에만 사용",
+      "powPolicySection": "은(는) %{powerPolicy}(으)로 설정됩니다.",
       "pvm_default_os_type": "기본 파티션 환경",
       "pvm_os_boot_type": "IBM i 파티션 부트 모드",
       "pvm_rpa_boot_mode": "AIX/LINUX 파티션 부트 모드",
@@ -1234,6 +1303,64 @@
       "pvm_system_operating_mode": "서버 작동 모드",
       "pvm_system_power_off_policy": "서버 전원 정책",
       "selectedOperatingMode": "저장 시에 작동 모드는 %{selectedOptMode}(으)로 설정됩니다.",
+      "serverFirmware": "서버 펌웨어 시작 정책",
+      "powerSettingDescription": "전원 설정 설명 보기",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "자동 시작만",
+          "autoStartAlways": "항상 자동 시작",
+          "standBy": "대기"
+        },
+        "description": {
+          "autoStartOnly": "비정상 종료 후 복구 전원 켜기(예: 자동 전원 다시 시작 또는 시스템 종료 자동 재부팅)의 경우에만 서버 펌웨어 및 파티션을 자동으로 활성화합니다.",
+          "autoStartAlways": "특정 파티션을 자동으로 활성화합니다. 서버가 HMC 또는 ASMI 메뉴를 사용하여 켜진 경우 서버는 '자동 시작'에 대해 구성된 파티션을 자동으로 활성화합니다. 서버가 비정상적으로 중지된 후 자동 전원 재시작 또는 다시 부팅이 수행되면, 서버는 시스템 중지 시 실행 중이던 파티션을 활성화합니다.",
+          "standBy": "사용자가 시작한 전원 켜기 또는 복구 전원 켜기의 경우에는 서버 펌웨어 및 파티션을 자동으로 활성화하지 않습니다."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "기본값"
+        },
+        "description": {
+          "aix": "시스템 펌웨어는 AIX/Linux를 기본 파티션 환경으로 선택합니다.",
+          "linux": "시스템 펌웨어는 AIX/Linux를 기본 파티션 환경으로 선택합니다.",
+          "ibmI": "서버 펌웨어는 IBM i를 기본 파티션 환경으로 선택합니다.",
+          "default": "시스템 펌웨어는 시스템 브랜드 유형에 따라 기본 파티션 환경을 자동으로 선택합니다."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "이 파티션은 운영 체제로 직접 부팅됨",
+          "serviceBoot": "저장된 목록으로부터의 서비스 부트 모드",
+          "bootToSms": "SMS 메뉴로 부팅",
+          "bootToOpenFirware": "개방형 펌웨어 프롬프트로 부팅",
+          "serviceBootMode": "기본 목록에서 서비스 모드 부팅"
+        },
+        "description": {
+          "partitionBoot": "파티션이 멈추는 일 없이 운영 체제로 부팅됩니다.",
+          "serviceBoot": "시스템이 저장된 서비스 모드 부트 목록으로부터 부팅됩니다. 이는 일반적으로 파티션의 진단을 실행하는 편법입니다.  이 옵션을 유용하게 사용하려면, 파티션 운영 체제가 진단 부팅을 지원하고 진단을 파티션의 디스크 드라이브에 로드해야 합니다.",
+          "bootToSms": "파티션이 시스템 관리 서비스(SMS) 메뉴에서 멈춥니다.",
+          "bootToOpenFirware": "시스템이 열린 펌웨어 프롬프트에서 멈춥니다.",
+          "serviceBootMode": "시스템이 기본 부트 목록으로부터 부팅됩니다.  이 옵션은 CD-ROM 드라이브로부터 독립형 진단을 실행하는 데 선호되는 방법입니다."
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "시스템 라이센스가 부여된 내부코드의 사본 A를 사용한 디스크에서의 IPL입니다.",
+          "b": "시스템 라이센스가 부여된 내부코드의 사본 B를 사용한 디스크에서의 IPL입니다.",
+          "c": "하드웨어 서비스용으로 예약되어 있습니다.",
+          "d": "로드 소스 디스크 외 매체에서의 IPL입니다. 코드 설치 지원을 위한 대체 IPL입니다."
+        }
+      },
       "attributeValues": {
         "pvm_os_boot_type": {
           "A_Mode": "A(사본 A를 사용하여 디스크에서 부팅)",
@@ -1259,7 +1386,7 @@
           "Normal": "정상 - 자동"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "시스템 자동 전원 끄기",
+          "automaticHelperText": "이 설정을 사용할 때, 시스템이 파티셔닝되지 않은 경우에는 시스템 동작이 전원 끄기와 동일하며, 시스템이 파티셔닝된 경우에는 시스템 동작이 전원을 계속 켜 두는 것과 동일함",
           "powerOffHelperText": "최종 파티션의 전원이 꺼지는 경우, 서버의 전원이 꺼짐",
           "stayOnHelperText": "최종 파티션의 전원이 꺼지는 경우, 서버 전원은 켜진 상태를 유지함"
         }
@@ -1294,7 +1421,7 @@
       "message": "HMC가 활성 상태이면 다시 연결을 시도합니다. 작동 중인 HMC의 연결을 끊으려면 HMC 자체에서 연결을 끊으십시오."
     },
     "modal": {
-      "disconnectMessage": "%{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "disconnectMessage": "%{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "disconnectTitle": "세션 연결 끊기 | 세션 연결 끊기"
     },
     "table": {
@@ -1314,8 +1441,8 @@
     "pageDescription": "IP 주소 및 포트로 SNMP(Simple Network Management Protocol) 트랩을 설정합니다.",
     "modal": {
       "addSnmpDestinationTitle": "SNMP 경보 대상 추가",
-      "batchDeleteConfirmMessage": "SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. %{count}개의 SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
-      "deleteConfirmMessage": "SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "batchDeleteConfirmMessage": "SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
+      "deleteConfirmMessage": "SNMP 경보 대상을 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "deleteSnmpDestinationTitle": "SNMP 경보 대상 삭제 | SNMP 경보 대상 삭제",
       "ipaddress": "IP 주소",
       "ipaddressFqdn": "IP 주소/FQDN",
@@ -1346,11 +1473,11 @@
       "accountLocked": "계정이 잠김",
       "accountStatus": "계정 상태",
       "automaticAfterTimeout": "제한시간 초과 후 자동",
-      "batchDeleteConfirmMessage": "%{count}명의 사용자를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}명의 사용자를 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "batchDeleteConfirmMessage": "%{count}명의 사용자를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}명의 사용자를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "cannotStartWithANumber": "숫자로 시작할 수 없음",
       "clickSaveToUnlockAccount": "계정을 잠금 해제하려면 \"저장\"을 클릭하십시오.",
       "confirmUserPassword": "사용자 비밀번호 확인",
-      "deleteConfirmMessage": "'%{user}' 사용자를 삭제하시겠습니까? 이 조치는 취소할 수 없습니다.",
+      "deleteConfirmMessage": "'%{user}' 사용자를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "manual": "수동",
       "maxFailedLoginAttempts": "최대 로그인 시도 실패 횟수",
       "noSpecialCharactersExceptUnderscore": "밑줄을 제외한 특수 문자 사용 불가",
@@ -1361,7 +1488,8 @@
       "unlock": "잠금 해제",
       "username": "사용자 이름",
       "userPassword": "사용자 비밀번호",
-      "userUnlockMethod": "사용자 잠금 해제 방법"
+      "userUnlockMethod": "사용자 잠금 해제 방법",
+      "zeroLoginAttempts": "`0`인 경우 계정이 잠기지 않습니다."
     },
     "table": {
       "privilege": "권한",
