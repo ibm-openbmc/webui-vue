@@ -10,11 +10,6 @@
           {{ $t('pageLogin.alert.message') }}
         </p>
       </alert>
-      <alert class="login-error mb-4" :show="failedAuth" variant="danger">
-        <p id="login-error-alert">
-          {{ $t('pageLogin.alert.unauthorizedMessage') }}
-        </p>
-      </alert>
       <b-form-group label-for="language" :label="$t('pageLogin.language')">
         <b-form-select
           id="language"
@@ -148,9 +143,6 @@ export default {
   computed: {
     authError() {
       return this.$store.getters['authentication/authError'];
-    },
-    failedAuth() {
-      return this.$store.getters['authentication/failedAuth'];
     },
     loginPageDetails() {
       return this.$store.getters['authentication/loginPageDetails'];

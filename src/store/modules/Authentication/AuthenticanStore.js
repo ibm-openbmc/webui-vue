@@ -7,14 +7,12 @@ const AuthenticationStore = {
   state: {
     loginPageDetails: {},
     authError: false,
-    failedAuth: false,
     xsrfCookie: Cookies.get('XSRF-TOKEN'),
     isAuthenticatedCookie: Cookies.get('IsAuthenticated'),
   },
   getters: {
     loginPageDetails: (state) => state.loginPageDetails,
     authError: (state) => state.authError,
-    failedAuth: (state) => state.failedAuth,
     isLoggedIn: (state) => {
       return (
         state.xsrfCookie !== undefined || state.isAuthenticatedCookie == 'true'
@@ -32,9 +30,6 @@ const AuthenticationStore = {
     authError(state, authError = true) {
       state.authError = authError;
     },
-    failedAuth(state, failedAuth = true) {
-      state.failedAuth = failedAuth;
-    },
     logout(state) {
       Cookies.remove('XSRF-TOKEN');
       Cookies.remove('IsAuthenticated');
@@ -48,7 +43,6 @@ const AuthenticationStore = {
   actions: {
     login({ commit }, { username, password }) {
       commit('authError', false);
-      commit('failedAuth', false);
       return api
         .post('/login', { data: [username, password] })
         .then(() => commit('authSuccess'))
@@ -64,14 +58,13 @@ const AuthenticationStore = {
         .then(() => router.replace('/login'))
         .catch((error) => console.log(error));
     },
-    async checkPasswordChangeRequired({ commit }, username) {
+    async checkPasswordChangeRequired(_, username) {
       return api
         .get(`/redfish/v1/AccountService/Accounts/${username}`)
         .then(({ data: { PasswordChangeRequired } }) => {
           return PasswordChangeRequired;
         })
         .catch((error) => {
-          commit('failedAuth');
           console.log(error);
         });
     },
