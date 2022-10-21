@@ -250,7 +250,7 @@ export default {
       return this.$store.getters['userManagement/accountSettings'];
     },
     passwordRequirements() {
-      if (this.currentUser?.AccountTypes?.includes('IPMI')) {
+      if (this.activeUser?.AccountTypes?.includes('IPMI')) {
         return {
           minLength: 8,
           maxLength: 20,
