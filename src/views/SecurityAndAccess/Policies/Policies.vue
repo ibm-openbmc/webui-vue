@@ -77,7 +77,13 @@
         <b-row class="section-divider">
           <b-col class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
-              <dt>{{ $t('pagePolicies.vtpm') }}</dt>
+              <dt>
+                {{ $t('pagePolicies.vtpm') }}
+                <info-tooltip :title="$t('global.status.nextReboot')">
+                  <icon-time />
+                </info-tooltip>
+              </dt>
+
               <dd>
                 {{ $t('pagePolicies.vtpmDescription') }}
               </dd>
