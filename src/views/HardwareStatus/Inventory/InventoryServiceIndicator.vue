@@ -72,6 +72,7 @@
               <b-form-checkbox
                 id="lampSwitch"
                 v-model="systems.lampTest"
+                :disabled="systems.lampTest"
                 data-test-id="hardwareStatus-toggle-lampTest"
                 switch
                 @change="toggleLampTestSwitch"
@@ -100,6 +101,11 @@ import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 export default {
   components: { InfoTooltip, PageSection },
   mixins: [BVToastMixin, DataFormatterMixin],
+  data() {
+    return {
+      isLampTestEditable: true,
+    };
+  },
   computed: {
     systems() {
       let systemData = this.$store.getters['system/systems'][0];
@@ -113,6 +119,21 @@ export default {
         return `global.status.off`;
       }
       return `global.status.${this.serverStatus}`;
+    },
+  },
+  watch: {
+    systems: function (value) {
+      if (value.lampTest) {
+        this.isLampTestEditable = false;
+        setTimeout(() => {
+          this.isLampTestEditable = true;
+        }, 240000);
+      }
+    },
+    isLampTestEditable: function (value) {
+      if (value) {
+        this.$store.dispatch('system/getSystem');
+      }
     },
   },
   created() {
@@ -137,7 +158,13 @@ export default {
     toggleLampTestSwitch(lampTestState) {
       this.$store
         .dispatch('system/changeLampTestState', lampTestState)
-        .then((message) => this.successToast(message))
+        .then((message) => {
+          this.successToast(message);
+          this.isLampTestEditable = false;
+          setTimeout(() => {
+            this.isLampTestEditable = true;
+          }, 240000);
+        })
         .catch(({ message }) => this.errorToast(message));
     },
   },

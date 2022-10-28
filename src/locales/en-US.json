@@ -848,7 +848,8 @@
       "infoRemoveAssembly": "Refresh to confirm whether '%{assemblyName}' is ready to  be removed.",
       "successEnclosureSettings": "Successfully updated enclosure settings.",
       "successEnableIdentifyLed": "Successfully enabled Identify LED.",
-      "successDisableIdentifyLed": "Successfully disabled Identify LED."
+      "successDisableIdentifyLed": "Successfully disabled Identify LED.",
+      "successEnableLampTest": "Successfully enabled Lamp test. The LEDs will stay on for 4 minutes."
     }
   },
   "pageKeyClear": {

@@ -105,9 +105,7 @@ const SystemStore = {
         })
         .then(() => {
           if (lampTestState) {
-            return i18n.t('pageInventory.toast.successEnableIdentifyLed');
-          } else {
-            return i18n.t('pageInventory.toast.successDisableIdentifyLed');
+            return i18n.t('pageInventory.toast.successEnableLampTest');
           }
         })
         .catch((error) => {
