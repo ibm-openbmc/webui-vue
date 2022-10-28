@@ -1,4 +1,5 @@
 import api from '@/store/api';
+import i18n from '@/i18n';
 
 const FabricAdaptersStore = {
   namespaced: true,
@@ -14,6 +15,7 @@ const FabricAdaptersStore = {
         const {
           Id,
           Location,
+          LocationIndicatorActive,
           Status,
           Model,
           Name,
@@ -24,6 +26,7 @@ const FabricAdaptersStore = {
         return {
           health: Status?.Health,
           id: Id,
+          identifyLed: LocationIndicatorActive,
           locationNumber: Location?.PartLocation?.ServiceLabel,
           model: Model,
           name: Name,
@@ -68,6 +71,35 @@ const FabricAdaptersStore = {
           });
         })
         .catch((error) => console.log(error));
+    },
+    async updateIdentifyLedValue({ dispatch }, led) {
+      const uri = led.uri;
+      const updatedIdentifyLedValue = {
+        LocationIndicatorActive: led.identifyLed,
+      };
+
+      return await api
+        .patch(uri, updatedIdentifyLedValue)
+        .then(() => {
+          if (led.identifyLed) {
+            return i18n.t('pageInventory.toast.successEnableIdentifyLed');
+          } else {
+            return i18n.t('pageInventory.toast.successDisableIdentifyLed');
+          }
+        })
+        .catch((error) => {
+          dispatch('getFabricAdaptersInfo');
+          console.log('error', error);
+          if (led.identifyLed) {
+            throw new Error(
+              i18n.t('pageInventory.toast.errorEnableIdentifyLed')
+            );
+          } else {
+            throw new Error(
+              i18n.t('pageInventory.toast.errorDisableIdentifyLed')
+            );
+          }
+        });
     },
   },
 };

@@ -7,6 +7,7 @@
           @clear-search="onClearSearchInput"
         />
       </b-col>
+
       <b-col sm="6" md="3" xl="2">
         <table-cell-count
           :filtered-items-count="filteredRows"
@@ -62,6 +63,22 @@
             ? $t('global.status.absent')
             : $t('global.status.present')
         }}
+      </template>
+      <!-- Toggle identify LED -->
+      <template #cell(identifyLed)="row">
+        <b-form-checkbox
+          v-if="hasIdentifyLed(row.item.identifyLed)"
+          v-model="row.item.identifyLed"
+          name="switch"
+          switch
+          @change="toggleIdentifyLedValue(row.item)"
+        >
+          <span v-if="row.item.identifyLed">
+            {{ $t('global.status.on') }}
+          </span>
+          <span v-else> {{ $t('global.status.off') }} </span>
+        </b-form-checkbox>
+        <div v-else>--</div>
       </template>
       <template #row-details="{ item }">
         <b-container fluid>
@@ -165,6 +182,11 @@ export default {
           formatter: this.dataFormatter,
           sortable: true,
         },
+        {
+          key: 'identifyLed',
+          label: this.$t('pageInventory.table.identifyLed'),
+          formatter: this.dataFormatter,
+        },
       ],
       searchFilter: searchFilter,
       searchTotalFilteredRows: 0,
@@ -201,6 +223,16 @@ export default {
       });
   },
   methods: {
+    toggleIdentifyLedValue(row) {
+      this.$store
+        .dispatch('fabricAdapters/updateIdentifyLedValue', {
+          uri: row.uri,
+          memberId: row.id,
+          identifyLed: row.identifyLed,
+        })
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message));
+    },
     sortCompare(a, b, key) {
       if (key === 'health') {
         return this.sortStatus(a, b, key);
@@ -208,6 +240,9 @@ export default {
     },
     onFiltered(filteredItems) {
       this.searchTotalFilteredRows = filteredItems.length;
+    },
+    hasIdentifyLed(identifyLed) {
+      return typeof identifyLed === 'boolean';
     },
   },
 };
