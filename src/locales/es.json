@@ -33,6 +33,7 @@
       "tooltip": "Ayuda contextual"
     },
     "calendar": {
+      "dateFormat": "AAAA-MM-DD",
       "selectDate": "Seleccionar fecha",
       "useCursorKeysToNavigateCalendarDates": "Utilizar las teclas de cursor para navegar por las fechas de calendario"
     },
@@ -70,14 +71,17 @@
       "absent": "Ausente",
       "copied": "Copiado",
       "connected": "Conectado",
+      "critical": "Crítico",
       "disabled": "Inhabilitado",
       "disconnected": "Desconectado",
       "enabled": "Habilitada",
       "error": "Error",
       "informational": "Informativo",
+      "locked": "Bloqueada",
       "nextReboot": "Los cambios entrarán en vigor en el siguiente arranque.",
       "notAvailable": "No disponible",
       "off": "Desactivar",
+      "ok": "OK",
       "on": "Activar",
       "present": "Presente",
       "success": "Éxito",
@@ -200,11 +204,24 @@
     "virtualMedia": "Soporte virtual"
   },
   "pageCapacityOnDemand": {
+    "absent": "Ausente",
+    "deferring": "Aplazamiento",
+    "disabled": "Inhabilitado",
+    "enabled": "Habilitada",
+    "inTest": "En prueba",
+    "starting": "Iniciando",
+    "standbyOffline": "En espera fuera de línea",
+    "standbySpare": "Repuesto en espera",
+    "unavailableOffline": "No disponible fuera de línea",
+    "updating": "Actualizando",
+    "qualified": "Qualified",
+    "quiesced": "Desactivado temporalmente",
     "vetCapabilities": "Prestaciones de VET",
     "quickLinks": "Enlaces rápidos",
     "activation": {
       "alert": "PHYP debe estar en espera o en ejecución para activarse.",
       "helperText": "Debe tener 34 caracteres. Para obtener una nueva clave de acceso, visite ",
+      "helperTextIps": "Para obtener una nueva clave de acceso, llame a la línea de atención al cliente: 400-940-0860",
       "placeholder": "Especifique el código de activación",
       "sectionTitle": "Activación",
       "srLabel": "Código de activación",
@@ -245,6 +262,22 @@
         "message": "Si esta información no está disponible, o si se necesita más información, cree un volcado de recursos (utilizando un selector de recursos específico) desde  ",
         "link": "Página de vuelcos."
       }
+    },
+    "setting": {
+      "aixAllowed": "AIX permitido",
+      "aixDiagnostics": "Diagnósticos de AIX",
+      "activeMemoryExpansion": "Expansión de memoria activa",
+      "activeMemoryMirroring": "Duplicación de memoria activa",
+      "capi": "CAPI",
+      "interactiveCapacity": "Capacidad 100 % interactiva de IBMi",
+      "ibmiPartitions": "Particiones IBMi permitidas",
+      "inmiPermitted": "IBMi con permiso para utilizar E/S nativa",
+      "lparCreationAllowed": "Creación de LPAR permitida",
+      "livePartitionMobility": "Live Partition Mobility",
+      "perPartition": "Mayor que 128 procesadores por partición",
+      "subprocessorPartitioning": "Particionamiento de subprocesador",
+      "virtualIoServer": "Con capacidad de servidor de E/S virtual",
+      "virtualTiersAllowed": "Niveles virtuales permitidos"
     },
     "table": {
       "bitCapabilityStatus": "Estado de la capacidad de bits",
@@ -318,6 +351,7 @@
     "alert": {
       "link": "Valores de perfil",
       "message": "Para cambiar la forma en que se visualizan la fecha y hora (UTC o desplazamiento del navegador) en toda la aplicación, visite ",
+      "messageText": "Para cambiar la forma en que se muestran la fecha y la hora (ya sea UTC o desplazamiento del navegador) en toda la aplicación, visite Valores de perfil",
       "messageNtp": "Si se selecciona NTP pero no se proporciona un servidor NTP o no se puede acceder al servidor NTP especificado, se utilizará time.google.com."
     },
     "configureSettings": "Configurar valores",
@@ -364,9 +398,11 @@
     "deconfigure": "Desconfigurar",
     "deconfigured": "Desconfigurado",
     "description": "Ver o cambiar el estado de todos los recursos de hardware. Para ver detalles sobre cada recurso desconfigurado, visite ",
+    "descriptionText": "Ver o cambiar el estado de todos los recursos de hardware.",
     "fcoSetting": "Configuración de FCO",
     "initiateDump": "Iniciar volcado",
     "link": "Registros de desconfiguración.",
+    "linkText": "Para ver los detalles del recurso desconfigurado, visite los registros de desconfiguración.",
     "memoryDimms": "DIMM de memoria",
     "node": "Nodo(s)",
     "overview": "Visión general",
@@ -384,6 +420,18 @@
     },
     "table": {
       "deconfigurationType": "Tipo de desconfiguración",
+      "filter": {
+        "byAssociation": "Por asociación",
+        "error": "Error",
+        "fatal": "Muy grave",
+        "fcoDeconfigured": "Desconfigurado por FCO",
+        "invalid": "No válido",
+        "manual": "Manual",
+        "none": "Ninguna",
+        "predictive": "Predictivo",
+        "recovered": "Recuperado",
+        "unknown": "Desconocido"
+      },
       "functionalState": "Estado funcional",
       "id": "Id",
       "locationCode": "Código de ubicación",
@@ -403,8 +451,10 @@
     "resolved": "Resuelto",
     "unresolved": "No resuelto",
     "pageDescription": {
-      "description": "Seleccione un registro para ver o exportar detalles de desconfiguración a un archivo .txt. Para ver y cambiar manualmente el estado de configuración de los recursos de hardware, visite ",
-      "link": "Desconfiguración de hardware."
+      "description": "Seleccione un registro para ver o exportar detalles de desconfiguración a un archivo .txt. Para ver y cambiar manualmente el estado de configuración de todos los recursos de hardware, visite ",
+      "decriptionText": "Seleccione un registro para ver o exportar detalles de desconfiguración a un archivo .txt.",
+      "link": "Desconfiguración de hardware.",
+      "linkText": "Para ver o cambiar el estado de configuración, visite Desconfiguración de hardware."
     },
     "modal": {
       "title": "Borrar todos los registros",
@@ -433,6 +483,11 @@
       "srcDetailsToolTip": "Detalles de código de referencia del sistema. Los detalles de SRC no están presentes para los registros de protección manual.",
       "status": "Estado",
       "type": "Tipo de desconfiguración"
+    },
+    "severityValues": {
+      "fatal": "Muy grave",
+      "predictive": "Predictivo",
+      "manual": "Manual"
     },
     "toast": {
       "errorDelete": "Error al suprimir %{count} registro. | Error al suprimir %{count} registros.",
@@ -486,7 +541,13 @@
       "dumpType": "Tipo de volcado",
       "id": "ID",
       "searchDumps": "Buscar volcados",
-      "size": "Tamaño"
+      "size": "Tamaño",
+      "filter": {
+        "bmcDumpEntry": "Entrada de volcado de BMC",
+        "hostbootDumpEntry": "Entrada de volcado de arranque de host",
+        "resourceDumpEntry": "Entrada de volcado de recurso",
+        "systemDumpEntry": "Entrada de volcado del sistema"
+      }
     },
     "toast": {
       "errorDeleteDump": "Error al suprimir %{count} volcado. | Error al suprimir %{count} volcados.",
@@ -507,6 +568,7 @@
   },
   "pageEventLogs": {
     "additionalDataUri": "Descargar datos adicionales",
+    "bmcManager": "Gestor de OpenBmc",
     "resolve": "Resolver",
     "resolved": "Resuelto",
     "unresolve": "Deshacer resolución",
@@ -525,11 +587,22 @@
       "id": "ID",
       "modifiedDate": "Fecha de modificación",
       "name": "Nombre",
-      "resolution": "Resolución",
+      "resolution": "Resolución (llamada)",
       "searchLogs": "Buscar registros",
       "severity": "Severity",
+      "severityValues": {
+        "critical": "Crítico",
+        "ok": "OK",
+        "warning": "Aviso"
+      },
       "status": "Estado",
+      "systemEventLogEntry": "Entrada de registro de sucesos del sistema",
       "type": "Tipo",
+      "typeValues": {
+        "event": "Suceso",
+        "oem": "OEM",
+        "sel": "SEL"
+      },
       "eventId": "ID de suceso"
     },
     "toast": {
@@ -677,10 +750,12 @@
   },
   "pageInventory": {
     "assemblies": "Conjuntos",
+    "baseboardManagementController": "Controlador de gestión de placa base",
     "bmcManager": "Gestor de BMC",
     "chassis": "Chasis",
     "dimmSlot": "Ranura DIMM",
     "fabricAdapters": "Adaptadores de entramado",
+    "false": "False",
     "fans": "Ventiladores",
     "identifyLedInfo": "Para piezas sin LED, el conmutador Identificar LED solo encenderá el LED de alojamiento",
     "pcieSlots": "Ranuras PCIe",
@@ -688,8 +763,10 @@
     "pcieTopologyLinkDescription": "Para obtener más información sobre las ranuras PCIe, visite ",
     "powerSupplies": "Fuentes de alimentación",
     "processors": "Procesadores",
+    "processorModule": "Módulo de procesador",
     "quicklinkTitle": "Enlaces rápidos a componentes de hardware",
     "system": "Sistema",
+    "true": "Sí",
     "enclosures": {
       "title": "Alojamientos de E/S",
       "traceLabel": "Recopilar rastreo de alojamiento de E/S",
@@ -889,6 +966,7 @@
     }
   },
   "pageLogin": {
+    "asmi": "Interfaz avanzada de gestión del sistema (ASMI)",
     "dateAndTime": "Fecha y hora",
     "language": "Idioma",
     "logIn": "Inicie sesión",
@@ -898,6 +976,7 @@
     "uploadServiceLoginCertificate": "Cargar certificado de inicio de sesión de servicio",
     "username": "Nombre de usuario",
     "alert": {
+      "unauthorizedMessage": "Usuario no autorizado",
       "message": "Nombre de usuario o contraseña no válidos"
     },
     "modal": {
@@ -1013,8 +1092,10 @@
     "hostName": "Nombre de host",
     "inventory": "Inventario y LED",
     "ipv4": "IPv4",
+    "manual": "Manual",
     "model": "Modelo",
     "networkInformation": "Información de red",
+    "normal": "Normal",
     "operatingMode": "Modalidad de operación",
     "powerCap": "Límite de alimentación",
     "powerConsumption": "Consumo de alimentación",
@@ -1182,7 +1263,9 @@
     "tableRoles": {
       "descMaximumPerformance": "La frecuencia del procesador variará. Esta modalidad permite que el sistema alcance la frecuencia máxima aprovechando las condiciones térmicas y de alimentación que proporcionan los núcleos desocupados, las cargas de trabajo más bajas y las condiciones ambientales favorables.",
       "descPowerSaving": "La frecuencia de procesador se establece en un valor mínimo fijo, lo que reduce el consumo de energía del sistema al tiempo que proporciona un rendimiento predecible.",
-      "descStatic": "La frecuencia de procesador se establece en un valor fijo que permite ejecutar cargas de trabajo normales en condiciones ambientales normales."
+      "descStatic": "La frecuencia de procesador se establece en un valor fijo que permite ejecutar cargas de trabajo normales en condiciones ambientales normales.",
+      "description": "Descripción",
+      "setting": "Valor"
     },
     "utilizationPercentValidation": {
       "enterUtilization": "El valor no puede ser mayor que el umbral para salir.",
@@ -1291,20 +1374,24 @@
     "shutdownServer": "Concluir servidor",
     "biosSettings": {
       "aixLinux": "Modalidad de arranque de partición de AIX/LINUX",
-      "currentOperatingMode": "Modalidad de funcionamiento actual %{currOptMode}",
+      "automatic": "Automático",
+      "currentOperatingModeManual": "Manual de modalidad de operación actual",
+      "currentOperatingModeNormal": "Modalidad de operación normal actual",
       "defaultPartition": "Entorno de partición predeterminado",
       "ibmIPartition": "Modalidad de arranque de partición de IBM i",
       "nonHMCManaged": "Solo está habilitado cuando el sistema no está gestionado por HMC",
       "powPolicySection": "se establecerá en %{powerPolicy}",
+      "powerOff": "Apagar",
       "pvm_default_os_type": "Entorno de partición predeterminado",
       "pvm_os_boot_type": "Modalidad de arranque de partición de IBM i",
       "pvm_rpa_boot_mode": "Modalidad de arranque de partición de AIX/LINUX",
       "pvm_stop_at_standby": "Política de inicio de firmware del servidor",
       "pvm_system_operating_mode": "Modalidad operativa de servidor",
       "pvm_system_power_off_policy": "Política de alimentación del servidor",
-      "selectedOperatingMode": "La modalidad de operación de ahorro se establecerá en %{selectedOptMode}",
+      "selectedOperatingModeManual": "Al guardar la modalidad de operación se establecerá en Manual",
       "serverFirmware": "Política de inicio de firmware del servidor",
       "powerSettingDescription": "Ver descripciones de los valores de alimentación",
+      "stayOn": "Permanecer encendido",
       "serverFirmwareItems": {
         "setting": {
           "autoStartOnly": "Solo Inicio automático",
@@ -1362,6 +1449,12 @@
         }
       },
       "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "Valor predeterminado"
+        },
         "pvm_os_boot_type": {
           "A_Mode": "A (arranque desde disco utilizando la copia A)",
           "B_Mode": "B (arranque desde disco utilizando la copia B)",
@@ -1492,15 +1585,20 @@
       "zeroLoginAttempts": "Si es \"0\", la cuenta nunca se bloqueará."
     },
     "table": {
+      "administrator": "Administrador",
       "privilege": "Privilegio",
+      "readOnly": "Sólo lectura",
       "status": "Estado",
       "username": "Nombre de usuario"
     },
     "tableRoles": {
+      "administrator": "Administrador",
       "configureComponentsManagedByThisService": "Configurar componentes gestionados por este servicio",
       "configureManagerResources": "Configurar recursos del gestor",
       "configureUsersAndTheirAccounts": "Configurar usuarios y sus cuentas",
       "logInToTheServiceAndReadResources": "Inicie sesión en el servicio y lea los recursos",
+      "privilege": "Privilegio",
+      "readOnly": "ReadOnly",
       "updatePasswordForCurrentUserAccount": "Actualice la contraseña para cuenta de usuario actual"
     },
     "toast": {
