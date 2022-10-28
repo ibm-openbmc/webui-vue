@@ -33,6 +33,7 @@
       "tooltip": "Suggerimento a comparsa"
     },
     "calendar": {
+      "dateFormat": "AAAA-MM-GG",
       "selectDate": "Seleziona data",
       "useCursorKeysToNavigateCalendarDates": "Utilizzare i tasti cursore per spostarsi tra le date del calendario"
     },
@@ -70,14 +71,17 @@
       "absent": "Assente",
       "copied": "Copiato",
       "connected": "Connesso",
+      "critical": "Critico",
       "disabled": "Disabilitato",
       "disconnected": "Disconnesso",
       "enabled": "Abilitato",
       "error": "Errore",
       "informational": "Informativo",
+      "locked": "Bloccato",
       "nextReboot": "Le modifiche avranno effetto al prossimo avvio.",
       "notAvailable": "Non disponibile",
       "off": "Spento",
+      "ok": "OK",
       "on": "Acceso",
       "present": "Presente",
       "success": "Operazione riuscita",
@@ -200,11 +204,24 @@
     "virtualMedia": "Supporto virtuale"
   },
   "pageCapacityOnDemand": {
+    "absent": "Assente",
+    "deferring": "Rinvio",
+    "disabled": "Disabilitato",
+    "enabled": "Abilitato",
+    "inTest": "InTest",
+    "starting": "In fase di avvio",
+    "standbyOffline": "Non in linea",
+    "standbySpare": "In attesa di riserva",
+    "unavailableOffline": "Non disponibile offline",
+    "updating": "Aggiornamento",
+    "qualified": "Qualificato",
+    "quiesced": "Sospeso",
     "vetCapabilities": "Funzionalità VET",
     "quickLinks": "Collegamenti rapidi",
     "activation": {
       "alert": "PHYP deve essere in standby o in esecuzione per l'attivazione.",
       "helperText": "Deve avere una lunghezza di 34 caratteri. Per ottenere una nuova chiave di accesso, visitare ",
+      "helperTextIps": "Per ottenere una nuova chiave di accesso, si prega di chiamare il servizio clienti hotline 400-940-0860",
       "placeholder": "Immettere il codice di attivazione",
       "sectionTitle": "Attivazione",
       "srLabel": "Codice di attivazione",
@@ -245,6 +262,22 @@
         "message": "Se queste informazioni non sono disponibili o sono necessarie ulteriori informazioni, creare un dump di risorse (utilizzando un selettore di risorse specifico) dalla  ",
         "link": "pagina Dump."
       }
+    },
+    "setting": {
+      "aixAllowed": "AIX consentito",
+      "aixDiagnostics": "Diagnostica AIX",
+      "activeMemoryExpansion": "AME (Active Memory Expansion)",
+      "activeMemoryMirroring": "Mirroring della memoria attiva",
+      "capi": "CAPI",
+      "interactiveCapacity": "IBMi 100% capacità interattiva",
+      "ibmiPartitions": "Partizioni IBMi consentite",
+      "inmiPermitted": "A IBMi è consentito utilizzare I/O nativo",
+      "lparCreationAllowed": "Creazione LPAR consentita",
+      "livePartitionMobility": "Live Partition Mobility",
+      "perPartition": "Superiore a 128 processori per partizione",
+      "subprocessorPartitioning": "Partizionamento del sottoprocessore",
+      "virtualIoServer": "Supporto VIOS (Virtual I/O Server)",
+      "virtualTiersAllowed": "Livelli virtuali consentiti"
     },
     "table": {
       "bitCapabilityStatus": "Stato capacità bit",
@@ -318,6 +351,7 @@
     "alert": {
       "link": "Impostazioni del profilo",
       "message": "Per modificare la modalità di visualizzazione della data e dell'ora (offset del browser o UTC) in tutta l'applicazione, visitare ",
+      "messageText": "Per modificare la modalità di visualizzazione della data e dell'ora (UTC o offset del browser) in tutta l'applicazione, visitare Impostazioni profilo",
       "messageNtp": "Se viene selezionato NTP ma non viene fornito un server NTP o se il server NTP fornito non è raggiungibile, verrà utilizzato time.google.com."
     },
     "configureSettings": "Configura impostazioni",
@@ -364,9 +398,11 @@
     "deconfigure": "Annulla configurazione",
     "deconfigured": "Configurazione annullata",
     "description": "Visualizzare o modificare lo stato di tutte le risorse hardware. Per visualizzare i dettagli relativi a ciascuna risorsa di cui si è annullata la configurazione, visitare ",
+    "descriptionText": "Visualizzare o modificare lo stato di tutte le risorse hardware.",
     "fcoSetting": "Impostazione FCO",
     "initiateDump": "Avvia dump",
     "link": "Record di annullamento della configurazione.",
+    "linkText": "Per visualizzare i dettagli della risorsa annullata dalla configurazione, visitare i record dell'annullamento della configurazione.",
     "memoryDimms": "DIMM di memoria",
     "node": "Nodo/i",
     "overview": "Panoramica",
@@ -384,6 +420,18 @@
     },
     "table": {
       "deconfigurationType": "Tipo di annullamento della configurazione",
+      "filter": {
+        "byAssociation": "Per associazione",
+        "error": "Errore",
+        "fatal": "Errore irreversibile",
+        "fcoDeconfigured": "Deconfigurato da FCO",
+        "invalid": "Non valido",
+        "manual": "Manuale",
+        "none": "Nessuna",
+        "predictive": "Predittivo",
+        "recovered": "Recuperato",
+        "unknown": "Sconosciuto"
+      },
       "functionalState": "Stato funzionale",
       "id": "ID",
       "locationCode": "Codice ubicazione",
@@ -403,8 +451,10 @@
     "resolved": "Risolto",
     "unresolved": "Risoluzione annullata",
     "pageDescription": {
-      "description": "Selezionare un record per visualizzare o esportare i dettagli di annullamento della configurazione in un file .txt. Per visualizzare e modificare manualmente lo stato di configurazione di tutte le risorse hardware visitare ",
-      "link": "Annullamento della configurazione hardware."
+      "description": "Selezionare un record per visualizzare o esportare i dettagli di deconfigurazione in un file .txt. Per visualizzare e modificare manualmente lo stato di configurazione di tutte le risorse hardware, visitare ",
+      "decriptionText": "Selezionare un record per visualizzare o esportare i dettagli di annullamento della configurazione in un file .txt.",
+      "link": "Annullamento della configurazione hardware.",
+      "linkText": "Per visualizzare o modificare lo stato della configurazione, visitare la pagina Deconfigurazione hardware."
     },
     "modal": {
       "title": "Cancella tutti i record",
@@ -433,6 +483,11 @@
       "srcDetailsToolTip": "Dettagli codice di riferimento di sistema (SRC). I dettagli SRC non sono presenti per un record guard manuale.",
       "status": "Stato",
       "type": "Tipo di annullamento della configurazione"
+    },
+    "severityValues": {
+      "fatal": "Errore irreversibile",
+      "predictive": "Predittivo",
+      "manual": "Manuale"
     },
     "toast": {
       "errorDelete": "Errore di eliminazione di %{count} record. | Errore di eliminazione di %{count} record.",
@@ -486,7 +541,13 @@
       "dumpType": "Tipo di dump",
       "id": "ID",
       "searchDumps": "Cerca i dump",
-      "size": "Dimensione"
+      "size": "Dimensione",
+      "filter": {
+        "bmcDumpEntry": "Voce dump BMC",
+        "hostbootDumpEntry": "Voce dump avvio host",
+        "resourceDumpEntry": "Voce dump di risorsa",
+        "systemDumpEntry": "Voce dump di sistema"
+      }
     },
     "toast": {
       "errorDeleteDump": "Errore di eliminazione di %{count} dump. | Errore di eliminazione di %{count} dump.",
@@ -507,6 +568,7 @@
   },
   "pageEventLogs": {
     "additionalDataUri": "Scarica dati aggiuntivi",
+    "bmcManager": "Gestore OpenBmc",
     "resolve": "Risolvi",
     "resolved": "Risolto",
     "unresolve": "Annulla risoluzione",
@@ -525,11 +587,22 @@
       "id": "ID",
       "modifiedDate": "Data di modifica",
       "name": "Nome",
-      "resolution": "Risoluzione",
+      "resolution": "Risoluzione (callout)",
       "searchLogs": "Cerca in log",
       "severity": "Severità",
+      "severityValues": {
+        "critical": "Critico",
+        "ok": "OK",
+        "warning": "Avvertenza"
+      },
       "status": "Stato",
+      "systemEventLogEntry": "Voce log eventi di sistema",
       "type": "Tipo",
+      "typeValues": {
+        "event": "Evento",
+        "oem": "OEM",
+        "sel": "SEL"
+      },
       "eventId": "ID evento"
     },
     "toast": {
@@ -677,10 +750,12 @@
   },
   "pageInventory": {
     "assemblies": "Assembly",
+    "baseboardManagementController": "Controller di gestione scheda di base",
     "bmcManager": "Gestore BMC",
     "chassis": "Chassis",
     "dimmSlot": "Slot DIMM",
     "fabricAdapters": "Adattatori Fabric",
+    "false": "No",
     "fans": "Ventole",
     "identifyLedInfo": "Per le parti senza LED, l'interruttore di attivazione/disattivazione LED di identificazione accenderà solo il LED dell'enclosure",
     "pcieSlots": "Slot PCIe",
@@ -688,8 +763,10 @@
     "pcieTopologyLinkDescription": "Per ulteriori informazioni sugli slot PCIe, visitare ",
     "powerSupplies": "Alimentatori",
     "processors": "Processori",
+    "processorModule": "Modulo processore",
     "quicklinkTitle": "Collegamenti rapidi ai componenti hardware",
     "system": "Sistema",
+    "true": "Vero",
     "enclosures": {
       "title": "Contenitori I/O",
       "traceLabel": "Raccogli traccia contenitore I/O",
@@ -889,6 +966,7 @@
     }
   },
   "pageLogin": {
+    "asmi": "ASMI (Advanced System Management Interface)",
     "dateAndTime": "Data e ora",
     "language": "Lingua",
     "logIn": "Accedi",
@@ -898,6 +976,7 @@
     "uploadServiceLoginCertificate": "Carica certificato di accesso al servizio",
     "username": "Nome utente",
     "alert": {
+      "unauthorizedMessage": "Utente non autorizzato",
       "message": "Nome utente o password non validi"
     },
     "modal": {
@@ -1013,8 +1092,10 @@
     "hostName": "Nome host",
     "inventory": "Inventario e LED",
     "ipv4": "IPv4",
+    "manual": "Manuale",
     "model": "Modello",
     "networkInformation": "Informazioni di rete",
+    "normal": "Normale",
     "operatingMode": "Modalità operativa",
     "powerCap": "Limite massimo alimentazione",
     "powerConsumption": "Consumo energetico",
@@ -1182,7 +1263,9 @@
     "tableRoles": {
       "descMaximumPerformance": "La frequenza del processore varierà. Questa modalità consente al sistema di raggiungere la frequenza massima avvalendosi della capacità aggiuntiva termica ed energetica fornita dai core inattivi, dai carichi di lavoro più bassi e dalle condizioni ambientali favorevoli.",
       "descPowerSaving": "La frequenza del processore è impostata su un valore minimo fisso, riducendo il consumo energetico del sistema fornendo al tempo stesso delle prestazioni prevedibili.",
-      "descStatic": "La frequenza del processore è impostata su un valore fisso in grado di eseguire carichi di lavoro normali in condizioni ambientali normali."
+      "descStatic": "La frequenza del processore è impostata su un valore fisso in grado di eseguire carichi di lavoro normali in condizioni ambientali normali.",
+      "description": "Descrizione",
+      "setting": "Impostazione"
     },
     "utilizationPercentValidation": {
       "enterUtilization": "Il valore non può essere superiore alla soglia per uscire.",
@@ -1291,20 +1374,24 @@
     "shutdownServer": "Arresta server",
     "biosSettings": {
       "aixLinux": "Modalità di avvio partizione AIX/LINUX",
-      "currentOperatingMode": "Modalità operativa corrente %{currOptMode}",
+      "automatic": "Automatico",
+      "currentOperatingModeManual": "Modalità operativa corrente Manuale",
+      "currentOperatingModeNormal": "Modalità operativa corrente normale",
       "defaultPartition": "Ambiente di partizione predefinito",
       "ibmIPartition": "Modalità di avvio partizione IBM i",
       "nonHMCManaged": "Abilitato solo quando il sistema non è gestito da HMC",
       "powPolicySection": "sarà impostata su %{powerPolicy}",
+      "powerOff": "Spegnimento",
       "pvm_default_os_type": "Ambiente di partizione predefinito",
       "pvm_os_boot_type": "Modalità di avvio partizione IBM i",
       "pvm_rpa_boot_mode": "Modalità di avvio partizione AIX/LINUX",
       "pvm_stop_at_standby": "Politica di avvio del firmware del server",
       "pvm_system_operating_mode": "Modalità operativa server",
       "pvm_system_power_off_policy": "Politica di alimentazione del server",
-      "selectedOperatingMode": "Al momento del salvataggio, la modalità operativa sarà impostata su %{selectedOptMode}",
+      "selectedOperatingModeManual": "La modalità operativa di salvataggio verrà impostata su Manuale",
       "serverFirmware": "Politica di avvio del firmware del server",
       "powerSettingDescription": "Visualizzare le descrizioni delle impostazioni di alimentazione",
+      "stayOn": "Rimani attivo",
       "serverFirmwareItems": {
         "setting": {
           "autoStartOnly": "Solo avvio automatico",
@@ -1362,6 +1449,12 @@
         }
       },
       "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "Predefinito"
+        },
         "pvm_os_boot_type": {
           "A_Mode": "A (avviare da disco utilizzando copia A)",
           "B_Mode": "B (avviare da disco utilizzando copia B)",
@@ -1492,15 +1585,20 @@
       "zeroLoginAttempts": "Se ` 0 `, l'account non sarà mai bloccato."
     },
     "table": {
+      "administrator": "Amministratore",
       "privilege": "Privilegio",
+      "readOnly": "Solo lettura",
       "status": "Stato",
       "username": "Nome utente"
     },
     "tableRoles": {
+      "administrator": "Amministratore",
       "configureComponentsManagedByThisService": "Configura componenti gestiti da questo servizio",
       "configureManagerResources": "Configura risorse gestore",
       "configureUsersAndTheirAccounts": "Configura utenti e i loro account",
       "logInToTheServiceAndReadResources": "Accedi al servizio e leggi le risorse",
+      "privilege": "Privilegio",
+      "readOnly": "Sola lettura",
       "updatePasswordForCurrentUserAccount": "Aggiorna password per account utente corrente"
     },
     "toast": {
