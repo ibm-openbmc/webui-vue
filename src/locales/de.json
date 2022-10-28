@@ -33,6 +33,7 @@
       "tooltip": "QuickInfo"
     },
     "calendar": {
+      "dateFormat": "JJJJ-MM-TT",
       "selectDate": "Datum auswählen",
       "useCursorKeysToNavigateCalendarDates": "Cursortasten zum Navigieren in Kalenderdaten verwenden"
     },
@@ -70,14 +71,17 @@
       "absent": "Fehlt",
       "copied": "Kopiert",
       "connected": "Verbunden",
+      "critical": "Kritisch",
       "disabled": "Inaktiviert",
       "disconnected": "Getrennt",
       "enabled": "Aktiviert",
       "error": "Fehler",
       "informational": "Information",
+      "locked": "Gesperrt",
       "nextReboot": "Änderungen werden beim nächsten Booten wirksam.",
       "notAvailable": "Nicht verfügbar",
       "off": "Aus",
+      "ok": "OK",
       "on": "Ein",
       "present": "Vorhanden",
       "success": "Erfolgreich",
@@ -200,11 +204,24 @@
     "virtualMedia": "Virtueller Datenträger"
   },
   "pageCapacityOnDemand": {
+    "absent": "Fehlt",
+    "deferring": "Verzögern",
+    "disabled": "Inaktiviert",
+    "enabled": "Aktiviert",
+    "inTest": "Im Test",
+    "starting": "Wird gestartet",
+    "standbyOffline": "Standby offline",
+    "standbySpare": "Standby-Ersatzspeicher",
+    "unavailableOffline": "Offline nicht verfügbar",
+    "updating": "Aktualisierung wird durchgeführt",
+    "qualified": "Qualified",
+    "quiesced": "Im Quiescemodus",
     "vetCapabilities": "VET-Funktionen",
     "quickLinks": "Schnelle Links",
     "activation": {
       "alert": "PHYP muss sich im Standby-Modus befinden oder laufen, um aktiviert zu werden.",
       "helperText": "Muss 34 Zeichen enthalten. Einen neuen Zugriffsschlüssel erhalten Sie hier: ",
+      "helperTextIps": "Um einen neuen Zugangsschlüssel zu erhalten, rufen Sie bitte die Kundenservice-Hotline 400-940-0860 an",
       "placeholder": "Aktivierungscode eingeben",
       "sectionTitle": "Aktivierung",
       "srLabel": "Aktivierungscode",
@@ -245,6 +262,22 @@
         "message": "Wenn diese Informationen nicht verfügbar sind oder weitere Informationen erforderlich sind, erstellen Sie einen Ressourcenspeicherauszug (mit einem bestimmten Ressourcenselektor) über die  ",
         "link": "Seite 'Speicherauszüge'."
       }
+    },
+    "setting": {
+      "aixAllowed": "AIX zulässig",
+      "aixDiagnostics": "AIX-Diagnose",
+      "activeMemoryExpansion": "Active Memory Expansion",
+      "activeMemoryMirroring": "Aktive Speicherspiegelung",
+      "capi": "CAPI",
+      "interactiveCapacity": "IBMi 100 % interaktive Kapazität",
+      "ibmiPartitions": "IBMi-Partitionen zulässig",
+      "inmiPermitted": "IBMi mit Berechtigung zur Verwendung der nativen Ein-/Ausgabe",
+      "lparCreationAllowed": "LPAR-Erstellung zulässig",
+      "livePartitionMobility": "Live Partition Mobility",
+      "perPartition": "Mehr als 128 Prozessoren pro Partition",
+      "subprocessorPartitioning": "Unterauftragsverarbeiter-Partitionierung",
+      "virtualIoServer": "Für virtuellen E/A-Server geeignet",
+      "virtualTiersAllowed": "Zulässige virtuelle Schichten"
     },
     "table": {
       "bitCapabilityStatus": "Bitfunktionsstatus",
@@ -318,6 +351,7 @@
     "alert": {
       "link": "Profileinstellungen auf.",
       "message": "Rufen Sie zum Ändern von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung die ",
+      "messageText": "Um die Anzeige von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung zu ändern, rufen Sie die Profileinstellungen auf.",
       "messageNtp": "Wenn NTP ausgewählt ist, aber kein NTP-Server angegeben ist oder der angegebene NTP-Server nicht erreichbar ist, wird time.google.com verwendet."
     },
     "configureSettings": "Einstellungen konfigurieren",
@@ -364,9 +398,11 @@
     "deconfigure": "Dekonfigurieren",
     "deconfigured": "Dekonfiguriert",
     "description": "Zeigen Sie den Status aller Hardwareressourcen an oder ändern Sie den Status. Details zu den einzelnen dekonfigurierten Ressourcen finden Sie unter ",
+    "descriptionText": "Zeigen Sie den Status aller Hardwareressourcen an oder ändern Sie den Status.",
     "fcoSetting": "FCO-Einstellung",
     "initiateDump": "Speicherauszug einleiten",
     "link": "Dekonfigurationsdatensätze.",
+    "linkText": "Um Details zu dekonfigurierten Ressourcen anzuzeigen, rufen Sie die Datensätze zur Dekonfiguration auf.",
     "memoryDimms": "Speicher-DIMMs",
     "node": "Knoten",
     "overview": "Übersicht",
@@ -384,6 +420,18 @@
     },
     "table": {
       "deconfigurationType": "Typ der Konfigurationsaufhebung",
+      "filter": {
+        "byAssociation": "Durch Zuordnung",
+        "error": "Fehler",
+        "fatal": "Fatal",
+        "fcoDeconfigured": "FCO-dekonfiguriert",
+        "invalid": "Ungültig",
+        "manual": "Manuell",
+        "none": "Keine",
+        "predictive": "Vorhersage",
+        "recovered": "Wiedergestellt",
+        "unknown": "Unbekannt"
+      },
       "functionalState": "Funktionaler Zustand",
       "id": "ID",
       "locationCode": "Standortcode",
@@ -403,8 +451,10 @@
     "resolved": "Aufgelöst",
     "unresolved": "Nicht aufgelöst",
     "pageDescription": {
-      "description": "Wählen Sie einen Datensatz aus, um Details zur Dekonfiguration anzuzeigen oder in eine Datei '.txt' zu exportieren. Informationen zum Anzeigen und manuellen Ändern des Konfigurationsstatus aller Hardwareressourcen finden Sie unter ",
-      "link": "Hardwaredekonfiguration."
+      "description": "Wählen Sie einen Datensatz aus, um Details zur Dekonfiguration anzuzeigen oder in eine .txt-Datei zu exportieren. Informationen zum Anzeigen und manuellen Ändern des Konfigurationsstatus aller Hardwareressourcen finden Sie unter ",
+      "decriptionText": "Wählen Sie einen Datensatz aus, um Details zur Dekonfiguration anzuzeigen oder in eine Datei '.txt' zu exportieren.",
+      "link": "Hardwaredekonfiguration.",
+      "linkText": "Um den Konfigurationsstatus anzuzeigen oder zu ändern, rufen Sie die Hardwaredekonfiguration auf."
     },
     "modal": {
       "title": "Alle Datensätze löschen",
@@ -433,6 +483,11 @@
       "srcDetailsToolTip": "Details des Systemreferenzcodes Für manuelle Schutzdatensätze sind keine SRC-Details vorhanden.",
       "status": "status",
       "type": "Dekonfigurationstyp"
+    },
+    "severityValues": {
+      "fatal": "Fatal",
+      "predictive": "Vorhersage",
+      "manual": "Manuell"
     },
     "toast": {
       "errorDelete": "Fehler beim Löschen von %{count} Datensatz. | Fehler beim Löschen von%{count} Datensätzen.",
@@ -486,7 +541,13 @@
       "dumpType": "Speicherauszugstyp",
       "id": "ID",
       "searchDumps": "Speicherauszüge suchen",
-      "size": "Größe"
+      "size": "Größe",
+      "filter": {
+        "bmcDumpEntry": "BMC-Speicherauszugseintrag",
+        "hostbootDumpEntry": "Hostbootspeicherauszugseintrag",
+        "resourceDumpEntry": "Ressourcenspeicherauszugseintrag",
+        "systemDumpEntry": "Systemspeicherauszugseintrag"
+      }
     },
     "toast": {
       "errorDeleteDump": "Fehler beim Löschen von %{count} Speicherauszug. | Fehler beim Löschen von %{count} Speicherauszügen.",
@@ -507,6 +568,7 @@
   },
   "pageEventLogs": {
     "additionalDataUri": "Zusätzliche Daten herunterladen",
+    "bmcManager": "OpenBmc-Manager",
     "resolve": "Auflösen",
     "resolved": "Aufgelöst",
     "unresolve": "Auflösung rückgängig machen",
@@ -525,11 +587,22 @@
       "id": "ID",
       "modifiedDate": "Änderungsdatum",
       "name": "Name",
-      "resolution": "Lösung",
+      "resolution": "Auflösung (Callout)",
       "searchLogs": "Protokolle durchsuchen",
       "severity": "Schweregrad",
+      "severityValues": {
+        "critical": "Kritisch",
+        "ok": "OK",
+        "warning": "Warnung"
+      },
       "status": "Status",
+      "systemEventLogEntry": "Systemereignisprotokolleintrag",
       "type": "Typ",
+      "typeValues": {
+        "event": "Ereignis",
+        "oem": "Oem",
+        "sel": "SEL"
+      },
       "eventId": "Ereignis-ID"
     },
     "toast": {
@@ -677,10 +750,12 @@
   },
   "pageInventory": {
     "assemblies": "Assemblys",
+    "baseboardManagementController": "Baseboard-Management-Controller",
     "bmcManager": "BMC-Manager",
     "chassis": "Chassis",
     "dimmSlot": "DIMM-Steckplatz",
     "fabricAdapters": "Fabric-Adapter",
+    "false": "Falsch",
     "fans": "Lüfter",
     "identifyLedInfo": "Bei Teilen ohne LEDs schaltet der Umschalter für die Identifikations-LED nur die Gehäuseanzeige ein.",
     "pcieSlots": "PCIe-Steckplätze",
@@ -688,8 +763,10 @@
     "pcieTopologyLinkDescription": "Wenn Sie mehr über PCIe-Steckplätze erfahren möchten, besuchen Sie ",
     "powerSupplies": "Netzteile",
     "processors": "Prozessoren",
+    "processorModule": "Prozessormodul",
     "quicklinkTitle": "Quick Links zu Hardwarekomponenten",
     "system": "System",
+    "true": "Ja",
     "enclosures": {
       "title": "E/A-Gehäuse",
       "traceLabel": "Trace für E/A-Gehäuse erfassen",
@@ -889,6 +966,7 @@
     }
   },
   "pageLogin": {
+    "asmi": "Advanced System Management Interface (ASMI)",
     "dateAndTime": "Datum und Uhrzeit",
     "language": "Sprache",
     "logIn": "Anmeldung",
@@ -898,6 +976,7 @@
     "uploadServiceLoginCertificate": "Serviceanmeldezertifikat hochladen",
     "username": "Benutzername",
     "alert": {
+      "unauthorizedMessage": "Benutzer nicht berechtigt",
       "message": "Benutzername oder Kennwort ungültig"
     },
     "modal": {
@@ -1013,8 +1092,10 @@
     "hostName": "Hostname",
     "inventory": "Inventar und LEDs",
     "ipv4": "IPv4",
+    "manual": "Manuell",
     "model": "Model",
     "networkInformation": "Netzinformationen",
+    "normal": "Normal",
     "operatingMode": "Betriebsmodus",
     "powerCap": "Leistungsbegrenzung",
     "powerConsumption": "Stromverbrauch",
@@ -1182,7 +1263,9 @@
     "tableRoles": {
       "descMaximumPerformance": "Die Prozessorfrequenz variiert. Dieser Modus ermöglicht dem System, die maximale Frequenz zu erreichen, indem die Wärme- und Leistungsaufnahmereserven genutzt werden, die durch inaktive Kerne, geringere Arbeitslasten und günstige Umgebungsbedingungen vorliegen.",
       "descPowerSaving": "Die Prozessorfrequenz wird auf einen festen Mindestwert gesetzt, wodurch sich die Leistungsaufnahme des Systems verringert und gleichzeitig eine vorhersehbare Leistung erzielt wird.",
-      "descStatic": "Für die Prozessorfrequenz wird ein fester Wert festgelegt, der für normale Workloads unter normalen Umgebungsbedingungen ausgelegt ist."
+      "descStatic": "Für die Prozessorfrequenz wird ein fester Wert festgelegt, der für normale Workloads unter normalen Umgebungsbedingungen ausgelegt ist.",
+      "description": "Beschreibung",
+      "setting": "Einstellung"
     },
     "utilizationPercentValidation": {
       "enterUtilization": "Wert darf den Inaktivierungsschwellenwert nicht überschreiten.",
@@ -1291,20 +1374,24 @@
     "shutdownServer": "Server herunterfahren",
     "biosSettings": {
       "aixLinux": "Bootmodus der AIX/LINUX-Partition",
-      "currentOperatingMode": "Aktueller Betriebsmodus %{currOptMode}",
+      "automatic": "Automatisch",
+      "currentOperatingModeManual": "Aktueller Betriebsmodus Manuell",
+      "currentOperatingModeNormal": "Aktueller Betriebsmodus Normal",
       "defaultPartition": "Standardpartitionsumgebung",
       "ibmIPartition": "Bootmodus der IBM i-Partition",
       "nonHMCManaged": "Nur aktiviert, wenn das System nicht von HMC verwaltet wird",
       "powPolicySection": "wird mit %{powerPolicy} definiert",
+      "powerOff": "Ausschalten",
       "pvm_default_os_type": "Standardpartitionsumgebung",
       "pvm_os_boot_type": "Bootmodus der IBM i-Partition",
       "pvm_rpa_boot_mode": "Bootmodus der AIX/LINUX-Partition",
       "pvm_stop_at_standby": "Richtlinie für Server-Firmwarestart",
       "pvm_system_operating_mode": "Betriebsmodus des Servers",
       "pvm_system_power_off_policy": "Ein-/Ausschaltrichtlinie des Servers",
-      "selectedOperatingMode": "Beim Speichern wird für den Betriebsmodus %{selectedOptMode} festgelegt",
+      "selectedOperatingModeManual": "Beim Speichern wird der Betriebsmodus auf Manuell gesetzt.",
       "serverFirmware": "Richtlinie für Server-Firmwarestart",
       "powerSettingDescription": "Beschreibungen der Stromversorgungseinstellungen anzeigen",
+      "stayOn": "Eingeschaltet lassen",
       "serverFirmwareItems": {
         "setting": {
           "autoStartOnly": "Nur automatischer Start",
@@ -1362,6 +1449,12 @@
         }
       },
       "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "Standardwert"
+        },
         "pvm_os_boot_type": {
           "A_Mode": "A (Mit Kopie A von Platte booten)",
           "B_Mode": "B (Mit Kopie B von Platte booten)",
@@ -1492,15 +1585,20 @@
       "zeroLoginAttempts": "Bei \"0\" wird das Konto nie gesperrt."
     },
     "table": {
+      "administrator": "Administrator",
       "privilege": "Berechtigung",
+      "readOnly": "Lesezugriff",
       "status": "Status",
       "username": "Benutzername"
     },
     "tableRoles": {
+      "administrator": "Administrator",
       "configureComponentsManagedByThisService": "Von diesem Service verwaltete Komponenten konfigurieren",
       "configureManagerResources": "Managerressourcen konfigurieren",
       "configureUsersAndTheirAccounts": "Benutzer und deren Accounts konfigurieren",
       "logInToTheServiceAndReadResources": "Beim Service anmelden und Ressourcen lesen",
+      "privilege": "Berechtigung",
+      "readOnly": "ReadOnly",
       "updatePasswordForCurrentUserAccount": "Kennwort für aktuellen Benutzeraccount aktualisieren"
     },
     "toast": {
