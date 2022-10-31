@@ -15,18 +15,17 @@
       "edit": "編集",
       "enable": "有効にする",
       "export": "エクスポート",
-      "exportAll": "すべてエクスポート",
+      "exportAll": "すべてをエクスポートします。",
       "filter": "フィルター",
       "openNewTab": "新しいタブで開きます。",
-      "refresh": "更新",
+      "refresh": "リフレッシュ",
       "replace": "置換",
       "reset": "リセット",
       "save": "保存",
-      "saveSettings": "設定の保存",
       "selected": "件選択中"
     },
     "ariaLabel": {
-      "clearSearch": "入力された検索内容のクリア",
+      "clearSearch": "検索入力のクリア",
       "hidePassword": "パスワードを非表示にする",
       "progressBar": "ページ読み込みの進行状況バー",
       "scrollToTop": "トップまでスクロールします。",
@@ -34,7 +33,8 @@
       "tooltip": "ツールチップ"
     },
     "calendar": {
-      "selectDate": "日付を選択",
+      "dateFormat": "YYYY-MM-DD",
+      "selectDate": "日付の選択",
       "useCursorKeysToNavigateCalendarDates": "日付を移動するにはカーソル・キーを使用します"
     },
     "fileUpload": {
@@ -42,19 +42,19 @@
       "clearSelectedFile": "選択したファイルをクリアします。"
     },
     "form": {
-      "dateMustBeAfter": "日付は%{date} の後でなければなりません。",
-      "dateMustBeBefore": "日付は%{date} の前でなければなりません。",
-      "fieldRequired": "必須フィールド",
+      "dateMustBeAfter": "日付は %{date} の後でなければなりません。",
+      "dateMustBeBefore": "日付は %{date} の前でなければなりません。",
+      "fieldRequired": "必須なフィールド",
       "invalidCharacterLength": "無効な文字長",
       "invalidFormat": "フォーマットが無効です",
       "invalidValue": "値が無効です",
-      "lengthMustBeBetween": "長さは%{min} -%{max} 文字の間でなければなりません。",
+      "lengthMustBeBetween": "長さは %{min} から %{max} 文字の間でなければなりません",
       "mustBeAtLeast": "最小値: %{value}",
       "optional": "オプション",
       "passwordsDoNotMatch": "パスワードが一致しません",
       "required": "必須",
       "search": "検索",
-      "selectAnOption": "オプションを選択",
+      "selectAnOption": "オプションを選択します。",
       "valueMustBeBetween": "値は %{min} から %{max} の間でなければなりません。"
     },
     "passwordValidation": {
@@ -64,20 +64,24 @@
       "message3": "3. アカウントのユーザー名が含まれていない",
       "message4": "4. 辞書の単語を含まない",
       "message5": "5. 連続文字を含まない",
-      "message6": "6. IPMI に使用する場合は 20 文字以下"
+      "message6": "6. IPMI に使用する場合は 20 文字以下",
+      "message7": "7. 小文字、大文字、数字、およびその他の文字のいずれか 2 つが含まれている必要があります。"
     },
     "status": {
       "absent": "不在",
       "copied": "コピー済み",
       "connected": "接続済み",
+      "critical": "深刻な",
       "disabled": "無効",
       "disconnected": "切断",
       "enabled": "有効",
       "error": "エラー",
       "informational": "通知",
+      "locked": "ロック済み",
       "nextReboot": "変更内容は次回のブート時に有効になります。",
       "notAvailable": "使用不可",
       "off": "Off",
+      "ok": "OK",
       "on": "オン",
       "present": "存在する",
       "success": "成功",
@@ -90,7 +94,7 @@
       "expandTableRow": "表の行を展開します。",
       "fromDate": "開始日",
       "items": "%{count} 項目",
-      "itemsPerPage": "項目/ページ",
+      "itemsPerPage": "1 ページあたりの部品",
       "selectAll": "すべて選択",
       "selectedItems": "%{count} アイテムの%{filterCount} %",
       "selectItem": "項目の選択",
@@ -106,7 +110,7 @@
     "applicationHeader": "アプリケーション・ヘッダー",
     "health": "正常性",
     "logOut": "ログアウト",
-    "power": "電源",
+    "power": "Power",
     "profileSettings": "@:appPageTitle.profileSettings",
     "refresh": "リフレッシュ",
     "skipToContent": "コンテンツにスキップ",
@@ -132,13 +136,15 @@
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
-    "lateralCastOutControl": "@:appPageTitle.lateralCastOutControl",
+    "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
     "logs": "ログ",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
     "operations": "操作",
     "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
     "policies": "@:appPageTitle.policies",
     "postCodeLogs": "@:appPageTitle.postCodeLogs",
     "power": "@:appPageTitle.power",
@@ -170,20 +176,22 @@
     "fieldCoreOverride": "フィールド・コア・オーバーライド",
     "firmware": "ファームウェア",
     "hostConsole": "ホスト・コンソール",
-    "inventory": "インベントリーと LED",
+    "inventory": "インベントリーとLED",
     "keyClear": "鍵のクリア",
     "kvm": "KVM",
-    "lateralCastOutControl": "ラテラル・キャストアウトの制御",
+    "systemParameters": "システム・パラメーター",
     "ldap": "LDAP",
     "login": "ログイン",
     "memory": "メモリー",
     "network": "ネットワーク",
+    "notices": "特記事項",
     "overview": "概要",
     "pageNotFound": "ページが見つからない",
+    "pcieTopology": "PCIe ハードウェア・トポロジー",
     "policies": "ポリシー",
     "postCodeLogs": "進行状況ログ",
     "postCodes": "進行状況ログ",
-    "power": "電源",
+    "power": "Power",
     "powerRestorePolicy": "電源復元ポリシー",
     "profileSettings": "プロファイル設定",
     "rebootBmc": "BMC のリブート",
@@ -196,11 +204,24 @@
     "virtualMedia": "仮想メディア"
   },
   "pageCapacityOnDemand": {
+    "absent": "不在",
+    "deferring": "延期",
+    "disabled": "無効",
+    "enabled": "有効",
+    "inTest": "テスト中",
+    "starting": "始動",
+    "standbyOffline": "スタンド・バイ・オフライン",
+    "standbySpare": "スタンバイ・バイ・スペア",
+    "unavailableOffline": "オフラインで使用不可",
+    "updating": "更新",
+    "qualified": "有資格",
+    "quiesced": "静止",
     "vetCapabilities": "VET 機能",
     "quickLinks": "クイック・リンク",
     "activation": {
       "alert": "PHYP を活動化にするには、スタンバイ状態または実行中である必要があります。",
       "helperText": "34 文字でなければなりません。 新しいアクセス・キーを取得するには、以下にアクセスしてください。 ",
+      "helperTextIps": "新しいアクセス・キーを取得するには、カスタマー・サービス・ホットライン 400-940-0860 に電話してください。",
       "placeholder": "活動化コードを入力します",
       "sectionTitle": "活動化",
       "srLabel": "アクティベーション・コード",
@@ -210,7 +231,7 @@
       }
     },
     "alert": {
-      "description": "システムの電源をオンにする必要があります。",
+      "description": "システムの電源をオンに設定しななければなりません。",
       "title": "Capacity on Demand 活動化への変更内容の適用。"
     },
     "orderInfo": {
@@ -239,8 +260,24 @@
       "title": "オンデマンド・ユーティリティーのオーダー情報",
       "description": {
         "message": "この情報が利用できない場合、または他の情報が必要な場合は、(特定のリソース・セレクターを使用して) リソース・ダンプを作成します。作成元:  ",
-        "link": "ページのダンプ。"
+        "link": "ページをダンプします。"
       }
+    },
+    "setting": {
+      "aixAllowed": "AIX 許可",
+      "aixDiagnostics": "AIX 診断",
+      "activeMemoryExpansion": "アクティブ・メモリー拡張",
+      "activeMemoryMirroring": "アクティブ・メモリー・ミラーリング",
+      "capi": "カピ",
+      "interactiveCapacity": "IBMi 100% 対話式容量",
+      "ibmiPartitions": "許可される IBMi パーティション",
+      "inmiPermitted": "ネイティブ I/O の使用が許可されている IBMi",
+      "lparCreationAllowed": "LPAR 作成許可",
+      "livePartitionMobility": "Live partition mobility",
+      "perPartition": "区画当たり 128 を超えるプロセッサー",
+      "subprocessorPartitioning": "サブプロセッサー区画化",
+      "virtualIoServer": "Virtual I/O Server 対応",
+      "virtualTiersAllowed": "許可される仮想層"
     },
     "table": {
       "bitCapabilityStatus": "ビット関数状況",
@@ -313,7 +350,9 @@
   "pageDateTime": {
     "alert": {
       "link": "プロファイル設定",
-      "message": "アプリケーション全体で日付と時刻の表示方法 (UTCまたはブラウザ・オフセット) を変更するには、次に移動します。 "
+      "message": "アプリケーション全体で日付と時刻の表示方法 (UTC またはブラウザ・オフセット) を変更するには、次に移動します。 ",
+      "messageText": "アプリケーション全体での日時の表示方法 (UTC またはブラウザーのオフセット) を変更するには、「プロファイル設定 (Profile Settings)」にアクセスしてください。",
+      "messageNtp": "NTP が選択されているが、NTP サーバーが指定されていない場合、または指定された NTP サーバーに到達できない場合は、time.google.com が使用されます。"
     },
     "configureSettings": "設定を構成する",
     "form": {
@@ -327,6 +366,9 @@
         "server1": "サーバー 1",
         "server2": "サーバー 2",
         "server3": "サーバー 3"
+      },
+      "validators": {
+        "serverExists": "サーバー・アドレスは既に存在しています"
       }
     },
     "toast": {
@@ -336,10 +378,12 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "並行保守",
+    "opPanelBase": "オペレーター・パネルの基本保守",
+    "opPanelLcd": "オペレーター・パネル LCD の保守",
     "tod": "時刻バッテリー保守",
     "alert": {
-      "message": "バッテリーを取り外したり交換したりするには、これを有効にします。 完了したら、これを無効にして、通常モードに戻ることをお勧めします。",
-      "title": "バッテリーの並行修復"
+      "message": "バッテリーの取り外しまたは交換を行うために、オペレーター・パネル・ベースまたはオペレーター・パネル LCD では、それぞれトグル・スイッチが使用可能です。 完了したら、これを無効にして、通常モードに戻ることをお勧めします。",
+      "title": "バッテリー、オペレーター・パネル・ベース、およびオペレーター・パネル LCD の並行修復"
     },
     "toast": {
       "errorSaveReadyToRemove": "状態を削除する準備中にエラー %{state} が発生しました。",
@@ -354,9 +398,11 @@
     "deconfigure": "構成解除",
     "deconfigured": "構成解除済み",
     "description": "すべてのハードウェア・リソースの状態を表示または変更します。 構成解除された各リソースの詳細を表示するには、次を参照してください。 ",
+    "descriptionText": "すべてのハードウェア・リソースの状態を表示または変更します。",
     "fcoSetting": "FCO 設定",
     "initiateDump": "ダンプの開始",
     "link": "構成解除レコード。",
+    "linkText": "構成解除されたリソースの詳細を表示するには、構成解除レコードにアクセスしてください。",
     "memoryDimms": "メモリー DIMM",
     "node": "ノード",
     "overview": "概要",
@@ -368,15 +414,29 @@
       "message": "メモリー DIMM とプロセッサー・コアは、サーバーの電源がオフのときにのみ構成または構成解除できます。"
     },
     "toast": {
+      "deleteReqFailed": "要求されたリソースを削除できないため、削除要求は失敗しました。",
       "errorDisablingSetting": "設定の無効化エラー",
       "errorEnablingSetting": "設定の有効化エラー"
     },
     "table": {
       "deconfigurationType": "構成解除タイプ",
+      "filter": {
+        "byAssociation": "関連別",
+        "error": "エラー",
+        "fatal": "致命的",
+        "fcoDeconfigured": "FCO 構成解除済み",
+        "invalid": "無効",
+        "manual": "手動",
+        "none": "なし",
+        "predictive": "予測的",
+        "recovered": "リカバリー済み",
+        "unknown": "不明"
+      },
       "functionalState": "機能状態",
       "id": "ID",
       "locationCode": "ロケーション・コード",
       "name": "名前",
+      "pelId": "ピクセル ID",
       "settings": "設定",
       "size": "サイズ (メビバイト単位)"
     }
@@ -391,8 +451,10 @@
     "resolved": "解決済み",
     "unresolved": "未解決",
     "pageDescription": {
-      "description": "表示するレコードを選択するか、構成解除の詳細を .txt ファイルにエクスポートします。 すべてのハードウェア・リソースの構成状態を表示して手動で変更するには、次にアクセスしてください: ",
-      "link": "ハードウェアの構成解除。"
+      "description": "構成解除の詳細を表示するレコードを選択するか、.txt ファイルにエクスポートします。すべてのハードウェア・リソースの構成状態を表示して手動で変更するには、以下を参照してください。 ",
+      "decriptionText": "表示するレコードを選択するか、構成解除の詳細を .txt ファイルにエクスポートします。",
+      "link": "ハードウェアの構成解除。",
+      "linkText": "構成状態を表示または変更するには、ハードウェア構成解除にアクセスしてください。"
     },
     "modal": {
       "title": "すべてのレコードをクリア",
@@ -403,7 +465,7 @@
       "deleteAllMessage": "すべてのレコードを削除してもよろしいですか? このアクションを元に戻すことはできません。",
       "deleteAllTitle": "すべてのレコードを削除",
       "deleteMessage": "%{count} 個のレコードを削除してもよろしいですか? このアクションを元に戻すことはできません。 | %{count} 個のレコードを削除してもよろしいですか? このアクションを元に戻すことはできません。",
-      "deleteTitle": "記録の削除 | 記録の削除",
+      "deleteTitle": "レコードの削除 | レコードの削除",
       "goBack": "戻る",
       "continue": "続行"
     },
@@ -413,18 +475,27 @@
       "description": "説明",
       "id": "ID",
       "name": "名前",
+      "pelId": "ピクセル Id",
       "reference": "参照",
       "resource": "リソース",
       "severity": "重大度",
       "srcDetails": "SRC の詳細",
-      "srcDetailsToolTip": "システム参照コードの詳細",
+      "srcDetailsToolTip": "システム参照コードの詳細。 手動ガード・レコードの SRC 詳細はありません。",
       "status": "状況",
       "type": "構成解除タイプ"
+    },
+    "severityValues": {
+      "fatal": "致命的",
+      "predictive": "予測的",
+      "manual": "手動"
     },
     "toast": {
       "errorDelete": "%{count} 件のレコードを削除中にエラーが発生しました。| {count} 件のレコードを削除中にエラーが発生しました。",
       "errorResolveEntries": "エラー解決%{count} 記録。 |エラー解決%{count}記録。",
+      "errorStartDownload": "ダウンロード開始中にエラーが発生しました。",
       "errorUnresolveEntries": "エラー未解決%{count}記録。 |エラー未解決%{count}記録。",
+      "successStartDownload": "追加データが正常にダウンロードされました。",
+      "successStartDownloadTitle": "ダウンロード成功",
       "successDelete": "正常削除%{count} 記録。|正常削除%{count}記録。"
     }
   },
@@ -470,7 +541,13 @@
       "dumpType": "ダンプ・タイプ",
       "id": "ID",
       "searchDumps": "ダンプの検索",
-      "size": "容量"
+      "size": "容量",
+      "filter": {
+        "bmcDumpEntry": "BMC ダンプ項目",
+        "hostbootDumpEntry": "ホストブート・ダンプ項目",
+        "resourceDumpEntry": "リソース・ダンプ項目",
+        "systemDumpEntry": "システム・ダンプ項目"
+      }
     },
     "toast": {
       "errorDeleteDump": "%{count} ダンプの削除中にエラーが発生しました。 |%{count} ダンプの削除中にエラーが発生しました。",
@@ -491,6 +568,7 @@
   },
   "pageEventLogs": {
     "additionalDataUri": "追加データのダウンロード",
+    "bmcManager": "OpenBmc マネージャー",
     "resolve": "解決",
     "resolved": "解決済み",
     "unresolve": "未解決",
@@ -509,11 +587,22 @@
       "id": "ID",
       "modifiedDate": "変更日",
       "name": "名前",
-      "resolution": "解決",
+      "resolution": "解決 (コールアウト)",
       "searchLogs": "ログの検索",
       "severity": "重大度",
+      "severityValues": {
+        "critical": "深刻な",
+        "ok": "OK",
+        "warning": "警告"
+      },
       "status": "状況",
+      "systemEventLogEntry": "システム・イベント・ログ・エントリー",
       "type": "タイプ",
+      "typeValues": {
+        "event": "イベント",
+        "oem": "OEM",
+        "sel": "SEL"
+      },
       "eventId": "イベントID"
     },
     "toast": {
@@ -535,22 +624,22 @@
       "resetBiosOptionLabel": "サーバー設定のみをリセット",
       "resetOptionsLabel": "オプションのリセット",
       "resetToDefaultsOptionHelperText": "サーバー設定に加えて、このオプションは、すべての BMC アカウント・データ、すべての変更済みパスワード、すべてのポリシー、LDAP 構成、ネットワーク・アドレス、時刻など、BMC 設定をリセットします。",
-      "resetToDefaultsOptionLabel": "BMC 設定とサーバー設定のリセット"
+      "resetToDefaultsOptionLabel": "BMC とサーバー設定の初期化"
     },
     "modal": {
-      "resetBiosTitle": "サーバー設定のリセット",
+      "resetBiosTitle": "サーバー設定の初期化",
       "resetBiosHeader": "サーバー設定をリセットしますか?",
-      "resetBiosSubmitText": "サーバー設定のリセット",
+      "resetBiosSubmitText": "サーバー設定の初期化",
       "resetBiosSettingsList": {
         "item1": "手動設定はすべて削除されます。",
-        "item2": "バックアップが存在する場合、区画構成とプラットフォーム鍵ストアが回復される可能性があります。"
+        "item2": "バックアップが存在する場合、パーティション構成とプラットフォームキーストアが回復される可能性があります。"
       },
-      "resetToDefaultsHeader": "BMC とサーバーの両方の設定を初期化しますか?",
-      "resetToDefaultsSubmitText": "BMC 設定とサーバー設定のリセット",
-      "resetToDefaultsTitle": "BMC 設定とサーバー設定のリセット",
+      "resetToDefaultsHeader": "BMC とサーバーの両方の設定をリセットしますか?",
+      "resetToDefaultsSubmitText": "BMC とサーバー設定の初期化",
+      "resetToDefaultsTitle": "BMC とサーバー設定の初期化",
       "resetToDefaultsSettingsList": {
         "item1": "手動設定はすべて削除されます。",
-        "item2": "バックアップが存在する場合、区画構成とプラットフォーム鍵ストアが回復される可能性があります。",
+        "item2": "バックアップが存在する場合、パーティション構成とプラットフォームキーストアが回復される可能性があります。",
         "item3": "すべての BMC ログが削除されます。",
         "item4": "現在、すべてのネットワークインターフェイスでアクティブなセッションが切断されます。",
         "item5": "BMCのデフォルトのアカウントとパスワードの設定が復元されます。"
@@ -562,7 +651,7 @@
       "resetBiosError": "サーバーの工場出荷時のリセットが失敗しました。",
       "resetBiosSuccess": "サーバーの工場出荷時のリセットが成功しました。",
       "resetToDefaultsError": "BMC とサーバーの工場出荷時設定へのリセットが失敗しました。",
-      "resetToDefaultsSuccess": "BMC とサーバーの工場出荷時のリセットが成功しました。"
+      "resetToDefaultsSuccess": "BMC とサーバーの工場出荷時のリセットが成功しました。 自動的にログアウトしない場合は、ブラウザーを更新してください。"
     }
   },
   "pageFieldCoreOverride": {
@@ -589,10 +678,12 @@
     "cardBodyVersion": "バージョン",
     "cardTitleBackup": "バックアップ画像",
     "cardTitleRunning": "実行中の画像",
+    "permanent": "Permanent",
     "sectionTitleBmcCards": "BMC",
     "sectionTitleBmcCardsCombined": "BMC とサーバー",
     "sectionTitleHostCards": "ホスト",
     "sectionTitleUpdateFirmware": "ファームウェアの更新",
+    "temporary": "一時",
     "alert": {
       "operationInProgress": "サーバーの電源操作が進行中です。",
       "serverMustBePoweredOffTo": "以下を行うには、サーバーの電源をオフにしてください。",
@@ -626,15 +717,31 @@
     },
     "toast": {
       "errorSwitchImages": "実行中画像とバックアップ画像の切り替え中にエラーが発生しました。",
+      "errorActivation": "ファームウェア活動化の開始中にエラーが発生しました。",
       "errorUpdateFirmware": "ファームウェアアップデートの開始中にエラーが発生しました。",
+      "errorUploadFirmware": "ファームウェアのアップロード中にエラーが発生しました。",
       "rebootStarted": "リブートが開始しました。",
-      "rebootStartedMessage": "バックアップ・イメージから正常にリブートしました。",
-      "updateStarted": "更新が開始されました",
-      "updateStartedMessage": "変更前に、ファームウェアの更新通知を待ちます。",
-      "verifySwitch": "スイッチの検証",
-      "verifySwitchMessage": "アプリケーションを更新して、実行中画像とバックアップ画像が切り替わったことを確認します。",
-      "verifyUpdate": "更新の検証",
-      "verifyUpdateMessage": "アプリケーションを更新して、ファームウェアが正常に更新されたことを確認します。"
+      "rebootStartedMessage": "バックアップ・イメージから正常にリブートしました。 リブートが完了するまで数分かかるかもしれません。",
+      "taskComplete": "タスク完了",
+      "taskCompleteMessage": "タスクが完了しました。 BMC のリブートの待機中",
+      "updateFirmware": {
+        "step1": "ステップ 1/4 - アップロード",
+        "step1Message": "更新が開始されました。 ファームウェアのアップロードが進行中です。",
+        "step2": "ステップ 2/4 - アクティブ化",
+        "step2Message": "ファームウェアのアップロードが完了しました。 アクティブ化タスクが進行中です。",
+        "step3": "ステップ 3/4 - リブート",
+        "step3Message": "アクティブ化タスクが完了しました。 BMC リブートが進行中です。",
+        "step4": "ステップ 4/4 - 完了",
+        "step4Message": "ファームウェア更新が成功しました。 「更新」をクリックして、ファームウェア・レベルを確認してください。"
+      },
+      "switchToRunning": {
+        "step1": "ステップ 1/3 - ファームウェアの切り替え",
+        "step1Message": "プロセスが開始されました。 ファームウェアの切り替えが進行中です。",
+        "step2": "ステップ 2/3 - リブート",
+        "step2Message": "ファームウェアの切り替えが完了しました。 BMC リブートが進行中です。",
+        "step3": "ステップ 3/3 - 完了",
+        "step3Message": "ファームウェア・スイッチが正常に完了しました。 実行中のイメージと切り替えられたバックアップ・イメージを確認するには、「リフレッシュ」をクリックします。"
+      }
     }
   },
   "pageHostConsole": {
@@ -643,48 +750,28 @@
   },
   "pageInventory": {
     "assemblies": "アセンブリー",
+    "baseboardManagementController": "ベースボード管理コントローラー",
     "bmcManager": "BMC マネージャー",
     "chassis": "シャーシ",
     "dimmSlot": "DIMM スロット",
+    "fabricAdapters": "ファブリック・アダプター",
+    "false": "いいえ",
     "fans": "ファン",
+    "identifyLedInfo": "LED がない部品の場合、識別 LED トグル・スイッチはエンクロージャー LED のみをオンにします。",
+    "pcieSlots": "PCIe スロット",
+    "pcieTopologyLink": "PCIe ハードウェア・トポロジー。",
+    "pcieTopologyLinkDescription": "PCIe スロットについて詳しくは、以下にアクセスしてください。 ",
     "powerSupplies": "電源機構",
     "processors": "プロセッサー",
+    "processorModule": "プロセッサー・モジュール",
     "quicklinkTitle": "ハードウェア・コンポーネントへのクイック・リンク",
     "system": "システム",
+    "true": "はい",
     "enclosures": {
       "title": "入出力エンクロージャー",
       "traceLabel": "入出力エンクロージャーのトレースの収集",
       "traceDescription": "次からリソース・ダンプを作成します (特定のリソース・セレクターを使用): ",
-      "DumpsLink": "ページのダンプ。"
-    },
-    "pcie": {
-      "bridgeOrHost": "PCIe ブリッジまたは CAPI ホスト",
-      "cable": "ケーブル",
-      "cableLength": "ケーブルの長さ",
-      "cableStatus": "ケーブル状況",
-      "cableType": "ケーブル・タイプ",
-      "degraded": "機能低下",
-      "failed": "失敗",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "識別 LED",
-      "inactive": "非アクティブ",
-      "ioSlots": "入出力スロット",
-      "linkProperties": "リンク・プロパティー",
-      "linkStatus": "リンク状況",
-      "localPort": "ローカル・ポート",
-      "localPortLocation": "ローカル・ポートのロケーション",
-      "open": "未完了",
-      "operational": "稼働",
-      "parentId": "親 ID",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "リモート・ポート",
-      "remotePortLocation": "リモート・ポートのロケーション",
-      "resetLink": "リンクのリセット",
-      "speed": "速度",
-      "title": "PCIe ハードウェア・トポロジー",
-      "type": "タイプ",
-      "unknown": "不明",
-      "width": "幅"
+      "DumpsLink": "ページをダンプします。"
     },
     "systemIndicator": {
       "attentionLed": "システム・アテンション LED",
@@ -697,7 +784,7 @@
     },
     "alert": {
       "enclosureAlertTitle": "エンクロージャー構成の表示",
-      "enclosureAlertMessage": "システムの電源をオンにする必要があります。",
+      "enclosureAlertMessage": "システムの電源をオンに設定しななければなりません。",
       "viewServerPowerOperations": "サーバーの電源操作を表示します。"
     },
     "modal": {
@@ -717,12 +804,6 @@
         "title": "エンクロージャー設定の変更",
         "typeModel": "@:pageInventory.table.typeModel",
         "typeModelHelperText": "エンクロージャーのマシン・タイプを 0000 にすることはできません。 すべての英数字が無効です。"
-      },
-      "pcie": {
-        "confirmMessage": "システム区画の実行中にリンクをリセットすると、エラーが発生する可能性があります。 この操作は、サポート・チーム・メンバーの指示に従って実行する必要があります。",
-        "resetLink": "リンク '%{linkId}' のリセット",
-        "subTitle": "よろしいですか?",
-        "title": "リンク '%{linkId}' のリセット"
       }
     },
     "table": {
@@ -746,10 +827,11 @@
       "model": "モデル",
       "name": "名前",
       "partNumber": "部品番号",
-      "power": "電源",
+      "power": "Power",
       "processorType": "プロセッサー・タイプ",
       "remove": "削除",
       "serialNumber": "シリアル番号",
+      "slotType": "スロット・タイプ",
       "sparePartNumber": "予備部品番号 (FRU 番号)",
       "totalCores": "合計スコア",
       "totalSystemMemoryGiB": "合計システム・メモリー",
@@ -763,12 +845,10 @@
       "errorEnableLampTest": "ランプテストの有効化中にエラーが発生しました。",
       "errorEnableSystemAttentionLed": "システム・アテンション LED を有効化しているときにエラーが発生しました。",
       "errorEnclosureSettings": "エンクロージャー設定の更新中にエラーが発生しました。",
-      "errorPcieLinkReset": "リンク '%{linkId}' のリセット中にエラーが発生しました。",
-      "infoPcieLinkResetMessage": "この操作が完了するまでに少々時間がかかる場合があります。",
-      "infoPcieLinkResetTitle": "リンク ID '%{linkId}' をリセットしています。",
       "infoRemoveAssembly": "更新して、'%{assemblyName}' を削除する準備ができているかどうかを確認してください。",
       "successEnclosureSettings": "エンクロージャー設定が正常に更新されました。",
-      "successPcieLinkReset": "'%{linkId}' が正常にリセットされました。"
+      "successEnableIdentifyLed": "識別 LED が正常に使用可能になりました。",
+      "successDisableIdentifyLed": "識別 LED が正常に使用不可になりました。"
     }
   },
   "pageKeyClear": {
@@ -810,19 +890,27 @@
     "openNewTab": "新しいタブで開きます。",
     "status": "状況"
   },
-  "pageLateralCastOutControl": {
-    "lateralCastOut": "ラテラル・キャストアウト",
-    "lateralCastOutControl": "ラテラル・キャストアウトの制御",
-    "lateralCastOutControlDescription": "この値を変更するとシステムのパフォーマンスが低下する可能性があるため、サービス・プロバイダーから指示された場合にのみ変更してください。",
+  "pageSystemParameters": {
+    "aggressivePrefetch": "アグレッシブ・プリフェッチ",
+    "aggressivePrefetchDescription": "この値は、システム・パフォーマンスを低下させる可能性があるので、サービス提供元から指示された場合にのみ変更してください。 プロセッサーがアグレッシブ・プリフェッチを優先するかどうかを指定します。",
     "alert": {
       "message": "システムの電源をオフにしなければなりません。 変更内容は次回のリブート時に有効になります",
       "title": "変更適用"
     },
     "button": {
-      "saveSettings": "設定の保存"
+      "saveSettings": "設定を保存します。"
     },
+    "frequencyCap": "頻度キャップ",
+    "frequencyCapDescription": "有効にすると、システム内のすべてのプロセッサーが、指定された最大動作頻度 (MHz) を超えないようにします。",
+    "frequencyCapHelpText": "使用不可にすると、最大頻度と最小頻度を設定するために初期ブートが必要になる場合があります。",
+    "lateralCastOut": "ラテラル・キャストアウト",
+    "lateralCastOutDescription": "この値を変更するとシステムのパフォーマンスが低下する可能性があるため、サービス・プロバイダーから指示された場合にのみ変更してください。",
     "toast": {
+      "errorSavingAggressivePrefetch": "アグレッシブ・プリフェッチの保存エラー",
+      "errorSavingFrequencyCap": "頻度キャップの保存エラー",
       "errorSavingLateralCastOut": "ラテラル・キャストアウト・モードの保存中にエラーが発生しました",
+      "successSavingAggressivePrefetch": "アグレッシブ・プリフェッチが正常に保存されました",
+      "successSavingFrequencyCap": "頻度キャップが正常に保存されました",
       "successSavingLateralCastOut": "ラテラル・キャストアウト・モードが正常に保存されました"
     }
   },
@@ -878,6 +966,7 @@
     }
   },
   "pageLogin": {
+    "asmi": "拡張システム管理インターフェース (ASMI) (Advanced System Management Interface (ASMI))",
     "dateAndTime": "日付/時刻",
     "language": "言語",
     "logIn": "ログイン",
@@ -887,6 +976,7 @@
     "uploadServiceLoginCertificate": "サービス・ログイン認証のアップロード",
     "username": "ユーザー名",
     "alert": {
+      "unauthorizedMessage": "無許可のユーザー",
       "message": "ユーザー名またはパスワードが無効です"
     },
     "modal": {
@@ -915,7 +1005,7 @@
     "updatePageSetup": "システム・メモリー・ページ・セットアップの更新",
     "alert": {
       "heading": "変更適用",
-      "message": "システムの電源をオフにしなければなりません。 加えられた変更は、次回の再起動時に有効になります。",
+      "message": "システムの電源はオフにする必要があり、HMC によって管理されていてはなりません。 加えられた変更は、次回の再起動時に有効になります。",
       "serverMustBePoweredOffTo": "以下を行うには、サーバーの電源をオフにしてください。",
       "updateActiveMemoryMirroring": "アクティブ・メモリー・ミラー・モードの更新",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -969,7 +1059,7 @@
     },
     "table": {
       "addDnsAddress": "IP アドレスの追加",
-      "addIpv4Address": "静的IPv4 アドレスの追加",
+      "addIpv4Address": "静的 IPv4 アドレスの追加",
       "addIpv6Address": "静的 IPv6 アドレスの追加",
       "addressOrigin": "アドレス起点",
       "addressState": "アドレス状態",
@@ -993,23 +1083,26 @@
     "accessKeyExpiration": "アクセス・キーの有効期限",
     "backupVersion": "バックアップ",
     "bmcTime": "BMC の日時",
-    "criticalEvents": "クリティカル",
+    "criticalEvents": "深刻な",
     "dhcp": "DHCPv4",
     "dumps": "ダンプ",
     "eventLogs": "イベント・ログ",
     "firmwareInformation": "ファームウェア情報",
     "hostConsole": "ホスト・コンソール",
     "hostName": "ホスト名",
-    "inventory": "インベントリーと LED",
+    "inventory": "インベントリーとLED",
     "ipv4": "IPv4",
+    "manual": "手動",
     "model": "モデル",
     "networkInformation": "ネットワーク情報",
+    "normal": "標準",
     "operatingMode": "操作モード",
     "powerCap": "電源キャップ",
     "powerConsumption": "電力使用量",
     "powerInformation": "電源情報",
     "powerMode": "電力モード",
     "runningVersion": "実行中",
+    "safeMode": "セーフ・モード",
     "serialNumber": "シリアル番号",
     "serverInformation": "サーバー情報",
     "serviceLogin": "サービス・ログイン",
@@ -1021,7 +1114,7 @@
     "warningEvents": "警告",
     "powerPerformanceModes": {
       "maximumPerformance": "最大パフォーマンス",
-      "powerSaving": "省電力",
+      "powerSaving": "電力節約",
       "static": "静的"
     },
     "modal": {
@@ -1035,13 +1128,54 @@
   "pagePageNotFound": {
     "description": "要求されたリソースが見つかりませんでした。"
   },
+  "pagePcieTopology": {
+    "alert": "このページのロードには数分かかるかもしれません。",
+    "bridgeOrHost": "PCIe ブリッジまたは CAPI ホスト",
+    "cableLength": "ケーブルの長さ",
+    "cableStatus": "ケーブル状況",
+    "cableType": "ケーブル・タイプ",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "識別 LED",
+    "ioSlots": "入出力スロット",
+    "linkProperties": "リンク・プロパティー",
+    "linkStatus": "リンク状況",
+    "localPort": "ローカル・ポート",
+    "localPortLocation": "ローカル・ポートのロケーション",
+    "parentId": "親 ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "リモート・ポート",
+    "remotePortLocation": "リモート・ポートのロケーション",
+    "resetLink": "リンクのリセット",
+    "savePcieTopology": "PCIe トポロジーの保存",
+    "speed": "速度",
+    "type": "タイプ",
+    "warning": "システムは少なくとも PHYP スタンバイ状態でなければなりません。 電源オンするには、以下にアクセスしてください。 ",
+    "width": "幅",
+    "modal": {
+      "resetConfirm": "よろしいですか?",
+      "resetLinkDescription": "システム区画の実行中にリンクをリセットすると、エラーが発生する可能性があります。 この操作は、サポート・チーム・メンバーの指示に従って実行する必要があります。",
+      "resetLinkHeader": "リンク %{id} のリセット"
+    },
+    "table": {
+      "search": "検索"
+    },
+    "toast": {
+      "errorReset": "リンク %{id} のリセット中にエラーが発生しました",
+      "errorSavePcieTopology": "PCIe トポロジー情報の保存中にエラーが発生しました。",
+      "errorSwitchingLed": "%{value} の %{operation} LED の転換中にエラーが発生しました",
+      "resetInfoTitle": "リンク ID %{id} をリセットしています。",
+      "resetInfoDescription": "この操作が完了するまでに数秒かかることがあります。",
+      "successReset": "リンク %{id} のリセットが正常に開始されました。 問題がないかイベント・ログを確認してください。",
+      "successSavePcieTopology": "PCIe トポロジー情報が正常に保存されました。"
+    }
+  },
   "pagePolicies": {
     "hostTpm": "ホスト TPM",
     "hostTpmDescription": "TPM が機能しているときにのみシステムがブートするように有効にします。",
     "hostUsb": "ホスト USB の有効化",
     "hostUsbDescription": "セキュリティー上の理由から、ホスト USB を無効にするか有効にするかを指定します。",
     "ipmi": "ネットワーク IPMI (アウト・オブ・バンド IPMI)",
-    "ipmiDescription": "IPMI を介したプラットフォームのリモート管理を許可します。 ipmitool などのツールでは、この設定を有効にする必要があります。",
+    "ipmiDescription": "IPMI を介したプラットフォームのリモート管理を許可します。 ipmitool などのツールでは、この設定を有効にする必要があります。 有効にしたら、オンライン・サポート資料の手順に従って IPMI ユーザーを追加してください。",
     "rtad": "RTAD",
     "rtadDescription": "このオプションは、ホスト・ファームウェアのリモート・トラステッド認証デーモンを有効または無効にします。",
     "rtadInfoIcon": "@:global.status.nextReboot",
@@ -1053,6 +1187,8 @@
     "usbFirmwareUpdatePolicyDescription": "USB ファームウェア更新ポリシーを有効にすると、USB キーを使用したファームウェア更新を許可する機能が有効になります。",
     "toast": {
       "errorNetworkPolicyUpdate": "%{policy} の更新中にエラーが発生しました。",
+      "successDisableBmcShell": "BMC シェルが (SSH 経由で) 正常に無効化されました。無効化が有効になるまで 15 秒待ってください。",
+      "successEnableBmcShell": "BMC シェルが (SSH 経由で) 正常に有効になりました",
       "successNetworkPolicyUpdate": "%{policy} が正常に更新されました。",
       "successNextBootToast": "%{policy} に変更を適用しています。 %{policy} に対して行われた変更は、次回のリブート時に有効になります。"
     },
@@ -1069,10 +1205,10 @@
       "exportLogs": "エクスポート・ログ"
     },
     "button": {
-      "exportAll": "すべてエクスポート"
+      "exportAll": "すべてをエクスポートします。"
     },
     "table": {
-      "bootCount": "ブートカウント",
+      "bootCount": "ブート数",
       "created": "作成日",
       "postCode": "コード",
       "searchLogs": "ログの検索",
@@ -1099,6 +1235,13 @@
     "toEnter": "開始",
     "toExit": "終了",
     "utilizationThreshold": "使用率しきい値 (%)",
+    "alert": {
+      "message": "現在、システムはセーフ・モードであるため、パフォーマンスが低下した状態で動作しています。 セーフ・モードでは電源設定にアクセスできません。 ",
+      "message2": "原因を判別するには、以下にアクセスしてください。",
+      "message2Link": "イベント・ログ",
+      "message3": "システムは次の電源オンでセーフ・モードを終了しようとします。 サーバーをリブートするには、以下にアクセスしてください。",
+      "message3Link": "サーバーの電源操作"
+    },
     "delayTimeValidation": {
       "delayTimeRange": "値は %{min} と %{max} の間でなければなりません。",
       "enterDelayTime": "値は、終了するまでの遅延時間より小さくすることはできません。",
@@ -1114,13 +1257,15 @@
     },
     "selectMode": {
       "maximumPerformance": "最大パフォーマンス",
-      "powerSaving": "省電力",
+      "powerSaving": "電力節約",
       "static": "静的"
     },
     "tableRoles": {
       "descMaximumPerformance": "プロセッサー周波数は変化します。 このモードでは、アイドル状態のコア、低いワークロード、良好な環境条件に提供される熱と電力のヘッドルームを利用して、システムを最大周波数に向上させることが可能です。",
       "descPowerSaving": "プロセッサー周波数は固定最小値に設定され、予測可能なパフォーマンスを維持しながら、システムの電力消費量を削減します。",
-      "descStatic": "プロセッサー周波数は、通常の環境条件で通常のワークロードを実行できる固定値に設定されます。"
+      "descStatic": "プロセッサー周波数は、通常の環境条件で通常のワークロードを実行できる固定値に設定されます。",
+      "description": "説明",
+      "setting": "設定"
     },
     "utilizationPercentValidation": {
       "enterUtilization": "値は、終了のしきい値を超えてはなりません。",
@@ -1215,8 +1360,11 @@
     "oneTimeBootWarning": "1 回限りのブートを保留しています。 次のブートは、指定されたワンタイム・ブート設定で実行されます。 後続のブートは、デフォルト設定で実行されます。",
     "operationInProgress": "電源操作の進行中に表示オプションはありません。 完了すると、電源操作がここに表示されます。",
     "operations": "操作",
-    "orderlyReboot": "正常-オペレーティング・システムがシャットダウンし、サーバーがリブートします。",
-    "orderlyShutdown": "正常-オペレーティング・システムがシャットダウンし、サーバーがシャットダウンします。",
+    "orderlyReboot": "正常 - オペレーティング・システムがシャットダウンし、サーバーがリブートします。",
+    "orderlyShutdown": "正常 - オペレーティング・システムがシャットダウンし、サーバーがシャットダウンします。",
+    "osRuntimeButton": "OS を実行し続ける",
+    "osRuntimeMessage": "ランタイムに進むには、OS の実行状態に進みます。",
+    "phypStandby": "システムは PHYP スタンバイ状態です。",
     "powerOn": "電源オン",
     "reboot": "再起動",
     "rebootServer": "サーバーのリブート",
@@ -1225,16 +1373,88 @@
     "shutDown": "シャットダウン",
     "shutdownServer": "サーバーのシャットダウン",
     "biosSettings": {
-      "currentOperatingMode": "現行操作モード%{currOptMode}:",
-      "powPolicySection": "%{powerPolicy} に設定されます。",
+      "aixLinux": "AIX/LINUX パーティション・ブート・モード",
+      "automatic": "自動",
+      "currentOperatingModeManual": "現行操作モード手動",
+      "currentOperatingModeNormal": "現行操作モード通常",
+      "defaultPartition": "デフォルトの区画環境",
+      "ibmIPartition": "IBM i 区画ブート・モード",
+      "nonHMCManaged": "システムが非 HMC 管理の場合にのみ使用可能",
+      "powPolicySection": "は「%{powerPolicy}」に設定されます",
+      "powerOff": "電源オフ",
       "pvm_default_os_type": "デフォルトの区画環境",
       "pvm_os_boot_type": "IBM i 区画ブート・モード",
       "pvm_rpa_boot_mode": "AIX/LINUX パーティション・ブート・モード",
       "pvm_stop_at_standby": "サーバー・ファームウェア始動ポリシー",
       "pvm_system_operating_mode": "サーバー操作モード",
       "pvm_system_power_off_policy": "サーバー電源ポリシー",
-      "selectedOperatingMode": "保存時の操作モードは「%{selectedOptMode}」に設定されます。",
+      "selectedOperatingModeManual": "保存時に操作モードが「手動」に設定されます",
+      "serverFirmware": "サーバー・ファームウェア始動ポリシー",
+      "powerSettingDescription": "電源設定の説明の表示",
+      "stayOn": "常時電源オン",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "自動開始のみ",
+          "autoStartAlways": "常に自動開始",
+          "standBy": "スタンバイ"
+        },
+        "description": {
+          "autoStartOnly": "サーバー・ファームウェアおよび区画を自動的に活動化するのは、異常終了 (例えば、自動電源再始動またはシステム終了の自動リブート) 後にリカバリー電源がオンになった場合のみです。",
+          "autoStartAlways": "特定のパーティションを自動的に活動化します。 HMC または ASMI メニューを使用してサーバーの電源をオンにすると、サーバーは「自動始動」に構成された区画を自動的に活動化します。 サーバーの異常停止の後に自動電源再始動またはリブートが行われると、サーバーは、システム停止時に実行されていた区画を活動化します。",
+          "standBy": "ユーザーが開始した電源オンまたはリカバリー電源オンのいずれに対しても、サーバー・ファームウェアおよび区画を自動的に活動化しません。"
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "Default"
+        },
+        "description": {
+          "aix": "システム・ファームウェアは、デフォルトの区画環境として AIX/Linux を選択します。",
+          "linux": "システム・ファームウェアは、デフォルトの区画環境として AIX/Linux を選択します。",
+          "ibmI": "サーバー・ファームウェアは、デフォルトの区画環境として IBM i を選択します。",
+          "default": "システム・ファームウェアは、システム・ブランド・タイプに基づいてデフォルトの区画環境を自動的に選択します。"
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "この区画は、オペレーティング・システムに対して直接ブートされます",
+          "serviceBoot": "保管リストからのサービス・ブート・モード",
+          "bootToSms": "SMS メニューにブート",
+          "bootToOpenFirware": "オープン・ファームウェア・プロンプトにブート",
+          "serviceBootMode": "デフォルト・リストからサービス・モード・ブート"
+        },
+        "description": {
+          "partitionBoot": "区画は、停止せずにオペレーティング・システムにブートされます。",
+          "serviceBoot": "システムは、保管されたサービス・モード・ブート・リストからブートします。 これは通常、区画の診断を実行する簡単な方法です。  このオプションを有効に活用するには、区画のオペレーティング・システムが診断ブートをサポートしている必要があり、区画のディスク・ドライブに診断をロードしておく必要があります。",
+          "bootToSms": "区画はシステム管理サービス (SMS) メニューで停止します。",
+          "bootToOpenFirware": "システムはオープン・ファームウェア・プロンプトで停止します。",
+          "serviceBootMode": "システムはデフォルトのブート・リストからブートします。  このオプションは、CD-ROM ドライブからスタンドアロン診断を実行する場合に推奨される方法です。"
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "システムのライセンス内部コードのコピー A を使用してディスクから IPL を実行します。",
+          "b": "システムのライセンス内部コードのコピー B を使用してディスクから IPL を実行します。",
+          "c": "ハードウェア・サービスの使用専用に予約済みです。",
+          "d": "ロード・ソース・ディスク以外のメディアから IPL を実行します。 コード・インストールをサポートするための代替 IPL です。"
+        }
+      },
       "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "Default"
+        },
         "pvm_os_boot_type": {
           "A_Mode": "A (コピー A を使用してディスクからブート)",
           "B_Mode": "B (コピー B を使用してディスクからブート)",
@@ -1250,7 +1470,7 @@
           "SmsMenu": "SMS メニューにブート"
         },
         "pvm_stop_at_standby": {
-          "Disabled": "常に自動始動",
+          "Disabled": "常に自動開始",
           "Enabled": "スタンバイ (ユーザーによる開始)",
           "ManualOnly": "自動開始のみ"
         },
@@ -1259,7 +1479,7 @@
           "Normal": "通常-自動"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "システム自動電源オフ",
+          "automaticHelperText": "この設定では、システムが区画に分割されていない場合、動作は電源オフと同じです。また、システムが区画に分割されている場合、システムの動作は「オンのまま」と同じです。",
           "powerOffHelperText": "最後の区画電源がオフになると、サーバーの電源もオフになります。",
           "stayOnHelperText": "最後の区画電源がオフになっても、サーバーの電源はオンのままになります。"
         }
@@ -1332,7 +1552,7 @@
       "errorDeleteDestination": "SNMP 警告宛先の削除中にエラーが発生しました。",
       "errorLoadSnmpDetails": "SNMP 警告詳細のロード中にエラーが発生しました。",
       "successAddDestination": "SNMP 警告宛先が正常に追加されました。",
-      "successBatchDelete": "SNMP 警告宛先が正常に削除されました。 |%{count} の SNMP 警告宛先が正常に削除されました。",
+      "successBatchDelete": "SNMP 警告宛先が正常に削除されました。 |%{count} 件の SNMP 警告宛先が正常に削除されました。",
       "successDeleteDestination": "SNMP 警告宛先が正常に削除されました。"
     }
   },
@@ -1354,25 +1574,31 @@
       "manual": "手動",
       "maxFailedLoginAttempts": "ログイン試行の最大失敗回数",
       "noSpecialCharactersExceptUnderscore": "下線以外の特殊文字なし",
-      "passwordMustBeBetween": "パスワードは%{min} から%{max} 文字の間でなければなりません。",
+      "passwordMustBeBetween": "パスワードは %{min} から %{max} 文字の間でなければなりません",
       "passwordsDoNotMatch": "パスワードが一致しません",
       "privilege": "特権",
       "timeoutDurationSeconds": "タイムアウト期間 (秒)",
       "unlock": "アンロック",
       "username": "ユーザー名",
       "userPassword": "ユーザー・パスワード",
-      "userUnlockMethod": "ユーザー・アンロック方式"
+      "userUnlockMethod": "ユーザー・アンロック方式",
+      "zeroLoginAttempts": "「0」の場合、アカウントはロックされません。"
     },
     "table": {
+      "administrator": "管理者",
       "privilege": "特権",
+      "readOnly": "読み取り専用",
       "status": "状況",
       "username": "ユーザー名"
     },
     "tableRoles": {
+      "administrator": "管理者",
       "configureComponentsManagedByThisService": "このサービスに管理されるコンポーネントの構成",
       "configureManagerResources": "マネージャー・リソースの構成",
       "configureUsersAndTheirAccounts": "ユーザーとそのアカウントの構成",
       "logInToTheServiceAndReadResources": "サービスへのログインとリソースの読み取り",
+      "privilege": "特権",
+      "readOnly": "読み取り専用",
       "updatePasswordForCurrentUserAccount": "現行ユーザー・アカウントのパスワードの更新"
     },
     "toast": {
