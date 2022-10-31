@@ -16,13 +16,12 @@
       "enable": "啟用",
       "export": "匯出",
       "exportAll": "全部匯出",
-      "filter": "過濾",
+      "filter": "過濾器",
       "openNewTab": "在新的標籤中開啟",
       "refresh": "重新整理",
       "replace": "取代",
       "reset": "重設",
       "save": "儲存",
-      "saveSettings": "儲存設定",
       "selected": "已選取"
     },
     "ariaLabel": {
@@ -64,7 +63,8 @@
       "message3": "3. 不包含帳戶使用者名稱",
       "message4": "4. 不包含字典單字",
       "message5": "5. 不包含循序字元",
-      "message6": "6. 如果用於 IPMI，則必須少於或等於 20 個字元"
+      "message6": "6. 如果用於 IPMI，則必須少於或等於 20 個字元",
+      "message7": "7. 必須包含任何兩個小寫字母、大寫字母、數字及其他字元"
     },
     "status": {
       "absent": "不存在",
@@ -74,7 +74,7 @@
       "disconnected": "已中斷連線",
       "enabled": "已啟用",
       "error": "錯誤",
-      "informational": "資訊性",
+      "informational": "參考資訊",
       "nextReboot": "變更將在下一次啟動時生效。",
       "notAvailable": "無法使用",
       "off": "關閉",
@@ -90,7 +90,7 @@
       "expandTableRow": "展開表格列",
       "fromDate": "起始日期",
       "items": "%{count} 個項目",
-      "itemsPerPage": "項/頁",
+      "itemsPerPage": "每頁項目數",
       "selectAll": "全選",
       "selectedItems": "%{filterCount} /%{count} 個項目",
       "selectItem": "選取項目",
@@ -132,13 +132,15 @@
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
-    "lateralCastOutControl": "@:appPageTitle.lateralCastOutControl",
+    "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
     "logs": "日誌",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
+    "notices": "@:appPageTitle.notices",
     "operations": "作業",
     "overview": "@:appPageTitle.overview",
+    "pcieTopology": "@:appPageTitle.pcieTopology",
     "policies": "@:appPageTitle.policies",
     "postCodeLogs": "@:appPageTitle.postCodeLogs",
     "power": "@:appPageTitle.power",
@@ -173,20 +175,22 @@
     "inventory": "庫存和 LED",
     "keyClear": "金鑰清除",
     "kvm": "KVM",
-    "lateralCastOutControl": "橫向強制轉型控制",
+    "systemParameters": "系統參數",
     "ldap": "LDAP",
     "login": "登入",
     "memory": "記憶體",
     "network": "網路",
+    "notices": "注意事項",
     "overview": "概觀",
     "pageNotFound": "找不到頁面",
+    "pcieTopology": "PCIe 硬體拓蹼",
     "policies": "原則",
     "postCodeLogs": "進度日誌",
     "postCodes": "進度日誌",
     "power": "電源",
     "powerRestorePolicy": "電源還原原則",
     "profileSettings": "設定檔設定",
-    "rebootBmc": "重新啟動 BMC",
+    "rebootBmc": "重新開機 BMC",
     "sensors": "感應器",
     "serverPowerOperations": "伺服器電源作業",
     "serviceLogin": "服務登入主控台",
@@ -239,7 +243,7 @@
       "title": "隨需應變公用程式的訂購資訊",
       "description": {
         "message": "如果無法使用此資訊，或需要更多資訊，請從下列中建立資源傾出（使用特定的資源選取器）：  ",
-        "link": "傾出頁面。"
+        "link": "（使用特定的資源選取器）。"
       }
     },
     "table": {
@@ -313,7 +317,8 @@
   "pageDateTime": {
     "alert": {
       "link": "設定檔設定",
-      "message": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪： "
+      "message": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪： ",
+      "messageNtp": "如果已選取 NTP，但未提供 NTP 伺服器，或無法連接給定的 NTP 伺服器，則會使用 time.google.com。"
     },
     "configureSettings": "配置設定",
     "form": {
@@ -327,6 +332,9 @@
         "server1": "伺服器 1",
         "server2": "伺服器 2",
         "server3": "伺服器 3"
+      },
+      "validators": {
+        "serverExists": "伺服器位址已存在"
       }
     },
     "toast": {
@@ -336,10 +344,12 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "並行維護",
+    "opPanelBase": "操作面板基本維護",
+    "opPanelLcd": "操作面板 LCD 維護",
     "tod": "電池維護當天時間",
     "alert": {
-      "message": "啟用此項以移除或更換電池。 完成之後，建議停用以回到標準模式。",
-      "title": "電池的並行修復"
+      "message": "若要卸下或更換電池，操作面板基座或操作面板 LCD 會啟用個別切換開關。 完成之後，建議停用以回到標準模式。",
+      "title": "並行修復電池、操作面板底座及操作面板 LCD"
     },
     "toast": {
       "errorSaveReadyToRemove": "錯誤 %{state} 已備妥移除狀態。",
@@ -368,6 +378,7 @@
       "message": "只有在伺服器關閉電源時，才能配置或取消配置記憶體 DIMM 及處理器核心。"
     },
     "toast": {
+      "deleteReqFailed": "刪除要求失敗，因為無法刪除所要求的資源。",
       "errorDisablingSetting": "停用設定時發生錯誤",
       "errorEnablingSetting": "啟用設定時發生錯誤"
     },
@@ -377,6 +388,7 @@
       "id": "ID",
       "locationCode": "位置碼",
       "name": "名稱",
+      "pelId": "Pel ID",
       "settings": "設定",
       "size": "大小 (MiB)"
     }
@@ -389,7 +401,7 @@
     "nextRebootInfoIcon": "@:global.status.nextReboot",
     "predictive": "預測",
     "resolved": "已解決",
-    "unresolved": "已取消解決",
+    "unresolved": "未解決",
     "pageDescription": {
       "description": "選取記錄以檢視取消配置詳細資料，或將取消配置詳細資料匯出成 .txt 檔。 若要檢視並手動變更所有硬體資源的配置狀態，請造訪： ",
       "link": "硬體取消配置。"
@@ -413,18 +425,22 @@
       "description": "說明",
       "id": "ID",
       "name": "名稱",
+      "pelId": "Pel Id",
       "reference": "參照",
       "resource": "資源",
       "severity": "嚴重性",
       "srcDetails": "SRC 詳細資料",
-      "srcDetailsToolTip": "系統參考碼詳細資料",
+      "srcDetailsToolTip": "系統參考碼詳細資料。 沒有手動保護記錄的 SRC 詳細資料。",
       "status": "狀態",
       "type": "取消配置類型"
     },
     "toast": {
       "errorDelete": "刪除 %{count} 筆記錄時發生錯誤。| 刪除 %{count} 筆記錄時發生錯誤。",
       "errorResolveEntries": "解析 %{count} 記錄時發生錯誤。| 解析 %{count} 筆記錄時發生錯誤。",
+      "errorStartDownload": "開始下載時發生錯誤。",
       "errorUnresolveEntries": "取消解析 %{count} 記錄時發生錯誤。| 取消解析 %{count} 筆記錄時發生錯誤。",
+      "successStartDownload": "已順利下載其他資料。",
+      "successStartDownloadTitle": "下載成功",
       "successDelete": "已順利刪除 %{count} 筆記錄。| 已順利刪除 %{count} 筆記錄。"
     }
   },
@@ -480,7 +496,7 @@
       "errorStartDumpResourceInStandby": "啟動新的 %{dump} 時發生錯誤。 系統必須已啟動。",
       "errorStartResourceDump": "啟動新的資源傾出時發生錯誤。",
       "errorStartResourceDumpInvalidSelector": "起始傾出時發生錯誤。 資源選取器無效。",
-      "errorStartResourceDumpInvalidPassword": "起始傾出時發生錯誤。 密碼無效。",
+      "errorStartResourceDumpInvalidPassword": "起始傾出時發生錯誤。 無效的密碼。",
       "errorStartSystemDump": "啟動新的系統傾出時發生錯誤。",
       "successDeleteDump": "已順利刪除 %{count} 個傾出。 | 已順利刪除 %{count} 個傾出。",
       "successStartBmcDumpTitle": "已啟動 BMC 傾出",
@@ -494,7 +510,7 @@
     "resolve": "解決",
     "resolved": "已解決",
     "unresolve": "取消解決",
-    "unresolved": "已取消解決",
+    "unresolved": "未解決",
     "modal": {
       "deleteAllMessage": "您確定要刪除所有日誌嗎？ 此動作無法復原。",
       "deleteAllTitle": "刪除所有日誌",
@@ -543,14 +559,14 @@
       "resetBiosSubmitText": "重設伺服器設定",
       "resetBiosSettingsList": {
         "item1": "將刪除所有手動設定。",
-        "item2": "如果存在備份，則可能會回復分割區配置及平台金鑰儲存庫。"
+        "item2": "如果存在備份，則可以回復分割區配置及平台金鑰儲存庫。"
       },
       "resetToDefaultsHeader": "您要重設 BMC 和伺服器設定嗎？",
       "resetToDefaultsSubmitText": "重設 BMC 和伺服器設定",
       "resetToDefaultsTitle": "重設 BMC 和伺服器設定",
       "resetToDefaultsSettingsList": {
         "item1": "將刪除所有手動設定。",
-        "item2": "如果存在備份，則可能會回復分割區配置及平台金鑰儲存庫。",
+        "item2": "如果存在備份，則可以回復分割區配置及平台金鑰儲存庫。",
         "item3": "將移除所有 BMC 日誌。",
         "item4": "將切斷所有網路介面上目前作用中階段作業的連線。",
         "item5": "將還原 BMC 預設帳戶和密碼設定。"
@@ -562,7 +578,7 @@
       "resetBiosError": "恢復伺服器原廠設定失敗。",
       "resetBiosSuccess": "已順利恢復伺服器原廠設定",
       "resetToDefaultsError": "BMC 和恢復伺服器原廠設定失敗。",
-      "resetToDefaultsSuccess": "BMC 和恢復伺服器原廠設定成功。"
+      "resetToDefaultsSuccess": "BMC 和恢復伺服器原廠設定成功。 如果您未自動登出，請重新整理瀏覽器。"
     }
   },
   "pageFieldCoreOverride": {
@@ -589,10 +605,12 @@
     "cardBodyVersion": "版本",
     "cardTitleBackup": "備份映像檔",
     "cardTitleRunning": "執行中映像檔",
+    "permanent": "永久",
     "sectionTitleBmcCards": "BMC",
     "sectionTitleBmcCardsCombined": "BMC 和伺服器",
     "sectionTitleHostCards": "主機",
     "sectionTitleUpdateFirmware": "更新韌體",
+    "temporary": "暫時",
     "alert": {
       "operationInProgress": "伺服器電源作業進行中。",
       "serverMustBePoweredOffTo": "伺服器必須關閉電源才能：",
@@ -626,15 +644,31 @@
     },
     "toast": {
       "errorSwitchImages": "切換執行及備份映像檔時發生錯誤。",
+      "errorActivation": "開始韌體啟動時發生錯誤。",
       "errorUpdateFirmware": "啟動韌體更新時發生錯誤。",
+      "errorUploadFirmware": "上傳韌體時發生錯誤。",
       "rebootStarted": "已啟動重新開機",
-      "rebootStartedMessage": "已順利從備份映像檔啟動重新開機。",
-      "updateStarted": "已啟動更新",
-      "updateStartedMessage": "請等待韌體更新通知，然後再進行任何變更。",
-      "verifySwitch": "驗證交換器",
-      "verifySwitchMessage": "請重新整理應用程式，以驗證已切換執行中及備份映像檔。",
-      "verifyUpdate": "驗證更新",
-      "verifyUpdateMessage": "重新整理應用程式以驗證韌體已順利更新"
+      "rebootStartedMessage": "已順利從備份映像檔啟動重新開機。 重新開機可能需要數分鐘才能完成。",
+      "taskComplete": "作業完成",
+      "taskCompleteMessage": "作業完成。 等待 BMC 重新開機",
+      "updateFirmware": {
+        "step1": "步驟 4 之 1 — 上傳",
+        "step1Message": "已啟動更新。 韌體上傳進行中。",
+        "step2": "步驟 4 之 2 — 啟動",
+        "step2Message": "韌體上傳完成。 啟動作業進行中。",
+        "step3": "步驟 4 之 3 — 重新開機",
+        "step3Message": "啟動作業完成。 BMC 重新開機進行中。",
+        "step4": "步驟 4 之 4 — 完成",
+        "step4Message": "韌體更新順利完成。 按一下重新整理以驗證韌體層次。"
+      },
+      "switchToRunning": {
+        "step1": "步驟 3 之 1 — 韌體切換",
+        "step1Message": "已啟動處理程序。 正在進行韌體切換。",
+        "step2": "步驟 3 之 2 — 重新開機",
+        "step2Message": "韌體切換完成。 BMC 重新開機進行中。",
+        "step3": "步驟 3 之 3 — 完成",
+        "step3Message": "韌體交換順利完成。 按一下重新整理，驗證是否已切換執行中及備份映像檔。"
+      }
     }
   },
   "pageHostConsole": {
@@ -646,7 +680,12 @@
     "bmcManager": "BMC 管理程式",
     "chassis": "機箱",
     "dimmSlot": "DIMM 插槽",
+    "fabricAdapters": "光纖配接卡",
     "fans": "風扇",
+    "identifyLedInfo": "對於沒有 LED 的組件，識別 LED 切換開關只會開啟機箱 LED",
+    "pcieSlots": "PCIe 插槽",
+    "pcieTopologyLink": "PCIe 硬體拓蹼。",
+    "pcieTopologyLinkDescription": "若要進一步瞭解 PCIe 插槽，請造訪 ",
     "powerSupplies": "電源供應器",
     "processors": "處理器",
     "quicklinkTitle": "硬體元件的快速鏈結",
@@ -654,37 +693,8 @@
     "enclosures": {
       "title": "I/O 機體",
       "traceLabel": "收集 I/O 機箱追蹤",
-      "traceDescription": "從傾出頁面建立資源傾出 ",
+      "traceDescription": "從下列中建立資源傾出（使用特定的資源選取器）： ",
       "DumpsLink": "（使用特定的資源選取器）。"
-    },
-    "pcie": {
-      "bridgeOrHost": "PCIe 橋接器或 CAPI 主機",
-      "cable": "纜線",
-      "cableLength": "纜線長度",
-      "cableStatus": "纜線狀態",
-      "cableType": "纜線類型",
-      "degraded": "欠佳",
-      "failed": "失敗",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "識別 LED",
-      "inactive": "非作用中",
-      "ioSlots": "I/O 插槽",
-      "linkProperties": "鏈結內容",
-      "linkStatus": "鏈結狀態",
-      "localPort": "本端埠",
-      "localPortLocation": "本端埠位置",
-      "open": "開啟",
-      "operational": "運作中",
-      "parentId": "母項 ID",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "遠端埠",
-      "remotePortLocation": "遠端埠位置",
-      "resetLink": "重設鏈結",
-      "speed": "速度",
-      "title": "PCIe 硬體拓蹼",
-      "type": "類型",
-      "unknown": "不明",
-      "width": "寬度"
     },
     "systemIndicator": {
       "attentionLed": "系統警示 LED",
@@ -717,12 +727,6 @@
         "title": "變更機箱設定",
         "typeModel": "@:pageInventory.table.typeModel",
         "typeModelHelperText": "機殼的機型不能是 0000。 所有英數字元都無效。"
-      },
-      "pcie": {
-        "confirmMessage": "在系統分割區執行時重設鏈結可能會導致錯誤。 必須在支援團隊成員的指引下執行作業。",
-        "resetLink": "重設鏈結 '%{linkId}'",
-        "subTitle": "您確定嗎？",
-        "title": "重設鏈結 '%{linkId}'"
       }
     },
     "table": {
@@ -750,6 +754,7 @@
       "processorType": "處理器類型",
       "remove": "移除",
       "serialNumber": "序號",
+      "slotType": "插槽類型",
       "sparePartNumber": "備用零件號碼（FRU 號碼）",
       "totalCores": "核心總數",
       "totalSystemMemoryGiB": "系統記憶體總計",
@@ -763,12 +768,10 @@
       "errorEnableLampTest": "啟用「燈」測試時發生錯誤。",
       "errorEnableSystemAttentionLed": "啟用系統警示 LED 時發生錯誤。",
       "errorEnclosureSettings": "更新機箱設定時發生錯誤。",
-      "errorPcieLinkReset": "重設鏈結 '%{linkId}' 時發生錯誤。",
-      "infoPcieLinkResetMessage": "此作業可能需要一些時間才能完成。",
-      "infoPcieLinkResetTitle": "正在重設鏈結 ID '%{linkId}'。",
       "infoRemoveAssembly": "重新整理以確認 '%{assemblyName}' 是否已備妥可移除。",
       "successEnclosureSettings": "已順利更新機箱設定。",
-      "successPcieLinkReset": "已順利重設 '%{linkId}'。"
+      "successEnableIdentifyLed": "已順利啟用識別 LED。",
+      "successDisableIdentifyLed": "已順利停用識別 LED。"
     }
   },
   "pageKeyClear": {
@@ -778,7 +781,7 @@
       "title": "此作業需要實體存在及系統重新開機"
     },
     "form": {
-      "clear": "清除",
+      "clear": "安全",
       "clearAllHelperText": "清除平台韌體所控制的所有機密資料",
       "clearAllLabel": "全部清除",
       "clearAllSetGenesisIPL": "全部清除並設定初始 IPL",
@@ -810,10 +813,9 @@
     "openNewTab": "在新的標籤中開啟",
     "status": "狀態"
   },
-  "pageLateralCastOutControl": {
-    "lateralCastOut": "橫向強制轉型",
-    "lateralCastOutControl": "橫向強制轉型控制",
-    "lateralCastOutControlDescription": "只有在「服務提供者」指示時，才變更此值，因為它可能會降低系統效能。",
+  "pageSystemParameters": {
+    "aggressivePrefetch": "積極的預先提取",
+    "aggressivePrefetchDescription": "只有在服務提供者指示時，才變更此值，因為它可能會降低系統效能。 指定是否停用或啟用處理器偏好積極的預先提取",
     "alert": {
       "message": "系統必須關閉電源。 所做的變更將在下次重新開機時生效",
       "title": "套用變更"
@@ -821,8 +823,17 @@
     "button": {
       "saveSettings": "儲存設定"
     },
+    "frequencyCap": "頻率上限",
+    "frequencyCapDescription": "啟用時，會防止系統中的所有處理器超出指定的作業頻率上限 (MHz)",
+    "frequencyCapHelpText": "如果已停用，則可能需要起始開機以取得可設定的頻率上限及下限。",
+    "lateralCastOut": "橫向強制轉型",
+    "lateralCastOutDescription": "只有在「服務提供者」指示時，才變更此值，因為它可能會降低系統效能。",
     "toast": {
+      "errorSavingAggressivePrefetch": "儲存積極的預先提取時發生錯誤",
+      "errorSavingFrequencyCap": "儲存頻率上限時發生錯誤",
       "errorSavingLateralCastOut": "儲存橫向強制轉型輸出模式時發生錯誤",
+      "successSavingAggressivePrefetch": "已順利儲存積極的預先提取",
+      "successSavingFrequencyCap": "已順利儲存頻率上限",
       "successSavingLateralCastOut": "已順利儲存橫向強制轉型輸出模式"
     }
   },
@@ -915,7 +926,7 @@
     "updatePageSetup": "更新系統記憶體頁面設定",
     "alert": {
       "heading": "套用變更",
-      "message": "系統必須關閉電源。 所做的變更將在下次重新開機時生效。",
+      "message": "系統必須關閉電源，且不受 HMC 管理。 所做的變更將在下次重新開機時生效。",
       "serverMustBePoweredOffTo": "伺服器必須關閉電源以：",
       "updateActiveMemoryMirroring": "更新作用中記憶體鏡映模式",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -993,7 +1004,7 @@
     "accessKeyExpiration": "存取金鑰有效期限",
     "backupVersion": "備份",
     "bmcTime": "BMC 日期和時間",
-    "criticalEvents": "重大",
+    "criticalEvents": "嚴重",
     "dhcp": "DHCPv4",
     "dumps": "傾出",
     "eventLogs": "事件日誌",
@@ -1009,7 +1020,8 @@
     "powerConsumption": "耗電量",
     "powerInformation": "電源資訊",
     "powerMode": "電源模式",
-    "runningVersion": "正在執行",
+    "runningVersion": "執行中",
+    "safeMode": "安全模式",
     "serialNumber": "序號",
     "serverInformation": "伺服器資訊",
     "serviceLogin": "服務登入",
@@ -1035,13 +1047,54 @@
   "pagePageNotFound": {
     "description": "找不到所要求的資源。"
   },
+  "pagePcieTopology": {
+    "alert": "載入此頁面可能需要幾分鐘。",
+    "bridgeOrHost": "PCIe 橋接器或 CAPI 主機",
+    "cableLength": "纜線長度",
+    "cableStatus": "纜線狀態",
+    "cableType": "纜線類型",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "識別 LED",
+    "ioSlots": "I/O 插槽",
+    "linkProperties": "鏈結內容",
+    "linkStatus": "鏈結狀態",
+    "localPort": "本端埠",
+    "localPortLocation": "本端埠位置",
+    "parentId": "母項 ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "遠端埠",
+    "remotePortLocation": "遠端埠位置",
+    "resetLink": "重設鏈結",
+    "savePcieTopology": "儲存 PCIe 拓蹼",
+    "speed": "速度",
+    "type": "類型",
+    "warning": "系統必須至少處於 PHYP 待機狀態。 若要開啟電源，請造訪 ",
+    "width": "寬度",
+    "modal": {
+      "resetConfirm": "您確定嗎？",
+      "resetLinkDescription": "在系統分割區執行時重設鏈結可能會導致錯誤。 必須在支援團隊成員的指引下執行此作業。",
+      "resetLinkHeader": "重設鏈結 %{id}"
+    },
+    "table": {
+      "search": "搜尋"
+    },
+    "toast": {
+      "errorReset": "重設鏈結 %{id} 時發生錯誤",
+      "errorSavePcieTopology": "儲存 PCIe 拓蹼資訊時發生錯誤。",
+      "errorSwitchingLed": "開啟 %{value} 的 %{operation} LED 時發生錯誤",
+      "resetInfoTitle": "正在重設鏈結 ID %{id}。",
+      "resetInfoDescription": "此作業可能需要幾秒鐘才能完成。",
+      "successReset": "已順利起始重設鏈結 %{id}。 請檢查事件日誌是否有任何問題。",
+      "successSavePcieTopology": "已順利儲存 PCIe 拓蹼資訊。"
+    }
+  },
   "pagePolicies": {
     "hostTpm": "主機 TPM",
     "hostTpmDescription": "啟用以確保只有在 TPM 正常運作時系統才會開機。",
     "hostUsb": "主機 USB 啟用",
     "hostUsbDescription": "指定基於安全理由，是否停用或啟用「主機 USB」。",
     "ipmi": "網路 IPMI（頻外 IPMI）",
-    "ipmiDescription": "容許透過 IPMI 進行平台的遠端管理。 諸如 ipmitool 之類的工具需要啟用此設定。",
+    "ipmiDescription": "容許透過 IPMI 進行平台的遠端管理。 諸如 ipmitool 之類的工具需要啟用此設定。 一旦啟用，請遵循線上支援文件中的程序來新增 IPMI 使用者。",
     "rtad": "RTAD",
     "rtadDescription": "此選項會啟用或停用主機韌體的「遠端授信認證常駐程式」。",
     "rtadInfoIcon": "@:global.status.nextReboot",
@@ -1053,6 +1106,8 @@
     "usbFirmwareUpdatePolicyDescription": "啟用「USB 韌體更新原則」將啟用容許透過 USB 金鑰進行韌體更新的功能。",
     "toast": {
       "errorNetworkPolicyUpdate": "更新 %{policy} 時發生錯誤。",
+      "successDisableBmcShell": "已順利停用 BMC Shell (透過 SSH)，請容許 15 秒讓停用生效。",
+      "successEnableBmcShell": "已順利啟用 BMC Shell (透過 SSH)",
       "successNetworkPolicyUpdate": "已順利更新 %{policy}。",
       "successNextBootToast": "正在將變更套用至 %{policy}。 對 %{policy} 所做的變更將在下一次重新開機時生效。"
     },
@@ -1073,7 +1128,7 @@
     },
     "table": {
       "bootCount": "開機計數",
-      "created": "已建立",
+      "created": "建立時間",
       "postCode": "代碼",
       "searchLogs": "搜尋日誌",
       "timeStampOffset": "時間戳記偏移"
@@ -1099,6 +1154,13 @@
     "toEnter": "對於進入",
     "toExit": "對於結束",
     "utilizationThreshold": "使用率臨界值 (%)",
+    "alert": {
+      "message": "由於處於安全模式，系統目前的作業效能有所降低。 處於安全模式時，無法存取電源設定。 ",
+      "message2": "若要判斷原因，請造訪",
+      "message2Link": "事件日誌",
+      "message3": "系統將嘗試在下一次開啟電源嘗試時結束「安全模式」。 若要重新啟動伺服器，請造訪",
+      "message3Link": "伺服器電源作業"
+    },
     "delayTimeValidation": {
       "delayTimeRange": "值必須介於 %{min} 和 %{max} 之間。",
       "enterDelayTime": "值不能小於要結束的延遲時間。",
@@ -1181,7 +1243,7 @@
   },
   "pageRebootBmc": {
     "lastReboot": "前次 BMC 重新啟動",
-    "rebootBmc": "重新啟動 BMC",
+    "rebootBmc": "重新開機 BMC",
     "rebootInformation": "當您重新啟動 BMC 時，您的 Web 瀏覽器會失去與 BMC 的聯繫達數分鐘。 當 BMC 回到線上時，您可能需要重新登入。",
     "modal": {
       "confirmMessage": "您確定要重新啟動 BMC 嗎？",
@@ -1217,6 +1279,9 @@
     "operations": "作業",
     "orderlyReboot": "循序 - 作業系統關閉，然後伺服器重新開機",
     "orderlyShutdown": "循序 - 作業系統關閉，然後伺服器關閉",
+    "osRuntimeButton": "繼續到作業系統執行",
+    "osRuntimeMessage": "繼續到作業系統執行狀態，以繼續到執行時期。",
+    "phypStandby": "系統處於 PHYP 待機狀態。",
     "powerOn": "開啟電源",
     "reboot": "重新開機",
     "rebootServer": "伺服器重新開機",
@@ -1225,7 +1290,11 @@
     "shutDown": "關閉",
     "shutdownServer": "關閉伺服器",
     "biosSettings": {
+      "aixLinux": "AIX/LINUX 分割區啟動模式",
       "currentOperatingMode": "現行作業模式 %{currOptMode}",
+      "defaultPartition": "預設分割區環境",
+      "ibmIPartition": "IBM i 分割區啟動模式",
+      "nonHMCManaged": "只有在系統由非 HMC 管理時才啟用",
       "powPolicySection": "將設為：%{powerPolicy}",
       "pvm_default_os_type": "預設分割區環境",
       "pvm_os_boot_type": "IBM i 分割區啟動模式",
@@ -1233,7 +1302,65 @@
       "pvm_stop_at_standby": "伺服器韌體啟動原則",
       "pvm_system_operating_mode": "伺服器作業模式",
       "pvm_system_power_off_policy": "伺服器電源原則",
-      "selectedOperatingMode": "開啟儲存作業模式將設為：%{selectedOptMode}",
+      "selectedOperatingMode": "開啟儲存作業模式將設為 %{selectedOptMode}",
+      "serverFirmware": "伺服器韌體啟動原則",
+      "powerSettingDescription": "檢視電源設定說明",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "僅自動啟動",
+          "autoStartAlways": "一律自動啟動",
+          "standBy": "待機"
+        },
+        "description": {
+          "autoStartOnly": "只有在異常終止（例如自動電源重新啟動或系統終止自動重新開機）之後開啟回復電源時，才會自動啟動伺服器韌體及分割區。",
+          "autoStartAlways": "自動啟動特定分割區。 如果使用 HMC 或 ASMI 功能表開啟伺服器電源，則伺服器會自動啟動配置為「自動啟動」的分割區。 如果在伺服器異常停止之後執行自動電源重新啟動或重新開機，則伺服器會啟動系統停止時正在執行的分割區。",
+          "standBy": "在使用者起始開啟電源或開啟回復電源時，請勿自動啟動伺服器韌體及分割區。"
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "ibmI": "IBM I",
+          "default": "預設值"
+        },
+        "description": {
+          "aix": "系統韌體將選取 AIX/Linux 作為預設分割區環境。",
+          "linux": "系統韌體將選取 AIX/Linux 作為預設分割區環境。",
+          "ibmI": "伺服器韌體將選取 IBM i 作為預設分割區環境。",
+          "default": "系統韌體將根據系統品牌類型自動選取預設的分割區環境。"
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "此分割區直接開機至作業系統",
+          "serviceBoot": "已儲存清單中的服務開機模式",
+          "bootToSms": "啟動到 SMS 功能表",
+          "bootToOpenFirware": "啟動到開啟韌體提示",
+          "serviceBootMode": "從預設清單進行服務模式啟動"
+        },
+        "description": {
+          "partitionBoot": "分割區會開機至作業系統，不需停止。",
+          "serviceBoot": "系統會從已儲存的服務模式開機清單啟動。 這通常是執行分割區診斷程式的速記方法。  如果要讓此選項變得有用，分割區作業系統必須支援診斷開機，而且診斷程式必須載入分割區的磁碟機。",
+          "bootToSms": "分割區在「系統管理服務 (SMS)」功能表中停止。",
+          "bootToOpenFirware": "系統會在開啟韌體提示時停止。",
+          "serviceBootMode": "系統會從預設開機清單開機。  此選項是從 CD-ROM 光碟機執行獨立式診斷程式的偏好方式。"
+        }
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "使用系統 Licensed Internal Code 的副本 A 從磁碟執行 IPL。",
+          "b": "使用系統 Licensed Internal Code 的副本 B 從磁碟執行 IPL。",
+          "c": "保留僅供硬體服務使用。",
+          "d": "從載入來源磁碟以外的媒體執行 IPL。 程式碼安裝支援的替代 IPL。"
+        }
+      },
       "attributeValues": {
         "pvm_os_boot_type": {
           "A_Mode": "A（使用副本 A 從磁碟啟動）",
@@ -1259,7 +1386,7 @@
           "Normal": "正常 - 自動"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "系統自動關閉電源",
+          "automaticHelperText": "有了這個設定，當系統未分割時，行為與關閉電源相同，當系統已分割時，系統的行為與保持開啟相同",
           "powerOffHelperText": "當最後一個分割區關閉電源時，伺服器會關閉電源",
           "stayOnHelperText": "當最後一個分割區關閉電源時，伺服器將保持開啟"
         }
@@ -1361,7 +1488,8 @@
       "unlock": "解除鎖定",
       "username": "使用者名稱",
       "userPassword": "使用者密碼",
-      "userUnlockMethod": "使用者解除鎖定方法"
+      "userUnlockMethod": "使用者解除鎖定方法",
+      "zeroLoginAttempts": "如果 '0'，則永不鎖定帳戶。"
     },
     "table": {
       "privilege": "專用權",
@@ -1656,7 +1784,7 @@
     "AE": "阿拉伯聯合大公國",
     "GB": "英國",
     "UM": "美國外國小島",
-    "US": "美國",
+    "US": "美利堅合眾國",
     "UY": "烏拉圭",
     "UZ": "烏玆別克",
     "VU": "萬那杜",
