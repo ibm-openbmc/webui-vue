@@ -14,12 +14,7 @@
           </BCol>
         </BRow>
         <div>
-          {{ $t('pageCapacityOnDemand.activation.helperText') }}
-          <BLink
-            target="_blank"
-            href="https://www.ibm.com/servers/eserver/ess"
-            >{{ accessKeyLink }}</BLink
-          >
+          {{ $t('pageCapacityOnDemand.activation.helperTextIps') }}
         </div>
         <BRow>
           <BCol sm="12" md="9" lg="9" xl="8">
@@ -88,7 +83,6 @@ const licenseStore = stores.LicenseStore();
 
 const licenseKey = ref('');
 const maxLengthVal = ref(34);
-const accessKeyLink = ref('www.ibm.com/servers/eserver/ess');
 
 onMounted(() => {
   fetchInfo();
