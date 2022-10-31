@@ -33,6 +33,7 @@
       "tooltip": "工具提示"
     },
     "calendar": {
+      "dateFormat": "YYYY-MM-DD",
       "selectDate": "选择日期",
       "useCursorKeysToNavigateCalendarDates": "使用光标键浏览日历日期"
     },
@@ -70,14 +71,17 @@
       "absent": "不存在",
       "copied": "已复制",
       "connected": "已连接",
+      "critical": "严重",
       "disabled": "已禁用",
       "disconnected": "已断开连接",
       "enabled": "已启用",
       "error": "错误",
       "informational": "参考",
+      "locked": "已锁定",
       "nextReboot": "更改将在下一次引导时生效。",
       "notAvailable": "未提供",
       "off": "关闭",
+      "ok": "确定",
       "on": "开启",
       "present": "已存在",
       "success": "成功",
@@ -200,11 +204,24 @@
     "virtualMedia": "虚拟介质"
   },
   "pageCapacityOnDemand": {
+    "absent": "不存在",
+    "deferring": "正在延迟",
+    "disabled": "已禁用",
+    "enabled": "已启用",
+    "inTest": "正在测试",
+    "starting": "正在启动",
+    "standbyOffline": "待机脱机",
+    "standbySpare": "待机备用",
+    "unavailableOffline": "不可用的脱机",
+    "updating": "正在更新",
+    "qualified": "合格",
+    "quiesced": "已停顿",
     "vetCapabilities": "VET 功能",
     "quickLinks": "快速链接",
     "activation": {
       "alert": "PHYP 必须处于备用或正在运行状态才能激活。",
       "helperText": "必须为 34 个字符。 要获取新的访问密钥，请访问 ",
+      "helperTextIps": "要获取新的访问密钥，请拨打客户服务热线 400-940-0860",
       "placeholder": "输入激活码",
       "sectionTitle": "激活",
       "srLabel": "激活码 (activation code)",
@@ -245,6 +262,22 @@
         "message": "如果此信息不可用，或者需要更多信息，请在此页面创建资源转储（使用特定资源选择器）：  ",
         "link": "转储页面。"
       }
+    },
+    "setting": {
+      "aixAllowed": "允许 AIX",
+      "aixDiagnostics": "AIX 诊断",
+      "activeMemoryExpansion": "活动内存扩展",
+      "activeMemoryMirroring": "活动内存镜像",
+      "capi": "CAPI",
+      "interactiveCapacity": "IBMi 100% 交互式容量",
+      "ibmiPartitions": "允许 IBMi 分区",
+      "inmiPermitted": "允许 IBMi 使用本机 I/O",
+      "lparCreationAllowed": "允许创建 LPAR",
+      "livePartitionMobility": "动态分区迁移",
+      "perPartition": "每个分区超过 128 个处理器",
+      "subprocessorPartitioning": "子处理器分区",
+      "virtualIoServer": "支持虚拟 I/O 服务器",
+      "virtualTiersAllowed": "允许的虚拟层"
     },
     "table": {
       "bitCapabilityStatus": "位功能状态",
@@ -318,6 +351,7 @@
     "alert": {
       "link": "概要文件设置",
       "message": "要更改在整个应用程序中显示日期和时间的方式（UTC 或浏览器偏移量），请访问 ",
+      "messageText": "要更改整个应用程序中日期和时间的显示方式（UTC 或浏览器偏移量），请访问“概要文件设置”",
       "messageNtp": "如果选择了 NTP，但未提供 NTP 服务器，或者无法访问给定的 NTP 服务器，那么将使用 time.google.com。"
     },
     "configureSettings": "配置设置",
@@ -364,9 +398,11 @@
     "deconfigure": "取消配置",
     "deconfigured": "已取消配置",
     "description": "查看或更改所有硬件资源的状态。 要查看有关每个已取消配置的资源的详细信息，请访问 ",
+    "descriptionText": "查看或更改所有硬件资源的状态。",
     "fcoSetting": "FCO 设置",
     "initiateDump": "启动转储",
     "link": "取消配置记录。",
+    "linkText": "要查看已取消配置的资源的详细信息，请访问“取消配置”记录。",
     "memoryDimms": "内存 DIMM",
     "node": "节点",
     "overview": "概述",
@@ -384,6 +420,18 @@
     },
     "table": {
       "deconfigurationType": "取消配置类型",
+      "filter": {
+        "byAssociation": "按关联",
+        "error": "错误",
+        "fatal": "致命",
+        "fcoDeconfigured": "FCO-取消配置",
+        "invalid": "无效",
+        "manual": "手动",
+        "none": "无",
+        "predictive": "预测的",
+        "recovered": "已恢复",
+        "unknown": "未知"
+      },
       "functionalState": "功能状态",
       "id": "标识",
       "locationCode": "位置码",
@@ -403,8 +451,10 @@
     "resolved": "已解决",
     "unresolved": "未解决",
     "pageDescription": {
-      "description": "选择要查看的记录或将取消配置详细信息导出到 .txt 文件。 要查看并手动更改所有硬件资源的配置状态，请访问 ",
-      "link": "硬件取消配置。"
+      "description": "选择记录以查看或将取消配置详细信息导出到 .txt 文件。要查看和手动更改所有硬件资源的配置状态，请访问 ",
+      "decriptionText": "选择要查看的记录或将取消配置详细信息导出到 .txt 文件。",
+      "link": "硬件取消配置。",
+      "linkText": "要查看或更改配置状态，请访问“硬件取消配置”。"
     },
     "modal": {
       "title": "清除所有记录",
@@ -433,6 +483,11 @@
       "srcDetailsToolTip": "系统参考码详细信息。 对于手动保护记录，不存在 SRC 详细信息。",
       "status": "状态",
       "type": "取消配置类型"
+    },
+    "severityValues": {
+      "fatal": "致命",
+      "predictive": "预测的",
+      "manual": "手动"
     },
     "toast": {
       "errorDelete": "删除 %{count} 条记录时出错。 | 删除 %{count} 条记录时出错。",
@@ -486,7 +541,13 @@
       "dumpType": "转储类型",
       "id": "标识",
       "searchDumps": "搜索转储",
-      "size": "大小"
+      "size": "大小",
+      "filter": {
+        "bmcDumpEntry": "BMC 转储条目",
+        "hostbootDumpEntry": "Hostboot 转储条目",
+        "resourceDumpEntry": "资源转储条目",
+        "systemDumpEntry": "系统转储条目"
+      }
     },
     "toast": {
       "errorDeleteDump": "删除 %{count} 转储时出错。| 删除 %{count} 个转储时出错。",
@@ -507,6 +568,7 @@
   },
   "pageEventLogs": {
     "additionalDataUri": "下载其他数据",
+    "bmcManager": "OpenBmc 管理器",
     "resolve": "解决",
     "resolved": "已解决",
     "unresolve": "取消解决",
@@ -525,11 +587,22 @@
       "id": "标识",
       "modifiedDate": "修改日期",
       "name": "名称",
-      "resolution": "解决方案",
+      "resolution": "解决方案（调出）",
       "searchLogs": "搜索日志",
       "severity": "严重性",
+      "severityValues": {
+        "critical": "严重",
+        "ok": "确定",
+        "warning": "警告"
+      },
       "status": "状态",
+      "systemEventLogEntry": "系统事件日志条目",
       "type": "类型",
+      "typeValues": {
+        "event": "事件",
+        "oem": "Oem",
+        "sel": "SEL"
+      },
       "eventId": "事件标识"
     },
     "toast": {
@@ -677,10 +750,12 @@
   },
   "pageInventory": {
     "assemblies": "组合件",
+    "baseboardManagementController": "基板管理控制器",
     "bmcManager": "BMC 管理器",
     "chassis": "机箱",
     "dimmSlot": "DIMM 插槽",
     "fabricAdapters": "光纤网适配器",
+    "false": "False",
     "fans": "风扇",
     "identifyLedInfo": "对于没有指示灯的部件，标识指示灯切换开关将仅开启机柜指示灯",
     "pcieSlots": "PCIe 插槽",
@@ -688,8 +763,10 @@
     "pcieTopologyLinkDescription": "要了解有关 PCIe 插槽的更多信息，请访问 ",
     "powerSupplies": "电源",
     "processors": "处理器",
+    "processorModule": "处理器模块",
     "quicklinkTitle": "硬件组件的快速链接",
     "system": "系统",
+    "true": "True",
     "enclosures": {
       "title": "I/O 机柜",
       "traceLabel": "收集 I/O 机柜跟踪信息",
@@ -889,6 +966,7 @@
     }
   },
   "pageLogin": {
+    "asmi": "高级系统管理界面 (ASMI)",
     "dateAndTime": "日期和时间",
     "language": "语言",
     "logIn": "登录",
@@ -898,6 +976,7 @@
     "uploadServiceLoginCertificate": "上载服务登录证书",
     "username": "用户名",
     "alert": {
+      "unauthorizedMessage": "用户未经授权",
       "message": "用户名或密码无效"
     },
     "modal": {
@@ -1013,8 +1092,10 @@
     "hostName": "主机名",
     "inventory": "库存和指示灯",
     "ipv4": "IPv4",
+    "manual": "手动",
     "model": "模型",
     "networkInformation": "网络信息",
+    "normal": "正常",
     "operatingMode": "操作方式",
     "powerCap": "电源上限",
     "powerConsumption": "功耗",
@@ -1182,7 +1263,9 @@
     "tableRoles": {
       "descMaximumPerformance": "处理器频率将变化。 此模式允许系统通过利用空闲核心提供的热量和功率空余空间、更低的工作负载以及有利的环境条件来达到最大频率。",
       "descPowerSaving": "处理器频率设置为固定最小值，从而降低系统功耗，同时仍提供可预测的性能。",
-      "descStatic": "处理器频率设置为固定值，可在正常环境条件下运行正常工作负载。"
+      "descStatic": "处理器频率设置为固定值，可在正常环境条件下运行正常工作负载。",
+      "description": "描述",
+      "setting": "设置"
     },
     "utilizationPercentValidation": {
       "enterUtilization": "值不能大于退出阈值。",
@@ -1291,20 +1374,24 @@
     "shutdownServer": "关闭服务器",
     "biosSettings": {
       "aixLinux": "AIX/LINUX 分区引导方式",
-      "currentOperatingMode": "当前操作方式 %{currOptMode}",
+      "automatic": "自动",
+      "currentOperatingModeManual": "当前操作方式手册",
+      "currentOperatingModeNormal": "当前操作方式正常",
       "defaultPartition": "缺省分区环境",
       "ibmIPartition": "IBM i 分区引导方式",
       "nonHMCManaged": "仅当系统是非 HMC 管理的系统时才启用",
       "powPolicySection": "将设置为 %{powerPolicy}",
+      "powerOff": "关闭电源",
       "pvm_default_os_type": "默认分区环境",
       "pvm_os_boot_type": "IBM i 分区引导模式",
       "pvm_rpa_boot_mode": "AIX/LINUX 分区引导方式",
       "pvm_stop_at_standby": "服务器固件启动策略",
       "pvm_system_operating_mode": "服务器操作方式",
       "pvm_system_power_off_policy": "服务器电源策略",
-      "selectedOperatingMode": "当保存时，操作方式将设置为 %{selectedOptMode}",
+      "selectedOperatingModeManual": "在保存时，操作方式将设置为“手动”",
       "serverFirmware": "服务器固件启动策略",
       "powerSettingDescription": "查看电源设置描述",
+      "stayOn": "保持开启",
       "serverFirmwareItems": {
         "setting": {
           "autoStartOnly": "仅自动启动",
@@ -1362,6 +1449,12 @@
         }
       },
       "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "缺省值"
+        },
         "pvm_os_boot_type": {
           "A_Mode": "A（使用副本 A 从磁盘引导）",
           "B_Mode": "B（使用副本 B 从磁盘引导）",
@@ -1492,15 +1585,20 @@
       "zeroLoginAttempts": "如果为“0”，那么将永远不会锁定帐户。"
     },
     "table": {
+      "administrator": "管理员",
       "privilege": "权限",
+      "readOnly": "只读",
       "status": "状态",
       "username": "用户名"
     },
     "tableRoles": {
+      "administrator": "管理员",
       "configureComponentsManagedByThisService": "配置此服务管理的组件",
       "configureManagerResources": "配置管理器资源",
       "configureUsersAndTheirAccounts": "配置用户及其帐户",
       "logInToTheServiceAndReadResources": "登录到服务并读取资源",
+      "privilege": "特权",
+      "readOnly": "ReadOnly",
       "updatePasswordForCurrentUserAccount": "更新当前用户帐户的密码"
     },
     "toast": {
