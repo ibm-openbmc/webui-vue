@@ -33,6 +33,7 @@
       "tooltip": "工具提示"
     },
     "calendar": {
+      "dateFormat": "YYYY-MM-DD",
       "selectDate": "選取日期",
       "useCursorKeysToNavigateCalendarDates": "使用游標鍵來導覽行事曆日期"
     },
@@ -70,14 +71,17 @@
       "absent": "不存在",
       "copied": "已複製",
       "connected": "已連接",
+      "critical": "嚴重",
       "disabled": "已停用",
       "disconnected": "已中斷連線",
       "enabled": "已啟用",
       "error": "錯誤",
       "informational": "參考資訊",
+      "locked": "已鎖定",
       "nextReboot": "變更將在下一次啟動時生效。",
       "notAvailable": "無法使用",
       "off": "關閉",
+      "ok": "確定",
       "on": "開啟",
       "present": "呈現",
       "success": "成功",
@@ -200,11 +204,24 @@
     "virtualMedia": "虛擬媒體"
   },
   "pageCapacityOnDemand": {
+    "absent": "不存在",
+    "deferring": "延遲",
+    "disabled": "已停用",
+    "enabled": "已啟用",
+    "inTest": "InTest",
+    "starting": "啟動中",
+    "standbyOffline": "離線待命",
+    "standbySpare": "備用",
+    "unavailableOffline": "離線無法使用",
+    "updating": "更新",
+    "qualified": "合格",
+    "quiesced": "靜止",
     "vetCapabilities": "VET 功能",
     "quickLinks": "快速鏈結",
     "activation": {
       "alert": "PHYP 必須處於待命或執行中的狀態才能啟動。",
       "helperText": "必須為 34 個字元。 若要取得新的存取金鑰，請造訪 ",
+      "helperTextIps": "若要取得新的存取金鑰，請致電客戶服務熱線 400-940-0860",
       "placeholder": "輸入啟動碼",
       "sectionTitle": "啟動",
       "srLabel": "啟動碼",
@@ -245,6 +262,22 @@
         "message": "如果無法使用此資訊，或需要更多資訊，請從下列中建立資源傾出（使用特定的資源選取器）：  ",
         "link": "（使用特定的資源選取器）。"
       }
+    },
+    "setting": {
+      "aixAllowed": "容許 AIX",
+      "aixDiagnostics": "AIX 診斷",
+      "activeMemoryExpansion": "作用中的記憶體擴充",
+      "activeMemoryMirroring": "作用中記憶體鏡映",
+      "capi": "CAPI",
+      "interactiveCapacity": "IBMi 100% 互動式容量",
+      "ibmiPartitions": "容許 IBMi 分割區",
+      "inmiPermitted": "IBMi 允許使用原生 I/O",
+      "lparCreationAllowed": "容許建立 LPAR",
+      "livePartitionMobility": "即時分割區行動性",
+      "perPartition": "每個分割區大於 128 個處理器",
+      "subprocessorPartitioning": "子處理器分割",
+      "virtualIoServer": "具有 Virtual I/O Server 功能",
+      "virtualTiersAllowed": "容許的虛擬層級"
     },
     "table": {
       "bitCapabilityStatus": "位元功能狀態",
@@ -318,6 +351,7 @@
     "alert": {
       "link": "設定檔設定",
       "message": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪： ",
+      "messageText": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪「設定檔設定」",
       "messageNtp": "如果已選取 NTP，但未提供 NTP 伺服器，或無法連接給定的 NTP 伺服器，則會使用 time.google.com。"
     },
     "configureSettings": "配置設定",
@@ -364,9 +398,11 @@
     "deconfigure": "取消配置",
     "deconfigured": "已取消配置",
     "description": "檢視或變更所有硬體資源的狀態。 若要檢視每一個已取消配置資源的詳細資料，請造訪： ",
+    "descriptionText": "檢視或變更所有硬體資源的狀態。",
     "fcoSetting": "FCO 設定",
     "initiateDump": "起始傾出",
     "link": "取消配置記錄。",
+    "linkText": "若要檢視已取消配置資源的詳細資料，請造訪「取消配置」記錄。",
     "memoryDimms": "記憶體 DIMM",
     "node": "節點",
     "overview": "概觀",
@@ -384,6 +420,18 @@
     },
     "table": {
       "deconfigurationType": "取消配置類型",
+      "filter": {
+        "byAssociation": "依關聯",
+        "error": "錯誤",
+        "fatal": "嚴重",
+        "fcoDeconfigured": "FCO 已取消配置",
+        "invalid": "無效的",
+        "manual": "手動",
+        "none": "無",
+        "predictive": "預測",
+        "recovered": "已回復",
+        "unknown": "不明"
+      },
       "functionalState": "功能狀態",
       "id": "ID",
       "locationCode": "位置碼",
@@ -403,8 +451,10 @@
     "resolved": "已解決",
     "unresolved": "未解決",
     "pageDescription": {
-      "description": "選取記錄以檢視取消配置詳細資料，或將取消配置詳細資料匯出成 .txt 檔。 若要檢視並手動變更所有硬體資源的配置狀態，請造訪： ",
-      "link": "硬體取消配置。"
+      "description": "選取記錄以檢視或匯出取消配置詳細資料至 .txt 檔。若要檢視並手動變更所有硬體資源的配置狀態，請造訪 ",
+      "decriptionText": "選取記錄以檢視取消配置詳細資料，或將取消配置詳細資料匯出成 .txt 檔。",
+      "link": "硬體取消配置。",
+      "linkText": "若要檢視或變更配置狀態，請造訪「硬體」取消配置。"
     },
     "modal": {
       "title": "清除所有記錄",
@@ -433,6 +483,11 @@
       "srcDetailsToolTip": "系統參考碼詳細資料。 沒有手動保護記錄的 SRC 詳細資料。",
       "status": "狀態",
       "type": "取消配置類型"
+    },
+    "severityValues": {
+      "fatal": "嚴重",
+      "predictive": "預測",
+      "manual": "手動"
     },
     "toast": {
       "errorDelete": "刪除 %{count} 筆記錄時發生錯誤。| 刪除 %{count} 筆記錄時發生錯誤。",
@@ -486,7 +541,13 @@
       "dumpType": "傾出類型",
       "id": "ID",
       "searchDumps": "搜尋傾出",
-      "size": "大小"
+      "size": "大小",
+      "filter": {
+        "bmcDumpEntry": "BMC 傾出項目",
+        "hostbootDumpEntry": "主機開機傾出項目",
+        "resourceDumpEntry": "資源傾出項目",
+        "systemDumpEntry": "系統傾出項目"
+      }
     },
     "toast": {
       "errorDeleteDump": "刪除 %{count} 傾出時發生錯誤。 | 刪除 %{count} 傾出時發生錯誤。",
@@ -507,6 +568,7 @@
   },
   "pageEventLogs": {
     "additionalDataUri": "下載其他資料",
+    "bmcManager": "OpenBmc 管理程式",
     "resolve": "解決",
     "resolved": "已解決",
     "unresolve": "取消解決",
@@ -525,11 +587,22 @@
       "id": "ID",
       "modifiedDate": "修改日期",
       "name": "名稱",
-      "resolution": "解決方法",
+      "resolution": "解決方案（圖說文字）",
       "searchLogs": "搜尋日誌",
       "severity": "嚴重性",
+      "severityValues": {
+        "critical": "嚴重",
+        "ok": "確定",
+        "warning": "警告"
+      },
       "status": "狀態",
+      "systemEventLogEntry": "系統事件日誌項目",
       "type": "類型",
+      "typeValues": {
+        "event": "事件",
+        "oem": "OEM",
+        "sel": "SEL"
+      },
       "eventId": "事件 ID"
     },
     "toast": {
@@ -677,10 +750,12 @@
   },
   "pageInventory": {
     "assemblies": "組件",
+    "baseboardManagementController": "Baseboard Management Controller (BMC)",
     "bmcManager": "BMC 管理程式",
     "chassis": "機箱",
     "dimmSlot": "DIMM 插槽",
     "fabricAdapters": "光纖配接卡",
+    "false": "否",
     "fans": "風扇",
     "identifyLedInfo": "對於沒有 LED 的組件，識別 LED 切換開關只會開啟機箱 LED",
     "pcieSlots": "PCIe 插槽",
@@ -688,8 +763,10 @@
     "pcieTopologyLinkDescription": "若要進一步瞭解 PCIe 插槽，請造訪 ",
     "powerSupplies": "電源供應器",
     "processors": "處理器",
+    "processorModule": "處理器模組",
     "quicklinkTitle": "硬體元件的快速鏈結",
     "system": "系統",
+    "true": "True",
     "enclosures": {
       "title": "I/O 機體",
       "traceLabel": "收集 I/O 機箱追蹤",
@@ -889,6 +966,7 @@
     }
   },
   "pageLogin": {
+    "asmi": "進階系統管理介面 (ASMI)",
     "dateAndTime": "日期與時間",
     "language": "語言",
     "logIn": "登入",
@@ -898,6 +976,7 @@
     "uploadServiceLoginCertificate": "上傳服務登入憑證",
     "username": "使用者名稱",
     "alert": {
+      "unauthorizedMessage": "使用者未獲授權",
       "message": "使用者名稱或密碼無效"
     },
     "modal": {
@@ -1013,8 +1092,10 @@
     "hostName": "主機名稱",
     "inventory": "庫存和 LED",
     "ipv4": "IPv4",
+    "manual": "手動",
     "model": "模型",
     "networkInformation": "網路資訊",
+    "normal": "一般",
     "operatingMode": "作業模式",
     "powerCap": "電源上限",
     "powerConsumption": "耗電量",
@@ -1182,7 +1263,9 @@
     "tableRoles": {
       "descMaximumPerformance": "處理器頻率將會改變。 此模式可讓系統利用閒置核心、較低工作量及有利環境條件所提供的熱及電源空餘空間來達到最大頻率。",
       "descPowerSaving": "處理器頻率設為固定最小值，可減少系統的耗電量，同時仍可提供可預測的效能。",
-      "descStatic": "處理器頻率設定為固定值，可在正常環境條件下執行正常工作量。"
+      "descStatic": "處理器頻率設定為固定值，可在正常環境條件下執行正常工作量。",
+      "description": "說明",
+      "setting": "設定"
     },
     "utilizationPercentValidation": {
       "enterUtilization": "值不能大於要結束的臨界值。",
@@ -1291,20 +1374,24 @@
     "shutdownServer": "關閉伺服器",
     "biosSettings": {
       "aixLinux": "AIX/LINUX 分割區啟動模式",
-      "currentOperatingMode": "現行作業模式 %{currOptMode}",
+      "automatic": "自動",
+      "currentOperatingModeManual": "現行作業模式手動",
+      "currentOperatingModeNormal": "現行作業模式正常",
       "defaultPartition": "預設分割區環境",
       "ibmIPartition": "IBM i 分割區啟動模式",
       "nonHMCManaged": "只有在系統由非 HMC 管理時才啟用",
       "powPolicySection": "將設為：%{powerPolicy}",
+      "powerOff": "關閉電源",
       "pvm_default_os_type": "預設分割區環境",
       "pvm_os_boot_type": "IBM i 分割區啟動模式",
       "pvm_rpa_boot_mode": "AIX/LINUX 分割區啟動模式",
       "pvm_stop_at_standby": "伺服器韌體啟動原則",
       "pvm_system_operating_mode": "伺服器作業模式",
       "pvm_system_power_off_policy": "伺服器電源原則",
-      "selectedOperatingMode": "開啟儲存作業模式將設為 %{selectedOptMode}",
+      "selectedOperatingModeManual": "儲存作業模式將設為「手動」",
       "serverFirmware": "伺服器韌體啟動原則",
       "powerSettingDescription": "檢視電源設定說明",
+      "stayOn": "保持開啟",
       "serverFirmwareItems": {
         "setting": {
           "autoStartOnly": "僅自動啟動",
@@ -1362,6 +1449,12 @@
         }
       },
       "attributeValues": {
+        "pvm_default_os_type": {
+          "AIX": "AIX",
+          "Linux": "Linux",
+          "IBM I": "IBM I",
+          "Default": "預設值"
+        },
         "pvm_os_boot_type": {
           "A_Mode": "A（使用副本 A 從磁碟啟動）",
           "B_Mode": "B（使用副本 B 從磁碟啟動）",
@@ -1492,15 +1585,20 @@
       "zeroLoginAttempts": "如果 '0'，則永不鎖定帳戶。"
     },
     "table": {
+      "administrator": "管理者",
       "privilege": "專用權",
+      "readOnly": "唯讀",
       "status": "狀態",
       "username": "使用者名稱"
     },
     "tableRoles": {
+      "administrator": "管理者",
       "configureComponentsManagedByThisService": "配置此服務管理的元件",
       "configureManagerResources": "配置管理程式資源",
       "configureUsersAndTheirAccounts": "配置使用者及其帳戶",
       "logInToTheServiceAndReadResources": "登入服務並讀取資源",
+      "privilege": "專用權",
+      "readOnly": "唯讀",
       "updatePasswordForCurrentUserAccount": "更新現行使用者帳戶的密碼"
     },
     "toast": {
