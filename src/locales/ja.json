@@ -110,7 +110,7 @@
     "applicationHeader": "アプリケーション・ヘッダー",
     "health": "正常性",
     "logOut": "ログアウト",
-    "power": "Power",
+    "power": "べき乗",
     "profileSettings": "@:appPageTitle.profileSettings",
     "refresh": "リフレッシュ",
     "skipToContent": "コンテンツにスキップ",
@@ -163,7 +163,7 @@
     "virtualMedia": "@:appPageTitle.virtualMedia"
   },
   "appPageTitle": {
-    "capacityOnDemand": "Capacity on demand",
+    "capacityOnDemand": "デマンド容量",
     "certificates": "認証",
     "changePassword": "パスワードの変更",
     "concurrentMaintenance": "並行保守",
@@ -191,7 +191,7 @@
     "policies": "ポリシー",
     "postCodeLogs": "進行状況ログ",
     "postCodes": "進行状況ログ",
-    "power": "Power",
+    "power": "べき乗",
     "powerRestorePolicy": "電源復元ポリシー",
     "profileSettings": "プロファイル設定",
     "rebootBmc": "BMC のリブート",
@@ -226,13 +226,13 @@
       "sectionTitle": "活動化",
       "srLabel": "アクティベーション・コード",
       "toast": {
-        "error": "Capacity on demand の活動化に失敗しました。",
-        "success": "Capacity on demand の活動化に成功しました。"
+        "error": "デマンド容量のアクティブ化に失敗しました。",
+        "success": "デマンド容量のアクティブ化が成功しました。"
       }
     },
     "alert": {
       "description": "システムの電源をオンに設定しななければなりません。",
-      "title": "Capacity on Demand 活動化への変更内容の適用。"
+      "title": "デマンド容量のアクティブ化への変更内容の適用。"
     },
     "orderInfo": {
       "activatedResources": "アクティブされたリソース",
@@ -827,7 +827,7 @@
       "model": "モデル",
       "name": "名前",
       "partNumber": "部品番号",
-      "power": "Power",
+      "power": "べき乗",
       "processorType": "プロセッサー・タイプ",
       "remove": "削除",
       "serialNumber": "シリアル番号",
