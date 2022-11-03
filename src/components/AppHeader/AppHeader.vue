@@ -36,7 +36,7 @@
             data-test-id="appHeader-container-overview"
           >
             <img
-              width="50px"
+              width="100px"
               class="header-logo"
               src="@/assets/images/logo-header.svg"
               :alt="altLogo"
