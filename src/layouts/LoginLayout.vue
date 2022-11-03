@@ -4,7 +4,7 @@
       <div class="login-main">
         <div>
           <div class="login-brand mb-5">
-            <img width="90px" :src="getImageUrl()" :alt="altLogo" />
+            <img width="150px" :src="getImageUrl()" :alt="altLogo" />
           </div>
           <h1 v-if="customizableGuiName" class="h3 mb-5">
             {{ customizableGuiName }}
