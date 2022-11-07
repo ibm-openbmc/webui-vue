@@ -81,7 +81,7 @@
       "nextReboot": "變更將在下一次啟動時生效。",
       "notAvailable": "無法使用",
       "off": "關閉",
-      "ok": "確定",
+      "ok": "正常",
       "on": "開啟",
       "present": "呈現",
       "success": "成功",
@@ -166,7 +166,7 @@
     "capacityOnDemand": "容量隨需應變",
     "certificates": "憑證",
     "changePassword": "變更密碼",
-    "concurrentMaintenance": "並行維護",
+    "concurrentMaintenance": "同時進行的維護",
     "dateTime": "日期和時間",
     "deconfigurationHardware": "硬體取消配置",
     "deconfigurationRecords": "取消配置記錄",
@@ -377,13 +377,13 @@
     }
   },
   "pageConcurrentMaintenance": {
-    "concurrentMaintenance": "並行維護",
-    "opPanelBase": "操作面板基本維護",
+    "concurrentMaintenance": "同時進行的維護",
+    "opPanelBase": "操作面板底座維護",
     "opPanelLcd": "操作面板 LCD 維護",
-    "tod": "電池維護當天時間",
+    "tod": "時鐘電池維護",
     "alert": {
-      "message": "若要卸下或更換電池，操作面板基座或操作面板 LCD 會啟用個別切換開關。 完成之後，建議停用以回到標準模式。",
-      "title": "並行修復電池、操作面板底座及操作面板 LCD"
+      "message": "若要卸下或更換電池，操作面板底座或操作面板 LCD 會啟用個別的切換開關。 完成之後，建議停用以回到正常模式。",
+      "title": "同時進行電池、操作面板底座及操作面板 LCD 的修復"
     },
     "toast": {
       "errorSaveReadyToRemove": "錯誤 %{state} 已備妥移除狀態。",
@@ -592,7 +592,7 @@
       "severity": "嚴重性",
       "severityValues": {
         "critical": "嚴重",
-        "ok": "確定",
+        "ok": "正常",
         "warning": "警告"
       },
       "status": "狀態",
@@ -725,22 +725,22 @@
       "taskComplete": "作業完成",
       "taskCompleteMessage": "作業完成。 等待 BMC 重新開機",
       "updateFirmware": {
-        "step1": "步驟 4 之 1 — 上傳",
+        "step1": "步驟 1 / 4 - 上傳",
         "step1Message": "已啟動更新。 韌體上傳進行中。",
-        "step2": "步驟 4 之 2 — 啟動",
+        "step2": "步驟 2 / 4 - 啟動",
         "step2Message": "韌體上傳完成。 啟動作業進行中。",
-        "step3": "步驟 4 之 3 — 重新開機",
+        "step3": "步驟 3 / 4 - 重新開機",
         "step3Message": "啟動作業完成。 BMC 重新開機進行中。",
-        "step4": "步驟 4 之 4 — 完成",
+        "step4": "步驟 4 / 4 - 完成",
         "step4Message": "韌體更新順利完成。 按一下重新整理以驗證韌體層次。"
       },
       "switchToRunning": {
-        "step1": "步驟 3 之 1 — 韌體切換",
+        "step1": "步驟 1 / 3 - 韌體切換",
         "step1Message": "已啟動處理程序。 正在進行韌體切換。",
-        "step2": "步驟 3 之 2 — 重新開機",
+        "step2": "步驟 2 / 3 - 重新開機",
         "step2Message": "韌體切換完成。 BMC 重新開機進行中。",
-        "step3": "步驟 3 之 3 — 完成",
-        "step3Message": "韌體交換順利完成。 按一下重新整理，驗證是否已切換執行中及備份映像檔。"
+        "step3": "步驟 3 / 3 - 完成",
+        "step3Message": "韌體切換順利完成。 按一下重新整理，以驗證是否已切換執行中及備份映像檔。"
       }
     }
   },
@@ -892,7 +892,7 @@
   },
   "pageSystemParameters": {
     "aggressivePrefetch": "積極的預先提取",
-    "aggressivePrefetchDescription": "只有在服務提供者指示時，才變更此值，因為它可能會降低系統效能。 指定是否停用或啟用處理器偏好積極的預先提取",
+    "aggressivePrefetchDescription": "只有在服務提供者指示時，才變更此值，因為它可能會降低系統效能。 指定是停用還是啟用處理器偏好積極的預先提取",
     "alert": {
       "message": "系統必須關閉電源。 所做的變更將在下次重新開機時生效",
       "title": "套用變更"
@@ -1149,7 +1149,7 @@
     "savePcieTopology": "儲存 PCIe 拓蹼",
     "speed": "速度",
     "type": "類型",
-    "warning": "系統必須至少處於 PHYP 待機狀態。 若要開啟電源，請造訪 ",
+    "warning": "系統必須至少處於 PHYP 待機狀態。 若要開啟電源，請造訪： ",
     "width": "寬度",
     "modal": {
       "resetConfirm": "您確定嗎？",
@@ -1375,8 +1375,8 @@
     "biosSettings": {
       "aixLinux": "AIX/LINUX 分割區啟動模式",
       "automatic": "自動",
-      "currentOperatingModeManual": "現行作業模式手動",
-      "currentOperatingModeNormal": "現行作業模式正常",
+      "currentOperatingModeManual": "現行作業模式「手動」",
+      "currentOperatingModeNormal": "現行作業模式「正常」",
       "defaultPartition": "預設分割區環境",
       "ibmIPartition": "IBM i 分割區啟動模式",
       "nonHMCManaged": "只有在系統由非 HMC 管理時才啟用",
@@ -1388,7 +1388,7 @@
       "pvm_stop_at_standby": "伺服器韌體啟動原則",
       "pvm_system_operating_mode": "伺服器作業模式",
       "pvm_system_power_off_policy": "伺服器電源原則",
-      "selectedOperatingModeManual": "儲存作業模式將設為「手動」",
+      "selectedOperatingModeManual": "儲存時作業模式將設為「手動」",
       "serverFirmware": "伺服器韌體啟動原則",
       "powerSettingDescription": "檢視電源設定說明",
       "stayOn": "保持開啟",
