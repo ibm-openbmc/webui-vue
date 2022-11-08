@@ -124,7 +124,7 @@ export default {
         },
         {
           key: 'type',
-          label: 'Slot type',
+          label: this.$t('pageInventory.table.slotType'),
           formatter: this.dataFormatter,
           sortable: true,
         },

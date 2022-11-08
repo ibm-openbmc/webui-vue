@@ -758,6 +758,7 @@
     "false": "False",
     "fans": "Fans",
     "identifyLedInfo": "For parts with no LEDs, the Identify LED toggle switch will only turn on the Enclosure LED",
+    "ioExpansionChassis": "I/O expansion chassis ",
     "pcieSlots": "PCIe slots",
     "pcieTopologyLink": "PCIe hardware topology.",
     "pcieTopologyLinkDescription": "To know more about PCIe slots, visit ",
@@ -766,6 +767,7 @@
     "processorModule": "Processor Module",
     "quicklinkTitle": "Quick links to hardware components",
     "system": "System",
+    "systemChassis": "System chassis",
     "true": "True",
     "enclosures": {
       "title": "I/O enclosures",

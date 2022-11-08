@@ -16,8 +16,8 @@
               :key="index"
               :title="
                 index === 0
-                  ? 'System chassis'
-                  : 'I/O expansion chassis ' + `${index}`
+                  ? $t('pageInventory.systemChassis')
+                  : $t('pageInventory.ioExpansionChassis') + `${index}`
               "
               @click="currentTabUpdate(index)"
             >
