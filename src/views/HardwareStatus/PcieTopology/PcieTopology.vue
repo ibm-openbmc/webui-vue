@@ -107,7 +107,7 @@
           <template #row-details="{ item }">
             <b-container fluid>
               <b-row>
-                <b-col lg="2" xl="2" md="2" sm="2" xs="2">
+                <b-col lg="4" xl="4" md="4" sm="4" xs="4">
                   <dl class="fontStyle">
                     <!-- Link properties -->
                     <dt class="headerStyle">
