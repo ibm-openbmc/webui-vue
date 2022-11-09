@@ -266,7 +266,7 @@
     "setting": {
       "aixAllowed": "AIX zulässig",
       "aixDiagnostics": "AIX-Diagnose",
-      "activeMemoryExpansion": "Active Memory Expansion",
+      "activeMemoryExpansion": "Aktive Speichererweiterung",
       "activeMemoryMirroring": "Aktive Speicherspiegelung",
       "capi": "CAPI",
       "interactiveCapacity": "IBMi 100 % interaktive Kapazität",
@@ -275,7 +275,7 @@
       "lparCreationAllowed": "LPAR-Erstellung zulässig",
       "livePartitionMobility": "Live Partition Mobility",
       "perPartition": "Mehr als 128 Prozessoren pro Partition",
-      "subprocessorPartitioning": "Unterauftragsverarbeiter-Partitionierung",
+      "subprocessorPartitioning": "Subprozessor-Partitionierung",
       "virtualIoServer": "Für virtuellen E/A-Server geeignet",
       "virtualTiersAllowed": "Zulässige virtuelle Schichten"
     },
@@ -378,11 +378,11 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "Parallelwartung",
-    "opPanelBase": "Basiswartung der Bedienerkonsole",
-    "opPanelLcd": "LCD-Wartung an der Bedienerkonsole",
+    "opPanelBase": "Wartung des Bedienerkonsolensockels",
+    "opPanelLcd": "Wartung der LCD-Anzeige der Bedienerkonsole",
     "tod": "Wartung der Uhrzeitbatterie",
     "alert": {
-      "message": "Zum Entfernen oder Austauschen der Batterie, des Bedienerkonsolensockels oder der LCD-Anzeige der Bedienerkonsole aktivieren Sie den entsprechenden Kippschalter. Sobald dies geschehen ist, wird empfohlen, die Funktion zu inaktivieren, um in den normalen Modus zurückzukehren.",
+      "message": "Zum Entfernen oder Austauschen der Batterie, des Bedienerkonsolensockels oder der LCD-Anzeige der Bedienerkonsole aktivieren Sie den entsprechenden Umschalter. Sobald dies geschehen ist, wird empfohlen, die Funktion zu inaktivieren, um in den normalen Modus zurückzukehren.",
       "title": "Reparatur der Batterie, des Bedienerkonsolensockels und der LCD-Anzeige der Bedienerkonsole bei eingeschalteter Einheit"
     },
     "toast": {
@@ -480,7 +480,7 @@
       "resource": "Ressource",
       "severity": "Fehlerkategorie",
       "srcDetails": "SRC-Details",
-      "srcDetailsToolTip": "Details des Systemreferenzcodes Für manuelle Schutzdatensätze sind keine SRC-Details vorhanden.",
+      "srcDetailsToolTip": "Details des Systemreferenzcodes. Für manuelle Schutzdatensätze sind keine SRC-Details vorhanden.",
       "status": "status",
       "type": "Dekonfigurationstyp"
     },
@@ -760,11 +760,11 @@
     "identifyLedInfo": "Bei Teilen ohne LEDs schaltet der Umschalter für die Identifikations-LED nur die Gehäuseanzeige ein.",
     "pcieSlots": "PCIe-Steckplätze",
     "pcieTopologyLink": "PCIe-Hardwaretopologie.",
-    "pcieTopologyLinkDescription": "Wenn Sie mehr über PCIe-Steckplätze erfahren möchten, besuchen Sie ",
+    "pcieTopologyLinkDescription": "Erfahren Sie mehr über PCIe-Steckplätze auf ",
     "powerSupplies": "Netzteile",
     "processors": "Prozessoren",
     "processorModule": "Prozessormodul",
-    "quicklinkTitle": "Quick Links zu Hardwarekomponenten",
+    "quicklinkTitle": "Schnelle Links zu Hardwarekomponenten",
     "system": "System",
     "true": "Ja",
     "enclosures": {
@@ -776,7 +776,7 @@
     "systemIndicator": {
       "attentionLed": "Systemkontrollanzeige",
       "attentionLedToolTipInfo": "Systemkontroll-LED kann nur inaktiviert werden",
-      "identifyLed": "Systemkennzeichnungsanzeige",
+      "identifyLed": "Identifikations-LED des Systems",
       "lampTest": "Anzeigentest",
       "powerStatus": "Stromversorgungsstatus",
       "sectionTitle": "Systemanzeigen",
@@ -821,7 +821,7 @@
       "health": "Allgemeinzustand",
       "healthRollup": "Rollup des Allgemeinzustands",
       "id": "ID",
-      "identifyLed": "Kennzeichnungsanzeige",
+      "identifyLed": "Identifikations-LED",
       "install": "Installieren",
       "locationNumber": "Standortnummer",
       "model": "Model",
@@ -838,10 +838,10 @@
       "typeModel": "Typ - Modell"
     },
     "toast": {
-      "errorDisableIdentifyLed": "Fehler beim Inaktivieren der Kennzeichnungsanzeige",
+      "errorDisableIdentifyLed": "Fehler beim Inaktivieren der Identifikations-LED",
       "errorDisableLampTest": "Fehler beim Inaktivieren des Anzeigentests",
       "errorDisableSystemAttentionLed": "Fehler beim Inaktivieren der Systemkontroll-LED.",
-      "errorEnableIdentifyLed": "Fehler beim Aktivieren der Kennzeichnungsanzeige",
+      "errorEnableIdentifyLed": "Fehler beim Aktivieren der Identifikations-LED",
       "errorEnableLampTest": "Fehler beim Aktivieren des Anzeigentests",
       "errorEnableSystemAttentionLed": "Fehler beim Aktivieren der Systemkontroll-LED.",
       "errorEnclosureSettings": "Fehler beim Aktualisieren der Gehäuseeinstellungen.",
@@ -900,18 +900,18 @@
     "button": {
       "saveSettings": "Einstellungen speichern"
     },
-    "frequencyCap": "Häufigkeitsbegrenzung",
+    "frequencyCap": "Frequenzbegrenzung",
     "frequencyCapDescription": "Ist dieser Parameter aktiviert, wird verhindert, dass alle Prozessoren im System die angegebene maximale Betriebsfrequenz in MHz überschreiten.",
-    "frequencyCapHelpText": "Wenn diese Option inaktiviert ist, ist möglicherweise ein initiales Booten erforderlich, damit die maximale und die minimale Häufigkeit festgelegt werden können.",
+    "frequencyCapHelpText": "Wenn diese Option inaktiviert ist, ist möglicherweise ein initiales Booten erforderlich, damit die maximale und die minimale Frequenz festgelegt werden können.",
     "lateralCastOut": "Laterales Castout",
     "lateralCastOutDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, dies kann die Systemleistung beeinträchtigen.",
     "toast": {
       "errorSavingAggressivePrefetch": "Fehler beim Speichern des aggressiven Vorablesezugriffs",
-      "errorSavingFrequencyCap": "Fehler beim Speichern der Häufigkeitsbegrenzung",
-      "errorSavingLateralCastOut": "Fehler beim Speichern des Modus für die laterale Umsetzung",
+      "errorSavingFrequencyCap": "Fehler beim Speichern der Frequenzbegrenzung",
+      "errorSavingLateralCastOut": "Fehler beim Speichern des Modus für laterales Castout",
       "successSavingAggressivePrefetch": "Aggressiver Vorablesezugriff erfolgreich gespeichert",
-      "successSavingFrequencyCap": "Häufigkeitsbegrenzung erfolgreich gespeichert",
-      "successSavingLateralCastOut": "Modus für die laterale Umsetzung erfolgreich gespeichert"
+      "successSavingFrequencyCap": "Frequenzbegrenzung erfolgreich gespeichert",
+      "successSavingLateralCastOut": "Modus für laterales Castout erfolgreich gespeichert"
     }
   },
   "pageLdap": {
@@ -969,7 +969,7 @@
     "asmi": "Advanced System Management Interface (ASMI)",
     "dateAndTime": "Datum und Uhrzeit",
     "language": "Sprache",
-    "logIn": "Anmeldung",
+    "logIn": "Anmelden",
     "model": "Model",
     "password": "Kennwort",
     "serialNumber": "Seriennummer",
@@ -1107,7 +1107,7 @@
     "serverInformation": "Serverinformationen",
     "serviceLogin": "Serviceanmeldung",
     "statusInformation": "Statusinformationen",
-    "systemIdentifyLed": "Systemkennzeichnungsanzeige",
+    "systemIdentifyLed": "Identifikations-LED des Systems",
     "systemInformation": "Systeminformationen",
     "total": "Summe",
     "viewMore": "Mehr anzeigen",
@@ -1135,9 +1135,9 @@
     "cableStatus": "Kabelstatus",
     "cableType": "Kabeltyp",
     "id": "@:pageInventory.table.id",
-    "identifyLed": "Kennzeichnungs-LEDs",
+    "identifyLed": "Identifikations-LEDs",
     "ioSlots": "E/A-Steckplätze",
-    "linkProperties": "Verbindungseigenschaften",
+    "linkProperties": "Eigenschaften der Verbindung",
     "linkStatus": "Verbindungsstatus",
     "localPort": "Lokaler Port",
     "localPortLocation": "Position des lokalen Ports",
@@ -1149,23 +1149,23 @@
     "savePcieTopology": "PCIe-Topologie speichern",
     "speed": "Geschwindigkeit",
     "type": "Typ",
-    "warning": "Das System muss sich mindestens im PHYP-Standby befinden. Zum Einschalten besuchen Sie ",
+    "warning": "Das System muss sich mindestens im PHYP-Standby befinden. Zum Einschalten wechseln Sie zu ",
     "width": "Breite",
     "modal": {
       "resetConfirm": "Sind Sie sicher?",
       "resetLinkDescription": "Das Zurücksetzen einer Verbindung während der Ausführung von Systempartitionen kann Fehler verursachen. Diese Operation muss unter Anleitung eines Support-Teammitglieds ausgeführt werden.",
-      "resetLinkHeader": "Link %{id} zurücksetzen"
+      "resetLinkHeader": "Verbindung %{id} zurücksetzen"
     },
     "table": {
       "search": "Suchen"
     },
     "toast": {
-      "errorReset": "Fehler beim Zurücksetzen des Links %{id}",
+      "errorReset": "Fehler beim Zurücksetzen der Verbindung %{id}",
       "errorSavePcieTopology": "Fehler beim Speichern der PCIe-Topologieinformationen.",
       "errorSwitchingLed": "Fehleranzeige LED %{operation} für %{value}",
-      "resetInfoTitle": "Link-ID %{id} wird zurückgesetzt.",
+      "resetInfoTitle": "Verbindungs-ID %{id} wird zurückgesetzt.",
       "resetInfoDescription": "Die Ausführung dieser Operation kann einige Sekunden dauern.",
-      "successReset": "Zurücksetzen des Links %{id} erfolgreich eingeleitet. Überprüfen Sie die Ereignisprotokolle auf Probleme.",
+      "successReset": "Zurücksetzen der Verbindung %{id} erfolgreich eingeleitet. Überprüfen Sie die Ereignisprotokolle auf Probleme.",
       "successSavePcieTopology": "PCIe-Topologieinformationen wurden erfolgreich gespeichert."
     }
   },
@@ -1237,9 +1237,9 @@
     "utilizationThreshold": "Auslastungsschwellenwert (in%)",
     "alert": {
       "message": "Das System arbeitet aktuell mit verringerter Leistung, da es sich im abgesicherten Modus befindet. Auf die Stromversorgungseinstellungen kann im abgesicherten Modus nicht zugegriffen werden. ",
-      "message2": "Um die Ursache zu ermitteln, besuchen Sie",
+      "message2": "Um die Ursache zu ermitteln, wechseln Sie zu",
       "message2Link": "Ereignisprotokolle",
-      "message3": "Das System versucht, den abgesicherten Modus beim nächsten Einschaltversuch zu verlassen. Um den Server neu zu starten, besuchen Sie",
+      "message3": "Das System versucht, den abgesicherten Modus beim nächsten Einschaltversuch zu verlassen. Um den Server neu zu starten, wechseln Sie zu",
       "message3Link": "Ein-/Ausschaltoperationen für Server"
     },
     "delayTimeValidation": {
@@ -1598,7 +1598,7 @@
       "configureUsersAndTheirAccounts": "Benutzer und deren Accounts konfigurieren",
       "logInToTheServiceAndReadResources": "Beim Service anmelden und Ressourcen lesen",
       "privilege": "Berechtigung",
-      "readOnly": "ReadOnly",
+      "readOnly": "NurLesen",
       "updatePasswordForCurrentUserAccount": "Kennwort für aktuellen Benutzeraccount aktualisieren"
     },
     "toast": {
