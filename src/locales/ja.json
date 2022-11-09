@@ -15,7 +15,7 @@
       "edit": "編集",
       "enable": "有効にする",
       "export": "エクスポート",
-      "exportAll": "すべてをエクスポートします。",
+      "exportAll": "すべてエクスポート",
       "filter": "フィルター",
       "openNewTab": "新しいタブで開きます。",
       "refresh": "リフレッシュ",
@@ -71,7 +71,7 @@
       "absent": "不在",
       "copied": "コピー済み",
       "connected": "接続済み",
-      "critical": "深刻な",
+      "critical": "重大",
       "disabled": "無効",
       "disconnected": "切断",
       "enabled": "有効",
@@ -220,7 +220,7 @@
     "quickLinks": "クイック・リンク",
     "activation": {
       "alert": "PHYP を活動化にするには、スタンバイ状態または実行中である必要があります。",
-      "helperText": "34 文字でなければなりません。 新しいアクセス・キーを取得するには、以下にアクセスしてください。 ",
+      "helperText": "34 文字でなければなりません。 新しいアクセス・キーを取得するには、次のアドレスにアクセスしてください: ",
       "helperTextIps": "新しいアクセス・キーを取得するには、カスタマー・サービス・ホットライン 400-940-0860 に電話してください。",
       "placeholder": "活動化コードを入力します",
       "sectionTitle": "活動化",
@@ -268,7 +268,7 @@
       "aixDiagnostics": "AIX 診断",
       "activeMemoryExpansion": "アクティブ・メモリー拡張",
       "activeMemoryMirroring": "アクティブ・メモリー・ミラーリング",
-      "capi": "カピ",
+      "capi": "CAPI",
       "interactiveCapacity": "IBMi 100% 対話式容量",
       "ibmiPartitions": "許可される IBMi パーティション",
       "inmiPermitted": "ネイティブ I/O の使用が許可されている IBMi",
@@ -350,7 +350,7 @@
   "pageDateTime": {
     "alert": {
       "link": "プロファイル設定",
-      "message": "アプリケーション全体で日付と時刻の表示方法 (UTC またはブラウザ・オフセット) を変更するには、次に移動します。 ",
+      "message": "アプリケーション全体で日付と時刻の表示方法 (UTC またはブラウザ・オフセット) を変更するには、次のリンクをクリックします: ",
       "messageText": "アプリケーション全体での日時の表示方法 (UTC またはブラウザーのオフセット) を変更するには、「プロファイル設定 (Profile Settings)」にアクセスしてください。",
       "messageNtp": "NTP が選択されているが、NTP サーバーが指定されていない場合、または指定された NTP サーバーに到達できない場合は、time.google.com が使用されます。"
     },
@@ -368,7 +368,7 @@
         "server3": "サーバー 3"
       },
       "validators": {
-        "serverExists": "サーバー・アドレスは既に存在しています"
+        "serverExists": "このサーバー・アドレスは既に存在しています"
       }
     },
     "toast": {
@@ -382,7 +382,7 @@
     "opPanelLcd": "オペレーター・パネル LCD の保守",
     "tod": "時刻バッテリー保守",
     "alert": {
-      "message": "バッテリーの取り外しまたは交換を行うために、オペレーター・パネル・ベースまたはオペレーター・パネル LCD では、それぞれトグル・スイッチが使用可能です。 完了したら、これを無効にして、通常モードに戻ることをお勧めします。",
+      "message": "バッテリーの取り外しまたは交換を行うには、オペレーター・パネル・ベースまたはオペレーター・パネル LCD でトグル・スイッチを有効化してください。 完了したら、スイッチを無効にして通常モードに戻ることをお勧めします。",
       "title": "バッテリー、オペレーター・パネル・ベース、およびオペレーター・パネル LCD の並行修復"
     },
     "toast": {
@@ -397,11 +397,11 @@
     "configured": "構成済み",
     "deconfigure": "構成解除",
     "deconfigured": "構成解除済み",
-    "description": "すべてのハードウェア・リソースの状態を表示または変更します。 構成解除された各リソースの詳細を表示するには、次を参照してください。 ",
+    "description": "すべてのハードウェア・リソースの状態を表示または変更します。 構成解除された各リソースの詳細を表示するには、次のリンクをクリックしてください: ",
     "descriptionText": "すべてのハードウェア・リソースの状態を表示または変更します。",
     "fcoSetting": "FCO 設定",
     "initiateDump": "ダンプの開始",
-    "link": "構成解除レコード。",
+    "link": "構成解除レコード",
     "linkText": "構成解除されたリソースの詳細を表示するには、構成解除レコードにアクセスしてください。",
     "memoryDimms": "メモリー DIMM",
     "node": "ノード",
@@ -591,7 +591,7 @@
       "searchLogs": "ログの検索",
       "severity": "重大度",
       "severityValues": {
-        "critical": "深刻な",
+        "critical": "重大",
         "ok": "OK",
         "warning": "警告"
       },
@@ -760,7 +760,7 @@
     "identifyLedInfo": "LED がない部品の場合、識別 LED トグル・スイッチはエンクロージャー LED のみをオンにします。",
     "pcieSlots": "PCIe スロット",
     "pcieTopologyLink": "PCIe ハードウェア・トポロジー。",
-    "pcieTopologyLinkDescription": "PCIe スロットについて詳しくは、以下にアクセスしてください。 ",
+    "pcieTopologyLinkDescription": "PCIe スロットについて詳しくは、次のアドレスにアクセスしてください: ",
     "powerSupplies": "電源機構",
     "processors": "プロセッサー",
     "processorModule": "プロセッサー・モジュール",
@@ -847,8 +847,8 @@
       "errorEnclosureSettings": "エンクロージャー設定の更新中にエラーが発生しました。",
       "infoRemoveAssembly": "更新して、'%{assemblyName}' を削除する準備ができているかどうかを確認してください。",
       "successEnclosureSettings": "エンクロージャー設定が正常に更新されました。",
-      "successEnableIdentifyLed": "識別 LED が正常に使用可能になりました。",
-      "successDisableIdentifyLed": "識別 LED が正常に使用不可になりました。"
+      "successEnableIdentifyLed": "識別 LED が正常に有効化されました。",
+      "successDisableIdentifyLed": "識別 LED が正常に無効化されました。"
     }
   },
   "pageKeyClear": {
@@ -902,7 +902,7 @@
     },
     "frequencyCap": "頻度キャップ",
     "frequencyCapDescription": "有効にすると、システム内のすべてのプロセッサーが、指定された最大動作頻度 (MHz) を超えないようにします。",
-    "frequencyCapHelpText": "使用不可にすると、最大頻度と最小頻度を設定するために初期ブートが必要になる場合があります。",
+    "frequencyCapHelpText": "無効にすると、最大頻度と最小頻度を設定するために初期ブートが必要になる場合があります。",
     "lateralCastOut": "ラテラル・キャストアウト",
     "lateralCastOutDescription": "この値を変更するとシステムのパフォーマンスが低下する可能性があるため、サービス・プロバイダーから指示された場合にのみ変更してください。",
     "toast": {
@@ -966,7 +966,7 @@
     }
   },
   "pageLogin": {
-    "asmi": "拡張システム管理インターフェース (ASMI) (Advanced System Management Interface (ASMI))",
+    "asmi": "拡張システム管理インターフェース (ASMI)",
     "dateAndTime": "日付/時刻",
     "language": "言語",
     "logIn": "ログイン",
@@ -1005,7 +1005,7 @@
     "updatePageSetup": "システム・メモリー・ページ・セットアップの更新",
     "alert": {
       "heading": "変更適用",
-      "message": "システムの電源はオフにする必要があり、HMC によって管理されていてはなりません。 加えられた変更は、次回の再起動時に有効になります。",
+      "message": "システムの電源はオフにする必要があり、HMC に管理されていない状態にする必要があります。 加えられた変更は、次回の再起動時に有効になります。",
       "serverMustBePoweredOffTo": "以下を行うには、サーバーの電源をオフにしてください。",
       "updateActiveMemoryMirroring": "アクティブ・メモリー・ミラー・モードの更新",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1083,7 +1083,7 @@
     "accessKeyExpiration": "アクセス・キーの有効期限",
     "backupVersion": "バックアップ",
     "bmcTime": "BMC の日時",
-    "criticalEvents": "深刻な",
+    "criticalEvents": "重大",
     "dhcp": "DHCPv4",
     "dumps": "ダンプ",
     "eventLogs": "イベント・ログ",
@@ -1149,7 +1149,7 @@
     "savePcieTopology": "PCIe トポロジーの保存",
     "speed": "速度",
     "type": "タイプ",
-    "warning": "システムは少なくとも PHYP スタンバイ状態でなければなりません。 電源オンするには、以下にアクセスしてください。 ",
+    "warning": "システムは少なくとも PHYP スタンバイ状態でなければなりません。 電源オンするには、次のアドレスにアクセスしてください: ",
     "width": "幅",
     "modal": {
       "resetConfirm": "よろしいですか?",
@@ -1187,7 +1187,7 @@
     "usbFirmwareUpdatePolicyDescription": "USB ファームウェア更新ポリシーを有効にすると、USB キーを使用したファームウェア更新を許可する機能が有効になります。",
     "toast": {
       "errorNetworkPolicyUpdate": "%{policy} の更新中にエラーが発生しました。",
-      "successDisableBmcShell": "BMC シェルが (SSH 経由で) 正常に無効化されました。無効化が有効になるまで 15 秒待ってください。",
+      "successDisableBmcShell": "BMC シェルが (SSH 経由で) 正常に無効化されました。無効化が有効になるまで 15 秒お待ちください。",
       "successEnableBmcShell": "BMC シェルが (SSH 経由で) 正常に有効になりました",
       "successNetworkPolicyUpdate": "%{policy} が正常に更新されました。",
       "successNextBootToast": "%{policy} に変更を適用しています。 %{policy} に対して行われた変更は、次回のリブート時に有効になります。"
@@ -1205,7 +1205,7 @@
       "exportLogs": "エクスポート・ログ"
     },
     "button": {
-      "exportAll": "すべてをエクスポートします。"
+      "exportAll": "すべてエクスポート"
     },
     "table": {
       "bootCount": "ブート数",
@@ -1237,9 +1237,9 @@
     "utilizationThreshold": "使用率しきい値 (%)",
     "alert": {
       "message": "現在、システムはセーフ・モードであるため、パフォーマンスが低下した状態で動作しています。 セーフ・モードでは電源設定にアクセスできません。 ",
-      "message2": "原因を判別するには、以下にアクセスしてください。",
+      "message2": "原因を判別するには、次のアドレスにアクセスしてください:",
       "message2Link": "イベント・ログ",
-      "message3": "システムは次の電源オンでセーフ・モードを終了しようとします。 サーバーをリブートするには、以下にアクセスしてください。",
+      "message3": "システムは次の電源オンでセーフ・モードを終了しようとします。 サーバーをリブートするには、次のアドレスにアクセスしてください:",
       "message3Link": "サーバーの電源操作"
     },
     "delayTimeValidation": {
@@ -1479,7 +1479,7 @@
           "Normal": "通常-自動"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "この設定では、システムが区画に分割されていない場合、動作は電源オフと同じです。また、システムが区画に分割されている場合、システムの動作は「オンのまま」と同じです。",
+          "automaticHelperText": "この設定では、システムが区画に分割されていない場合、動作は電源オフと同じです。また、システムが区画に分割されている場合、システムの動作は「常時電源オン」と同じです。",
           "powerOffHelperText": "最後の区画電源がオフになると、サーバーの電源もオフになります。",
           "stayOnHelperText": "最後の区画電源がオフになっても、サーバーの電源はオンのままになります。"
         }
