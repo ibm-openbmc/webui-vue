@@ -352,7 +352,7 @@
       "link": "프로파일 설정",
       "message": "애플리케이션 전체에서 날짜와 시간의 표시 방법(UTC 또는 브라우저 오프셋)을 변경하려면 다음을 방문하십시오. ",
       "messageText": "애플리케이션 전체에서 날짜 및 시간이 표시되는 방식(UTC 또는 브라우저 오프셋)을 변경하려면 프로파일 설정을 방문하십시오",
-      "messageNtp": "NTP가 선택되었지만 NTP 서버가 지정되어 있지 않거나 지정된 NTP 서버에 도달할 수 없는 경우 time.google.com이 사용됩니다."
+      "messageNtp": "NTP가 선택되었지만 NTP 서버가 지정되어 있지 않거나 지정된 NTP 서버에 연결할 수 없는 경우 time.google.com이 사용됩니다."
     },
     "configureSettings": "설정 구성",
     "form": {
@@ -382,8 +382,8 @@
     "opPanelLcd": "오퍼레이터 패널 LCD 유지보수",
     "tod": "배터리 유지보수 시간",
     "alert": {
-      "message": "배터리를 제거하거나 교체하기 위해 오퍼레이터 패널 기본 또는 오퍼레이터 패널 LCD는 각각의 토글 스위치를 사용으로 설정합니다. 완료되면 일반 모드로 돌아가기 위해 비활성화하는 것이 좋습니다.",
-      "title": "배터리의 동시 수리, 오퍼레이터 패널 기본, 오퍼레이터 패널 LCD"
+      "message": "배터리, 오퍼레이터 패널 기본 또는 오퍼레이터 패널 LCD를 제거하거나 교체하려면 각의 토글 스위치를 사용으로 설정하십시오. 완료되면 일반 모드로 돌아가기 위해 비활성화하는 것이 좋습니다.",
+      "title": "배터리, 오퍼레이터 패널 기본, 오퍼레이터 패널 LCD의 동시 수리"
     },
     "toast": {
       "errorSaveReadyToRemove": "오류 %{state} 상태를 제거할 준비가 되었습니다.",
@@ -401,7 +401,7 @@
     "descriptionText": "모든 하드웨어 자원의 상태를 보거나 변경하십시오.",
     "fcoSetting": "FCO 설정",
     "initiateDump": "덤프 시작",
-    "link": "구성 해제 레코드",
+    "link": "구성 해제 레코드.",
     "linkText": "구성 해제된 자원의 세부사항을 보려면 구성 해제 레코드를 방문하십시오.",
     "memoryDimms": "메모리 DIMM",
     "node": "노드",
@@ -460,7 +460,7 @@
       "title": "모든 레코드 지우기",
       "subtileServiceRequired": "서비스 권한 필수",
       "messageServiceRequired": "이 조작을 지원하려면 서비스 담당자에게 문의하십시오.",
-      "confirm": "확실합니까?",
+      "confirm": "계속 진행하시겠습니까?",
       "confirmMessage": "모든 구성 해제 레코드를 지우면 선택된 노드의 모든 하드웨어를 재구성하려고 시도합니다. 이러한 변경사항은 다음 부트에 적용됩니다.",
       "deleteAllMessage": "모든 레코드를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "deleteAllTitle": "모든 레코드 삭제",
@@ -531,7 +531,7 @@
       "deleteDump": "덤프 삭제 | 덤프 삭제",
       "deleteDumpConfirmation": "%{count}개의 덤프를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개의 덤프를 삭제하시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
       "initiateSystemDump": "시스템 덤프 시작",
-      "initiateSystemDumpMessage1": "확실합니까?",
+      "initiateSystemDumpMessage1": "계속 진행하시겠습니까?",
       "initiateSystemDumpMessage2": "시스템 덤프의 진행 중에는 다른 덤프를 시작할 수 없습니다.",
       "initiateSystemDumpMessage3": "시스템 덤프를 시작하면 모든 활성 시스템 파티션이 비정상적으로 종료됩니다.",
       "initiateSystemDumpMessage4": "덤프 초기화 진행"
@@ -757,10 +757,10 @@
     "fabricAdapters": "패브릭 어댑터",
     "false": "False",
     "fans": "팬",
-    "identifyLedInfo": "LED가 없는 부품의 경우, 식별 LED 토글 스위치는 격납장치 LED만 켬",
+    "identifyLedInfo": "LED가 없는 부품의 경우, 식별 LED 토글 스위치는 격납장치 LED만 켭니다.",
     "pcieSlots": "PCIe 슬롯",
-    "pcieTopologyLink": "PCIe 하드웨어 토폴로지입니다.",
-    "pcieTopologyLinkDescription": "PCIe 슬롯에 대해 자세히 알아보려면 다음 위치로 이동하십시오 ",
+    "pcieTopologyLink": "PCIe 하드웨어 토폴로지.",
+    "pcieTopologyLinkDescription": "PCIe 슬롯에 대해 자세히 알아보려면 다음 위치로 이동하십시오. ",
     "powerSupplies": "전원 공급 장치",
     "processors": "프로세서",
     "processorModule": "프로세서 모듈",
@@ -794,7 +794,7 @@
         "message": "이 조작을 완료하는 데 2분이 소요될 수 있습니다.",
         "remove": "@:pageInventory.table.remove",
         "selected": "선택된 '%{assemblyName}' -",
-        "subTitle": "확실합니까?",
+        "subTitle": "계속 진행하시겠습니까?",
         "title": "'%{assemblyName}'을(를) 제거하시겠습니까?"
       },
       "enclosures": {
@@ -1095,7 +1095,7 @@
     "manual": "수동",
     "model": "모델",
     "networkInformation": "네트워크 정보",
-    "normal": "정규",
+    "normal": "정상",
     "operatingMode": "작동 모드",
     "powerCap": "전력 용량",
     "powerConsumption": "소비 전력",
@@ -1149,10 +1149,10 @@
     "savePcieTopology": "PCIe 토폴로지 저장",
     "speed": "속도",
     "type": "유형",
-    "warning": "시스템은 최소한 PHYP 대기 상태여야 합니다. 전원을 켜려면 다음 위치로 이동하십시오 ",
+    "warning": "시스템은 최소한 PHYP 대기 상태여야 합니다. 전원을 켜려면 다음 위치로 이동하십시오. ",
     "width": "너비",
     "modal": {
-      "resetConfirm": "확실합니까?",
+      "resetConfirm": "계속 진행하시겠습니까?",
       "resetLinkDescription": "시스템 파티션이 실행 중인 상태에서 링크를 재설정하면 오류가 발생할 수 있습니다. 이 조작은 지원 팀 구성원의 안내를 받아 수행해야 합니다.",
       "resetLinkHeader": "링크 %{id} 재설정"
     },
@@ -1187,7 +1187,7 @@
     "usbFirmwareUpdatePolicyDescription": "USB 펌웨어 업데이트 정책을 사용하면 USB 키를 통한 펌웨어 업데이트를 허용하는 기능을 사용할 수 있습니다.",
     "toast": {
       "errorNetworkPolicyUpdate": "%{policy}을(를) 업데이트하는 중",
-      "successDisableBmcShell": "BMC 쉘을 사용 안함으로 설정했습니다(SSH를 통해). 사용 안함 설정을 적용하는 데 15초를 허용하십시오.",
+      "successDisableBmcShell": "BMC 쉘을 사용 안함으로 설정했습니다(SSH를 통해). 사용 안함이 적용되는 데 15초가 소요됩니다.",
       "successEnableBmcShell": "BMC 쉘을 사용으로 설정했습니다(SSH를 통해).",
       "successNetworkPolicyUpdate": "%{policy}을(를) 업데이트했습니다.",
       "successNextBootToast": "%{policy}에 변경사항 적용. %{policy}에 대한 변경사항은 다음 재부팅 시 적용됩니다."
@@ -1237,9 +1237,9 @@
     "utilizationThreshold": "활용도 임계값(%)",
     "alert": {
       "message": "안전 모드이므로 시스템은 현재 축소된 성능으로 작동하는 중입니다. 안전 모드에서는 전원 설정에 액세스할 수 없습니다. ",
-      "message2": "원인을 판별하려면 다음 위치로 이동하십시오",
+      "message2": "원인을 판별하려면 다음 위치로 이동하십시오.",
       "message2Link": "이벤트 로그",
-      "message3": "시스템이 다음 전원 켜기 시 안전 모드를 종료하려 합니다. 서버를 재부팅하려면 다음 위치로 이동하십시오",
+      "message3": "시스템이 다음 전원 켜기 시 안전 모드를 종료하려 합니다. 서버를 재부팅하려면 다음 위치로 이동하십시오.",
       "message3Link": "서버 전원 조작"
     },
     "delayTimeValidation": {
@@ -1250,7 +1250,7 @@
     "modalEnablePowerPerformanceMode": {
       "cancelButton": "취소",
       "content": "전원 절약 모드를 사용하면 프로세서 빈도의 변경, 프로세서 활용도의 변경 및 소비 전력의 변경이 발생하며, 성능 상의 변화도 발생합니다.",
-      "subTitle": "확실합니까?",
+      "subTitle": "계속 진행하시겠습니까?",
       "titleMaximumPerformance": "최대 성능 모드 사용",
       "titlePowerSaving": "전원 절약 모드 사용",
       "titleStatic": "정적 모드 사용"
@@ -1428,7 +1428,7 @@
         },
         "description": {
           "partitionBoot": "파티션이 멈추는 일 없이 운영 체제로 부팅됩니다.",
-          "serviceBoot": "시스템이 저장된 서비스 모드 부트 목록으로부터 부팅됩니다. 이는 일반적으로 파티션의 진단을 실행하는 편법입니다.  이 옵션을 유용하게 사용하려면, 파티션 운영 체제가 진단 부팅을 지원하고 진단을 파티션의 디스크 드라이브에 로드해야 합니다.",
+          "serviceBoot": "시스템이 저장된 서비스 모드 부트 목록으로부터 부팅됩니다. 이는 일반적으로 파티션의 진단을 실행하는 약식 방법입니다.  이 옵션을 유용하게 사용하려면, 파티션 운영 체제가 진단 부팅을 지원하고 진단을 파티션의 디스크 드라이브에 로드해야 합니다.",
           "bootToSms": "파티션이 시스템 관리 서비스(SMS) 메뉴에서 멈춥니다.",
           "bootToOpenFirware": "시스템이 열린 펌웨어 프롬프트에서 멈춥니다.",
           "serviceBootMode": "시스템이 기본 부트 목록으로부터 부팅됩니다.  이 옵션은 CD-ROM 드라이브로부터 독립형 진단을 실행하는 데 선호되는 방법입니다."
