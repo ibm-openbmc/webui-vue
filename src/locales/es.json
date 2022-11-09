@@ -65,7 +65,7 @@
       "message4": "4. No debe contener una palabra de diccionario",
       "message5": "5. No debe contener caracteres secuenciales",
       "message6": "6. Debe tener 20 caracteres o menos si se utiliza para IPMI",
-      "message7": "7. Debe contener dos letras en minúsculas, letras en mayúsculas, dígitos y otros caracteres"
+      "message7": "7. Debe contener dos de los siguientes tipos de caracteres: letras en minúsculas, letras en mayúsculas, dígitos y otros caracteres"
     },
     "status": {
       "absent": "Ausente",
@@ -80,9 +80,9 @@
       "locked": "Bloqueada",
       "nextReboot": "Los cambios entrarán en vigor en el siguiente arranque.",
       "notAvailable": "No disponible",
-      "off": "Desactivar",
-      "ok": "OK",
-      "on": "Activar",
+      "off": "Desactivado",
+      "ok": "Correcto",
+      "on": "Activado",
       "present": "Presente",
       "success": "Éxito",
       "warning": "Aviso"
@@ -173,7 +173,7 @@
     "dumps": "Volcados",
     "eventLogs": "Registros de sucesos",
     "factoryReset": "Restablecimiento de fábrica",
-    "fieldCoreOverride": "Modificación de núcleo de campo",
+    "fieldCoreOverride": "Sobrescritura de núcleo de campo",
     "firmware": "Firmware",
     "hostConsole": "Consola de host",
     "inventory": "Inventario y LED",
@@ -187,7 +187,7 @@
     "notices": "Avisos",
     "overview": "Visión general",
     "pageNotFound": "No se ha encontrado la página",
-    "pcieTopology": "Topología de hardware de PCI Express",
+    "pcieTopology": "Topología de hardware de PCIe",
     "policies": "Políticas",
     "postCodeLogs": "Registros de progreso",
     "postCodes": "Registros de progreso",
@@ -274,7 +274,7 @@
       "inmiPermitted": "IBMi con permiso para utilizar E/S nativa",
       "lparCreationAllowed": "Creación de LPAR permitida",
       "livePartitionMobility": "Live Partition Mobility",
-      "perPartition": "Mayor que 128 procesadores por partición",
+      "perPartition": "Más de 128 procesadores por partición",
       "subprocessorPartitioning": "Particionamiento de subprocesador",
       "virtualIoServer": "Con capacidad de servidor de E/S virtual",
       "virtualTiersAllowed": "Niveles virtuales permitidos"
@@ -350,8 +350,8 @@
   "pageDateTime": {
     "alert": {
       "link": "Valores de perfil",
-      "message": "Para cambiar la forma en que se visualizan la fecha y hora (UTC o desplazamiento del navegador) en toda la aplicación, visite ",
-      "messageText": "Para cambiar la forma en que se muestran la fecha y la hora (ya sea UTC o desplazamiento del navegador) en toda la aplicación, visite Valores de perfil",
+      "message": "Para cambiar la forma en que se visualizan la fecha y hora (UTC o diferencia horaria del navegador) en toda la aplicación, visite ",
+      "messageText": "Para cambiar la forma en que se muestran la fecha y la hora (ya sea UTC o diferencia horaria del navegador) en toda la aplicación, visite Valores de perfil",
       "messageNtp": "Si se selecciona NTP pero no se proporciona un servidor NTP o no se puede acceder al servidor NTP especificado, se utilizará time.google.com."
     },
     "configureSettings": "Configurar valores",
@@ -368,7 +368,7 @@
         "server3": "Servidor 3"
       },
       "validators": {
-        "serverExists": "La dirección del servidor ya existe"
+        "serverExists": "Esta dirección de servidor ya existe"
       }
     },
     "toast": {
@@ -380,10 +380,10 @@
     "concurrentMaintenance": "Mantenimiento simultáneo",
     "opPanelBase": "Mantenimiento de la base del panel de operador",
     "opPanelLcd": "Mantenimiento del LCD del panel de operador",
-    "tod": "Mantenimiento de la batería de día",
+    "tod": "Mantenimiento de la batería de la hora del día",
     "alert": {
       "message": "Para extraer o sustituir la batería, la base del panel de operador o el LCD del panel de operador, habilite el conmutador respectivo. Una vez hecho, se recomienda inhabilitarlo para volver a la modalidad normal.",
-      "title": "Reparación simultánea de la batería, base del panel de operador y LCD del panel de operador"
+      "title": "Reparación simultánea de la batería, la base del panel de operador y el LCD del panel de operador"
     },
     "toast": {
       "errorSaveReadyToRemove": "Error al %{state} estado listo para extraer.",
@@ -427,7 +427,7 @@
         "fcoDeconfigured": "Desconfigurado por FCO",
         "invalid": "No válido",
         "manual": "Manual",
-        "none": "Ninguna",
+        "none": "Ninguno",
         "predictive": "Predictivo",
         "recovered": "Recuperado",
         "unknown": "Desconocido"
@@ -478,7 +478,7 @@
       "pelId": "ID de pel",
       "reference": "Referencia",
       "resource": "Recurso",
-      "severity": "Severity",
+      "severity": "Gravedad",
       "srcDetails": "Detalles SRC",
       "srcDetailsToolTip": "Detalles de código de referencia del sistema. Los detalles de SRC no están presentes para los registros de protección manual.",
       "status": "Estado",
@@ -540,7 +540,7 @@
       "dateAndTime": "Fecha y hora",
       "dumpType": "Tipo de volcado",
       "id": "ID",
-      "searchDumps": "Buscar volcados",
+      "searchDumps": "Buscar en volcados",
       "size": "Tamaño",
       "filter": {
         "bmcDumpEntry": "Entrada de volcado de BMC",
@@ -588,11 +588,11 @@
       "modifiedDate": "Fecha de modificación",
       "name": "Nombre",
       "resolution": "Resolución (llamada)",
-      "searchLogs": "Buscar registros",
-      "severity": "Severity",
+      "searchLogs": "Buscar en registros",
+      "severity": "Gravedad",
       "severityValues": {
         "critical": "Crítico",
-        "ok": "OK",
+        "ok": "Correcto",
         "warning": "Aviso"
       },
       "status": "Estado",
@@ -658,7 +658,7 @@
     "changeConfiguration": "Cambiar configuración",
     "configuredCores": "Núcleos configurados",
     "currentConfiguration": "Configuración actual",
-    "enableFieldCoreOverride": "Habilitar sustitución de núcleo de campo",
+    "enableFieldCoreOverride": "Habilitar sobrescritura de núcleo de campo",
     "enterValue": "Especificar valor",
     "licensedCores": "Núcleos con licencia",
     "pageDescription": "Ver o cambiar los núcleos de procesador que configurará el firmware.",
@@ -666,7 +666,7 @@
     "totalInstalledCores": "Total de núcleos instalados",
     "alert": {
       "description": "Los cambios realizados entrarán en vigor en el próximo reinicio del servidor.",
-      "title": "Aplicando cambios"
+      "title": "Aplicación de cambios"
     },
     "toast": {
       "configurationChangeError": "No se ha podido guardar la configuración.",
@@ -757,10 +757,10 @@
     "fabricAdapters": "Adaptadores de entramado",
     "false": "False",
     "fans": "Ventiladores",
-    "identifyLedInfo": "Para piezas sin LED, el conmutador Identificar LED solo encenderá el LED de alojamiento",
-    "pcieSlots": "Ranuras PCIe",
-    "pcieTopologyLink": "Topología de hardware PCIe.",
-    "pcieTopologyLinkDescription": "Para obtener más información sobre las ranuras PCIe, visite ",
+    "identifyLedInfo": "Para piezas sin LED, con el conmutador Identificar LED solo se encenderá el LED de alojamiento",
+    "pcieSlots": "Ranuras de PCIe",
+    "pcieTopologyLink": "Topología de hardware de PCIe.",
+    "pcieTopologyLinkDescription": "Para obtener más información sobre las ranuras de PCIe, visite ",
     "powerSupplies": "Fuentes de alimentación",
     "processors": "Procesadores",
     "processorModule": "Módulo de procesador",
@@ -869,7 +869,7 @@
       "clearSystemSecurityKeyLabel": "Borrar clave de responsable de seguridad del sistema",
       "keyClearNotRequested": "No se ha solicitado que se borre la clave",
       "keyClearOptionsLabel": "Opciones de borrado de claves",
-      "none": "Ninguna",
+      "none": "Ninguno",
       "setFactoryDefault": "Establecer valor predeterminado de fábrica"
     },
     "modal": {
@@ -892,10 +892,10 @@
   },
   "pageSystemParameters": {
     "aggressivePrefetch": "Captación previa agresiva",
-    "aggressivePrefetchDescription": "Cambie solo este valor si así se lo indica el proveedor de servicios, ya que podría degradar el rendimiento del sistema. Especifica si la captación previa agresiva a favor del procesador está inhabilitada o habilitada",
+    "aggressivePrefetchDescription": "Cambie este valor únicamente si así se lo indica el proveedor del servicio, ya que podría degradar el rendimiento del sistema. Especifica si la captación previa agresiva a favor del procesador está inhabilitada o habilitada",
     "alert": {
       "message": "Es necesario apagar el sistema. Los cambios realizados entrarán en vigor en el próximo reinicio",
-      "title": "Aplicando cambios"
+      "title": "Aplicación de cambios"
     },
     "button": {
       "saveSettings": "Guardar valores"
@@ -969,7 +969,7 @@
     "asmi": "Interfaz avanzada de gestión del sistema (ASMI)",
     "dateAndTime": "Fecha y hora",
     "language": "Idioma",
-    "logIn": "Inicie sesión",
+    "logIn": "Iniciar sesión",
     "model": "Modelo",
     "password": "Contraseña",
     "serialNumber": "Número de serie",
@@ -1004,7 +1004,7 @@
     "updateLogicalMemorySize": "Actualizar tamaño de bloque de memoria lógica",
     "updatePageSetup": "Actualizar configuración de página de memoria del sistema",
     "alert": {
-      "heading": "Aplicando cambios",
+      "heading": "Aplicación de cambios",
       "message": "El sistema debe estar apagado y no gestionado por HMC. Los cambios realizados entrarán en vigor en el próximo reinicio.",
       "serverMustBePoweredOffTo": "El servidor debe estar apagado para:",
       "updateActiveMemoryMirroring": "Actualizar la modalidad de duplicación de memoria activa",
@@ -1130,12 +1130,12 @@
   },
   "pagePcieTopology": {
     "alert": "Esta página puede tardar unos minutos en cargarse.",
-    "bridgeOrHost": "Puente PCI Express o host CAPI",
+    "bridgeOrHost": "Puente de PCIe o host CAPI",
     "cableLength": "Longitud de cable",
     "cableStatus": "Estado del cable",
     "cableType": "Tipo de cable",
     "id": "@:pageInventory.table.id",
-    "identifyLed": "Identificar los LED (diodo emisor de luz)",
+    "identifyLed": "Identificar los LED",
     "ioSlots": "Ranuras de E/S",
     "linkProperties": "Propiedades de enlace",
     "linkStatus": "Estado de enlace",
@@ -1146,27 +1146,27 @@
     "remotePort": "Puerto remoto",
     "remotePortLocation": "Ubicación del puerto remoto",
     "resetLink": "Restablecer enlace",
-    "savePcieTopology": "Guardar topología PCIe",
+    "savePcieTopology": "Guardar topología de PCIe",
     "speed": "Velocidad",
     "type": "Tipo",
     "warning": "El sistema debe estar como mínimo en espera PHYP. Para encenderlo, visite ",
     "width": "Ancho",
     "modal": {
       "resetConfirm": "¿Está seguro?",
-      "resetLinkDescription": "El restablecimiento de un enlace mientras se están ejecutando las particiones del sistema puede provocar errores. Esta operación debe realizarse con la ayuda de un miembro del equipo de soporte.",
+      "resetLinkDescription": "Restablecer un enlace mientras se están ejecutando las particiones del sistema puede provocar errores. Esta operación debe realizarse con la ayuda de un miembro del equipo de soporte.",
       "resetLinkHeader": "Restablecer enlace %{id}"
     },
     "table": {
-      "search": "Búsqueda"
+      "search": "Buscar"
     },
     "toast": {
       "errorReset": "Error al restablecer el enlace %{id}",
-      "errorSavePcieTopology": "Error al guardar la información de topología PCIe.",
+      "errorSavePcieTopology": "Error al guardar la información de topología de PCIe.",
       "errorSwitchingLed": "Error al activar el LED %{operation} para %{value}",
       "resetInfoTitle": "Se está restableciendo el ID de enlace %{id}.",
       "resetInfoDescription": "esta operación puede tardar unos segundos en completarse.",
       "successReset": "El enlace de restablecimiento %{id} se ha iniciado correctamente. Compruebe si hay algún problema en los registros de sucesos.",
-      "successSavePcieTopology": "Se ha guardado correctamente la información de topología PCIe."
+      "successSavePcieTopology": "Se ha guardado correctamente la información de topología de PCIe."
     }
   },
   "pagePolicies": {
@@ -1211,8 +1211,8 @@
       "bootCount": "Recuento arranque",
       "created": "Creado",
       "postCode": "Código",
-      "searchLogs": "Buscar registros",
-      "timeStampOffset": "Desplazamiento de indicación de fecha y hora"
+      "searchLogs": "Buscar en registros",
+      "timeStampOffset": "Diferencia horaria de la indicación de fecha y hora"
     }
   },
   "pagePower": {
@@ -1308,7 +1308,7 @@
     }
   },
   "pageProfileSettings": {
-    "browserOffset": "Desplazamiento del navegador (%{timezone})",
+    "browserOffset": "Diferencia horaria del navegador (%{timezone})",
     "changePassword": "Cambiar contraseña",
     "confirmPassword": "Confirmar nueva contraseña",
     "defaultUTC": "Valor predeterminado (UTC)",
@@ -1388,7 +1388,7 @@
       "pvm_stop_at_standby": "Política de inicio de firmware del servidor",
       "pvm_system_operating_mode": "Modalidad operativa de servidor",
       "pvm_system_power_off_policy": "Política de alimentación del servidor",
-      "selectedOperatingModeManual": "Al guardar la modalidad de operación se establecerá en Manual",
+      "selectedOperatingModeManual": "La modalidad de operación Al guardar se establecerá en Manual",
       "serverFirmware": "Política de inicio de firmware del servidor",
       "powerSettingDescription": "Ver descripciones de los valores de alimentación",
       "stayOn": "Permanecer encendido",
@@ -1401,7 +1401,7 @@
         "description": {
           "autoStartOnly": "Active el firmware del servidor y las particiones automáticamente solo en el caso de un encendido de recuperación después de una terminación anómala (por ejemplo, reinicio automático de la alimentación o reinicio automático de la terminación del sistema).",
           "autoStartAlways": "Activar determinadas particiones automáticamente. Si el servidor está encendido utilizando los menús de HMC o ASMI, el servidor activa automáticamente las particiones configuradas para el 'inicio automático'. Si se realiza un reinicio automático tras una detención anómala del servidor, éste activa las particiones que estaban en ejecución en el momento en que el sistema se detuvo.",
-          "standBy": "No active el firmware de servidor ni las particiones automáticamente para un encendido iniciado por el usuario o para un encendido de recuperación."
+          "standBy": "No activar el firmware de servidor ni las particiones automáticamente en un encendido iniciado por el usuario ni en un encendido de recuperación."
         }
       },
       "defaultPartitionItems": {
@@ -1442,8 +1442,8 @@
           "d": "D"
         },
         "description": {
-          "a": "IPL desde un disco mediante la copia A del código\ninterno bajo licencia del sistema.",
-          "b": "IPL desde un disco mediante la copia B del código\ninterno bajo licencia del sistema.",
+          "a": "IPL desde el disco mediante la copia A del código interno bajo licencia del sistema.",
+          "b": "IPL desde el disco mediante la copia B del código interno bajo licencia del sistema.",
           "c": "Reservado solamente para prestar servicio de hardware.",
           "d": "IPL desde un soporte de almacenamiento distinto del disco de origen de\ncarga. Alterne la IPL para disponer de soporte de instalación de códigos."
         }
@@ -1520,7 +1520,7 @@
     "table": {
       "clientID": "ID de cliente",
       "ipAddress": "Dirección IP",
-      "searchSessions": "Buscar sesiones",
+      "searchSessions": "Buscar en sesiones",
       "username": "Nombre de usuario"
     },
     "toast": {
@@ -1596,10 +1596,10 @@
       "configureComponentsManagedByThisService": "Configurar componentes gestionados por este servicio",
       "configureManagerResources": "Configurar recursos del gestor",
       "configureUsersAndTheirAccounts": "Configurar usuarios y sus cuentas",
-      "logInToTheServiceAndReadResources": "Inicie sesión en el servicio y lea los recursos",
+      "logInToTheServiceAndReadResources": "Iniciar sesión en el servicio y leer los recursos",
       "privilege": "Privilegio",
       "readOnly": "ReadOnly",
-      "updatePasswordForCurrentUserAccount": "Actualice la contraseña para cuenta de usuario actual"
+      "updatePasswordForCurrentUserAccount": "Actualizar la contraseña de la cuenta de usuario actual"
     },
     "toast": {
       "errorBatchDelete": "Error al suprimir %{count} usuario. | Error al suprimir %{count} usuarios.",
