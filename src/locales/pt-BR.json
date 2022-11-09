@@ -65,7 +65,7 @@
       "message4": "4. Não conter uma palavra de dicionário",
       "message5": "5. Não conter caracteres sequenciais",
       "message6": "6. Deve ter 20 caracteres ou menos se usada para IPMI",
-      "message7": "7. Deve conter quaisquer duas de letras minúsculas, letras maiúsculas, dígitos e outros caracteres"
+      "message7": "7. Deve conter quaisquer duas letras minúsculas, letras maiúsculas, dígitos e outros caracteres."
     },
     "status": {
       "absent": "Ausente",
@@ -902,7 +902,7 @@
     },
     "frequencyCap": "Valor máximo de frequência",
     "frequencyCapDescription": "Quando ativado, evita que todos os processadores no sistema excedam a frequência de operação máxima especificada, em MHz",
-    "frequencyCapHelpText": "Se desativado, poderá ser necessária uma inicialização inicial para obter as frequências máxima e mínima para ser capaz de configurar.",
+    "frequencyCapHelpText": "Se desativado, poderá ser necessária uma inicialização prévia para obter a frequência máxima e mínima para poder ser configurado.",
     "lateralCastOut": "Expulsão lateral",
     "lateralCastOutDescription": "Mude este valor somente se instruído por seu provedor de serviços, pois isso pode comprometer o desempenho do sistema.",
     "toast": {
@@ -966,7 +966,7 @@
     }
   },
   "pageLogin": {
-    "asmi": "ASMI (Advanced System Management Interface)",
+    "asmi": "Interface Avançada de Gerenciamento do Sistema (ASMI)",
     "dateAndTime": "Data e hora",
     "language": "Idioma",
     "logIn": "Efetuar login",
@@ -1149,7 +1149,7 @@
     "savePcieTopology": "Salvar topologia do PCIe",
     "speed": "Velocidade",
     "type": "Tipo",
-    "warning": "O sistema deve estar pronto pelo menos para PHYP. Para ativação, visite ",
+    "warning": "O sistema deve ao menos estar em standby para PHYP. Para ativação, visite ",
     "width": "Largura",
     "modal": {
       "resetConfirm": "Tem certeza?",
@@ -1166,7 +1166,7 @@
       "resetInfoTitle": "O ID do link %{id} está sendo reconfigurado.",
       "resetInfoDescription": "Esta operação pode levar alguns segundos para ser concluída.",
       "successReset": "Reconfiguração de link %{id} iniciada com sucesso. Verifique os logs de eventos para quaisquer problemas.",
-      "successSavePcieTopology": "Informações de topologia do PCIe salvas com sucesso."
+      "successSavePcieTopology": "As informações de topologia do PCIe foram salvas com sucesso."
     }
   },
   "pagePolicies": {
