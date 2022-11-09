@@ -60,7 +60,7 @@
     "passwordValidation": {
       "title": "La password deve:",
       "message1": "1. Deve essere composta da almeno 8 caratteri",
-      "message2": "2. Non essere un palindromo",
+      "message2": "2. Non deve essere un palindromo",
       "message3": "3. Non deve contenere il nome utente dell'account",
       "message4": "4. Non deve contenere una parola del dizionario",
       "message5": "5. Non deve contenere caratteri sequenziali",
@@ -269,7 +269,7 @@
       "activeMemoryExpansion": "AME (Active Memory Expansion)",
       "activeMemoryMirroring": "Mirroring della memoria attiva",
       "capi": "CAPI",
-      "interactiveCapacity": "IBMi 100% capacità interattiva",
+      "interactiveCapacity": "100% capacità interattiva IBMi",
       "ibmiPartitions": "Partizioni IBMi consentite",
       "inmiPermitted": "A IBMi è consentito utilizzare I/O nativo",
       "lparCreationAllowed": "Creazione LPAR consentita",
@@ -350,8 +350,8 @@
   "pageDateTime": {
     "alert": {
       "link": "Impostazioni del profilo",
-      "message": "Per modificare la modalità di visualizzazione della data e dell'ora (offset del browser o UTC) in tutta l'applicazione, visitare ",
-      "messageText": "Per modificare la modalità di visualizzazione della data e dell'ora (UTC o offset del browser) in tutta l'applicazione, visitare Impostazioni profilo",
+      "message": "Per modificare la modalità di visualizzazione di data e ora (UTC o offset del browser) in tutta l'applicazione, visitare ",
+      "messageText": "Per modificare la modalità di visualizzazione di data e ora (UTC o offset del browser) in tutta l'applicazione, visitare Impostazioni del profilo",
       "messageNtp": "Se viene selezionato NTP ma non viene fornito un server NTP o se il server NTP fornito non è raggiungibile, verrà utilizzato time.google.com."
     },
     "configureSettings": "Configura impostazioni",
@@ -359,7 +359,7 @@
       "date": "Data",
       "manual": "Manuale",
       "time": {
-        "label": "Orario in formato 24 ore",
+        "label": "Ora in formato 24 ore",
         "timezone": "@:pageDateTime.form.time.label (%{timezone})"
       },
       "ntpServers": {
@@ -380,10 +380,10 @@
     "concurrentMaintenance": "Manutenzione simultanea",
     "opPanelBase": "Manutenzione di base del pannello operatore",
     "opPanelLcd": "Manutenzione LCD del pannello operatore",
-    "tod": "Manutenzione della batteria dell'ora del giorno",
+    "tod": "Manutenzione della batteria TOD",
     "alert": {
-      "message": "Per rimuovere o sostituire la batteria, la base del pannello operatore o il pannello operatore LCD è necessario abilitare il rispettivo interruttore di attivazione / disattivazione. Una volta completato l'operazione, si consiglia di disabilitare l'opzione per tornare alla modalità normale.",
-      "title": "Riparazione simultanea della batteria, della base del pannello operatore e del pannello operatore LCD"
+      "message": "Per rimuovere o sostituire batteria, base del pannello operatore o LCD del pannello operatore è necessario abilitare il rispettivo interruttore di attivazione/disattivazione. Una volta completato l'operazione, si consiglia di disabilitare l'opzione per tornare alla modalità normale.",
+      "title": "Riparazione simultanea di batteria, base del pannello operatore e LCD del pannello operatore"
     },
     "toast": {
       "errorSaveReadyToRemove": "Errore %{state} pronto per rimuovere lo stato.",
@@ -427,7 +427,7 @@
         "fcoDeconfigured": "Deconfigurato da FCO",
         "invalid": "Non valido",
         "manual": "Manuale",
-        "none": "Nessuna",
+        "none": "Nessuno",
         "predictive": "Predittivo",
         "recovered": "Recuperato",
         "unknown": "Sconosciuto"
@@ -544,7 +544,7 @@
       "size": "Dimensione",
       "filter": {
         "bmcDumpEntry": "Voce dump BMC",
-        "hostbootDumpEntry": "Voce dump avvio host",
+        "hostbootDumpEntry": "Voce dump di avvio host",
         "resourceDumpEntry": "Voce dump di risorsa",
         "systemDumpEntry": "Voce dump di sistema"
       }
@@ -658,7 +658,7 @@
     "changeConfiguration": "Modifica configurazione",
     "configuredCores": "Core configurati",
     "currentConfiguration": "Configurazione corrente",
-    "enableFieldCoreOverride": "Abilitare sostituzione core di campo",
+    "enableFieldCoreOverride": "Abilita sostituzione core di campo",
     "enterValue": "Immettere un valore",
     "licensedCores": "Core concessi in licenza",
     "pageDescription": "Visualizzare o modificare i core processore che saranno configurati dal firmware.",
@@ -674,7 +674,7 @@
     }
   },
   "pageFirmware": {
-    "cardActionSwitchToRunning": "Commuta a in esecuzione",
+    "cardActionSwitchToRunning": "Passa a in esecuzione",
     "cardBodyVersion": "Versione",
     "cardTitleBackup": "Immagine di backup",
     "cardTitleRunning": "Immagine in esecuzione",
@@ -740,7 +740,7 @@
         "step2": "Passo 2 di 3 - Riavvio",
         "step2Message": "Cambio di firmware completato. Riavvio BMC in corso.",
         "step3": "Passo 3 di 3 - Completato",
-        "step3Message": "Cambio di firmware riuscito. Fare clic su Aggiorna per verificare che le immagini in esecuzione e di backup siano state cambiate."
+        "step3Message": "Cambio di firmware riuscito. Fare clic su Aggiorna per verificare che le immagini in esecuzione e di backup siano state scambiate."
       }
     }
   },
@@ -750,7 +750,7 @@
   },
   "pageInventory": {
     "assemblies": "Assembly",
-    "baseboardManagementController": "Controller di gestione scheda di base",
+    "baseboardManagementController": "Baseboard Management Controller (BMC)",
     "bmcManager": "Gestore BMC",
     "chassis": "Chassis",
     "dimmSlot": "Slot DIMM",
@@ -869,7 +869,7 @@
       "clearSystemSecurityKeyLabel": "Cancella chiave responsabile della sicurezza del sistema",
       "keyClearNotRequested": "Cancellazione chiavi non richiesta",
       "keyClearOptionsLabel": "Opzioni di cancellazione chiavi",
-      "none": "Nessuna",
+      "none": "Nessuno",
       "setFactoryDefault": "Imposta valori predefiniti di fabbrica"
     },
     "modal": {
@@ -902,16 +902,16 @@
     },
     "frequencyCap": "Limite di frequenza",
     "frequencyCapDescription": "Quando è abilitato, impedisce a tutti i processori nel sistema di superare la frequenza operativa massima specificata, in MHz",
-    "frequencyCapHelpText": "Se disabilitato, potrebbe essere necessario un avvio iniziale per ottenere la frequenza massima e minima per poter essere impostato.",
-    "lateralCastOut": "Espulsione laterale",
+    "frequencyCapHelpText": "Se disabilitato, potrebbe essere necessario un avvio iniziale per ottenere la frequenza massima e minima per l'impostazione.",
+    "lateralCastOut": "Cast-out laterale",
     "lateralCastOutDescription": "Modificare questo valore solo se richiesto dal fornitore del servizio, in quanto l'operazione potrebbe causare un peggioramento delle prestazioni del sistema.",
     "toast": {
       "errorSavingAggressivePrefetch": "Errore durante il salvataggio del precaricamento aggressivo",
       "errorSavingFrequencyCap": "Errore durante il salvataggio del limite di frequenza",
-      "errorSavingLateralCastOut": "Errore di salvataggio della modalità di espulsione laterale",
+      "errorSavingLateralCastOut": "Errore di salvataggio della modalità di cast-out laterale",
       "successSavingAggressivePrefetch": "Precaricamento aggressivo salvato correttamente",
       "successSavingFrequencyCap": "Limite di frequenza salvato correttamente",
-      "successSavingLateralCastOut": "Modalità di espulsione laterale salvata correttamente"
+      "successSavingLateralCastOut": "Modalità di cast-out laterale salvata correttamente"
     }
   },
   "pageLdap": {
@@ -1148,7 +1148,7 @@
     "resetLink": "Reimposta collegamento",
     "savePcieTopology": "Salva topologia PCIe",
     "speed": "Velocità",
-    "type": "Immettere",
+    "type": "Tipo",
     "warning": "Il sistema deve essere almeno in standby PHYP. Per accendere, visitare ",
     "width": "Larghezza",
     "modal": {
@@ -1187,7 +1187,7 @@
     "usbFirmwareUpdatePolicyDescription": "L'abilitazione della politica di aggiornamento firmware USB abiliterà la funzionalità per consentire gli aggiornamenti del firmware tramite una chiavetta USB.",
     "toast": {
       "errorNetworkPolicyUpdate": "Errore di aggiornamento di %{policy}.",
-      "successDisableBmcShell": "Shell BMC disabilitata correttamente (tramite SSH), consentire 15 secondi per rendere effettiva la disabilitazione.",
+      "successDisableBmcShell": "Shell BMC disabilitata correttamente (tramite SSH), considerare 15 secondi per rendere effettiva la disabilitazione.",
       "successEnableBmcShell": "Shell BMC abilitata correttamente (tramite SSH)",
       "successNetworkPolicyUpdate": "%{policy} correttamente aggiornata.",
       "successNextBootToast": "Applicazione delle modifiche a %{policy}. Le modifiche apportate a %{policy} avranno effetto sul prossimo riavvio."
@@ -1376,7 +1376,7 @@
       "aixLinux": "Modalità di avvio partizione AIX/LINUX",
       "automatic": "Automatico",
       "currentOperatingModeManual": "Modalità operativa corrente Manuale",
-      "currentOperatingModeNormal": "Modalità operativa corrente normale",
+      "currentOperatingModeNormal": "Modalità operativa corrente Normale",
       "defaultPartition": "Ambiente di partizione predefinito",
       "ibmIPartition": "Modalità di avvio partizione IBM i",
       "nonHMCManaged": "Abilitato solo quando il sistema non è gestito da HMC",
@@ -1391,7 +1391,7 @@
       "selectedOperatingModeManual": "La modalità operativa di salvataggio verrà impostata su Manuale",
       "serverFirmware": "Politica di avvio del firmware del server",
       "powerSettingDescription": "Visualizzare le descrizioni delle impostazioni di alimentazione",
-      "stayOn": "Rimani attivo",
+      "stayOn": "Rimani acceso",
       "serverFirmwareItems": {
         "setting": {
           "autoStartOnly": "Solo avvio automatico",
@@ -1423,14 +1423,14 @@
           "partitionBoot": "Questa partizione viene avviata direttamente sul sistema operativo",
           "serviceBoot": "Modalità di boot del servizio dall'elenco salvato",
           "bootToSms": "Avvia al menu SMS",
-          "bootToOpenFirware": "Avvia alla richiesta di apertura del firmware",
+          "bootToOpenFirware": "Avvia al prompt Open Firmware",
           "serviceBootMode": "Avvia modalità di servizio dall'elenco predefinito"
         },
         "description": {
           "partitionBoot": "La partizione viene avviata sul sistema operativo senza arresto.",
-          "serviceBoot": "Il sistema viene avviato dall'elenco di avvio della modalità di servizio salvata. Questo è generalmente un metodo abbreviato per eseguire la diagnostica della partizione.  Per rendere utile questa opzione, il sistema operativo della partizione deve supportare l'avvio diagnostico e i programmi di diagnostica devono essere caricati nell'unità del disco della partizione.",
+          "serviceBoot": "Il sistema viene avviato dall'elenco di avvio della modalità di servizio salvata. Questo è generalmente un metodo abbreviato per eseguire la diagnostica della partizione.  Per rendere utile questa opzione, il sistema operativo della partizione deve supportare l'avvio diagnostico e i programmi di diagnostica devono essere caricati nell'unità disco della partizione.",
           "bootToSms": "La partizione viene arrestata nel menu SMS (System Management Services).",
-          "bootToOpenFirware": "Il sistema viene arrestato nel prompt Open firmware.",
+          "bootToOpenFirware": "Il sistema viene arrestato al prompt Open Firmware.",
           "serviceBootMode": "Il sistema viene avviato dall'elenco di avvio predefinito.  Questa opzione è il modo preferito per eseguire la diagnostica autonoma da un'unità CD-ROM."
         }
       },
@@ -1442,10 +1442,10 @@
           "d": "D"
         },
         "description": {
-          "a": "IPL de pe disc folosind copia A a LIC-ului de sistem.",
-          "b": "IPL de pe disc folosind copia B a LIC-ului de sistem.",
-          "c": "Rezervat doar pentru folosirea de service hardware.",
-          "d": "IPL de pe alt mediu în afară de discul de încărcare sursă. IPL alternativ pentru suportul de instalare a codului."
+          "a": "IPL da disco utilizzando la copia A del LIC (Licensed Internal Code) di sistema.",
+          "b": "IPL da disco utilizzando la copia B del LIC (Licensed Internal Code) di sistema.",
+          "c": "Riservato solo per l'uso del servizio hardware.",
+          "d": "IPL da supporto diverso dal disco origine di caricamento. IPL alternativ pentru suportul de instalare a codului."
         }
       },
       "attributeValues": {
@@ -1464,7 +1464,7 @@
         "pvm_rpa_boot_mode": {
           "DefaultList": "Avvia modalità di servizio dall'elenco predefinito",
           "Normal": "La partizione viene avviata direttamente al sistema operativo",
-          "OkPrompt": "Avvia alla richiesta di apertura del firmware",
+          "OkPrompt": "Avvia al prompt Open Firmware",
           "PblBootLid": "La partizione viene avviata dal programma di caricamento avvio petitboot",
           "SavedList": "Avvia modalità di servizio dall'elenco dei salvati",
           "SmsMenu": "Avvia al menu SMS"
@@ -1479,7 +1479,7 @@
           "Normal": "Normale - Automatico"
         },
         "pvm_system_power_off_policy": {
-          "automaticHelperText": "Con questa impostazione, quando il sistema non è partizionato, il comportamento è uguale a quello di spegnimento; quando il sistema è partizionato, il comportamento del sistema è uguale a quello di rimanere attivo",
+          "automaticHelperText": "Con questa impostazione, quando il sistema non è partizionato, il comportamento è uguale a quello di spegnimento; quando il sistema è partizionato, il comportamento del sistema è uguale a Rimani acceso",
           "powerOffHelperText": "Quando l'ultima partizione si spegnerà, il server si spegnerà",
           "stayOnHelperText": "Quando l'ultima partizione si spegnerà, il server rimarrà acceso"
         }
@@ -1582,7 +1582,7 @@
       "username": "Nome utente",
       "userPassword": "Password utente",
       "userUnlockMethod": "Metodo di sblocco utente",
-      "zeroLoginAttempts": "Se ` 0 `, l'account non sarà mai bloccato."
+      "zeroLoginAttempts": "Se `0`, l'account non sarà mai bloccato."
     },
     "table": {
       "administrator": "Amministratore",
