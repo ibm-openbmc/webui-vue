@@ -266,8 +266,8 @@
     "setting": {
       "aixAllowed": "AIX autorisé",
       "aixDiagnostics": "AIX Diagnostics",
-      "activeMemoryExpansion": "Active Memory Expansion",
-      "activeMemoryMirroring": "Mise en miroir de la mémoire activée",
+      "activeMemoryExpansion": "Extension de la mémoire active",
+      "activeMemoryMirroring": "Mise en miroir de la mémoire active",
       "capi": "CAPI",
       "interactiveCapacity": "Capacité interactive IBM i 100 %",
       "ibmiPartitions": "Partitions IBMi autorisées",
@@ -341,7 +341,7 @@
   "pageChangePassword": {
     "changePassword": "Modifier le mot de passe",
     "changePasswordAlertMessage": "Le mot de passe a expiré et doit être changé.",
-    "changePasswordError": "Une erreur est survenue lors du changement de mot de passe.",
+    "changePasswordError": "Une erreur est survenue lors de la modification de mot de passe.",
     "confirmNewPassword": "Confirmer le nouveau mot de passe",
     "goBack": "Retour",
     "newPassword": "Nouveau mot de passe",
@@ -665,8 +665,8 @@
     "scheduledForNextReboot": "@:global.status.nextReboot",
     "totalInstalledCores": "Nombre total de coeurs installés",
     "alert": {
-      "description": "Les changements effectués seront appliqués au prochain réamorçage du serveur.",
-      "title": "Application des changements"
+      "description": "Les modifications effectuées seront appliquées au prochain réamorçage du serveur.",
+      "title": "Application des modifications"
     },
     "toast": {
       "configurationChangeError": "La sauvegarde de la configuration a échoué.",
@@ -760,7 +760,7 @@
     "identifyLedInfo": "Pour les éléments sans LED, le commutateur à LED d'identification allume uniquement la LED du boîtier",
     "pcieSlots": "Emplacements PCIe",
     "pcieTopologyLink": "Topologie matérielle PCIe.",
-    "pcieTopologyLinkDescription": "Pour en savoir plus sur les emplacements PCIe, visitez ",
+    "pcieTopologyLinkDescription": "Pour en savoir plus sur les emplacements PCIe, voir ",
     "powerSupplies": "Alimentations électriques",
     "processors": "Processeurs",
     "processorModule": "Module de processeur",
@@ -895,7 +895,7 @@
     "aggressivePrefetchDescription": "Ne modifiez cette valeur que si le fournisseur de services vous y invite car cela peut dégrader les performances du système. Indique si la préextraction agressive de faveur de processeur est désactivée ou activée",
     "alert": {
       "message": "Le système doit être mis hors tension. Les modifications apportées prendront effet lors du prochain redémarrage",
-      "title": "Application des changements"
+      "title": "Application des modifications"
     },
     "button": {
       "saveSettings": "Enregistrer les paramètres"
@@ -988,7 +988,7 @@
     "activeMemoryMirroring": "Mode miroir de la mémoire active",
     "activeMemoryMirroringDescription": "Active Memory Mirroring for Hypervisor  est conçu pour s'assurer que le système\ncontinue à fonctionner même dans le cas improbable d'une erreur irrémédiable\nsurvenant dans la mémoire principale utilisée par l'hyperviseur du système.",
     "activeMemoryMirroringHelpText": "Indique si la mise en miroir de la mémoire est activée, nécessite un réamorçage pour que la modification soit appliquée.",
-    "activeMemoryMirroringTitle": "Mise en miroir de la mémoire activée",
+    "activeMemoryMirroringTitle": "Mise en miroir de la mémoire active",
     "ioAdapterEnlargedCapacity": "Cette option gère la taille de l'espace mémoire PCI alloué à chaque emplacement PCI.",
     "ioAdapterEnlargedCapacityTitle": "Capacité étendue des adaptateurs d'E-S",
     "logicalMemorySize": "Taille de bloc de mémoire logique",
@@ -1004,8 +1004,8 @@
     "updateLogicalMemorySize": "Mettre à jour la taille de bloc de mémoire logique",
     "updatePageSetup": "Mettre à jour la configuration de la page de mémoire système",
     "alert": {
-      "heading": "Application des changements",
-      "message": "Le système doit être mis hors tension et non géré par le HMC. Les changements effectués seront appliqués au prochain réamorçage.",
+      "heading": "Application des modifications",
+      "message": "Le système doit être mis hors tension et non géré par le HMC. Les modifications effectuées seront appliquées au prochain réamorçage.",
       "serverMustBePoweredOffTo": "Le serveur doit être mis hors tension pour :",
       "updateActiveMemoryMirroring": "Mettre à jour le mode miroir de la mémoire active",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1146,10 +1146,10 @@
     "remotePort": "Port distant",
     "remotePortLocation": "Emplacement de port distant",
     "resetLink": "Réinitialiser le lien",
-    "savePcieTopology": "Sauvegarde de la topologie PCIe",
+    "savePcieTopology": "Sauvegarder la topologie PCIe",
     "speed": "Vitesse",
     "type": "Type",
-    "warning": "Le système doit être au moins en veille PHYP. Pour mettre sous tension, visitez ",
+    "warning": "Le système doit être au moins en veille PHYP. Pour mettre sous tension, voir ",
     "width": "Largeur",
     "modal": {
       "resetConfirm": "Confirmez-vous ?",
@@ -1187,8 +1187,8 @@
     "usbFirmwareUpdatePolicyDescription": "Si vous activez la stratégie de mise à jour du microprogramme via USB, les mises à jour seront possibles via une clé USB.",
     "toast": {
       "errorNetworkPolicyUpdate": "Erreur de mise à jour de %{policy}.",
-      "successDisableBmcShell": "Le shell BMC a été désactivé (via SSH). La désactivation prendra effet d'ici 15 secondes.",
-      "successEnableBmcShell": "Le shell BMC a été activé (via SSH)",
+      "successDisableBmcShell": "L'interpréteur de commandes BMC a été désactivé (via SSH). La désactivation prendra effet d'ici 15 secondes.",
+      "successEnableBmcShell": "L'interpréteur de commandes BMC a été activé (via SSH)",
       "successNetworkPolicyUpdate": "La mise à jour de %{policy} a abouti.",
       "successNextBootToast": "Application des modifications à %{policy}. Les modifications apportées à %{policy} prendront effet lors du prochain redémarrage."
     },
@@ -1237,9 +1237,9 @@
     "utilizationThreshold": "Seuil d'utilisation (en %)",
     "alert": {
       "message": "Le système fonctionne à un niveau de performance réduit car il est en mode sans échec. Les paramètres d'alimentation ne sont pas accessibles en mode sans échec. ",
-      "message2": "Pour déterminer la cause, visitez",
+      "message2": "Pour déterminer la cause, voir",
       "message2Link": "journaux d'événements",
-      "message3": "Le système tentera de quitter le mode sans échec à la prochaine mise sous tension. Pour réamorcer le serveur, visitez",
+      "message3": "Le système tentera de quitter le mode sans échec à la prochaine mise sous tension. Pour réamorcer le serveur, voir",
       "message3Link": "opérations d'alimentation du serveur"
     },
     "delayTimeValidation": {
