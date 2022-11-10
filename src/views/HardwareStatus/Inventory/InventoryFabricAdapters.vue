@@ -68,10 +68,6 @@
           <b-row>
             <b-col sm="6" xl="6">
               <dl>
-                <dt>{{ $t('pageInventory.table.name') }}</dt>
-                <dd>{{ dataFormatter(item.name) }}</dd>
-              </dl>
-              <dl>
                 <dt>{{ $t('pageInventory.table.model') }}</dt>
                 <dd>{{ dataFormatter(item.model) }}</dd>
               </dl>
@@ -140,8 +136,8 @@ export default {
           sortable: false,
         },
         {
-          key: 'id',
-          label: this.$t('pageInventory.table.id'),
+          key: 'name',
+          label: this.$t('pageInventory.table.name'),
           formatter: this.dataFormatter,
           sortable: true,
         },
