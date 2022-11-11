@@ -224,7 +224,14 @@ export default {
       return this.allUsers.map((user) => {
         return {
           username: user.UserName,
-          privilege: user.Description,
+          privilege:
+            user.Description === 'Administrator'
+              ? this.$t('pageUserManagement.table.administrator')
+              : user.Description === 'ReadOnly'
+              ? this.$t('pageUserManagement.table.readOnly')
+              : user.Description === 'ServiceAgent'
+              ? this.$t('pageUserManagement.table.serviceAgent')
+              : user.Description,
           status: user.Locked
             ? this.$t('global.status.locked')
             : user.Enabled
