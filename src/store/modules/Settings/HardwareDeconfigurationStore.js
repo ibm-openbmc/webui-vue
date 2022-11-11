@@ -81,7 +81,34 @@ const HardwareDeconfigurationStore = {
               functionalState: data.Status?.Health,
               settings: data.Enabled,
               uri: data['@odata.id'],
-              deconfigurationType: msgArgs,
+              deconfigurationType:
+                msgArgs === 'By Association'
+                  ? i18n.t(
+                      'pageDeconfigurationHardware.table.filter.byAssociation'
+                    )
+                  : msgArgs === 'Error'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.error')
+                  : msgArgs === 'Fatal'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.fatal')
+                  : msgArgs === 'FCO-Deconfigured'
+                  ? i18n.t(
+                      'pageDeconfigurationHardware.table.filter.fcoDeconfigured'
+                    )
+                  : msgArgs === 'Invalid'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.invalid')
+                  : msgArgs === 'Manual'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.manual')
+                  : msgArgs === 'None'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.none')
+                  : msgArgs === 'Predictive'
+                  ? i18n.t(
+                      'pageDeconfigurationHardware.table.filter.predictive'
+                    )
+                  : msgArgs === 'Recovered'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.recovered')
+                  : msgArgs === 'Unknown'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.unknown')
+                  : msgArgs,
               processorId: procId,
               pelID: pelId,
             };
@@ -126,7 +153,34 @@ const HardwareDeconfigurationStore = {
               functionalState: data.Status?.Health,
               size: data.CapacityMiB,
               locationCode: data.Location?.PartLocation?.ServiceLabel,
-              deconfigurationType: msgArgs,
+              deconfigurationType:
+                msgArgs === 'By Association'
+                  ? i18n.t(
+                      'pageDeconfigurationHardware.table.filter.byAssociation'
+                    )
+                  : msgArgs === 'Error'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.error')
+                  : msgArgs === 'Fatal'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.fatal')
+                  : msgArgs === 'FCO-Deconfigured'
+                  ? i18n.t(
+                      'pageDeconfigurationHardware.table.filter.fcoDeconfigured'
+                    )
+                  : msgArgs === 'Invalid'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.invalid')
+                  : msgArgs === 'Manual'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.manual')
+                  : msgArgs === 'None'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.none')
+                  : msgArgs === 'Predictive'
+                  ? i18n.t(
+                      'pageDeconfigurationHardware.table.filter.predictive'
+                    )
+                  : msgArgs === 'Recovered'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.recovered')
+                  : msgArgs === 'Unknown'
+                  ? i18n.t('pageDeconfigurationHardware.table.filter.unknown')
+                  : msgArgs,
               settings: data.Enabled,
               uri: data['@odata.id'],
               available: data.Status?.State,
