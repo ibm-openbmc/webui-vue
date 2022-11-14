@@ -10,8 +10,13 @@
               :alt="altLogo"
             />
           </div>
-          <h1 v-if="customizableGuiName" class="h3 mb-5">
-            {{ customizableGuiName }}
+          <h1 class="h3 mb-5">
+            {{
+              customizableGuiName ===
+              'Advanced System Management Interface (ASMI)'
+                ? $t('pageLogin.asmi')
+                : customizableGuiName
+            }}
           </h1>
           <router-view class="login=form form-background" />
         </div>
