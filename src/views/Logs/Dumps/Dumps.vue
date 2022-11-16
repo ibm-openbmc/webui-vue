@@ -416,7 +416,7 @@ export default {
       }
     },
     exportFileName(row) {
-      let filename = row.item.dumpType + '_' + row.item.id + '.tar.xz';
+      let filename = row.item.dumpType + '_' + row.item.id;
       filename = filename.replace(RegExp(' ', 'g'), '_');
       return filename;
     },
