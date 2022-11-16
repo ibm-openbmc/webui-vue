@@ -758,6 +758,7 @@
     "false": "いいえ",
     "fans": "ファン",
     "identifyLedInfo": "LED がない部品の場合、識別 LED トグル・スイッチはエンクロージャー LED のみをオンにします。",
+    "ioExpansionChassis": "入出力拡張シャーシ ",
     "pcieSlots": "PCIe スロット",
     "pcieTopologyLink": "PCIe ハードウェア・トポロジー。",
     "pcieTopologyLinkDescription": "PCIe スロットについて詳しくは、次のアドレスにアクセスしてください: ",
@@ -766,6 +767,7 @@
     "processorModule": "プロセッサー・モジュール",
     "quicklinkTitle": "ハードウェア・コンポーネントへのクイック・リンク",
     "system": "システム",
+    "systemChassis": "システム・シャーシ",
     "true": "はい",
     "enclosures": {
       "title": "入出力エンクロージャー",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "更新して、'%{assemblyName}' を削除する準備ができているかどうかを確認してください。",
       "successEnclosureSettings": "エンクロージャー設定が正常に更新されました。",
       "successEnableIdentifyLed": "識別 LED が正常に有効化されました。",
-      "successDisableIdentifyLed": "識別 LED が正常に無効化されました。"
+      "successDisableIdentifyLed": "識別 LED が正常に無効化されました。",
+      "successEnableLampTest": "ランプ・テストが正常に有効化されました。 LEDは4分間点灯します。"
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "管理者",
       "privilege": "特権",
       "readOnly": "読み取り専用",
+      "serviceAgent": "サービス・エージェント",
       "status": "状況",
       "username": "ユーザー名"
     },
