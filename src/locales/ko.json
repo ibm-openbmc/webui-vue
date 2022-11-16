@@ -758,6 +758,7 @@
     "false": "False",
     "fans": "팬",
     "identifyLedInfo": "LED가 없는 부품의 경우, 식별 LED 토글 스위치는 격납장치 LED만 켭니다.",
+    "ioExpansionChassis": "I/O 확장 섀시 ",
     "pcieSlots": "PCIe 슬롯",
     "pcieTopologyLink": "PCIe 하드웨어 토폴로지.",
     "pcieTopologyLinkDescription": "PCIe 슬롯에 대해 자세히 알아보려면 다음 위치로 이동하십시오. ",
@@ -766,6 +767,7 @@
     "processorModule": "프로세서 모듈",
     "quicklinkTitle": "하드웨어 컴포넌트에 대한 빠른 링크",
     "system": "시스템",
+    "systemChassis": "시스템 섀시",
     "true": "예",
     "enclosures": {
       "title": "I/O 격납장치",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "'%{assemblyName}'을(를) 제거할 준비가 되었는지 확인하려면 새로 고치십시오.",
       "successEnclosureSettings": "격납장치 설정을 업데이트했습니다.",
       "successEnableIdentifyLed": "식별 LED를 사용으로 설정했습니다.",
-      "successDisableIdentifyLed": "식별 LED를 사용 안함으로 설정했습니다."
+      "successDisableIdentifyLed": "식별 LED를 사용 안함으로 설정했습니다.",
+      "successEnableLampTest": "램프 테스트를 성공적으로 활성화되었습니다. LED는 4분 동안 켜져 있습니다."
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "관리자",
       "privilege": "권한",
       "readOnly": "읽기 전용",
+      "serviceAgent": "서비스 에이전트",
       "status": "상태",
       "username": "사용자 이름"
     },
