@@ -758,6 +758,7 @@
     "false": "No",
     "fans": "Ventole",
     "identifyLedInfo": "Per le parti senza LED, l'interruttore di attivazione/disattivazione LED di identificazione accenderà solo il LED dell'enclosure",
+    "ioExpansionChassis": "Chassis di espansione I/O ",
     "pcieSlots": "Slot PCIe",
     "pcieTopologyLink": "Topologia hardware PCIe.",
     "pcieTopologyLinkDescription": "Per ulteriori informazioni sugli slot PCIe, visitare ",
@@ -766,6 +767,7 @@
     "processorModule": "Modulo processore",
     "quicklinkTitle": "Collegamenti rapidi ai componenti hardware",
     "system": "Sistema",
+    "systemChassis": "Chassis di sistema",
     "true": "Vero",
     "enclosures": {
       "title": "Contenitori I/O",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "Aggiornare per confermare se '%{assemblyName}' è pronto per essere rimosso.",
       "successEnclosureSettings": "Impostazioni del contenitore aggiornate correttamente.",
       "successEnableIdentifyLed": "LED di identificazione abilitato correttamente.",
-      "successDisableIdentifyLed": "LED di identificazione disabilitato correttamente."
+      "successDisableIdentifyLed": "LED di identificazione disabilitato correttamente.",
+      "successEnableLampTest": "Verifica luci abilitata correttamente. I LED resteranno accesi per 4 minuti."
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "Amministratore",
       "privilege": "Privilegio",
       "readOnly": "Solo lettura",
+      "serviceAgent": "Agent del servizio",
       "status": "Stato",
       "username": "Nome utente"
     },
