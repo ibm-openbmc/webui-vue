@@ -758,6 +758,7 @@
     "false": "False",
     "fans": "Ventiladores",
     "identifyLedInfo": "Para piezas sin LED, con el conmutador Identificar LED solo se encenderá el LED de alojamiento",
+    "ioExpansionChassis": "Chasis de expansión de E/S ",
     "pcieSlots": "Ranuras de PCIe",
     "pcieTopologyLink": "Topología de hardware de PCIe.",
     "pcieTopologyLinkDescription": "Para obtener más información sobre las ranuras de PCIe, visite ",
@@ -766,6 +767,7 @@
     "processorModule": "Módulo de procesador",
     "quicklinkTitle": "Enlaces rápidos a componentes de hardware",
     "system": "Sistema",
+    "systemChassis": "Chasis del sistema",
     "true": "Sí",
     "enclosures": {
       "title": "Alojamientos de E/S",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "Renueve para confirmar si '%{assemblyName}' está listo para ser eliminado.",
       "successEnclosureSettings": "Se han actualizado correctamente los valores de alojamiento actualizados.",
       "successEnableIdentifyLed": "El LED de identificación se ha habilitado correctamente.",
-      "successDisableIdentifyLed": "El LED de identificación se ha inhabilitado correctamente."
+      "successDisableIdentifyLed": "El LED de identificación se ha inhabilitado correctamente.",
+      "successEnableLampTest": "Prueba de lámpara habilitada correctamente. Los LED permanecerán encendidos durante 4 minutos."
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "Administrador",
       "privilege": "Privilegio",
       "readOnly": "Sólo lectura",
+      "serviceAgent": "Agente de servicio",
       "status": "Estado",
       "username": "Nombre de usuario"
     },
