@@ -758,6 +758,7 @@
     "false": "Faux",
     "fans": "Ventilateurs",
     "identifyLedInfo": "Pour les éléments sans LED, le commutateur à LED d'identification allume uniquement la LED du boîtier",
+    "ioExpansionChassis": "Châssis d'extension d'E-S ",
     "pcieSlots": "Emplacements PCIe",
     "pcieTopologyLink": "Topologie matérielle PCIe.",
     "pcieTopologyLinkDescription": "Pour en savoir plus sur les emplacements PCIe, voir ",
@@ -766,6 +767,7 @@
     "processorModule": "Module de processeur",
     "quicklinkTitle": "Liens rapides vers les composants matériels",
     "system": "Système",
+    "systemChassis": "Châssis du système",
     "true": "Oui",
     "enclosures": {
       "title": "Boîtiers d'E-S",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "Actualisez pour confirmer si '%{assemblyName}' est prêt à être supprimé.",
       "successEnclosureSettings": "Les paramètres du boîtier ont été mis à jour.",
       "successEnableIdentifyLed": "Le voyant d'identification a été activé.",
-      "successDisableIdentifyLed": "Le voyant d'identification a été désactivé."
+      "successDisableIdentifyLed": "Le voyant d'identification a été désactivé.",
+      "successEnableLampTest": "L'activation du test de la lampe a abouti. Les voyants resteront allumés pendant 4 minutes."
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "Administrateur",
       "privilege": "Privilège",
       "readOnly": "Lecture seule",
+      "serviceAgent": "Service Agent",
       "status": "Statut",
       "username": "Nom d'utilisateur"
     },
