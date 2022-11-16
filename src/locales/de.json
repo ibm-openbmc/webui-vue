@@ -758,6 +758,7 @@
     "false": "Falsch",
     "fans": "Lüfter",
     "identifyLedInfo": "Bei Teilen ohne LEDs schaltet der Umschalter für die Identifikations-LED nur die Gehäuseanzeige ein.",
+    "ioExpansionChassis": "E/A-Erweiterungs-Chassis ",
     "pcieSlots": "PCIe-Steckplätze",
     "pcieTopologyLink": "PCIe-Hardwaretopologie.",
     "pcieTopologyLinkDescription": "Erfahren Sie mehr über PCIe-Steckplätze auf ",
@@ -766,6 +767,7 @@
     "processorModule": "Prozessormodul",
     "quicklinkTitle": "Schnelle Links zu Hardwarekomponenten",
     "system": "System",
+    "systemChassis": "Systemchassis",
     "true": "Ja",
     "enclosures": {
       "title": "E/A-Gehäuse",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "Aktualisieren Sie die Anzeige, um festzustellen, ob '%{assemblyName}' zum Entfernen bereit ist.",
       "successEnclosureSettings": "Die Gehäuseeinstellungen wurden erfolgreich aktualisiert.",
       "successEnableIdentifyLed": "Identifikations-LED erfolgreich aktiviert.",
-      "successDisableIdentifyLed": "Identifikations-LED erfolgreich inaktiviert."
+      "successDisableIdentifyLed": "Identifikations-LED erfolgreich inaktiviert.",
+      "successEnableLampTest": "Der Lamp-Test wurde erfolgreich aktiviert. Die LEDs bleiben 4 Minuten an."
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "Administrator",
       "privilege": "Berechtigung",
       "readOnly": "Lesezugriff",
+      "serviceAgent": "Serviceagent",
       "status": "Status",
       "username": "Benutzername"
     },
