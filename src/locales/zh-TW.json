@@ -758,6 +758,7 @@
     "false": "否",
     "fans": "風扇",
     "identifyLedInfo": "對於沒有 LED 的組件，識別 LED 切換開關只會開啟機箱 LED",
+    "ioExpansionChassis": "I/O 擴充機箱 ",
     "pcieSlots": "PCIe 插槽",
     "pcieTopologyLink": "PCIe 硬體拓蹼。",
     "pcieTopologyLinkDescription": "若要進一步瞭解 PCIe 插槽，請造訪 ",
@@ -766,6 +767,7 @@
     "processorModule": "處理器模組",
     "quicklinkTitle": "硬體元件的快速鏈結",
     "system": "系統",
+    "systemChassis": "系統機箱",
     "true": "True",
     "enclosures": {
       "title": "I/O 機體",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "重新整理以確認 '%{assemblyName}' 是否已備妥可移除。",
       "successEnclosureSettings": "已順利更新機箱設定。",
       "successEnableIdentifyLed": "已順利啟用識別 LED。",
-      "successDisableIdentifyLed": "已順利停用識別 LED。"
+      "successDisableIdentifyLed": "已順利停用識別 LED。",
+      "successEnableLampTest": "已順利啟用「燈」測試。 LED 會持續發亮 4 分鐘。"
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "管理者",
       "privilege": "專用權",
       "readOnly": "唯讀",
+      "serviceAgent": "服務代理程式",
       "status": "狀態",
       "username": "使用者名稱"
     },
