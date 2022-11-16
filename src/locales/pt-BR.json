@@ -758,6 +758,7 @@
     "false": "Não",
     "fans": "Ventiladores",
     "identifyLedInfo": "Para peças sem LEDs, o interruptor de duas posições do LED de identificação irá ligar apenas o LED de Gabinete",
+    "ioExpansionChassis": "Chassi de expansão de E/S ",
     "pcieSlots": "Slots do PCIe",
     "pcieTopologyLink": "Topologia de hardware do PCIe.",
     "pcieTopologyLinkDescription": "Para saber mais sobre os slots do PCIe, visite ",
@@ -766,6 +767,7 @@
     "processorModule": "Módulo de processador",
     "quicklinkTitle": "Links rápidos para componentes de hardware",
     "system": "Sistema",
+    "systemChassis": "Chassi do sistema",
     "true": "Sim",
     "enclosures": {
       "title": "Gabinetes de E/S",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "Atualize para confirmar se '%{assemblyName}' está pronto para ser removido.",
       "successEnclosureSettings": "Configurações do gabinete atualizadas com sucesso.",
       "successEnableIdentifyLed": "LED de identificação ativado com sucesso.",
-      "successDisableIdentifyLed": "LED de identificação desativado com sucesso."
+      "successDisableIdentifyLed": "LED de identificação desativado com sucesso.",
+      "successEnableLampTest": "Teste de Lamp ativado com sucesso. Os LEDs ficarão acesos durante quatro minutos."
     }
   },
   "pageKeyClear": {
@@ -1588,6 +1591,7 @@
       "administrator": "Administrador",
       "privilege": "Privilégio",
       "readOnly": "Somente leitura",
+      "serviceAgent": "Agente de serviço",
       "status": "Status",
       "username": "Nome do usuário"
     },
