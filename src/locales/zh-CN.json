@@ -758,6 +758,7 @@
     "false": "False",
     "fans": "风扇",
     "identifyLedInfo": "对于没有指示灯的部件，标识指示灯切换开关将仅开启机柜指示灯",
+    "ioExpansionChassis": "I/O 扩展机箱 ",
     "pcieSlots": "PCIe 插槽",
     "pcieTopologyLink": "PCIe 硬件拓扑。",
     "pcieTopologyLinkDescription": "要了解有关 PCIe 插槽的更多信息，请访问 ",
@@ -766,6 +767,7 @@
     "processorModule": "处理器模块",
     "quicklinkTitle": "硬件组件的快速链接",
     "system": "系统",
+    "systemChassis": "系统机箱",
     "true": "True",
     "enclosures": {
       "title": "I/O 机柜",
@@ -848,7 +850,8 @@
       "infoRemoveAssembly": "刷新以确认是否已准备好移除 \"%{assemblyName}\"。",
       "successEnclosureSettings": "已成功更新机柜设置。",
       "successEnableIdentifyLed": "已成功启用标识指示灯。",
-      "successDisableIdentifyLed": "已成功禁用标识指示灯。"
+      "successDisableIdentifyLed": "已成功禁用标识指示灯。",
+      "successEnableLampTest": "已成功启用灯具测试。 指示灯将持续点亮 4 分钟。"
     }
   },
   "pageKeyClear": {
@@ -903,15 +906,15 @@
     "frequencyCap": "频率上限",
     "frequencyCapDescription": "启用后，会阻止系统中的所有处理器超过指定的最大工作频率（以 MHz 为单位）",
     "frequencyCapHelpText": "如果禁用，那么可能需要初始引导才能设置最大和最小频率。",
-    "lateralCastOut": "横向强制类型转换",
+    "lateralCastOut": "Lateral cast out 控制",
     "lateralCastOutDescription": "仅在服务提供者指示时更改此值，因为它可能会降低系统性能。",
     "toast": {
       "errorSavingAggressivePrefetch": "保存主动预取时出错",
       "errorSavingFrequencyCap": "保存频率上限时出错",
-      "errorSavingLateralCastOut": "保存横向强制类型转换方式时出错",
+      "errorSavingLateralCastOut": "保存 Lateral cast out 控制方式时出错",
       "successSavingAggressivePrefetch": "已成功保存主动预取",
       "successSavingFrequencyCap": "已成功保存频率上限",
-      "successSavingLateralCastOut": "已成功保存横向强制类型转换方式"
+      "successSavingLateralCastOut": "已成功保存 Lateral cast out 控制方式"
     }
   },
   "pageLdap": {
@@ -1588,6 +1591,7 @@
       "administrator": "管理员",
       "privilege": "权限",
       "readOnly": "只读",
+      "serviceAgent": "服务代理程序",
       "status": "状态",
       "username": "用户名"
     },
