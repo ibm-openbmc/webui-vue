@@ -46,8 +46,9 @@
                   </b-form-invalid-feedback>
                 </b-input-group>
               </b-form-group>
-              <b-col align-self="baseline">
+              <b-col sm="2" align-self="baseline">
                 <b-button
+                  class="activationBtn"
                   variant="primary"
                   type="submit"
                   :disabled="isActivationDisabled"
