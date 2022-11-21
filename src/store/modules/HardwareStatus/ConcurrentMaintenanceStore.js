@@ -110,7 +110,7 @@ const ConcurrentMaintenanceStore = {
         });
     },
     async saveReadyToRemoveOpPanelBase({ commit, state }, updatedOpPanelBase) {
-      commit('setReadyToRemoveOpPanel', updatedOpPanelBase);
+      commit('setReadyToRemoveOpPanelBase', updatedOpPanelBase);
       return await api
         .patch('/redfish/v1/Chassis/chassis/Assembly', {
           Assemblies: [
@@ -134,7 +134,7 @@ const ConcurrentMaintenanceStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setReadyToRemoveOpPanel', !updatedOpPanelBase);
+          commit('setReadyToRemoveOpPanelBase', !updatedOpPanelBase);
           throw new Error(
             i18n.t('pageConcurrentMaintenance.toast.errorSaveReadyToRemove', {
               state: updatedOpPanelBase ? 'enabling' : 'disabling',
@@ -143,7 +143,7 @@ const ConcurrentMaintenanceStore = {
         });
     },
     async saveReadyToRemoveOpPanelLcd({ commit, state }, updatedOpPanelLcd) {
-      commit('setReadyToRemoveOpPanel', updatedOpPanelLcd);
+      commit('setReadyToRemoveOpPanelLcd', updatedOpPanelLcd);
       return await api
         .patch('/redfish/v1/Chassis/chassis/Assembly', {
           Assemblies: [
@@ -167,7 +167,7 @@ const ConcurrentMaintenanceStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setReadyToRemoveOpPanel', !updatedOpPanelLcd);
+          commit('setReadyToRemoveOpPanelLcd', !updatedOpPanelLcd);
           throw new Error(
             i18n.t('pageConcurrentMaintenance.toast.errorSaveReadyToRemove', {
               state: updatedOpPanelLcd ? 'enabling' : 'disabling',
