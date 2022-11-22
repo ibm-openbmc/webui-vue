@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.kvm')" />
     <div class="terminal-container">
       <kvm-console :is-full-window="false" />
     </div>

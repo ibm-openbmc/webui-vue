@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.certificates')" />
     <b-row>
       <b-col xl="11">
         <!-- Expired certificates banner -->

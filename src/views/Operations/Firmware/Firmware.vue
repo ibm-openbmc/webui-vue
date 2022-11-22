@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.firmware')" />
     <alerts-server-power
       v-if="isServerPowerOffRequired"
       :is-server-off="isServerOff"

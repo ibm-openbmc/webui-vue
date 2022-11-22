@@ -1,6 +1,10 @@
 <template>
   <b-container fluid="xl">
-    <page-title class="mb-4" :description="$t('pageHostConsole.subTitle')" />
+    <page-title
+      class="mb-4"
+      :title="$t('appPageTitle.hostConsole')"
+      :description="$t('pageHostConsole.subTitle')"
+    />
 
     <page-section class="mb-0">
       <host-console-console :is-full-window="false" />

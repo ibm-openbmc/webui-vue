@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pagePowerRestorePolicy.description')" />
+    <page-title
+      :title="$t('appPageTitle.powerRestorePolicy')"
+      :description="$t('pagePowerRestorePolicy.description')"
+    />
 
     <b-row>
       <b-col>

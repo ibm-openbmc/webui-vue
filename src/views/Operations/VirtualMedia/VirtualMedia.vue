@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.virtualMedia')" />
     <b-row class="mb-4">
       <b-col md="12">
         <page-section

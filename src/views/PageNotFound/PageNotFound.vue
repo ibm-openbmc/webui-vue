@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pagePageNotFound.description')" />
+    <page-title
+      :title="$t('appPageTitle.pageNotFound')"
+      :description="$t('pagePageNotFound.description')"
+    />
   </b-container>
 </template>
 <script>

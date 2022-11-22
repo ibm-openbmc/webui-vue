@@ -11,6 +11,10 @@
 export default {
   name: 'PageTitle',
   props: {
+    title: {
+      type: String,
+      default: '',
+    },
     description: {
       type: String,
       default: '',
@@ -23,11 +27,6 @@ export default {
       type: String,
       default: '',
     },
-  },
-  data() {
-    return {
-      title: this.$route.meta.title,
-    };
   },
 };
 </script>

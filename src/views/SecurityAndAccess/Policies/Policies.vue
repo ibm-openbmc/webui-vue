@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.policies')" />
     <b-row>
       <b-col md="8">
         <b-row v-if="!modifySSHPolicyDisabled" class="section-divider">

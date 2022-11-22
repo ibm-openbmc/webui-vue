@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.serviceLogin')" />
 
     <page-section class="mb-0">
       <b-row class="d-flex">

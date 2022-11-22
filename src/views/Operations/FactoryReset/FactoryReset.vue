@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pageFactoryReset.description')" />
+    <page-title
+      :title="$t('appPageTitle.factoryReset')"
+      :description="$t('pageFactoryReset.description')"
+    />
     <b-row>
       <b-col md="8" xl="6">
         <alert variant="info" class="mb-4">

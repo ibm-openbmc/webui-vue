@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.rebootBmc')" />
     <b-row>
       <b-col md="8" lg="8" xl="6">
         <page-section>

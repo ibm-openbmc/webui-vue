@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pageKeyClear.description')" />
+    <page-title
+      :title="$t('appPageTitle.keyClear')"
+      :description="$t('pageKeyClear.description')"
+    />
     <b-row>
       <b-col md="8" xl="6">
         <alert variant="info" class="mb-4">

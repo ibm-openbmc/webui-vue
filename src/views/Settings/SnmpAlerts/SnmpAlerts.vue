@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pageSnmpAlerts.pageDescription')" />
+    <page-title
+      :title="$t('appPageTitle.snmpAlerts')"
+      :description="$t('pageSnmpAlerts.pageDescription')"
+    />
     <b-row>
       <b-col xl="9" class="text-right">
         <b-button variant="primary" @click="initModalAddDestination">

@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.dumps')" />
     <b-row v-if="selectedDumpType">
       <b-col md="8" xl="6">
         <alert variant="info" class="mb-4">

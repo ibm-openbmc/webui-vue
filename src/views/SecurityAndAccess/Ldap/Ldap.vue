@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pageLdap.pageDescription')" />
+    <page-title
+      :title="$t('appPageTitle.ldap')"
+      :description="$t('pageLdap.pageDescription')"
+    />
     <page-section :section-title="$t('pageLdap.settings')">
       <b-form novalidate @submit.prevent="handleSubmit">
         <b-row>

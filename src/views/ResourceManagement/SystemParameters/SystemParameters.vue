@@ -2,7 +2,7 @@
   <b-container fluid="xl">
     <b-row>
       <b-col md="8" xl="6">
-        <page-title />
+        <page-title :title="$t('appPageTitle.systemParameters')" />
       </b-col>
     </b-row>
     <b-row>

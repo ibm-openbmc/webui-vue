@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pageFieldCoreOverride.pageDescription')" />
+    <page-title
+      :title="$t('appPageTitle.fieldCoreOverride')"
+      :description="$t('pageFieldCoreOverride.pageDescription')"
+    />
     <b-row>
       <b-col md="8" xl="6">
         <alert variant="info" class="mb-5">

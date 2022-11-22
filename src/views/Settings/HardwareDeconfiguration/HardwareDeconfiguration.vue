@@ -1,6 +1,7 @@
 <template>
   <b-container fluid="xl">
     <page-title
+      :title="$t('appPageTitle.deconfigurationHardware')"
       :description="$t('pageDeconfigurationHardware.description')"
       :link="$t('pageDeconfigurationHardware.link')"
       to="/logs/deconfiguration-records"

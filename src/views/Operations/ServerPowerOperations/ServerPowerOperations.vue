@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.serverPowerOperations')" />
     <b-row class="mb-4">
       <b-col sm="10">
         <page-section

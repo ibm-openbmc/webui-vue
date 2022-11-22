@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.userManagement')" />
     <b-row>
       <b-col xl="9" class="text-right">
         <b-button variant="link" :disabled="isBusy" @click="initModalSettings">

@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.postCodeLogs')" />
     <b-row>
       <b-col xl="12" class="text-right">
         <b-button variant="dark" type="button" @click="openConsoleWindow()">

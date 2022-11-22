@@ -1,6 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.inventory')" />
 
     <!-- Service indicators -->
     <service-indicator />

@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pageNetwork.pageDescription')" />
+    <page-title
+      :title="$t('appPageTitle.network')"
+      :description="$t('pageNetwork.pageDescription')"
+    />
     <!-- Global settings for all interfaces -->
     <network-global-settings />
     <!-- Interface tabs -->

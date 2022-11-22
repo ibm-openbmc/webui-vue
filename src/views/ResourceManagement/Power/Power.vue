@@ -1,6 +1,9 @@
 <template>
   <b-container fluid="xl">
-    <page-title :description="$t('pagePower.description')" />
+    <page-title
+      :title="$t('appPageTitle.power')"
+      :description="$t('pagePower.description')"
+    />
     <b-row v-if="safeMode">
       <b-col md="9" xl="6">
         <alert variant="danger" class="mb-4">

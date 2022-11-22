@@ -193,7 +193,7 @@ export default {
               this.$store.dispatch('global/getCurrentUser', username),
               this.$store.dispatch('global/getSystemInfo'),
             ]).then(() => {
-              location.href = '/';
+              this.$router.push('/');
             });
           }
         })
