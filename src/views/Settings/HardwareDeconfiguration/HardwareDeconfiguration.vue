@@ -18,7 +18,7 @@
       <b-row>
         <b-col>
           <b-card no-body>
-            <b-tabs content-class="mt-3" fill>
+            <b-tabs content-class="mt-3" active-nav-item-class="text-dark" fill>
               <b-tab :title="$t('pageDeconfigurationHardware.memoryDimms')">
                 <memory-dimms />
               </b-tab>

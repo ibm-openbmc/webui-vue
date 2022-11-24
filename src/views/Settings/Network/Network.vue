@@ -8,7 +8,7 @@
       <b-row>
         <b-col>
           <b-card no-body>
-            <b-tabs content-class="mt-3 p-4">
+            <b-tabs content-class="mt-3 p-4" active-nav-item-class="text-dark">
               <b-tab
                 v-for="(data, index) in network"
                 :key="data.id"
