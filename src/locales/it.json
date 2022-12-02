@@ -1448,7 +1448,7 @@
           "a": "IPL da disco utilizzando la copia A del LIC (Licensed Internal Code) di sistema.",
           "b": "IPL da disco utilizzando la copia B del LIC (Licensed Internal Code) di sistema.",
           "c": "Riservato solo per l'uso del servizio hardware.",
-          "d": "IPL da supporto diverso dal disco origine di caricamento. IPL alternativ pentru suportul de instalare a codului."
+          "d": "IPL da supporto diverso dal disco origine di caricamento. IPL alternativo per supporto di installazione di codice."
         }
       },
       "attributeValues": {
