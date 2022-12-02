@@ -436,7 +436,7 @@
       "id": "ID",
       "locationCode": "Código do local",
       "name": "Nome",
-      "pelId": "ID do pixel",
+      "pelId": "ID do Pel",
       "settings": "Configurações",
       "size": "Tamanho em mebibytes"
     }
@@ -1397,9 +1397,9 @@
       "stayOn": "Permanecer Ligado",
       "serverFirmwareItems": {
         "setting": {
-          "autoStartOnly": "Apenas autoinicialização",
-          "autoStartAlways": "Sempre autoinicialização",
-          "standBy": "de espera"
+          "autoStartOnly": "Auto-iniciar apenas",
+          "autoStartAlways": "Auto-iniciar sempre",
+          "standBy": "Espera"
         },
         "description": {
           "autoStartOnly": "Ative o firmware do servidor e as partições automaticamente apenas no caso de uma recuperação de energia após uma finalização de modo anormal (por exemplo, reinicialização automática de energia ou do sistema).",
@@ -1473,9 +1473,9 @@
           "SmsMenu": "Reinicializar para menu do SMS"
         },
         "pvm_stop_at_standby": {
-          "Disabled": "Sempre autoinicialização",
+          "Disabled": "Auto-iniciar sempre",
           "Enabled": "Espera (Iniciado pelo usuário)",
-          "ManualOnly": "Apenas autoinicialização"
+          "ManualOnly": "Auto-iniciar apenas"
         },
         "pvm_system_operating_mode": {
           "Manual": "Manual - Serviço/Manutenção",
