@@ -1402,7 +1402,7 @@
           "standBy": "Reposo"
         },
         "description": {
-          "autoStartOnly": "Active el firmware del servidor y las particiones automáticamente solo en el caso de un encendido de recuperación después de una terminación anómala (por ejemplo, reinicio automático de la alimentación o reinicio automático de la terminación del sistema).",
+          "autoStartOnly": "Activar el firmware del servidor y las particiones automáticamente solo en el caso de un encendido de recuperación después de una terminación anómala (por ejemplo, reinicio automático de la alimentación o reinicio automático de la terminación del sistema).",
           "autoStartAlways": "Activar determinadas particiones automáticamente. Si el servidor está encendido utilizando los menús de HMC o ASMI, el servidor activa automáticamente las particiones configuradas para el 'inicio automático'. Si se realiza un reinicio automático tras una detención anómala del servidor, éste activa las particiones que estaban en ejecución en el momento en que el sistema se detuvo.",
           "standBy": "No activar el firmware de servidor ni las particiones automáticamente en un encendido iniciado por el usuario ni en un encendido de recuperación."
         }
@@ -1602,7 +1602,7 @@
       "configureUsersAndTheirAccounts": "Configurar usuarios y sus cuentas",
       "logInToTheServiceAndReadResources": "Iniciar sesión en el servicio y leer los recursos",
       "privilege": "Privilegio",
-      "readOnly": "ReadOnly",
+      "readOnly": "Solo lectura",
       "updatePasswordForCurrentUserAccount": "Actualizar la contraseña de la cuenta de usuario actual"
     },
     "toast": {
