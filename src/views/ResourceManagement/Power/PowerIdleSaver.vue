@@ -162,7 +162,7 @@
                 variant="secondary"
                 type="reset"
                 form="idle-power-saver"
-                class="ml-3"
+                class="ml-3 resetbtn"
               >
                 {{ $t('pagePower.idlePowerSubmitReset') }}
               </b-button>
