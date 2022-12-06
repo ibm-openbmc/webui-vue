@@ -260,7 +260,9 @@ export const BootSettingsStore = defineStore('bootSettings', {
           },
         })
         .then((response) => {
-          this.biosAttributes = biosSettings;
+          setTimeout(() => {
+            this.biosAttributes = biosSettings;
+          }, 2000);
           return response;
         })
         .catch((error) => {
