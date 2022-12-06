@@ -203,6 +203,9 @@
         </b-col>
       </template>
     </b-row>
+    <b-button variant="primary" type="submit" class="mb-3">
+      {{ $t('global.action.save') }}
+    </b-button>
     <b-row class="mb-3">
       <b-col xl="10">
         <b-button v-b-toggle.collapse-role-table variant="link">

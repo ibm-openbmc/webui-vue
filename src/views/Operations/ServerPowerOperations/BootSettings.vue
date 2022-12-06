@@ -6,9 +6,6 @@
       :attribute-values="form.attributeValues"
       @updated-attributes="updateAttributeKeys"
     />
-    <b-button variant="primary" type="submit" class="mb-3">
-      {{ $t('global.action.save') }}
-    </b-button>
   </b-form>
 </template>
 <script>
