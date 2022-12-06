@@ -38,6 +38,10 @@ const LicenseStore = {
           license.Name !== 'Firmware Update Access Key' &&
           license.Name !== 'Virtualization Engine Technology' &&
           license.Name !== 'Trial Processor Licenses' &&
+          license.Name !== 'P05 Virtual Tier' &&
+          license.Name !== 'P10 Virtual Tier' &&
+          license.Name !== 'P20 Virtual Tier' &&
+          license.Name !== 'P30 Virtual Tier' &&
           license.Name !== 'System Anchor'
         );
       }),
