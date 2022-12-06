@@ -9,7 +9,7 @@ Openbmc_FW1030
 
 TABLE OF CONTENTS
 
-THE REMAINDER OF THIS IBM NOTICES FILE CONSISTS OF THE FOLLOWING
+THE REMAINDER OF THIS INSPUR POWER SYSTEMS NOTICES FILE CONSISTS OF THE FOLLOWING
 SECTIONS:
 
 Apache-2.0
@@ -40,7 +40,7 @@ Zlib
 
 Apache License Version 2.0
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the Apache License Version 2.0:
 
 biosconfig-manager, bmcweb, clear-once, croserver, dbus-broker, dbus-perms, 
@@ -280,7 +280,7 @@ END OF APACHE LICENSE VERSION 2.0 NOTICES AND INFORMATION
 
 Artistic License
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the Artistic License:
 
 shadow
@@ -386,7 +386,7 @@ END OF ARTISTIC LICENSE NOTICES AND INFORMATION
 
 BSD license
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the BSD license:
 
 dropbear,  e2fsprogs,  glib-2.0,  ibmtpm2tss,  libarchive,  libpcap,  libpcre,
@@ -653,7 +653,7 @@ END OF BSD LICENSE NOTICES AND INFORMATION
 
 Boost Software License - Version 1.0
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the Boost Software License - Version 1.0:
 
 boost
@@ -689,7 +689,7 @@ END OF BOOST SOFTWARE LICENSE - VERSION 1.0 NOTICES AND INFORMATION
 
 Bzip license 1.0.4
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the Bzip license 1.0.4:
 
 busybox
@@ -743,7 +743,7 @@ END OF BZIP LICENSE 1.0.4 NOTICES AND INFORMATION
 
 Bzip license 1.0.6
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the Bzip license 1.0.6:
 
 bzip2
@@ -795,7 +795,7 @@ END OF BZIP LICENSE 1.0.6 NOTICES AND INFORMATION
 
 GNU GENERAL PUBLIC LICENSE Version 2
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the GNU GENERAL PUBLIC LICENSE Version 2:
 
 base-files, base-passwd, busybox, ca-certificates, dbus, e2fsprogs, e2fsprogs, 
@@ -804,12 +804,6 @@ libpwquality, libunistring, linux-aspeed, logrotate, lrzsz, lz4, lzo, nbd,
 netbase, opkg, opkg-utils, rng-tools, squashfs-tools, strace, systemd, 
 systemd-serialgetty, u-boot-aspeed-sdk, u-boot-fw-utils-aspeed-sdk, 
 update-rc.d, util-linux, xz, zstd
-
-For copies of the source code for this software, send an email to
-askibm@vnet.ibm.com identifying the IBM product and the GPL-licensed program
-for which you are requesting the source code.  Or send the request using
-http://www.ibm.com/support or http://www.ibm.com/contact.
-
 
 GNU GENERAL PUBLIC LICENSE
 
@@ -1130,7 +1124,7 @@ END OF GNU GENERAL PUBLIC LICENSE VERSION 2 NOTICES AND INFORMATION
 
 GNU GENERAL PUBLIC LICENSE Version 3
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the GNU GENERAL PUBLIC LICENSE Version 3:
 
 bash, gdb, gdbm, gzip, parted, phosphor-ipmi-fru, readline, rsync, rsyslog
@@ -1740,7 +1734,7 @@ END OF GNU GENERAL PUBLIC LICENSE VERSION 3 NOTICES AND INFORMATION
 
 GCC RUNTIME LIBRARY EXCEPTION Version 3.1
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the GCC RUNTIME LIBRARY EXCEPTION Version 3.1:
 
 gcc-runtime, libgcc
@@ -1815,7 +1809,7 @@ END OF GCC RUNTIME LIBRARY EXCEPTION VERSION 3.1 NOTICES AND INFORMATION
 
 ISC License
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the ISC License:
 
 openssh, sudo
@@ -1844,7 +1838,7 @@ END OF ISC LICENSE NOTICES AND INFORMATION
 
 GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the GNU LIBRARY GENERAL PUBLIC LICENSE Version 2:
 
 e2fsprogs, fuse, gdb
@@ -2462,7 +2456,7 @@ END OF GNU LIBRARY GENERAL PUBLIC LICENSE VERSION 2 NOTICES AND INFORMATION
 
 GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the GNU LESSER GENERAL PUBLIC LICENSE Version 2.1:
 
 avahi, cracklib, glib-2.0, glibc, kmod, libdaemon, libestr, libgpiod, libnl, 
@@ -2931,7 +2925,7 @@ END OF GNU LESSER GENERAL PUBLIC LICENSE VERSION 2.1 NOTICES AND INFORMATION
 
 GNU LESSER GENERAL PUBLIC LICENSE Version 3
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the GNU LESSER GENERAL PUBLIC LICENSE Version 3:
 
 gdb, rsyslog
@@ -3086,7 +3080,7 @@ END OF GNU LESSER GENERAL PUBLIC LICENSE VERSION 3 NOTICES AND INFORMATION
 
 MIT License
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the MIT License:
 
 boost, cjson, curl, dropbear, e2fsprogs, expat, fmt, json-c, krb5, libevdev, 
@@ -3268,7 +3262,7 @@ END OF MIT LICENSE NOTICES AND INFORMATION
 
 Mozilla Public License Version 2.0
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the Mozilla Public License Version 2.0:
 
 ca-certificates
@@ -3652,7 +3646,7 @@ END OF MOZILLA PUBLIC LICENSE VERSION 2.0 NOTICES AND INFORMATION
 
 OpenLDAP Public License Version 2.8
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the OpenLDAP Public License Version 2.8:
 
 openldap
@@ -3710,7 +3704,7 @@ END OF OPENLDAP PUBLIC LICENSE VERSION 2.8 NOTICES AND INFORMATION
 
 OpenSSL License
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the OpenSSL License:
 
 openssl
@@ -3838,7 +3832,7 @@ END OF OPENSSL LICENSE NOTICES AND INFORMATION
 
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2:
 
 python3
@@ -3898,7 +3892,7 @@ END OF PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 NOTICES AND INFORMATION
 
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE:
 
 boost
@@ -4101,7 +4095,7 @@ END OF PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI 
 
 zlib License
 
-The Program includes some or all of the following that IBM obtained
+The Program includes some or all of the following that Inspur Power Systems obtained
 under the zlib License:
 
 libtinyxml2, sudo, zlib
@@ -4131,7 +4125,7 @@ zlib License
 END OF ZLIB LICENSE NOTICES AND INFORMATION
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-END OF IBM NOTICES AND INFORMATION
+END OF INSPUR POWER SYSTEMS NOTICES AND INFORMATION
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 END OF NOTICE FILE
