@@ -191,7 +191,9 @@ const BootSettingsStore = {
           },
         })
         .then((response) => {
-          dispatch('getBiosAttributes');
+          setTimeout(() => {
+            dispatch('getBiosAttributes');
+          }, 2000);
           return response;
         })
         .catch((error) => {
