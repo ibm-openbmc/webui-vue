@@ -41,13 +41,12 @@
                     "
                     @input="v$.licenseKey.$touch()"
                   />
-                  <BFormInvalidFeedback role="alert">
-                    {{ $t('global.form.invalidCharacterLength') }}
                   </BFormInvalidFeedback>
                 </BInputGroup>
               </BFormGroup>
-              <BCol align-self="baseline" class="ms-3">
+              <BCol sm="2" align-self="baseline" class="ms-3">
                 <BButton
+                  class="activationBtn"
                   variant="primary"
                   type="submit"
                   :disabled="isActivationDisabled"
