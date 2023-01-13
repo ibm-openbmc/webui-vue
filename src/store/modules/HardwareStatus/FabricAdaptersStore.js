@@ -42,6 +42,7 @@ const FabricAdaptersStore = {
   actions: {
     async getFabricAdaptersInfo({ commit }, requestBody) {
       let tempFabricAdapters = [];
+      commit('setFabricAdaptersInfo', tempFabricAdapters);
       const res = await api.get(requestBody.uri + '/PCIeSlots');
       return await api
         .get(`/redfish/v1/Systems/system/FabricAdapters`)

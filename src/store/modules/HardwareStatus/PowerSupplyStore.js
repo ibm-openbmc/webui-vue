@@ -43,6 +43,7 @@ const PowerSupplyStore = {
   },
   actions: {
     async getAllPowerSupplies({ commit }, requestBody) {
+      commit('setPowerSupply', []);
       return await api
         .get(`${requestBody.uri}`)
         .then((response) => api.get(response.data.PowerSubsystem['@odata.id']))

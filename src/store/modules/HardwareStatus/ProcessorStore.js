@@ -45,6 +45,7 @@ const ProcessorStore = {
   },
   actions: {
     async getProcessorsInfo({ commit }) {
+      commit('setProcessorsInfo', []);
       return await api
         .get('/redfish/v1/Systems/system/Processors')
         .then(({ data: { Members = [] } }) =>

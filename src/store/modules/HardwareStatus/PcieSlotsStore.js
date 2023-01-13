@@ -23,6 +23,7 @@ const PcieSlotsStore = {
   },
   actions: {
     async getPcieSlotsInfo({ commit }, requestBody) {
+      commit('setPcieSlotsInfo', []);
       return await api
         .get(`${requestBody.uri}/PCIeSlots`)
         .then(({ data }) => {

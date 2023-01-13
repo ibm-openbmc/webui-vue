@@ -41,6 +41,7 @@ const AssemblyStore = {
   },
   actions: {
     async getAssemblyInfo({ commit }, requestBody) {
+      commit('setAssemblyInfo', []);
       return await api
         .get(`${requestBody.uri}/Assembly`)
         .then(({ data }) => commit('setAssemblyInfo', data?.Assemblies))
