@@ -26,9 +26,11 @@ const SessionsStore = {
         .then((sessionUris) => {
           const allConnectionsData = sessionUris.map((sessionUri) => {
             //For filtering IP address to IPv4
-            let filteredIPAddress = sessionUri.data?.ClientOriginIPAddress.slice(
-              7
-            );
+            let filteredIPAddress = sessionUri.data?.ClientOriginIPAddress.includes(
+              '::ffff'
+            )
+              ? sessionUri.data?.ClientOriginIPAddress.slice(7)
+              : sessionUri.data?.ClientOriginIPAddress;
             return {
               clientID: sessionUri.data?.Oem?.OpenBMC.ClientID,
               username: sessionUri.data?.UserName,
