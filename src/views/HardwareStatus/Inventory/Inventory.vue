@@ -336,6 +336,11 @@ export default {
       this.getAllInfo('watched');
     },
   },
+  watch: {
+    currentTab: function () {
+      this.getAllInfo('watched');
+    },
+  },
   created() {
     this.getAllInfo('created');
   },
