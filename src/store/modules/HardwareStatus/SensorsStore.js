@@ -30,31 +30,25 @@ const SensorsStore = {
         .catch((error) => console.log(error));
     },
     async getSensors({ commit }, id) {
-      const sensors = await api
-        .get(`${id}/Sensors`)
-        .then((response) => response.data.Members)
-        .catch((error) => console.log(error));
-      if (!sensors) return;
-      let sensorData = [];
-      const promises = sensors.map((sensor) => {
-        return api
-          .get(sensor['@odata.id'])
-          .then(({ data }) => {
+      await api
+        .get(`${id}/Sensors?$expand=.($levels=1)`)
+        .then((response) => {
+          let sensorData = [];
+          response.data.Members.map((sensor) => {
             const oneSensordata = {
-              name: data.Name,
-              status: data.Status.Health,
-              currentValue: data.Reading,
-              units: data.ReadingUnits,
+              name: sensor.Name,
+              status: sensor.Status.Health,
+              currentValue: sensor.Reading,
+              units: sensor.ReadingUnits,
             };
             sensorData.push(oneSensordata);
             commit('setSensors', sensorData);
-          })
-          .catch((error) => {
-            console.log(error);
-            return error;
           });
-      });
-      return await api.all(promises);
+        })
+        .then(() => {
+          return;
+        })
+        .catch((error) => console.log(error));
     },
     async getThermalSensors({ commit }, id) {
       return await api
