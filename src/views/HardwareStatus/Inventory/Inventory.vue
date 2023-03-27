@@ -19,6 +19,7 @@
                   ? $t('pageInventory.systemChassis')
                   : $t('pageInventory.ioExpansionChassis') + `${index}`
               "
+              :disabled="index !== currentTab && isBusy"
               @click="currentTabUpdate(index)"
             >
               <b-container fluid="xl">
@@ -207,6 +208,7 @@ export default {
   },
   data() {
     return {
+      isBusy: false,
       currentTab: 0,
       links: [
         {
@@ -311,65 +313,107 @@ export default {
       return this.$store.getters['chassis/chassis'];
     },
   },
+  watch: {
+    currentTab: function () {
+      this.getAllInfo('watched');
+    },
+  },
   created() {
-    this.startLoader();
-    this.$store.dispatch('chassis/getChassisInfo');
-    const bmcManagerTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-bmc-manager-complete', () => resolve());
-    });
-    const chassisTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-chassis-complete', () => resolve());
-    });
-    const dimmSlotTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-dimm-slot-complete', () => resolve());
-    });
-    const fansTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-fans-complete', () => resolve());
-    });
-    const powerSuppliesTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-power-supplies-complete', () =>
-        resolve()
-      );
-    });
-    const processorsTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-processors-complete', () => resolve());
-    });
-    const serviceIndicatorPromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-service-complete', () => resolve());
-    });
-    const systemTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-system-complete', () => resolve());
-    });
-    const assemblyTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-assembly-complete', () => resolve());
-    });
-    const pcieSlotsTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-pcie-slots-complete', () => resolve());
-    });
-    const fabricAdaptersTablePromise = new Promise((resolve) => {
-      this.$root.$on('hardware-status-fabric-adapters-complete', () =>
-        resolve()
-      );
-    });
-    // Combine all child component Promises to indicate
-    // when page data load complete
-    Promise.all([
-      bmcManagerTablePromise,
-      chassisTablePromise,
-      dimmSlotTablePromise,
-      fansTablePromise,
-      powerSuppliesTablePromise,
-      processorsTablePromise,
-      serviceIndicatorPromise,
-      systemTablePromise,
-      assemblyTablePromise,
-      pcieSlotsTablePromise,
-      fabricAdaptersTablePromise,
-    ]).finally(() => this.endLoader());
+    this.getAllInfo('created');
   },
   methods: {
     currentTabUpdate(index) {
       this.currentTab = index;
+    },
+    getAllInfo(value) {
+      this.startLoader();
+      this.isBusy = true;
+      this.$store.dispatch('chassis/getChassisInfo');
+      const bmcManagerTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-bmc-manager-complete', () => resolve());
+      });
+      const chassisTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-chassis-complete', () => resolve());
+      });
+      const dimmSlotTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-dimm-slot-complete', () => resolve());
+      });
+      const fansTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-fans-complete', () => resolve());
+      });
+      const powerSuppliesTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-power-supplies-complete', () =>
+          resolve()
+        );
+      });
+      const processorsTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-processors-complete', () => resolve());
+      });
+      const serviceIndicatorPromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-service-complete', () => resolve());
+      });
+      const systemTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-system-complete', () => resolve());
+      });
+      const assemblyTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-assembly-complete', () => resolve());
+      });
+      const pcieSlotsTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-pcie-slots-complete', () => resolve());
+      });
+      const fabricAdaptersTablePromise = new Promise((resolve) => {
+        this.$root.$on('hardware-status-fabric-adapters-complete', () =>
+          resolve()
+        );
+      });
+      if (this.currentTab === 0 && value === 'created') {
+        // Combine all child component Promises to indicate
+        // when page data load complete
+        Promise.all([
+          bmcManagerTablePromise,
+          chassisTablePromise,
+          dimmSlotTablePromise,
+          fansTablePromise,
+          powerSuppliesTablePromise,
+          processorsTablePromise,
+          serviceIndicatorPromise,
+          systemTablePromise,
+          assemblyTablePromise,
+          pcieSlotsTablePromise,
+          fabricAdaptersTablePromise,
+        ]).finally(() => {
+          this.endLoader();
+          this.isBusy = false;
+        });
+      } else if (this.currentTab === 0 && value === 'watched') {
+        // Combine all child component Promises to indicate
+        // when page data load complete
+        Promise.all([
+          bmcManagerTablePromise,
+          dimmSlotTablePromise,
+          fansTablePromise,
+          powerSuppliesTablePromise,
+          processorsTablePromise,
+          systemTablePromise,
+          assemblyTablePromise,
+          pcieSlotsTablePromise,
+          fabricAdaptersTablePromise,
+        ]).finally(() => {
+          this.endLoader();
+          this.isBusy = false;
+        });
+      } else {
+        Promise.all([
+          fansTablePromise,
+          powerSuppliesTablePromise,
+          assemblyTablePromise,
+          pcieSlotsTablePromise,
+          fabricAdaptersTablePromise,
+        ]).finally(() => {
+          this.endLoader();
+          this.isBusy = false;
+        });
+      }
     },
   },
 };

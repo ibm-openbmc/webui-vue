@@ -1,9 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title
-      :title="$t('appPageTitle.network')"
-      :description="$t('pageNetwork.pageDescription')"
-    />
+    <page-title :description="$t('pageNetwork.pageDescription')" />
     <!-- Global settings for all interfaces -->
     <network-global-settings />
     <!-- Interface tabs -->
@@ -22,6 +19,10 @@
                 <network-interface-settings :tab-index="tabIndex" />
                 <!-- IPV4 table -->
                 <table-ipv-4 :tab-index="tabIndex" />
+                <!-- Static DNS table -->
+                <div v-if="isIpv6Valid">
+                  <table-ipv-6 :tab-index="tabIndex" />
+                </div>
                 <!-- Static DNS table -->
                 <table-dns :tab-index="tabIndex" />
               </b-tab>
@@ -43,6 +44,12 @@
       :edit-modal="ipAddress !== ''"
       @ok="saveIpv4Address"
     />
+    <modal-ipv6
+      :prefix-length="prefixLength"
+      :ip-address="ipAddressIpv6"
+      :edit-modal="ipAddressIpv6 !== ''"
+      @ok="saveIpv6Address"
+    />
     <modal-dns @ok="saveDnsAddress" />
     <modal-hostname :hostname="currentHostname" @ok="saveHostname" />
   </b-container>
@@ -54,6 +61,7 @@ import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
 import ModalHostname from './ModalHostname.vue';
 import ModalIpv4 from './ModalIpv4.vue';
+import ModalIpv6 from './ModalIpv6.vue';
 import ModalDns from './ModalDns.vue';
 import NetworkGlobalSettings from './NetworkGlobalSettings.vue';
 import NetworkInterfaceSettings from './NetworkInterfaceSettings.vue';
@@ -61,12 +69,14 @@ import PageSection from '@/components/Global/PageSection';
 import PageTitle from '@/components/Global/PageTitle';
 import TableIpv4 from './TableIpv4.vue';
 import TableDns from './TableDns.vue';
+import TableIpv6 from './TableIpv6.vue';
 
 export default {
   name: 'Network',
   components: {
     ModalHostname,
     ModalIpv4,
+    ModalIpv6,
     ModalDns,
     NetworkGlobalSettings,
     NetworkInterfaceSettings,
@@ -74,6 +84,7 @@ export default {
     PageTitle,
     TableDns,
     TableIpv4,
+    TableIpv6,
   },
   mixins: [BVToastMixin, DataFormatterMixin, LoadingBarMixin],
   beforeRouteLeave(to, from, next) {
@@ -85,6 +96,8 @@ export default {
       currentHostname: '',
       defaultGateway: '',
       ipAddress: '',
+      ipAddressIpv6: '',
+      prefixLength: 0,
       subnet: '',
       loading,
       tabIndex: 0,
@@ -93,6 +106,12 @@ export default {
   computed: {
     network() {
       return this.$store.getters['network/networkSettings'];
+    },
+    isIpv6Valid() {
+      const ipv6 = this.network[this.tabIndex].ipv6;
+      if (ipv6 === undefined || ipv6 === null || ipv6.length === 0)
+        return false;
+      else return true;
     },
   },
   watch: {
@@ -103,7 +122,9 @@ export default {
   mounted() {
     this.$root.$on('edit-address', (item) => {
       this.subnet = item.SubnetMask;
+      this.ipAddressIpv6 = item.Address;
       this.ipAddress = item.Address;
+      this.prefixLength = item.PrefixLength;
     });
   },
   created() {
@@ -113,6 +134,11 @@ export default {
       .finally(() => this.endLoader());
   },
   methods: {
+    // isIpv6Valid() {
+    //   const ipv6 = this.network[this.tabIndex].ipv6;
+    //   if (ipv6 == 'undefined' || 'null') return false;
+    //   else return true;
+    // },
     getModalInfo() {
       this.defaultGateway = this.$store.getters['network/networkSettings'][
         this.tabIndex
@@ -151,6 +177,27 @@ export default {
         // Add new address
         this.$store
           .dispatch('network/updateIpv4Address', modalData)
+          .then((message) => this.successToast(message))
+          .catch(({ message }) => this.errorToast(message))
+          .finally(() => this.endLoader());
+      }
+    },
+    saveIpv6Address(modalFormData) {
+      const modalData = [modalFormData];
+      this.startLoader();
+      if (this.ipAddress !== '') {
+        //Edit selected row
+        const selectedRow = { Address: this.ipAddress, PrefixLength: 0 };
+        const editRow = modalData.concat(selectedRow);
+        this.$store
+          .dispatch('network/updateIpv6Address', editRow)
+          .then((message) => this.successToast(message))
+          .catch(({ message }) => this.errorToast(message))
+          .finally(() => this.endLoader());
+      } else {
+        // Add new address
+        this.$store
+          .dispatch('network/updateIpv6Address', modalData)
           .then((message) => this.successToast(message))
           .catch(({ message }) => this.errorToast(message))
           .finally(() => this.endLoader());

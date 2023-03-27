@@ -172,6 +172,8 @@ export default {
     },
     resetForm() {
       this.form.gateway = this.defaultGateway;
+      this.form.ipAddress = '';
+      this.form.subnetMask = '';
       const item = {
         Address: '',
         SubnetMask: '',

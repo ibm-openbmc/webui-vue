@@ -464,7 +464,11 @@ export default {
   methods: {
     hmcManagedChecks(value) {
       if (!this.isHmcManaged()) return true;
-      if (value === 'Server firmware start policy') return true;
+      if (
+        value ===
+        this.$t('pageServerPowerOperations.biosSettings.pvm_stop_at_standby')
+      )
+        return true;
       return false;
     },
     isHmcManaged() {

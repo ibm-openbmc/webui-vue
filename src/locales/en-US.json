@@ -352,7 +352,8 @@
       "link": "Profile Settings",
       "message": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit ",
       "messageText": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit Profile Settings",
-      "messageNtp": "If NTP is selected but an NTP server is not given or the given NTP server is not reachable, then time.google.com will be used."
+      "messageNtp": "If NTP is selected but an NTP server is not given or the given NTP server is not reachable, then time.google.com will be used.",
+      "messagePowerOff": "The server must be powered off to change date and time to manual or NTP."
     },
     "configureSettings": "Configure settings",
     "form": {
@@ -1037,6 +1038,7 @@
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 addresses",
     "ipv6": "IPv6",
+    "ipv6AutoConfig": "IPv6 auto config",
     "ipv6DefaultGateway": "IPv6 default gateway",
     "macAddress": "MAC address",
     "network": "network",
@@ -1050,13 +1052,16 @@
     "useNtp": "Use NTP servers",
     "modal": {
       "confirmDeleteIpv4": "Are you sure you want to delete '%{address}'?",
+      "confirmDeleteIpv6": "Are you sure you want to delete '%{address}'?",
       "confirmDisableDhcp": "Are you sure you want to disable DHCP?",
       "confirmEnableDhcp": "When DHCP is enabled, static IP addresses will not be accessible.",
       "dhcpConfirmTitle": "%{dhcpState} DHCP",
       "deleteIpv4": "Delete IPv4 address",
+      "deleteIpv6": "Delete IPv6 address",
       "editHostnameTitle": "Edit hostname",
       "gateway": "Gateway",
       "ipAddress": "IP address",
+      "prefixLength": "Prefix length",
       "staticDns": "Static DNS",
       "subnetMask": "Subnet mask"
     },
@@ -1068,6 +1073,7 @@
       "addressState": "Address  state",
       "deleteDns": "Delete DNS address",
       "deleteIpv4": "Delete IPv4 address",
+      "deleteIpv6": "Delete IPv6 address",
       "editDns": "Edit DNS address",
       "editIpv4": "Edit static IPv4 address",
       "editIpv6": "Edit static IPv6 address",
@@ -1078,7 +1084,15 @@
     },
     "toast": {
       "errorSaveNetworkSettings": "Error updating %{setting} settings.",
-      "successSaveNetworkSettings": "Successfully updated %{setting} settings."
+      "errorAddingDnsServer": "Error adding DNS server.",
+      "errorDeletingDnsServer": "Error deleting DNS server.",
+      "errorDeletingIpv4Server": "Error deleting IPv4 server.",
+      "errorDeletingIpv6Server": "Error deleting IPv6 server.",
+      "successSaveNetworkSettings": "Successfully updated %{setting} settings.",
+      "successAddingDnsServer": "Successfully added DNS server.",
+      "successDeletingDnsServer": "Successfully deleted DNS server.",
+      "successDeletingIpv4Server": "Successfully deleted IPv4 server.",
+      "successDeletingIpv6Server": "Successfully deleted IPv6 server."
     }
   },
   "pageOverview": {

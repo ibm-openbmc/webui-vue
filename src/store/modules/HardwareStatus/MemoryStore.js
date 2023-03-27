@@ -43,6 +43,7 @@ const MemoryStore = {
   },
   actions: {
     async getDimms({ commit }) {
+      commit('setMemoryInfo', []);
       return await api
         .get('/redfish/v1/Systems/system/Memory')
         .then(({ data: { Members } }) => {

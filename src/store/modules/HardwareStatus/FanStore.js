@@ -41,6 +41,7 @@ const FanStore = {
   },
   actions: {
     async getAllFans({ commit }, requestBody) {
+      commit('setFanInfo', []);
       return await api
         .get(`${requestBody.uri}`)
         .then((response) =>

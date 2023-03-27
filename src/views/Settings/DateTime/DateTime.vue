@@ -34,6 +34,11 @@
     <page-section :section-title="$t('pageDateTime.configureSettings')">
       <b-row>
         <b-col md="8" xl="6">
+          <alert v-if="!isServerOff()" variant="warning" class="mb-4">
+            <span>
+              {{ $t('pageDateTime.alert.messagePowerOff') }}
+            </span>
+          </alert>
           <alert variant="info" class="mb-4">
             <span>
               {{ $t('pageDateTime.alert.messageNtp') }}
