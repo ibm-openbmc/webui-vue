@@ -1,15 +1,6 @@
 <template>
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.sensors')" />
-    <b-row>
-      <b-col md="8" xl="6">
-        <alert variant="info" class="mb-4">
-          <span>
-            {{ $t('pageSensors.alert') }}
-          </span>
-        </alert>
-      </b-col>
-    </b-row>
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
         <search
@@ -138,7 +129,6 @@
 </template>
 
 <script>
-import Alert from '@/components/Global/Alert';
 import PageTitle from '@/components/Global/PageTitle';
 import Search from '@/components/Global/Search';
 import StatusIcon from '@/components/Global/StatusIcon';
@@ -166,7 +156,6 @@ import SearchFilterMixin, {
 export default {
   name: 'Sensors',
   components: {
-    Alert,
     PageTitle,
     Search,
     StatusIcon,
