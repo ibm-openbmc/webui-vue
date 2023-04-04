@@ -120,6 +120,15 @@
                 />
 
                 <!-- Mex Chassis -->
+                <alert
+                  v-if="currentTab > 0 && isPoweredOff"
+                  variant="info"
+                  class="mb-4"
+                >
+                  <span>
+                    {{ $t('pageInventory.alert.powerOffExpansionChassis') }}
+                  </span>
+                </alert>
                 <!-- Fans table -->
                 <table-fans
                   v-if="currentTab > 0"
@@ -164,6 +173,7 @@
 </template>
 
 <script>
+import Alert from '@/components/Global/Alert';
 import PageTitle from '@/components/Global/PageTitle';
 import TableSystem from './InventoryTableSystem';
 import TablePowerSupplies from './InventoryTablePowerSupplies';
@@ -184,6 +194,7 @@ import { chunk } from 'lodash';
 
 export default {
   components: {
+    Alert,
     PageTitle,
     ServiceIndicator,
     TableDimmSlot,
@@ -311,6 +322,13 @@ export default {
     },
     chassis() {
       return this.$store.getters['chassis/chassis'];
+    },
+    isPoweredOff() {
+      if (this.$store.getters['global/serverStatus'] === 'off') {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   watch: {

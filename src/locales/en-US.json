@@ -85,6 +85,7 @@
       "on": "On",
       "present": "Present",
       "success": "Success",
+      "unavailable": "Unavailable",
       "warning": "Warning"
     },
     "table": {
@@ -787,6 +788,7 @@
     "alert": {
       "enclosureAlertTitle": "Viewing enclosure configuration",
       "enclosureAlertMessage": "System needs to be powered on.",
+      "powerOffExpansionChassis": "Health and status values in I/O expansion chassis are unavailable when the host is powered off.",
       "viewServerPowerOperations": "View server power operations"
     },
     "modal": {

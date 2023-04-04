@@ -47,9 +47,15 @@
 
       <!-- Health -->
       <template #cell(health)="{ value }">
-        <status-icon :status="statusIcon(value)" />
+        <status-icon
+          v-if="isIoExpansionChassis && isPoweredOff"
+          :status="statusIcon('')"
+        />
+        <status-icon v-else :status="statusIcon(value)" />
         {{
-          value === 'OK'
+          isIoExpansionChassis && isPoweredOff
+            ? $t('global.status.unavailable')
+            : value === 'OK'
             ? $t('global.status.ok')
             : value === 'Warning'
             ? $t('global.status.warning')
@@ -59,7 +65,9 @@
       <!-- Status -->
       <template #cell(status)="row">
         {{
-          row.item.status === 'Enabled'
+          isIoExpansionChassis && isPoweredOff
+            ? $t('global.status.unavailable')
+            : row.item.status === 'Enabled'
             ? $t('global.status.present')
             : $t('global.status.absent')
         }}
@@ -215,6 +223,13 @@ export default {
       if (this.chassis.endsWith('chassis')) {
         return false;
       } else if (this.$store.getters['global/serverStatus'] !== 'on') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isPoweredOff() {
+      if (this.$store.getters['global/serverStatus'] === 'off') {
         return true;
       } else {
         return false;

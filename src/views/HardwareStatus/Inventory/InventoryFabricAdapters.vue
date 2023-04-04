@@ -47,9 +47,15 @@
       </template>
       <!-- Health -->
       <template #cell(health)="{ value }">
-        <status-icon :status="statusIcon(value)" />
+        <status-icon
+          v-if="isIoExpansionChassis && isPoweredOff"
+          :status="statusIcon('')"
+        />
+        <status-icon v-else :status="statusIcon(value)" />
         {{
-          value === 'OK'
+          isIoExpansionChassis && isPoweredOff
+            ? $t('global.status.unavailable')
+            : value === 'OK'
             ? $t('global.status.ok')
             : value === 'Warning'
             ? $t('global.status.warning')
@@ -59,7 +65,9 @@
       <!-- Status -->
       <template #cell(status)="row">
         {{
-          row.item.status === 'Absent'
+          isIoExpansionChassis && isPoweredOff
+            ? $t('global.status.unavailable')
+            : row.item.status === 'Absent'
             ? $t('global.status.absent')
             : $t('global.status.present')
         }}
@@ -71,6 +79,7 @@
           v-model="row.item.identifyLed"
           name="switch"
           switch
+          :disabled="serverStatus"
           @change="toggleIdentifyLedValue(row.item)"
         >
           <span v-if="row.item.identifyLed">
@@ -198,6 +207,29 @@ export default {
     fabricAdapters() {
       const adapters = this.$store.getters['fabricAdapters/fabricAdapters'];
       return adapters;
+    },
+    serverStatus() {
+      if (this.chassis.endsWith('chassis')) {
+        return false;
+      } else if (this.$store.getters['global/serverStatus'] !== 'on') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isPoweredOff() {
+      if (this.$store.getters['global/serverStatus'] === 'off') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isIoExpansionChassis() {
+      if (this.chassis.endsWith('chassis')) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
   watch: {
