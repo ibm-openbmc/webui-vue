@@ -59,7 +59,9 @@
             ? $t('global.status.ok')
             : value === 'Warning'
             ? $t('global.status.warning')
-            : $t('global.status.critical')
+            : value === 'Critical'
+            ? $t('global.status.critical')
+            : '--'
         }}
       </template>
       <!-- Status -->

@@ -61,7 +61,9 @@
             ? $t('global.status.ok')
             : row.item.health === 'Warning'
             ? $t('global.status.warning')
-            : $t('global.status.critical')
+            : row.item.health === 'Critical'
+            ? $t('global.status.critical')
+            : '--'
         }}
       </template>
       <!-- Status -->
