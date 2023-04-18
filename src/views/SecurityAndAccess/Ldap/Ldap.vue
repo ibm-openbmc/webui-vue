@@ -315,6 +315,12 @@ export default {
       this.form.activeDirectoryEnabled = value;
       this.setFormValues();
     },
+    caCertificateExpiration: function () {
+      this.setFormValues();
+    },
+    ldapCertificateExpiration: function () {
+      this.setFormValues();
+    },
   },
   validations: {
     form: {
