@@ -133,10 +133,6 @@ export default {
     handleSubmit() {
       this.$v.$touch();
       if (this.$v.$invalid) return;
-      if (this.selectedDumpType === 'resource' && !this.isInPhypStandby) {
-        this.errorToast(this.$t('pageDumps.toast.errorPhypInStandby'));
-        return;
-      }
 
       const dumpType = this.$t(`pageDumps.form.${this.selectedDumpType}Dump`);
 
