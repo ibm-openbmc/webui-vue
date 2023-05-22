@@ -59,7 +59,6 @@ const DumpsStore = {
           '/redfish/v1/Managers/bmc/LogServices/Dump/Actions/LogService.CollectDiagnosticData',
           {
             DiagnosticDataType: 'Manager',
-            OEMDiagnosticDataType: '',
           }
         )
         .catch((error) => {
