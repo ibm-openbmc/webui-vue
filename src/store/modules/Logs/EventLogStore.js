@@ -43,10 +43,13 @@ const EventLogStore = {
   },
   actions: {
     async getEventLogData({ commit }) {
+      let eventLogs = [];
+      commit('setAllEvents', eventLogs);
+      commit('setCeLogs', eventLogs);
       return await api
         .get('/redfish/v1/Systems/system/LogServices/EventLog/Entries')
         .then(({ data: { Members = [] } = {} }) => {
-          const eventLogs = Members.map((log) => {
+          eventLogs = Members.map((log) => {
             const {
               Id,
               EventId,
