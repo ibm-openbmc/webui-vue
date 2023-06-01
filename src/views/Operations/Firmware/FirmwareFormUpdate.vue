@@ -264,7 +264,11 @@ export default {
               })
               .catch(({ message }) => {
                 this.endLoader();
-                this.errorToast(message);
+                const errorMessage =
+                  message === 'ExpiredAccessKey'
+                    ? this.$t('pageFirmware.toast.expiredAccessKeyError')
+                    : message;
+                this.errorToast(errorMessage);
               });
           }, 180000); // 3 minutes
         };
