@@ -105,6 +105,8 @@ export default {
   display: flex;
   align-items: center;
   background-color: theme-color('light');
+  position: relative;
+  z-index: 2;
   .btn {
     width: 36px;
     height: 36px;
