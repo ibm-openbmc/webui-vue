@@ -742,7 +742,7 @@
       "rebootStartedMessage": "Successfully started reboot from backup image. Reboot might take several minutes to complete.",
       "taskComplete": "Task complete",
       "taskCompleteMessage": "Task complete. Waiting for BMC reboot",
-      "expiredAccessKeyError": "Expired Access Key",
+      "expiredAccessKeyError": "Expired Access Key. Go to `https://www.ibm.com/servers/eserver/ess`",
       "updateFirmware": {
         "step1": "Step 1 of 4 - Upload",
         "step1Message": "Update started. Firmware upload in progress.",
