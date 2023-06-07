@@ -118,4 +118,7 @@ export default {
     }
   }
 }
+.custom-form-file-container {
+  word-break: break-all;
+}
 </style>
