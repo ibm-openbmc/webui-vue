@@ -971,6 +971,7 @@
       "ldapSettings": "LDAP settings"
     },
     "form": {
+      "activeDirectory": "Active Directory",
       "baseDn": "Base DN",
       "bindDn": "Bind DN",
       "bindPassword": "Bind password",
@@ -979,6 +980,7 @@
       "ldapAuthentication": "LDAP authentication",
       "ldapCertificateValidUntil": "LDAP Certificate valid until",
       "manageSslCertificates": "Manage SSL certificates",
+      "openLDAP": "OpenLDAP",
       "secureLdapHelper": "A CA certificate and an LDAP certificate are required to enable secure LDAP",
       "secureLdapUsingSsl": "Secure LDAP using SSL",
       "serverUri": "Server URI",
@@ -1218,7 +1220,16 @@
         "resetLinkHeader": "Reset link %{id}"
       },
       "table": {
-        "search": "Search"
+        "search": "Search",
+        "linkStatusType": "Link status type",
+        "filter": {
+          "degraded": "Degraded",
+          "failed": "Failed",
+          "inactive": "Inactive",
+          "open": "Open",
+          "operational": "Operational",
+          "unknown": "Unknown"
+        }
       },
       "toast": {
         "errorReset": "Error resetting link %{id}",
@@ -1412,7 +1423,12 @@
       "name": "Name",
       "status": "Status",
       "upperCritical": "Upper critical",
-      "upperWarning": "Upper warning"
+      "upperWarning": "Upper warning",
+      "filter": {
+        "ok": "OK",
+        "critical": "Critical",
+        "warning": "Warning"
+      }
     }
   },
   "pageServerPowerOperations": {
