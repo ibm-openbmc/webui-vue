@@ -33,7 +33,7 @@ const AssemblyStore = {
           name: Name,
           locationNumber: Location?.PartLocation?.ServiceLabel,
           identifyLed: LocationIndicatorActive,
-          status: Status?.State,
+          status: Status?.State === 'Enabled' ? 'Present' : Status?.State,
           uri: assembly['@odata.id'],
         };
       });

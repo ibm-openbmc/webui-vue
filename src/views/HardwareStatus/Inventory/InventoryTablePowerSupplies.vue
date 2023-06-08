@@ -69,7 +69,7 @@
         {{
           isIoExpansionChassis && isPoweredOff
             ? $t('global.status.unavailable')
-            : row.item.status === 'Enabled'
+            : row.item.status === 'Present'
             ? $t('global.status.present')
             : $t('global.status.absent')
         }}
