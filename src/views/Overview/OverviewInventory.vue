@@ -29,14 +29,12 @@
 
 <script>
 import OverviewCard from './OverviewCard';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
   name: 'Inventory',
   components: {
     OverviewCard,
   },
-  mixins: [BVToastMixin],
   computed: {
     systems() {
       let systemData = this.$store.getters['system/systems'][0];
@@ -52,7 +50,6 @@ export default {
     toggleIdentifyLedSwitch(state) {
       this.$store
         .dispatch('system/changeIdentifyLedState', state)
-        .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },
   },
