@@ -1240,7 +1240,7 @@
     "ipmi": "Network IPMI (out-of-band IPMI)",
     "ipmiDescription": "Allow remote management of the platform via IPMI. Tools such as ipmitool require this setting to be enabled. Once enabled, please follow the procedure in the online support documentation to add IPMI users.",
     "rtad": "RTAD",
-    "rtadDescription": "This option enables or disables the Remote Trusted Attestation Daemon for host firmware.",
+    "rtadDescription": "This setting only applies if the Virtualization Management Interface (VMI) is running. The Virtualization Management Interface is running if the system is HMC managed.",
     "rtadInfoIcon": "@:global.status.nextReboot",
     "secureVersion": "Secure version lock-in",
     "secureVersionDescription": "Specifies whether the secure version lock-in functionality is enabled.",
