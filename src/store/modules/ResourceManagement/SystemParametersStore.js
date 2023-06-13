@@ -297,10 +297,14 @@ const systemParametersStore = {
           );
         });
     },
-    async saveImmediateTestRequested({ commit }) {
-      commit('setImmediateTestRequested', true);
+    async saveImmediateTestRequested({ commit }, { value }) {
+      if (value === 'Enabled') {
+        commit('setImmediateTestRequested', true);
+      } else {
+        commit('setImmediateTestRequested', false);
+      }
       const updatedImmediateTestRequestedValue = {
-        Attributes: { pvm_rpd_immediate_test: 'Enabled' },
+        Attributes: { pvm_rpd_immediate_test: value },
       };
       return api
         .patch(
@@ -314,7 +318,11 @@ const systemParametersStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setImmediateTestRequested', false);
+          if (value === 'Enabled') {
+            commit('setImmediateTestRequested', false);
+          } else {
+            commit('setImmediateTestRequested', true);
+          }
           throw new Error(
             i18n.t(
               'pageSystemParameters.toast.errorSavingImmediateTestRequested'
