@@ -578,7 +578,7 @@ export default {
         return this.sortStatus(a, b, key);
       }
     },
-    onTableRowAction(action, { id, name, uri }) {
+    onTableRowAction(action, { uri }) {
       if (action === 'delete') {
         this.$bvModal
           .msgBoxConfirm(this.$tc('pageEventLogs.modal.deleteMessage'), {
@@ -593,27 +593,15 @@ export default {
         //  download single log
         const pelJsonInfo = [];
         this.startLoader();
-        if (name === 'System CE Log Entry') {
-          this.$store
-            .dispatch('eventLog/downloadCELogData', id)
-            .then((returned) => {
-              pelJsonInfo.push(returned);
-            })
-            .finally(() => {
-              this.downloadFile(pelJsonInfo);
-              this.endLoader();
-            });
-        } else {
-          this.$store
-            .dispatch('eventLog/downloadEventLogData', id)
-            .then((returned) => {
-              pelJsonInfo.push(returned);
-            })
-            .finally(() => {
-              this.downloadFile(pelJsonInfo);
-              this.endLoader();
-            });
-        }
+        this.$store
+          .dispatch('eventLog/downloadLogData', uri)
+          .then((returned) => {
+            pelJsonInfo.push(returned);
+          })
+          .finally(() => {
+            this.downloadFile(pelJsonInfo);
+            this.endLoader();
+          });
       }
     },
     onBatchAction(action) {
@@ -697,78 +685,39 @@ export default {
         let counter = 1;
         while (counter <= this.allLogs.length) {
           this.startLoader();
-          if (this.allLogs[counter - 1].name === 'System CE Log Entry') {
-            await this.$store
-              .dispatch(
-                'eventLog/downloadCELogData',
-                this.allLogs[counter - 1].id
-              )
-              .then((returned) => {
-                pelJsonInfo.push(returned);
-                counter = counter + 1;
-              })
-              .finally(() => {
-                if (pelJsonInfo.length === this.allLogs.length) {
-                  this.downloadFile(pelJsonInfo);
-                  this.endLoader();
-                }
-              });
-          } else {
-            await this.$store
-              .dispatch(
-                'eventLog/downloadEventLogData',
-                this.allLogs[counter - 1].id
-              )
-              .then((returned) => {
-                pelJsonInfo.push(returned);
-                counter = counter + 1;
-              })
-              .finally(() => {
-                if (pelJsonInfo.length === this.allLogs.length) {
-                  this.downloadFile(pelJsonInfo);
-                  this.endLoader();
-                }
-              });
-          }
+          await this.$store
+            .dispatch('eventLog/downloadLogData', this.allLogs[counter - 1].uri)
+            .then((returned) => {
+              pelJsonInfo.push(returned);
+              counter = counter + 1;
+            })
+            .finally(() => {
+              if (pelJsonInfo.length === this.allLogs.length) {
+                this.downloadFile(pelJsonInfo);
+                this.endLoader();
+              }
+            });
         }
       } else {
         // several logs
         let counter = 1;
         while (counter <= this.selectedRows.length) {
           this.startLoader();
-          if (this.selectedRows[counter - 1].name === 'System CE Log Entry') {
-            await this.$store
-              .dispatch(
-                'eventLog/downloadCELogData',
-                this.selectedRows[counter - 1].id
-              )
-              .then((returned) => {
-                pelJsonInfo.push(returned);
-                counter = counter + 1;
-              })
-              .finally(() => {
-                if (pelJsonInfo.length === this.selectedRows.length) {
-                  this.downloadFile(pelJsonInfo);
-                  this.endLoader();
-                }
-              });
-          } else {
-            await this.$store
-              .dispatch(
-                'eventLog/downloadEventLogData',
-                this.selectedRows[counter - 1].id
-              )
-              .then((returned) => {
-                pelJsonInfo.push(returned);
-                counter = counter + 1;
-              })
-              .finally(() => {
-                if (pelJsonInfo.length === this.selectedRows.length) {
-                  this.downloadFile(pelJsonInfo);
-                  this.endLoader();
-                }
-              });
-          }
+          await this.$store
+            .dispatch(
+              'eventLog/downloadLogData',
+              this.selectedRows[counter - 1].uri
+            )
+            .then((returned) => {
+              pelJsonInfo.push(returned);
+              counter = counter + 1;
+            })
+            .finally(() => {
+              if (pelJsonInfo.length === this.selectedRows.length) {
+                this.downloadFile(pelJsonInfo);
+                this.endLoader();
+              }
+            });
         }
       }
     },
