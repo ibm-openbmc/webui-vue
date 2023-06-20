@@ -263,6 +263,9 @@ export default {
   },
   data() {
     return {
+      unauthenticatedACFUploadEnablementState: this.$store.getters[
+        'policies/acfUploadEnablement'
+      ],
       modifySSHPolicyDisabled:
         process.env.VUE_APP_MODIFY_SSH_POLICY_DISABLED === 'true',
     };
@@ -341,16 +344,7 @@ export default {
         return newValue;
       },
     },
-    unauthenticatedACFUploadEnablementState: {
-      get() {
-        return this.$store.getters['policies/acfUploadEnablement'];
-      },
-      set(newValue) {
-        return newValue;
-      },
-    },
   },
-
   created() {
     this.startLoader();
     Promise.all([
@@ -362,6 +356,9 @@ export default {
       this.$store.dispatch('userManagement/getUsers'),
       this.checkForUserData(),
     ]).finally(() => {
+      this.unauthenticatedACFUploadEnablementState = this.$store.getters[
+        'policies/acfUploadEnablement'
+      ];
       this.endLoader();
     });
   },
@@ -415,10 +412,28 @@ export default {
         .catch(({ message }) => this.errorToast(message));
     },
     changeUnauthenticatedACFUploadEnablement(state) {
-      this.$store
-        .dispatch('policies/saveUnauthenticatedACFUploadEnablement', state)
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+      this.$bvModal
+        .msgBoxConfirm(this.$t('pagePolicies.acfUploadEnablementConfirmText'), {
+          title: this.$tc('pagePolicies.acfUploadEnablement'),
+          okTitle: this.$tc('global.action.confirm'),
+          cancelTitle: this.$t('global.action.cancel'),
+        })
+        .then((value) => {
+          this.enableUpload(value, state);
+        });
+    },
+    enableUpload(value, state) {
+      if (value) {
+        this.$store
+          .dispatch('policies/saveUnauthenticatedACFUploadEnablement', state)
+          .then((message) => this.successToast(message))
+          .then(() => {
+            this.unauthenticatedACFUploadEnablementState = state;
+          })
+          .catch(({ message }) => this.errorToast(message));
+      } else {
+        this.unauthenticatedACFUploadEnablementState = !state;
+      }
     },
     checkForUserData() {
       if (!this.currentUser) {
