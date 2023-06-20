@@ -1255,7 +1255,7 @@
       "successNetworkPolicyUpdate": "Successfully updated %{policy}.",
       "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
     },
-    "acfUploadEnablementConfirmText": "Enabling this setting will allow an unauthorised user to upload ACF  for infinite period.<br/> You really confirm to enable this setting  ?",
+    "acfUploadEnablementConfirmText": "Enabling this setting will allow an unauthorised user to upload ACF  for infinite period.\n You really confirm to enable this setting  ?",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system."
   },
