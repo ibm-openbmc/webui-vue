@@ -638,10 +638,7 @@ export default {
             if (deleteConfirmed) {
               if (this.selectedRows.length === this.allLogs.length) {
                 this.$store
-                  .dispatch(
-                    'eventLog/deleteAllEventLogs',
-                    this.selectedRows.length
-                  )
+                  .dispatch('eventLog/deleteAllEventLogs', this.selectedRows)
                   .then((message) => {
                     this.reloadEventLogData();
                     this.successToast(message);
