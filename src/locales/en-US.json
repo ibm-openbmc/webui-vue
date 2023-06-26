@@ -948,20 +948,23 @@
     "toast": {
       "errorSavingAggressivePrefetch": "Error saving aggressive prefetch",
       "errorSavingFrequencyCap": "Error saving frequency cap",
-      "errorSavingImmediateTestRequested": "Error saving immediate test request",
       "errorSavingGardOnError": "Error saving Gard on error",
       "errorSavingLateralCastOut": "Error saving lateral cast out mode",
       "errorSavingRpdPolicy": "Error saving RPD policy",
       "errorSavingRpdFeature": "Error saving RPD feature",
       "errorSavingRpdRun": "Error saving RPD scheduled run",
-      "successSavingRpdRun": "RPD scheduled run saved successfully",
+      "errorStartingDiagnosticTestRun": "Error starting diagnostic test run",
+      "errorStoppingDiagnosticTestRun": "Error stopping diagnostic test run",
+      "successSavingRpdRun": "RPD scheduled run saved successfully. NOTE: System must be powered on at RPD scheduled run time of day, else the diagnostic test run will take effect on the next available schedule.",
       "successSavingAggressivePrefetch": "Aggressive prefetch saved successfully",
       "successSavingFrequencyCap": "Frequency cap saved successfully",
-      "successSavingImmediateTestRequested": "Immediate test request saved successfully",
       "successSavingGardOnError": "Gard on error saved successfully",
       "successSavingLateralCastOut": "Lateral cast out mode saved successfully",
       "successSavingRpdPolicy": "RPD policy saved successfully",
-      "successSavingRpdFeature": "RPD feature saved successfully. Changes made will take effect on next reboot."
+      "successSavingRpdFeature": "RPD feature saved successfully. Changes made will take effect on next reboot.",
+      "successStartingDiagnosticTestRun": "Diagnostic test run started successfully",
+      "successStartingDiagnosticTestRunIfPoweredOff": "Diagnostic test run saved successfully, Tests will start once the system is powered on.",
+      "successStoppingDiagnosticTestRun": "Diagnostic test run stopped successfully"
     }
   },
   "pageLdap": {
