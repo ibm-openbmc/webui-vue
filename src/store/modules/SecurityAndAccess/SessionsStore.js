@@ -32,7 +32,7 @@ const SessionsStore = {
               ? sessionUri.data?.ClientOriginIPAddress.slice(7)
               : sessionUri.data?.ClientOriginIPAddress;
             return {
-              clientID: sessionUri.data?.Oem?.OpenBMC.ClientID,
+              clientID: sessionUri.data?.Context,
               username: sessionUri.data?.UserName,
               ipAddress: filteredIPAddress,
               uri: sessionUri.data['@odata.id'],

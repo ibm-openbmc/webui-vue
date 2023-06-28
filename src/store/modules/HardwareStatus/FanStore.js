@@ -33,7 +33,7 @@ const FanStore = {
           model: Model,
           name: Name,
           sparePartNumber: SparePartNumber,
-          status: Status.State,
+          status: Status?.State === 'Enabled' ? 'Present' : Status?.State,
           uri: fan['@odata.id'],
         };
       });

@@ -105,6 +105,8 @@ export default {
   display: flex;
   align-items: center;
   background-color: theme-color('light');
+  position: relative;
+  z-index: 2;
   .btn {
     width: 36px;
     height: 36px;
@@ -115,5 +117,8 @@ export default {
       box-shadow: inset 0 0 0 2px theme-color('primary');
     }
   }
+}
+.custom-form-file-container {
+  word-break: break-all;
 }
 </style>

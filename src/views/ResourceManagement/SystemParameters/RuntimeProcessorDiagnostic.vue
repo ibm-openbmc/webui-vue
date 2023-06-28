@@ -179,9 +179,18 @@
         type="submit"
         class="ml-3"
         :disabled="immediateTestRequestedState || isRpdFeatureCurrentDisabled"
-        @click="updateImmediateTestRequestedState()"
+        @click="updateImmediateTestRequestedState(true)"
       >
         {{ $t('pageSystemParameters.runNow') }}
+      </b-button>
+      <b-button
+        variant="danger"
+        type="submit"
+        class="ml-3"
+        :disabled="!immediateTestRequestedState || isRpdFeatureCurrentDisabled"
+        @click="updateImmediateTestRequestedState(false)"
+      >
+        {{ $t('pageSystemParameters.stopTest') }}
       </b-button>
     </b-row>
   </div>
@@ -319,10 +328,12 @@ export default {
     },
   },
   methods: {
-    updateImmediateTestRequestedState() {
+    updateImmediateTestRequestedState(value) {
       this.startLoader();
       Promise.all([
-        this.$store.dispatch('systemParameters/saveImmediateTestRequested'),
+        this.$store.dispatch('systemParameters/saveImmediateTestRequested', {
+          value: value ? 'Enabled' : 'Disabled',
+        }),
         this.$store.dispatch('systemParameters/getRpdScheduledRun'),
       ]).finally(() => this.endLoader());
     },

@@ -260,27 +260,10 @@ const EventLogStore = {
           throw new Error(i18n.t('pageEventLogs.toast.errorLogStatusUpdate'));
         });
     },
-    async downloadCELogData(_, eventId) {
-      return await api
-        .get(
-          `/redfish/v1/Systems/system/LogServices/CELog/Entries/` +
-            eventId +
-            `/OemPelAttachment`
-        )
-        .then((response) => {
-          return response?.data?.Oem?.IBM?.PelJson;
-        });
-    },
-    async downloadEventLogData(_, eventId) {
-      return await api
-        .get(
-          `/redfish/v1/Systems/system/LogServices/EventLog/Entries/` +
-            eventId +
-            `/OemPelAttachment`
-        )
-        .then((response) => {
-          return response?.data?.Oem?.IBM?.PelJson;
-        });
+    async downloadLogData(_, uri) {
+      return await api.get(uri + `/OemPelAttachment`).then((response) => {
+        return response?.data?.Oem?.IBM?.PelJson;
+      });
     },
   },
 };

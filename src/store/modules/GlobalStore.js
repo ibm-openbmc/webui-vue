@@ -44,7 +44,7 @@ const GlobalStore = {
       ? JSON.parse(localStorage.getItem('storedUtcDisplay'))
       : true,
     username: localStorage.getItem('storedUsername'),
-    currentUser: JSON.parse(sessionStorage.getItem('storedCurrentUser')),
+    currentUser: JSON.parse(localStorage.getItem('storedCurrentUser')),
     isAuthorized: true,
     isServiceLoginEnabled: false,
   },
@@ -134,12 +134,12 @@ const GlobalStore = {
       { commit, getters },
       username = localStorage.getItem('storedUsername')
     ) {
-      if (sessionStorage.getItem('storedCurrentUser')) return;
+      if (localStorage.getItem('storedCurrentUser')) return;
       return api
         .get(`/redfish/v1/AccountService/Accounts/${username}`)
         .then(({ data }) => {
           commit('setCurrentUser', data);
-          sessionStorage.setItem(
+          localStorage.setItem(
             'storedCurrentUser',
             JSON.stringify(getters.currentUser)
           );

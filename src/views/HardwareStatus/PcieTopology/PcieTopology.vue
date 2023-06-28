@@ -369,14 +369,14 @@ export default {
       tableFilters: [
         {
           key: 'linkStatus',
-          label: 'Link status type',
+          label: this.$t('pagePcieTopology.table.linkStatusType'),
           values: [
-            'Degraded',
-            'Inactive',
-            'Open',
-            'Operational',
-            'Unknown',
-            'Failed',
+            this.$t('pagePcieTopology.table.filter.degraded'),
+            this.$t('pagePcieTopology.table.filter.inactive'),
+            this.$t('pagePcieTopology.table.filter.open'),
+            this.$t('pagePcieTopology.table.filter.operational'),
+            this.$t('pagePcieTopology.table.filter.unknown'),
+            this.$t('pagePcieTopology.table.filter.failed'),
           ],
         },
       ],
