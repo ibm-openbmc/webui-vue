@@ -1268,7 +1268,7 @@
       "successNetworkPolicyUpdate": "Successfully updated %{policy}.",
       "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
     },
-    "acfUploadEnablementConfirmText": "Enabling this setting will allow an unauthorised user to upload ACF for infinite period. You really confirm to enable this setting?",
+    "acfUploadEnablementConfirmText": "Caution: Enabling this setting allows unauthenticated users to upload Access Control Files (ACFs) without logging in and without pressing Function 74 on the Operator Panel.  Do you want to proceed?",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system."
   },

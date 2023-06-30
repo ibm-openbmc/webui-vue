@@ -412,28 +412,37 @@ export default {
         .catch(({ message }) => this.errorToast(message));
     },
     changeUnauthenticatedACFUploadEnablement(state) {
-      this.$bvModal
-        .msgBoxConfirm(this.$t('pagePolicies.acfUploadEnablementConfirmText'), {
-          title: this.$tc('pagePolicies.acfUploadEnablement'),
-          okTitle: this.$tc('global.action.confirm'),
-          cancelTitle: this.$t('global.action.cancel'),
-        })
-        .then((value) => {
-          this.enableUpload(value, state);
-        });
-    },
-    enableUpload(value, state) {
-      if (value) {
-        this.$store
-          .dispatch('policies/saveUnauthenticatedACFUploadEnablement', state)
-          .then((message) => this.successToast(message))
-          .then(() => {
-            this.unauthenticatedACFUploadEnablementState = state;
-          })
-          .catch(({ message }) => this.errorToast(message));
+      if (state) {
+        this.$bvModal
+          .msgBoxConfirm(
+            this.$t('pagePolicies.acfUploadEnablementConfirmText'),
+            {
+              title: this.$tc('pagePolicies.acfUploadEnablement'),
+              okTitle: this.$tc('global.action.confirm'),
+              cancelTitle: this.$t('global.action.cancel'),
+            }
+          )
+          .then((value) => {
+            this.enableUpload(value, state);
+          });
       } else {
         this.unauthenticatedACFUploadEnablementState = !state;
+        this.uploadApi(state);
       }
+    },
+    uploadApi(state) {
+      this.$store
+        .dispatch('policies/saveUnauthenticatedACFUploadEnablement', state)
+        .then((message) => this.successToast(message))
+        .then(() => {
+          this.unauthenticatedACFUploadEnablementState = state;
+        })
+        .catch(({ message }) => this.errorToast(message));
+    },
+    enableUpload(value, state) {
+      value
+        ? this.uploadApi(state)
+        : (this.unauthenticatedACFUploadEnablementState = !state);
     },
     checkForUserData() {
       if (!this.currentUser) {
