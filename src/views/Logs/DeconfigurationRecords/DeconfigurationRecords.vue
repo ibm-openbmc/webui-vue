@@ -1,7 +1,7 @@
 <template>
   <b-container fluid="xl">
     <page-title
-      :title="$t('appPageTitle.deconfigurationHardware')"
+      :title="$t('appPageTitle.deconfigurationRecords')"
       :description="
         $t('pageDeconfigurationRecords.pageDescription.description')
       "
