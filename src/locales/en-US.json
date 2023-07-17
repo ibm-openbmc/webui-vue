@@ -1234,11 +1234,15 @@
         }
       },
       "toast": {
+        "errorDisableIdentifyLed": "Error disabling Identify LED.",
+        "errorEnableIdentifyLed": "Error enabling Identify LED.",
         "errorReset": "Error resetting link %{id}",
         "errorSavePcieTopology": "Error saving PCIe topology Info.",
         "errorSwitchingLed": "Error turning %{operation} LED for %{value}",
         "resetInfoTitle": "Link ID %{id} being reset.",
         "resetInfoDescription": "this operation may take a few seconds to complete.",
+        "successDisableIdentifyLed": "Successfully disabled Identify LED.",
+        "successEnableIdentifyLed": "Successfully enabled Identify LED.",
         "successReset": "Reset link %{id} successfully initiated. Check event logs for any issues.",
         "successSavePcieTopology": "Successfully saved PCIe topology Info."
       }
