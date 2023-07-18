@@ -1593,7 +1593,7 @@
     },
     "alert": {
       "heading": "Warning",
-      "message": "If the HMC is active, it will attempt to reconnect. To disconnect a working HMC, disconnect from the HMC itself."
+      "message": "For users with an HMC attached, if you try to disconnect it from this page and the HMC is active, it will attempt to reconnect. The proper way to disconnect a working HMC is to disconnect it from the HMC itself."
     },
     "modal": {
       "disconnectMessage": "Are you sure you want to disconnect %{count} session? This action cannot be undone. | Are you sure you want to disconnect %{count} sessions? This action cannot be undone.",
