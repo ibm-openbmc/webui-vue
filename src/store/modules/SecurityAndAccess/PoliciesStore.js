@@ -189,7 +189,12 @@ const PoliciesStore = {
           );
         });
     },
-    async saveIpmiProtocolState({ commit }, protocolEnabled) {
+    async getNetworkProtocolStatusAfterDelay({ dispatch }) {
+      setTimeout(() => {
+        dispatch('getNetworkProtocolStatus');
+      }, 30000);
+    },
+    async saveIpmiProtocolState({ commit, dispatch }, protocolEnabled) {
       commit('setIpmiProtocolEnabled', protocolEnabled);
       const ipmi = {
         IPMI: {
@@ -199,7 +204,11 @@ const PoliciesStore = {
       return await api
         .patch('/redfish/v1/Managers/bmc/NetworkProtocol', ipmi)
         .then(() => {
-          return i18n.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+          // Getting protocol data here so that the Ipmi gets enabled
+          dispatch('getNetworkProtocolStatusAfterDelay');
+        })
+        .then(() => {
+          return i18n.t('pagePolicies.toast.successIpmiNetworkPolicyUpdate', {
             policy: i18n.t('pagePolicies.ipmi'),
           });
         })

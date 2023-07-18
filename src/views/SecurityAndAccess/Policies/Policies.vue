@@ -349,7 +349,9 @@ export default {
     this.startLoader();
     Promise.all([
       this.$store.dispatch('policies/getBiosStatus'),
-      this.$store.dispatch('policies/getNetworkProtocolStatus'),
+      setTimeout(() => {
+        this.$store.dispatch('policies/getNetworkProtocolStatus');
+      }, 30000),
       this.$store.dispatch('policies/getUsbFirmwareUpdatePolicyEnabled'),
       this.$store.dispatch('policies/getUnauthenticatedACFUploadEnablement'),
       this.$store.dispatch('policies/getTpmPolicy'),
@@ -359,7 +361,9 @@ export default {
       this.unauthenticatedACFUploadEnablementState = this.$store.getters[
         'policies/acfUploadEnablement'
       ];
-      this.endLoader();
+      setTimeout(() => {
+        this.endLoader();
+      }, 30000);
     });
   },
   methods: {
@@ -378,7 +382,13 @@ export default {
     changeIpmiProtocolState(state) {
       this.$store
         .dispatch('policies/saveIpmiProtocolState', state)
-        .then((message) => this.successToast(message))
+        .then((message) => {
+          this.startLoader();
+          setTimeout(() => {
+            this.endLoader();
+          }, 30000);
+          this.successToast(message);
+        })
         .catch(({ message }) => this.errorToast(message));
     },
     changeSshProtocolState(state) {
