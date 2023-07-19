@@ -1273,7 +1273,7 @@
       "successDisableBmcShell": "Successfully disabled BMC shell (via SSH), Please allow 15 seconds for the disable to become effective.",
       "successEnableBmcShell": "Successfully enabled BMC shell (via SSH)",
       "successNetworkPolicyUpdate": "Successfully updated %{policy}.",
-      "successIpmiNetworkPolicyUpdate": "The BMC normally takes about 30 seconds to change the %{policy} state.",
+      "successIpmiNetworkPolicyUpdate": "Successfully updated %{policy}. The BMC normally takes about 30 seconds to change the state.",
       "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
     },
     "acfUploadEnablementConfirmText": "Caution: Enabling this setting allows unauthenticated users to upload Access Control Files (ACFs) without logging in and without pressing Function 74 on the Operator Panel. Do you want to proceed?",
