@@ -862,15 +862,15 @@
     "toast": {
       "errorDisableIdentifyLed": "Error disabling Identify LED.",
       "errorDisableLampTest": "Error disabling Lamp test.",
-      "errorDisableSystemAttentionLed": "Error disabling System Attention LED.",
+      "errorDisableSystemAttentionLed": "Error disabling System attention LED.",
       "errorEnableIdentifyLed": "Error enabling Identify LED.",
       "errorEnableLampTest": "Error enabling Lamp test.",
-      "errorEnableSystemAttentionLed": "Error enabling System Attention LED.",
       "errorEnclosureSettings": "Error updating enclosure settings.",
       "infoRemoveAssembly": "Refresh to confirm whether '%{assemblyName}' is ready to  be removed.",
       "successEnclosureSettings": "Successfully updated enclosure settings.",
       "successEnableIdentifyLed": "Successfully enabled Identify LED.",
       "successDisableIdentifyLed": "Successfully disabled Identify LED.",
+      "successDisableSystemAttentionLed": "Successfully disabled System attention LED.",
       "successEnableLampTest": "Successfully enabled Lamp test. The LEDs will stay on for 4 minutes."
     }
   },
