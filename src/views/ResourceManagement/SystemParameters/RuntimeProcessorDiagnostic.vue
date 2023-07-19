@@ -307,6 +307,12 @@ export default {
         return newValue;
       },
     },
+    serverStatus() {
+      return this.$store.getters['global/serverStatus'];
+    },
+    isServerOff() {
+      return this.serverStatus === 'off' ? true : false;
+    },
   },
   validations() {
     return {
@@ -335,7 +341,20 @@ export default {
           value: value ? 'Enabled' : 'Disabled',
         }),
         this.$store.dispatch('systemParameters/getRpdScheduledRun'),
-      ]).finally(() => this.endLoader());
+      ])
+        .then((message) => {
+          if (value && this.isServerOff) {
+            this.successToast(
+              this.$t(
+                'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff'
+              )
+            );
+          } else {
+            this.successToast(message);
+          }
+        })
+        .catch(({ message }) => this.errorToast(message))
+        .finally(() => this.endLoader());
     },
     updateGardOnErrorState(state) {
       this.$store

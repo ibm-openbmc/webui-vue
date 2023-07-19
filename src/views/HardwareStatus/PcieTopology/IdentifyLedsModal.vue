@@ -148,16 +148,25 @@ export default {
         .dispatch('pcieTopology/updateLedValue', { value: value, type: type })
         .then(() => {
           this.getAllLeds();
+          if (value.led) {
+            this.successToast(
+              this.$t('pagePcieTopology.toast.successEnableIdentifyLed')
+            );
+          } else {
+            this.successToast(
+              this.$t('pagePcieTopology.toast.successDisableIdentifyLed')
+            );
+          }
         })
         .catch(() => {
           this.getAllLeds();
-          if (!value.locationIndicatorActive) {
+          if (value.led) {
             this.errorToast(
-              this.$t('pageInventory.toast.errorEnableIdentifyLed')
+              this.$t('pagePcieTopology.toast.errorEnableIdentifyLed')
             );
           } else {
             this.errorToast(
-              this.$t('pageInventory.toast.errorDisableIdentifyLed')
+              this.$t('pagePcieTopology.toast.errorDisableIdentifyLed')
             );
           }
         });

@@ -65,14 +65,16 @@ export default {
   },
   computed: {
     serverStatus() {
-      let status = null;
+      let status = false;
       if (this.consoleType === 'bmc-console') status = this.wsConnection;
-      if (this.consoleType === 'console1')
-        status =
-          this.$store.getters['chassis/powerState'] !== 'Off' &&
-          this.wsConnection;
+      if (this.consoleType === 'console1') {
+        status = this.powerStatus !== 'Off' && this.wsConnection;
+      }
 
       return status;
+    },
+    powerStatus() {
+      return this.$store.getters['chassis/powerState'];
     },
     serverStatusIcon() {
       return this.serverStatus ? 'success' : 'danger';
@@ -95,7 +97,10 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('global/getSystemInfo');
+    Promise.all([
+      this.$store.dispatch('global/getSystemInfo'),
+      this.$store.dispatch('chassis/getPowerState'),
+    ]);
   },
   mounted() {
     this.openTerminal();

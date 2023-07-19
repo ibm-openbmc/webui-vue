@@ -312,22 +312,33 @@ const systemParametersStore = {
           updatedImmediateTestRequestedValue
         )
         .then(() => {
-          return i18n.t(
-            'pageSystemParameters.toast.successSavingImmediateTestRequested'
-          );
+          if (value === 'Enabled') {
+            return i18n.t(
+              'pageSystemParameters.toast.successStartingDiagnosticTestRun'
+            );
+          } else {
+            return i18n.t(
+              'pageSystemParameters.toast.successStoppingDiagnosticTestRun'
+            );
+          }
         })
         .catch((error) => {
           console.log(error);
           if (value === 'Enabled') {
             commit('setImmediateTestRequested', false);
+            throw new Error(
+              i18n.t(
+                'pageSystemParameters.toast.errorStartingDiagnosticTestRun'
+              )
+            );
           } else {
             commit('setImmediateTestRequested', true);
+            throw new Error(
+              i18n.t(
+                'pageSystemParameters.toast.errorStoppingDiagnosticTestRun'
+              )
+            );
           }
-          throw new Error(
-            i18n.t(
-              'pageSystemParameters.toast.errorSavingImmediateTestRequested'
-            )
-          );
         });
     },
     async saveGardOnError({ commit }, updatedImmediateTestRequested) {

@@ -1018,13 +1018,13 @@ const PcieTopologyStore = {
             };
             await api.patch(uri, updatedIdentifyLedValue).catch((error) => {
               console.log('error', error);
-              if (!requestBody.locationIndicatorActive) {
+              if (requestBody.value.led) {
                 throw new Error(
-                  i18n.t('pageInventory.toast.errorEnableIdentifyLed')
+                  i18n.t('pagePcieTopology.toast.errorEnableIdentifyLed')
                 );
               } else {
                 throw new Error(
-                  i18n.t('pageInventory.toast.errorDisableIdentifyLed')
+                  i18n.t('pagePcieTopology.toast.errorDisableIdentifyLed')
                 );
               }
             });

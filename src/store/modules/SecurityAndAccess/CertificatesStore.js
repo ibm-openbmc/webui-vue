@@ -158,7 +158,7 @@ const CertificatesStore = {
         Oem: {
           IBM: {
             ACF: {
-              ACFFile: base64File.split('base64,')[1].slice(0, -1),
+              ACFFile: base64File.split('base64,')[1],
             },
           },
         },
@@ -187,7 +187,7 @@ const CertificatesStore = {
         Oem: {
           IBM: {
             ACF: {
-              ACFFile: base64File.split('base64,')[1].slice(0, -1),
+              ACFFile: base64File.split('base64,')[1],
             },
           },
         },
@@ -228,7 +228,7 @@ const CertificatesStore = {
         Oem: {
           IBM: {
             ACF: {
-              ACFFile: base64File.split('base64,')[1].slice(0, -1),
+              ACFFile: base64File.split('base64,')[1],
             },
           },
         },
