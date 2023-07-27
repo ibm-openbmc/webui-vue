@@ -434,10 +434,20 @@ export default {
           }
         })
         .then(() => {
-          this.$store.dispatch('global/getBmcTime');
+          if (!isNTPEnabled) {
+            this.$store.dispatch('global/getBmcTime');
+            this.$v.form.$reset();
+            this.endLoader();
+          } else {
+            this.startLoader();
+            setTimeout(() => {
+              this.$store.dispatch('global/getBmcTime');
+              this.endLoader();
+            }, 20000);
+          }
         })
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => {
+        .catch(({ message }) => {
+          this.errorToast(message);
           this.$v.form.$reset();
           this.endLoader();
         });

@@ -391,7 +391,8 @@
     },
     "toast": {
       "errorSaveDateTime": "Error saving date and time settings.",
-      "successSaveDateTime": "Successfully saved date and time settings."
+      "successSaveDateTime": "Successfully saved date and time settings.",
+      "successSaveDateTimeForNtpServer": "Successfully saved date and time settings. It would take about 20 seconds to update date and time."
     }
   },
   "pageConcurrentMaintenance": {
