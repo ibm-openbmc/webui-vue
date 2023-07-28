@@ -160,7 +160,7 @@ const UserManagementStore = {
       const data = {};
       if (username) data.UserName = username;
       if (password) data.Password = password;
-      if (privilege) data.RoleId = privilege;
+      if (privilege && privilege !== 'ReadOnly') data.RoleId = privilege;
       if (status !== undefined) data.Enabled = status;
       if (locked !== undefined) data.Locked = locked;
       return await api
