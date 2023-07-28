@@ -172,11 +172,7 @@ const UserManagementStore = {
           })
         )
         .catch((error) => {
-          console.log(error);
-
-          const messageId =
-            error.response.data['Password@Message.ExtendedInfo'][0].MessageId;
-
+          const messageId = error?.response?.data?.error?.code;
           const message =
             messageId === 'Base.1.8.1.PropertyValueFormatError'
               ? i18n.t(

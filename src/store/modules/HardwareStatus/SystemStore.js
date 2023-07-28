@@ -78,10 +78,10 @@ const SystemStore = {
           },
         })
         .then(() => {
-          if (ledState) {
-            return i18n.t('pageInventory.toast.successEnableIdentifyLed');
-          } else {
-            return i18n.t('pageInventory.toast.successDisableIdentifyLed');
+          if (!ledState) {
+            return i18n.t(
+              'pageInventory.toast.successDisableSystemAttentionLed'
+            );
           }
         })
         .catch((error) => {

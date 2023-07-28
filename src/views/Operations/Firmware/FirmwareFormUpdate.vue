@@ -204,9 +204,13 @@ export default {
 
             if (activationAborted) {
               if (activationAborted?.Oem?.OpenBMC?.AbortReason) {
-                return this.errorToast(
-                  activationAborted?.Oem?.OpenBMC?.AbortReason?.split('.').pop()
-                );
+                const message = activationAborted?.Oem?.OpenBMC?.AbortReason?.split(
+                  '.'
+                ).pop();
+                if (message === 'ExpiredAccessKey')
+                  return this.errorToast(
+                    this.$t('pageFirmware.toast.expiredAccessKeyError')
+                  );
               } else {
                 return this.errorToast(
                   this.$t('pageFirmware.toast.errorActivation')
@@ -264,11 +268,7 @@ export default {
               })
               .catch(({ message }) => {
                 this.endLoader();
-                const errorMessage =
-                  message === 'ExpiredAccessKey'
-                    ? this.$t('pageFirmware.toast.expiredAccessKeyError')
-                    : message;
-                this.errorToast(errorMessage);
+                this.errorToast(message);
               });
           }, 180000); // 3 minutes
         };
