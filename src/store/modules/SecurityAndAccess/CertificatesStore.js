@@ -207,16 +207,26 @@ const CertificatesStore = {
         });
     },
     async addNewCertificate({ dispatch }, { file, type }) {
+      const typeOfCertificate = getCertificateProp(type, 'label');
       return await api
         .post(getCertificateProp(type, 'location'), file, {
           headers: { 'Content-Type': 'application/x-pem-file' },
         })
         .then(() => dispatch('getCertificates'))
-        .then(() =>
-          i18n.t('pageCertificates.toast.successAddCertificate', {
-            certificate: getCertificateProp(type, 'label'),
-          })
-        )
+        .then(() => {
+          if (typeOfCertificate === 'HTTPS Certificate') {
+            return i18n.t(
+              'pageCertificates.toast.successAddedHTTPCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              }
+            );
+          } else {
+            return i18n.t('pageCertificates.toast.successAddCertificate', {
+              certificate: getCertificateProp(type, 'label'),
+            });
+          }
+        })
         .catch((error) => {
           console.log(error);
           throw new Error(i18n.t('pageCertificates.toast.errorAddCertificate'));
@@ -261,6 +271,7 @@ const CertificatesStore = {
       data.CertificateString = certificateString;
       data.CertificateType = 'PEM';
       data.CertificateUri = { '@odata.id': location };
+      const typeOfCertificate = getCertificateProp(type, 'label');
       return await api
         .post(
           '/redfish/v1/CertificateService/Actions/CertificateService.ReplaceCertificate',
@@ -271,9 +282,18 @@ const CertificatesStore = {
           dispatch('getCertificates');
         })
         .then(() => {
-          return i18n.t('pageCertificates.toast.successReplaceCertificate', {
-            certificate: getCertificateProp(type, 'label'),
-          });
+          if (typeOfCertificate === 'HTTPS Certificate') {
+            return i18n.t(
+              'pageCertificates.toast.successReplacedHTTPCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              }
+            );
+          } else {
+            return i18n.t('pageCertificates.toast.successReplaceCertificate', {
+              certificate: getCertificateProp(type, 'label'),
+            });
+          }
         })
         .catch((error) => {
           console.log(error);

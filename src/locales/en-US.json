@@ -351,8 +351,11 @@
       "errorDeleteCertificate": "Error deleting certificate.",
       "errorReplaceCertificate": "Error replacing certificate.",
       "successAddCertificate": "Successfully added %{certificate}.",
+      "successAddedHTTPCertificate": "Successfully added %{certificate}. Reload the browser page to see the changes",
       "successDeleteCertificate": "Successfully deleted %{certificate}.",
-      "successReplaceCertificate": "Successfully replaced %{certificate}."
+      "successReplaceCertificate": "Successfully replaced %{certificate}.",
+      "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to see the changes."
+
     }
   },
   "pageChangePassword": {
