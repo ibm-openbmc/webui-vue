@@ -355,7 +355,6 @@
       "successDeleteCertificate": "Successfully deleted %{certificate}.",
       "successReplaceCertificate": "Successfully replaced %{certificate}.",
       "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to see the changes."
-
     }
   },
   "pageChangePassword": {
