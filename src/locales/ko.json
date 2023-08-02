@@ -85,6 +85,7 @@
       "on": "설정",
       "present": "있음",
       "success": "성공",
+      "unavailable": "사용 불가능",
       "warning": "경고"
     },
     "table": {
@@ -266,16 +267,32 @@
     "setting": {
       "aixAllowed": "AIX 허용됨",
       "aixDiagnostics": "AIX 진단",
+      "aixUpdateAccessKey": "AIX 업데이트 액세스 키",
       "activeMemoryExpansion": "활성 메모리 확장",
       "activeMemoryMirroring": "활성 메모리 미러링",
+      "assetProtectionMachineID": "자산 보호 시스템 ID",
+      "assetProtectionPublicKey": "자산 보호 공용 키",
       "capi": "CAPI",
+      "elasticMemoryGBAvailable": "Elastic MemoryGB*사용 가능한 일수",
+      "elasticProcessorAvailable": "Elastic 프로세서*사용 가능한 일수",
+      "firmwareUpdateAccessKey": "펌웨어 업데이트 액세스 키",
       "interactiveCapacity": "IBMi 100% 대화식 용량",
       "ibmiPartitions": "IBMi 파티션 허용됨",
       "inmiPermitted": "IBMi 기본 I/O 사용 허용됨",
       "lparCreationAllowed": "LPAR 작성 허용됨",
       "livePartitionMobility": "Live Partition Mobility",
       "perPartition": "파티션당 128개의 프로세서 초과",
+      "p05VirtualTier": "P05 가상 티어",
+      "p10VirtualTier": "P10 가상 티어",
+      "p20VirtualTier": "P20 가상 티어",
+      "p30VirtualTier": "P30 가상 티어",
+      "permanentMemoryLicenses": "영구 메모리 라이센스(GB)",
+      "permanentProcessorLicenses": "영구 프로세서 라이센스",
       "subprocessorPartitioning": "서브프로세서 파티셔닝",
+      "systemAnchor": "시스템 앵커",
+      "trialMemoryLicenses": "평가판 메모리 라이센스(GB)",
+      "trialProcessorLicenses": "평가판 프로세서 라이센스",
+      "virtualizationEngineTechnology": "가상화 엔진 기술",
       "virtualIoServer": "Virtual I/O Server 가능",
       "virtualTiersAllowed": "가상 티어 허용됨"
     },
@@ -352,7 +369,8 @@
       "link": "프로파일 설정",
       "message": "애플리케이션 전체에서 날짜와 시간의 표시 방법(UTC 또는 브라우저 오프셋)을 변경하려면 다음으로 이동하십시오. ",
       "messageText": "애플리케이션 전체에서 날짜 및 시간이 표시되는 방식(UTC 또는 브라우저 오프셋)을 변경하려면 프로파일 설정으로 이동하십시오",
-      "messageNtp": "NTP가 선택되었지만 NTP 서버가 지정되어 있지 않거나 지정된 NTP 서버에 연결할 수 없는 경우 time.google.com이 사용됩니다."
+      "messageNtp": "NTP가 선택되었지만 NTP 서버가 지정되어 있지 않거나 지정된 NTP 서버에 연결할 수 없는 경우 time.google.com이 사용됩니다.",
+      "messagePowerOff": "날짜 및 시간을 수동 또는 NTP로 변경하려면 서버의 전원을 꺼야 합니다."
     },
     "configureSettings": "설정 구성",
     "form": {
@@ -724,6 +742,7 @@
       "rebootStartedMessage": "백업 이미지에서 재부팅을 시작했습니다. 재부팅은 완료하는 데 몇 분 정도 소요될 수 있습니다.",
       "taskComplete": "태스크 완료",
       "taskCompleteMessage": "태스크가 완료되었습니다. BMC 재부팅 대기 중",
+      "expiredAccessKeyError": "액세스 키가 만료되었습니다. `https://www.ibm.com/servers/eserver/ess`로 이동하십시오.",
       "updateFirmware": {
         "step1": "4단계 중 1단계 - 업로드",
         "step1Message": "업데이트가 시작되었습니다. 펌웨어 업로드가 진행 중입니다.",
@@ -787,6 +806,7 @@
     "alert": {
       "enclosureAlertTitle": "격납장치 구성 보기",
       "enclosureAlertMessage": "시스템에 전원이 켜져 있어야 합니다.",
+      "powerOffExpansionChassis": "호스트 전원이 꺼진 경우 I/O 확장 섀시의 상태 값을 사용할 수 없습니다.",
       "viewServerPowerOperations": "서버 전원 조작 보기"
     },
     "modal": {
@@ -845,12 +865,12 @@
       "errorDisableSystemAttentionLed": "시스템 주의 LED를 사용 안함으로 설정하는 동안 오류가 발생했습니다.",
       "errorEnableIdentifyLed": "식별 LED의 사용 설정 중 오류가 발생했습니다.",
       "errorEnableLampTest": "램프 테스트의 사용 설정 중 오류가 발생했습니다.",
-      "errorEnableSystemAttentionLed": "시스템 주의 LED를 사용으로 설정하는 동안 오류가 발생했습니다.",
       "errorEnclosureSettings": "격납장치 설정을 업데이트하는 중에 오류가 발생했습니다.",
       "infoRemoveAssembly": "'%{assemblyName}'을(를) 제거할 준비가 되었는지 확인하려면 새로 고치십시오.",
       "successEnclosureSettings": "격납장치 설정을 업데이트했습니다.",
       "successEnableIdentifyLed": "식별 LED를 사용으로 설정했습니다.",
       "successDisableIdentifyLed": "식별 LED를 사용 안함으로 설정했습니다.",
+      "successDisableSystemAttentionLed": "시스템 주의 LED를 사용 안함으로 설정했습니다.",
       "successEnableLampTest": "램프 테스트를 성공적으로 활성화되었습니다. LED는 4분 동안 켜져 있습니다."
     }
   },
@@ -908,13 +928,43 @@
     "frequencyCapHelpText": "사용 안함으로 설정한 경우 최대 및 최소 빈도를 설정하려면 초기 부팅이 필요할 수 있습니다.",
     "lateralCastOut": "측면 캐스트 아웃",
     "lateralCastOutDescription": "시스템 성능을 저하시킬 수 있으므로 서비스 제공자의 지시가 있는 경우에만 이 값을 변경하십시오.",
+    "rpdPolicy": "런타임 프로세서 진단 정책",
+    "updateRpdPolicy": "RPD 정책 업데이트",
+    "rpdPolicyDescription": "사용 가능(주기적으로 각 코어에서 실행), 스케줄됨(지정된 지속 기간(분)에 대해 매일 스케줄된 시간에 각 코어에서 순차적으로 실행), 사용 불가능(진단 또는 실행 프로그램이 실행되지 않음).",
+    "rpdFeature": "런타임 프로세서 진단 기능",
+    "updateRpdFeature": "RPD 기능 업데이트",
+    "rpdFeatureDescription": "시스템에서 런타임 프로세서 진단(RPD) 기능을 구성할지 여부를 제어합니다. 사용 가능(RPD 기능은 설치된 메모리의 양에 관계없이 구성됨), 자동(RPD 기능은 설치된 메모리가 128GB 이상인 시스템에서 구성되며 128GB보다 작은 시스템에 구성되지 않음), 사용 불가능(RPD 기능이 구성되지 않음).",
+    "startTime": "시작 시간(24시간(UTC))",
+    "runNow": "지금 실행",
+    "duration": "지속 기간(분)",
+    "immediateTestRequested": "즉시 테스트 요청",
+    "immediateTestRequestedDescription": "지금 실행 단추를 누르면 RPD 정책이 대체되고 진단 테스트 실행이 즉시 시작되고 테스트가 실행될 때까지 단추가 비활성화됩니다.",
+    "rpdScheduledRun": "RPD 스케줄된 실행 시간",
+    "rpdScheduledRunDescription": "RPD 정책이 \"스케줄됨\"으로 설정된 경우에만 사용됩니다. 이 값은 프로세서 진단을 실행할 시간을 나타냅니다.",
+    "updateRpdScheduledRun": "RPD 스케줄된 실행 업데이트",
+    "gardOnError": "오류에 대한 GARD",
+    "gardOnErrorDescription": "오류 시 프로세서 코어를 구성 해제할지 여부를 제어합니다.",
+    "stopTest": "진단 테스트 실행 중지",
     "toast": {
       "errorSavingAggressivePrefetch": "적극적 프리페치 저장 중에 오류가 발생함",
       "errorSavingFrequencyCap": "주파수 상한 저장 중에 오류가 발생함",
+      "errorSavingGardOnError": "오류로 Gard를 저장하는 중 오류 발생",
       "errorSavingLateralCastOut": "측면 캐스트 아웃 모드를 저장하는 동안 오류가 발생했습니다.",
+      "errorSavingRpdPolicy": "RPD 정책을 저장하는 중 오류 발생",
+      "errorSavingRpdFeature": "RPD 기능을 저장하는 중 오류 발생",
+      "errorSavingRpdRun": "RPD 스케줄된 실행 저장 중에 오류 발생",
+      "errorStartingDiagnosticTestRun": "진단 테스트 실행 시작 중 오류 발생",
+      "errorStoppingDiagnosticTestRun": "진단 테스트 실행을 중지하는 중 오류 발생",
+      "successSavingRpdRun": "RPD 스케줄된 실행이 저장되었습니다. 참고: RPD 스케줄된 실행 시간에 시스템에 전원을 공급해야 합니다. 그렇지 않으면 다음 사용 가능한 스케줄에 대해 진단 테스트 실행이 적용됩니다.",
       "successSavingAggressivePrefetch": "적극적 프리페치가 저장됨",
       "successSavingFrequencyCap": "주파수 상한이 저장됨",
-      "successSavingLateralCastOut": "측면 캐스트 아웃 모드가 성공적으로 저장됨"
+      "successSavingGardOnError": "오류가 발생한 Gard가 성공적으로 저장됨",
+      "successSavingLateralCastOut": "측면 캐스트 아웃 모드가 성공적으로 저장됨",
+      "successSavingRpdPolicy": "RPD 정책이 성공적으로 저장됨",
+      "successSavingRpdFeature": "RPD 기능이 성공적으로 저장됨 변경사항은 다음 재부팅 시에 적용됩니다.",
+      "successStartingDiagnosticTestRun": "진단 테스트 실행이 시작됨",
+      "successStartingDiagnosticTestRunIfPoweredOff": "진단 테스트 실행이 저장되었습니다. 시스템에 전원이 공급되면 테스트가 시작됩니다.",
+      "successStoppingDiagnosticTestRun": "진단 테스트 실행이 중지됨"
     }
   },
   "pageLdap": {
@@ -926,6 +976,7 @@
       "ldapSettings": "LDAP 설정"
     },
     "form": {
+      "activeDirectory": "Active Directory",
       "baseDn": "기본 DN",
       "bindDn": "바인드 DN",
       "bindPassword": "바인드 비밀번호",
@@ -934,6 +985,7 @@
       "ldapAuthentication": "LDAP 인증",
       "ldapCertificateValidUntil": "LDAP 인증서 유효 기한",
       "manageSslCertificates": "SSL 인증서 관리",
+      "openLDAP": "OpenLDAP",
       "secureLdapHelper": "보안 LDAP를 사용하려면 CA 인증서와 LDAP 인증서가 필요합니다.",
       "secureLdapUsingSsl": "SSL을 사용한 보안 LDAP",
       "serverUri": "서버 URI",
@@ -1037,6 +1089,7 @@
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 주소",
     "ipv6": "IPv6",
+    "ipv6AutoConfig": "IPv6 자동 구성",
     "ipv6DefaultGateway": "IPv6 기본 게이트웨이",
     "macAddress": "MAC 주소",
     "network": "네트워크",
@@ -1050,13 +1103,16 @@
     "useNtp": "NTP 서버 사용",
     "modal": {
       "confirmDeleteIpv4": "'%{address}'을(를) 삭제하시겠습니까?",
+      "confirmDeleteIpv6": "'%{address}'을(를) 삭제하시겠습니까?",
       "confirmDisableDhcp": "DHCP를 사용 안함으로 설정하시겠습니까?",
       "confirmEnableDhcp": "DHCP가 사용으로 설정된 경우 정적 IP 주소에 액세스할 수 없습니다.",
       "dhcpConfirmTitle": "%{dhcpState} DHCP",
       "deleteIpv4": "IPv4 주소 삭제",
+      "deleteIpv6": "IPv6 주소 삭제",
       "editHostnameTitle": "호스트 이름 편집",
       "gateway": "게이트웨이",
       "ipAddress": "IP 주소",
+      "prefixLength": "접두부 길이",
       "staticDns": "정적 DNS",
       "subnetMask": "서브넷 마스크"
     },
@@ -1068,6 +1124,7 @@
       "addressState": "주소 상태",
       "deleteDns": "DNS 주소 삭제",
       "deleteIpv4": "IPv4 주소 삭제",
+      "deleteIpv6": "IPv6 주소 삭제",
       "editDns": "DNS 주소 편집",
       "editIpv4": "정적 IPv4 주소 편집",
       "editIpv6": "정적 IPv6 주소 편집",
@@ -1078,7 +1135,15 @@
     },
     "toast": {
       "errorSaveNetworkSettings": "%{setting} 설정의 업데이트 중 오류가 발생했습니다.",
-      "successSaveNetworkSettings": "%{setting} 설정값을 업데이트했습니다."
+      "errorAddingDnsServer": "DNS 서버 추가 중 오류가 발생했습니다.",
+      "errorDeletingDnsServer": "DNS 서버 삭제 중 오류가 발생했습니다.",
+      "errorDeletingIpv4Server": "IPv4 서버 삭제 중 오류가 발생했습니다.",
+      "errorDeletingIpv6Server": "IPv6 서버 삭제 중 오류가 발생했습니다.",
+      "successSaveNetworkSettings": "%{setting} 설정값을 업데이트했습니다.",
+      "successAddingDnsServer": "DNS 서버를 성공적으로 추가했습니다.",
+      "successDeletingDnsServer": "DNS 서버를 성공적으로 삭제했습니다.",
+      "successDeletingIpv4Server": "IPv4 서버가 성공적으로 삭제되었습니다.",
+      "successDeletingIpv6Server": "IPv6 서버가 성공적으로 삭제되었습니다."
     }
   },
   "pageOverview": {
@@ -1160,19 +1225,34 @@
       "resetLinkHeader": "링크 %{id} 재설정"
     },
     "table": {
-      "search": "검색"
+      "search": "검색",
+      "linkStatusType": "링크 상태 유형",
+      "filter": {
+        "degraded": "저하됨",
+        "failed": "실패함",
+        "inactive": "비활성",
+        "open": "열기",
+        "operational": "작동",
+        "unknown": "알 수 없음"
+      }
     },
     "toast": {
+      "errorDisableIdentifyLed": "식별 LED의 사용 안함 설정 중 오류가 발생했습니다.",
+      "errorEnableIdentifyLed": "식별 LED의 사용 설정 중 오류가 발생했습니다.",
       "errorReset": "링크 %{id}을(를) 재설정하는 중에 오류가 발생함",
       "errorSavePcieTopology": "PCIe 토폴로지 정보를 저장하는 중에 오류가 발생했습니다.",
       "errorSwitchingLed": "%{value}에 대해 %{operation} LED를 전환하는 중에 오류가 발생함",
       "resetInfoTitle": "링크 ID %{id}이(가) 재설정되는 중입니다.",
       "resetInfoDescription": "이 조작은 완료하는 데 몇 초가 소요될 수 있습니다.",
+      "successDisableIdentifyLed": "식별 LED를 사용 안함으로 설정했습니다.",
+      "successEnableIdentifyLed": "식별 LED를 사용으로 설정했습니다.",
       "successReset": "링크 %{id} 재설정이 시작되었습니다. 문제 여부는 이벤트 로그를 확인하십시오.",
       "successSavePcieTopology": "PCIe 토폴로지 정보를 저장했습니다."
     }
   },
   "pagePolicies": {
+    "acfUploadEnablement": "인증되지 않은 ACF 업로드 인에이블먼트",
+    "acfUploadEnablementDescription": "인증되지 않은 사용자가 ACF를 업로드하도록 허용합니다.",
     "hostTpm": "호스트 TPM",
     "hostTpmDescription": "TPM이 작동할 때만 시스템이 부팅되도록 합니다.",
     "hostUsb": "호스트 USB 사용 가능",
@@ -1180,7 +1260,7 @@
     "ipmi": "네트워크 IPMI(아웃오브밴드 IPMI)",
     "ipmiDescription": "IPMI를 통한 플랫폼의 원격 관리를 허용합니다. ipmitool 등의 도구를 사용하려면 이 설정을 사용할 수 있어야 합니다. 사용으로 설정되고 나면 온라인 지원 문서에 있는 절차에 따라 IPMI 사용자를 추가하십시오.",
     "rtad": "RTAD",
-    "rtadDescription": "이 옵션은 호스트 펌웨어에 대해 원격 신뢰 증명 디먼을 사용 또는 사용 안함으로 설정합니다.",
+    "rtadDescription": "이 설정은 VMI(Virtualization Management Interface)가 실행 중인 경우에만 적용됩니다. 시스템이 HMC 관리되는 경우 가상화 관리 인터페이스가 실행 중입니다.",
     "rtadInfoIcon": "@:global.status.nextReboot",
     "secureVersion": "보안 버전 잠금",
     "secureVersionDescription": "보안 버전 잠금 기능의 사용 여부를 지정합니다.",
@@ -1195,6 +1275,7 @@
       "successNetworkPolicyUpdate": "%{policy}을(를) 업데이트했습니다.",
       "successNextBootToast": "%{policy}에 변경사항 적용. %{policy}에 대한 변경사항은 다음 재부팅 시 적용됩니다."
     },
+    "acfUploadEnablementConfirmText": "주의: 이 설정을 사용으로 설정하면 인증되지 않은 사용자가 로그인하지 않고 운영자 패널에서 기능 74를 누르지 않고도 액세스 제어 파일(ACF)을 업로드할 수 있습니다. 계속하시겠습니까?",
     "vtpm": "가상 TPM",
     "vtpmDescription": "vTPM을 사용하면 게스트 운영 체제에서 TPM을 사용할 수 있습니다."
   },
@@ -1352,7 +1433,12 @@
       "name": "이름",
       "status": "상태",
       "upperCritical": "상위 위험",
-      "upperWarning": "상위 경고"
+      "upperWarning": "상위 경고",
+      "filter": {
+        "ok": "정상",
+        "critical": "위험",
+        "warning": "경고"
+      }
     }
   },
   "pageServerPowerOperations": {
@@ -1514,7 +1600,7 @@
     },
     "alert": {
       "heading": "경고",
-      "message": "HMC가 활성 상태이면 다시 연결을 시도합니다. 작동 중인 HMC의 연결을 끊으려면 HMC 자체에서 연결을 끊으십시오."
+      "message": "HMC가 연결된 사용자의 경우, 이 페이지에서 HMC 연결을 끊으려고 시도하고 HMC가 활성화되면 다시 연결을 시도합니다. 작동 중인 HMC를 연결 해제하는 올바른 방법은 HMC 자체에서 연결을 해제하는 것입니다."
     },
     "modal": {
       "disconnectMessage": "%{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 실행 취소할 수 없습니다. | %{count}개 세션의 연결을 끊으시겠습니까? 이 조치는 실행 취소할 수 없습니다.",
