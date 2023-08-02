@@ -85,6 +85,7 @@
       "on": "オン",
       "present": "存在する",
       "success": "成功",
+      "unavailable": "使用不可",
       "warning": "警告"
     },
     "table": {
@@ -266,16 +267,32 @@
     "setting": {
       "aixAllowed": "AIX 許可",
       "aixDiagnostics": "AIX 診断",
+      "aixUpdateAccessKey": "AIX 更新アクセス・キー",
       "activeMemoryExpansion": "アクティブ・メモリー拡張",
       "activeMemoryMirroring": "アクティブ・メモリー・ミラーリング",
+      "assetProtectionMachineID": "資産保護マシン ID",
+      "assetProtectionPublicKey": "資産保護公開キー",
       "capi": "CAPI",
+      "elasticMemoryGBAvailable": "Elastic MemoryGB*利用可能日数",
+      "elasticProcessorAvailable": "Elastic プロセッサー * 利用可能日数",
+      "firmwareUpdateAccessKey": "ファームウェア更新アクセス・キー",
       "interactiveCapacity": "IBMi 100% 対話式容量",
       "ibmiPartitions": "許可される IBMi パーティション",
       "inmiPermitted": "ネイティブ I/O の使用が許可されている IBMi",
       "lparCreationAllowed": "LPAR 作成許可",
       "livePartitionMobility": "Live partition mobility",
       "perPartition": "区画当たり 128 を超えるプロセッサー",
+      "p05VirtualTier": "P05 仮想層",
+      "p10VirtualTier": "P10 仮想層",
+      "p20VirtualTier": "P20 仮想層",
+      "p30VirtualTier": "P30 仮想層",
+      "permanentMemoryLicenses": "永続メモリー・ライセンス (GB)",
+      "permanentProcessorLicenses": "永続プロセッサー・ライセンス",
       "subprocessorPartitioning": "サブプロセッサー区画化",
+      "systemAnchor": "システム・アンカー",
+      "trialMemoryLicenses": "トライアル・メモリー・ライセンス (GB)",
+      "trialProcessorLicenses": "トライアル・プロセッサー・ライセンス",
+      "virtualizationEngineTechnology": "仮想化エンジン・テクノロジー",
       "virtualIoServer": "Virtual I/O Server 対応",
       "virtualTiersAllowed": "許可される仮想層"
     },
@@ -352,7 +369,8 @@
       "link": "プロファイル設定",
       "message": "アプリケーション全体で日付と時刻の表示方法 (UTC またはブラウザ・オフセット) を変更するには、次のリンクをクリックします: ",
       "messageText": "アプリケーション全体での日時の表示方法 (UTC またはブラウザーのオフセット) を変更するには、「プロファイル設定 (Profile Settings)」にアクセスしてください。",
-      "messageNtp": "NTP が選択されているが、NTP サーバーが指定されていない場合、または指定された NTP サーバーに到達できない場合は、time.google.com が使用されます。"
+      "messageNtp": "NTP が選択されているが、NTP サーバーが指定されていない場合、または指定された NTP サーバーに到達できない場合は、time.google.com が使用されます。",
+      "messagePowerOff": "日時を手動または NTP に変更するには、サーバーの電源をオフにする必要があります。"
     },
     "configureSettings": "設定を構成する",
     "form": {
@@ -724,6 +742,7 @@
       "rebootStartedMessage": "バックアップ・イメージから正常にリブートしました。 リブートが完了するまで数分かかるかもしれません。",
       "taskComplete": "タスク完了",
       "taskCompleteMessage": "タスクが完了しました。 BMC のリブートの待機中",
+      "expiredAccessKeyError": "期限切れのアクセス・キー。 「https://www.ibm.com/servers/eserver/ess」に移動します",
       "updateFirmware": {
         "step1": "ステップ 1/4 - アップロード",
         "step1Message": "更新が開始されました。 ファームウェアのアップロードが進行中です。",
@@ -787,6 +806,7 @@
     "alert": {
       "enclosureAlertTitle": "エンクロージャー構成の表示",
       "enclosureAlertMessage": "システムの電源をオンに設定しななければなりません。",
+      "powerOffExpansionChassis": "入出力拡張シャーシの正常性と状況の値は、ホストの電源がオフのときは使用できません。",
       "viewServerPowerOperations": "サーバーの電源操作を表示します。"
     },
     "modal": {
@@ -845,12 +865,12 @@
       "errorDisableSystemAttentionLed": "システム・アテンション LED を無効化しているときにエラーが発生しました。",
       "errorEnableIdentifyLed": "識別LEDの有効化中にエラーが発生しました。",
       "errorEnableLampTest": "ランプテストの有効化中にエラーが発生しました。",
-      "errorEnableSystemAttentionLed": "システム・アテンション LED を有効化しているときにエラーが発生しました。",
       "errorEnclosureSettings": "エンクロージャー設定の更新中にエラーが発生しました。",
       "infoRemoveAssembly": "更新して、'%{assemblyName}' を削除する準備ができているかどうかを確認してください。",
       "successEnclosureSettings": "エンクロージャー設定が正常に更新されました。",
       "successEnableIdentifyLed": "識別 LED が正常に有効化されました。",
       "successDisableIdentifyLed": "識別 LED が正常に無効化されました。",
+      "successDisableSystemAttentionLed": "システム・アテンション LED が正常に無効になりました。",
       "successEnableLampTest": "ランプ・テストが正常に有効化されました。 LEDは4分間点灯します。"
     }
   },
@@ -908,13 +928,43 @@
     "frequencyCapHelpText": "無効にすると、最大頻度と最小頻度を設定するために初期ブートが必要になる場合があります。",
     "lateralCastOut": "ラテラル・キャストアウト",
     "lateralCastOutDescription": "この値を変更するとシステムのパフォーマンスが低下する可能性があるため、サービス・プロバイダーから指示された場合にのみ変更してください。",
+    "rpdPolicy": "ランタイム・プロセッサー診断ポリシー",
+    "updateRpdPolicy": "RPD ポリシーの更新",
+    "rpdPolicyDescription": "有効 (定期的にテストするために各コアで実行)、スケジュール済み (指定された期間 (分)、毎日スケジュールされた時刻に各コアで順次実行)、無効 (診断またはエクササイザーは実行されません)。",
+    "rpdFeature": "ランタイム・プロセッサー診断フィーチャー",
+    "updateRpdFeature": "RPD 機能の更新",
+    "rpdFeatureDescription": "ランタイム・プロセッサー診断 (RPD) フィーチャーがシステム上で構成されるかどうかを制御します。 有効 (インストールされているメモリーの量に関係なく RPD フィーチャーが構成されます)、自動 (RPD フィーチャーは、少なくとも 128GB のインストール済みメモリーがあり、128GB 未満のシステムでは構成されていないシステムで構成されます)、無効 (RPD フィーチャーは構成されません)。",
+    "startTime": "開始時刻 (24 時間制 (UTC))",
+    "runNow": "今すぐ実行",
+    "duration": "所要時間 (分)",
+    "immediateTestRequested": "即時テストが要求されました",
+    "immediateTestRequestedDescription": "「今すぐ実行」ボタンを押すと、RPD ポリシーがオーバーライドされ、診断テストの実行が即時に開始され、テストが実行されるまでボタンがグレー表示されます。",
+    "rpdScheduledRun": "RPD スケジュール済み実行時刻",
+    "rpdScheduledRunDescription": "RPD ポリシーが「スケジュール済み」に設定されている場合にのみ使用されます。 この値は、プロセッサー診断を実行する時刻を表します。",
+    "updateRpdScheduledRun": "RPD スケジュール済み実行の更新",
+    "gardOnError": "エラー時の GARD",
+    "gardOnErrorDescription": "プロセッサー・コアがエラー時に構成解除されるかどうかを制御します。",
+    "stopTest": "診断テスト実行の停止",
     "toast": {
       "errorSavingAggressivePrefetch": "アグレッシブ・プリフェッチの保存エラー",
       "errorSavingFrequencyCap": "頻度キャップの保存エラー",
+      "errorSavingGardOnError": "エラー時にガードを保存中にエラーが発生しました",
       "errorSavingLateralCastOut": "ラテラル・キャストアウト・モードの保存中にエラーが発生しました",
+      "errorSavingRpdPolicy": "RPD ポリシーの保存エラー",
+      "errorSavingRpdFeature": "RPD 機能の保存エラー",
+      "errorSavingRpdRun": "RPD スケジュール実行の保存中にエラーが発生しました",
+      "errorStartingDiagnosticTestRun": "診断テストの開始中にエラーが発生しました",
+      "errorStoppingDiagnosticTestRun": "診断テストの実行を停止中にエラーが発生しました",
+      "successSavingRpdRun": "RPD スケジュール済み実行が正常に保管されました。 注: システムの電源は、RPD のスケジュール済み実行時刻にオンにする必要があります。そうしないと、診断テストの実行は、次に使用可能なスケジュールで有効になります。",
       "successSavingAggressivePrefetch": "アグレッシブ・プリフェッチが正常に保存されました",
       "successSavingFrequencyCap": "頻度キャップが正常に保存されました",
-      "successSavingLateralCastOut": "ラテラル・キャストアウト・モードが正常に保存されました"
+      "successSavingGardOnError": "エラー時のガードが正常に保存されました",
+      "successSavingLateralCastOut": "ラテラル・キャストアウト・モードが正常に保存されました",
+      "successSavingRpdPolicy": "RPD ポリシーが正常に保存されました",
+      "successSavingRpdFeature": "RPD 機能が正常に保存されました。 加えられた変更は、次回の再起動時に有効になります。",
+      "successStartingDiagnosticTestRun": "診断テストの実行が正常に開始されました",
+      "successStartingDiagnosticTestRunIfPoweredOff": "診断テストの実行が正常に保存されました。システムの電源がオンになると、テストが開始されます。",
+      "successStoppingDiagnosticTestRun": "診断テストの実行が正常に停止されました"
     }
   },
   "pageLdap": {
@@ -926,6 +976,7 @@
       "ldapSettings": "LDAP 設定"
     },
     "form": {
+      "activeDirectory": "Active Directory",
       "baseDn": "基本 DN",
       "bindDn": "バインド DN",
       "bindPassword": "バインド・パスワード",
@@ -934,6 +985,7 @@
       "ldapAuthentication": "LDAP 認証",
       "ldapCertificateValidUntil": "LDAP 認証の有効期限",
       "manageSslCertificates": "SSL 認証の管理",
+      "openLDAP": "OpenLDAP",
       "secureLdapHelper": "セキュア LDAP を有効にするには、CA 認証と LDAP 認証が必要です。",
       "secureLdapUsingSsl": "SSL を使ったセキュア LDAP",
       "serverUri": "サーバー URI",
@@ -1037,6 +1089,7 @@
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 アドレス",
     "ipv6": "IPv6",
+    "ipv6AutoConfig": "IPv6 自動構成",
     "ipv6DefaultGateway": "IPv6 デフォルト・ゲートウェイ",
     "macAddress": "MAC アドレス",
     "network": "ネットワーク",
@@ -1050,13 +1103,16 @@
     "useNtp": "NTP サーバーの使用",
     "modal": {
       "confirmDeleteIpv4": "'%{address}' を削除してもよろしいですか?",
+      "confirmDeleteIpv6": "'%{address}' を削除してもよろしいですか?",
       "confirmDisableDhcp": "DHCP を無効にしますか?",
       "confirmEnableDhcp": "DHCPを有効にすると、静的IPアドレスにアクセスできなくなります。",
       "dhcpConfirmTitle": "%{dhcpState} DHCP",
       "deleteIpv4": "IPv4 アドレスの削除",
+      "deleteIpv6": "IPv6 アドレスの削除",
       "editHostnameTitle": "ホスト名の編集",
       "gateway": "ゲートウェイ",
       "ipAddress": "IP アドレス",
+      "prefixLength": "接頭部の長さ",
       "staticDns": "静的 DNS",
       "subnetMask": "サブネット・マスク"
     },
@@ -1068,6 +1124,7 @@
       "addressState": "アドレス状態",
       "deleteDns": "DNS アドレスの削除",
       "deleteIpv4": "IPv4 アドレスの削除",
+      "deleteIpv6": "IPv6 アドレスの削除",
       "editDns": "DNS アドレスの編集",
       "editIpv4": "静的 IPv4 アドレスの編集",
       "editIpv6": "静的 IPv6 アドレスの編集",
@@ -1078,7 +1135,15 @@
     },
     "toast": {
       "errorSaveNetworkSettings": "%{setting} 設定の更新中にエラーが発生しました。",
-      "successSaveNetworkSettings": "%{setting} の設定が正常に更新されました。"
+      "errorAddingDnsServer": "DNS サーバーの追加でエラーが発生しました。",
+      "errorDeletingDnsServer": "DNS サーバーの削除でエラーが発生しました。",
+      "errorDeletingIpv4Server": "IPv4 サーバーの削除中にエラーが発生しました。",
+      "errorDeletingIpv6Server": "IPv6 サーバーの削除中にエラーが発生しました。",
+      "successSaveNetworkSettings": "%{setting} の設定が正常に更新されました。",
+      "successAddingDnsServer": "DNS サーバーが正常に追加されました。",
+      "successDeletingDnsServer": "DNS サーバーが正常に削除されました。",
+      "successDeletingIpv4Server": "IPv4 サーバーが正常に削除されました。",
+      "successDeletingIpv6Server": "IPv6 サーバーが正常に削除されました。"
     }
   },
   "pageOverview": {
@@ -1160,19 +1225,34 @@
       "resetLinkHeader": "リンク %{id} のリセット"
     },
     "table": {
-      "search": "検索"
+      "search": "検索",
+      "linkStatusType": "リンク状況タイプ",
+      "filter": {
+        "degraded": "機能低下",
+        "failed": "失敗",
+        "inactive": "非アクティブ",
+        "open": "開く",
+        "operational": "稼働",
+        "unknown": "不明"
+      }
     },
     "toast": {
+      "errorDisableIdentifyLed": "識別LEDの無効化中にエラーが発生しました。",
+      "errorEnableIdentifyLed": "識別LEDの有効化中にエラーが発生しました。",
       "errorReset": "リンク %{id} のリセット中にエラーが発生しました",
       "errorSavePcieTopology": "PCIe トポロジー情報の保存中にエラーが発生しました。",
       "errorSwitchingLed": "%{value} の %{operation} LED の転換中にエラーが発生しました",
       "resetInfoTitle": "リンク ID %{id} をリセットしています。",
       "resetInfoDescription": "この操作が完了するまでに数秒かかることがあります。",
+      "successDisableIdentifyLed": "識別 LED が正常に無効化されました。",
+      "successEnableIdentifyLed": "識別 LED が正常に有効化されました。",
       "successReset": "リンク %{id} のリセットが正常に開始されました。 問題がないかイベント・ログを確認してください。",
       "successSavePcieTopology": "PCIe トポロジー情報が正常に保存されました。"
     }
   },
   "pagePolicies": {
+    "acfUploadEnablement": "非認証 ACF アップロードの有効化",
+    "acfUploadEnablementDescription": "非認証ユーザーに ACF のアップロードを許可します。",
     "hostTpm": "ホスト TPM",
     "hostTpmDescription": "TPM が機能しているときにのみシステムがブートするように有効にします。",
     "hostUsb": "ホスト USB の有効化",
@@ -1180,7 +1260,7 @@
     "ipmi": "ネットワーク IPMI (アウト・オブ・バンド IPMI)",
     "ipmiDescription": "IPMI を介したプラットフォームのリモート管理を許可します。 ipmitool などのツールでは、この設定を有効にする必要があります。 有効にしたら、オンライン・サポート資料の手順に従って IPMI ユーザーを追加してください。",
     "rtad": "RTAD",
-    "rtadDescription": "このオプションは、ホスト・ファームウェアのリモート・トラステッド認証デーモンを有効または無効にします。",
+    "rtadDescription": "この設定は、仮想化管理インターフェース (VMI) が実行されている場合にのみ適用されます。 システムが HMC 管理対象の場合、仮想化管理インターフェースは実行中です。",
     "rtadInfoIcon": "@:global.status.nextReboot",
     "secureVersion": "セキュア・バージョン・ロックイン",
     "secureVersionDescription": "セキュア・バージョン・ロックイン機能を有効にするかどうかを指定します。",
@@ -1195,6 +1275,7 @@
       "successNetworkPolicyUpdate": "%{policy} が正常に更新されました。",
       "successNextBootToast": "%{policy} に変更を適用しています。 %{policy} に対して行われた変更は、次回のリブート時に有効になります。"
     },
+    "acfUploadEnablementConfirmText": "注意: この設定を有効にすると、認証されていないユーザーは、オペレーター・パネルで機能 74 を押すことなく、ログインせずにアクセス制御ファイル (ACF) をアップロードできます。 続行しますか?",
     "vtpm": "仮想 TPM",
     "vtpmDescription": "vTPM を有効にすると、ゲスト・オペレーティング・システムで TPM が使用できるようになります。"
   },
@@ -1352,7 +1433,12 @@
       "name": "名前",
       "status": "状況",
       "upperCritical": "上位クリティカル",
-      "upperWarning": "上位の警告"
+      "upperWarning": "上位の警告",
+      "filter": {
+        "ok": "OK",
+        "critical": "重大",
+        "warning": "警告"
+      }
     }
   },
   "pageServerPowerOperations": {
@@ -1514,7 +1600,7 @@
     },
     "alert": {
       "heading": "警告",
-      "message": "HMC がアクティブの場合は、再接続を試みます。 作動中の HMC を切断するには、HMC 自体から切断します。"
+      "message": "HMC が接続されているユーザーの場合、HMC がアクティブなときにこのページから切断しようとすると、HMC は再接続を試みます。 機能している HMC を切断する適切な方法は、HMC 自体から切断することです。"
     },
     "modal": {
       "disconnectMessage": "%{count} 件のセッションを切断してもよろしいですか? このアクションを元に戻すことはできません。 |%{count} のセッションを切断しますか? このアクションを元に戻すことはできません。",
