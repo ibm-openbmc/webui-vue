@@ -60,12 +60,12 @@
     "passwordValidation": {
       "title": "密码必须：",
       "message1": "1. 至少为 8 个字符",
-      "message2": "2. 不是 palindrome",
+      "message2": "2. 不是回文",
       "message3": "3. 不包含帐户用户名",
       "message4": "4. 不包含字典单词",
       "message5": "5. 不包含连续字符",
       "message6": "6. 如果用于 IPMI，那么必须不超过 20 个字符",
-      "message7": "7. 必须包含小写字母、大写字母、数字和其他字符中的任意两个字符"
+      "message7": "7. 必须包含小写字母、大写字母、数字和其他字符中的任意两种字符"
     },
     "status": {
       "absent": "不存在",
@@ -81,10 +81,11 @@
       "nextReboot": "更改将在下一次引导时生效。",
       "notAvailable": "未提供",
       "off": "关闭",
-      "ok": "确定",
+      "ok": "正常",
       "on": "开启",
       "present": "已存在",
       "success": "成功",
+      "unavailable": "不可用",
       "warning": "警告"
     },
     "table": {
@@ -266,16 +267,32 @@
     "setting": {
       "aixAllowed": "允许 AIX",
       "aixDiagnostics": "AIX 诊断",
+      "aixUpdateAccessKey": "AIX 更新访问密钥",
       "activeMemoryExpansion": "主动内存扩展 (AME)",
       "activeMemoryMirroring": "主动内存镜像 (AMM)",
+      "assetProtectionMachineID": "资产保护机器标识",
+      "assetProtectionPublicKey": "资产保护公用密钥",
       "capi": "CAPI",
+      "elasticMemoryGBAvailable": "Elastic MemoryGB*可用天数",
+      "elasticProcessorAvailable": "Elastic Processor*可用天数",
+      "firmwareUpdateAccessKey": "固件更新访问密钥",
       "interactiveCapacity": "IBMi 100% 交互能力",
       "ibmiPartitions": "允许使用 IBMi 分区",
       "inmiPermitted": "允许 IBMi 使用本机 I/O",
       "lparCreationAllowed": "允许创建 LPAR",
       "livePartitionMobility": "动态分区迁移 (LPM)",
       "perPartition": "允许分区超过 128 个处理器",
+      "p05VirtualTier": "P05 虚拟层",
+      "p10VirtualTier": "P10 虚拟层",
+      "p20VirtualTier": "P20 虚拟层",
+      "p30VirtualTier": "P30 虚拟层",
+      "permanentMemoryLicenses": "永久内存许可证 (GB)",
+      "permanentProcessorLicenses": "永久处理器许可证",
       "subprocessorPartitioning": "子处理器分区",
+      "systemAnchor": "系统锚点",
+      "trialMemoryLicenses": "试用内存许可证 (GB)",
+      "trialProcessorLicenses": "试用处理器许可证",
+      "virtualizationEngineTechnology": "虚拟化引擎技术",
       "virtualIoServer": "支持虚拟 I/O 服务器",
       "virtualTiersAllowed": "允许虚拟层"
     },
@@ -352,7 +369,8 @@
       "link": "概要文件设置",
       "message": "要更改整个应用程序中日期和时间的显示方式（UTC 或浏览器偏移量），请访问 ",
       "messageText": "要更改整个应用程序中日期和时间的显示方式（UTC 或浏览器偏移量），请访问“概要文件设置”",
-      "messageNtp": "如果选择了 NTP，但未提供 NTP 服务器，或者无法访问给定的 NTP 服务器，那么将使用 time.google.com。"
+      "messageNtp": "如果选择了 NTP，但未提供 NTP 服务器，或者无法访问给定的 NTP 服务器，那么将使用 time.google.com。",
+      "messagePowerOff": "必须关闭服务器电源才能将日期和时间更改为手动或 NTP。"
     },
     "configureSettings": "配置设置",
     "form": {
@@ -380,7 +398,7 @@
     "concurrentMaintenance": "并发维护",
     "opPanelBase": "操作员面板基座维护",
     "opPanelLcd": "操作员面板 LCD 维护",
-    "tod": "一天中的电池维护时间",
+    "tod": "日常电池维护",
     "alert": {
       "message": "为了卸下或更换电池、操作员面板基座或操作员面板 LCD，启用相应的切换开关。 完成之后，建议将其禁用以回到正常模式。",
       "title": "电池、操作员面板基座和操作员面板 LCD 的并发修复"
@@ -438,7 +456,7 @@
       "name": "名称",
       "pelId": "Pel 标识",
       "settings": "设置",
-      "size": "大小（以兆比字节计）"
+      "size": "大小（以兆字节计）"
     }
   },
   "pageDeconfigurationRecords": {
@@ -623,7 +641,7 @@
       "resetBiosOptionHelperText": "重置服务器设置，包括：平台密钥库、分区 NVRAM、分区配置和事件日志。",
       "resetBiosOptionLabel": "仅重置服务器设置",
       "resetOptionsLabel": "重置选项",
-      "resetToDefaultsOptionHelperText": "除了服务器设置之外，此选项还会重置 BMC 设置，包括：所有 BMC 帐户数据、所有更改的密码、所有策略、LDAP 配置、网络地址以及一天中的时间。",
+      "resetToDefaultsOptionHelperText": "除了服务器设置之外，此选项还会重置 BMC 设置，包括：所有 BMC 帐户数据、所有更改的密码、所有策略、LDAP 配置、网络地址以及日期和时间。",
       "resetToDefaultsOptionLabel": "重置 BMC 和服务器设置"
     },
     "modal": {
@@ -724,6 +742,7 @@
       "rebootStartedMessage": "已成功从备份映像启动重新引导。 重新引导可能需要几分钟才能完成。",
       "taskComplete": "任务完成",
       "taskCompleteMessage": "任务完成。 正在等待 BMC 重新引导",
+      "expiredAccessKeyError": "访问密钥已到期。 转至“https://www.ibm.com/servers/eserver/ess”",
       "updateFirmware": {
         "step1": "第 1 步（共 4 步）- 上载",
         "step1Message": "已启动更新。 正在进行固件上载。",
@@ -787,6 +806,7 @@
     "alert": {
       "enclosureAlertTitle": "查看机柜配置",
       "enclosureAlertMessage": "需要打开系统的电源。",
+      "powerOffExpansionChassis": "当主机电源关闭时，I/O 扩展机箱中的运行状况和状态值不可用。",
       "viewServerPowerOperations": "查看服务器电源操作"
     },
     "modal": {
@@ -845,12 +865,12 @@
       "errorDisableSystemAttentionLed": "禁用系统提醒指示灯时出错。",
       "errorEnableIdentifyLed": "启用标识指示灯时出错。",
       "errorEnableLampTest": "启用灯具测试时出错。",
-      "errorEnableSystemAttentionLed": "启用系统提醒指示灯时出错。",
       "errorEnclosureSettings": "更新机柜设置时出错。",
       "infoRemoveAssembly": "刷新以确认是否已准备好移除 \"%{assemblyName}\"。",
       "successEnclosureSettings": "已成功更新机柜设置。",
       "successEnableIdentifyLed": "已成功启用标识指示灯。",
       "successDisableIdentifyLed": "已成功禁用标识指示灯。",
+      "successDisableSystemAttentionLed": "已成功禁用系统提醒指示灯。",
       "successEnableLampTest": "已成功启用灯具测试。 指示灯将持续点亮 4 分钟。"
     }
   },
@@ -908,13 +928,43 @@
     "frequencyCapHelpText": "如果禁用，那么可能需要初始引导才能设置最大和最小频率。",
     "lateralCastOut": "Lateral cast out 控制",
     "lateralCastOutDescription": "仅在服务提供者指示时更改此值，因为它可能会降低系统性能。",
+    "rpdPolicy": "运行时处理器诊断策略",
+    "updateRpdPolicy": "更新 RPD 策略",
+    "rpdPolicyDescription": "已启用（在每个核心上运行以定期进行测试）、已调度（每天按调度的时间在每个核心上按顺序运行指定的持续时间（以分钟为单位））、已禁用（不运行诊断或试验程序）。",
+    "rpdFeature": "运行时处理器诊断功能",
+    "updateRpdFeature": "更新 RPD 功能部件",
+    "rpdFeatureDescription": "控制是否将在系统上配置运行时处理器诊断 (RPD) 功能部件。 已启用（将配置 RPD 功能部件，而不考虑已安装的内存量）、自动（将在至少具有 128GB 已安装内存的系统上配置 RPD 功能部件，而不在低于 128GB 的系统上进行配置）、已禁用（不配置 RPD 功能部件）。",
+    "startTime": "开始时间（24 小时制 (UTC)）",
+    "runNow": "立即运行",
+    "duration": "持续时间（分钟）",
+    "immediateTestRequested": "已请求立即测试",
+    "immediateTestRequestedDescription": "按“立即运行”按钮时，将覆盖 RPD 策略，并且诊断测试运行将立即启动，并且此按钮将呈现灰色，直至测试运行为止。",
+    "rpdScheduledRun": "一天中 RPD 的调度运行时间",
+    "rpdScheduledRunDescription": "仅在将 RPD 策略设置为“已调度”时使用。 该值表示一天中运行处理器诊断的时间。",
+    "updateRpdScheduledRun": "更新 RPD 调度运行",
+    "gardOnError": "出错时 GARD",
+    "gardOnErrorDescription": "控制是否在出错时取消配置处理器核心。",
+    "stopTest": "停止诊断测试运行",
     "toast": {
       "errorSavingAggressivePrefetch": "保存主动预取时出错",
       "errorSavingFrequencyCap": "保存频率上限时出错",
+      "errorSavingGardOnError": "保存“出错时 Gard”时出错",
       "errorSavingLateralCastOut": "保存 Lateral cast out 控制方式时出错",
+      "errorSavingRpdPolicy": "保存 RPD 策略时出错",
+      "errorSavingRpdFeature": "保存 RPD 功能部件时出错",
+      "errorSavingRpdRun": "保存 RPD 调度运行时出错",
+      "errorStartingDiagnosticTestRun": "启动诊断测试运行时出错",
+      "errorStoppingDiagnosticTestRun": "停止诊断测试运行时出错",
+      "successSavingRpdRun": "已成功保存 RPD 调度运行。 注意：必须在一天中的 RPD 调度运行时打开系统电源，否则诊断测试运行将在下一个可用调度上生效。",
       "successSavingAggressivePrefetch": "已成功保存主动预取",
       "successSavingFrequencyCap": "已成功保存频率上限",
-      "successSavingLateralCastOut": "已成功保存 Lateral cast out 控制方式"
+      "successSavingGardOnError": "已成功保存出错时 Gard",
+      "successSavingLateralCastOut": "已成功保存 Lateral cast out 控制方式",
+      "successSavingRpdPolicy": "已成功保存 RPD 策略",
+      "successSavingRpdFeature": "已成功保存 RPD 功能部件。 所作的更改将在下次重新引导时生效。",
+      "successStartingDiagnosticTestRun": "已成功启动诊断测试运行",
+      "successStartingDiagnosticTestRunIfPoweredOff": "已成功保存诊断测试运行，一旦打开系统电源，就将启动测试。",
+      "successStoppingDiagnosticTestRun": "已成功停止诊断测试运行"
     }
   },
   "pageLdap": {
@@ -926,6 +976,7 @@
       "ldapSettings": "LDAP 设置"
     },
     "form": {
+      "activeDirectory": "Active Directory",
       "baseDn": "基本 DN",
       "bindDn": "绑定 DN",
       "bindPassword": "绑定密码",
@@ -934,6 +985,7 @@
       "ldapAuthentication": "LDAP 认证",
       "ldapCertificateValidUntil": "LDAP 证书有效期至",
       "manageSslCertificates": "管理 SSL 证书",
+      "openLDAP": "OpenLDAP",
       "secureLdapHelper": "要启用安全 LDAP，需要 CA 证书和 LDAP 证书",
       "secureLdapUsingSsl": "使用 SSL 保护 LDAP",
       "serverUri": "服务器 URI",
@@ -1037,6 +1089,7 @@
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 地址",
     "ipv6": "IPv6",
+    "ipv6AutoConfig": "IPv6 自动配置",
     "ipv6DefaultGateway": "IPv6 默认网关",
     "macAddress": "MAC 地址",
     "network": "network",
@@ -1050,13 +1103,16 @@
     "useNtp": "使用 NTP 服务器",
     "modal": {
       "confirmDeleteIpv4": "确定要删除“%{address}”吗？",
+      "confirmDeleteIpv6": "确定要删除“%{address}”吗？",
       "confirmDisableDhcp": "确定要禁用 DHCP 吗？",
       "confirmEnableDhcp": "如果启用了 DHCP，那么静态 IP 地址将不可访问。",
       "dhcpConfirmTitle": "%{dhcpState} DHCP",
       "deleteIpv4": "删除 IPv4 地址",
+      "deleteIpv6": "删除 IPv6 地址",
       "editHostnameTitle": "编辑主机名",
       "gateway": "网关",
       "ipAddress": "IP 地址",
+      "prefixLength": "前缀长度",
       "staticDns": "静态 DNS",
       "subnetMask": "子网掩码"
     },
@@ -1068,6 +1124,7 @@
       "addressState": "地址状态",
       "deleteDns": "删除 DNS 地址",
       "deleteIpv4": "删除 IPv4 地址",
+      "deleteIpv6": "删除 IPv6 地址",
       "editDns": "编辑 DNS 地址",
       "editIpv4": "编辑静态 IPv4 地址",
       "editIpv6": "编辑静态 IPv6 地址",
@@ -1078,7 +1135,15 @@
     },
     "toast": {
       "errorSaveNetworkSettings": "更新 %{setting} 设置时出错。",
-      "successSaveNetworkSettings": "已成功更新 %{setting} 个设置。"
+      "errorAddingDnsServer": "添加 DNS 服务器时出错。",
+      "errorDeletingDnsServer": "删除 DNS 服务器时出错。",
+      "errorDeletingIpv4Server": "删除 IPv4 服务器时出错。",
+      "errorDeletingIpv6Server": "删除 IPv6 服务器时出错。",
+      "successSaveNetworkSettings": "已成功更新 %{setting} 个设置。",
+      "successAddingDnsServer": "已成功添加 DNS 服务器。",
+      "successDeletingDnsServer": "已成功删除 DNS 服务器。",
+      "successDeletingIpv4Server": "已成功删除 IPv4 服务器。",
+      "successDeletingIpv6Server": "已成功删除 IPv6 服务器。"
     }
   },
   "pageOverview": {
@@ -1160,19 +1225,34 @@
       "resetLinkHeader": "重置链路 %{id}"
     },
     "table": {
-      "search": "搜索"
+      "search": "搜索",
+      "linkStatusType": "链路状态类型",
+      "filter": {
+        "degraded": "已降级",
+        "failed": "失败",
+        "inactive": "不活动",
+        "open": "打开",
+        "operational": "运作",
+        "unknown": "未知"
+      }
     },
     "toast": {
+      "errorDisableIdentifyLed": "禁用标识指示灯时出错。",
+      "errorEnableIdentifyLed": "启用标识指示灯时出错。",
       "errorReset": "重置链路 %{id} 时出错",
       "errorSavePcieTopology": "保存 PCIe 拓扑信息时出错。",
       "errorSwitchingLed": "针对 %{value} 转动 %{operation} 指示灯时出错",
       "resetInfoTitle": "正在重置链路标识 %{id}。",
       "resetInfoDescription": "此操作可能需要几秒钟才能完成。",
+      "successDisableIdentifyLed": "已成功禁用标识指示灯。",
+      "successEnableIdentifyLed": "已成功启用标识指示灯。",
       "successReset": "已成功启动重置链路 %{id}。 检查事件日志以查找任何问题。",
       "successSavePcieTopology": "已成功保存 PCIe 拓扑信息。"
     }
   },
   "pagePolicies": {
+    "acfUploadEnablement": "未认证的 ACF 上载启用",
+    "acfUploadEnablementDescription": "允许未认证用户上载 ACF。",
     "hostTpm": "主机 TPM",
     "hostTpmDescription": "启用以确保系统仅在 TPM 正常运行时引导。",
     "hostUsb": "主机 USB 支持",
@@ -1180,7 +1260,7 @@
     "ipmi": "网络 IPMI（带外 IPMI）",
     "ipmiDescription": "允许通过 IPMI 对平台进行远程管理。 诸如 ipmitool 之类的工具需要启用此设置。 启用后，请按照联机支持文档中的过程来添加 IPMI 用户。",
     "rtad": "RTAD",
-    "rtadDescription": "此选项对主机固件启用或禁用“远程可信认证守护程序”。",
+    "rtadDescription": "仅当虚拟化管理接口 (VMI) 正在运行时，此设置才适用。 如果系统由 HMC 管理，那么虚拟化管理接口正在运行。",
     "rtadInfoIcon": "@:global.status.nextReboot",
     "secureVersion": "安全版本锁定",
     "secureVersionDescription": "指定是否启用安全版本锁定功能。",
@@ -1195,6 +1275,7 @@
       "successNetworkPolicyUpdate": "已成功更新 %{policy}。",
       "successNextBootToast": "正在将更改应用于 %{policy}。 对 %{policy} 所作的更改将在下一次重新引导时生效。"
     },
+    "acfUploadEnablementConfirmText": "注意：启用此设置将使未经认证的用户无需登录即可上载访问控制文件 (ACF)，也无需在操作员面板上按功能 74。 要继续吗？",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "启用 vTPM 使 TPM 可供访客操作系统使用。"
   },
@@ -1285,7 +1366,7 @@
     }
   },
   "pagePowerRestorePolicy": {
-    "description": "配置电源策略以确定系统在发生功率干扰后的启动方式。",
+    "description": "配置电源策略以确定系统在发生电源中断后的启动方式。",
     "powerPoliciesLabel": "电源恢复策略",
     "policies": {
       "AlwaysOff": "始终关闭",
@@ -1352,7 +1433,12 @@
       "name": "名称",
       "status": "状态",
       "upperCritical": "上临界",
-      "upperWarning": "上限警告"
+      "upperWarning": "上限警告",
+      "filter": {
+        "ok": "正常",
+        "critical": "严重",
+        "warning": "警告"
+      }
     }
   },
   "pageServerPowerOperations": {
@@ -1514,7 +1600,7 @@
     },
     "alert": {
       "heading": "警告",
-      "message": "如果 HMC 处于活动状态，那么它将会尝试重新连接。 要断开工作中 HMC 的连接，请断开该 HMC 自身的连接。"
+      "message": "对于连接了 HMC 的用户，如果尝试从此页面将其断开连接，并且 HMC 处于活动状态，那么它将尝试重新连接。 断开运行的 HMC 的正确方法是将其与 HMC 本身断开连接。"
     },
     "modal": {
       "disconnectMessage": "确定要断开 %{count} 个会话的连接吗？ 此操作无法撤销。| 确定要断开%{count} 个会话的连接吗？ 此操作无法撤销。",
@@ -1617,7 +1703,7 @@
       "errorLoadUsers": "装入用户时出错。",
       "errorSaveSettings": "保存帐户设置时出错。",
       "errorUpdateUser": "更新用户“%{username}”时出错。",
-      "errorUpdateUserPasswordNotAccepted": "更新用户 \"%{username}\" 时出错，因为密码错误。",
+      "errorUpdateUserPasswordNotAccepted": "更新用户 \"%{username}\" 时出错，因为密码复杂度不符合要求。",
       "successBatchDelete": "已成功删除 %{count} 个用户。| 已成功删除 %{count} 个用户。",
       "successBatchDisable": "已成功禁用 %{count} 个用户。| 已成功禁用 %{count} 个用户。",
       "successBatchEnable": "已成功启用 %{count} 个用户。| 已成功启用 %{count} 个用户。",
