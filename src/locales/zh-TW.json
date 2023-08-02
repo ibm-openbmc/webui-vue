@@ -85,6 +85,7 @@
       "on": "開啟",
       "present": "呈現",
       "success": "成功",
+      "unavailable": "無法使用",
       "warning": "警告"
     },
     "table": {
@@ -266,16 +267,32 @@
     "setting": {
       "aixAllowed": "容許 AIX",
       "aixDiagnostics": "AIX 診斷",
+      "aixUpdateAccessKey": "AIX 更新存取金鑰",
       "activeMemoryExpansion": "作用中的記憶體擴充",
       "activeMemoryMirroring": "作用中記憶體鏡映",
+      "assetProtectionMachineID": "資產保護機器 ID",
+      "assetProtectionPublicKey": "資產保護公開金鑰",
       "capi": "CAPI",
+      "elasticMemoryGBAvailable": "Elastic MemoryGB* 可用的天數",
+      "elasticProcessorAvailable": "Elastic 處理器*可用天數",
+      "firmwareUpdateAccessKey": "韌體更新存取金鑰",
       "interactiveCapacity": "IBMi 100% 互動式容量",
       "ibmiPartitions": "容許 IBMi 分割區",
       "inmiPermitted": "IBMi 允許使用原生 I/O",
       "lparCreationAllowed": "容許建立 LPAR",
       "livePartitionMobility": "即時分割區行動性",
       "perPartition": "每個分割區大於 128 個處理器",
+      "p05VirtualTier": "P05 虛擬層級",
+      "p10VirtualTier": "P10 虛擬層級",
+      "p20VirtualTier": "P20 虛擬層級",
+      "p30VirtualTier": "P30 虛擬層級",
+      "permanentMemoryLicenses": "永久記憶體授權 (GB)",
+      "permanentProcessorLicenses": "永久處理器授權",
       "subprocessorPartitioning": "子處理器分割",
+      "systemAnchor": "系統錨點",
+      "trialMemoryLicenses": "試用記憶體授權 (GB)",
+      "trialProcessorLicenses": "試用處理器授權",
+      "virtualizationEngineTechnology": "虛擬化引擎技術",
       "virtualIoServer": "具有 Virtual I/O Server 功能",
       "virtualTiersAllowed": "容許的虛擬層級"
     },
@@ -352,7 +369,8 @@
       "link": "設定檔設定",
       "message": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪： ",
       "messageText": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪「設定檔設定」",
-      "messageNtp": "如果已選取 NTP，但未提供 NTP 伺服器，或無法連接給定的 NTP 伺服器，則會使用 time.google.com。"
+      "messageNtp": "如果已選取 NTP，但未提供 NTP 伺服器，或無法連接給定的 NTP 伺服器，則會使用 time.google.com。",
+      "messagePowerOff": "必須關閉伺服器電源，才能將日期和時間變更為手動或 NTP。"
     },
     "configureSettings": "配置設定",
     "form": {
@@ -724,6 +742,7 @@
       "rebootStartedMessage": "已順利從備份映像檔啟動重新開機。 重新開機可能需要數分鐘才能完成。",
       "taskComplete": "作業完成",
       "taskCompleteMessage": "作業完成。 等待 BMC 重新開機",
+      "expiredAccessKeyError": "存取金鑰過期。 移至 `https://www.ibm.com/servers/eserver/ess`",
       "updateFirmware": {
         "step1": "步驟 1 / 4 - 上傳",
         "step1Message": "已啟動更新。 韌體上傳進行中。",
@@ -787,6 +806,7 @@
     "alert": {
       "enclosureAlertTitle": "檢視機箱配置",
       "enclosureAlertMessage": "系統需要開啟電源。",
+      "powerOffExpansionChassis": "當主機關閉電源時，I/O 擴充機箱中的性能及狀態值無法使用。",
       "viewServerPowerOperations": "檢視伺服器電源作業"
     },
     "modal": {
@@ -845,12 +865,12 @@
       "errorDisableSystemAttentionLed": "停用系統警示 LED 時發生錯誤。",
       "errorEnableIdentifyLed": "啟用識別 LED 時發生錯誤。",
       "errorEnableLampTest": "啟用「燈」測試時發生錯誤。",
-      "errorEnableSystemAttentionLed": "啟用系統警示 LED 時發生錯誤。",
       "errorEnclosureSettings": "更新機箱設定時發生錯誤。",
       "infoRemoveAssembly": "重新整理以確認 '%{assemblyName}' 是否已備妥可移除。",
       "successEnclosureSettings": "已順利更新機箱設定。",
       "successEnableIdentifyLed": "已順利啟用識別 LED。",
       "successDisableIdentifyLed": "已順利停用識別 LED。",
+      "successDisableSystemAttentionLed": "已順利停用系統警示 LED。",
       "successEnableLampTest": "已順利啟用「燈」測試。 LED 會持續發亮 4 分鐘。"
     }
   },
@@ -908,13 +928,43 @@
     "frequencyCapHelpText": "如果已停用，則可能需要起始開機以取得可設定的頻率上限及下限。",
     "lateralCastOut": "橫向強制轉型",
     "lateralCastOutDescription": "只有在「服務提供者」指示時，才變更此值，因為它可能會降低系統效能。",
+    "rpdPolicy": "執行時期處理器診斷原則",
+    "updateRpdPolicy": "更新 RPD 原則",
+    "rpdPolicyDescription": "已啟用（在每一個核心上執行以定期測試它們）、已排定（在每天排定的時間在每一個核心上循序執行指定的持續時間（分鐘））、已停用（將不執行診斷程式或練習程式）。",
+    "rpdFeature": "執行時期處理器診斷特性",
+    "updateRpdFeature": "更新 RPD 特性",
+    "rpdFeatureDescription": "控制是否在系統上配置「執行時期處理器診斷 (RPD) 特性」。 已啟用（不論已安裝的記憶體數量為何，都會配置 RPD 特性）、自動（將在具有至少 128GB 已安裝記憶體的系統上配置 RPD 特性，而在具有小於 128GB 的系統上未配置）、已停用（將不會配置 RPD 特性）。",
+    "startTime": "開始時間（24 小時制 (UTC)）",
+    "runNow": "立即執行",
+    "duration": "持續時間（分鐘）",
+    "immediateTestRequested": "已要求立即測試",
+    "immediateTestRequestedDescription": "按下「立即執行」按鈕時， RPD 原則會被置換，診斷測試執行會立即開始，且按鈕會變成灰色，直到測試執行為止。",
+    "rpdScheduledRun": "RPD 排定的一天執行時間",
+    "rpdScheduledRunDescription": "僅在 RPD 原則設為「已排程」時使用。 此值代表一天中執行處理器診斷程式的時間。",
+    "updateRpdScheduledRun": "更新 RPD 排程執行",
+    "gardOnError": "發生錯誤時的 GARD",
+    "gardOnErrorDescription": "控制是否在發生錯誤時取消配置處理器核心。",
+    "stopTest": "停止診斷測試執行",
     "toast": {
       "errorSavingAggressivePrefetch": "儲存積極的預先提取時發生錯誤",
       "errorSavingFrequencyCap": "儲存頻率上限時發生錯誤",
+      "errorSavingGardOnError": "在錯誤時儲存 Gard 時發生錯誤",
       "errorSavingLateralCastOut": "儲存橫向強制轉型輸出模式時發生錯誤",
+      "errorSavingRpdPolicy": "儲存 RPD 原則時發生錯誤",
+      "errorSavingRpdFeature": "儲存 RPD 特性時發生錯誤",
+      "errorSavingRpdRun": "儲存 RPD 排程執行時發生錯誤",
+      "errorStartingDiagnosticTestRun": "啟動診斷測試執行時發生錯誤",
+      "errorStoppingDiagnosticTestRun": "停止診斷測試執行時發生錯誤",
+      "successSavingRpdRun": "已順利儲存 RPD 排程執行。 附註：系統必須在 RPD 排定的執行時間開啟電源，否則診斷測試執行將在下一個可用的排程上生效。",
       "successSavingAggressivePrefetch": "已順利儲存積極的預先提取",
       "successSavingFrequencyCap": "已順利儲存頻率上限",
-      "successSavingLateralCastOut": "已順利儲存橫向強制轉型輸出模式"
+      "successSavingGardOnError": "已順利儲存錯誤時的高",
+      "successSavingLateralCastOut": "已順利儲存橫向強制轉型輸出模式",
+      "successSavingRpdPolicy": "已順利儲存 RPD 原則",
+      "successSavingRpdFeature": "已順利儲存 RPD 特性。 所做的變更將在下次重新開機時生效。",
+      "successStartingDiagnosticTestRun": "診斷測試執行已順利啟動",
+      "successStartingDiagnosticTestRunIfPoweredOff": "已順利儲存診斷測試執行，一旦系統開啟電源，即會啟動測試。",
+      "successStoppingDiagnosticTestRun": "已順利停止診斷測試執行"
     }
   },
   "pageLdap": {
@@ -926,6 +976,7 @@
       "ldapSettings": "LDAP 設定"
     },
     "form": {
+      "activeDirectory": "Active Directory",
       "baseDn": "基礎 DN",
       "bindDn": "連結 DN",
       "bindPassword": "連結密碼",
@@ -934,6 +985,7 @@
       "ldapAuthentication": "LDAP 鑑別",
       "ldapCertificateValidUntil": "LDAP 憑證有效截止時間",
       "manageSslCertificates": "管理 SSL 憑證",
+      "openLDAP": "OpenLDAP",
       "secureLdapHelper": "需要 CA 憑證和 LDAP 憑證才能啟用安全 LDAP",
       "secureLdapUsingSsl": "使用 SSL 保護 LDAP 安全",
       "serverUri": "伺服器 URL",
@@ -1037,6 +1089,7 @@
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 位址",
     "ipv6": "IPv6",
+    "ipv6AutoConfig": "IPv6 自動配置",
     "ipv6DefaultGateway": "IPv6 預設閘道",
     "macAddress": "MAC 位址",
     "network": "network",
@@ -1050,13 +1103,16 @@
     "useNtp": "使用 NTP 伺服器",
     "modal": {
       "confirmDeleteIpv4": "您確定要刪除 %{address} 嗎？",
+      "confirmDeleteIpv6": "您確定要刪除 %{address} 嗎？",
       "confirmDisableDhcp": "您確定要停用 DHCP 嗎？",
       "confirmEnableDhcp": "啟用 DHCP 時，將無法存取靜態 IP 位址。",
       "dhcpConfirmTitle": "%{dhcpState} DHCP",
       "deleteIpv4": "刪除 IPv4 位址",
+      "deleteIpv6": "刪除 IPv6 位址",
       "editHostnameTitle": "編輯主機名稱",
       "gateway": "閘道",
       "ipAddress": "IP 位址",
+      "prefixLength": "字首長度",
       "staticDns": "靜態 DNS",
       "subnetMask": "子網路遮罩"
     },
@@ -1068,6 +1124,7 @@
       "addressState": "位址狀態",
       "deleteDns": "刪除 DNS 位址",
       "deleteIpv4": "刪除 IPv4 位址",
+      "deleteIpv6": "刪除 IPv6 位址",
       "editDns": "編輯 DNS 位址",
       "editIpv4": "編輯靜態 IPv4 位址",
       "editIpv6": "編輯靜態 IPv6 位址",
@@ -1078,7 +1135,15 @@
     },
     "toast": {
       "errorSaveNetworkSettings": "更新 %{setting} 設定時發生錯誤。",
-      "successSaveNetworkSettings": "已順利更新 %{setting} 設定。"
+      "errorAddingDnsServer": "新增 DNS 伺服器時發生錯誤。",
+      "errorDeletingDnsServer": "刪除 DNS 伺服器時發生錯誤。",
+      "errorDeletingIpv4Server": "刪除 IPv4 伺服器時發生錯誤。",
+      "errorDeletingIpv6Server": "刪除 IPv6 伺服器時發生錯誤。",
+      "successSaveNetworkSettings": "已順利更新 %{setting} 設定。",
+      "successAddingDnsServer": "已順利新增 DNS 伺服器。",
+      "successDeletingDnsServer": "已順利刪除 DNS 伺服器。",
+      "successDeletingIpv4Server": "已順利刪除 IPv4 伺服器。",
+      "successDeletingIpv6Server": "已順利刪除 IPv6 伺服器。"
     }
   },
   "pageOverview": {
@@ -1160,19 +1225,34 @@
       "resetLinkHeader": "重設鏈結 %{id}"
     },
     "table": {
-      "search": "搜尋"
+      "search": "搜尋",
+      "linkStatusType": "鏈結狀態類型",
+      "filter": {
+        "degraded": "欠佳",
+        "failed": "失敗",
+        "inactive": "非作用中",
+        "open": "開放",
+        "operational": "運作中",
+        "unknown": "不明"
+      }
     },
     "toast": {
+      "errorDisableIdentifyLed": "停用識別 LED 時發生錯誤。",
+      "errorEnableIdentifyLed": "啟用識別 LED 時發生錯誤。",
       "errorReset": "重設鏈結 %{id} 時發生錯誤",
       "errorSavePcieTopology": "儲存 PCIe 拓蹼資訊時發生錯誤。",
       "errorSwitchingLed": "開啟 %{value} 的 %{operation} LED 時發生錯誤",
       "resetInfoTitle": "正在重設鏈結 ID %{id}。",
       "resetInfoDescription": "此作業可能需要幾秒鐘才能完成。",
+      "successDisableIdentifyLed": "已順利停用識別 LED。",
+      "successEnableIdentifyLed": "已順利啟用識別 LED。",
       "successReset": "已順利起始重設鏈結 %{id}。 請檢查事件日誌是否有任何問題。",
       "successSavePcieTopology": "已順利儲存 PCIe 拓蹼資訊。"
     }
   },
   "pagePolicies": {
+    "acfUploadEnablement": "啟用未經鑑別的 ACF 上傳",
+    "acfUploadEnablementDescription": "容許未經鑑別的使用者上傳 ACF。",
     "hostTpm": "主機 TPM",
     "hostTpmDescription": "啟用以確保只有在 TPM 正常運作時系統才會開機。",
     "hostUsb": "主機 USB 啟用",
@@ -1180,7 +1260,7 @@
     "ipmi": "網路 IPMI（頻外 IPMI）",
     "ipmiDescription": "容許透過 IPMI 進行平台的遠端管理。 諸如 ipmitool 之類的工具需要啟用此設定。 一旦啟用，請遵循線上支援文件中的程序來新增 IPMI 使用者。",
     "rtad": "RTAD",
-    "rtadDescription": "此選項會啟用或停用主機韌體的「遠端授信認證常駐程式」。",
+    "rtadDescription": "只有在「虛擬化管理介面 (VMI)」正在執行時，此設定才適用。 如果系統由 HMC 管理，則「虛擬化管理介面」正在執行。",
     "rtadInfoIcon": "@:global.status.nextReboot",
     "secureVersion": "安全版本鎖定",
     "secureVersionDescription": "指定是否啟用安全版本鎖定功能。",
@@ -1195,6 +1275,7 @@
       "successNetworkPolicyUpdate": "已順利更新 %{policy}。",
       "successNextBootToast": "正在將變更套用至 %{policy}。 對 %{policy} 所做的變更將在下一次重新開機時生效。"
     },
+    "acfUploadEnablementConfirmText": "注意：啟用此設定可讓未經鑑別的使用者上傳「存取控制檔案 (ACF)」，而無需登入，也無需在「操作面板」上按「功能 74」。 您要繼續嗎？",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "啟用 vTPM 會使 TPM 可供訪客作業系統使用。"
   },
@@ -1352,7 +1433,12 @@
       "name": "名稱",
       "status": "狀態",
       "upperCritical": "上限臨界",
-      "upperWarning": "警告上限"
+      "upperWarning": "警告上限",
+      "filter": {
+        "ok": "正常",
+        "critical": "嚴重",
+        "warning": "警告"
+      }
     }
   },
   "pageServerPowerOperations": {
@@ -1514,7 +1600,7 @@
     },
     "alert": {
       "heading": "警告",
-      "message": "如果 HMC 處於作用中狀態，則會嘗試重新連接。 若要中斷工作中 HMC 的連線，請中斷與 HMC 本身的連線。"
+      "message": "對於已連接 HMC 的使用者，如果您嘗試中斷與此頁面的連線，且 HMC 處於作用中，則會嘗試重新連接。 切斷工作中 HMC 的適當方法是切斷它與 HMC 本身的連線。"
     },
     "modal": {
       "disconnectMessage": "您確定要中斷 %{count} 個階段作業的連線嗎？ 此動作無法復原。 | 您確定要中斷 %{count} 個階段作業的連線嗎？ 此動作無法復原。",
