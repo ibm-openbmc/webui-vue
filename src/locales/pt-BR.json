@@ -85,6 +85,7 @@
       "on": "Ligado",
       "present": "Presente",
       "success": "Sucesso",
+      "unavailable": "Indisponível",
       "warning": "Aviso"
     },
     "table": {
@@ -266,16 +267,32 @@
     "setting": {
       "aixAllowed": "AIX permitido",
       "aixDiagnostics": "Diagnósticos do AIX",
+      "aixUpdateAccessKey": "Chave de acesso de atualização do AIX",
       "activeMemoryExpansion": "Expansão da Memória Ativa",
       "activeMemoryMirroring": "Espelhamento de memória ativa",
+      "assetProtectionMachineID": "ID da máquina de proteção ao ativo",
+      "assetProtectionPublicKey": "Chave pública de proteção ao ativo",
       "capi": "CAPI",
+      "elasticMemoryGBAvailable": "MemoryGB elástico*Dias disponíveis",
+      "elasticProcessorAvailable": "Processador elástico*Dias disponíveis",
+      "firmwareUpdateAccessKey": "Chave de acesso de atualização de firmware",
       "interactiveCapacity": "100% de capacidade interativa do IBMi",
       "ibmiPartitions": "Partições do IBMi permitidas",
       "inmiPermitted": "O IBMi permitiu usar E/S nativa",
       "lparCreationAllowed": "Criação de LPAR permitida",
       "livePartitionMobility": "Live Partition Mobility",
       "perPartition": "Mais de 128 processadores por partição",
+      "p05VirtualTier": "Camada virtual P05",
+      "p10VirtualTier": "Camada virtual P10",
+      "p20VirtualTier": "Camada virtual P20",
+      "p30VirtualTier": "Camada virtual P30",
+      "permanentMemoryLicenses": "Licenças permanentes de memória (GB)",
+      "permanentProcessorLicenses": "Licenças permanentes de processador",
       "subprocessorPartitioning": "Particionamento do subprocessador",
+      "systemAnchor": "Âncora do sistema",
+      "trialMemoryLicenses": "Licenças para teste de memória (GB)",
+      "trialProcessorLicenses": "Licenças para teste de processador",
+      "virtualizationEngineTechnology": "Tecnologia do mecanismo de virtualização",
       "virtualIoServer": "Com capacidade do Virtual I/O Server",
       "virtualTiersAllowed": "Camadas virtuais permitidas"
     },
@@ -352,7 +369,8 @@
       "link": "Configurações de perfil",
       "message": "Para mudar como a data e a hora são exibidas (UTC ou deslocamento do navegador) em todo o aplicativo, visite ",
       "messageText": "Para alterar como a data e hora são exibidas (ou UTC ou compensação do navegador) por todo o aplicativo, visite Configurações do Perfil",
-      "messageNtp": "Se o NTP for selecionado, mas um servidor NTP não for fornecido ou o servidor NTP fornecido não for alcançável, time.google.com será usado."
+      "messageNtp": "Se o NTP for selecionado, mas um servidor NTP não for fornecido ou o servidor NTP fornecido não for alcançável, time.google.com será usado.",
+      "messagePowerOff": "O servidor deve estar desligado para mudar a data e a hora para manual ou NTP."
     },
     "configureSettings": "Definir configurações",
     "form": {
@@ -724,6 +742,7 @@
       "rebootStartedMessage": "Sucesso na reinicialização da imagem de backup. A reinicialização pode levar vários minutos para ser concluída.",
       "taskComplete": "Tarefa concluída",
       "taskCompleteMessage": "Tarefa concluída. Aguardando a reinicialização do BMC",
+      "expiredAccessKeyError": "Chave de acesso expirada. Acesse `https://www.ibm.com/servers/eserver/ess`",
       "updateFirmware": {
         "step1": "Etapa 1 de 4 - Upload",
         "step1Message": "Atualização iniciada. Upload de firmware em andamento.",
@@ -787,6 +806,7 @@
     "alert": {
       "enclosureAlertTitle": "Visualizando a configuração do gabinete",
       "enclosureAlertMessage": "O sistema precisa ser ligado.",
+      "powerOffExpansionChassis": "Os valores de funcionamento e de status no chassi de expansão de E/S ficam indisponíveis quando o host é desligado.",
       "viewServerPowerOperations": "Visualizar operações de energia do servidor"
     },
     "modal": {
@@ -845,12 +865,12 @@
       "errorDisableSystemAttentionLed": "Erro ao desativar o LED de atenção do sistema.",
       "errorEnableIdentifyLed": "Erro ao ativar o LED de identificação.",
       "errorEnableLampTest": "Erro ao ativar o teste de lâmpada.",
-      "errorEnableSystemAttentionLed": "Erro ao ativar o LED de atenção do sistema.",
       "errorEnclosureSettings": "Erro ao atualizar as configurações do gabinete.",
       "infoRemoveAssembly": "Atualize para confirmar se '%{assemblyName}' está pronto para ser removido.",
       "successEnclosureSettings": "Configurações do gabinete atualizadas com sucesso.",
       "successEnableIdentifyLed": "LED de identificação ativado com sucesso.",
       "successDisableIdentifyLed": "LED de identificação desativado com sucesso.",
+      "successDisableSystemAttentionLed": "LED de atenção do sistema desativado com sucesso.",
       "successEnableLampTest": "Teste de Lamp ativado com sucesso. Os LEDs ficarão acesos durante quatro minutos."
     }
   },
@@ -908,13 +928,43 @@
     "frequencyCapHelpText": "Se desativado, poderá ser necessária uma inicialização prévia para obter a frequência máxima e mínima para poder ser configurado.",
     "lateralCastOut": "Expulsão lateral",
     "lateralCastOutDescription": "Mude este valor somente se instruído por seu provedor de serviços, pois isso pode comprometer o desempenho do sistema.",
+    "rpdPolicy": "Política de diagnóstico do processador de tempo de execução",
+    "updateRpdPolicy": "Atualizar política de RPD",
+    "rpdPolicyDescription": "Ativado (executar em cada núcleo para testá-los periodicamente), Planejado (executar sequencialmente em cada núcleo no horário planejado todos os dias para a duração especificada (em minutos)), Desativado (nenhum diagnóstico ou exercitador será executado).",
+    "rpdFeature": "Recurso de diagnóstico do processador de tempo de execução",
+    "updateRpdFeature": "Atualizar recurso RPD",
+    "rpdFeatureDescription": "Controla se o recurso Runtime Processor Diagnostics (RPD) será configurado no sistema. Ativado (o recurso RPD será configurado independentemente da quantidade de memória instalada), Automático (o recurso RPD será configurado em sistemas com pelo menos 128 GB de memória instalada e não configurado em sistemas com menos de 128 GB), Desativado (o recurso RPD não será configurado).",
+    "startTime": "Horário de início (horário de 24 horas (UTC))",
+    "runNow": "Executar agora",
+    "duration": "Duração (minutos)",
+    "immediateTestRequested": "Teste imediato solicitado",
+    "immediateTestRequestedDescription": "Ao pressionar o botão Executar agora, a política de RPD será substituída e a execução do teste de diagnóstico será iniciada imediatamente e o botão será esmaecido até que o teste seja executado.",
+    "rpdScheduledRun": "Horário do dia da execução planejada do RPD",
+    "rpdScheduledRunDescription": "Usado somente quando a política de RPD está configurada como “Planejado”. Esse valor representa o horário do dia em que os diagnósticos do processador serão executados.",
+    "updateRpdScheduledRun": "Atualizar execução planejada do RPD",
+    "gardOnError": "GARD em erro",
+    "gardOnErrorDescription": "Controla se um núcleo do processador será ou não desconfigurado mediante um erro.",
+    "stopTest": "Parar execução do teste de diagnóstico",
     "toast": {
       "errorSavingAggressivePrefetch": "Erro ao salvar a pré-busca agressiva",
       "errorSavingFrequencyCap": "Erro ao salvar o valor máximo de frequência",
+      "errorSavingGardOnError": "Erro ao salvar o Gard em erro",
       "errorSavingLateralCastOut": "Erro ao salvar o modo de expulsão lateral",
+      "errorSavingRpdPolicy": "Erro ao salvar a política de RPD",
+      "errorSavingRpdFeature": "Erro ao salvar o recurso RPD",
+      "errorSavingRpdRun": "Erro ao salvar a execução planejada do RPD",
+      "errorStartingDiagnosticTestRun": "Erro ao iniciar execução de teste de diagnóstico",
+      "errorStoppingDiagnosticTestRun": "Erro ao parar execução de teste de diagnóstico",
+      "successSavingRpdRun": "Execução planejada do RPD salva com sucesso. NOTA: o sistema deve ser ligado no horário da execução planejada do RPD do dia, caso contrário, a execução do teste de diagnóstico entrará em vigor no próximo planejamento disponível.",
       "successSavingAggressivePrefetch": "Pré-busca agressiva salva com sucesso",
       "successSavingFrequencyCap": "Valor máximo de frequência salvo com sucesso",
-      "successSavingLateralCastOut": "Modo de expulsão lateral salvo com sucesso"
+      "successSavingGardOnError": "Gard em erro salvo com êxito",
+      "successSavingLateralCastOut": "Modo de expulsão lateral salvo com sucesso",
+      "successSavingRpdPolicy": "Política de RPD salva com êxito",
+      "successSavingRpdFeature": "Recurso RPD salvo com êxito. A mudanças feitas entrarão em vigor na próxima reinicialização.",
+      "successStartingDiagnosticTestRun": "Execução de teste de diagnóstico iniciada com sucesso",
+      "successStartingDiagnosticTestRunIfPoweredOff": "Execução de teste de diagnóstico salva com sucesso. Os testes serão iniciados assim que o sistema for ligado.",
+      "successStoppingDiagnosticTestRun": "Execução de teste de diagnóstico interrompida com sucesso"
     }
   },
   "pageLdap": {
@@ -926,6 +976,7 @@
       "ldapSettings": "Configurações LDAP"
     },
     "form": {
+      "activeDirectory": "Active Directory",
       "baseDn": "DN base",
       "bindDn": "DN de ligação",
       "bindPassword": "Senha de ligação",
@@ -934,6 +985,7 @@
       "ldapAuthentication": "Autenticação LDAP",
       "ldapCertificateValidUntil": "Certificado LDAP válido até",
       "manageSslCertificates": "Gerenciar certificados SSL",
+      "openLDAP": "OpenLDAP",
       "secureLdapHelper": "Um certificado de autoridade de certificação e um certificado LDAP são necessários para ativar o LDAP seguro",
       "secureLdapUsingSsl": "LDAP seguro usando SSL",
       "serverUri": "URI do servidor",
@@ -1037,6 +1089,7 @@
     "ipv4": "IPv4",
     "ipv4Addresses": "endereços IPv4",
     "ipv6": "IPv6",
+    "ipv6AutoConfig": "Configuração automática de IPv6",
     "ipv6DefaultGateway": "Gateway padrão IPv6",
     "macAddress": "Endereço MAC",
     "network": "rede",
@@ -1050,13 +1103,16 @@
     "useNtp": "Usar servidores NTP",
     "modal": {
       "confirmDeleteIpv4": "Tem certeza de que deseja excluir '%{address}'?",
+      "confirmDeleteIpv6": "Tem certeza de que deseja excluir '%{address}'?",
       "confirmDisableDhcp": "Tem certeza de que deseja desativar o DHCP?",
       "confirmEnableDhcp": "Quando o DHCP estiver ativado, endereços IP estáticos não serão acessíveis.",
       "dhcpConfirmTitle": "DHCP %{dhcpState}",
       "deleteIpv4": "Excluir endereço IPv4",
+      "deleteIpv6": "Excluir o endereço IPv6",
       "editHostnameTitle": "Editar o nome do host",
       "gateway": "Gateway",
       "ipAddress": "Endereço IP",
+      "prefixLength": "Comprimento do prefixo",
       "staticDns": "DNS estático",
       "subnetMask": "Máscara de sub-rede"
     },
@@ -1068,6 +1124,7 @@
       "addressState": "Estado do endereço",
       "deleteDns": "Excluir endereço DNS",
       "deleteIpv4": "Excluir endereço IPv4",
+      "deleteIpv6": "Excluir o endereço IPv6",
       "editDns": "Editar endereço DNS",
       "editIpv4": "Editar endereço IPv4 estático",
       "editIpv6": "Editar endereço IPv6 estático",
@@ -1078,7 +1135,15 @@
     },
     "toast": {
       "errorSaveNetworkSettings": "Erro ao atualizar as configurações %{setting}.",
-      "successSaveNetworkSettings": "Sucesso ao atualizar as configurações %{setting}."
+      "errorAddingDnsServer": "Erro ao incluir o servidor DNS.",
+      "errorDeletingDnsServer": "Erro ao excluir o servidor DNS.",
+      "errorDeletingIpv4Server": "Erro ao excluir o servidor IPv4.",
+      "errorDeletingIpv6Server": "Erro ao excluir o servidor IPv6.",
+      "successSaveNetworkSettings": "Sucesso ao atualizar as configurações %{setting}.",
+      "successAddingDnsServer": "Servidor DNS incluído com êxito.",
+      "successDeletingDnsServer": "Servidor DNS excluído com êxito.",
+      "successDeletingIpv4Server": "Servidor IPv4 excluído com êxito.",
+      "successDeletingIpv6Server": "Servidor IPv6 excluído com êxito."
     }
   },
   "pageOverview": {
@@ -1160,19 +1225,34 @@
       "resetLinkHeader": "Reconfigurar o link %{id}"
     },
     "table": {
-      "search": "Procurar"
+      "search": "Procurar",
+      "linkStatusType": "Tipo de status do link",
+      "filter": {
+        "degraded": "Comprometido",
+        "failed": "Com falha",
+        "inactive": "Inativo",
+        "open": "Aberta",
+        "operational": "Operacional",
+        "unknown": "Desconhecido"
+      }
     },
     "toast": {
+      "errorDisableIdentifyLed": "Erro ao desativar o LED de identificação.",
+      "errorEnableIdentifyLed": "Erro ao ativar o LED de identificação.",
       "errorReset": "Erro ao reconfigurar o link%{id}",
       "errorSavePcieTopology": "Erro ao salvar as informações da topologia do PCIe.",
       "errorSwitchingLed": "Erro ao transformar o LED da %{operation} para %{value}",
       "resetInfoTitle": "O ID do link %{id} está sendo reconfigurado.",
       "resetInfoDescription": "Esta operação pode levar alguns segundos para ser concluída.",
+      "successDisableIdentifyLed": "LED de identificação desativado com sucesso.",
+      "successEnableIdentifyLed": "LED de identificação ativado com sucesso.",
       "successReset": "Reconfiguração de link %{id} iniciada com sucesso. Verifique os logs de eventos para quaisquer problemas.",
       "successSavePcieTopology": "As informações de topologia do PCIe foram salvas com sucesso."
     }
   },
   "pagePolicies": {
+    "acfUploadEnablement": "Ativação de upload de ACF não autenticado",
+    "acfUploadEnablementDescription": "Permitir que os usuários não autenticados façam upload de ACFs.",
     "hostTpm": "TPM do host",
     "hostTpmDescription": "Ative para garantir que o sistema apenas reinicializa quando o TPM estiver funcional.",
     "hostUsb": "Ativação do USB do host",
@@ -1180,7 +1260,7 @@
     "ipmi": "Rede IPMI (IPMI fora da banda)",
     "ipmiDescription": "Permitir o gerenciamento remoto da plataforma via IPMI. As ferramentas como o ipmitool requerem que essa configuração seja ativada. Uma vez ativado, siga o procedimento na documentação de suporte on-line para adicionar usuários de IPMI.",
     "rtad": "RTAD",
-    "rtadDescription": "Esta opção ativa ou desativa o daemon de atestado de confiança remoto para o firmware do host.",
+    "rtadDescription": "Essa configuração se aplicará somente se a Virtualization Management Interface (VMI) estiver em execução. A Virtualization Management Interface estará em execução se o sistema for gerenciado pelo HMC.",
     "rtadInfoIcon": "@:global.status.nextReboot",
     "secureVersion": "Bloqueio de versão segura",
     "secureVersionDescription": "Especifica se a funcionalidade de bloqueio de versão segura está ativada.",
@@ -1195,6 +1275,7 @@
       "successNetworkPolicyUpdate": "%{policy} atualizada com sucesso.",
       "successNextBootToast": "Aplicando mudanças em %{policy}. As mudanças feitas em %{policy} entrarão em vigor na próxima reinicialização."
     },
+    "acfUploadEnablementConfirmText": "Cuidado: a ativação dessa configuração permite que usuários não autenticados façam upload de arquivos de controle de acesso (ACFs) sem efetuar login e sem pressionar a Função 74 no painel do operador. Deseja prosseguir?",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "A ativação do vTPM disponibiliza um TPM para o sistema operacional guest."
   },
@@ -1352,7 +1433,12 @@
       "name": "Nome",
       "status": "Status",
       "upperCritical": "Aumentar crítico",
-      "upperWarning": "Aumentar aviso"
+      "upperWarning": "Aumentar aviso",
+      "filter": {
+        "ok": "OK",
+        "critical": "Crítico",
+        "warning": "Aviso"
+      }
     }
   },
   "pageServerPowerOperations": {
@@ -1514,7 +1600,7 @@
     },
     "alert": {
       "heading": "Aviso",
-      "message": "Se o HMC estiver ativo, ele tentará se reconectar. Para desconectar um HMC ativo, desconecte-se do próprio HMC."
+      "message": "Para usuários com um HMC conectado, se você tentar desconectá-lo desta página e o HMC estiver ativo, ele tentará reconectar. A maneira apropriada de desconectar um HMC em funcionamento é desconectá-lo do próprio HMC."
     },
     "modal": {
       "disconnectMessage": "Tem certeza de que deseja desconectar %{count} sessão? Esta ação não pode ser desfeita. | Tem certeza de que deseja desconectar %{count} sessões? Não é possível desfazer essa ação.",
