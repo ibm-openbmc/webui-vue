@@ -287,7 +287,7 @@ const CertificatesStore = {
         Oem: {
           IBM: {
             ACF: {
-              ACFFile: null,
+              ACFFile: '',
             },
           },
         },
