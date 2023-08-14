@@ -168,16 +168,26 @@ export default {
         const editRow = modalData.concat(selectedRow);
         this.$store
           .dispatch('network/updateIpv4Address', editRow)
-          .then((message) => this.successToast(message))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .then((message) => {
+            this.successToast(message);
+            this.setEndLoaderAfterDelay();
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
       } else {
         // Add new address
         this.$store
           .dispatch('network/updateIpv4Address', modalData)
-          .then((message) => this.successToast(message))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .then((message) => {
+            this.successToast(message);
+            this.setEndLoaderAfterDelay();
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
       }
     },
     saveIpv6Address(modalFormData) {
@@ -189,16 +199,26 @@ export default {
         const editRow = modalData.concat(selectedRow);
         this.$store
           .dispatch('network/updateIpv6Address', editRow)
-          .then((message) => this.successToast(message))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .then((message) => {
+            this.successToast(message);
+            this.setEndLoaderAfterDelay();
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
       } else {
         // Add new address
         this.$store
           .dispatch('network/updateIpv6Address', modalData)
-          .then((message) => this.successToast(message))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .then((message) => {
+            this.successToast(message);
+            this.setEndLoaderAfterDelay();
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
       }
     },
     saveDnsAddress(modalFormData) {
@@ -216,6 +236,11 @@ export default {
         .then(this.$store.dispatch('authentication/logout'))
         .catch(({ message }) => this.errorToast(message))
         .finally(() => this.endLoader());
+    },
+    setEndLoaderAfterDelay() {
+      setTimeout(() => {
+        this.endLoader();
+      }, 10000);
     },
   },
 };

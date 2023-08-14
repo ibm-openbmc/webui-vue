@@ -68,7 +68,11 @@ const DateTimeStore = {
           }
         })
         .then(() => {
-          return i18n.t('pageDateTime.toast.successSaveDateTime');
+          if (dateTimeForm.ntpProtocolEnabled) {
+            return i18n.t('pageDateTime.toast.successSaveDateTimeForNtpServer');
+          } else {
+            return i18n.t('pageDateTime.toast.successSaveDateTime');
+          }
         })
         .catch((error) => {
           console.log(error);

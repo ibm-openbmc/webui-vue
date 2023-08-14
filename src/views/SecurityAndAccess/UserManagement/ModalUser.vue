@@ -101,7 +101,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group
-              v-if="notService"
+              v-if="notService && notReadyOnly"
               :label="$t('pageUserManagement.modal.privilege')"
               label-for="privilege"
             >
@@ -274,6 +274,9 @@ export default {
     },
     notService() {
       return this.user?.RoleId !== 'OemIBMServiceAgent';
+    },
+    notReadyOnly() {
+      return this.user?.RoleId !== 'ReadOnly';
     },
     accountSettings() {
       return this.$store.getters['userManagement/accountSettings'];

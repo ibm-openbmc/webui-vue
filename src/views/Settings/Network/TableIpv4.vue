@@ -247,7 +247,13 @@ export default {
           if (dhcpEnableConfirmed) {
             this.$store
               .dispatch('network/saveDhcpEnabledState', state)
-              .then((message) => this.successToast(message))
+              .then((message) => {
+                this.successToast(message);
+                this.startLoader();
+                setTimeout(() => {
+                  this.endLoader();
+                }, 10000);
+              })
               .catch(({ message }) => this.errorToast(message));
           } else {
             let onDhcpCancel = document.getElementById('dhcpSwitch');

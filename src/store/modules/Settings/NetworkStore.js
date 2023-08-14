@@ -119,6 +119,11 @@ const NetworkStore = {
           console.log('Network Data:', error);
         });
     },
+    async getEthernetDataAfterDelay({ dispatch }) {
+      setTimeout(() => {
+        dispatch('getEthernetData');
+      }, 10000);
+    },
     async saveDomainNameState({ commit, state, dispatch }, domainState) {
       commit('setDomainNameState', domainState);
       const data = {
@@ -215,7 +220,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           data
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.dhcp'),
@@ -244,7 +254,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           data
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the IPv6 table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.dhcp'),
@@ -320,9 +335,7 @@ const NetworkStore = {
           updatedIpv4Array
         )
         .then(() => {
-          setTimeout(() => {
-            dispatch('getEthernetData');
-          }, 10000);
+          dispatch('getEthernetDataAfterDelay');
         })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
@@ -360,7 +373,9 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           updatedIpv6Array
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.ipv6'),

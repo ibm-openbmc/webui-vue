@@ -252,7 +252,13 @@ export default {
     changeIpv6DhcpEnabledState(state) {
       this.$store
         .dispatch('network/saveIpv6DhcpEnabledState', state)
-        .then((message) => this.successToast(message))
+        .then((message) => {
+          this.successToast(message);
+          this.startLoader();
+          setTimeout(() => {
+            this.endLoader();
+          }, 10000);
+        })
         .catch(({ message }) => this.errorToast(message));
     },
     changeIpv6AutoConfigState(state) {

@@ -351,8 +351,10 @@
       "errorDeleteCertificate": "Error deleting certificate.",
       "errorReplaceCertificate": "Error replacing certificate.",
       "successAddCertificate": "Successfully added %{certificate}.",
+      "successAddedHTTPCertificate": "Successfully added %{certificate}. Reload the browser page to see the changes.",
       "successDeleteCertificate": "Successfully deleted %{certificate}.",
-      "successReplaceCertificate": "Successfully replaced %{certificate}."
+      "successReplaceCertificate": "Successfully replaced %{certificate}.",
+      "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to see the changes."
     }
   },
   "pageChangePassword": {
@@ -391,7 +393,8 @@
     },
     "toast": {
       "errorSaveDateTime": "Error saving date and time settings.",
-      "successSaveDateTime": "Successfully saved date and time settings."
+      "successSaveDateTime": "Successfully saved date and time settings.",
+      "successSaveDateTimeForNtpServer": "Successfully saved date and time settings. It would take about 20 seconds to update date and time."
     }
   },
   "pageConcurrentMaintenance": {
