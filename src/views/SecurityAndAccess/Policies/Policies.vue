@@ -395,10 +395,6 @@ export default {
       this.$store
         .dispatch('policies/saveSshProtocolState', state)
         .then((message) => {
-          this.startLoader();
-          setTimeout(() => {
-            this.endLoader();
-          }, 30000);
           this.successToast(message);
         })
         .catch(({ message }) => this.errorToast(message));
