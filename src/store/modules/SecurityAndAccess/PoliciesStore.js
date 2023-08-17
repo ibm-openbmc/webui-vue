@@ -213,7 +213,7 @@ const PoliciesStore = {
           );
         });
     },
-    async saveSshProtocolState({ commit }, protocolEnabled) {
+    async saveSshProtocolState({ commit, dispatch }, protocolEnabled) {
       commit('setSshProtocolEnabled', protocolEnabled);
       const ssh = {
         SSH: {
@@ -223,6 +223,8 @@ const PoliciesStore = {
       return await api
         .patch('/redfish/v1/Managers/bmc/NetworkProtocol', ssh)
         .then(() => {
+          // Getting protocol data here so that the ssh gets enabled/disabled
+          dispatch('getNetworkProtocolStatusAfterDelay');
           if (protocolEnabled) {
             return i18n.t('pagePolicies.toast.successEnableBmcShell');
           } else {
