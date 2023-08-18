@@ -4,6 +4,7 @@
       <dl class="mt-3 mr-3 w-75">
         <dt id="aggressive-prefetch-label">
           {{ $t('pageSystemParameters.aggressivePrefetch') }}
+          <info-tooltip :title="$t('pageSystemParameters.parametersInfo')" />
         </dt>
         <dd id="aggressive-prefetch-description">
           {{ $t('pageSystemParameters.aggressivePrefetchDescription') }}
@@ -27,11 +28,13 @@
 </template>
 
 <script>
+import InfoTooltip from '@/components/Global/InfoTooltip';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 
 export default {
   name: 'AggressivePrefetch',
+  components: { InfoTooltip },
   mixins: [LoadingBarMixin, BVToastMixin],
   props: {
     safeMode: {

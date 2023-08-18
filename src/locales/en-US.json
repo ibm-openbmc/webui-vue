@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "Aggressive prefetch",
     "aggressivePrefetchDescription": "Only change this value if instructed by service provider as it might degrade system performance. Specifies if processor favor aggressive prefetch is disabled or enabled",
-    "alert": {
-      "message": "System has to be powered off. Changes made will take effect on next reboot",
-      "title": "Applying changes"
-    },
     "button": {
       "saveSettings": "Save settings"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "If disabled, might require an initial boot to get the max and min frequency to be able to set.",
     "lateralCastOut": "Lateral cast out",
     "lateralCastOutDescription": "Only change this value if instructed by your service provider as it might degrade system performance.",
+    "parametersInfo": "System has to be powered off. Changes made will take effect on next reboot.",
     "rpdPolicy": "Runtime processor diagnostic policy",
     "updateRpdPolicy": "Update RPD policy",
     "rpdPolicyDescription": "Enabled (Run on each core to test them on periodic basis), Scheduled (Run sequentially on each core at the scheduled time each day for the specified duration (in minutes)), Disabled (No diagnostics or exercisers will be run).",
     "rpdFeature": "Runtime processor diagnostic feature",
     "updateRpdFeature": "Update RPD feature",
     "rpdFeatureDescription": "Controls whether or not the Runtime Processor Diagnostics (RPD) Feature will be configured on the system. Enabled ( The RPD feature will be configured regardless of the amount of installed memory), Automatic (The RPD feature will be configured on systems with at least 128GB of installed memory and not configured on systems with less than 128GB), Disabled (The RPD feature will not be configured).",
+    "rpdFeatureInfo": "Changes made to RPD feature requires a reboot to take effect but all other RPD parameters can be set dynamically at runtime.",
     "startTime": "Start time (24-hour time (UTC))",
     "runNow": "Run now",
     "duration": "Duration (minutes)",

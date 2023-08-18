@@ -6,7 +6,11 @@
           <dt id="frequency-cap-label">
             {{ $t('pageSystemParameters.frequencyCap') }}
             <info-tooltip
-              :title="$t('pageSystemParameters.frequencyCapHelpText')"
+              :title="
+                $t('pageSystemParameters.parametersInfo') +
+                ' ' +
+                $t('pageSystemParameters.frequencyCapHelpText')
+              "
             />
           </dt>
           <dd id="frequency-cap-description">

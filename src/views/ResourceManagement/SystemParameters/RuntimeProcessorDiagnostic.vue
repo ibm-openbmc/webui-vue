@@ -5,6 +5,7 @@
         <dl class="mt-3 mr-3 w-75">
           <dt id="rpd-policy-label">
             {{ $t('pageSystemParameters.rpdFeature') }}
+            <info-tooltip :title="$t('pageSystemParameters.rpdFeatureInfo')" />
           </dt>
           <dd id="rpd-policy-description">
             {{ $t('pageSystemParameters.rpdFeatureDescription') }}
@@ -197,6 +198,7 @@
 </template>
 
 <script>
+import InfoTooltip from '@/components/Global/InfoTooltip';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import { mapGetters } from 'vuex';
@@ -207,6 +209,7 @@ import { minValue, maxValue } from 'vuelidate/lib/validators';
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 export default {
   name: 'RuntimeProcessorDiagnostic',
+  components: { InfoTooltip },
   mixins: [LoadingBarMixin, BVToastMixin, VuelidateMixin],
   props: {
     safeMode: {
