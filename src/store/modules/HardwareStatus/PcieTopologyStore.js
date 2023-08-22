@@ -654,6 +654,7 @@ const PcieTopologyStore = {
                       ) {
                         cablesData.detailedInfo.downstreamPorts.push({
                           data: dspPorts[p],
+                          grandParent: dspRes.data,
                           grandParentLocation:
                             dspRes.data?.Location?.PartLocation?.ServiceLabel,
                         });
@@ -880,13 +881,14 @@ const PcieTopologyStore = {
                         cable.detailedInfo.downstreamChassis[0].pcieSlots.map(
                           (dsSlot) => {
                             if (
-                              dsSlot?.data?.Location?.PartLocation?.ServiceLabel
+                              dsSlot?.data?.Links?.Oem?.IBM
+                                ?.UpstreamFabricAdapter
                             ) {
                               if (
-                                dsSlot?.data?.Location?.PartLocation?.ServiceLabel.startsWith(
-                                  cable.detailedInfo?.downstreamPorts[0]
-                                    ?.grandParentLocation
-                                )
+                                dsSlot?.data?.Links?.Oem?.IBM
+                                  ?.UpstreamFabricAdapter['@odata.id'] ===
+                                cable.detailedInfo?.downstreamPorts[0]
+                                  ?.grandParent['@odata.id']
                               ) {
                                 const duplicate = row.ioSlotLocation.find(
                                   (obj) => {
