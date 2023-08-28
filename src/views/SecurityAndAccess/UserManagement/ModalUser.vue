@@ -278,6 +278,9 @@ export default {
     notReadyOnly() {
       return this.user?.RoleId !== 'ReadOnly';
     },
+    currentUser() {
+      return this.$store.getters['global/currentUser'];
+    },
     accountSettings() {
       return this.$store.getters['userManagement/accountSettings'];
     },
@@ -347,6 +350,7 @@ export default {
       } else {
         if (this.$v.$invalid) return;
         userData.originalUsername = this.originalUsername;
+        userData.currentUser = this.currentUser;
         if (this.$v.form.status.$dirty) {
           userData.status = this.form.status;
         }

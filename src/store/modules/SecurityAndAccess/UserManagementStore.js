@@ -155,12 +155,30 @@ const UserManagementStore = {
     },
     async updateUser(
       { dispatch },
-      { originalUsername, username, password, privilege, status, locked }
+      {
+        originalUsername,
+        currentUser,
+        username,
+        password,
+        privilege,
+        status,
+        locked,
+      }
     ) {
       const data = {};
+      const notReadOnly =
+        privilege !== 'ReadOnly' && currentUser.RoleId !== 'ReadOnly';
       if (username) data.UserName = username;
       if (password) data.Password = password;
-      if (privilege && privilege !== 'ReadOnly') data.RoleId = privilege;
+      if (privilege && notReadOnly) {
+        data.RoleId = privilege;
+      } else if (
+        privilege &&
+        privilege === 'ReadOnly' &&
+        currentUser.RoleId !== 'ReadOnly'
+      ) {
+        data.RoleId = privilege;
+      }
       if (status !== undefined) data.Enabled = status;
       if (locked !== undefined) data.Locked = locked;
       return await api
