@@ -38,6 +38,12 @@
             </dd>
           </dl>
         </b-col>
+        <b-col lg="2" md="6">
+          <dl>
+            <dt>{{ $t('pageNetwork.ipv6DefaultGateway') }}</dt>
+            <dd>{{ ipv6DefaultGateway }}</dd>
+          </dl>
+        </b-col>
       </b-row>
       <b-row>
         <b-col class="text-right">
@@ -139,6 +145,11 @@ export default {
     },
     selectedInterface() {
       return this.$store.getters['network/selectedInterfaceIndex'];
+    },
+    ipv6DefaultGateway() {
+      return this.$store.getters['network/networkSettings'][
+        this.selectedInterface
+      ].ipv6DefaultGateway;
     },
     dhcpEnabledState: {
       get() {

@@ -26,6 +26,8 @@
                 <div v-if="isIpv6Valid">
                   <table-ipv-6 :tab-index="tabIndex" />
                 </div>
+                <!-- IPV6 Static Default gateways table -->
+                <table-ipv6-static-default-gateway :tab-index="tabIndex" />
                 <!-- Static DNS table -->
                 <table-dns :tab-index="tabIndex" />
               </b-tab>
@@ -53,6 +55,12 @@
       :edit-modal="ipAddressIpv6 !== ''"
       @ok="saveIpv6Address"
     />
+    <modal-ipv6-static-default-gateway
+      :prefix-length="prefixLengthIpv6StaticDefaultGateway"
+      :ip-address="ipAddressIpv6StaticDefaultGateway"
+      :edit-modal="ipAddressIpv6StaticDefaultGateway !== ''"
+      @ok="saveIpv6StaticDefaultGatewayAddress"
+    />
     <modal-dns @ok="saveDnsAddress" />
     <modal-hostname :hostname="currentHostname" @ok="saveHostname" />
   </b-container>
@@ -65,6 +73,7 @@ import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
 import ModalHostname from './ModalHostname.vue';
 import ModalIpv4 from './ModalIpv4.vue';
 import ModalIpv6 from './ModalIpv6.vue';
+import ModalIpv6StaticDefaultGateway from './ModalIpv6StaticDefaultGateway.vue';
 import ModalDns from './ModalDns.vue';
 import NetworkGlobalSettings from './NetworkGlobalSettings.vue';
 import NetworkInterfaceSettings from './NetworkInterfaceSettings.vue';
@@ -73,6 +82,7 @@ import PageTitle from '@/components/Global/PageTitle';
 import TableIpv4 from './TableIpv4.vue';
 import TableDns from './TableDns.vue';
 import TableIpv6 from './TableIpv6.vue';
+import TableIpv6StaticDefaultGateway from './TableIpv6StaticDefaultGateway.vue';
 
 export default {
   name: 'Network',
@@ -80,6 +90,7 @@ export default {
     ModalHostname,
     ModalIpv4,
     ModalIpv6,
+    ModalIpv6StaticDefaultGateway,
     ModalDns,
     NetworkGlobalSettings,
     NetworkInterfaceSettings,
@@ -88,6 +99,7 @@ export default {
     TableDns,
     TableIpv4,
     TableIpv6,
+    TableIpv6StaticDefaultGateway,
   },
   mixins: [BVToastMixin, DataFormatterMixin, LoadingBarMixin],
   beforeRouteLeave(to, from, next) {
@@ -100,6 +112,8 @@ export default {
       defaultGateway: '',
       ipAddress: '',
       ipAddressIpv6: '',
+      ipAddressIpv6StaticDefaultGateway: '',
+      prefixLengthIpv6StaticDefaultGateway: 0,
       prefixLength: 0,
       subnet: '',
       loading,
@@ -127,7 +141,9 @@ export default {
       this.subnet = item.SubnetMask;
       this.ipAddressIpv6 = item.Address;
       this.ipAddress = item.Address;
+      this.ipAddressIpv6StaticDefaultGateway = item.Address;
       this.prefixLength = item.PrefixLength;
+      this.prefixLengthIpv6StaticDefaultGateway = item.PrefixLength;
     });
   },
   created() {
@@ -211,6 +227,40 @@ export default {
         // Add new address
         this.$store
           .dispatch('network/updateIpv6Address', modalData)
+          .then((message) => {
+            this.successToast(message);
+            this.setEndLoaderAfterDelay();
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
+      }
+    },
+    saveIpv6StaticDefaultGatewayAddress(modalFormData) {
+      const modalData = [modalFormData];
+      this.startLoader();
+      if (this.ipAddressIpv6StaticDefaultGateway !== '') {
+        //Edit selected row
+        const selectedRow = {
+          Address: this.ipAddressIpv6StaticDefaultGateway,
+          PrefixLength: 0,
+        };
+        const editRow = modalData.concat(selectedRow);
+        this.$store
+          .dispatch('network/updateIpv6StaticDefaultGatewayAddress', editRow)
+          .then((message) => {
+            this.successToast(message);
+            this.setEndLoaderAfterDelay();
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
+      } else {
+        // Add new address
+        this.$store
+          .dispatch('network/updateIpv6StaticDefaultGatewayAddress', modalData)
           .then((message) => {
             this.successToast(message);
             this.setEndLoaderAfterDelay();

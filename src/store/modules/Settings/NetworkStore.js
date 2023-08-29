@@ -51,6 +51,7 @@ const NetworkStore = {
           IPv6StaticAddresses,
           IPv6Addresses,
           IPv6DefaultGateway,
+          IPv6StaticDefaultGateways,
           MACAddress,
           StaticNameServers,
           StatelessAddressAutoConfig,
@@ -75,6 +76,7 @@ const NetworkStore = {
           ipv6: IPv6Addresses ?? [],
           ipv6DefaultGateway: IPv6DefaultGateway ?? '',
           ipv6OperatingMode: DHCPv6?.OperatingMode ?? '',
+          ipv6StaticDefaultGateways: IPv6StaticDefaultGateways ?? [],
           ipv6UseDnsEnabled: DHCPv6?.UseDNSServers ?? false,
           ipv6UseDomainNameEnabled: DHCPv6?.UseDomainName ?? false,
           ipv6UseNtpEnabled: DHCPv6?.UseNTPServers ?? false,
@@ -390,6 +392,49 @@ const NetworkStore = {
           );
         });
     },
+    async updateIpv6StaticDefaultGatewayAddress(
+      { dispatch, state },
+      newIpv6StaticDefaultGatewayAddress
+    ) {
+      const originalAddresses =
+        state.networkSettings[state.selectedInterfaceIndex]
+          .ipv6StaticDefaultGateways;
+      const updatedIpv6 = originalAddresses.map((item) => {
+        const address = item.Address;
+        if (find(newIpv6StaticDefaultGatewayAddress, { Address: address })) {
+          return null; // if address matches then delete address to "edit"
+        } else {
+          return {}; // if address doesn't match then skip address, no change
+        }
+      });
+      const filteredAddress = newIpv6StaticDefaultGatewayAddress.filter(
+        (item) => item.PrefixLength !== 0
+      );
+      const updatedIpv6Array = {
+        IPv6StaticDefaultGateways: [...updatedIpv6, ...filteredAddress],
+      };
+      return api
+        .patch(
+          `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
+          updatedIpv6Array
+        )
+        .then(() => {
+          dispatch('getEthernetDataAfterDelay');
+        })
+        .then(() => {
+          return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.t('pageNetwork.ipv6StaticDefaultGateway'),
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          throw new Error(
+            i18n.t('pageNetwork.toast.errorSaveNetworkSettings', {
+              setting: i18n.t('pageNetwork.ipv6StaticDefaultGateway'),
+            })
+          );
+        });
+    },
     async deleteIpv4Address({ dispatch, state }, updatedIpv4Array) {
       const originalAddressArray =
         state.networkSettings[state.selectedInterfaceIndex].staticIpv4Addresses;
@@ -439,6 +484,39 @@ const NetworkStore = {
         .catch((error) => {
           console.log(error);
           throw new Error(i18n.t('pageNetwork.toast.errorDeletingIpv6Server'));
+        });
+    },
+    async deleteIpv6StaticDefaultGatewayAddress(
+      { dispatch, state },
+      updatedIpv6Array
+    ) {
+      const originalAddressArray =
+        state.networkSettings[state.selectedInterfaceIndex]
+          .ipv6StaticDefaultGateways;
+      const newIpv6Array = originalAddressArray.map((item) => {
+        const address = item.Address;
+        if (find(updatedIpv6Array, { Address: address })) {
+          return {}; //return addresses that match the updated array
+        } else {
+          return null; // delete address that do not match updated array
+        }
+      });
+      return api
+        .patch(
+          `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
+          { IPv6StaticDefaultGateways: newIpv6Array }
+        )
+        .then(dispatch('getEthernetData'))
+        .then(() => {
+          return i18n.t(
+            'pageNetwork.toast.successDeletingIpv6StaticDefaultGateway'
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+          throw new Error(
+            i18n.t('pageNetwork.toast.errorDeletingIpv6StaticDefaultGateway')
+          );
         });
     },
     async saveHostname({ state, dispatch }, hostname) {
