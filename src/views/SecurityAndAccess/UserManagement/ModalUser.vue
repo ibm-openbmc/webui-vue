@@ -276,7 +276,9 @@ export default {
       return this.user?.RoleId !== 'OemIBMServiceAgent';
     },
     notReadyOnly() {
-      return this.user?.RoleId !== 'ReadOnly';
+      const cUser = this.$store.getters['global/currentUser'];
+      const RoleId = cUser.RoleId;
+      return RoleId !== 'ReadOnly';
     },
     currentUser() {
       return this.$store.getters['global/currentUser'];
