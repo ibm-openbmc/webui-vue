@@ -351,8 +351,10 @@
       "errorDeleteCertificate": "删除证书时出错。",
       "errorReplaceCertificate": "替换证书时出错。",
       "successAddCertificate": "已成功添加 %{certificate}。",
+      "successAddedHTTPCertificate": "已成功添加 %{certificate}。 重新装入浏览器页面以查看更改。",
       "successDeleteCertificate": "已成功删除 %{certificate}。",
-      "successReplaceCertificate": "已成功替换 %{certificate}。"
+      "successReplaceCertificate": "已成功替换 %{certificate}。",
+      "successReplacedHTTPCertificate": "已成功替换 %{certificate}。 重新装入浏览器页面以查看更改。"
     }
   },
   "pageChangePassword": {
@@ -391,7 +393,8 @@
     },
     "toast": {
       "errorSaveDateTime": "保存日期和时间设置时出错。",
-      "successSaveDateTime": "已成功保存日期和时间设置。"
+      "successSaveDateTime": "已成功保存日期和时间设置。",
+      "successSaveDateTimeForNtpServer": "已成功保存日期和时间设置。 更新日期和时间大约需要 20 秒。"
     }
   },
   "pageConcurrentMaintenance": {
