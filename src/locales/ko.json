@@ -351,8 +351,10 @@
       "errorDeleteCertificate": "인증서 삭제 중 오류가 발생했습니다.",
       "errorReplaceCertificate": "인증서 대체 중 오류가 발생했습니다.",
       "successAddCertificate": "%{certificate}을(를) 추가했습니다.",
+      "successAddedHTTPCertificate": "%{certificate}을(를) 추가했습니다. 브라우저 페이지를 다시 로드하여 변경사항을 확인하십시오.",
       "successDeleteCertificate": "%{certificate}을(를) 삭제했습니다.",
-      "successReplaceCertificate": "%{certificate}을(를) 교체했습니다."
+      "successReplaceCertificate": "%{certificate}을(를) 교체했습니다.",
+      "successReplacedHTTPCertificate": "%{certificate}을(를) 교체했습니다. 브라우저 페이지를 다시 로드하여 변경사항을 확인하십시오."
     }
   },
   "pageChangePassword": {
@@ -391,7 +393,8 @@
     },
     "toast": {
       "errorSaveDateTime": "날짜 및 시간 설정의 저장 중 오류가 발생했습니다.",
-      "successSaveDateTime": "날짜 및 시간 설정이 저장되었습니다."
+      "successSaveDateTime": "날짜 및 시간 설정이 저장되었습니다.",
+      "successSaveDateTimeForNtpServer": "날짜 및 시간 설정이 저장되었습니다. 날짜 및 시간을 업데이트하는 데 약 20초가 걸립니다."
     }
   },
   "pageConcurrentMaintenance": {
