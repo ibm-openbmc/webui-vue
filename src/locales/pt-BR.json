@@ -351,8 +351,10 @@
       "errorDeleteCertificate": "Erro ao excluir certificado.",
       "errorReplaceCertificate": "Erro ao substituir certificado.",
       "successAddCertificate": "Sucesso ao incluir %{certificate}.",
+      "successAddedHTTPCertificate": "Sucesso ao incluir %{certificate}. Recarregue a página do navegador para ver as alterações.",
       "successDeleteCertificate": "Sucesso ao excluir %{certificate}.",
-      "successReplaceCertificate": "Sucesso ao substituir %{certificate}."
+      "successReplaceCertificate": "Sucesso ao substituir %{certificate}.",
+      "successReplacedHTTPCertificate": "Sucesso ao substituir %{certificate}. Recarregue a página do navegador para ver as alterações."
     }
   },
   "pageChangePassword": {
@@ -391,7 +393,8 @@
     },
     "toast": {
       "errorSaveDateTime": "Erro ao salvar configurações de data e hora.",
-      "successSaveDateTime": "Sucesso ao salvar as configurações de data e hora."
+      "successSaveDateTime": "Sucesso ao salvar as configurações de data e hora.",
+      "successSaveDateTimeForNtpServer": "Sucesso ao salvar as configurações de data e hora. Levaria cerca de 20 segundos para atualizar a data e hora."
     }
   },
   "pageConcurrentMaintenance": {
