@@ -351,8 +351,10 @@
       "errorDeleteCertificate": "認証の削除中にエラーが発生しました。",
       "errorReplaceCertificate": "認証の置き換え中にエラーが発生しました。",
       "successAddCertificate": "%{certificate}が正常に追加されました。",
+      "successAddedHTTPCertificate": "%{certificate}が正常に追加されました。 ブラウザー・ページを再ロードして変更を確認します。",
       "successDeleteCertificate": "%{certificate}が正常に削除されました。",
-      "successReplaceCertificate": "%{certificate}を正常に置換されました。"
+      "successReplaceCertificate": "%{certificate}を正常に置換されました。",
+      "successReplacedHTTPCertificate": "%{certificate}を正常に置換されました。 ブラウザー・ページを再ロードして変更を確認します。"
     }
   },
   "pageChangePassword": {
@@ -391,7 +393,8 @@
     },
     "toast": {
       "errorSaveDateTime": "日付と時刻の設定を保存中にエラーが発生しました。",
-      "successSaveDateTime": "日付と時刻の設定が正常に保存されました。"
+      "successSaveDateTime": "日付と時刻の設定が正常に保存されました。",
+      "successSaveDateTimeForNtpServer": "日付と時刻の設定が正常に保存されました。 日付と時刻を更新するには、約20秒かかります。"
     }
   },
   "pageConcurrentMaintenance": {
