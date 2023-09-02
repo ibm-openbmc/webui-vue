@@ -351,8 +351,10 @@
       "errorDeleteCertificate": "Fehler beim Löschen des Zertifikats.",
       "errorReplaceCertificate": "Fehler beim Ersetzen des Zertifikats.",
       "successAddCertificate": "%{certificate} wurde erfolgreich hinzugefügt.",
+      "successAddedHTTPCertificate": "%{certificate} wurde erfolgreich hinzugefügt. Laden Sie die Browserseite erneut, um die Änderungen anzuzeigen.",
       "successDeleteCertificate": "%{certificate} wurde erfolgreich gelöscht.",
-      "successReplaceCertificate": "%{certificate} wurde erfolgreich ersetzt."
+      "successReplaceCertificate": "%{certificate} wurde erfolgreich ersetzt.",
+      "successReplacedHTTPCertificate": "%{certificate} wurde erfolgreich ersetzt. Laden Sie die Browserseite erneut, um die Änderungen anzuzeigen."
     }
   },
   "pageChangePassword": {
@@ -391,7 +393,8 @@
     },
     "toast": {
       "errorSaveDateTime": "Fehler beim Speichern der Einstellungen für Datum und Uhrzeit.",
-      "successSaveDateTime": "Einstellungen für Datum und Uhrzeit wurden erfolgreich gespeichert."
+      "successSaveDateTime": "Einstellungen für Datum und Uhrzeit wurden erfolgreich gespeichert.",
+      "successSaveDateTimeForNtpServer": "Einstellungen für Datum und Uhrzeit wurden erfolgreich gespeichert. Die Aktualisierung von Datum und Uhrzeit dauert ungefähr 20 Sekunden."
     }
   },
   "pageConcurrentMaintenance": {
