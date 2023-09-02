@@ -351,8 +351,10 @@
       "errorDeleteCertificate": "刪除憑證時發生錯誤。",
       "errorReplaceCertificate": "取代憑證時發生錯誤。",
       "successAddCertificate": "已順利新增 %{certificate}。",
+      "successAddedHTTPCertificate": "已順利新增 %{certificate}。 重新載入瀏覽器頁面以查看變更。",
       "successDeleteCertificate": "已順利刪除 %{certificate}。",
-      "successReplaceCertificate": "已順利取代 %{certificate}。"
+      "successReplaceCertificate": "已順利取代 %{certificate}。",
+      "successReplacedHTTPCertificate": "已順利取代 %{certificate}。 重新載入瀏覽器頁面以查看變更。"
     }
   },
   "pageChangePassword": {
@@ -391,7 +393,8 @@
     },
     "toast": {
       "errorSaveDateTime": "儲存日期和時間設定時發生錯誤。",
-      "successSaveDateTime": "已順利儲存日期和時間設定。"
+      "successSaveDateTime": "已順利儲存日期和時間設定。",
+      "successSaveDateTimeForNtpServer": "已順利儲存日期和時間設定。 更新日期和時間大約需要 20 秒。"
     }
   },
   "pageConcurrentMaintenance": {
