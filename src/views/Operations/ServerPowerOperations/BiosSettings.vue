@@ -72,6 +72,7 @@
                 <b-col
                   v-if="
                     selectedOperatingMode &&
+                    selectedOperatingMode === manualMode &&
                     selectedOperatingMode !== currentOperatingMode
                   "
                   sm="5"
@@ -88,6 +89,49 @@
                       {{
                         $t(
                           'pageServerPowerOperations.biosSettings.selectedOperatingModeManual'
+                        )
+                      }}
+                    </p>
+                  </alert>
+                  <div>
+                    <b-link to="/settings/power-restore-policy">
+                      {{ $t(`appPageTitle.powerRestorePolicy`) }}
+                    </b-link>
+                    {{
+                      $t(
+                        `pageServerPowerOperations.biosSettings.powPolicySection`,
+                        {
+                          powerPolicy:
+                            powerPolicy === 'AlwaysOff'
+                              ? $t(`pagePowerRestorePolicy.policies.AlwaysOff`)
+                              : powerPolicy === 'AlwaysOn'
+                              ? $t(`pagePowerRestorePolicy.policies.AlwaysOn`)
+                              : $t(`pagePowerRestorePolicy.policies.LastState`),
+                        }
+                      )
+                    }}
+                  </div>
+                </b-col>
+                <b-col
+                  v-else-if="
+                    selectedOperatingMode &&
+                    selectedOperatingMode === normalMode &&
+                    selectedOperatingMode !== currentOperatingMode
+                  "
+                  sm="5"
+                >
+                  <alert variant="info" class="mb-4">
+                    <p>
+                      {{
+                        $t(
+                          'pageServerPowerOperations.biosSettings.currentOperatingModeManual'
+                        )
+                      }}
+                    </p>
+                    <p>
+                      {{
+                        $t(
+                          'pageServerPowerOperations.biosSettings.selectedOperatingModeNormal'
                         )
                       }}
                     </p>

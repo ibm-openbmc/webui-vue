@@ -1486,6 +1486,7 @@
       "pvm_system_operating_mode": "Server operating mode",
       "pvm_system_power_off_policy": "Server power policy",
       "selectedOperatingModeManual": "On save operating mode will be set to Manual",
+      "selectedOperatingModeNormal":  "On save operating mode will be set to Normal",
       "serverFirmware": "Server firmware start policy",
       "powerSettingDescription": "View power setting descriptions",
       "stayOn": "Stay On",
