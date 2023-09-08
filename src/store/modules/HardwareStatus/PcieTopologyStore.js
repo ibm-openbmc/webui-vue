@@ -761,6 +761,7 @@ const PcieTopologyStore = {
                             ) {
                               cablesData.detailedInfo.downstreamPorts.push({
                                 data: element?.portsData[m],
+                                grandParent: element.data,
                                 grandParentLocation:
                                   element.data?.Location?.PartLocation
                                     ?.ServiceLabel,
@@ -792,6 +793,7 @@ const PcieTopologyStore = {
                             ) {
                               cablesData.detailedInfo.downstreamPorts.push({
                                 data: dpResponse.data,
+                                grandParent: chassisResp.data,
                                 grandParentLocation:
                                   chassisResp.data?.Location?.PartLocation
                                     ?.ServiceLabel,
@@ -1027,13 +1029,14 @@ const PcieTopologyStore = {
                         cable.detailedInfo.downstreamChassis[0].pcieSlots.map(
                           (dsSlot) => {
                             if (
-                              dsSlot?.data?.Location?.PartLocation?.ServiceLabel
+                              dsSlot?.data?.Links?.Oem?.IBM
+                                ?.UpstreamFabricAdapter
                             ) {
                               if (
-                                dsSlot?.data?.Location?.PartLocation?.ServiceLabel.startsWith(
-                                  cable.detailedInfo?.downstreamPorts[0]
-                                    ?.grandParentLocation
-                                )
+                                dsSlot?.data?.Links?.Oem?.IBM
+                                  ?.UpstreamFabricAdapter['@odata.id'] ===
+                                cable.detailedInfo?.downstreamPorts[0]
+                                  ?.grandParent['@odata.id']
                               ) {
                                 const duplicate = row.ioSlotLocation.find(
                                   (obj) => {
