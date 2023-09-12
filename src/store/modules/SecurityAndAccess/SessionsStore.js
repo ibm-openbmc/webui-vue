@@ -26,11 +26,9 @@ const SessionsStore = {
         .then((sessionUris) => {
           const allConnectionsData = sessionUris.map((sessionUri) => {
             //For filtering IP address to IPv4
-            let filteredIPAddress = sessionUri.data?.ClientOriginIPAddress.includes(
-              '::ffff'
-            )
-              ? sessionUri.data?.ClientOriginIPAddress.slice(7)
-              : sessionUri.data?.ClientOriginIPAddress;
+            let filteredIPAddress = sessionUri.data?.ClientOriginIPAddress.split(
+              '::ffff:'
+            ).pop();
             return {
               clientID: sessionUri.data?.Context,
               username: sessionUri.data?.UserName,
