@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "적극적 프리페치",
     "aggressivePrefetchDescription": "이 값을 변경하면 시스템 성능이 저하될 수 있으므로, 서비스 제공자의 지시를 받은 경우에만 변경하십시오. 프로세서의 적극적 프리페치 선호를 사용 안함으로 설정할지, 또는 사용으로 설정할지 지정함",
-    "alert": {
-      "message": "시스템의 전원을 꺼야 합니다. 변경된 사항은 다음 재부팅 시 적용됩니다.",
-      "title": "변경사항 적용"
-    },
     "button": {
       "saveSettings": "설정 저장"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "사용 안함으로 설정한 경우 최대 및 최소 빈도를 설정하려면 초기 부팅이 필요할 수 있습니다.",
     "lateralCastOut": "측면 캐스트 아웃",
     "lateralCastOutDescription": "시스템 성능을 저하시킬 수 있으므로 서비스 제공자의 지시가 있는 경우에만 이 값을 변경하십시오.",
+    "parametersInfo": "시스템의 전원을 꺼야 합니다. 변경사항은 다음 재부팅 시에 적용됩니다.",
     "rpdPolicy": "런타임 프로세서 진단 정책",
     "updateRpdPolicy": "RPD 정책 업데이트",
     "rpdPolicyDescription": "사용 가능(주기적으로 각 코어에서 실행), 스케줄됨(지정된 지속 기간(분)에 대해 매일 스케줄된 시간에 각 코어에서 순차적으로 실행), 사용 불가능(진단 또는 실행 프로그램이 실행되지 않음).",
     "rpdFeature": "런타임 프로세서 진단 기능",
     "updateRpdFeature": "RPD 기능 업데이트",
     "rpdFeatureDescription": "시스템에서 런타임 프로세서 진단(RPD) 기능을 구성할지 여부를 제어합니다. 사용 가능(RPD 기능은 설치된 메모리의 양에 관계없이 구성됨), 자동(RPD 기능은 설치된 메모리가 128GB 이상인 시스템에서 구성되며 128GB보다 작은 시스템에 구성되지 않음), 사용 불가능(RPD 기능이 구성되지 않음).",
+    "rpdFeatureInfo": "RPD 기능을 변경하려면 재부팅을 적용해야 하지만 다른 모든 RPD 매개변수는 런타임 시 동적으로 설정할 수 있습니다.",
     "startTime": "시작 시간(24시간(UTC))",
     "runNow": "지금 실행",
     "duration": "지속 기간(분)",
@@ -1094,6 +1092,7 @@
     "ipv6": "IPv6",
     "ipv6AutoConfig": "IPv6 자동 구성",
     "ipv6DefaultGateway": "IPv6 기본 게이트웨이",
+    "ipv6StaticDefaultGateway": "IPv6 정적 기본 게이트웨이",
     "macAddress": "MAC 주소",
     "network": "네트워크",
     "networkSettings": "네트워크 설정",
@@ -1123,14 +1122,17 @@
       "addDnsAddress": "IP 주소 추가",
       "addIpv4Address": "정적 IPv4 주소 추가",
       "addIpv6Address": "정적 IPv6 주소 추가",
+      "addIpv6StaticDefaultGateway": "IPv6 정적 기본 게이트웨이 주소 추가",
       "addressOrigin": "주소 원본",
       "addressState": "주소 상태",
       "deleteDns": "DNS 주소 삭제",
       "deleteIpv4": "IPv4 주소 삭제",
       "deleteIpv6": "IPv6 주소 삭제",
+      "deleteIpv6StaticDefaultGateway": "IPv6 정적 기본 게이트웨이 주소 삭제",
       "editDns": "DNS 주소 편집",
       "editIpv4": "정적 IPv4 주소 편집",
       "editIpv6": "정적 IPv6 주소 편집",
+      "editIpv6StaticDefaultGateway": "IPv6 정적 기본 게이트웨이 주소 편집",
       "gateway": "게이트웨이",
       "ipAddress": "IP 주소",
       "prefixLength": "접두부 길이",
@@ -1142,11 +1144,13 @@
       "errorDeletingDnsServer": "DNS 서버 삭제 중 오류가 발생했습니다.",
       "errorDeletingIpv4Server": "IPv4 서버 삭제 중 오류가 발생했습니다.",
       "errorDeletingIpv6Server": "IPv6 서버 삭제 중 오류가 발생했습니다.",
+      "errorDeletingIpv6StaticDefaultGateway": "IPv6 정적 기본 게이트웨이를 삭제하는 중에 오류가 발생했습니다.",
       "successSaveNetworkSettings": "%{setting} 설정값을 업데이트했습니다.",
       "successAddingDnsServer": "DNS 서버를 성공적으로 추가했습니다.",
       "successDeletingDnsServer": "DNS 서버를 성공적으로 삭제했습니다.",
       "successDeletingIpv4Server": "IPv4 서버가 성공적으로 삭제되었습니다.",
-      "successDeletingIpv6Server": "IPv6 서버가 성공적으로 삭제되었습니다."
+      "successDeletingIpv6Server": "IPv6 서버가 성공적으로 삭제되었습니다.",
+      "successDeletingIpv6StaticDefaultGateway": "IPv6 정적 기본 게이트웨이가 삭제되었습니다."
     }
   },
   "pageOverview": {
@@ -1276,6 +1280,7 @@
       "successDisableBmcShell": "BMC 쉘을 사용 안함으로 설정했습니다(SSH를 통해). 사용 안함이 적용되는 데 15초가 소요됩니다.",
       "successEnableBmcShell": "BMC 쉘을 사용으로 설정했습니다(SSH를 통해).",
       "successNetworkPolicyUpdate": "%{policy}을(를) 업데이트했습니다.",
+      "successIpmiNetworkPolicyUpdate": "%{policy}을(를) 업데이트했습니다. BMC는 일반적으로 상태를 변경하는 데 약 30초가 소요됩니다.",
       "successNextBootToast": "%{policy}에 변경사항 적용. %{policy}에 대한 변경사항은 다음 재부팅 시 적용됩니다."
     },
     "acfUploadEnablementConfirmText": "주의: 이 설정을 사용으로 설정하면 인증되지 않은 사용자가 로그인하지 않고 운영자 패널에서 기능 74를 누르지 않고도 액세스 제어 파일(ACF)을 업로드할 수 있습니다. 계속하시겠습니까?",
