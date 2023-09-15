@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "アグレッシブ・プリフェッチ",
     "aggressivePrefetchDescription": "この値は、システム・パフォーマンスを低下させる可能性があるので、サービス提供元から指示された場合にのみ変更してください。 プロセッサーがアグレッシブ・プリフェッチを優先するかどうかを指定します。",
-    "alert": {
-      "message": "システムの電源をオフにしなければなりません。 変更内容は次回のリブート時に有効になります",
-      "title": "変更適用"
-    },
     "button": {
       "saveSettings": "設定を保存します。"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "無効にすると、最大頻度と最小頻度を設定するために初期ブートが必要になる場合があります。",
     "lateralCastOut": "ラテラル・キャストアウト",
     "lateralCastOutDescription": "この値を変更するとシステムのパフォーマンスが低下する可能性があるため、サービス・プロバイダーから指示された場合にのみ変更してください。",
+    "parametersInfo": "システムの電源をオフにしなければなりません。 加えられた変更は、次回の再起動時に有効になります。",
     "rpdPolicy": "ランタイム・プロセッサー診断ポリシー",
     "updateRpdPolicy": "RPD ポリシーの更新",
     "rpdPolicyDescription": "有効 (定期的にテストするために各コアで実行)、スケジュール済み (指定された期間 (分)、毎日スケジュールされた時刻に各コアで順次実行)、無効 (診断またはエクササイザーは実行されません)。",
     "rpdFeature": "ランタイム・プロセッサー診断フィーチャー",
     "updateRpdFeature": "RPD 機能の更新",
     "rpdFeatureDescription": "ランタイム・プロセッサー診断 (RPD) フィーチャーがシステム上で構成されるかどうかを制御します。 有効 (インストールされているメモリーの量に関係なく RPD フィーチャーが構成されます)、自動 (RPD フィーチャーは、少なくとも 128GB のインストール済みメモリーがあり、128GB 未満のシステムでは構成されていないシステムで構成されます)、無効 (RPD フィーチャーは構成されません)。",
+    "rpdFeatureInfo": "RPD 機能に加えられた変更を有効にするにはリブートが必要ですが、その他のすべての RPD パラメーターは実行時に動的に設定できます。",
     "startTime": "開始時刻 (24 時間制 (UTC))",
     "runNow": "今すぐ実行",
     "duration": "所要時間 (分)",
@@ -1094,6 +1092,7 @@
     "ipv6": "IPv6",
     "ipv6AutoConfig": "IPv6 自動構成",
     "ipv6DefaultGateway": "IPv6 デフォルト・ゲートウェイ",
+    "ipv6StaticDefaultGateway": "IPv6 静的デフォルト・ゲートウェイ",
     "macAddress": "MAC アドレス",
     "network": "ネットワーク",
     "networkSettings": "ネットワーク設定",
@@ -1123,14 +1122,17 @@
       "addDnsAddress": "IP アドレスの追加",
       "addIpv4Address": "静的 IPv4 アドレスの追加",
       "addIpv6Address": "静的 IPv6 アドレスの追加",
+      "addIpv6StaticDefaultGateway": "IPv6 静的デフォルト・ゲートウェイ・アドレスの追加",
       "addressOrigin": "アドレス起点",
       "addressState": "アドレス状態",
       "deleteDns": "DNS アドレスの削除",
       "deleteIpv4": "IPv4 アドレスの削除",
       "deleteIpv6": "IPv6 アドレスの削除",
+      "deleteIpv6StaticDefaultGateway": "IPv6 静的デフォルト・ゲートウェイ・アドレスの削除",
       "editDns": "DNS アドレスの編集",
       "editIpv4": "静的 IPv4 アドレスの編集",
       "editIpv6": "静的 IPv6 アドレスの編集",
+      "editIpv6StaticDefaultGateway": "IPv6 静的デフォルト・ゲートウェイ・アドレスの編集",
       "gateway": "ゲートウェイ",
       "ipAddress": "IP アドレス",
       "prefixLength": "接頭部の長さ",
@@ -1142,11 +1144,13 @@
       "errorDeletingDnsServer": "DNS サーバーの削除でエラーが発生しました。",
       "errorDeletingIpv4Server": "IPv4 サーバーの削除中にエラーが発生しました。",
       "errorDeletingIpv6Server": "IPv6 サーバーの削除中にエラーが発生しました。",
+      "errorDeletingIpv6StaticDefaultGateway": "IPv6 静的デフォルト・ゲートウェイの削除中にエラーが発生しました。",
       "successSaveNetworkSettings": "%{setting} の設定が正常に更新されました。",
       "successAddingDnsServer": "DNS サーバーが正常に追加されました。",
       "successDeletingDnsServer": "DNS サーバーが正常に削除されました。",
       "successDeletingIpv4Server": "IPv4 サーバーが正常に削除されました。",
-      "successDeletingIpv6Server": "IPv6 サーバーが正常に削除されました。"
+      "successDeletingIpv6Server": "IPv6 サーバーが正常に削除されました。",
+      "successDeletingIpv6StaticDefaultGateway": "IPv6 静的デフォルト・ゲートウェイが正常に削除されました。"
     }
   },
   "pageOverview": {
@@ -1274,8 +1278,9 @@
     "toast": {
       "errorNetworkPolicyUpdate": "%{policy} の更新中にエラーが発生しました。",
       "successDisableBmcShell": "BMC シェルが (SSH 経由で) 正常に無効化されました。無効化が有効になるまで 15 秒お待ちください。",
-      "successEnableBmcShell": "BMC シェルが (SSH 経由で) 正常に有効になりました",
+      "successEnableBmcShell": "BMC シェルが (SSH 経由で) 正常に有効になりました。",
       "successNetworkPolicyUpdate": "%{policy} が正常に更新されました。",
+      "successIpmiNetworkPolicyUpdate": "%{policy} が正常に更新されました。 BMC は通常、状態を変更するのに約 30 秒かかります。",
       "successNextBootToast": "%{policy} に変更を適用しています。 %{policy} に対して行われた変更は、次回のリブート時に有効になります。"
     },
     "acfUploadEnablementConfirmText": "注意: この設定を有効にすると、認証されていないユーザーは、オペレーター・パネルで機能 74 を押すことなく、ログインせずにアクセス制御ファイル (ACF) をアップロードできます。 続行しますか?",
