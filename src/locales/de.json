@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "Aggressiver Vorablesezugriff",
     "aggressivePrefetchDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, da dies die Systemleistung beeinträchtigen kann. Gibt an, ob der aggressive Vorablesezugriff durch den Prozessor inaktiviert oder aktiviert ist",
-    "alert": {
-      "message": "Das System muss ausgeschaltet werden. Vorgenommene Änderungen werden beim nächsten Warmstart wirksam",
-      "title": "Änderungen anwenden"
-    },
     "button": {
       "saveSettings": "Einstellungen speichern"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "Wenn diese Option inaktiviert ist, ist möglicherweise ein initiales Booten erforderlich, damit die maximale und die minimale Frequenz festgelegt werden können.",
     "lateralCastOut": "Laterales Castout",
     "lateralCastOutDescription": "Ändern Sie diesen Wert nur, wenn Sie vom Service-Provider dazu aufgefordert werden, dies kann die Systemleistung beeinträchtigen.",
+    "parametersInfo": "Das System muss ausgeschaltet werden. Vorgenommene Änderungen werden beim nächsten Warmstart wirksam.",
     "rpdPolicy": "Richtlinie für Runtime Processor Diagnostics",
     "updateRpdPolicy": "RPD-Richtlinie aktualisieren",
     "rpdPolicyDescription": "Aktiviert (auf jedem Kern ausführen, um sie regelmäßig zu testen), Geplant (nacheinander auf jedem Kern jeden Tag zur geplanten Zeit für die angegebene Dauer (in Minuten) ausführen), Inaktiviert (es werden keine Diagnoseprogramme oder Testprogramme ausgeführt).",
     "rpdFeature": "Funktion Runtime Processor Diagnostics",
     "updateRpdFeature": "RPD-Funktion aktualisieren",
     "rpdFeatureDescription": "Steuert, ob die Funktion Runtime Processor Diagnostics (RPD) auf dem System konfiguriert wird. Aktiviert (die RPD-Funktion wird unabhängig von der installierten Speicherkapazität konfiguriert), Automatisch (die RPD-Funktion wird auf Systemen mit mindestens 128GB installiertem Speicher und nicht auf Systemen mit weniger als 128GB Speicher konfiguriert), Inaktiviert (die RPD-Funktion wird nicht konfiguriert).",
+    "rpdFeatureInfo": "Änderungen am RPD-Feature erfordern einen Warmstart, aber alle anderen RPD-Parameter können dynamisch zur Laufzeit festgelegt werden.",
     "startTime": "Startzeit (24-Stunden-Zeit (UTC))",
     "runNow": "Jetzt ausführen",
     "duration": "Dauer (Minuten)",
@@ -1094,6 +1092,7 @@
     "ipv6": "IPv6",
     "ipv6AutoConfig": "Automatische IPv6-Konfiguration",
     "ipv6DefaultGateway": "IPv6-Standardgateway",
+    "ipv6StaticDefaultGateway": "Statische IPv6-Standardgateways",
     "macAddress": "MAC-Adresse",
     "network": "Netz",
     "networkSettings": "Netzeinstellungen",
@@ -1123,14 +1122,17 @@
       "addDnsAddress": "IP-Adresse hinzufügen",
       "addIpv4Address": "Statische IPv4-Adresse hinzufügen",
       "addIpv6Address": "Statische IPv6-Adresse hinzufügen",
+      "addIpv6StaticDefaultGateway": "Statische IPv6-Standardgatewayadresse hinzufügen",
       "addressOrigin": "Adressursprung",
       "addressState": "Status der Adresse",
       "deleteDns": "DNS-Adresse löschen",
       "deleteIpv4": "IPv4-Adresse löschen",
       "deleteIpv6": "IPv6-Adresse löschen",
+      "deleteIpv6StaticDefaultGateway": "Statische Standardgatewayadresse IPv6 löschen",
       "editDns": "DNS-Adresse bearbeiten",
       "editIpv4": "Statische IPv4-Adresse bearbeiten",
       "editIpv6": "Statische IPv6-Adresse bearbeiten",
+      "editIpv6StaticDefaultGateway": "Statische Standardgatewayadresse IPv6 bearbeiten",
       "gateway": "Gateway",
       "ipAddress": "IP-Adresse",
       "prefixLength": "Länge des Präfix",
@@ -1142,11 +1144,13 @@
       "errorDeletingDnsServer": "Fehler beim Löschen des DNS-Servers.",
       "errorDeletingIpv4Server": "Fehler beim Löschen des IPv4-Servers.",
       "errorDeletingIpv6Server": "Fehler beim Löschen des IPv6-Servers.",
+      "errorDeletingIpv6StaticDefaultGateway": "Fehler beim Löschen des statischen IPv6-Standardgateways.",
       "successSaveNetworkSettings": "Einstellungen für %{setting} wurden erfolgreich aktualisiert.",
       "successAddingDnsServer": "DNS-Server erfolgreich hinzugefügt.",
       "successDeletingDnsServer": "DNS-Server erfolgreich gelöscht.",
       "successDeletingIpv4Server": "IPv4-Server erfolgreich gelöscht.",
-      "successDeletingIpv6Server": "IPv6-Server erfolgreich gelöscht."
+      "successDeletingIpv6Server": "IPv6-Server erfolgreich gelöscht.",
+      "successDeletingIpv6StaticDefaultGateway": "Das statische IPv6-Standardgateway wurde gelöscht."
     }
   },
   "pageOverview": {
@@ -1274,8 +1278,9 @@
     "toast": {
       "errorNetworkPolicyUpdate": "Fehler beim Aktualisieren von %{policy}.",
       "successDisableBmcShell": "BMC-Shell wurde erfolgreich inaktiviert (über SSH). Bitte warten Sie 15 Sekunden, bis die Inaktivierung wirksam wird.",
-      "successEnableBmcShell": "BMC-Shell erfolgreich aktiviert (über SSH)",
+      "successEnableBmcShell": "BMC-Shell erfolgreich aktiviert (über SSH).",
       "successNetworkPolicyUpdate": "%{policy} erfolgreich aktualisiert.",
+      "successIpmiNetworkPolicyUpdate": "%{policy} erfolgreich aktualisiert. Der BMC benötigt normalerweise etwa 30 Sekunden, um den Zustand zu ändern.",
       "successNextBootToast": "Änderungen werden auf %{policy} angewendet. Änderungen an %{policy} werden beim nächsten Warmstart wirksam."
     },
     "acfUploadEnablementConfirmText": "Vorsicht: Wenn Sie diese Einstellung aktivieren, können nicht authentifizierte Benutzer Zugriffssteuerungsdateien (Access Control Files, ACFs) hochladen, ohne sich anzumelden und ohne Funktion 74 auf der Bedienerkonsole zu drücken. Möchten Sie fortfahren?",
