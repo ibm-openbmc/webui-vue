@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "積極的預先提取",
     "aggressivePrefetchDescription": "只有在服務提供者指示時，才變更此值，因為它可能會降低系統效能。 指定是停用還是啟用處理器偏好積極的預先提取",
-    "alert": {
-      "message": "系統必須關閉電源。 所做的變更將在下次重新開機時生效",
-      "title": "套用變更"
-    },
     "button": {
       "saveSettings": "儲存設定"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "如果已停用，則可能需要起始開機以取得可設定的頻率上限及下限。",
     "lateralCastOut": "橫向強制轉型",
     "lateralCastOutDescription": "只有在「服務提供者」指示時，才變更此值，因為它可能會降低系統效能。",
+    "parametersInfo": "系統必須關閉電源。 所做的變更將在下次重新開機時生效。",
     "rpdPolicy": "執行時期處理器診斷原則",
     "updateRpdPolicy": "更新 RPD 原則",
     "rpdPolicyDescription": "已啟用（在每一個核心上執行以定期測試它們）、已排定（在每天排定的時間在每一個核心上循序執行指定的持續時間（分鐘））、已停用（將不執行診斷程式或練習程式）。",
     "rpdFeature": "執行時期處理器診斷特性",
     "updateRpdFeature": "更新 RPD 特性",
     "rpdFeatureDescription": "控制是否在系統上配置「執行時期處理器診斷 (RPD) 特性」。 已啟用（不論已安裝的記憶體數量為何，都會配置 RPD 特性）、自動（將在具有至少 128GB 已安裝記憶體的系統上配置 RPD 特性，而在具有小於 128GB 的系統上未配置）、已停用（將不會配置 RPD 特性）。",
+    "rpdFeatureInfo": "針對 RPD 特性所做的變更需要重新開機才能生效，但所有其他 RPD 參數都可以在執行時期動態設定。",
     "startTime": "開始時間（24 小時制 (UTC)）",
     "runNow": "立即執行",
     "duration": "持續時間（分鐘）",
@@ -1094,6 +1092,7 @@
     "ipv6": "IPv6",
     "ipv6AutoConfig": "IPv6 自動配置",
     "ipv6DefaultGateway": "IPv6 預設閘道",
+    "ipv6StaticDefaultGateway": "IPv6 靜態預設閘道",
     "macAddress": "MAC 位址",
     "network": "network",
     "networkSettings": "網路設定",
@@ -1123,14 +1122,17 @@
       "addDnsAddress": "新增 IP 位址",
       "addIpv4Address": "新增靜態 IPv4 位址",
       "addIpv6Address": "新增靜態 IPv6 位址",
+      "addIpv6StaticDefaultGateway": "新增 IPv6 靜態預設閘道位址",
       "addressOrigin": "位址來源",
       "addressState": "位址狀態",
       "deleteDns": "刪除 DNS 位址",
       "deleteIpv4": "刪除 IPv4 位址",
       "deleteIpv6": "刪除 IPv6 位址",
+      "deleteIpv6StaticDefaultGateway": "刪除 IPv6 靜態預設閘道位址",
       "editDns": "編輯 DNS 位址",
       "editIpv4": "編輯靜態 IPv4 位址",
       "editIpv6": "編輯靜態 IPv6 位址",
+      "editIpv6StaticDefaultGateway": "編輯 IPv6 靜態預設閘道位址",
       "gateway": "閘道",
       "ipAddress": "IP 位址",
       "prefixLength": "字首長度",
@@ -1142,11 +1144,13 @@
       "errorDeletingDnsServer": "刪除 DNS 伺服器時發生錯誤。",
       "errorDeletingIpv4Server": "刪除 IPv4 伺服器時發生錯誤。",
       "errorDeletingIpv6Server": "刪除 IPv6 伺服器時發生錯誤。",
+      "errorDeletingIpv6StaticDefaultGateway": "刪除 IPv6 靜態預設閘道時發生錯誤。",
       "successSaveNetworkSettings": "已順利更新 %{setting} 設定。",
       "successAddingDnsServer": "已順利新增 DNS 伺服器。",
       "successDeletingDnsServer": "已順利刪除 DNS 伺服器。",
       "successDeletingIpv4Server": "已順利刪除 IPv4 伺服器。",
-      "successDeletingIpv6Server": "已順利刪除 IPv6 伺服器。"
+      "successDeletingIpv6Server": "已順利刪除 IPv6 伺服器。",
+      "successDeletingIpv6StaticDefaultGateway": "刪除 IPv6 靜態預設閘道成功。"
     }
   },
   "pageOverview": {
@@ -1274,8 +1278,9 @@
     "toast": {
       "errorNetworkPolicyUpdate": "更新 %{policy} 時發生錯誤。",
       "successDisableBmcShell": "已順利停用 BMC Shell (透過 SSH)，請容許 15 秒讓停用生效。",
-      "successEnableBmcShell": "已順利啟用 BMC Shell (透過 SSH)",
+      "successEnableBmcShell": "已順利啟用 BMC Shell（透過 SSH）。",
       "successNetworkPolicyUpdate": "已順利更新 %{policy}。",
+      "successIpmiNetworkPolicyUpdate": "已順利更新 %{policy}。 BMC 通常需要大約 30 秒來變更狀態。",
       "successNextBootToast": "正在將變更套用至 %{policy}。 對 %{policy} 所做的變更將在下一次重新開機時生效。"
     },
     "acfUploadEnablementConfirmText": "注意：啟用此設定可讓未經鑑別的使用者上傳「存取控制檔案 (ACF)」，而無需登入，也無需在「操作面板」上按「功能 74」。 您要繼續嗎？",
