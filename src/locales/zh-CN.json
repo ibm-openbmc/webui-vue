@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "主动预取",
     "aggressivePrefetchDescription": "仅在服务提供者指示时更改此值，因为它可能会降低系统性能。 指定是禁用还是启用处理器偏好的主动预取",
-    "alert": {
-      "message": "必须关闭系统的电源。 所作的更改将在下一次重新引导时生效",
-      "title": "应用更改"
-    },
     "button": {
       "saveSettings": "保存设置"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "如果禁用，那么可能需要初始引导才能设置最大和最小频率。",
     "lateralCastOut": "Lateral cast out 控制",
     "lateralCastOutDescription": "仅在服务提供者指示时更改此值，因为它可能会降低系统性能。",
+    "parametersInfo": "必须关闭系统的电源。 所作的更改将在下次重新引导时生效。",
     "rpdPolicy": "运行时处理器诊断策略",
     "updateRpdPolicy": "更新 RPD 策略",
     "rpdPolicyDescription": "已启用（在每个核心上运行以定期进行测试）、已调度（每天按调度的时间在每个核心上按顺序运行指定的持续时间（以分钟为单位））、已禁用（不运行诊断或试验程序）。",
     "rpdFeature": "运行时处理器诊断功能",
     "updateRpdFeature": "更新 RPD 功能部件",
     "rpdFeatureDescription": "控制是否将在系统上配置运行时处理器诊断 (RPD) 功能部件。 已启用（将配置 RPD 功能部件，而不考虑已安装的内存量）、自动（将在至少具有 128GB 已安装内存的系统上配置 RPD 功能部件，而不在低于 128GB 的系统上进行配置）、已禁用（不配置 RPD 功能部件）。",
+    "rpdFeatureInfo": "对 RPD 功能部件所作的更改需要重新引导才能生效，但所有其他 RPD 参数都可以在运行时动态设置。",
     "startTime": "开始时间（24 小时制 (UTC)）",
     "runNow": "立即运行",
     "duration": "持续时间（分钟）",
@@ -1094,6 +1092,7 @@
     "ipv6": "IPv6",
     "ipv6AutoConfig": "IPv6 自动配置",
     "ipv6DefaultGateway": "IPv6 默认网关",
+    "ipv6StaticDefaultGateway": "IPv6 静态缺省网关",
     "macAddress": "MAC 地址",
     "network": "network",
     "networkSettings": "网络设置",
@@ -1123,14 +1122,17 @@
       "addDnsAddress": "添加 IP 地址",
       "addIpv4Address": "添加静态 IPv4 地址",
       "addIpv6Address": "添加静态 IPv6 地址",
+      "addIpv6StaticDefaultGateway": "添加 IPv6 静态缺省网关地址",
       "addressOrigin": "地址来源",
       "addressState": "地址状态",
       "deleteDns": "删除 DNS 地址",
       "deleteIpv4": "删除 IPv4 地址",
       "deleteIpv6": "删除 IPv6 地址",
+      "deleteIpv6StaticDefaultGateway": "删除 IPv6 静态缺省网关地址",
       "editDns": "编辑 DNS 地址",
       "editIpv4": "编辑静态 IPv4 地址",
       "editIpv6": "编辑静态 IPv6 地址",
+      "editIpv6StaticDefaultGateway": "编辑 IPv6 静态缺省网关地址",
       "gateway": "网关",
       "ipAddress": "IP 地址",
       "prefixLength": "前缀长度",
@@ -1142,11 +1144,13 @@
       "errorDeletingDnsServer": "删除 DNS 服务器时出错。",
       "errorDeletingIpv4Server": "删除 IPv4 服务器时出错。",
       "errorDeletingIpv6Server": "删除 IPv6 服务器时出错。",
+      "errorDeletingIpv6StaticDefaultGateway": "删除 IPv6 静态缺省网关时出错。",
       "successSaveNetworkSettings": "已成功更新 %{setting} 个设置。",
       "successAddingDnsServer": "已成功添加 DNS 服务器。",
       "successDeletingDnsServer": "已成功删除 DNS 服务器。",
       "successDeletingIpv4Server": "已成功删除 IPv4 服务器。",
-      "successDeletingIpv6Server": "已成功删除 IPv6 服务器。"
+      "successDeletingIpv6Server": "已成功删除 IPv6 服务器。",
+      "successDeletingIpv6StaticDefaultGateway": "已成功删除 IPv6 静态缺省网关。"
     }
   },
   "pageOverview": {
@@ -1274,8 +1278,9 @@
     "toast": {
       "errorNetworkPolicyUpdate": "更新 %{policy} 时出错。",
       "successDisableBmcShell": "已成功禁用 BMC shell（通过 SSH），请允许 15 秒以使禁用生效。",
-      "successEnableBmcShell": "已成功启用 BMC shell（通过 SSH）",
+      "successEnableBmcShell": "已成功启用 BMC shell（通过 SSH）。",
       "successNetworkPolicyUpdate": "已成功更新 %{policy}。",
+      "successIpmiNetworkPolicyUpdate": "已成功更新 %{policy}。 BMC 通常需要大约 30 秒来改变状态。",
       "successNextBootToast": "正在将更改应用于 %{policy}。 对 %{policy} 所作的更改将在下一次重新引导时生效。"
     },
     "acfUploadEnablementConfirmText": "注意：启用此设置将使未经认证的用户无需登录即可上载访问控制文件 (ACF)，也无需在操作员面板上按功能 74。 要继续吗？",
