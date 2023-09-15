@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "Pré-busca agressiva",
     "aggressivePrefetchDescription": "Mude este valor somente se instruído por seu provedor de serviços, pois isso pode comprometer o desempenho do sistema. Especifica se a pré-busca agressiva do processador está desativada ou ativada",
-    "alert": {
-      "message": "O sistema tem que ser desligado. As mudanças feitas entrarão em vigor na próxima reinicialização",
-      "title": "Aplicar mudanças"
-    },
     "button": {
       "saveSettings": "Salvar configurações"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "Se desativado, poderá ser necessária uma inicialização prévia para obter a frequência máxima e mínima para poder ser configurado.",
     "lateralCastOut": "Expulsão lateral",
     "lateralCastOutDescription": "Mude este valor somente se instruído por seu provedor de serviços, pois isso pode comprometer o desempenho do sistema.",
+    "parametersInfo": "O sistema tem que ser desligado. A mudanças feitas entrarão em vigor na próxima reinicialização.",
     "rpdPolicy": "Política de diagnóstico do processador de tempo de execução",
     "updateRpdPolicy": "Atualizar política de RPD",
     "rpdPolicyDescription": "Ativado (executar em cada núcleo para testá-los periodicamente), Planejado (executar sequencialmente em cada núcleo no horário planejado todos os dias para a duração especificada (em minutos)), Desativado (nenhum diagnóstico ou exercitador será executado).",
     "rpdFeature": "Recurso de diagnóstico do processador de tempo de execução",
     "updateRpdFeature": "Atualizar recurso RPD",
     "rpdFeatureDescription": "Controla se o recurso Runtime Processor Diagnostics (RPD) será configurado no sistema. Ativado (o recurso RPD será configurado independentemente da quantidade de memória instalada), Automático (o recurso RPD será configurado em sistemas com pelo menos 128 GB de memória instalada e não configurado em sistemas com menos de 128 GB), Desativado (o recurso RPD não será configurado).",
+    "rpdFeatureInfo": "As mudanças feitas no recurso RPD requerem uma reinicialização para entrar em vigor, mas todos os outros parâmetros de RPD podem ser configurados dinamicamente no tempo de execução.",
     "startTime": "Horário de início (horário de 24 horas (UTC))",
     "runNow": "Executar agora",
     "duration": "Duração (minutos)",
@@ -1094,6 +1092,7 @@
     "ipv6": "IPv6",
     "ipv6AutoConfig": "Configuração automática de IPv6",
     "ipv6DefaultGateway": "Gateway padrão IPv6",
+    "ipv6StaticDefaultGateway": "Gateways padrão estáticos IPv6",
     "macAddress": "Endereço MAC",
     "network": "rede",
     "networkSettings": "Configurações de rede",
@@ -1123,14 +1122,17 @@
       "addDnsAddress": "Incluir endereço IP",
       "addIpv4Address": "Incluir endereço IPv4 estático",
       "addIpv6Address": "Incluir o endereço IPv6 estático",
+      "addIpv6StaticDefaultGateway": "Incluir endereço de gateway padrão estático IPv6",
       "addressOrigin": "Origem do endereço",
       "addressState": "Estado do endereço",
       "deleteDns": "Excluir endereço DNS",
       "deleteIpv4": "Excluir endereço IPv4",
       "deleteIpv6": "Excluir o endereço IPv6",
+      "deleteIpv6StaticDefaultGateway": "Excluir endereço de gateway padrão estático IPv6",
       "editDns": "Editar endereço DNS",
       "editIpv4": "Editar endereço IPv4 estático",
       "editIpv6": "Editar endereço IPv6 estático",
+      "editIpv6StaticDefaultGateway": "Editar endereço de gateway padrão estático IPv6",
       "gateway": "Gateway",
       "ipAddress": "Endereço IP",
       "prefixLength": "Comprimento do prefixo",
@@ -1142,11 +1144,13 @@
       "errorDeletingDnsServer": "Erro ao excluir o servidor DNS.",
       "errorDeletingIpv4Server": "Erro ao excluir o servidor IPv4.",
       "errorDeletingIpv6Server": "Erro ao excluir o servidor IPv6.",
+      "errorDeletingIpv6StaticDefaultGateway": "Erro ao excluir gateway padrão estático IPv6.",
       "successSaveNetworkSettings": "Sucesso ao atualizar as configurações %{setting}.",
       "successAddingDnsServer": "Servidor DNS incluído com êxito.",
       "successDeletingDnsServer": "Servidor DNS excluído com êxito.",
       "successDeletingIpv4Server": "Servidor IPv4 excluído com êxito.",
-      "successDeletingIpv6Server": "Servidor IPv6 excluído com êxito."
+      "successDeletingIpv6Server": "Servidor IPv6 excluído com êxito.",
+      "successDeletingIpv6StaticDefaultGateway": "Gateway padrão estático IPv6 excluído com sucesso."
     }
   },
   "pageOverview": {
@@ -1274,8 +1278,9 @@
     "toast": {
       "errorNetworkPolicyUpdate": "Erro ao atualizar %{policy}.",
       "successDisableBmcShell": "Shell BMC (via SSH) desativado com sucesso. Aguarde 15 segundos para que a desativação seja efetivada.",
-      "successEnableBmcShell": "Shell BMC ativado com sucesso (via SSH)",
+      "successEnableBmcShell": "Shell BMC ativado com sucesso (via SSH).",
       "successNetworkPolicyUpdate": "%{policy} atualizada com sucesso.",
+      "successIpmiNetworkPolicyUpdate": "%{policy} atualizada com sucesso. O BMC normalmente leva cerca de 30 segundos para mudar o estado.",
       "successNextBootToast": "Aplicando mudanças em %{policy}. As mudanças feitas em %{policy} entrarão em vigor na próxima reinicialização."
     },
     "acfUploadEnablementConfirmText": "Cuidado: a ativação dessa configuração permite que usuários não autenticados façam upload de arquivos de controle de acesso (ACFs) sem efetuar login e sem pressionar a Função 74 no painel do operador. Deseja prosseguir?",
