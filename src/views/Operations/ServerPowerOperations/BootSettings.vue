@@ -4,6 +4,7 @@
       v-if="form.attributes && form.attributeValues"
       :key="componentKey"
       :attribute-values="form.attributeValues"
+      :disabled="disabled"
       @updated-attributes="updateAttributeKeys"
     />
     <b-button variant="primary" type="submit" class="mb-3">
@@ -33,6 +34,9 @@ export default {
   },
   computed: {
     ...mapState('serverBootSettings', ['attributeValues', 'biosAttributes']),
+    disabled() {
+      return this.$store.getters['serverBootSettings/disabled'];
+    },
   },
   watch: {
     attributeValues: function (value) {
@@ -46,7 +50,7 @@ export default {
     Promise.all([
       this.$store.dispatch('serverBootSettings/getBiosAttributes'),
       this.$store.dispatch('serverBootSettings/getAttributeValues'),
-    ]).finally(() =>
+    ]).finally(
       this.$root.$emit('server-power-operations-boot-settings-complete')
     );
   },
@@ -65,7 +69,9 @@ export default {
           this.componentKey += 1;
           this.successToast(message);
         })
-        .catch(({ message }) => this.errorToast(message))
+        .catch(({ message }) => {
+          this.errorToast(message);
+        })
         .finally(() => {
           this.endLoader();
         });

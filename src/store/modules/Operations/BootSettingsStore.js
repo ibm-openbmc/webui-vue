@@ -12,6 +12,7 @@ const BootSettingsStore = {
       'pvm_os_boot_type',
       'pvm_sys_dump_active',
     ],
+    disabled: false,
     attributeValues: null,
     automaticRetryConfigValue: '',
     biosAttributes: null,
@@ -26,8 +27,10 @@ const BootSettingsStore = {
     powerRestorePolicyValue: (state) => state.powerRestorePolicyValue,
     systemDumpActive: (state) =>
       state.biosAttributes?.pvm_sys_dump_active === 'Enabled',
+    disabled: (state) => state.disabled,
   },
   mutations: {
+    setDisabled: (state, disabled) => (state.disabled = disabled),
     setAttributeValues: (state, attributeValues) =>
       (state.attributeValues = attributeValues),
     setBiosAttributes: (state, biosAttributes) =>
@@ -50,9 +53,9 @@ const BootSettingsStore = {
         })
         .catch((error) => console.log(error));
     },
-    async saveSettings({ dispatch }, { biosSettings }) {
+    async saveSettings({ dispatch, commit }, { biosSettings }) {
       const promises = [];
-
+      commit('setDisabled', true);
       if (biosSettings) {
         promises.push(dispatch('saveBiosSettings', biosSettings));
       }
@@ -85,8 +88,12 @@ const BootSettingsStore = {
               };
             }, {});
           commit('setBiosAttributes', filteredAttributes);
+          commit('setDisabled', false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          commit('setDisabled', false);
+        });
     },
     async getAttributeValues({ commit, state }) {
       return await api
@@ -142,7 +149,7 @@ const BootSettingsStore = {
         )
         .catch((error) => console.log(error));
     },
-    saveBiosSettings({ dispatch }, biosSettings) {
+    saveBiosSettings({ dispatch, commit }, biosSettings) {
       return api
         .patch('/redfish/v1/Systems/system/Bios/Settings', {
           Attributes: biosSettings,
@@ -153,6 +160,7 @@ const BootSettingsStore = {
         })
         .catch((error) => {
           console.log(error);
+          commit('setDisabled', false);
           return error;
         });
     },
@@ -171,7 +179,7 @@ const BootSettingsStore = {
           );
         });
     },
-    saveOperatingModeSettings({ dispatch }) {
+    saveOperatingModeSettings({ dispatch, commit }) {
       return api
         .patch('/redfish/v1/Systems/system', {
           PowerRestorePolicy: this.state.serverBootSettings
@@ -188,6 +196,7 @@ const BootSettingsStore = {
         })
         .catch((error) => {
           console.log(error);
+          commit('setDisabled', false);
           return error;
         });
     },
