@@ -199,7 +199,6 @@ export default {
             {
               value: 'edit',
               enabled:
-                ipv6.AddressOrigin !== 'LinkLocal' &&
                 ipv6.AddressOrigin !== 'DHCPv6' &&
                 ipv6.AddressOrigin !== 'SLAAC',
               title: this.$t('pageNetwork.table.editIpv6'),
@@ -207,7 +206,6 @@ export default {
             {
               value: 'delete',
               enabled:
-                ipv6.AddressOrigin !== 'LinkLocal' &&
                 ipv6.AddressOrigin !== 'DHCPv6' &&
                 ipv6.AddressOrigin !== 'SLAAC',
               title: this.$t('pageNetwork.table.deleteIpv6'),
