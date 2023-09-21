@@ -84,9 +84,6 @@
             <div v-else-if="value == 'Subprocessor partitioning'">
               {{ $t('pageCapacityOnDemand.setting.subprocessorPartitioning') }}
             </div>
-            <div v-else-if="value == 'System Anchor'">
-              {{ $t('pageCapacityOnDemand.setting.systemAnchor') }}
-            </div>
             <div v-else-if="value == 'Trial Memory Licenses (GB)'">
               {{ $t('pageCapacityOnDemand.setting.trialMemoryLicenses') }}
             </div>
