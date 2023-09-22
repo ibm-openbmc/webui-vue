@@ -919,10 +919,6 @@
   "pageSystemParameters": {
     "aggressivePrefetch": "Préextraction agressive",
     "aggressivePrefetchDescription": "Ne modifiez cette valeur que si le fournisseur de services vous y invite car cela peut dégrader les performances du système. Indique si la préextraction agressive de faveur de processeur est désactivée ou activée",
-    "alert": {
-      "message": "Le système doit être mis hors tension. Les modifications apportées prendront effet lors du prochain redémarrage",
-      "title": "Application des modifications"
-    },
     "button": {
       "saveSettings": "Enregistrer les paramètres"
     },
@@ -931,12 +927,14 @@
     "frequencyCapHelpText": "Si cette option est désactivée, un amorçage initial peut être nécessaire pour pouvoir fixer les fréquences maximale et minimale.",
     "lateralCastOut": "Conversion latérale",
     "lateralCastOutDescription": "Ne modifiez cette valeur qu'à la demande de votre fournisseur de services, car cela pourrait entraîner une dégradation des performances du système.",
+    "parametersInfo": "Le système doit être mis hors tension. Les modifications effectuées seront appliquées au prochain réamorçage.",
     "rpdPolicy": "Règle RPD (Runtime Processor Diagnostic)",
     "updateRpdPolicy": "Mettre à jour la règle RPD",
     "rpdPolicyDescription": "Activée (Exécuter sur chaque coeur pour les tester périodiquement), Planifiée (Exécuter séquentiellement sur chaque coeur à l'heure planifiée chaque jour pendant la durée indiquée (en minutes)), Désactivée (Aucun diagnostic ou exercice ne sera exécuté).",
     "rpdFeature": "Fonction RPD (Runtime Processor Diagnostic)",
     "updateRpdFeature": "Mettre à jour la fonction RPD",
     "rpdFeatureDescription": "Contrôle si la fonction RPD (Runtime Processor Diagnostic) sera configurée sur le système. Activée (la fonction RPD sera configurée quelle que soit la quantité de mémoire installée), Automatique (la fonction RPD sera configurée sur les systèmes disposant d'au moins 128 Go de mémoire installée et non sur les systèmes disposant de moins de 128 Go), Désactivée (la fonction RPD ne sera pas configurée).",
+    "rpdFeatureInfo": "Les modifications apportées à la fonction RPD nécessitent un redémarrage pour être appliquées, mais tous les autres paramètres RPD peuvent être définis dynamiquement lors de l'exécution.",
     "startTime": "Heure de début (heure au format 24 heures (UTC))",
     "runNow": "Exécuter maintenant",
     "duration": "Durée (minutes)",
@@ -1094,6 +1092,7 @@
     "ipv6": "IPv6",
     "ipv6AutoConfig": "Configuration automatique IPv6",
     "ipv6DefaultGateway": "Passerelle par défaut IPv6",
+    "ipv6StaticDefaultGateway": "Passerelles par défaut statiques IPv6",
     "macAddress": "Adresse MAC",
     "network": "réseau",
     "networkSettings": "Paramètres réseau",
@@ -1123,14 +1122,17 @@
       "addDnsAddress": "Ajouter une adresse IP",
       "addIpv4Address": "Ajouter une adresse IPv4 statique",
       "addIpv6Address": "Ajouter une adresse IPv6 statique",
+      "addIpv6StaticDefaultGateway": "Ajout d'une adresse de passerelle statique par défaut IPv6",
       "addressOrigin": "Origine de l'adresse",
       "addressState": "Etat de l'adresse",
       "deleteDns": "Supprimer l'adresse du serveur DNS",
       "deleteIpv4": "Supprimer l'adresse IPv4",
       "deleteIpv6": "Supprimer l'adresse IPv6",
+      "deleteIpv6StaticDefaultGateway": "Supprimer l'adresse de passerelle statique par défaut IPv6",
       "editDns": "Editer l'adresse du serveur DNS",
       "editIpv4": "Modifier l'adresse IPv4 statique",
       "editIpv6": "Modifier l'adresse IPv6 statique",
+      "editIpv6StaticDefaultGateway": "Éditer l'adresse de passerelle statique par défaut IPv6",
       "gateway": "Passerelle",
       "ipAddress": "Adresse IP",
       "prefixLength": "Longueur du préfixe",
@@ -1142,11 +1144,13 @@
       "errorDeletingDnsServer": "Erreur lors de la suppression du serveur DNS.",
       "errorDeletingIpv4Server": "Erreur lors de la suppression du serveur IPv4.",
       "errorDeletingIpv6Server": "Erreur lors de la suppression du serveur IPv6.",
+      "errorDeletingIpv6StaticDefaultGateway": "Erreur lors de la suppression de la passerelle par défaut statique IPv6.",
       "successSaveNetworkSettings": "Les paramètres %{setting} ont été mis à jour.",
       "successAddingDnsServer": "L'ajout du serveur DNS a abouti.",
       "successDeletingDnsServer": "La suppression du serveur DNS a abouti.",
       "successDeletingIpv4Server": "La suppression du serveur IPv4 a abouti.",
-      "successDeletingIpv6Server": "La suppression du serveur IPv6 a abouti."
+      "successDeletingIpv6Server": "La suppression du serveur IPv6 a abouti.",
+      "successDeletingIpv6StaticDefaultGateway": "La suppression de la passerelle par défaut statique IPv6 a abouti."
     }
   },
   "pageOverview": {
@@ -1274,8 +1278,9 @@
     "toast": {
       "errorNetworkPolicyUpdate": "Erreur de mise à jour de %{policy}.",
       "successDisableBmcShell": "L'interpréteur de commandes BMC a été désactivé (via SSH). La désactivation prendra effet d'ici 15 secondes.",
-      "successEnableBmcShell": "L'interpréteur de commandes BMC a été activé (via SSH)",
+      "successEnableBmcShell": "L'activation du shell BMC (via SSH) a abouti.",
       "successNetworkPolicyUpdate": "La mise à jour de %{policy} a abouti.",
+      "successIpmiNetworkPolicyUpdate": "La mise à jour de %{policy} a abouti. Le BMC prend normalement environ 30 secondes pour changer l'état.",
       "successNextBootToast": "Application des modifications à %{policy}. Les modifications apportées à %{policy} prendront effet lors du prochain redémarrage."
     },
     "acfUploadEnablementConfirmText": "Attention : l'activation de ce paramètre permet aux utilisateurs non authentifiés de télécharger des fichiers de contrôle d'accès (ACF) sans se connecter et sans appuyer sur Fonction 74 du panneau de commande. des infos utilisateur ou de groupe. Voulez-vous poursuivre ?",
