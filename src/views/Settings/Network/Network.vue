@@ -144,16 +144,32 @@ export default {
         const editRow = modalData.concat(selectedRow);
         this.$store
           .dispatch('network/updateIpv4Address', editRow)
-          .then((message) => this.successToast(message))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .then((message) => {
+            this.startLoader();
+            this.successToast(message);
+            setTimeout(() => {
+              this.endLoader();
+            }, 10000);
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
       } else {
         // Add new address
         this.$store
           .dispatch('network/updateIpv4Address', modalData)
-          .then((message) => this.successToast(message))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .then((message) => {
+            this.startLoader();
+            this.successToast(message);
+            setTimeout(() => {
+              this.endLoader();
+            }, 10000);
+          })
+          .catch(({ message }) => {
+            this.errorToast(message);
+            this.endLoader();
+          });
       }
     },
     saveDnsAddress(modalFormData) {

@@ -233,7 +233,11 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           updatedIpv4Array
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          setTimeout(() => {
+            dispatch('getEthernetData');
+          }, 10000);
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.ipv4'),

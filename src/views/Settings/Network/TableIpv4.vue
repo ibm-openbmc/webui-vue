@@ -255,16 +255,12 @@ export default {
           actions: [
             {
               value: 'edit',
-              enabled:
-                ipv4.AddressOrigin !== 'IPv4LinkLocal' &&
-                ipv4.AddressOrigin !== 'DHCP',
+              enabled: ipv4.AddressOrigin !== 'DHCP',
               title: this.$t('pageNetwork.table.editIpv4'),
             },
             {
               value: 'delete',
-              enabled:
-                ipv4.AddressOrigin !== 'IPv4LinkLocal' &&
-                ipv4.AddressOrigin !== 'DHCP',
+              enabled: ipv4.AddressOrigin !== 'DHCP',
               title: this.$t('pageNetwork.table.deleteIpv4'),
             },
           ],
