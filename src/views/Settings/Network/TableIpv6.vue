@@ -28,6 +28,7 @@
                 id="ipv6AutoConfigSwitch"
                 v-model="ipv6AutoConfigState"
                 switch
+                :disabled="!isAutoConfigLoaded"
                 @change="changeIpv6AutoConfigState"
               >
                 <span v-if="ipv6AutoConfigState">
@@ -109,6 +110,7 @@ export default {
   },
   data() {
     return {
+      isAutoConfigLoaded: true,
       form: {
         ipv6TableItems: [],
       },
@@ -273,12 +275,21 @@ export default {
         .catch(({ message }) => this.errorToast(message));
     },
     changeIpv6AutoConfigState(state) {
+      this.isAutoConfigLoaded = false;
       this.$store
         .dispatch('network/saveIpv6AutoConfigState', state)
         .then((success) => {
+          this.startLoader();
           this.successToast(success);
+          setTimeout(() => {
+            this.isAutoConfigLoaded = true;
+            this.endLoader();
+          }, 10000);
         })
-        .catch(({ message }) => this.errorToast(message));
+        .catch(({ message }) => {
+          this.isAutoConfigLoaded = true;
+          this.errorToast(message);
+        });
     },
   },
 };

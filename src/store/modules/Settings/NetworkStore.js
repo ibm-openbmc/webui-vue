@@ -292,7 +292,14 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           data
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          dispatch('getEthernetData');
+          setTimeout(() => {
+            // Getting Ethernet data here so that the IPv6 table gets updated
+            dispatch('getEthernetData');
+          }, 10000);
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.ipv6AutoConfig'),
