@@ -1486,6 +1486,7 @@
       "pvm_system_operating_mode": "伺服器作業模式",
       "pvm_system_power_off_policy": "伺服器電源原則",
       "selectedOperatingModeManual": "儲存時作業模式將設為「手動」",
+      "selectedOperatingModeNormal": "儲存作業模式將設為「正常」",
       "serverFirmware": "伺服器韌體啟動原則",
       "powerSettingDescription": "檢視電源設定說明",
       "stayOn": "保持開啟",
