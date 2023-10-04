@@ -1486,6 +1486,7 @@
       "pvm_system_operating_mode": "サーバー操作モード",
       "pvm_system_power_off_policy": "サーバー電源ポリシー",
       "selectedOperatingModeManual": "保存時に操作モードが「手動」に設定されます",
+      "selectedOperatingModeNormal": "保管時に操作モードは「通常」に設定されます",
       "serverFirmware": "サーバー・ファームウェア始動ポリシー",
       "powerSettingDescription": "電源設定の説明の表示",
       "stayOn": "常時電源オン",
