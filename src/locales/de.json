@@ -1486,6 +1486,7 @@
       "pvm_system_operating_mode": "Betriebsmodus des Servers",
       "pvm_system_power_off_policy": "Ein-/Ausschaltrichtlinie des Servers",
       "selectedOperatingModeManual": "Beim Speichern wird der Betriebsmodus auf Manuell gesetzt.",
+      "selectedOperatingModeNormal": "Beim Speichern wird der Betriebsmodus auf Normal gesetzt",
       "serverFirmware": "Richtlinie für Server-Firmwarestart",
       "powerSettingDescription": "Beschreibungen der Stromversorgungseinstellungen anzeigen",
       "stayOn": "Eingeschaltet lassen",
