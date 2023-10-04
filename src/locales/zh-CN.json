@@ -1486,6 +1486,7 @@
       "pvm_system_operating_mode": "服务器操作方式",
       "pvm_system_power_off_policy": "服务器电源策略",
       "selectedOperatingModeManual": "在保存时，操作方式将设置为“手动”",
+      "selectedOperatingModeNormal": "保存时操作方式将设置为“正常”",
       "serverFirmware": "服务器固件启动策略",
       "powerSettingDescription": "查看电源设置说明",
       "stayOn": "保持开启",
