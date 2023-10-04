@@ -1486,6 +1486,7 @@
       "pvm_system_operating_mode": "서버 작동 모드",
       "pvm_system_power_off_policy": "서버 전원 정책",
       "selectedOperatingModeManual": "저장 시 작동 모드가 수동으로 설정됨",
+      "selectedOperatingModeNormal": "저장 시 작동 모드가 정상으로 설정됩니다",
       "serverFirmware": "서버 펌웨어 시작 정책",
       "powerSettingDescription": "전원 설정 설명 보기",
       "stayOn": "켜진 상태 유지",
