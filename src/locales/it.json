@@ -1486,6 +1486,7 @@
       "pvm_system_operating_mode": "Modalità operativa server",
       "pvm_system_power_off_policy": "Politica di alimentazione del server",
       "selectedOperatingModeManual": "La modalità operativa di salvataggio verrà impostata su Manuale",
+      "selectedOperatingModeNormal": "La modalità operativa di salvataggio verrà impostata su Normale",
       "serverFirmware": "Politica di avvio del firmware del server",
       "powerSettingDescription": "Visualizzare le descrizioni delle impostazioni di alimentazione",
       "stayOn": "Rimani acceso",
