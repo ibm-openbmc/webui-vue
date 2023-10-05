@@ -167,10 +167,6 @@ export default {
           text: 'Brazilian Portuguese',
         },
         {
-          value: 'pt',
-          text: 'Portuguese',
-        },
-        {
           value: 'zh-CN',
           text: '简体中文 - Chinese simplified',
         },
