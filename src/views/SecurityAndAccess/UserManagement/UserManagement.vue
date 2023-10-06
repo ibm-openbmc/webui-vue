@@ -317,7 +317,7 @@ export default {
           .finally(() => this.endLoader());
       } else {
         this.$store
-          .dispatch('userManagement/updateUser', userData)
+          .dispatch('userManagement/updateUserfromUserManagement', userData)
           .then((success) => this.successToast(success))
           .catch(({ message }) => this.errorToast(message))
           .finally(() => this.endLoader());

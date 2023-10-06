@@ -123,12 +123,15 @@ export default {
         password: this.form.password,
       };
 
-      Promise.all([
-        this.$store.dispatch('userManagement/updateUser', data),
-        this.$store.dispatch('userManagement/getUsers'),
-        this.$store.dispatch('global/getCurrentUser', this.username),
-        this.$store.dispatch('global/getSystemInfo'),
-      ])
+      this.$store
+        .dispatch('userManagement/updateUser', data)
+        .then(() => {
+          Promise.all([
+            this.$store.dispatch('userManagement/getUsers'),
+            this.$store.dispatch('global/getCurrentUser', this.username),
+            this.$store.dispatch('global/getSystemInfo'),
+          ]);
+        })
         .then(() => this.$router.push('/'))
         .catch(() => (this.changePasswordError = true));
     },

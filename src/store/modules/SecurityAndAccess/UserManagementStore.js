@@ -153,7 +153,7 @@ const UserManagementStore = {
           }
         });
     },
-    async updateUser(
+    async updateUserfromUserManagement(
       { dispatch },
       {
         originalUsername,
@@ -191,6 +191,44 @@ const UserManagementStore = {
         )
         .catch((error) => {
           const messageId = error?.response?.data?.error?.code;
+          const message =
+            messageId === 'Base.1.8.1.PropertyValueFormatError'
+              ? i18n.t(
+                  'pageUserManagement.toast.errorUpdateUserPasswordNotAccepted',
+                  {
+                    username: originalUsername,
+                  }
+                )
+              : i18n.t('pageUserManagement.toast.errorUpdateUser', {
+                  username: originalUsername,
+                });
+          throw new Error(message);
+        });
+    },
+    async updateUser(
+      { dispatch },
+      { originalUsername, username, password, privilege, status, locked }
+    ) {
+      const data = {};
+      if (username) data.UserName = username;
+      if (password) data.Password = password;
+      if (privilege) data.RoleId = privilege;
+      if (status !== undefined) data.Enabled = status;
+      if (locked !== undefined) data.Locked = locked;
+      return await api
+        .patch(`/redfish/v1/AccountService/Accounts/${originalUsername}`, data)
+        .then(() => dispatch('getUsers'))
+        .then(() =>
+          i18n.t('pageUserManagement.toast.successUpdateUser', {
+            username: originalUsername,
+          })
+        )
+        .catch((error) => {
+          console.log(error);
+
+          const messageId =
+            error.response.data['Password@Message.ExtendedInfo'][0].MessageId;
+
           const message =
             messageId === 'Base.1.8.1.PropertyValueFormatError'
               ? i18n.t(
