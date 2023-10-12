@@ -44,7 +44,6 @@ const EventLogStore = {
   actions: {
     async getEventLogData({ commit }) {
       let eventLogs = [];
-      commit('setAllEvents', eventLogs);
       commit('setCeLogs', eventLogs);
       return await api
         .get('/redfish/v1/Systems/system/LogServices/EventLog/Entries')
