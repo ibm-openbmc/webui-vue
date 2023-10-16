@@ -272,7 +272,7 @@ export default {
           sortable: true,
         },
         {
-          key: 'EventID',
+          key: 'eventID',
           label: this.$t('pageDeconfigurationRecords.table.eventId'),
           sortable: true,
         },

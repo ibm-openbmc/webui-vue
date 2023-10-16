@@ -82,7 +82,7 @@ const DeconfigurationRecordsStore = {
                 uri: log['@odata.id'],
                 severity: Severity,
                 location: LocationCode,
-                EventID: eventId,
+                eventID: eventId,
               };
             })
           );
