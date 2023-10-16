@@ -166,10 +166,10 @@ export default {
           tdClass: 'text-nowrap',
         },
         {
-          key: 'pelID',
+          key: 'eventID',
           sortable: true,
           formatter: this.dataFormatter,
-          label: this.$t('pageDeconfigurationHardware.table.pelId'),
+          label: this.$t('pageDeconfigurationHardware.table.eventId'),
           tdClass: 'text-nowrap',
         },
         {

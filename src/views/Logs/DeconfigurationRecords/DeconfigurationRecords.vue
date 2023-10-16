@@ -272,8 +272,8 @@ export default {
           sortable: true,
         },
         {
-          key: 'pelID',
-          label: this.$t('pageDeconfigurationRecords.table.pelId'),
+          key: 'EventID',
+          label: this.$t('pageDeconfigurationRecords.table.eventId'),
           sortable: true,
         },
         {

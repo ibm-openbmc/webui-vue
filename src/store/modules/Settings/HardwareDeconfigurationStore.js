@@ -59,7 +59,7 @@ const HardwareDeconfigurationStore = {
         api.spread((...responses) => {
           const coreData = responses.map(({ data }) => {
             var msgArgs = 'None';
-            var pelId = '';
+            var eventId = '';
             const conditionsArray = data.Status?.Conditions;
             if (Array.isArray(conditionsArray) && conditionsArray.length) {
               const messageArgsArray = conditionsArray[0].MessageArgs;
@@ -68,9 +68,9 @@ const HardwareDeconfigurationStore = {
               }
               const logEntry = conditionsArray[0].LogEntry;
               if (logEntry) {
-                const pelIdUrl = logEntry['@odata.id'];
-                const splitUrl = pelIdUrl.split('/');
-                pelId = splitUrl[splitUrl.length - 1];
+                const eventIdUrl = logEntry['@odata.id'];
+                const splitUrl = eventIdUrl.split('/');
+                eventId = splitUrl[splitUrl.length - 1];
               }
             }
             return {
@@ -110,7 +110,7 @@ const HardwareDeconfigurationStore = {
                   ? i18n.t('pageDeconfigurationHardware.table.filter.unknown')
                   : msgArgs,
               processorId: procId,
-              pelID: pelId,
+              eventID: eventId,
             };
           });
           return coreData;
@@ -134,7 +134,7 @@ const HardwareDeconfigurationStore = {
         api.spread((...responses) => {
           const dimmsData = responses.map(({ data }) => {
             var msgArgs = 'None';
-            var pelId = '';
+            var eventId = '';
             const conditionsArray = data.Status?.Conditions;
             if (Array.isArray(conditionsArray) && conditionsArray.length) {
               const messageArgsArray = conditionsArray[0].MessageArgs;
@@ -143,9 +143,9 @@ const HardwareDeconfigurationStore = {
               }
               const logEntry = conditionsArray[0].LogEntry;
               if (logEntry) {
-                const pelIdUrl = logEntry['@odata.id'];
-                const splitUrl = pelIdUrl.split('/');
-                pelId = splitUrl[splitUrl.length - 1];
+                const eventIdUrl = logEntry['@odata.id'];
+                const splitUrl = eventIdUrl.split('/');
+                eventId = splitUrl[splitUrl.length - 1];
               }
             }
             return {
@@ -184,7 +184,7 @@ const HardwareDeconfigurationStore = {
               settings: data.Enabled,
               uri: data['@odata.id'],
               available: data.Status?.State,
-              pelID: pelId,
+              eventID: eventId,
             };
           });
           const dimmsDataFiltered = dimmsData.filter(

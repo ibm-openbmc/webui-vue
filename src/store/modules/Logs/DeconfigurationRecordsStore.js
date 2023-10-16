@@ -61,11 +61,11 @@ const DeconfigurationRecordsStore = {
                   : null,
                 LocationCode,
               } = log;
-              let pelId = '';
+              let eventId = '';
               const additionalDataURIValue = log.AdditionalDataURI;
               if (additionalDataURIValue) {
                 const splitUrl = additionalDataURIValue.split('/');
-                pelId = splitUrl[splitUrl.length - 2];
+                eventId = splitUrl[splitUrl.length - 2];
               }
               return {
                 additionalDataUri: AdditionalDataURI,
@@ -82,7 +82,7 @@ const DeconfigurationRecordsStore = {
                 uri: log['@odata.id'],
                 severity: Severity,
                 location: LocationCode,
-                pelID: pelId,
+                EventID: eventId,
               };
             })
           );

@@ -498,6 +498,7 @@
       "id": "Id",
       "name": "Name",
       "pelId": "Pel Id",
+      "eventId": "Event ID",
       "reference": "Reference",
       "resource": "Resource",
       "severity": "Severity",
