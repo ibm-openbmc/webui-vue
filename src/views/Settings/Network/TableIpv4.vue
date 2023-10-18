@@ -11,6 +11,7 @@
                 v-model="dhcpEnabledState"
                 data-test-id="networkSettings-switch-dhcpEnabled"
                 switch
+                :disabled="isTablesDisabled"
                 @change="changeDhcpEnabledState"
               >
                 <span v-if="dhcpEnabledState">
@@ -24,7 +25,11 @@
       </b-row>
       <b-row>
         <b-col class="text-right">
-          <b-button variant="primary" @click="initIpv4Modal()">
+          <b-button
+            variant="primary"
+            :disabled="isTablesDisabled"
+            @click="initIpv4Modal()"
+          >
             <icon-add />
             {{ $t('pageNetwork.table.addIpv4Address') }}
           </b-button>
@@ -36,6 +41,7 @@
         :fields="ipv4TableFields"
         :items="form.ipv4TableItems"
         :empty-text="$t('global.table.emptyMessage')"
+        :busy="isTablesDisabled"
         class="mb-0"
         show-empty
       >
@@ -121,6 +127,9 @@ export default {
     };
   },
   computed: {
+    isTablesDisabled() {
+      return this.$store.getters['network/isTableBusy'];
+    },
     network() {
       return this.$store.getters['network/networkSettings'];
     },
@@ -180,12 +189,14 @@ export default {
       });
     },
     onIpv4TableAction(action, $event, item) {
-      if ($event === 'edit') {
-        this.$root.$emit('edit-address', item);
-        this.initIpv4Modal();
-      }
-      if ($event === 'delete') {
-        this.deleteIpv4TableRow(item);
+      if (!this.isTablesDisabled) {
+        if ($event === 'edit') {
+          this.$root.$emit('edit-address', item);
+          this.initIpv4Modal();
+        }
+        if ($event === 'delete') {
+          this.deleteIpv4TableRow(item);
+        }
       }
     },
     deleteIpv4TableRow(item) {
@@ -216,7 +227,13 @@ export default {
           if (deleteConfirmed) {
             this.$store
               .dispatch('network/deleteIpv4Address', newIpv4Array)
-              .then((message) => this.successToast(message))
+              .then((message) => {
+                this.successToast(message);
+                this.startLoader();
+                setTimeout(() => {
+                  this.endLoader();
+                }, 15000);
+              })
               .catch(({ message }) => this.errorToast(message));
           }
         });
@@ -252,7 +269,7 @@ export default {
                 this.startLoader();
                 setTimeout(() => {
                   this.endLoader();
-                }, 10000);
+                }, 15000);
               })
               .catch(({ message }) => this.errorToast(message));
           } else {

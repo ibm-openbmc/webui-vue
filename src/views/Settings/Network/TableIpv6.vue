@@ -10,6 +10,7 @@
                 id="dhcpIpv6Switch"
                 v-model="dhcpEnabledState"
                 switch
+                :disabled="isTablesDisabled"
                 @change="changeIpv6DhcpEnabledState"
               >
                 <span v-if="dhcpEnabledState">
@@ -28,7 +29,7 @@
                 id="ipv6AutoConfigSwitch"
                 v-model="ipv6AutoConfigState"
                 switch
-                :disabled="!isAutoConfigLoaded"
+                :disabled="isTablesDisabled"
                 @change="changeIpv6AutoConfigState"
               >
                 <span v-if="ipv6AutoConfigState">
@@ -48,7 +49,11 @@
       </b-row>
       <b-row>
         <b-col class="text-right">
-          <b-button variant="primary" @click="initIpv6Modal()">
+          <b-button
+            variant="primary"
+            :disabled="isTablesDisabled"
+            @click="initIpv6Modal()"
+          >
             <icon-add />
             {{ $t('pageNetwork.table.addIpv6Address') }}
           </b-button>
@@ -60,6 +65,7 @@
         :fields="ipv6TableFields"
         :items="form.ipv6TableItems"
         :empty-text="$t('global.table.emptyMessage')"
+        :busy="isTablesDisabled"
         class="mb-0"
         show-empty
       >
@@ -110,7 +116,6 @@ export default {
   },
   data() {
     return {
-      isAutoConfigLoaded: true,
       form: {
         ipv6TableItems: [],
       },
@@ -142,6 +147,9 @@ export default {
     };
   },
   computed: {
+    isTablesDisabled() {
+      return this.$store.getters['network/isTableBusy'];
+    },
     network() {
       return this.$store.getters['network/networkSettings'];
     },
@@ -219,12 +227,14 @@ export default {
       });
     },
     onIpv6TableAction(action, $event, item) {
-      if ($event === 'edit') {
-        this.$root.$emit('edit-address', item);
-        this.initIpv6Modal();
-      }
-      if ($event === 'delete') {
-        this.deleteIpv6TableRow(item);
+      if (!this.isTablesDisabled) {
+        if ($event === 'edit') {
+          this.$root.$emit('edit-address', item);
+          this.initIpv6Modal();
+        }
+        if ($event === 'delete') {
+          this.deleteIpv6TableRow(item);
+        }
       }
     },
     deleteIpv6TableRow(item) {
@@ -254,7 +264,13 @@ export default {
           if (deleteConfirmed) {
             this.$store
               .dispatch('network/deleteIpv6Address', newIpv6Array)
-              .then((message) => this.successToast(message))
+              .then((message) => {
+                this.successToast(message);
+                this.startLoader();
+                setTimeout(() => {
+                  this.endLoader();
+                }, 15000);
+              })
               .catch(({ message }) => this.errorToast(message));
           }
         });
@@ -270,26 +286,21 @@ export default {
           this.startLoader();
           setTimeout(() => {
             this.endLoader();
-          }, 10000);
+          }, 15000);
         })
         .catch(({ message }) => this.errorToast(message));
     },
     changeIpv6AutoConfigState(state) {
-      this.isAutoConfigLoaded = false;
       this.$store
         .dispatch('network/saveIpv6AutoConfigState', state)
         .then((success) => {
           this.startLoader();
           this.successToast(success);
           setTimeout(() => {
-            this.isAutoConfigLoaded = true;
             this.endLoader();
-          }, 10000);
+          }, 15000);
         })
-        .catch(({ message }) => {
-          this.isAutoConfigLoaded = true;
-          this.errorToast(message);
-        });
+        .catch(({ message }) => this.errorToast(message));
     },
   },
 };

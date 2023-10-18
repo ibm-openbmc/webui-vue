@@ -3,7 +3,11 @@
     <page-section :section-title="$t('pageNetwork.ipv6StaticDefaultGateway')">
       <b-row>
         <b-col class="text-right">
-          <b-button variant="primary" @click="initIpv6DefaultGatewayModal()">
+          <b-button
+            variant="primary"
+            :disabled="isTablesDisabled"
+            @click="initIpv6DefaultGatewayModal()"
+          >
             <icon-add />
             {{ $t('pageNetwork.table.addIpv6StaticDefaultGateway') }}
           </b-button>
@@ -15,6 +19,7 @@
         :fields="ipv6DefaultGatewayTableFields"
         :items="form.ipv6DefaultGatewayTableItems"
         :empty-text="$t('global.table.emptyMessage')"
+        :busy="isTablesDisabled"
         class="mb-0"
         show-empty
       >
@@ -94,6 +99,9 @@ export default {
     };
   },
   computed: {
+    isTablesDisabled() {
+      return this.$store.getters['network/isTableBusy'];
+    },
     network() {
       return this.$store.getters['network/networkSettings'];
     },
@@ -139,12 +147,14 @@ export default {
       });
     },
     onIpv6DefaultGatewayTableAction(action, $event, item) {
-      if ($event === 'edit') {
-        this.$root.$emit('edit-address', item);
-        this.initIpv6DefaultGatewayModal();
-      }
-      if ($event === 'delete') {
-        this.deleteIpv6DefaultGatewayTableRow(item);
+      if (!this.isTablesDisabled) {
+        if ($event === 'edit') {
+          this.$root.$emit('edit-address', item);
+          this.initIpv6DefaultGatewayModal();
+        }
+        if ($event === 'delete') {
+          this.deleteIpv6DefaultGatewayTableRow(item);
+        }
       }
     },
     deleteIpv6DefaultGatewayTableRow(item) {
@@ -177,7 +187,13 @@ export default {
                 'network/deleteIpv6StaticDefaultGatewayAddress',
                 newIpv6Array
               )
-              .then((message) => this.successToast(message))
+              .then((message) => {
+                this.successToast(message);
+                this.startLoader();
+                setTimeout(() => {
+                  this.endLoader();
+                }, 15000);
+              })
               .catch(({ message }) => this.errorToast(message));
           }
         });

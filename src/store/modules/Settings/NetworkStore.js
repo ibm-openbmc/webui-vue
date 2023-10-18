@@ -11,6 +11,7 @@ const NetworkStore = {
     networkSettings: [],
     selectedInterfaceId: '', // which tab is selected
     selectedInterfaceIndex: 0, // which tab is selected
+    isTableBusy: false,
   },
   getters: {
     dchpEnabledState: (state) => state.dchpEnabledState,
@@ -19,6 +20,7 @@ const NetworkStore = {
     networkSettings: (state) => state.networkSettings,
     selectedInterfaceId: (state) => state.selectedInterfaceId,
     selectedInterfaceIndex: (state) => state.selectedInterfaceIndex,
+    isTableBusy: (state) => state.isTableBusy,
   },
   mutations: {
     setDchpEnabledState: (state, dchpEnabledState) =>
@@ -39,6 +41,7 @@ const NetworkStore = {
       (state.selectedInterfaceId = selectedInterfaceId),
     setSelectedInterfaceIndex: (state, selectedInterfaceIndex) =>
       (state.selectedInterfaceIndex = selectedInterfaceIndex),
+    setIsTableBusy: (state, isTableBusy) => (state.isTableBusy = isTableBusy),
     setNetworkSettings: (state, data) => {
       state.networkSettings = data.map(({ data }) => {
         const {
@@ -121,10 +124,14 @@ const NetworkStore = {
           console.log('Network Data:', error);
         });
     },
-    async getEthernetDataAfterDelay({ dispatch }) {
+    async getEthernetDataAfterDelay({ commit, dispatch }) {
+      commit('setIsTableBusy', true);
       setTimeout(() => {
         dispatch('getEthernetData');
       }, 10000);
+      setTimeout(() => {
+        commit('setIsTableBusy', false);
+      }, 15000);
     },
     async saveDomainNameState({ commit, state, dispatch }, domainState) {
       commit('setDomainNameState', domainState);
@@ -295,10 +302,8 @@ const NetworkStore = {
         .then(() => {
           // Getting Ethernet data here so that the toggle gets updated
           dispatch('getEthernetData');
-          setTimeout(() => {
-            // Getting Ethernet data here so that the IPv6 table gets updated
-            dispatch('getEthernetData');
-          }, 10000);
+          // Getting Ethernet data here so that the IPv6 table gets updated
+          dispatch('getEthernetDataAfterDelay');
         })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
@@ -459,7 +464,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           { IPv4StaticAddresses: newIpv4Array }
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the address is deleted immediately
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successDeletingIpv4Server');
         })
@@ -484,7 +494,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           { IPv6StaticAddresses: newIpv6Array }
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the address is deleted immediately
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the IPv6 table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successDeletingIpv6Server');
         })
@@ -513,7 +528,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           { IPv6StaticDefaultGateways: newIpv6Array }
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the address is deleted immediately
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t(
             'pageNetwork.toast.successDeletingIpv6StaticDefaultGateway'

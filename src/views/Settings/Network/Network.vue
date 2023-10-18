@@ -290,7 +290,7 @@ export default {
     setEndLoaderAfterDelay() {
       setTimeout(() => {
         this.endLoader();
-      }, 10000);
+      }, 15000);
     },
   },
 };
