@@ -442,7 +442,7 @@ export default {
         : this.filteredLogs.length;
     },
     allLogs() {
-      return this.$store.getters['eventLog/allEvents'].map((event) => {
+      return this.$store.getters['eventLog/eventlogs'].map((event) => {
         return {
           ...event,
           actions: [

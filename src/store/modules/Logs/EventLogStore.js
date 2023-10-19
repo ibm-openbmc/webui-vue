@@ -25,6 +25,7 @@ const EventLogStore = {
     allEvents: [],
     ceLogs: [],
     loadedEvents: false,
+    eventlogs: [],
   },
   getters: {
     allEvents: (state) => state.allEvents.concat(state.ceLogs),
@@ -32,6 +33,7 @@ const EventLogStore = {
     highPriorityEvents: (state) => getHighPriorityEvents(state.allEvents),
     healthStatus: (state) =>
       getHealthStatus(state.allEvents, state.loadedEvents),
+    eventlogs: (state) => state.allEvents.concat(state.ceLogs),
   },
   mutations: {
     setAllEvents: (state, allEvents) => (
@@ -40,10 +42,14 @@ const EventLogStore = {
     setCeLogs: (state, ceLogs) => (
       (state.ceLogs = ceLogs), (state.loadedEvents = true)
     ),
+    eventlogs: (state, eventlogs) => (
+      (state.eventlogs = eventlogs), (state.loadedEvents = true)
+    ),
   },
   actions: {
     async getEventLogData({ commit }) {
       let eventLogs = [];
+      commit('eventlogs', eventLogs);
       commit('setCeLogs', eventLogs);
       return await api
         .get('/redfish/v1/Systems/system/LogServices/EventLog/Entries')
@@ -78,6 +84,7 @@ const EventLogStore = {
               additionalDataUri: AdditionalDataURI,
             };
           });
+          commit('eventlogs', eventLogs);
           commit('setAllEvents', eventLogs);
         })
         .catch((error) => {
