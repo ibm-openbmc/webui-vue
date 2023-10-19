@@ -110,7 +110,12 @@ const DumpsStore = {
         })
         .catch((error) => {
           const errorMsg = error;
-
+          if (
+            error.response?.data?.error?.code ===
+            'Base.1.13.0.ResourceInStandby'
+          ) {
+            throw new Error(i18n.t('pageDumps.toast.errorPhypInStandby'));
+          }
           switch (errorMsg) {
             case 'Base.1.8.1.ActionParameterUnknown':
               throw new Error(
