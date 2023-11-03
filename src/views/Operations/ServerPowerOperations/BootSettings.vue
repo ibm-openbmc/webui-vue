@@ -5,9 +5,22 @@
       :key="componentKey"
       :attribute-values="form.attributeValues"
       :disabled="disabled"
+      @is-linux-kvm-valid="linuxKvmValue"
       @updated-attributes="updateAttributeKeys"
     />
-    <b-button variant="primary" type="submit" class="mb-3">
+    <b-button
+      variant="primary"
+      type="submit"
+      class="mb-3"
+      :disabled="
+        !isLinuxKvmValid
+          ? form.attributes.pvm_default_os_type === 'Linux KVM' ||
+            form.attributes.pvm_default_os_type === 'Default'
+            ? true
+            : false
+          : false
+      "
+    >
       {{ $t('global.action.save') }}
     </b-button>
   </b-form>
@@ -24,6 +37,7 @@ export default {
   data() {
     return {
       componentKey: 0,
+      isLinuxKvmValid: true,
       form: {
         attributes: this.$store.getters['serverBootSettings/biosAttributes'],
         attributeValues: this.$store.getters[
@@ -58,6 +72,9 @@ export default {
     updateAttributeKeys(attributeKeys) {
       this.form.attributes = attributeKeys;
     },
+    linuxKvmValue(value) {
+      this.isLinuxKvmValid = value;
+    },
     handleSubmit() {
       this.startLoader();
       let settings;
@@ -67,7 +84,18 @@ export default {
         .dispatch('serverBootSettings/saveSettings', settings)
         .then((message) => {
           this.componentKey += 1;
-          this.successToast(message);
+          if (
+            settings.biosSettings.pvm_default_os_type == 'Linux KVM' ||
+            settings.biosSettings.pvm_default_os_type == 'Default'
+          ) {
+            this.successToast(
+              this.$t(
+                'pageServerPowerOperations.toast.successSaveLinuxKvmSettings'
+              )
+            );
+          } else {
+            this.successToast(message);
+          }
         })
         .catch(({ message }) => {
           this.errorToast(message);

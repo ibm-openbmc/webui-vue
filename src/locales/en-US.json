@@ -1482,6 +1482,8 @@
       "powPolicySection": "will be set to %{powerPolicy}",
       "powerOff": "Power Off",
       "pvm_default_os_type": "Default partition environment",
+      "pvm_linux_kvm_memory": "Linux KVM",
+      "pvm_linux_kvm_percentage": "System Memory Reserved for KVM Guest Management (%)",
       "pvm_os_boot_type": "IBM i partition boot mode",
       "pvm_rpa_boot_mode": "AIX/LINUX partition boot mode",
       "pvm_stop_at_standby": "Server firmware start policy",
@@ -1508,12 +1510,14 @@
       "setting": {
        "aix": "AIX",
        "linux": "Linux",
+       "linuxKVM": "Linux KVM",
        "ibmI": "IBM I",
        "default": "Default"
      },
      "description": {
        "aix": "System firmware will select AIX/Linux as default partition environment.",
        "linux" : "System firmware will select AIX/Linux as default partition environment.",
+       "linuxKVM": "System firmware will select Linux KVM as default partition environment.",
        "ibmI": "Server firmware will select IBM i as default partition environment.",
        "default": "System firmware will automatically select the default partition environment based on system brand type."
    }
@@ -1534,6 +1538,20 @@
      "serviceBootMode": "The system boots from the default boot list.  This option is the preferred way to run stand-alone diagnostics from a CD-ROM drive."
  }
 },
+  "linuxKvmItems": { 
+    "setting": {
+    "automatic": "Automatic",
+    "custom": "Custom"
+    },
+    "description": {
+      "automatic": "The system will determine the percentage of available system memory to be reserved for the management of KVM guests.",
+      "custom" : "The user specified percentage of available system memory will be reserved for the management of KVM guests."
+    }
+ },
+ "linuxKvmPercentage": { 
+  "description": "Specifies the percentage of available system memory that will be reserved for the management of KVM guests. The percentage is specified to the 10th of a percent.",
+  "errorMessage": "Value must be in range of 0-100 and include decimals with up to one decimal point."
+},
 "ibmiItems": { 
   "setting": {
    "a": "A",
@@ -1552,6 +1570,7 @@
         "pvm_default_os_type": {
           "AIX": "AIX",
           "Linux": "Linux",
+          "Linux KVM": "Linux KVM",
           "IBM I": "IBM I",
           "Default": "Default"
         },
@@ -1582,6 +1601,10 @@
           "automaticHelperText": "With this setting, when the system is not partitioned, the behavior is the same as power off, and when the system is partitioned, the behavior of the system is the same as stay on",
           "powerOffHelperText": "When the last partition powers off, the server will power off",
           "stayOnHelperText": "When the last partition powers off, the server will stay on"
+        },
+        "pvm_linux_kvm_memory": {
+          "Automatic": "Automatic",
+          "Custom": "Custom"
         }
       }
     },
@@ -1596,7 +1619,8 @@
     "toast": {
       "errorPowerOn": "BMC is not ready to power on the host.",
       "errorSaveSettings": "Error saving settings.",
-      "successSaveSettings": "Successfully saved settings."
+      "successSaveSettings": "Successfully saved settings.",
+      "successSaveLinuxKvmSettings": "Successfully saved settings. Changes made will take effect on next reboot."
     }
   },
   "pageServiceLoginConsoles": {

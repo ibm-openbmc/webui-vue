@@ -11,6 +11,7 @@ const BootSettingsStore = {
       'pvm_rpa_boot_mode',
       'pvm_os_boot_type',
       'pvm_sys_dump_active',
+      'pvm_linux_kvm_memory',
     ],
     disabled: false,
     attributeValues: null,
@@ -18,6 +19,8 @@ const BootSettingsStore = {
     biosAttributes: null,
     bootFault: '',
     powerRestorePolicyValue: '',
+    linuxKvmPercentageValue: null,
+    linuxKvmPercentageCurrentValue: null,
   },
   getters: {
     attributeValues: (state) => state.attributeValues,
@@ -28,6 +31,9 @@ const BootSettingsStore = {
     systemDumpActive: (state) =>
       state.biosAttributes?.pvm_sys_dump_active === 'Enabled',
     disabled: (state) => state.disabled,
+    linuxKvmPercentageValue: (state) => state.linuxKvmPercentageValue,
+    linuxKvmPercentageCurrentValue: (state) =>
+      state.linuxKvmPercentageCurrentValue,
   },
   mutations: {
     setDisabled: (state, disabled) => (state.disabled = disabled),
@@ -41,6 +47,13 @@ const BootSettingsStore = {
       (state.powerRestorePolicyValue = powerRestorePolicyValue),
     setAutomaticRetryConfigValue: (state, automaticRetryConfigValue) =>
       (state.automaticRetryConfigValue = automaticRetryConfigValue),
+    setLinuxKvmPercentageValue: (state, linuxKvmPercentageValue) =>
+      (state.linuxKvmPercentageValue = linuxKvmPercentageValue),
+    setLinuxKvmPercentageCurrentValue: (
+      state,
+      linuxKvmPercentageCurrentValue
+    ) =>
+      (state.linuxKvmPercentageCurrentValue = linuxKvmPercentageCurrentValue),
   },
   actions: {
     async getOperatingModeSettings({ commit }) {
@@ -106,6 +119,12 @@ const BootSettingsStore = {
               RegistryEntries: { Attributes },
             },
           }) => {
+            let linuxPercentObj = Attributes.find(
+              (itm) => itm.AttributeName === 'pvm_linux_kvm_percentage'
+            );
+            let linuxValue = linuxPercentObj?.CurrentValue / 10;
+            commit('setLinuxKvmPercentageValue', linuxValue);
+            commit('setLinuxKvmPercentageCurrentValue', linuxValue);
             // Array for state BIOS attributes is created
             const filteredAttributeValues = state.attributeKeys
               .reduce((arr, attriValue) => {
@@ -134,6 +153,7 @@ const BootSettingsStore = {
                             'pvm_rpa_boot_mode',
                             'pvm_stop_at_standby',
                             'pvm_system_operating_mode',
+                            'pvm_linux_kvm_memory',
                           ].indexOf(attributeObj.AttributeName) >= 0
                             ? i18n.t(
                                 `pageServerPowerOperations.biosSettings.attributeValues.${attributeObj.AttributeName}.${item.ValueName}`
@@ -199,6 +219,9 @@ const BootSettingsStore = {
           commit('setDisabled', false);
           return error;
         });
+    },
+    saveLinuxPercentageValue({ commit }, value) {
+      commit('setLinuxKvmPercentageValue', value);
     },
   },
 };

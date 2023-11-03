@@ -4,13 +4,21 @@
       <template v-for="(attriValuesArr, key) of attributeValues">
         <b-col
           v-if="
-            attriValuesArr.length > 2 &&
+            attriValuesArr.length >= 2 &&
             key !== 'pvm_system_power_off_policy' &&
             validateAttributeKeys(attributeKeys.pvm_default_os_type, key)
           "
           :key="key"
           sm="8"
-          xl="6"
+          :xl="
+            attributeKeys.pvm_default_os_type === 'Linux KVM' &&
+            key === 'pvm_linux_kvm_memory'
+              ? 5
+              : attributeKeys.pvm_default_os_type === 'Default' &&
+                key === 'pvm_rpa_boot_mode'
+              ? 5
+              : 6
+          "
         >
           <b-form-group
             v-if="
@@ -246,6 +254,51 @@
             </b-form-group>
           </div>
         </b-col>
+        <b-col
+          v-if="
+            attributeKeys[key] === 'Linux KVM' ||
+            attributeKeys[key] === 'Default'
+          "
+          :key="key + 1"
+          sm="8"
+          xl="7"
+        >
+          <b-form-group
+            label-for="linux_kvm_percentage"
+            class="mb-4"
+            :label="
+              $t(
+                `${'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage'}`
+              )
+            "
+          >
+            <b-form-input
+              id="linux_kvm_percentage"
+              v-model="linuxKvmPercentageValue"
+              type="number"
+              :disabled="attributeKeys.pvm_linux_kvm_memory === 'Automatic'"
+              step="0.1"
+              min="0.0"
+              max="100.0"
+              @keypress="validateLinuxKvmPercentage"
+              @input="changeLinuxKvmPercentageValue"
+            />
+            <span
+              v-if="
+                linuxKvmPercentageValue < 0.0 ||
+                linuxKvmPercentageValue > 100.0 ||
+                !isLinuxKvmValid
+              "
+              class="error-text"
+            >
+              {{
+                $t(
+                  'pageServerPowerOperations.biosSettings.linuxKvmPercentage.errorMessage'
+                )
+              }}
+            </span>
+          </b-form-group>
+        </b-col>
       </template>
     </b-row>
     <b-row class="mb-3">
@@ -306,6 +359,38 @@
               ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
             </template>
           </b-table>
+          <b-table
+            stacked="sm"
+            hover
+            :items="linuxKvmItems"
+            :fields="fields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t(
+                  'pageServerPowerOperations.biosSettings.pvm_linux_kvm_memory'
+                )
+              }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
+          <b-table
+            stacked="sm"
+            hover
+            :items="linuxKvmPercentageItems"
+            :fields="linuxKvmPercentageFields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t(
+                  'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage'
+                )
+              }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
         </b-collapse>
       </b-col>
     </b-row>
@@ -314,6 +399,7 @@
 <script>
 import Alert from '@/components/Global/Alert';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
+
 export default {
   name: 'BiosSettings',
   components: { Alert, IconChevron },
@@ -329,6 +415,7 @@ export default {
   },
   data() {
     return {
+      isLinuxKvmValid: true,
       manualMode: 'Manual',
       normalMode: 'Normal',
       currentOperatingMode: '',
@@ -342,6 +429,13 @@ export default {
           label: this.$t('pagePower.tableRoles.setting'),
           sortable: false,
         },
+        {
+          key: 'description',
+          label: this.$t('pagePower.tableRoles.description'),
+          sortable: false,
+        },
+      ],
+      linuxKvmPercentageFields: [
         {
           key: 'description',
           label: this.$t('pagePower.tableRoles.description'),
@@ -397,6 +491,14 @@ export default {
           ),
           description: this.$t(
             'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.ibmI'
+          ),
+        },
+        {
+          setting: this.$t(
+            'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linuxKVM'
+          ),
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linuxKVM'
           ),
         },
         {
@@ -484,6 +586,31 @@ export default {
           ),
         },
       ],
+      linuxKvmItems: [
+        {
+          setting: this.$t(
+            'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.automatic'
+          ),
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.linuxKvmItems.description.automatic'
+          ),
+        },
+        {
+          setting: this.$t(
+            'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.custom'
+          ),
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.linuxKvmItems.description.custom'
+          ),
+        },
+      ],
+      linuxKvmPercentageItems: [
+        {
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.linuxKvmPercentage.description'
+          ),
+        },
+      ],
     };
   },
   computed: {
@@ -499,6 +626,21 @@ export default {
     powerPolicy() {
       return this.$store.getters['serverBootSettings/powerRestorePolicyValue'];
     },
+    linuxKvmPercentageCurrentValue() {
+      return this.$store.getters[
+        'serverBootSettings/linuxKvmPercentageCurrentValue'
+      ];
+    },
+    linuxKvmPercentageValue: {
+      get() {
+        return this.$store.getters[
+          'serverBootSettings/linuxKvmPercentageValue'
+        ];
+      },
+      set(newValue) {
+        return newValue;
+      },
+    },
   },
   created() {
     this.$store.dispatch('resourceMemory/getHmcManaged');
@@ -508,7 +650,15 @@ export default {
     }
   },
   updated() {
+    if (this.attributeKeys['pvm_linux_kvm_memory'] === 'Custom') {
+      this.attributeKeys['pvm_linux_kvm_percentage'] =
+        this.linuxKvmPercentageValue * 10;
+    } else {
+      this.attributeKeys['pvm_linux_kvm_percentage'] =
+        this.linuxKvmPercentageCurrentValue * 10;
+    }
     this.$emit('updated-attributes', this.attributeKeys);
+    this.$emit('is-linux-kvm-valid', this.isLinuxKvmValid);
   },
   methods: {
     hmcManagedChecks(value) {
@@ -557,6 +707,34 @@ export default {
         );
       }
     },
+    changeLinuxKvmPercentageValue(value) {
+      let valueAsString = value.toString();
+      let regex = /^\d+(\.\d?)?$/;
+      if (regex.test(valueAsString)) {
+        this.isLinuxKvmValid = true;
+      } else {
+        this.isLinuxKvmValid = false;
+      }
+      this.$store.dispatch(
+        'serverBootSettings/saveLinuxPercentageValue',
+        value
+      );
+    },
+    validateLinuxKvmPercentage($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      let percentageValue = $event.target.value + $event.key;
+      let decimalSet = $event.key === '.';
+      if (!decimalSet) {
+        // only allow number and one decimal
+        if (
+          (keyCode < 48 || keyCode > 57) &&
+          (keyCode !== 46 || percentageValue.indexOf('.') != -1)
+        ) {
+          // 46 is decimal
+          $event.preventDefault();
+        }
+      }
+    },
     validateAttributeKeys(defaultPartitionEnvironment, key) {
       if (key === 'pvm_rpa_boot_mode') {
         return (
@@ -567,7 +745,13 @@ export default {
       } else if (key === 'pvm_os_boot_type') {
         return !(
           defaultPartitionEnvironment === 'AIX' ||
-          defaultPartitionEnvironment === 'Linux'
+          defaultPartitionEnvironment === 'Linux' ||
+          defaultPartitionEnvironment === 'Linux KVM'
+        );
+      } else if (key === 'pvm_linux_kvm_memory') {
+        return (
+          defaultPartitionEnvironment === 'Default' ||
+          defaultPartitionEnvironment === 'Linux KVM'
         );
       } else {
         return true;
@@ -576,3 +760,9 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.error-text {
+  color: red;
+  font-size: 12px;
+}
+</style>
