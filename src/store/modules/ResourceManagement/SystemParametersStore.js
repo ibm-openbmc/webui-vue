@@ -151,7 +151,7 @@ const systemParametersStore = {
         )
         .then(({ data: { RegistryEntries } }) => {
           const immediateTestRequested = RegistryEntries.Attributes.filter(
-            (Attribute) => Attribute.AttributeName == 'pvm_rpd_gard_policy'
+            (Attribute) => Attribute.AttributeName == 'pvm_rpd_guard_policy'
           );
           let immediateTestRequestedValue =
             immediateTestRequested[0].CurrentValue;
@@ -345,7 +345,7 @@ const systemParametersStore = {
       let updatedValue = updatedImmediateTestRequested ? 'Enabled' : 'Disabled';
       commit('setGardOnError', updatedImmediateTestRequested);
       const updatedImmediateTestRequestedValue = {
-        Attributes: { pvm_rpd_gard_policy: updatedValue },
+        Attributes: { pvm_rpd_guard_policy: updatedValue },
       };
       return api
         .patch(
