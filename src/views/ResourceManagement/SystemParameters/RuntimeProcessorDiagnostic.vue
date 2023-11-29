@@ -139,23 +139,23 @@
     <b-row>
       <b-col class="d-flex align-items-center justify-content-between">
         <dl class="mt-3 mr-3 w-75">
-          <dt id="gard-on-error-label">
-            {{ $t('pageSystemParameters.gardOnError') }}
+          <dt id="guard-on-error-label">
+            {{ $t('pageSystemParameters.guardOnError') }}
           </dt>
-          <dd id="gard-on-error-description">
-            {{ $t('pageSystemParameters.gardOnErrorDescription') }}
+          <dd id="guard-on-error-description">
+            {{ $t('pageSystemParameters.guardOnErrorDescription') }}
           </dd>
         </dl>
         <b-form-checkbox
-          id="gardOnErrorSwitch"
-          v-model="gardOnErrorState"
-          aria-labelledby="gard-on-error-label"
-          aria-describedby="gard-on-error-description"
+          id="guardOnErrorSwitch"
+          v-model="guardOnErrorState"
+          aria-labelledby="guard-on-error-label"
+          aria-describedby="guard-on-error-description"
           switch
           :disabled="isRpdFeatureCurrentDisabled"
-          @change="updateGardOnErrorState"
+          @change="updateGuardOnErrorState"
         >
-          <span v-if="gardOnErrorState">
+          <span v-if="guardOnErrorState">
             {{ $t('global.status.enabled') }}
           </span>
           <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -302,9 +302,9 @@ export default {
         );
       },
     },
-    gardOnErrorState: {
+    guardOnErrorState: {
       get() {
-        return this.$store.getters['systemParameters/gardOnError'];
+        return this.$store.getters['systemParameters/guardOnError'];
       },
       set(newValue) {
         return newValue;
@@ -359,9 +359,9 @@ export default {
         .catch(({ message }) => this.errorToast(message))
         .finally(() => this.endLoader());
     },
-    updateGardOnErrorState(state) {
+    updateGuardOnErrorState(state) {
       this.$store
-        .dispatch('systemParameters/saveGardOnError', state)
+        .dispatch('systemParameters/saveGuardOnError', state)
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },

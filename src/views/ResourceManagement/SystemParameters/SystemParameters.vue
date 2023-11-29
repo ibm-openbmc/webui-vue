@@ -45,7 +45,7 @@ export default {
       this.$store.dispatch('systemParameters/getLateralCastOutMode'),
       this.$store.dispatch('systemParameters/getAggressivePrefetch'),
       this.$store.dispatch('systemParameters/getImmediateTestRequested'),
-      this.$store.dispatch('systemParameters/getGardOnError'),
+      this.$store.dispatch('systemParameters/getGuardOnError'),
       this.$store.dispatch('systemParameters/getRpdPolicyOptions'),
       this.$store.dispatch('systemParameters/getRpdFeatureOptions'),
       this.$store.dispatch('systemParameters/getRpdPolicy'),

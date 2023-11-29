@@ -11,7 +11,7 @@ const systemParametersStore = {
     frequencyRequestCurrentToggle: false,
     lateralCastOutMode: null,
     immediateTestRequested: false,
-    gardOnError: false,
+    guardOnError: false,
     rpdPolicy: null,
     pvmRpdPolicy: null,
     rpdPolicyCurrent: null,
@@ -30,7 +30,7 @@ const systemParametersStore = {
       state.frequencyRequestCurrentToggle,
     lateralCastOutMode: (state) => state.lateralCastOutMode,
     immediateTestRequested: (state) => state.immediateTestRequested,
-    gardOnError: (state) => state.gardOnError,
+    guardOnError: (state) => state.guardOnError,
     rpdPolicy: (state) => state.rpdPolicy,
     pvmRpdPolicy: (state) => state.pvmRpdPolicy,
     rpdPolicyCurrent: (state) => state.rpdPolicyCurrent,
@@ -51,7 +51,8 @@ const systemParametersStore = {
       (state.lateralCastOutMode = lateralCastOutMode),
     setImmediateTestRequested: (state, immediateTestRequested) =>
       (state.immediateTestRequested = immediateTestRequested),
-    setGardOnError: (state, gardOnError) => (state.gardOnError = gardOnError),
+    setGuardOnError: (state, guardOnError) =>
+      (state.guardOnError = guardOnError),
     setRpdPolicy: (state, rpdPolicy) => (state.rpdPolicy = rpdPolicy),
     setPvmRpdPolicy: (state, pvmRpdPolicy) =>
       (state.pvmRpdPolicy = pvmRpdPolicy),
@@ -144,7 +145,7 @@ const systemParametersStore = {
         })
         .catch((error) => console.log(error));
     },
-    async getGardOnError({ commit }) {
+    async getGuardOnError({ commit }) {
       return await api
         .get(
           '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry'
@@ -157,7 +158,7 @@ const systemParametersStore = {
             immediateTestRequested[0].CurrentValue;
           let modeValue =
             immediateTestRequestedValue == 'Enabled' ? true : false;
-          commit('setGardOnError', modeValue);
+          commit('setGuardOnError', modeValue);
         })
         .catch((error) => console.log(error));
     },
@@ -341,9 +342,9 @@ const systemParametersStore = {
           }
         });
     },
-    async saveGardOnError({ commit }, updatedImmediateTestRequested) {
+    async saveGuardOnError({ commit }, updatedImmediateTestRequested) {
       let updatedValue = updatedImmediateTestRequested ? 'Enabled' : 'Disabled';
-      commit('setGardOnError', updatedImmediateTestRequested);
+      commit('setGuardOnError', updatedImmediateTestRequested);
       const updatedImmediateTestRequestedValue = {
         Attributes: { pvm_rpd_guard_policy: updatedValue },
       };
@@ -353,13 +354,13 @@ const systemParametersStore = {
           updatedImmediateTestRequestedValue
         )
         .then(() => {
-          return i18n.t('pageSystemParameters.toast.successSavingGardOnError');
+          return i18n.t('pageSystemParameters.toast.successSavingGuardOnError');
         })
         .catch((error) => {
           console.log(error);
-          commit('setGardOnError', !updatedImmediateTestRequested);
+          commit('setGuardOnError', !updatedImmediateTestRequested);
           throw new Error(
-            i18n.t('pageSystemParameters.toast.errorSavingGardOnError')
+            i18n.t('pageSystemParameters.toast.errorSavingGuardOnError')
           );
         });
     },
