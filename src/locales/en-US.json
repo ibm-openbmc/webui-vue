@@ -945,7 +945,7 @@
     "rpdScheduledRun": "RPD scheduled run time of day",
     "rpdScheduledRunDescription": "Only used when RPD policy is set to “Scheduled”. This value represents the time of day at which to run the processor diagnostics.",
     "updateRpdScheduledRun": "Update RPD scheduled run",
-    "guardOnError": "GUARD on error",
+    "guardOnError": "Guard on error",
     "guardOnErrorDescription": "Controls whether or not a processor core will be de-configured on error.",
     "stopTest": "Stop diagnostic test run",
     "toast": {
