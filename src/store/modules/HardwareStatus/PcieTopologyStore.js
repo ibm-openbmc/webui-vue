@@ -722,6 +722,7 @@ const PcieTopologyStore = {
             row.linkType = 'Primary';
             row.linkSpeed = 'unknown';
             row.linkWidth = 'unknown';
+            let tempLocalPorts = [];
             row.localPortLocation = [];
             row.remotePortLocation = [];
             row.ioSlotLocation = [];
@@ -1033,6 +1034,34 @@ const PcieTopologyStore = {
                     }
                   }
                 });
+              }
+              if (
+                row?.localPortLocation.length > 0 &&
+                row?.remotePortLocation.length > 0
+              ) {
+                if (
+                  cable.detailedInfo?.upstreamPorts.length > 0 &&
+                  cable.detailedInfo?.downstreamPorts.length > 0
+                ) {
+                  row?.remotePortLocation.map((remotePort, index) => {
+                    if (
+                      remotePort.locationNumber ===
+                      cable.detailedInfo?.downstreamPorts[0].data.Location
+                        ?.PartLocation?.ServiceLabel
+                    ) {
+                      tempLocalPorts[index] = {
+                        locationIndicatorActive:
+                          cable.detailedInfo?.upstreamPorts[0]
+                            .LocationIndicatorActive,
+                        locationNumber:
+                          cable.detailedInfo?.upstreamPorts[0].Location
+                            ?.PartLocation?.ServiceLabel,
+                        uri: cable.detailedInfo?.upstreamPorts[0]['@odata.id'],
+                      };
+                    }
+                  });
+                  row.localPortLocation = tempLocalPorts;
+                }
               }
             });
             fabricAdapterInfo.map((adapter) => {
