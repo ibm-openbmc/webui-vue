@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="modelType !== '--'">
     <div class="nav-container" :class="{ open: isNavigationOpen }">
       <nav ref="nav" :aria-label="$t('appNavigation.primaryNavigation')">
         <b-nav vertical class="mb-4">
@@ -70,6 +70,9 @@ export default {
     };
   },
   computed: {
+    modelType() {
+      return this.$store?.getters['global/modelType'];
+    },
     currentUser() {
       return this.$store?.getters['global/currentUser'];
     },
