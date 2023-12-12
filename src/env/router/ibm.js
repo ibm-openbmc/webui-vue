@@ -39,6 +39,7 @@ import SnmpAlerts from '@/views/Settings/SnmpAlerts';
 import CapacityOnDemand from '@/views/ResourceManagement/CapacityOnDemand';
 import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
 import DeconfigurationRecords from '@/views/Logs/DeconfigurationRecords';
+import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
 
 import i18n from '@/i18n';
 
@@ -147,6 +148,14 @@ const routes = [
         component: Dumps,
         meta: {
           title: i18n.t('appPageTitle.dumps'),
+        },
+      },
+      {
+        path: '/logs/ibmi-service-functions',
+        name: 'ibmiServiceFunctions',
+        component: IBMiServiceFunctions,
+        meta: {
+          title: i18n.t('appPageTitle.ibmiServiceFunctions'),
         },
       },
       {

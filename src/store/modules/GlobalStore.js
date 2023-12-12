@@ -56,6 +56,7 @@ const GlobalStore = {
       state.bootProgress === 'SetupEntered' ||
       state.bootProgress === 'OSBootStarted' ||
       state.bootProgress === 'OSRunning',
+    isOSRunning: (state) => state.bootProgress === 'OSRunning',
     assetTag: (state) => state.assetTag,
     modelType: (state) => state.modelType,
     serialNumber: (state) => state.serialNumber,

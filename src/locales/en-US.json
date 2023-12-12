@@ -134,12 +134,13 @@
     "firmware": "@:appPageTitle.firmware",
     "hardwareStatus": "Hardware status",
     "hostConsole": "@:appPageTitle.hostConsole",
+    "ibmiServiceFunctions": "@:appPageTitle.ibmiServiceFunctions",
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
     "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
-    "logs": "Logs",
+    "logs": "Logs and services",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
     "notices": "@:appPageTitle.notices",
@@ -177,6 +178,7 @@
     "fieldCoreOverride": "Field core override",
     "firmware": "Firmware",
     "hostConsole": "Host console",
+    "ibmiServiceFunctions": "IBM i service functions",
     "inventory": "Inventory and LEDs",
     "keyClear": "Key clear",
     "kvm": "KVM",
@@ -771,6 +773,27 @@
   "pageHostConsole": {
     "subTitle": "Host console redirects the server's serial port output to this window.",
     "status": "Status"
+  },
+  "pageIbmiServiceFunctions": {
+    "activateDedicatedServiceTool": "Activate Dedicated Service Tools",
+    "activateDedicatedServiceToolDesc": "This function makes dedicated service tools (DST) available on the system console display.",
+    "concurrentMaintenancePowerOff": "Concurrent Maintenance Power Off Domain",
+    "concurrentMaintenancePowerOffDesc": "Use this function to power off the power domain that includes resources that are currently in a disk unit attention state.",
+    "concurrentMaintenancePowerOn": "Concurrent Maintenance Power On Domain",
+    "concurrentMaintenancePowerOnDesc": "Use this function to power on the power domain that was powered off by using function 68.",
+    "disableRemoteService": "Disable Remote Service",
+    "disableRemoteServiceDesc": "Use this function to deactivate a remote service session.",
+    "diskUnitIOP": "Disk Unit IOP Reset/Reload",
+    "diskUnitIOPDesc": "Use this function to initiate an I/O processor dump and reset/reload of an IOP that controls resources that are currently in a disk unit attention state.",
+    "enableRemoteService": "Enable Remote Service",
+    "enableRemoteServiceDesc": "Use this function to activate a remote service session.",
+    "execute": "Execute",
+    "iopControlStorageDump": "IOP Control Storage Dump",
+    "iopControlStorageDumpDesc": "Use this function to initiate an I/O processor dump and reset/reload of the IOP that was designated to control the load source device when the logical partition was activated.",
+    "toast": {
+      "successExecuteFunction": "Request successfully sent to server",
+      "errorExecuteFunction": "Error sending request to server"
+    }
   },
   "pageInventory": {
     "assemblies": "Assemblies",
@@ -1511,7 +1534,7 @@
        "aix": "AIX",
        "linux": "Linux",
        "linuxKVM": "Linux KVM",
-       "ibmI": "IBM I",
+       "ibmI": "IBM i",
        "default": "Default"
      },
      "description": {
@@ -1571,7 +1594,7 @@
           "AIX": "AIX",
           "Linux": "Linux",
           "Linux KVM": "Linux KVM",
-          "IBM I": "IBM I",
+          "IBM I": "IBM i",
           "Default": "Default"
         },
         "pvm_os_boot_type": {

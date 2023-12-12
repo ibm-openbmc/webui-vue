@@ -164,6 +164,12 @@ const AppNavigationMixin = {
               restrictTo: [],
             },
             {
+              id: 'ibmi-service-functions',
+              label: this.$t('appNavigation.ibmiServiceFunctions'),
+              route: '/logs/ibmi-service-functions',
+              restrictTo: [],
+            },
+            {
               id: 'deconfiguration-records',
               label: this.$t('appNavigation.deconfigurationRecords'),
               route: '/logs/deconfiguration-records',
