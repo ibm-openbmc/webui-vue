@@ -256,8 +256,9 @@
         </b-col>
         <b-col
           v-if="
-            attributeKeys[key] === 'Linux KVM' ||
-            attributeKeys[key] === 'Default'
+            !isHmcManaged() &&
+            (attributeKeys[key] === 'Linux KVM' ||
+              attributeKeys[key] === 'Default')
           "
           :key="key + 1"
           sm="8"
