@@ -153,7 +153,7 @@
         <page-section
           :section-title="$t('pageServerPowerOperations.serverBootSettings')"
         >
-          <boot-settings />
+          <boot-settings :is-in-phyp-standby="isInPhypStandby" />
         </page-section>
       </b-col>
     </b-row>
@@ -231,7 +231,6 @@ export default {
     });
     Promise.all([
       this.$store.dispatch('serverBootSettings/getOperatingModeSettings'),
-      this.$store.dispatch('serverBootSettings/getBootSettings'),
       this.$store.dispatch('controls/getLastPowerOperationTime'),
       this.$store.dispatch('bmc/getBmcInfo'),
       this.$store.dispatch('global/getBootProgress'),

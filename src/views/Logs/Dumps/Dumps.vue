@@ -16,6 +16,14 @@
                   : ''
               }}
             </span>
+            <span
+              v-else-if="
+                selectedDumpType === 'partition' ||
+                selectedDumpType === 'retryPartition'
+              "
+            >
+              {{ $t(`pageIbmiServiceFunctions.alert.osRunning`) }}
+            </span>
             <span v-else>
               {{ $t(`pageDumps.alert.refreshMessage`) }}
             </span>

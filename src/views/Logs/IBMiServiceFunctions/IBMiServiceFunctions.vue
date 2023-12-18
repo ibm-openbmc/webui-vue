@@ -2,7 +2,16 @@
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.ibmiServiceFunctions')" />
     <b-row>
-      <b-col md="8">
+      <b-col v-if="isIBMi" md="8">
+        <b-row v-if="!isOSRunning">
+          <b-col>
+            <alert variant="info" class="mb-4">
+              <span>
+                {{ $t('pageIbmiServiceFunctions.alert.osRunning') }}
+              </span>
+            </alert>
+          </b-col>
+        </b-row>
         <b-row class="section-divider">
           <b-col class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
@@ -21,7 +30,7 @@
             </dl>
             <b-button
               variant="primary"
-              :disabled="!isOSRunning"
+              :disabled="isFunctionDisabled(21)"
               @click="exceuteFunction(21)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
@@ -40,7 +49,7 @@
             </dl>
             <b-button
               variant="primary"
-              :disabled="!isOSRunning"
+              :disabled="isFunctionDisabled(65)"
               @click="exceuteFunction(65)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
@@ -59,7 +68,7 @@
             </dl>
             <b-button
               variant="primary"
-              :disabled="!isOSRunning"
+              :disabled="isFunctionDisabled(66)"
               @click="exceuteFunction(66)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
@@ -78,7 +87,7 @@
             </dl>
             <b-button
               variant="primary"
-              :disabled="!isOSRunning"
+              :disabled="isFunctionDisabled(67)"
               @click="exceuteFunction(67)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
@@ -103,7 +112,7 @@
             </dl>
             <b-button
               variant="primary"
-              :disabled="!isOSRunning"
+              :disabled="isFunctionDisabled(68)"
               @click="exceuteFunction(68)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
@@ -128,7 +137,7 @@
             </dl>
             <b-button
               variant="primary"
-              :disabled="!isOSRunning"
+              :disabled="isFunctionDisabled(69)"
               @click="exceuteFunction(69)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
@@ -147,11 +156,22 @@
             </dl>
             <b-button
               variant="primary"
-              :disabled="!isOSRunning"
+              :disabled="isFunctionDisabled(70)"
               @click="exceuteFunction(70)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
             </b-button>
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col v-else>
+        <b-row>
+          <b-col>
+            <alert variant="danger" class="mb-4">
+              <span>
+                {{ $t('pageIbmiServiceFunctions.alert.notIBMi') }}
+              </span>
+            </alert>
           </b-col>
         </b-row>
       </b-col>
@@ -162,10 +182,11 @@
 <script>
 import PageTitle from '@/components/Global/PageTitle';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import Alert from '@/components/Global/Alert';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 export default {
   name: 'IBMiServiceFunctions',
-  components: { PageTitle },
+  components: { PageTitle, Alert },
   mixins: [LoadingBarMixin, BVToastMixin],
   computed: {
     isOSRunning() {
@@ -174,12 +195,26 @@ export default {
     availableFunctions() {
       return this.$store.getters['ibmiServiceFunctions/serviceFunctions'];
     },
+    isIBMi() {
+      if (
+        this.attributeKeys?.pvm_default_os_type === 'Default' ||
+        this.attributeKeys?.pvm_default_os_type === 'IBM I'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    attributeKeys() {
+      return this.$store.getters['serverBootSettings/biosAttributes'];
+    },
   },
   created() {
     this.startLoader();
     Promise.all([
       this.$store.dispatch('global/getBootProgress'),
       this.$store.dispatch('ibmiServiceFunctions/getAvailableServiceFunctions'),
+      this.$store.dispatch('serverBootSettings/getBiosAttributes'),
     ]).finally(() => {
       this.endLoader();
     });
@@ -190,6 +225,15 @@ export default {
         .dispatch('ibmiServiceFunctions/executeServiceFunction', value)
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
+    },
+    isFunctionDisabled(value) {
+      if (!this.isOSRunning) {
+        return true;
+      } else if (this.availableFunctions.includes(value)) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
 };

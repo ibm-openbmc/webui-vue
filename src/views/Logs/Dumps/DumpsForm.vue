@@ -12,12 +12,12 @@
         <b-form-select
           id="selectDumpType"
           v-model="selectedDumpType"
-          :options="dumpTypeOptions"
+          :options="updatedDumpTypeOptions"
           :state="getValidationState($v.selectedDumpType)"
           @change="updateDumpInfo"
         >
           <template #first>
-            <b-form-select-option :value="null" disabled>
+            <b-form-select-option :value="''" disabled>
               {{ $t('global.form.selectAnOption') }}
             </b-form-select-option>
           </template>
@@ -57,12 +57,25 @@
         </template>
       </template>
 
-      <b-button variant="primary" type="submit" form="form-new-dump">
+      <b-button
+        :disabled="isButtonDisabled"
+        variant="primary"
+        type="submit"
+        form="form-new-dump"
+      >
         {{ $t('pageDumps.form.initiateDump') }}
       </b-button>
     </b-form>
     <modal-confirmation
       @ok="createSystemDump($t(`pageDumps.form.${selectedDumpType}Dump`))"
+    />
+    <modal-partition-dump-confirmation
+      :selected="selectedDumpType"
+      @ok="
+        selectedDumpType === 'partition'
+          ? exceuteFunction(22)
+          : exceuteFunction(34)
+      "
     />
   </div>
 </template>
@@ -70,27 +83,48 @@
 <script>
 import { required } from 'vuelidate/lib/validators';
 import ModalConfirmation from './DumpsModalConfirmation';
+import ModalPartitionDumpConfirmation from './DumpsPartitionModalConfirmation';
 import InfoTooltip from '@/components/Global/InfoTooltip';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
 
 export default {
-  components: { InfoTooltip, InputPasswordToggle, ModalConfirmation },
+  components: {
+    InfoTooltip,
+    InputPasswordToggle,
+    ModalConfirmation,
+    ModalPartitionDumpConfirmation,
+  },
   mixins: [BVToastMixin, VuelidateMixin],
   data() {
     return {
-      selectedDumpType: null,
+      selectedDumpType: '',
       resourceSelectorValue: null,
       resourcePassword: null,
-      dumpTypeOptions: [
-        { value: 'bmc', text: this.$t('pageDumps.form.bmcDump') },
-        { value: 'resource', text: this.$t('pageDumps.form.resourceDump') },
-        { value: 'system', text: this.$t('pageDumps.form.systemDump') },
-      ],
+      dumpTypeOptions: [],
     };
   },
   computed: {
+    isOSRunning() {
+      return this.$store.getters['global/isOSRunning'];
+    },
+    availableFunctions() {
+      return this.$store.getters['ibmiServiceFunctions/serviceFunctions'];
+    },
+    isIBMi() {
+      if (
+        this.attributeKeys?.pvm_default_os_type === 'Default' ||
+        this.attributeKeys?.pvm_default_os_type === 'IBM I'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    attributeKeys() {
+      return this.$store.getters['serverBootSettings/biosAttributes'];
+    },
     currentUser() {
       return this.$store.getters['global/currentUser'];
     },
@@ -100,10 +134,43 @@ export default {
     isInPhypStandby() {
       return this.$store.getters['global/isInPhypStandby'];
     },
+    updatedDumpTypeOptions() {
+      return this.setDumpTypeOptions();
+    },
+    hmcInfo() {
+      return this.$store?.getters['global/hmcManaged'];
+    },
+    isButtonDisabled() {
+      if (
+        !this.isOSRunning &&
+        (this.selectedDumpType === 'partition' ||
+          this.selectedDumpType === 'retryPartition')
+      ) {
+        return true;
+      } else if (
+        this.isOSRunning &&
+        (this.selectedDumpType === 'partition' ||
+          this.selectedDumpType === 'retryPartition')
+      ) {
+        if (this.selectedDumpType === 'partition') {
+          return this.isFunctionDisabled(22);
+        } else {
+          return this.isFunctionDisabled(34);
+        }
+      } else {
+        return false;
+      }
+    },
   },
   created() {
     this.checkForUserData();
     this.checkIfInPhypStandby();
+    Promise.all([
+      this.$store.dispatch('global/getHmcManaged'),
+      this.$store.dispatch('global/getBootProgress'),
+      this.$store.dispatch('ibmiServiceFunctions/getAvailableServiceFunctions'),
+      this.$store.dispatch('serverBootSettings/getBiosAttributes'),
+    ]);
   },
   validations() {
     return {
@@ -168,10 +235,60 @@ export default {
             })
           )
           .catch(({ message }) => this.errorToast(message));
+      } else if (this.selectedDumpType === 'partition') {
+        // Partition dump initiation
+        this.showPartitionDumpConfirmationModal();
+      } else if (this.selectedDumpType === 'retryPartition') {
+        // Retry partition dump
+        this.showPartitionDumpConfirmationModal();
+      }
+    },
+    setDumpTypeOptions() {
+      let minimumOptions = [
+        { value: 'bmc', text: this.$t('pageDumps.form.bmcDump') },
+        { value: 'resource', text: this.$t('pageDumps.form.resourceDump') },
+        { value: 'system', text: this.$t('pageDumps.form.systemDump') },
+      ];
+      this.dumpTypeOptions = [];
+      if (this.hmcInfo === 'Enabled') {
+        return (this.dumpTypeOptions = minimumOptions);
+      } else {
+        if (this.isIBMi) {
+          return (this.dumpTypeOptions = [
+            ...minimumOptions,
+            {
+              value: 'partition',
+              text: this.$t('pageDumps.form.partitionDump'),
+            },
+            {
+              value: 'retryPartition',
+              text: this.$t('pageDumps.form.retryPartitionDump'),
+            },
+          ]);
+        } else {
+          return (this.dumpTypeOptions = minimumOptions);
+        }
+      }
+    },
+    exceuteFunction(value) {
+      this.$store
+        .dispatch('ibmiServiceFunctions/executeServiceFunction', value)
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message));
+    },
+    isFunctionDisabled(value) {
+      // This condition is to check if the function is available to execute
+      if (this.availableFunctions.includes(value)) {
+        return false;
+      } else {
+        return true;
       }
     },
     showConfirmationModal() {
       this.$bvModal.show('modal-confirmation');
+    },
+    showPartitionDumpConfirmationModal() {
+      this.$bvModal.show('modal-partition-dump-confirmation');
     },
     createSystemDump(dumpType) {
       this.$store
