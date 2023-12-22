@@ -409,6 +409,7 @@ export default {
         .catch(({ message }) => this.errorToast(message));
     },
     changeTpmPolicyState(state) {
+      console.log('test-demo-1030');
       this.$store
         .dispatch('policies/saveTpmPolicy', state)
         .then((message) => this.successToast(message))
