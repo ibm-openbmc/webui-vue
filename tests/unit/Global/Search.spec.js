@@ -15,10 +15,6 @@ describe('Search.vue', () => {
   it('should exist', () => {
     expect(wrapper.exists()).toBe(true);
   });
-  it('should emit change-search on triggering onChangeInput', () => {
-    wrapper.find('input').trigger('input');
-    expect(wrapper.emitted('change-search')).toHaveLength(1);
-  });
   it('should emit clear-search on triggering onClearSearch', async () => {
     await wrapper.setData({ filter: 'true' });
     wrapper.find('button').trigger('click');

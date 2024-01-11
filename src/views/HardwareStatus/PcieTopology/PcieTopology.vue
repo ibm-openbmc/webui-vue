@@ -23,6 +23,7 @@
         <search
           :placeholder="$t('pagePcieTopology.table.search')"
           data-test-id="pcie-input-search"
+          :is-search-disabled="isBusy"
           @change-search="onChangeSearchInput"
           @clear-search="onClearSearchInput"
         />
@@ -36,7 +37,11 @@
     </b-row>
     <b-row>
       <b-col class="text-right">
-        <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
+        <table-filter
+          :is-filter-disabled="isBusy"
+          :filters="tableFilters"
+          @filter-change="onFilterChange"
+        />
         <b-button
           v-if="isServiceUser"
           variant="primary"
