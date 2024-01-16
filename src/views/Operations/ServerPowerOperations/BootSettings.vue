@@ -14,8 +14,7 @@
       class="mb-3"
       :disabled="
         !isLinuxKvmValid
-          ? form.attributes.pvm_default_os_type === 'Linux KVM' ||
-            form.attributes.pvm_default_os_type === 'Default'
+          ? form.attributes.pvm_default_os_type === 'Linux KVM'
             ? true
             : false
           : false
@@ -84,10 +83,7 @@ export default {
         .dispatch('serverBootSettings/saveSettings', settings)
         .then((message) => {
           this.componentKey += 1;
-          if (
-            settings.biosSettings.pvm_default_os_type == 'Linux KVM' ||
-            settings.biosSettings.pvm_default_os_type == 'Default'
-          ) {
+          if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
             this.successToast(
               this.$t(
                 'pageServerPowerOperations.toast.successSaveLinuxKvmSettings'
