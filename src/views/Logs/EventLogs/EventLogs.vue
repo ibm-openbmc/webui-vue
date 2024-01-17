@@ -474,11 +474,13 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store.dispatch('eventLog/getEventLogData').finally(() => {
-      this.checkForUserData();
-      if (this.isServiceUser) {
-        this.$store.dispatch('eventLog/getCELogData');
-      }
+    this.$store.dispatch('eventLog/initializeLogs').then(() => {
+      this.$store.dispatch('eventLog/getEventLogData').finally(() => {
+        this.checkForUserData();
+        if (this.isServiceUser) {
+          this.$store.dispatch('eventLog/getCELogData');
+        }
+      });
       this.endLoader();
       this.isBusy = false;
     });
