@@ -94,6 +94,15 @@
         <div v-else>--</div>
       </template>
 
+      <template #cell(ledStatus)="row">
+        <led-component
+          :ref="`identifyLedAssemblyRef${row.item.locationNumber}`"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+        ></led-component>
+      </template>
+
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -142,9 +151,17 @@ import TableRowExpandMixin, {
   expandRowLabel,
 } from '@/components/Mixins/TableRowExpandMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+import LedComponent from '@/components/Global/LedComponent';
 
 export default {
-  components: { IconChevron, Search, InfoTooltip, PageSection, TableCellCount },
+  components: {
+    IconChevron,
+    Search,
+    InfoTooltip,
+    PageSection,
+    TableCellCount,
+    LedComponent,
+  },
   mixins: [
     BVToastMixin,
     SearchFilterMixin,
@@ -195,6 +212,11 @@ export default {
         {
           key: 'identifyLed',
           label: this.$t('pageInventory.table.identifyLed'),
+          formatter: this.dataFormatter,
+        },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
           formatter: this.dataFormatter,
         },
       ],
@@ -286,8 +308,29 @@ export default {
           memberId: row.id,
           identifyLed: row.identifyLed,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (!(row.health === 'Critical')) {
+            if (row.identifyLed) {
+              this.$refs[
+                'identifyLedAssemblyRef' + `${row.locationNumber}`
+              ].startBlinking();
+            } else {
+              this.$refs[
+                'identifyLedAssemblyRef' + `${row.locationNumber}`
+              ].stopBlinking();
+            }
+          } else {
+            this.$refs[
+              'identifyLedAssemblyRef' + `${row.locationNumber}`
+            ].turnon();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs[
+            'identifyLedAssemblyRef' + `${row.locationNumber}`
+          ].turnErrorColor();
+          this.errorToast(message);
+        });
     },
     hasIdentifyLed(identifyLed) {
       return typeof identifyLed === 'boolean';

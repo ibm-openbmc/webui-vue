@@ -29,6 +29,7 @@ const FanStore = {
           partNumber: PartNumber,
           serialNumber: SerialNumber,
           identifyLed: LocationIndicatorActive,
+          ledStatus: LocationIndicatorActive,
           locationNumber: Location?.PartLocation?.ServiceLabel,
           model: Model,
           name: Name,

@@ -58,8 +58,18 @@
           </span>
           <span v-else> {{ $t('global.status.off') }} </span>
         </b-form-checkbox>
-        <div v-else>--</div>
       </template>
+
+      <template #cell(ledStatus)="row">
+        <led-component
+          ref="identifyChassisLedRef"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+          class="align-middle"
+        ></led-component>
+      </template>
+
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -89,6 +99,7 @@ import PageSection from '@/components/Global/PageSection';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import StatusIcon from '@/components/Global/StatusIcon';
+import LedComponent from '@/components/Global/LedComponent';
 
 import TableRowExpandMixin, {
   expandRowLabel,
@@ -96,7 +107,7 @@ import TableRowExpandMixin, {
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon },
+  components: { IconChevron, PageSection, StatusIcon, LedComponent },
   mixins: [BVToastMixin, TableRowExpandMixin, DataFormatterMixin],
   data() {
     return {
@@ -134,6 +145,11 @@ export default {
           label: this.$t('pageInventory.table.identifyLed'),
           formatter: this.dataFormatter,
         },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
+          formatter: this.dataFormatter,
+        },
       ],
       expandRowLabel: expandRowLabel,
     };
@@ -157,8 +173,21 @@ export default {
           uri: row.uri,
           identifyLed: row.identifyLed,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (!(row.health === 'Critical')) {
+            if (row.identifyLed) {
+              this.$refs.identifyChassisLedRef.startBlinking();
+            } else {
+              this.$refs.identifyChassisLedRef.stopBlinking();
+            }
+          } else {
+            this.$refs.identifyChassisLedRef.turnon();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs.identifyChassisLedRef.turnErrorColor();
+          this.errorToast(message);
+        });
     },
     // TO DO: Remove this method when the LocationIndicatorActive is added from backend.
     hasIdentifyLed(identifyLed) {

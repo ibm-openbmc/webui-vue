@@ -17,6 +17,7 @@ const BmcStore = {
       bmc.health = data.Status.Health;
       bmc.id = data.Id;
       bmc.identifyLed = data.LocationIndicatorActive;
+      bmc.ledStatus = data.LocationIndicatorActive;
       bmc.locationNumber = data.Location?.PartLocation?.ServiceLabel;
       bmc.model = data.Model;
       bmc.name = data.Name;
