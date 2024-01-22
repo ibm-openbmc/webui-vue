@@ -95,6 +95,15 @@
         </b-form-checkbox>
       </template>
 
+      <template #cell(ledStatus)="row">
+        <led-component
+          :ref="`identifyLedFanRef${row.item.name}`"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+        ></led-component>
+      </template>
+
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -150,9 +159,17 @@ import TableRowExpandMixin, {
   expandRowLabel,
 } from '@/components/Mixins/TableRowExpandMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import LedComponent from '@/components/Global/LedComponent';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon, Search, TableCellCount },
+  components: {
+    IconChevron,
+    PageSection,
+    StatusIcon,
+    Search,
+    TableCellCount,
+    LedComponent,
+  },
   mixins: [
     BVToastMixin,
     TableRowExpandMixin,
@@ -205,6 +222,11 @@ export default {
         {
           key: 'identifyLed',
           label: this.$t('pageInventory.table.identifyLed'),
+          formatter: this.dataFormatter,
+        },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
           formatter: this.dataFormatter,
         },
       ],
@@ -279,8 +301,17 @@ export default {
           uri: row.uri,
           identifyLed: row.identifyLed,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (row.identifyLed) {
+            this.$refs['identifyLedFanRef' + `${row.name}`].turnErrorColor();
+          } else {
+            this.$refs['identifyLedFanRef' + `${row.name}`].stopBlinking();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs.identifyLedFanRef`${row.name}`.turnErrorColor();
+          this.errorToast(message);
+        });
     },
   },
 };

@@ -80,6 +80,17 @@
           <span v-else> {{ $t('global.status.off') }} </span>
         </b-form-checkbox>
       </template>
+
+      <template #cell(ledStatus)="row">
+        <led-component
+          :ref="`identifydimmLedRef${row.item.id}`"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+          class="text-center"
+        ></led-component>
+      </template>
+
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -140,6 +151,7 @@ import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import Search from '@/components/Global/Search';
+import LedComponent from '@/components/Global/LedComponent';
 import SearchFilterMixin, {
   searchFilter,
 } from '@/components/Mixins/SearchFilterMixin';
@@ -148,7 +160,14 @@ import TableRowExpandMixin, {
 } from '@/components/Mixins/TableRowExpandMixin';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon, Search, TableCellCount },
+  components: {
+    IconChevron,
+    PageSection,
+    StatusIcon,
+    Search,
+    TableCellCount,
+    LedComponent,
+  },
   mixins: [
     BVToastMixin,
     TableRowExpandMixin,
@@ -197,6 +216,11 @@ export default {
           formatter: this.dataFormatter,
           sortable: false,
         },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
+          formatter: this.dataFormatter,
+        },
       ],
       searchFilter: searchFilter,
       searchTotalFilteredRows: 0,
@@ -235,8 +259,21 @@ export default {
           uri: row.uri,
           identifyLed: row.identifyLed,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (!(row.health === 'Critical')) {
+            if (row.identifyLed) {
+              this.$refs['identifydimmLedRef' + `${row.id}`].startBlinking();
+            } else {
+              this.$refs['identifydimmLedRef' + `${row.id}`].stopBlinking();
+            }
+          } else {
+            this.$refs['identifydimmLedRef' + `${row.id}`].turnon();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs['identifydimmLedRef' + `${row.id}`].turnErrorColor();
+          this.errorToast(message);
+        });
     },
   },
 };

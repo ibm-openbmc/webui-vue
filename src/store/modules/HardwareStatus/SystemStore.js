@@ -21,11 +21,14 @@ const SystemStore = {
       system.sysAttentionLed =
         data.Oem?.IBM?.PartitionSystemAttentionIndicator ||
         data.Oem?.IBM?.PlatformSystemAttentionIndicator;
+      system.issysAttentionLed = system.sysAttentionLed;
       system.locationIndicatorActive = data.LocationIndicatorActive;
+      system.issysidentifyLed = data.LocationIndicatorActive;
       system.model = data.Model;
       system.processorSummaryCoreCount = data.ProcessorSummary?.CoreCount;
       system.processorSummaryCount = data.ProcessorSummary?.Count;
       system.powerState = data.PowerState;
+      system.powerLedStatus = data.PowerState;
       system.serialNumber = data.SerialNumber;
       system.statusState = data.Status?.State;
       state.systems = [system];
@@ -45,6 +48,32 @@ const SystemStore = {
       return await api
         .patch('/redfish/v1/Systems/system', {
           LocationIndicatorActive: ledState,
+        })
+        .then(() => {
+          if (ledState) {
+            return i18n.t('pageInventory.toast.successEnableIdentifyLed');
+          } else {
+            return i18n.t('pageInventory.toast.successDisableIdentifyLed');
+          }
+        })
+        .catch((error) => {
+          commit('setSystemInfo', this.state.system.systems[0]);
+          console.log('error', error);
+          if (ledState) {
+            throw new Error(
+              i18n.t('pageInventory.toast.errorEnableIdentifyLed')
+            );
+          } else {
+            throw new Error(
+              i18n.t('pageInventory.toast.errorDisableIdentifyLed')
+            );
+          }
+        });
+    },
+    async PowerStatusLedState({ commit }, ledState) {
+      return await api
+        .patch('/redfish/v1/Systems/system', {
+          powerLedStatus: ledState,
         })
         .then(() => {
           if (ledState) {

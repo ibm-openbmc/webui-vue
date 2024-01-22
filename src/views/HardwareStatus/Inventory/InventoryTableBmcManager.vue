@@ -68,6 +68,15 @@
         <div v-else>--</div>
       </template>
 
+      <template #cell(ledStatus)="row">
+        <led-component
+          ref="identifyBmcMngerLedRef"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+        ></led-component>
+      </template>
+
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -108,13 +117,14 @@ import PageSection from '@/components/Global/PageSection';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import StatusIcon from '@/components/Global/StatusIcon';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import LedComponent from '@/components/Global/LedComponent';
 import TableRowExpandMixin, {
   expandRowLabel,
 } from '@/components/Mixins/TableRowExpandMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon },
+  components: { IconChevron, PageSection, StatusIcon, LedComponent },
   mixins: [BVToastMixin, TableRowExpandMixin, DataFormatterMixin],
   data() {
     return {
@@ -151,6 +161,11 @@ export default {
           label: this.$t('pageInventory.table.identifyLed'),
           formatter: this.dataFormatter,
         },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
+          formatter: this.dataFormatter,
+        },
       ],
       expandRowLabel: expandRowLabel,
     };
@@ -181,8 +196,21 @@ export default {
           uri: row.uri,
           identifyLed: row.identifyLed,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (!(row.health === 'Critical')) {
+            if (row.identifyLed) {
+              this.$refs.identifyBmcMngerLedRef.startBlinking();
+            } else {
+              this.$refs.identifyBmcMngerLedRef.stopBlinking();
+            }
+          } else {
+            this.$refs.identifyBmcMngerLedRef.turnon();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs.identifyBmcMngerLedRef.turnErrorColor();
+          this.errorToast(message);
+        });
     },
     // TO DO: remove hasIdentifyLed method once the following story is merged:
     // https://gerrit.openbmc-project.xyz/c/openbmc/bmcweb/+/43179

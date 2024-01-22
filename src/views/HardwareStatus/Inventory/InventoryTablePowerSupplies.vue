@@ -89,6 +89,17 @@
           <span v-else> {{ $t('global.status.off') }} </span>
         </b-form-checkbox>
       </template>
+
+      <template #cell(ledStatus)="row">
+        <led-component
+          :ref="`identifyLedpowersupplyRef${row.item.name}`"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+          :health="row.item.health"
+        ></led-component>
+      </template>
+
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -149,9 +160,17 @@ import TableRowExpandMixin, {
   expandRowLabel,
 } from '@/components/Mixins/TableRowExpandMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import LedComponent from '@/components/Global/LedComponent';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon, Search, TableCellCount },
+  components: {
+    IconChevron,
+    PageSection,
+    StatusIcon,
+    Search,
+    TableCellCount,
+    LedComponent,
+  },
   mixins: [
     BVToastMixin,
     TableRowExpandMixin,
@@ -204,6 +223,11 @@ export default {
         {
           key: 'identifyLed',
           label: this.$t('pageInventory.table.identifyLed'),
+          formatter: this.dataFormatter,
+        },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
           formatter: this.dataFormatter,
         },
       ],
@@ -275,13 +299,33 @@ export default {
       this.searchTotalFilteredRows = filteredItems.length;
     },
     toggleIdentifyLedValue(row) {
+      console.log('row->', row);
       this.$store
         .dispatch('powerSupply/updateIdentifyLedValue', {
           uri: row.uri,
           identifyLed: row.identifyLed,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (!(row.health === 'Critical')) {
+            if (row.identifyLed) {
+              this.$refs[
+                'identifyLedpowersupplyRef' + `${row.name}`
+              ].startBlinking();
+            } else {
+              this.$refs[
+                'identifyLedpowersupplyRef' + `${row.name}`
+              ].stopBlinking();
+            }
+          } else {
+            this.$refs['identifyLedpowersupplyRef' + `${row.name}`].turnon();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs[
+            'identifyLedpowersupplyRef' + `${row.name}`
+          ].turnErrorColor();
+          this.errorToast(message);
+        });
     },
   },
 };

@@ -38,6 +38,7 @@ const ProcessorStore = {
           totalCores: TotalCores,
           locationNumber: Location?.PartLocation?.ServiceLabel,
           identifyLed: LocationIndicatorActive,
+          ledStatus: LocationIndicatorActive,
           uri: processor['@odata.id'],
         };
       });

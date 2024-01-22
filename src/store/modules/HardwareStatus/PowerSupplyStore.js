@@ -31,6 +31,7 @@ const PowerSupplyStore = {
           serialNumber: SerialNumber,
           firmwareVersion: FirmwareVersion,
           identifyLed: LocationIndicatorActive,
+          ledStatus: LocationIndicatorActive,
           locationNumber: Location?.PartLocation?.ServiceLabel,
           model: Model,
           name: Name,

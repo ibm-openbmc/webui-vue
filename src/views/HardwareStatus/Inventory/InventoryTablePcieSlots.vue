@@ -64,6 +64,14 @@
           <span v-else> {{ $t('global.status.off') }} </span>
         </b-form-checkbox>
       </template>
+      <template #cell(ledStatus)="row">
+        <led-component
+          :ref="`identifyPciSlotLedRef${row.item.locationNumber}`"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+        ></led-component>
+      </template>
 
       <template #row-details="{ item }">
         <b-container fluid>
@@ -96,9 +104,16 @@ import TableRowExpandMixin, {
   expandRowLabel,
 } from '@/components/Mixins/TableRowExpandMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import LedComponent from '@/components/Global/LedComponent';
 
 export default {
-  components: { IconChevron, PageSection, Search, TableCellCount },
+  components: {
+    IconChevron,
+    PageSection,
+    Search,
+    TableCellCount,
+    LedComponent,
+  },
   mixins: [
     BVToastMixin,
     TableRowExpandMixin,
@@ -137,6 +152,11 @@ export default {
         {
           key: 'identifyLed',
           label: this.$t('pageInventory.table.identifyLed'),
+          formatter: this.dataFormatter,
+        },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
           formatter: this.dataFormatter,
         },
       ],
@@ -205,8 +225,29 @@ export default {
           identifyLed: row.identifyLed,
           uri: this.chassis,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (!(row.health === 'Critical')) {
+            if (row.identifyLed) {
+              this.$refs[
+                'identifyPciSlotLedRef' + `${row.locationNumber}`
+              ].startBlinking();
+            } else {
+              this.$refs[
+                'identifyPciSlotLedRef' + `${row.locationNumber}`
+              ].stopBlinking();
+            }
+          } else {
+            this.$refs[
+              'identifyPciSlotLedRef' + `${row.locationNumber}`
+            ].turnon();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs[
+            'identifyPciSlotLedRef' + `${row.locationNumber}`
+          ].turnErrorColor();
+          this.errorToast(message);
+        });
     },
   },
 };

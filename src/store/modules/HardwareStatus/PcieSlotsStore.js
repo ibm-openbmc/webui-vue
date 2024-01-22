@@ -16,6 +16,7 @@ const PcieSlotsStore = {
         return {
           type: SlotType,
           identifyLed: LocationIndicatorActive,
+          ledStatus: LocationIndicatorActive,
           locationNumber: Location?.PartLocation?.ServiceLabel,
         };
       });

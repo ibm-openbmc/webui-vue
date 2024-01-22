@@ -83,6 +83,15 @@
         <div v-else>--</div>
       </template>
 
+      <template #cell(ledStatus)="row">
+        <led-component
+          :ref="`identifyprocessorledRef${row.item.id}`"
+          :led-value="row.item.identifyLed"
+          off-colour="white"
+          on-colour="amber"
+        ></led-component>
+      </template>
+
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
@@ -143,9 +152,17 @@ import SearchFilterMixin, {
 import TableRowExpandMixin, {
   expandRowLabel,
 } from '@/components/Mixins/TableRowExpandMixin';
+import LedComponent from '@/components/Global/LedComponent';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon, Search, TableCellCount },
+  components: {
+    IconChevron,
+    PageSection,
+    StatusIcon,
+    Search,
+    TableCellCount,
+    LedComponent,
+  },
   mixins: [
     BVToastMixin,
     TableRowExpandMixin,
@@ -195,6 +212,11 @@ export default {
           formatter: this.dataFormatter,
           sortable: false,
         },
+        {
+          key: 'ledStatus',
+          label: 'Physical LED State',
+          formatter: this.dataFormatter,
+        },
       ],
       searchFilter: searchFilter,
       searchTotalFilteredRows: 0,
@@ -228,8 +250,25 @@ export default {
           uri: row.uri,
           identifyLed: row.identifyLed,
         })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
+        .then(() => {
+          if (!(row.health === 'Critical')) {
+            if (row.identifyLed) {
+              this.$refs[
+                'identifyprocessorledRef' + `${row.id}`
+              ].startBlinking();
+            } else {
+              this.$refs[
+                'identifyprocessorledRef' + `${row.id}`
+              ].stopBlinking();
+            }
+          } else {
+            this.$refs['identifyprocessorledRef' + `${row.id}`].turnon();
+          }
+        })
+        .catch(({ message }) => {
+          this.$refs['identifyprocessorledRef' + `${row.id}`].turnErrorColor();
+          this.errorToast(message);
+        });
     },
     // TO DO: remove hasIdentifyLed when the following is merged:
     // https://gerrit.openbmc-project.xyz/c/openbmc/bmcweb/+/37045
