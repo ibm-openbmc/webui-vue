@@ -1,5 +1,5 @@
 <template>
-  <div :key="[hmcMangedInfo, modelType].toString()">
+  <div v-if="modelType !== '--' && hmcMangedInfo !== null">
     <div class="nav-container" :class="{ open: isNavigationOpen }">
       <nav ref="nav" :aria-label="$t('appNavigation.primaryNavigation')">
         <b-nav vertical class="mb-4">

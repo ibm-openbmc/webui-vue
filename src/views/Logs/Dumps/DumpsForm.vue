@@ -253,21 +253,17 @@ export default {
       if (this.hmcInfo === 'Enabled') {
         return (this.dumpTypeOptions = minimumOptions);
       } else {
-        if (this.isIBMi) {
-          return (this.dumpTypeOptions = [
-            ...minimumOptions,
-            {
-              value: 'partition',
-              text: this.$t('pageDumps.form.partitionDump'),
-            },
-            {
-              value: 'retryPartition',
-              text: this.$t('pageDumps.form.retryPartitionDump'),
-            },
-          ]);
-        } else {
-          return (this.dumpTypeOptions = minimumOptions);
-        }
+        return (this.dumpTypeOptions = [
+          ...minimumOptions,
+          {
+            value: 'partition',
+            text: this.$t('pageDumps.form.partitionDump'),
+          },
+          {
+            value: 'retryPartition',
+            text: this.$t('pageDumps.form.retryPartitionDump'),
+          },
+        ]);
       }
     },
     exceuteFunction(value) {

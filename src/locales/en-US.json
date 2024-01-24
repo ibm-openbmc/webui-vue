@@ -801,12 +801,12 @@
     "iopControlStorageDump": "IOP Control Storage Dump",
     "iopControlStorageDumpDesc": "Use this function to initiate an I/O processor dump and reset/reload of the IOP that was designated to control the load source device when the logical partition was activated.",
     "toast": {
-      "successExecuteFunction": "Request successfully sent to server",
-      "errorExecuteFunction": "Error sending request to server"
+      "successExecuteFunction": "Request successfully sent to server.",
+      "errorExecuteFunction": "Error sending request to server."
     },
     "alert": {
       "notIBMi": "Default partition environment should be either IBM i or Default.",
-      "osRunning": "Functions available only when OS is Running."
+      "osRunning": "Functions available only when OS is Running. Try hitting the refresh button."
     }
   },
   "pageInventory": {
@@ -1490,6 +1490,8 @@
   },
   "pageServerPowerOperations": {
     "currentStatus": "Current status",
+    "discardOsRuntimeButton": "Discard and continue to OS running",
+    "discardOsRuntimeMessage": "Discard changes and continue to OS running state to continue to runtime.",
     "immediateReboot": "Immediate – Server reboots without operating system shutting down; may cause data corruption",
     "immediateShutdown": "Immediate - Server shuts down without operating system shutting down; may cause data corruption",
     "lastPowerOperation": "Last chassis power operation",
@@ -1504,6 +1506,8 @@
     "powerOn": "Power on",
     "reboot": "Reboot",
     "rebootServer": "Reboot server",
+    "saveOsRuntimeButton": "Save and continue to OS running",
+    "saveOsRuntimeMessage": "Save changes and continue to OS running state to continue to runtime.",
     "serverBootSettings": "Settings",
     "serverStatus": "Server status",
     "shutDown": "Shut down",
@@ -1520,7 +1524,7 @@
       "powerOff": "Power Off",
       "pvm_default_os_type": "Default partition environment",
       "pvm_ibmi_load_source": "IBM i load source",
-      "pvm_ibmi_alt_load_source": "IBM i alternate restart device",
+      "pvm_ibmi_alt_load_source": "IBM i alternate load source",
       "pvm_ibmi_console": "IBM i console",
       "pvm_linux_kvm_memory": "Linux KVM",
       "pvm_linux_kvm_percentage": "System Memory Reserved for KVM Guest Management (%)",
@@ -1592,6 +1596,15 @@
   "description": "Specifies the percentage of available system memory that will be reserved for the management of KVM guests. The percentage is specified to the 10th of a percent.",
   "errorMessage": "Value must be in range of 0-100 and include decimals with up to one decimal point."
 },
+  "ibmiLoadSource": {
+    "description": "Specifies the load source the system will use to start the logical partition."
+  },
+  "ibmiAltLoadSource": {
+    "description": "Specifies the device the system will use when a D-mode initial program load (IPL) is performed."
+  },
+  "ibmiConsole": {
+    "description": "Specifies the first workstation that the system will activate in the logical partition."
+  },
 "ibmiItems": { 
   "setting": {
    "a": "A",

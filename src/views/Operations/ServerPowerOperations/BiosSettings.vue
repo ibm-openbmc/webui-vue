@@ -10,15 +10,7 @@
           "
           :key="key"
           sm="8"
-          :xl="
-            attributeKeys.pvm_default_os_type === 'Linux KVM' &&
-            key === 'pvm_linux_kvm_memory'
-              ? 5
-              : attributeKeys.pvm_default_os_type === 'Default' &&
-                key === 'pvm_rpa_boot_mode'
-              ? 5
-              : 6
-          "
+          xl="6"
         >
           <b-form-group
             v-if="
@@ -254,51 +246,6 @@
             </b-form-group>
           </div>
         </b-col>
-        <b-col
-          v-if="
-            attributeKeys[key] === 'Linux KVM' ||
-            attributeKeys[key] === 'Default'
-          "
-          :key="key + 1"
-          sm="8"
-          xl="7"
-        >
-          <b-form-group
-            label-for="linux_kvm_percentage"
-            class="mb-4"
-            :label="
-              $t(
-                `${'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage'}`
-              )
-            "
-          >
-            <b-form-input
-              id="linux_kvm_percentage"
-              v-model="linuxKvmPercentageValue"
-              type="number"
-              :disabled="attributeKeys.pvm_linux_kvm_memory === 'Automatic'"
-              step="0.1"
-              min="0.0"
-              max="100.0"
-              @keypress="validateLinuxKvmPercentage"
-              @input="changeLinuxKvmPercentageValue"
-            />
-            <span
-              v-if="
-                linuxKvmPercentageValue < 0.0 ||
-                linuxKvmPercentageValue > 100.0 ||
-                !isLinuxKvmValid
-              "
-              class="error-text"
-            >
-              {{
-                $t(
-                  'pageServerPowerOperations.biosSettings.linuxKvmPercentage.errorMessage'
-                )
-              }}
-            </span>
-          </b-form-group>
-        </b-col>
       </template>
       <template v-for="(taggedSetting, index) in taggedSettingValues">
         <b-col
@@ -338,6 +285,62 @@
           </b-form-group>
         </b-col>
       </template>
+    </b-row>
+    <b-row>
+      <b-col
+        v-if="
+          !isHmcManaged() &&
+          attributeKeys['pvm_default_os_type'] === 'Linux KVM'
+        "
+        key="percentage"
+        sm="8"
+        xl="6"
+      >
+        <b-form-group
+          label-for="linux_kvm_percentage"
+          class="mb-4"
+          :label="
+            $t(
+              `${'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage'}`
+            )
+          "
+        >
+          <b-form-input
+            v-if="
+              attributeKeys.pvm_linux_kvm_memory === 'Automatic' &&
+              linuxKvmPercentageValue === 0
+            "
+            value="--"
+            disabled
+          ></b-form-input>
+          <b-form-input
+            v-else
+            id="linux_kvm_percentage"
+            v-model="linuxKvmPercentageValue"
+            type="number"
+            :disabled="attributeKeys.pvm_linux_kvm_memory === 'Automatic'"
+            step="0.1"
+            min="0.0"
+            max="100.0"
+            @keypress="validateLinuxKvmPercentage"
+            @input="changeLinuxKvmPercentageValue"
+          />
+          <span
+            v-if="
+              linuxKvmPercentageValue < 0.0 ||
+              linuxKvmPercentageValue > 100.0 ||
+              !isLinuxKvmValid
+            "
+            class="error-text"
+          >
+            {{
+              $t(
+                'pageServerPowerOperations.biosSettings.linuxKvmPercentage.errorMessage'
+              )
+            }}
+          </span>
+        </b-form-group>
+      </b-col>
     </b-row>
     <b-row class="mb-3">
       <b-col xl="10">
@@ -394,6 +397,52 @@
           >
             <template #table-caption>
               {{ $t('pageServerPowerOperations.biosSettings.ibmIPartition') }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
+          <b-table
+            stacked="sm"
+            hover
+            :items="ibmiLoadSourceItems"
+            :fields="taggedSettingsFields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t(
+                  'pageServerPowerOperations.biosSettings.pvm_ibmi_load_source'
+                )
+              }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
+          <b-table
+            stacked="sm"
+            hover
+            :items="ibmiAltLoadSourceItems"
+            :fields="taggedSettingsFields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t(
+                  'pageServerPowerOperations.biosSettings.pvm_ibmi_alt_load_source'
+                )
+              }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
+          <b-table
+            stacked="sm"
+            hover
+            :items="ibmiConsoleItems"
+            :fields="taggedSettingsFields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t('pageServerPowerOperations.biosSettings.pvm_ibmi_console')
+              }}
               ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
             </template>
           </b-table>
@@ -493,6 +542,13 @@ export default {
         },
       ],
       linuxKvmPercentageFields: [
+        {
+          key: 'description',
+          label: this.$t('pagePower.tableRoles.description'),
+          sortable: false,
+        },
+      ],
+      taggedSettingsFields: [
         {
           key: 'description',
           label: this.$t('pagePower.tableRoles.description'),
@@ -665,6 +721,27 @@ export default {
         {
           description: this.$t(
             'pageServerPowerOperations.biosSettings.linuxKvmPercentage.description'
+          ),
+        },
+      ],
+      ibmiLoadSourceItems: [
+        {
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.ibmiLoadSource.description'
+          ),
+        },
+      ],
+      ibmiAltLoadSourceItems: [
+        {
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.ibmiAltLoadSource.description'
+          ),
+        },
+      ],
+      ibmiConsoleItems: [
+        {
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.ibmiConsole.description'
           ),
         },
       ],
@@ -848,10 +925,7 @@ export default {
           defaultPartitionEnvironment === 'Linux KVM'
         );
       } else if (key === 'pvm_linux_kvm_memory') {
-        return (
-          defaultPartitionEnvironment === 'Default' ||
-          defaultPartitionEnvironment === 'Linux KVM'
-        );
+        return defaultPartitionEnvironment === 'Linux KVM';
       } else {
         return true;
       }

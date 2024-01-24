@@ -28,7 +28,9 @@ const IBMiServiceFunctionsStore = {
         )
         .then(() => {
           dispatch('getAvailableServiceFunctions');
-          i18n.tc('pageIbmiServiceFunctions.toast.successExecuteFunction');
+          return i18n.tc(
+            'pageIbmiServiceFunctions.toast.successExecuteFunction'
+          );
         })
         .catch((error) => {
           console.log(error);
