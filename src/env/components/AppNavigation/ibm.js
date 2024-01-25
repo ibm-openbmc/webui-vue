@@ -158,6 +158,12 @@ const AppNavigationMixin = {
               restrictTo: [],
             },
             {
+              id: 'audit-logs',
+              label: this.$t('appNavigation.auditLogs'),
+              route: '/logs/audit-logs',
+              restrictTo: [],
+            },
+            {
               id: 'dumps',
               label: this.$t('appNavigation.dumps'),
               route: '/logs/dumps',
