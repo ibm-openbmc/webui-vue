@@ -1,7 +1,9 @@
 import api from '@/store/api';
+import i18n from '@/i18n';
+
 const formatedData = (MessageId, Message, MessageArgs) => {
   if (MessageId === 'OpenBMC.0.5.AuditLogUsysConfig') {
-    const [, operation, account, , , address, , , result] = MessageArgs;
+    const [, operation, account, , , address, , result] = MessageArgs;
 
     return {
       operation: operation ? operation.split(':')[0] : '--',
@@ -69,10 +71,25 @@ const AuditLogsStore = {
         });
     },
     async downloadLogData(_, uri) {
-      return await api.get(uri).then((response) => {
-        console.log(response);
-        return response;
-      });
+      return await api
+        .get(uri)
+        .then((response) => {
+          return response;
+        })
+        .then(() => {
+          const message = [
+            i18n.t('pageAuditLogs.toast.successStartDownload'),
+            {
+              title: i18n.t('pageAuditLogs.toast.successStartDownloadTitle'),
+            },
+          ];
+
+          return message;
+        })
+        .catch((error) => {
+          console.log(error);
+          throw new Error(i18n.t('pageAuditLogs.toast.errorStartDownload'));
+        });
     },
   },
 };
