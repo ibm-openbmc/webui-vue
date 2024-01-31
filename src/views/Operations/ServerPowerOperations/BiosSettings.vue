@@ -6,6 +6,7 @@
           v-if="
             attriValuesArr.length >= 2 &&
             key !== 'pvm_system_power_off_policy' &&
+            key !== 'pvm_system_operating_mode' &&
             validateAttributeKeys(attributeKeys.pvm_default_os_type, key)
           "
           :key="key"
