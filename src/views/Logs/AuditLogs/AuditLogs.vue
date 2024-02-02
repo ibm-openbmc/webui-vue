@@ -256,6 +256,7 @@ export default {
       document.body.removeChild(element);
     },
     async downloadEventLogs(value) {
+      const auditLogsData = [];
       this.infoToast(this.$t('pageAuditLogs.toast.infoStartDownload'));
       if (value === 'all') {
         this.startLoader();
@@ -265,7 +266,13 @@ export default {
             this.allLogs[0].additionalDataUri
           )
           .then((response) => {
-            this.downloadFile(response.data);
+            auditLogsData.push(response.data);
+          })
+          .catch((message) => {
+            this.errorToast(message);
+          })
+          .finally(() => {
+            this.downloadFile(auditLogsData);
             this.endLoader();
           });
       }
