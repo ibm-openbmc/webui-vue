@@ -26,7 +26,6 @@
               id="bios-option-sysOp-mode"
               v-model="attributeKeys[key]"
               :options="attriValuesArr"
-              :disabled="disabled"
             >
             </b-form-select>
           </b-form-group>
@@ -59,7 +58,6 @@
                     v-model="attributeKeys[key]"
                     :value="values.value"
                     :aria-describedby="values.value"
-                    :disabled="disabled"
                     @change="onChangeSystemOpsMode"
                   >
                     {{ values.text }}
@@ -195,7 +193,6 @@
                     v-model="attributeKeys[key]"
                     :value="values.value"
                     :aria-describedby="values.value"
-                    :disabled="disabled"
                   >
                     <template v-if="values.value === 'Power Off'">{{
                       $t('pageServerPowerOperations.biosSettings.powerOff')
