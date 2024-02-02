@@ -98,6 +98,7 @@
 import IconDownload from '@carbon/icons-vue/es/download/20';
 import PageTitle from '@/components/Global/PageTitle';
 import Search from '@/components/Global/Search';
+import i18n from '@/i18n';
 import TableCellCount from '@/components/Global/TableCellCount';
 import TableDateFilter from '@/components/Global/TableDateFilter';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
@@ -268,11 +269,15 @@ export default {
           .then((response) => {
             auditLogsData.push(response.data);
           })
-          .catch((message) => {
-            this.errorToast(message);
+          .catch((error) => {
+            console.log(error);
+            this.errorToast(i18n.t('pageAuditLogs.toast.errorStartDownload'));
           })
           .finally(() => {
             this.downloadFile(auditLogsData);
+            this.successToast(
+              i18n.t('pageAuditLogs.toast.successStartDownload')
+            );
             this.endLoader();
           });
       }

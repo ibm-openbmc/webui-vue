@@ -223,12 +223,10 @@
       "errorResolveLogs": "Error resolving %{count} log. | Error resolving %{count} logs.",
       "errorUnresolveLogs": "Error unresolving %{count} log. | Error unresolving %{count} logs.",
       "infoStartDownload": "Download might take several minutes to complete.",
-      "successDelete": "Successfully deleted %{count} log. | Successfully deleted %{count} logs.",
       "successResolveLogs": "Successfully resolved %{count} log. | Successfully resolved %{count} logs.",
       "successUnresolveLogs": "Successfully unresolved %{count} log. | Successfully unresolved %{count} logs.",
-      "errorStartDownload": "Error starting download.",
-      "successStartDownload":  "Additional data downloaded successfully.",
-      "successStartDownloadTitle": "Download success"
+      "errorStartDownload": "Error downloading the Additional data.",
+      "successStartDownload":  "Additional data downloaded successfully."
     }
 },
   "pageCapacityOnDemand": {
