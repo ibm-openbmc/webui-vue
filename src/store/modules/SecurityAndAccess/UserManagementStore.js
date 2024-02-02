@@ -1,5 +1,6 @@
 import api, { getResponseCount } from '@/store/api';
 import i18n from '@/i18n';
+import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
 
 const UserManagementStore = {
   namespaced: true,
@@ -128,8 +129,8 @@ const UserManagementStore = {
 
           const errorMsg = error.response?.data?.error?.code;
 
-          switch (errorMsg) {
-            case 'Base.1.8.1.PropertyValueFormatError':
+          switch (true) {
+            case REGEX_MAPPINGS.propertyValueFormatError.test(errorMsg):
               throw new Error(
                 i18n.t(
                   'pageUserManagement.toast.errorCreateUserPasswordNotAccepted',
@@ -138,7 +139,7 @@ const UserManagementStore = {
                   }
                 )
               );
-            case 'Base.1.8.1.CreateLimitReachedForResource':
+            case REGEX_MAPPINGS.createLimitReachedForResource.test(errorMsg):
               throw new Error(
                 i18n.t('pageUserManagement.toast.errorCreateUserMaxUsers', {
                   username,
@@ -191,17 +192,18 @@ const UserManagementStore = {
         )
         .catch((error) => {
           const messageId = error?.response?.data?.error?.code;
-          const message =
-            messageId === 'Base.1.8.1.PropertyValueFormatError'
-              ? i18n.t(
-                  'pageUserManagement.toast.errorUpdateUserPasswordNotAccepted',
-                  {
-                    username: originalUsername,
-                  }
-                )
-              : i18n.t('pageUserManagement.toast.errorUpdateUser', {
+          const message = REGEX_MAPPINGS.propertyValueFormatError.test(
+            messageId
+          )
+            ? i18n.t(
+                'pageUserManagement.toast.errorUpdateUserPasswordNotAccepted',
+                {
                   username: originalUsername,
-                });
+                }
+              )
+            : i18n.t('pageUserManagement.toast.errorUpdateUser', {
+                username: originalUsername,
+              });
           throw new Error(message);
         });
     },
@@ -229,17 +231,18 @@ const UserManagementStore = {
           const messageId =
             error.response.data['Password@Message.ExtendedInfo'][0].MessageId;
 
-          const message =
-            messageId === 'Base.1.8.1.PropertyValueFormatError'
-              ? i18n.t(
-                  'pageUserManagement.toast.errorUpdateUserPasswordNotAccepted',
-                  {
-                    username: originalUsername,
-                  }
-                )
-              : i18n.t('pageUserManagement.toast.errorUpdateUser', {
+          const message = REGEX_MAPPINGS.propertyValueFormatError.test(
+            messageId
+          )
+            ? i18n.t(
+                'pageUserManagement.toast.errorUpdateUserPasswordNotAccepted',
+                {
                   username: originalUsername,
-                });
+                }
+              )
+            : i18n.t('pageUserManagement.toast.errorUpdateUser', {
+                username: originalUsername,
+              });
           throw new Error(message);
         });
     },

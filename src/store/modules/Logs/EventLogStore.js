@@ -47,14 +47,16 @@ const EventLogStore = {
     ),
   },
   actions: {
-    async getEventLogData({ commit }) {
+    async initializeLogs({ commit }) {
       let eventLogs = [];
       commit('eventlogs', eventLogs);
       commit('setCeLogs', eventLogs);
+    },
+    async getEventLogData({ commit }) {
       return await api
         .get('/redfish/v1/Systems/system/LogServices/EventLog/Entries')
         .then(({ data: { Members = [] } = {} }) => {
-          eventLogs = Members.map((log) => {
+          let eventLogs = Members.map((log) => {
             const {
               Id,
               EventId,

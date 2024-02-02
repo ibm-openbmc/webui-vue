@@ -212,13 +212,20 @@
               {{ $t('pageMemory.activeMemoryMirroring') }}
             </dt>
             <dd v-if="!isSectionEditable()">
-              <span v-if="activeMemoryMirroringState">
+              <span v-if="activeMemoryMirroringState === null">
+                {{ '--' }}
+              </span>
+              <span v-else-if="activeMemoryMirroringState">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
             </dd>
             <dd v-else>
+              <span v-if="activeMemoryMirroringState === null">
+                {{ '--' }}
+              </span>
               <b-form-checkbox
+                v-else
                 id="activeMemoryMirroringSwitch"
                 v-model="activeMemoryMirroringState"
                 switch

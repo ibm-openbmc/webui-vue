@@ -92,6 +92,9 @@ export default {
           } else {
             this.successToast(message);
           }
+          this.$store
+            .dispatch('serverBootSettings/getAttributeValues')
+            .catch((error) => console.log(error));
         })
         .catch(({ message }) => {
           this.errorToast(message);

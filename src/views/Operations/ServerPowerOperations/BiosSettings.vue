@@ -270,11 +270,21 @@
           <b-form-input
             v-if="
               attributeKeys.pvm_linux_kvm_memory === 'Automatic' &&
-              linuxKvmPercentageValue === 0
+              linuxKvmPercentageCurrentValue === 0
             "
             value="--"
             disabled
           ></b-form-input>
+          <b-form-input
+            v-else-if="attributeKeys.pvm_linux_kvm_memory === 'Automatic'"
+            id="linux_kvm_percentage_current"
+            v-model="linuxKvmPercentageCurrentValue"
+            type="number"
+            disabled
+            step="0.1"
+            min="0.0"
+            max="100.0"
+          />
           <b-form-input
             v-else
             id="linux_kvm_percentage"
@@ -634,6 +644,11 @@ export default {
         'serverBootSettings/linuxKvmPercentageCurrentValue'
       ];
     },
+    linuxKvmPercentageInitialValue() {
+      return this.$store.getters[
+        'serverBootSettings/linuxKvmPercentageInitialValue'
+      ];
+    },
     linuxKvmPercentageValue: {
       get() {
         return this.$store.getters[
@@ -658,7 +673,7 @@ export default {
         this.linuxKvmPercentageValue * 10;
     } else {
       this.attributeKeys['pvm_linux_kvm_percentage'] =
-        this.linuxKvmPercentageCurrentValue * 10;
+        this.linuxKvmPercentageInitialValue * 10;
     }
     this.$emit('updated-attributes', this.attributeKeys);
     this.$emit('is-linux-kvm-valid', this.isLinuxKvmValid);

@@ -35,7 +35,9 @@ const AuthenticationStore = {
       Cookies.remove('IsAuthenticated');
       localStorage.removeItem('storedModelType');
       localStorage.removeItem('storedUsername');
-      sessionStorage.removeItem('storedCurrentUser');
+      localStorage.removeItem('storedCurrentUser');
+      localStorage.removeItem('storedHmcManagedValue');
+      localStorage.removeItem('storedLanguage');
       state.xsrfCookie = undefined;
       state.isAuthenticatedCookie = undefined;
     },
