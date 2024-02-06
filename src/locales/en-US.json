@@ -1047,7 +1047,7 @@
     "activeMemoryMirroringDescription": "Active Memory Mirroring for hypervisor is designed to ensure that system operation continues even in the unlikely event of an uncorrectable error occurring in main memory used by the system hypervisor.",
     "activeMemoryMirroringHelpText": "Specifies if memory mirroring is enabled, requires a reboot for the change to be applied.",
     "activeMemoryMirroringTitle": "Active memory mirroring",
-    "ioAdapterEnlargedCapacity": "This option controls the size of PCI memory space allocated to each PCI slot.",
+    "ioAdapterEnlargedCapacity": "This option controls the size of PCIe memory space allocated to each PCIe slot.",
     "ioAdapterEnlargedCapacityTitle": "I/O Adapter enlarged capacity",
     "logicalMemorySize": "Logical memory block size",
     "logicalMemorySizeHeading": "Logical memory block size is used for partitioning. Changing the logical memory block size impacts system resource management.",
@@ -1061,6 +1061,9 @@
     "updateLogicalMemoryPageSetup": "Update system memory page setup",
     "updateLogicalMemorySize": "Update logical memory block size",
     "updatePageSetup": "Update system memory page setup",
+    "dynamicIoDrawerAttachmentTitle":"Dynamic I/O drawer attachment",
+    "dynamicIoDrawerAttachment": "This option allocates platform memory during IPL for PCIe slots to enable dynamic I/O drawer attachment.",
+    "updateDynamicIoDrawerAttachment": "Update dynamic I/O drawer attachment",
     "alert": {
       "heading": "Applying changes",
       "message": "System has to be powered off and not managed by HMC. Changes made will take effect on next reboot.",
@@ -1079,7 +1082,9 @@
       "successSavingAdapterEnlargedCapacity": "Successfully updated I/O adapter enlarged capacity",
       "successSavingLogicalMemory": "Successfully updated logical memory block size",
       "successSavingActiveMemoryMirroringMode": "Successfully updated active memory mirroring mode",
-      "successSavingPageSetup": "Successfully updated system memory page setup"
+      "successSavingPageSetup": "Successfully updated system memory page setup",
+      "successSavingAdapterDynamicCapacity": "Successfully updated I/O adapter drawer attachment",
+      "errorSavingAdapterDynamicCapacity": "Error updating I/O adapter drawer attachment"
     }
   },
   "pageNetwork": {
