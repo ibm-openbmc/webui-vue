@@ -1,7 +1,7 @@
 <template>
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.notices')" />
-    <notices-text></notices-text>
+    <notices-text class="notice"></notices-text>
   </b-container>
 </template>
 
@@ -13,3 +13,10 @@ export default {
   components: { NoticesText, PageTitle },
 };
 </script>
+
+<style scoped>
+.notice {
+  overflow-x: hidden;
+  white-space: break-spaces;
+}
+</style>

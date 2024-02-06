@@ -938,38 +938,43 @@ const PcieTopologyStore = {
                           (dsSlot) => {
                             if (
                               dsSlot?.data?.Links?.Oem?.IBM
-                                ?.UpstreamFabricAdapter
+                                ?.UpstreamFabricAdapters &&
+                              dsSlot?.data?.Links?.Oem?.IBM
+                                ?.UpstreamFabricAdapters.length > 0
                             ) {
-                              if (
-                                dsSlot?.data?.Links?.Oem?.IBM
-                                  ?.UpstreamFabricAdapter['@odata.id'] ===
-                                cable.detailedInfo?.downstreamPorts[0]
-                                  ?.grandParent['@odata.id']
-                              ) {
-                                const duplicate = row.ioSlotLocation.find(
-                                  (obj) => {
-                                    if (
-                                      obj.locationNumber ===
-                                      dsSlot?.data?.Location?.PartLocation
-                                        ?.ServiceLabel
-                                    ) {
-                                      return true;
+                              dsSlot?.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.map(
+                                (singleUpstreamFabricAdapter) => {
+                                  if (
+                                    singleUpstreamFabricAdapter['@odata.id'] ===
+                                    cable.detailedInfo?.downstreamPorts[0]
+                                      ?.grandParent['@odata.id']
+                                  ) {
+                                    const duplicate = row.ioSlotLocation.find(
+                                      (obj) => {
+                                        if (
+                                          obj.locationNumber ===
+                                          dsSlot?.data?.Location?.PartLocation
+                                            ?.ServiceLabel
+                                        ) {
+                                          return true;
+                                        }
+                                      }
+                                    );
+                                    if (duplicate === undefined) {
+                                      row.ioSlotLocation.push({
+                                        locationIndicatorActive:
+                                          dsSlot?.data?.LocationIndicatorActive,
+                                        locationNumber:
+                                          dsSlot?.data?.Location?.PartLocation
+                                            ?.ServiceLabel,
+                                        uri:
+                                          cable.detailedInfo
+                                            .downstreamChassis[0].pcieSlotsUri,
+                                      });
                                     }
                                   }
-                                );
-                                if (duplicate === undefined) {
-                                  row.ioSlotLocation.push({
-                                    locationIndicatorActive:
-                                      dsSlot?.data?.LocationIndicatorActive,
-                                    locationNumber:
-                                      dsSlot?.data?.Location?.PartLocation
-                                        ?.ServiceLabel,
-                                    uri:
-                                      cable.detailedInfo.downstreamChassis[0]
-                                        .pcieSlotsUri,
-                                  });
                                 }
-                              }
+                              );
                             }
                           }
                         );
@@ -1054,20 +1059,31 @@ const PcieTopologyStore = {
                           ) {
                             if (
                               slot.data?.Links?.Oem?.IBM
-                                ?.UpstreamFabricAdapter &&
-                              slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapter[
-                                '@odata.id'
-                              ] === adapter.data['@odata.id']
+                                ?.UpstreamFabricAdapters &&
+                              slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters
+                                .length > 0
                             ) {
-                              row['linkType'] = 'Secondary';
-                              row['parentLinkId'] = slot2.Oem?.IBM?.LinkId;
-                              rows.map((singleRow) => {
-                                if (
-                                  singleRow.linkId === slot2.Oem?.IBM?.LinkId
-                                ) {
-                                  row.pcieHBLocation = singleRow.pcieHBLocation;
+                              slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.map(
+                                (upstreamFabAdapter) => {
+                                  if (
+                                    upstreamFabAdapter['@odata.id'] ===
+                                    adapter.data['@odata.id']
+                                  ) {
+                                    row['linkType'] = 'Secondary';
+                                    row['parentLinkId'] =
+                                      slot2.Oem?.IBM?.LinkId;
+                                    rows.map((singleRow) => {
+                                      if (
+                                        singleRow.linkId ===
+                                        slot2.Oem?.IBM?.LinkId
+                                      ) {
+                                        row.pcieHBLocation =
+                                          singleRow.pcieHBLocation;
+                                      }
+                                    });
+                                  }
                                 }
-                              });
+                              );
                             }
                           }
                         }

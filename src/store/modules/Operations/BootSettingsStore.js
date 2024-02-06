@@ -20,6 +20,7 @@ const BootSettingsStore = {
     bootFault: '',
     powerRestorePolicyValue: '',
     linuxKvmPercentageValue: null,
+    linuxKvmPercentageInitialValue: null,
     ibmiLoadSourceValue: 'Current configuration',
     ibmiAltLoadSourceValue: 'Current configuration',
     ibmiConsoleValue: 'Current configuration',
@@ -36,6 +37,8 @@ const BootSettingsStore = {
       state.biosAttributes?.pvm_sys_dump_active === 'Enabled',
     disabled: (state) => state.disabled,
     linuxKvmPercentageValue: (state) => state.linuxKvmPercentageValue,
+    linuxKvmPercentageInitialValue: (state) =>
+      state.linuxKvmPercentageInitialValue,
     linuxKvmPercentageCurrentValue: (state) =>
       state.linuxKvmPercentageCurrentValue,
     locationCodes: (state) => state.locationCodes,
@@ -57,6 +60,11 @@ const BootSettingsStore = {
       (state.automaticRetryConfigValue = automaticRetryConfigValue),
     setLinuxKvmPercentageValue: (state, linuxKvmPercentageValue) =>
       (state.linuxKvmPercentageValue = linuxKvmPercentageValue),
+    setLinuxKvmPercentageInitialValue: (
+      state,
+      linuxKvmPercentageInitialValue
+    ) =>
+      (state.linuxKvmPercentageInitialValue = linuxKvmPercentageInitialValue),
     setLinuxKvmPercentageCurrentValue: (
       state,
       linuxKvmPercentageCurrentValue
@@ -138,6 +146,9 @@ const BootSettingsStore = {
             let linuxPercentObj = Attributes.find(
               (itm) => itm.AttributeName === 'pvm_linux_kvm_percentage'
             );
+            let linuxPercentCurrentObj = Attributes.find(
+              (itm) => itm.AttributeName === 'pvm_linux_kvm_percentage_current'
+            );
             let linuxValue = linuxPercentObj?.CurrentValue / 10;
             let ibmi_load_source = Attributes.find(
               (itm) => itm.AttributeName === 'pvm_ibmi_load_source'
@@ -151,8 +162,14 @@ const BootSettingsStore = {
               (itm) => itm.AttributeName === 'pvm_ibmi_console'
             );
             let ibmi_console_value = ibmi_console?.CurrentValue;
+            let linuxPercentCurrentValue =
+              linuxPercentCurrentObj?.CurrentValue / 10;
             commit('setLinuxKvmPercentageValue', linuxValue);
-            commit('setLinuxKvmPercentageCurrentValue', linuxValue);
+            commit('setLinuxKvmPercentageInitialValue', linuxValue);
+            commit(
+              'setLinuxKvmPercentageCurrentValue',
+              linuxPercentCurrentValue
+            );
             if (ibmi_load_source_value !== undefined) {
               commit('set_pvm_ibmi_load_source', ibmi_load_source_value);
             }

@@ -1674,7 +1674,7 @@
       "errorSaveSettings": "Error saving settings.",
       "successSaveSettings": "Successfully saved settings.",
       "successSaveLinuxKvmSettings": "Successfully saved settings. Changes made will take effect on next reboot.",
-      "successSaveIBMiStandby": "Success. Please press the `Continue to OS running` link to proceed."
+      "successSaveIBMiStandby": "Please press the `Continue to OS running` link to proceed."
     }
   },
   "pageServiceLoginConsoles": {

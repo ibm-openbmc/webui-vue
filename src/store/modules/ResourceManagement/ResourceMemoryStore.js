@@ -127,11 +127,13 @@ const ResourceMemoryStore = {
           const activeMemoryMirroringMode = RegistryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'hb_memory_mirror_mode'
           );
-          let activeMemoryMirroringModeValue =
-            activeMemoryMirroringMode[0].CurrentValue;
-          let mirroringModeValue =
-            activeMemoryMirroringModeValue == 'Enabled' ? true : false;
-          commit('setMemoryMirroringMode', mirroringModeValue);
+          if (activeMemoryMirroringMode.length > 0) {
+            let activeMemoryMirroringModeValue =
+              activeMemoryMirroringMode[0].CurrentValue;
+            let mirroringModeValue =
+              activeMemoryMirroringModeValue == 'Enabled' ? true : false;
+            commit('setMemoryMirroringMode', mirroringModeValue);
+          }
         })
         .catch((error) => console.log(error));
     },
