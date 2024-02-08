@@ -54,8 +54,40 @@
           :filter="searchFilter"
           :busy="isBusy"
           @filtered="onFiltered"
-          @row-selected="onRowSelected($event, filteredLogs.length)"
         >
+          <!-- Expand chevron icon -->
+          <template #cell(expandRow)="row">
+            <b-button
+              variant="link"
+              :aria-label="expandRowLabel"
+              :title="expandRowLabel"
+              class="btn-icon-only"
+              @click="toggleRowDetails(row)"
+            >
+              <icon-chevron />
+            </b-button>
+          </template>
+
+          <template #row-details="{ item }">
+            <b-container fluid>
+              <b-row>
+                <b-col>
+                  <dl>
+                    <!-- Id -->
+                    <dt>{{ $t('pageAuditLogs.table.id') }}:</dt>
+                    <dd>{{ dataFormatter(item.auditId) }}</dd>
+                  </dl>
+                  <dl>
+                    <!-- Message -->
+                    <dt>{{ $t('pageAuditLogs.table.message') }}:</dt>
+                    <dd>
+                      {{ dataFormatter(item.message) }}
+                    </dd>
+                  </dl>
+                </b-col>
+              </b-row>
+            </b-container>
+          </template>
           <!-- Date column -->
           <template #cell(date)="{ value }">
             <p class="mb-0">{{ value | formatDate }}</p>
@@ -96,6 +128,7 @@
 
 <script>
 import IconDownload from '@carbon/icons-vue/es/download/20';
+import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import PageTitle from '@/components/Global/PageTitle';
 import Search from '@/components/Global/Search';
 import i18n from '@/i18n';
@@ -114,6 +147,8 @@ import BVTableSelectableMixin, {
   tableHeaderCheckboxIndeterminate,
 } from '@/components/Mixins/BVTableSelectableMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import TableRowExpandMixin, {
   expandRowLabel,
@@ -125,6 +160,7 @@ import SearchFilterMixin, {
 export default {
   components: {
     IconDownload,
+    IconChevron,
     PageTitle,
     Search,
     TableCellCount,
@@ -134,6 +170,7 @@ export default {
     BVPaginationMixin,
     BVTableSelectableMixin,
     BVToastMixin,
+    DataFormatterMixin,
     LoadingBarMixin,
     TableFilterMixin,
     TableSortMixin,
@@ -151,9 +188,9 @@ export default {
       isBusy: true,
       fields: [
         {
-          key: 'id',
-          label: this.$t('pageAuditLogs.table.id'),
-          sortable: true,
+          key: 'expandRow',
+          label: '',
+          tdClass: 'table-row-expand',
         },
         {
           key: 'date',
@@ -174,10 +211,6 @@ export default {
         {
           key: 'res',
           label: this.$t('pageAuditLogs.table.res'),
-        },
-        {
-          key: 'messageId',
-          label: this.$t('pageAuditLogs.table.messageId'),
         },
       ],
       expandRowLabel,

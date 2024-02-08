@@ -214,17 +214,12 @@
       "addr": "Address",
       "res": "Response",
       "messageArgs": "MessageArgs",
-      "messageId": "MessageId",
+      "message": "Message",
       "searchLogs": "Search logs",
       "eventTimeStamp": "Date"
     },
     "toast": {
-      "errorLogStatusUpdate": "Error updating log status.",
-      "errorResolveLogs": "Error resolving %{count} log. | Error resolving %{count} logs.",
-      "errorUnresolveLogs": "Error unresolving %{count} log. | Error unresolving %{count} logs.",
       "infoStartDownload": "Download might take several minutes to complete.",
-      "successResolveLogs": "Successfully resolved %{count} log. | Successfully resolved %{count} logs.",
-      "successUnresolveLogs": "Successfully unresolved %{count} log. | Successfully unresolved %{count} logs.",
       "errorStartDownload": "Error downloading the Additional data.",
       "successStartDownload":  "Additional data downloaded successfully."
     }
