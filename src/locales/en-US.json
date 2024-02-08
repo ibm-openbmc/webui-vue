@@ -168,7 +168,7 @@
     "capacityOnDemand": "Capacity on demand",
     "certificates": "Certificates",
     "changePassword": "Change password",
-    "concurrentMaintenance":"Concurrent maintenance",
+    "concurrentMaintenance": "Concurrent maintenance",
     "dateTime": "Date and time",
     "deconfigurationHardware": "Hardware deconfiguration",
     "deconfigurationRecords": "Deconfiguration records",
@@ -266,7 +266,7 @@
         "link": "Dumps page."
       }
     },
-    "setting":{
+    "setting": {
       "aixAllowed": "AIX allowed",
       "aixDiagnostics": "AIX Diagnostics",
       "aixUpdateAccessKey": "AIX Update Access Key",
@@ -433,7 +433,7 @@
     "processorChips": "Processor chips",
     "processorCores": "Processor cores",
     "totalCores": "Total cores",
-    "alert":{
+    "alert": {
       "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off."
     },
     "toast": {
@@ -1231,11 +1231,11 @@
       "powerSaving": "Power saving",
       "static": "Static"
     },
-    "modal" : {
+    "modal": {
       "editAssetTag": "Edit asset tag"
     },
     "toast": {
-      "successSaveAssetTag" : "Successfully updated asset tag.",
+      "successSaveAssetTag": "Successfully updated asset tag.",
       "errorSaveAssetTag": "Error updating asset tag."
     }
   },
@@ -1243,58 +1243,58 @@
     "description": "The requested resource could not be found."
   },
   "pagePcieTopology": {
-      "alert": "This page might take a few minutes to load.",
-      "bridgeOrHost": "PCIe bridge or CAPI host",
-      "cableLength": "Cable length",
-      "cableStatus": "Cable status",
-      "cableType": "Cable type",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "Identify LEDs",
-      "ioSlots": "I/O slots",
-      "linkProperties": "Link properties",
-      "linkStatus": "Link status",
-      "localPort": "Local port",
-      "localPortLocation": "Local port location",
-      "parentId": "Parent ID",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "Remote port",
-      "remotePortLocation": "Remote port location",
-      "resetLink": "Reset link",
-      "savePcieTopology": "Save PCIe topology",
-      "speed": "Speed",
-      "type": "Type",
-      "warning": "System must at least be in PHYP standby. To power on, visit ",
-      "width": "Width",
-      "modal": {
-        "resetConfirm": "Are you sure?",
-        "resetLinkDescription": "Resetting a link while system partitions are running can cause errors. This operation must be performed with guidance from a support team member.",
-        "resetLinkHeader": "Reset link %{id}"
-      },
-      "table": {
-        "search": "Search",
-        "linkStatusType": "Link status type",
-        "filter": {
-          "degraded": "Degraded",
-          "failed": "Failed",
-          "inactive": "Inactive",
-          "open": "Open",
-          "operational": "Operational",
-          "unknown": "Unknown"
-        }
-      },
-      "toast": {
-        "errorDisableIdentifyLed": "Error disabling Identify LED.",
-        "errorEnableIdentifyLed": "Error enabling Identify LED.",
-        "errorReset": "Error resetting link %{id}",
-        "errorSavePcieTopology": "Error saving PCIe topology Info.",
-        "errorSwitchingLed": "Error turning %{operation} LED for %{value}",
-        "resetInfoTitle": "Link ID %{id} being reset.",
-        "resetInfoDescription": "this operation may take a few seconds to complete.",
-        "successDisableIdentifyLed": "Successfully disabled Identify LED.",
-        "successEnableIdentifyLed": "Successfully enabled Identify LED.",
-        "successReset": "Reset link %{id} successfully initiated. Check event logs for any issues.",
-        "successSavePcieTopology": "Successfully saved PCIe topology Info."
+    "alert": "This page might take a few minutes to load.",
+    "bridgeOrHost": "PCIe bridge or CAPI host",
+    "cableLength": "Cable length",
+    "cableStatus": "Cable status",
+    "cableType": "Cable type",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "Identify LEDs",
+    "ioSlots": "I/O slots",
+    "linkProperties": "Link properties",
+    "linkStatus": "Link status",
+    "localPort": "Local port",
+    "localPortLocation": "Local port location",
+    "parentId": "Parent ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "Remote port",
+    "remotePortLocation": "Remote port location",
+    "resetLink": "Reset link",
+    "savePcieTopology": "Save PCIe topology",
+    "speed": "Speed",
+    "type": "Type",
+    "warning": "System must at least be in PHYP standby. To power on, visit ",
+    "width": "Width",
+    "modal": {
+      "resetConfirm": "Are you sure?",
+      "resetLinkDescription": "Resetting a link while system partitions are running can cause errors. This operation must be performed with guidance from a support team member.",
+      "resetLinkHeader": "Reset link %{id}"
+    },
+    "table": {
+      "search": "Search",
+      "linkStatusType": "Link status type",
+      "filter": {
+        "degraded": "Degraded",
+        "failed": "Failed",
+        "inactive": "Inactive",
+        "open": "Open",
+        "operational": "Operational",
+        "unknown": "Unknown"
       }
+    },
+    "toast": {
+      "errorDisableIdentifyLed": "Error disabling Identify LED.",
+      "errorEnableIdentifyLed": "Error enabling Identify LED.",
+      "errorReset": "Error resetting link %{id}",
+      "errorSavePcieTopology": "Error saving PCIe topology Info.",
+      "errorSwitchingLed": "Error turning %{operation} LED for %{value}",
+      "resetInfoTitle": "Link ID %{id} being reset.",
+      "resetInfoDescription": "this operation may take a few seconds to complete.",
+      "successDisableIdentifyLed": "Successfully disabled Identify LED.",
+      "successEnableIdentifyLed": "Successfully enabled Identify LED.",
+      "successReset": "Reset link %{id} successfully initiated. Check event logs for any issues.",
+      "successSavePcieTopology": "Successfully saved PCIe topology Info."
+    }
   },
   "pagePolicies": {
     "acfUploadEnablement": "Unauthenticated ACF upload enablement",
@@ -1343,7 +1343,12 @@
       "created": "Created",
       "postCode": "Code",
       "searchLogs": "Search logs",
-      "timeStampOffset": "Time stamp offset"
+      "timeStampOffset": "Time stamp offset",
+      "srcDetails": "SRC Details",
+      "srcDetailsToolTip": "System Reference Code Details"
+    },
+    "toast": {
+      "errorSrcFetch": "Error fetching SRC details."
     }
   },
   "pagePower": {
@@ -1534,15 +1539,81 @@
       "pvm_system_operating_mode": "Server operating mode",
       "pvm_system_power_off_policy": "Server power policy",
       "selectedOperatingModeManual": "On save operating mode will be set to Manual",
-      "selectedOperatingModeNormal":  "On save operating mode will be set to Normal",
+      "selectedOperatingModeNormal": "On save operating mode will be set to Normal",
       "serverFirmware": "Server firmware start policy",
       "powerSettingDescription": "View power setting descriptions",
       "stayOn": "Stay On",
-      "serverFirmwareItems": { 
-       "setting": {
-        "autoStartOnly": "Auto-start only",
-        "autoStartAlways": "Auto-start always",
-        "standBy": "Standby"
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "Auto-start only",
+          "autoStartAlways": "Auto-start always",
+          "standBy": "Standby"
+        },
+        "description": {
+          "autoStartOnly": "Activate server firmware and partitions automatically only in the case of a recovery power on after an abnormal termination (e.g. auto power restart or system termination auto-reboot).",
+          "autoStartAlways": "Activate certain partitions automatically. If the server is powered on using the HMC or ASMI menus, the server automatically activates the partitions configured for 'auto-start'. If an auto-power restart or a reboot is performed after the server stops abnormally, the server activates the partitions that were running at the time the system stopped.",
+          "standBy": "Do not activate server firmware and partitions automatically for either a user-initiated power on or a recovery power on."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "linuxKVM": "Linux KVM",
+          "ibmI": "IBM I",
+          "default": "Default"
+        },
+        "description": {
+          "aix": "System firmware will select AIX/Linux as default partition environment.",
+          "linux": "System firmware will select AIX/Linux as default partition environment.",
+          "linuxKVM": "System firmware will select Linux KVM as default partition environment.",
+          "ibmI": "Server firmware will select IBM i as default partition environment.",
+          "default": "System firmware will automatically select the default partition environment based on system brand type."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "This partition boots directly to the operating system",
+          "serviceBoot": "Service boot mode from saved list",
+          "bootToSms": "Boot to SMS menu",
+          "bootToOpenFirware": "Boot to open firmware prompt",
+          "serviceBootMode": "Service mode boot from default list"
+        },
+        "description": {
+          "partitionBoot": "The partition boots to the operating system without stopping.",
+          "serviceBoot": "The system boots from the saved service mode boot list. This is typically a shorthand method of executing the partition's diagnostics.  To make this option useful, the partition operating system must support diagnostic boot and diagnostics must be loaded on the partition's disk drive.",
+          "bootToSms": "The partition stops at the System Management Services (SMS) menu.",
+          "bootToOpenFirware": "The system stops at the open firmware prompt.",
+          "serviceBootMode": "The system boots from the default boot list.  This option is the preferred way to run stand-alone diagnostics from a CD-ROM drive."
+        }
+      },
+      "linuxKvmItems": {
+        "setting": {
+          "automatic": "Automatic",
+          "custom": "Custom"
+        },
+        "description": {
+          "automatic": "The system will determine the percentage of available system memory to be reserved for the management of KVM guests.",
+          "custom": "The user specified percentage of available system memory will be reserved for the management of KVM guests."
+        }
+      },
+      "linuxKvmPercentage": {
+        "description": "Specifies the percentage of available system memory that will be reserved for the management of KVM guests. The percentage is specified to the 10th of a percent.",
+        "errorMessage": "Value must be in range of 0-100 and include decimals with up to one decimal point."
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "IPL from disk using copy A of the system Licensed Internal Code.",
+          "b": "IPL from disk using copy B of the system Licensed Internal Code.",
+          "c": "Reserved for hardware service use only.",
+          "d": "IPL from media other than load-source disk. Alternate IPL for code installation support."
+        }
       },
       "description": {
         "autoStartOnly": "Activate server firmware and partitions automatically only in the case of a recovery power on after an abnormal termination (e.g. auto power restart or system termination auto-reboot).",

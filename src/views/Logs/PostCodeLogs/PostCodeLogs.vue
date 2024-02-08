@@ -53,6 +53,40 @@
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredLogs.length)"
         >
+          <!-- Expand chevron icon -->
+          <template #cell(expandRow)="row">
+            <b-button
+              variant="link"
+              :aria-label="expandRowLabel"
+              :title="expandRowLabel"
+              class="btn-icon-only"
+              @click="fetchSrcDetails(row)"
+            >
+              <icon-chevron />
+            </b-button>
+          </template>
+          <template #row-details="{ item }">
+            <b-container fluid
+              ><b-row>
+                <b-col>
+                  <dl>
+                    <!-- SRC Details -->
+                    <dt>
+                      {{ $t('pagePostCodeLogs.table.srcDetails') }}:
+                      <info-tooltip
+                        class="info-icon"
+                        :title="$t('pagePostCodeLogs.table.srcDetailsToolTip')"
+                      >
+                      </info-tooltip>
+                    </dt>
+                    <dd>
+                      {{ dataFormatter(srcData[item.timeStampOffset]) }}
+                    </dd>
+                  </dl>
+                </b-col>
+              </b-row>
+            </b-container>
+          </template>
           <!-- Date column -->
           <template #cell(date)="{ value }">
             <p class="mb-0">{{ value | formatDate }}</p>
@@ -93,13 +127,18 @@
 
 <script>
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
+import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
+import api from '@/store/api';
+import i18n from '@/i18n';
 import { omit } from 'lodash';
 import PageTitle from '@/components/Global/PageTitle';
 import Search from '@/components/Global/Search';
 import TableCellCount from '@/components/Global/TableCellCount';
 import TableDateFilter from '@/components/Global/TableDateFilter';
+import InfoTooltip from '@/components/Global/InfoTooltip';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
+import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import BVPaginationMixin, {
   currentPage,
   perPage,
@@ -126,6 +165,8 @@ export default {
     Search,
     TableCellCount,
     TableDateFilter,
+    IconChevron,
+    InfoTooltip,
   },
   mixins: [
     BVPaginationMixin,
@@ -136,6 +177,7 @@ export default {
     TableSortMixin,
     TableRowExpandMixin,
     SearchFilterMixin,
+    DataFormatterMixin,
   ],
   beforeRouteLeave(to, from, next) {
     // Hide loader if the user navigates to another page
@@ -145,8 +187,14 @@ export default {
   },
   data() {
     return {
+      srcData: {},
       isBusy: true,
       fields: [
+        {
+          key: 'expandRow',
+          label: '',
+          tdClass: 'table-row-expand',
+        },
         {
           key: 'date',
           label: this.$t('pagePostCodeLogs.table.created'),
@@ -229,6 +277,39 @@ export default {
     });
   },
   methods: {
+    fetchSrcDetails(row) {
+      this.toggleRowDetails(row);
+      if (!row.detailsShowing) {
+        const { timeStampOffset, uri, postCode } = row.item;
+        if (!this.srcData[timeStampOffset]) {
+          api
+            .get(uri)
+            .then((response) => this.generateSrcWords(response.data))
+            .then((srcWords) =>
+              this.$set(
+                this.srcData,
+                timeStampOffset,
+                `${postCode.trim()} ${srcWords}`
+              )
+            )
+            .catch(() =>
+              this.errorToast(i18n.t('pagePostCodeLogs.toast.errorSrcFetch'))
+            );
+        }
+      }
+    },
+    generateSrcWords(data) {
+      const decodedData = Buffer.from(data, 'base64').toString('hex');
+      const srcBulk = decodedData.substring(16, 80).toUpperCase();
+      if (!isNaN(srcBulk) && !Number(srcBulk)) {
+        return '';
+      }
+      let srcWords = '';
+      for (let i = 0; i <= 56; i += 8) {
+        srcWords += `${srcBulk.substring(i, i + 8)} `;
+      }
+      return srcWords.trim();
+    },
     openConsoleWindow() {
       window.open(
         '#/console/post-codes',
