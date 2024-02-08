@@ -35,7 +35,7 @@ const AuditLogsStore = {
           commit('setAllAuditLogs', auditLogs);
         })
         .catch((error) => {
-          console.log('Audit Log Data:', error);
+          console.log(error);
         });
     },
     async downloadLogData(_, uri) {
