@@ -81,7 +81,7 @@ const CertificatesStore = {
               var acfCertificate = {
                 type: '',
                 location: '/redfish/v1/AccountService/Accounts/service',
-                certificate: 'ServiceLogin Certificate',
+                certificate: i18n.t('pageCertificates.serviceLoginCertificate'),
                 issuedBy: '',
                 issuedTo: '',
                 validFrom: '',
