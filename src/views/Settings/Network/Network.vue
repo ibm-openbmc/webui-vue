@@ -283,7 +283,7 @@ export default {
       this.startLoader();
       this.$store
         .dispatch('network/saveHostname', modalFormData)
-        .then(this.$store.dispatch('authentication/logout'))
+        .then(() => this.$store.dispatch('authentication/logout'))
         .catch(({ message }) => this.errorToast(message))
         .finally(() => this.endLoader());
     },
