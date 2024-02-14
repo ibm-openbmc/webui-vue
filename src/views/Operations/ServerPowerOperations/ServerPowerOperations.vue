@@ -4,6 +4,7 @@
     <b-row class="mb-4">
       <b-col sm="10">
         <page-section
+          class="mb-0"
           :section-title="$t('pageServerPowerOperations.currentStatus')"
         >
           <b-row v-if="isInPhypStandby">
@@ -183,6 +184,17 @@
         <page-section
           :section-title="$t('pageServerPowerOperations.serverBootSettings')"
         >
+          <b-row class="mt-3 mb-3">
+            <b-col>
+              <b-button
+                variant="primary"
+                data-test-id="network-settings"
+                @click="openNetworkSettings"
+              >
+                {{ 'Network settings' }}
+              </b-button>
+            </b-col>
+          </b-row>
           <boot-settings
             :is-in-phyp-standby="isInPhypStandby"
             :is-updated="isUpdated"
@@ -191,6 +203,8 @@
         </page-section>
       </b-col>
     </b-row>
+    <!-- Modal -->
+    <network-settings-modal />
   </b-container>
 </template>
 
@@ -202,6 +216,7 @@ import BootSettings from './BootSettings';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import Alert from '@/components/Global/Alert';
 import ArrowRight16 from '@carbon/icons-vue/es/arrow--right/16';
+import NetworkSettingsModal from './NetworkSettingsModal';
 
 export default {
   name: 'ServerPowerOperations',
@@ -211,6 +226,7 @@ export default {
     BootSettings,
     Alert,
     IconArrowRight: ArrowRight16,
+    NetworkSettingsModal,
   },
   mixins: [BVToastMixin, LoadingBarMixin],
   beforeRouteLeave(to, from, next) {
@@ -273,6 +289,9 @@ export default {
     ]).finally(() => this.endLoader());
   },
   methods: {
+    openNetworkSettings() {
+      this.$bvModal.show('modal-network-settings');
+    },
     discardStandbyToRuntime() {
       this.getRequiredResponses();
     },

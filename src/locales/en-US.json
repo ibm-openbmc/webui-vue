@@ -1677,7 +1677,10 @@
       "confirmRebootTitle": "Server reboot will cause outage",
       "confirmShutdownMessage": "Are you sure you want to shut down?",
       "confirmShutdownMessage2": "A system dump is being offloaded. Shutting down the system will result in the dump being lost.",
-      "confirmShutdownTitle": "Server shutdown will cause outage"
+      "confirmShutdownTitle": "Server shutdown will cause outage",
+      "networkSettings": "Network settings",
+      "cancel": "Cancel",
+      "submit": "Submit"
     },
     "toast": {
       "errorPowerOn": "BMC is not ready to power on the host.",
