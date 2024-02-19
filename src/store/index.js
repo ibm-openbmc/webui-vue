@@ -30,6 +30,7 @@ import PoliciesStore from './modules/SecurityAndAccess/PoliciesStore';
 import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
 import KeyClearStore from './modules/Operations/KeyClearStore';
+import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore';
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
 import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
 import WebSocketPlugin from './plugins/WebSocketPlugin';
@@ -81,6 +82,7 @@ export default new Vuex.Store({
     policies: PoliciesStore,
     factoryReset: FactoryResetStore,
     keyClear: KeyClearStore,
+    networkSettings: NetworkSettingsStore,
     resourceMemory: ResourceMemoryStore,
     hardwareDeconfiguration: HardwareDeconfigurationStore,
     deconfigurationRecords: DeconfigurationRecordsStore,
