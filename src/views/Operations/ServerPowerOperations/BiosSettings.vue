@@ -248,6 +248,44 @@
           </div>
         </b-col>
       </template>
+      <template v-for="(taggedSetting, index) in taggedSettingValues">
+        <b-col
+          v-if="
+            attributeKeys.pvm_default_os_type === 'IBM I' ||
+            attributeKeys.pvm_default_os_type === 'Default'
+          "
+          :key="taggedSetting.settingKey"
+          sm="8"
+          xl="6"
+        >
+          <b-form-group
+            v-if="!isHmcManaged()"
+            :key="index"
+            :label="
+              $t(
+                `${'pageServerPowerOperations.biosSettings'}.${
+                  taggedSetting.settingKey
+                }`
+              )
+            "
+            class="mb-4"
+          >
+            <b-form-select
+              id="bios-option-sysOp-mode"
+              v-model="taggedSetting.settingValue"
+              :options="taggedSettingsOptions"
+              :disabled="!isAtleastPhypInStandby"
+              @input="
+                changeTaggedSettingsValue(
+                  taggedSetting.settingKey,
+                  taggedSetting.settingValue
+                )
+              "
+            >
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+      </template>
     </b-row>
     <b-row>
       <b-col
@@ -376,6 +414,52 @@
           <b-table
             stacked="sm"
             hover
+            :items="ibmiLoadSourceItems"
+            :fields="taggedSettingsFields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t(
+                  'pageServerPowerOperations.biosSettings.pvm_ibmi_load_source'
+                )
+              }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
+          <b-table
+            stacked="sm"
+            hover
+            :items="ibmiAltLoadSourceItems"
+            :fields="taggedSettingsFields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t(
+                  'pageServerPowerOperations.biosSettings.pvm_ibmi_alt_load_source'
+                )
+              }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
+          <b-table
+            stacked="sm"
+            hover
+            :items="ibmiConsoleItems"
+            :fields="taggedSettingsFields"
+            caption-top
+          >
+            <template #table-caption>
+              {{
+                $t('pageServerPowerOperations.biosSettings.pvm_ibmi_console')
+              }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
+            </template>
+          </b-table>
+          <b-table
+            stacked="sm"
+            hover
             :items="linuxKvmItems"
             :fields="fields"
             caption-top
@@ -426,6 +510,10 @@ export default {
       type: Boolean,
       require: true,
     },
+    isInPhypStandby: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -434,6 +522,21 @@ export default {
       normalMode: 'Normal',
       currentOperatingMode: '',
       selectedOperatingMode: '',
+      taggedSettingsArr: ['Current configuration', 'none'],
+      taggedSettings: [
+        {
+          settingKey: 'pvm_ibmi_load_source',
+          settingValue: 'Current configuration',
+        },
+        {
+          settingKey: 'pvm_ibmi_alt_load_source',
+          settingValue: 'Current configuration',
+        },
+        {
+          settingKey: 'pvm_ibmi_console',
+          settingValue: 'Current configuration',
+        },
+      ],
       powerRestorePolicy: this.$store.getters[
         'serverBootSettings/powerRestorePolicyValue'
       ],
@@ -450,6 +553,13 @@ export default {
         },
       ],
       linuxKvmPercentageFields: [
+        {
+          key: 'description',
+          label: this.$t('pagePower.tableRoles.description'),
+          sortable: false,
+        },
+      ],
+      taggedSettingsFields: [
         {
           key: 'description',
           label: this.$t('pagePower.tableRoles.description'),
@@ -625,6 +735,27 @@ export default {
           ),
         },
       ],
+      ibmiLoadSourceItems: [
+        {
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.ibmiLoadSource.description'
+          ),
+        },
+      ],
+      ibmiAltLoadSourceItems: [
+        {
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.ibmiAltLoadSource.description'
+          ),
+        },
+      ],
+      ibmiConsoleItems: [
+        {
+          description: this.$t(
+            'pageServerPowerOperations.biosSettings.ibmiConsole.description'
+          ),
+        },
+      ],
     };
   },
   computed: {
@@ -634,11 +765,30 @@ export default {
     attributeKeys() {
       return this.$store.getters['serverBootSettings/biosAttributes'];
     },
+    isAtleastPhypInStandby() {
+      return this.$store.getters['global/isInPhypStandby'];
+    },
     manualModeSelected() {
       return this.selectedOperatingMode === this.manualMode;
     },
     powerPolicy() {
       return this.$store.getters['serverBootSettings/powerRestorePolicyValue'];
+    },
+    ibmiLoadSourceValue() {
+      return this.$store.getters['serverBootSettings/ibmiLoadSourceValue'];
+    },
+    ibmiAltLoadSourceValue() {
+      return this.$store.getters['serverBootSettings/ibmiAltLoadSourceValue'];
+    },
+    ibmiConsoleValue() {
+      return this.$store.getters['serverBootSettings/ibmiConsoleValue'];
+    },
+    taggedSettingValues() {
+      let taggedSettingsInfo = this.taggedSettings;
+      taggedSettingsInfo[0].settingValue = this.ibmiLoadSourceValue;
+      taggedSettingsInfo[1].settingValue = this.ibmiAltLoadSourceValue;
+      taggedSettingsInfo[2].settingValue = this.ibmiConsoleValue;
+      return taggedSettingsInfo;
     },
     linuxKvmPercentageCurrentValue() {
       return this.$store.getters[
@@ -660,8 +810,16 @@ export default {
         return newValue;
       },
     },
+    locationCodes() {
+      return this.$store.getters['serverBootSettings/locationCodes'];
+    },
+    taggedSettingsOptions() {
+      let taggedSettingsList = [...this.taggedSettingsArr];
+      return [...taggedSettingsList, ...this.locationCodes];
+    },
   },
   created() {
+    this.$store.dispatch('serverBootSettings/getLocationCodes');
     this.$store.dispatch('resourceMemory/getHmcManaged');
     this.currentOperatingMode = this.attributeKeys['pvm_system_operating_mode'];
     if (this.currentOperatingMode === this.manualMode) {
@@ -676,6 +834,15 @@ export default {
       this.attributeKeys['pvm_linux_kvm_percentage'] =
         this.linuxKvmPercentageInitialValue * 10;
     }
+    this.attributeKeys[
+      'pvm_ibmi_load_source'
+    ] = this.taggedSettingValues[0].settingValue;
+    this.attributeKeys[
+      'pvm_ibmi_alt_load_source'
+    ] = this.taggedSettingValues[1].settingValue;
+    this.attributeKeys[
+      'pvm_ibmi_console'
+    ] = this.taggedSettingValues[2].settingValue;
     this.$emit('updated-attributes', this.attributeKeys);
     this.$emit('is-linux-kvm-valid', this.isLinuxKvmValid);
   },
@@ -738,6 +905,12 @@ export default {
         'serverBootSettings/saveLinuxPercentageValue',
         value
       );
+    },
+    changeTaggedSettingsValue(key, value) {
+      this.$store.dispatch('serverBootSettings/saveTaggedSettingsValue', {
+        key,
+        value,
+      });
     },
     validateLinuxKvmPercentage($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;

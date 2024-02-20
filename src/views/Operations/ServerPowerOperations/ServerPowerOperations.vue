@@ -12,15 +12,45 @@
                 <span class="font-weight-bold">
                   {{ $t('pageServerPowerOperations.phypStandby') }}
                 </span>
-                <p>{{ $t('pageServerPowerOperations.osRuntimeMessage') }}</p>
+                <p class="mt-1">
+                  {{ $t('pageServerPowerOperations.osRuntimeMessage') }}
+                </p>
+                <p>
+                  {{ $t('pageServerPowerOperations.saveOsRuntimeMessage') }}
+                </p>
+                <p>
+                  {{ $t('pageServerPowerOperations.discardOsRuntimeMessage') }}
+                </p>
                 <template #action>
                   <b-button
                     variant="link"
-                    class="d-flex justify-content-between align-items-center"
+                    class="mt-3 d-flex justify-content-between align-items-center"
                     @click="standbyToRuntime"
                   >
                     <span class="pr-1">
                       {{ $t('pageServerPowerOperations.osRuntimeButton') }}
+                    </span>
+                    <icon-arrow-right />
+                  </b-button>
+                  <b-button
+                    variant="link"
+                    class="d-flex justify-content-between align-items-center"
+                    @click="saveStandbyToRuntime"
+                  >
+                    <span class="pr-1">
+                      {{ $t('pageServerPowerOperations.saveOsRuntimeButton') }}
+                    </span>
+                    <icon-arrow-right />
+                  </b-button>
+                  <b-button
+                    variant="link"
+                    class="d-flex justify-content-between align-items-center"
+                    @click="discardStandbyToRuntime"
+                  >
+                    <span class="pr-1">
+                      {{
+                        $t('pageServerPowerOperations.discardOsRuntimeButton')
+                      }}
                     </span>
                     <icon-arrow-right />
                   </b-button>
@@ -153,7 +183,11 @@
         <page-section
           :section-title="$t('pageServerPowerOperations.serverBootSettings')"
         >
-          <boot-settings />
+          <boot-settings
+            :is-in-phyp-standby="isInPhypStandby"
+            :is-updated="isUpdated"
+            @update-standby="updateToRuntime()"
+          />
         </page-section>
       </b-col>
     </b-row>
@@ -186,6 +220,7 @@ export default {
   data() {
     return {
       phypStandby: false,
+      isUpdated: false,
       form: {
         rebootOption: 'orderly',
         shutdownOption: 'orderly',
@@ -231,7 +266,6 @@ export default {
     });
     Promise.all([
       this.$store.dispatch('serverBootSettings/getOperatingModeSettings'),
-      this.$store.dispatch('serverBootSettings/getBootSettings'),
       this.$store.dispatch('controls/getLastPowerOperationTime'),
       this.$store.dispatch('bmc/getBmcInfo'),
       this.$store.dispatch('global/getBootProgress'),
@@ -239,6 +273,32 @@ export default {
     ]).finally(() => this.endLoader());
   },
   methods: {
+    discardStandbyToRuntime() {
+      this.getRequiredResponses();
+    },
+    saveStandbyToRuntime() {
+      this.isUpdated = true;
+    },
+    updateToRuntime() {
+      this.isUpdated = false;
+      this.standbyToRuntime();
+    },
+    getRequiredResponses() {
+      this.startLoader();
+      Promise.all([
+        this.$store.dispatch('serverBootSettings/getOperatingModeSettings'),
+        this.$store.dispatch('controls/getLastPowerOperationTime'),
+        this.$store.dispatch('bmc/getBmcInfo'),
+        this.$store.dispatch('global/getBootProgress'),
+        this.$store.dispatch('serverBootSettings/getLocationCodes'),
+        this.$store.dispatch('resourceMemory/getHmcManaged'),
+        this.$store.dispatch('serverBootSettings/getBiosAttributes'),
+        this.$store.dispatch('serverBootSettings/getAttributeValues'),
+      ]).finally(() => {
+        this.endLoader();
+        this.standbyToRuntime();
+      });
+    },
     powerOn() {
       if (
         this.bmc.powerState === 'On' &&

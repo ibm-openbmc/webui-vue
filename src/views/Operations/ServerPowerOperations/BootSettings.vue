@@ -5,6 +5,7 @@
       :key="componentKey"
       :attribute-values="form.attributeValues"
       :disabled="disabled"
+      :is-in-phyp-standby="isInPhypStandby"
       @is-linux-kvm-valid="linuxKvmValue"
       @updated-attributes="updateAttributeKeys"
     />
@@ -33,6 +34,16 @@ export default {
   name: 'BootSettings',
   components: { BiosSettings },
   mixins: [BVToastMixin, LoadingBarMixin],
+  props: {
+    isInPhypStandby: {
+      type: Boolean,
+      default: false,
+    },
+    isUpdated: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       componentKey: 0,
@@ -50,6 +61,9 @@ export default {
     disabled() {
       return this.$store.getters['serverBootSettings/disabled'];
     },
+    isAtleastPhypInStandby() {
+      return this.$store.getters['global/isInPhypStandby'];
+    },
   },
   watch: {
     attributeValues: function (value) {
@@ -57,6 +71,11 @@ export default {
     },
     biosAttributes: function (value) {
       this.form.attributes = value;
+    },
+    isUpdated: function (newValue) {
+      if (newValue) {
+        this.handleSubmit();
+      }
     },
   },
   created() {
@@ -83,14 +102,33 @@ export default {
         .dispatch('serverBootSettings/saveSettings', settings)
         .then((message) => {
           this.componentKey += 1;
-          if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
-            this.successToast(
-              this.$t(
-                'pageServerPowerOperations.toast.successSaveLinuxKvmSettings'
-              )
-            );
-          } else {
-            this.successToast(message);
+          if (!this.isUpdated) {
+            if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
+              this.successToast(
+                this.$t(
+                  'pageServerPowerOperations.toast.successSaveLinuxKvmSettings'
+                )
+              );
+            } else if (
+              settings.biosSettings.pvm_default_os_type == 'IBM I' &&
+              this.isAtleastPhypInStandby
+            ) {
+              if (this.isInPhypStandby) {
+                this.successToast(
+                  this.$t(
+                    'pageServerPowerOperations.toast.successSaveIBMiStandby'
+                  )
+                );
+              } else {
+                this.successToast(
+                  this.$t(
+                    'pageServerPowerOperations.toast.successSaveLinuxKvmSettings'
+                  )
+                );
+              }
+            } else {
+              this.successToast(message);
+            }
           }
           this.$store
             .dispatch('serverBootSettings/getAttributeValues')
@@ -100,6 +138,9 @@ export default {
           this.errorToast(message);
         })
         .finally(() => {
+          if (this.isUpdated) {
+            this.$emit('update-standby', this.isUpdated);
+          }
           this.endLoader();
         });
     },

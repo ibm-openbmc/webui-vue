@@ -46,6 +46,7 @@ const GlobalStore = {
     username: localStorage.getItem('storedUsername'),
     currentUser: JSON.parse(localStorage.getItem('storedCurrentUser')),
     isAuthorized: true,
+    hmcManaged: localStorage.getItem('storedHmcManagedValue') || null,
     isServiceLoginEnabled: false,
   },
   getters: {
@@ -56,6 +57,7 @@ const GlobalStore = {
       state.bootProgress === 'SetupEntered' ||
       state.bootProgress === 'OSBootStarted' ||
       state.bootProgress === 'OSRunning',
+    isOSRunning: (state) => state.bootProgress === 'OSRunning',
     assetTag: (state) => state.assetTag,
     modelType: (state) => state.modelType,
     serialNumber: (state) => state.serialNumber,
@@ -68,6 +70,7 @@ const GlobalStore = {
     languagePreference: (state) => state.languagePreference,
     isUtcDisplay: (state) => state.isUtcDisplay,
     username: (state) => state.username,
+    hmcManaged: (state) => state.hmcManaged,
     currentUser: (state) => state.currentUser,
     isServiceUser: (state) =>
       state.currentUser?.RoleId === 'OemIBMServiceAgent' || !state.currentUser,
@@ -99,6 +102,7 @@ const GlobalStore = {
       (state.languagePreference = language),
     setUsername: (state, username) => (state.username = username),
     setCurrentUser: (state, currentUser) => (state.currentUser = currentUser),
+    setHmcManaged: (state, hmcManaged) => (state.hmcManaged = hmcManaged),
     setUtcTime: (state, isUtcDisplay) => (state.isUtcDisplay = isUtcDisplay),
     setUnauthorized: (state) => {
       state.isAuthorized = false;
@@ -143,6 +147,21 @@ const GlobalStore = {
             'storedCurrentUser',
             JSON.stringify(getters.currentUser)
           );
+        })
+        .catch((error) => console.log(error));
+    },
+    async getHmcManaged({ commit }) {
+      return await api
+        .get(
+          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry'
+        )
+        .then(({ data: { RegistryEntries } }) => {
+          const hmcMananged = RegistryEntries.Attributes.filter(
+            (Attribute) => Attribute.AttributeName == 'pvm_hmc_managed'
+          );
+          let hmcManangedValue = hmcMananged[0].CurrentValue;
+          commit('setHmcManaged', hmcManangedValue);
+          localStorage.setItem('storedHmcManagedValue', hmcManangedValue);
         })
         .catch((error) => console.log(error));
     },
