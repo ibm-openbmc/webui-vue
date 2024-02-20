@@ -64,10 +64,26 @@
             ? $t('global.status.present')
             : row.item.status === 'Absent'
             ? $t('global.status.absent')
+            : row.item.status === 'Deferring'
+            ? $t('global.status.deferring')
             : row.item.status === 'Disabled'
             ? $t('global.status.disabled')
+            : row.item.status === 'InTest'
+            ? $t('global.status.inTest')
+            : row.item.status === 'Qualified'
+            ? $t('global.status.qualified')
+            : row.item.status === 'Quiesced'
+            ? $t('global.status.quiesced')
             : row.item.status === 'StandbyOffline'
             ? $t('global.status.standbyOffline')
+            : row.item.status === 'StandbySpare'
+            ? $t('global.status.standbySpare')
+            : row.item.status === 'Starting'
+            ? $t('global.status.starting')
+            : row.item.status === 'UnavailableOffline'
+            ? $t('global.status.unavailableOffline')
+            : row.item.status === 'Updating'
+            ? $t('global.status.updating')
             : row.item.status
         }}
       </template>
