@@ -222,8 +222,8 @@
     },
     "toast": {
       "infoStartDownload": "Download might take several minutes to complete.",
-      "errorStartDownload": "Error downloading the Additional data.",
-      "successStartDownload":  "Additional data downloaded successfully."
+      "errorStartDownload": "Error downloading Logs",
+      "successStartDownload": "Logs downloaded successfully"
     }
 },
   "pageCapacityOnDemand": {
