@@ -86,7 +86,8 @@
       "present": "Present",
       "success": "Success",
       "unavailable": "Unavailable",
-      "warning": "Warning"
+      "warning": "Warning",
+      "standbyOffline":"Standby offline"
     },
     "table": {
       "collapseTableRow": "Collapse table row",

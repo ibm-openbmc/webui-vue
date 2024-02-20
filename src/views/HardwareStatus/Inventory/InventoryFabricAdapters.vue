@@ -69,9 +69,15 @@
         {{
           isIoExpansionChassis && isPoweredOff
             ? $t('global.status.unavailable')
+            : row.item.status === 'Present'
+            ? $t('global.status.present')
             : row.item.status === 'Absent'
             ? $t('global.status.absent')
-            : $t('global.status.present')
+            : row.item.status === 'Disabled'
+            ? $t('global.status.disabled')
+            : row.item.status === 'StandbyOffline'
+            ? $t('global.status.standbyOffline')
+            : row.item.status
         }}
       </template>
       <!-- Toggle identify LED -->

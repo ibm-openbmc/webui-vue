@@ -48,7 +48,13 @@
         {{
           row.item.statusState === 'Enabled'
             ? $t('global.status.present')
-            : $t('global.status.absent')
+            : row.item.statusState === 'Absent'
+            ? $t('global.status.absent')
+            : row.item.statusState === 'Disabled'
+            ? $t('global.status.disabled')
+            : row.item.statusState === 'StandbyOffline'
+            ? $t('global.status.standbyOffline')
+            : row.item.statusState
         }}
       </template>
       <!-- Toggle identify LED -->

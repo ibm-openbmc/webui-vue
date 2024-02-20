@@ -39,9 +39,15 @@
       <!-- Status -->
       <template #cell(status)="row">
         {{
-          row.item.statusState === 'Absent'
+          row.item.statusState === 'Enabled'
+            ? $t('global.status.present')
+            : row.item.statusState === 'Absent'
             ? $t('global.status.absent')
-            : $t('global.status.present')
+            : row.item.statusState === 'Disabled'
+            ? $t('global.status.disabled')
+            : row.item.statusState === 'StandbyOffline'
+            ? $t('global.status.standbyOffline')
+            : row.item.statusState
         }}
       </template>
 

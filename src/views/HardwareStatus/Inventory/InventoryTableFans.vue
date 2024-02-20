@@ -75,7 +75,13 @@
             ? $t('global.status.unavailable')
             : row.item.status === 'Present'
             ? $t('global.status.present')
-            : $t('global.status.absent')
+            : row.item.status === 'Absent'
+            ? $t('global.status.absent')
+            : row.item.status === 'Disabled'
+            ? $t('global.status.disabled')
+            : row.item.status === 'StandbyOffline'
+            ? $t('global.status.standbyOffline')
+            : row.item.status
         }}
       </template>
 
