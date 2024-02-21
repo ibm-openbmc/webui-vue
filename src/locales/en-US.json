@@ -72,11 +72,13 @@
       "copied": "Copied",
       "connected": "Connected",
       "critical": "Critical",
+      "deferring": "Deferring",
       "disabled": "Disabled",
       "disconnected": "Disconnected",
       "enabled": "Enabled",
       "error": "Error",
       "informational": "Informational",
+      "inTest": "InTest",
       "locked": "Locked",
       "nextReboot": "Changes will take effect on next boot.",
       "notAvailable": "Not available",
@@ -84,8 +86,15 @@
       "ok": "OK",
       "on": "On",
       "present": "Present",
+      "qualified": "Qualified",
+      "quiesced": "Quiesced",
+      "standbyOffline": "Standby offline",
+      "standbySpare": "Standby spare",
+      "starting": "Starting",
       "success": "Success",
+      "updating": "Updating",
       "unavailable": "Unavailable",
+      "unavailableOffline": "Unavailable offline",
       "warning": "Warning"
     },
     "table": {
@@ -121,6 +130,7 @@
     "titleShowNavigation": "Show navigation"
   },
   "appNavigation": {
+    "auditLogs": "@:appPageTitle.auditLogs",
     "capacityOnDemand": "@:appPageTitle.capacityOnDemand",
     "certificates": "@:appPageTitle.certificates",
     "concurrentMaintenance": "@:appPageTitle.concurrentMaintenance",
@@ -165,6 +175,7 @@
     "virtualMedia": "@:appPageTitle.virtualMedia"
   },
   "appPageTitle": {
+    "auditLogs": "Audit logs",
     "capacityOnDemand": "Capacity on demand",
     "certificates": "Certificates",
     "changePassword": "Change password",
@@ -205,6 +216,24 @@
     "snmpAlerts": "SNMP alerts",
     "userManagement": "User management",
     "virtualMedia": "Virtual media"
+  },
+  "pageAuditLogs": {
+    "table": {
+      "id": "ID",
+      "op": "Operation",
+      "acct": "Account",
+      "addr": "Address",
+      "res": "Response",
+      "messageArgs": "MessageArgs",
+      "message": "Message",
+      "searchLogs": "Search logs",
+      "eventTimeStamp": "Date"
+    },
+    "toast": {
+      "infoStartDownload": "Download might take several minutes to complete.",
+      "errorStartDownload": "Error downloading Logs",
+      "successStartDownload": "Logs downloaded successfully"
+    }
   },
   "pageCapacityOnDemand": {
     "absent": "Absent",
@@ -1098,7 +1127,7 @@
     "updateLogicalMemoryPageSetup": "Update system memory page setup",
     "updateLogicalMemorySize": "Update logical memory block size",
     "updatePageSetup": "Update system memory page setup",
-    "dynamicIoDrawerAttachmentTitle":"Dynamic I/O drawer attachment",
+    "dynamicIoDrawerAttachmentTitle": "Dynamic I/O drawer attachment",
     "dynamicIoDrawerAttachment": "This option allocates platform memory during IPL for PCIe slots to enable dynamic I/O drawer attachment.",
     "updateDynamicIoDrawerAttachment": "Update dynamic I/O drawer attachment",
     "alert": {
@@ -1556,79 +1585,79 @@
         },
         "description": {
           "autoStartOnly": "Activate server firmware and partitions automatically only in the case of a recovery power on after an abnormal termination (e.g. auto power restart or system termination auto-reboot).",
-        "autoStartAlways" : "Activate certain partitions automatically. If the server is powered on using the HMC or ASMI menus, the server automatically activates the partitions configured for 'auto-start'. If an auto-power restart or a reboot is performed after the server stops abnormally, the server activates the partitions that were running at the time the system stopped.",
-        "standBy": "Do not activate server firmware and partitions automatically for either a user-initiated power on or a recovery power on."
-      }
-    },
-    "defaultPartitionItems": { 
-      "setting": {
-       "aix": "AIX",
-       "linux": "Linux",
-       "linuxKVM": "Linux KVM",
-       "ibmI": "IBM i",
-       "default": "Default"
-     },
-     "description": {
-       "aix": "System firmware will select AIX/Linux as default partition environment.",
-       "linux" : "System firmware will select AIX/Linux as default partition environment.",
-       "linuxKVM": "System firmware will select Linux KVM as default partition environment.",
-       "ibmI": "Server firmware will select IBM i as default partition environment.",
-       "default": "System firmware will automatically select the default partition environment based on system brand type."
-   }
-  },
-  "aixPartitionItems": { 
-    "setting": {
-     "partitionBoot": "This partition boots directly to the operating system",
-     "serviceBoot": "Service boot mode from saved list",
-     "bootToSms": "Boot to SMS menu",
-     "bootToOpenFirware": "Boot to open firmware prompt",
-     "serviceBootMode": "Service mode boot from default list"
-   },
-   "description": {
-     "partitionBoot": "The partition boots to the operating system without stopping.",
-     "serviceBoot" : "The system boots from the saved service mode boot list. This is typically a shorthand method of executing the partition's diagnostics.  To make this option useful, the partition operating system must support diagnostic boot and diagnostics must be loaded on the partition's disk drive.",
-     "bootToSms": "The partition stops at the System Management Services (SMS) menu.",
-     "bootToOpenFirware": "The system stops at the open firmware prompt.",
-     "serviceBootMode": "The system boots from the default boot list.  This option is the preferred way to run stand-alone diagnostics from a CD-ROM drive."
- }
-},
-  "linuxKvmItems": { 
-    "setting": {
-    "automatic": "Automatic",
-    "custom": "Custom"
-    },
-    "description": {
-      "automatic": "The system will determine the percentage of available system memory to be reserved for the management of KVM guests.",
-      "custom" : "The user specified percentage of available system memory will be reserved for the management of KVM guests."
-    }
- },
- "linuxKvmPercentage": { 
-  "description": "Specifies the percentage of available system memory that will be reserved for the management of KVM guests. The percentage is specified to the 10th of a percent.",
-  "errorMessage": "Value must be in range of 0-100 and include decimals with up to one decimal point."
-},
-  "ibmiLoadSource": {
-    "description": "Specifies the load source the system will use to start the logical partition."
-  },
-  "ibmiAltLoadSource": {
-    "description": "Specifies the device the system will use when a D-mode initial program load (IPL) is performed."
-  },
-  "ibmiConsole": {
-    "description": "Specifies the first workstation that the system will activate in the logical partition."
-  },
-"ibmiItems": { 
-  "setting": {
-   "a": "A",
-   "b": "B",
-   "c": "C",
-   "d": "D"
- },
- "description": {
-  "a": "IPL from disk using copy A of the system Licensed Internal Code.",
-  "b": "IPL from disk using copy B of the system Licensed Internal Code.",
-  "c": "Reserved for hardware service use only.",
-  "d": "IPL from media other than load-source disk. Alternate IPL for code installation support."
-}
-},
+          "autoStartAlways": "Activate certain partitions automatically. If the server is powered on using the HMC or ASMI menus, the server automatically activates the partitions configured for 'auto-start'. If an auto-power restart or a reboot is performed after the server stops abnormally, the server activates the partitions that were running at the time the system stopped.",
+          "standBy": "Do not activate server firmware and partitions automatically for either a user-initiated power on or a recovery power on."
+        }
+      },
+      "defaultPartitionItems": {
+        "setting": {
+          "aix": "AIX",
+          "linux": "Linux",
+          "linuxKVM": "Linux KVM",
+          "ibmI": "IBM i",
+          "default": "Default"
+        },
+        "description": {
+          "aix": "System firmware will select AIX/Linux as default partition environment.",
+          "linux": "System firmware will select AIX/Linux as default partition environment.",
+          "linuxKVM": "System firmware will select Linux KVM as default partition environment.",
+          "ibmI": "Server firmware will select IBM i as default partition environment.",
+          "default": "System firmware will automatically select the default partition environment based on system brand type."
+        }
+      },
+      "aixPartitionItems": {
+        "setting": {
+          "partitionBoot": "This partition boots directly to the operating system",
+          "serviceBoot": "Service boot mode from saved list",
+          "bootToSms": "Boot to SMS menu",
+          "bootToOpenFirware": "Boot to open firmware prompt",
+          "serviceBootMode": "Service mode boot from default list"
+        },
+        "description": {
+          "partitionBoot": "The partition boots to the operating system without stopping.",
+          "serviceBoot": "The system boots from the saved service mode boot list. This is typically a shorthand method of executing the partition's diagnostics.  To make this option useful, the partition operating system must support diagnostic boot and diagnostics must be loaded on the partition's disk drive.",
+          "bootToSms": "The partition stops at the System Management Services (SMS) menu.",
+          "bootToOpenFirware": "The system stops at the open firmware prompt.",
+          "serviceBootMode": "The system boots from the default boot list.  This option is the preferred way to run stand-alone diagnostics from a CD-ROM drive."
+        }
+      },
+      "linuxKvmItems": {
+        "setting": {
+          "automatic": "Automatic",
+          "custom": "Custom"
+        },
+        "description": {
+          "automatic": "The system will determine the percentage of available system memory to be reserved for the management of KVM guests.",
+          "custom": "The user specified percentage of available system memory will be reserved for the management of KVM guests."
+        }
+      },
+      "linuxKvmPercentage": {
+        "description": "Specifies the percentage of available system memory that will be reserved for the management of KVM guests. The percentage is specified to the 10th of a percent.",
+        "errorMessage": "Value must be in range of 0-100 and include decimals with up to one decimal point."
+      },
+      "ibmiLoadSource": {
+        "description": "Specifies the load source the system will use to start the logical partition."
+      },
+      "ibmiAltLoadSource": {
+        "description": "Specifies the device the system will use when a D-mode initial program load (IPL) is performed."
+      },
+      "ibmiConsole": {
+        "description": "Specifies the first workstation that the system will activate in the logical partition."
+      },
+      "ibmiItems": {
+        "setting": {
+          "a": "A",
+          "b": "B",
+          "c": "C",
+          "d": "D"
+        },
+        "description": {
+          "a": "IPL from disk using copy A of the system Licensed Internal Code.",
+          "b": "IPL from disk using copy B of the system Licensed Internal Code.",
+          "c": "Reserved for hardware service use only.",
+          "d": "IPL from media other than load-source disk. Alternate IPL for code installation support."
+        }
+      },
       "attributeValues": {
         "pvm_default_os_type": {
           "AIX": "AIX",
@@ -1672,6 +1701,9 @@
       }
     },
     "modal": {
+      "alert": {
+        "available": "Network settings is available only for Non HMC managed systems, is in PHYP standby and Default partition environment is IBM i or Default."
+      },
       "confirmRebootMessage": "Are you sure you want to reboot?",
       "confirmRebootMessage2": "A system dump is being offloaded. Rebooting will result in the dump being lost.",
       "confirmRebootTitle": "Server reboot will cause outage",
@@ -1679,13 +1711,55 @@
       "confirmShutdownMessage2": "A system dump is being offloaded. Shutting down the system will result in the dump being lost.",
       "confirmShutdownTitle": "Server shutdown will cause outage",
       "networkSettings": {
+        "advanced": "Advanced",
+        "advancedSettings": {
+          "vlanTagId": "VLAN tag Id",
+          "maxFrameSize": "Max frame size"
+        },
         "cancel": "Cancel",
         "header": "Network settings",
+        "ipAddressProtocolHeading": "IP Address Protocol",
+        "networkTypeHeading": "Network Install Type",
+        "partition": "Partition",
+        "partitionSettings": {
+          "ipAddress": "IP address",
+          "subnetMask": "Subnet mask",
+          "gateway": "Gateway"
+        },
+        "server": "Server",
+        "serverSettings": {
+          "bootServerIPAddress": "Boot Server IP Address",
+          "imageDirectoryPath": "Image Directory Path",
+          "targetIpAddress": "Target Ip Address",
+          "targetName": "Target Name",
+          "initiatorName": "Initiator Name",
+          "targetPort": "Target Port",
+          "chapName": "Chap Name",
+          "chapSecret": "Chap Secret",
+          "restoreDefault": "Restore default"
+        },
         "settingsDescription": "Configure the network boot settings for the IBM i partition.",
         "settingsHeading": "Configure Network settings",
         "submit": "Submit",
-        "networkTypeHeading": "Network Install Type",
-        "ipAddressProtocolHeading": "IP Address Protocol"
+        "toast": {
+          "errorSavedSettings": "Error saving network settings",
+          "errorRestoreDefault": "Error restoring default initiator name",
+          "errorUpdateDMode": "Error updating the IBM i boot partition mode",
+          "successRestoreDefault": "Successfully restored default initiator name",
+          "successSavedSetting": "Successfully saved network settings",
+          "successUpdateDMode": "Successfully updated IBM i boot partition mode to D mode"
+        },
+        "validators": {
+          "invalidIpv4": "The IPv4 address is not valid",
+          "invalidIpv6": "The IPv6 address is not valid. Please specify IPv6 Address in <ip_address>/<prefix_length> format",
+          "invalidImageDirectory": "Enter valid directory path",
+          "invalidVlanTagId": "VLAN ID must be in range %{min} to %{max}",
+          "invalidIsciTargetPort": "The port value should be a positive integer between %{min} and %{max}",
+          "chapNameRequired": "CHAP name is required when CHAP secret is specified",
+          "chapSecretRequired": "CHAP secret is required when CHAP secret is specified",
+          "invalidFieldLength": "%{field} should not exceed %{max} characters",
+          "invalidChapSecretLength": "CHAP secret length must be between %{min} and %{max} characters"
+        }
       }
     },
     "toast": {

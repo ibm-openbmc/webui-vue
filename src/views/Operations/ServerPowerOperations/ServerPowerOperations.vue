@@ -187,12 +187,16 @@
           <b-row class="mt-3 mb-3">
             <b-col>
               <b-button
+                v-if="isInPhypStandby && hmcInfo !== 'Enabled' && isIBMi"
                 variant="primary"
                 data-test-id="network-settings"
                 @click="openNetworkSettings"
               >
                 {{ 'Network settings' }}
               </b-button>
+              <alert v-else variant="info">
+                {{ $t('pageServerPowerOperations.modal.alert.available') }}
+              </alert>
             </b-col>
           </b-row>
           <boot-settings
@@ -256,6 +260,22 @@ export default {
     },
     bmc() {
       return this.$store.getters['bmc/bmc'];
+    },
+    hmcInfo() {
+      return this.$store?.getters['global/hmcManaged'];
+    },
+    isIBMi() {
+      if (
+        this.attributeKeys?.pvm_default_os_type === 'Default' ||
+        this.attributeKeys?.pvm_default_os_type === 'IBM I'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    attributeKeys() {
+      return this.$store.getters['serverBootSettings/biosAttributes'];
     },
     serverStatus() {
       return this.$store.getters['global/serverStatus'];

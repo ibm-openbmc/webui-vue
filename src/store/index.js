@@ -26,6 +26,7 @@ import ProcessorStore from './modules/HardwareStatus/ProcessorStore';
 import AssemblyStore from './modules/HardwareStatus/AssemblyStore';
 import PcieTopologyStore from './modules/HardwareStatus/PcieTopologyStore';
 import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore';
+import AuditLogsStore from './modules/Logs/AuditLogsStore';
 import PoliciesStore from './modules/SecurityAndAccess/PoliciesStore';
 import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
@@ -78,6 +79,7 @@ export default new Vuex.Store({
     assemblies: AssemblyStore,
     pcieSlots: PcieSlotsStore,
     postCodeLogs: PostCodeLogsStore,
+    auditLogs: AuditLogsStore,
     virtualMedia: VirtualMediaStore,
     policies: PoliciesStore,
     factoryReset: FactoryResetStore,
