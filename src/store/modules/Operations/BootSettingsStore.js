@@ -248,6 +248,7 @@ const BootSettingsStore = {
         })
         .then((response) => {
           dispatch('saveOperatingModeSettings', biosSettings);
+          commit('setDisabled', false);
           return response;
         })
         .catch((error) => {

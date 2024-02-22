@@ -27,6 +27,7 @@
               id="bios-option-sysOp-mode"
               v-model="attributeKeys[key]"
               :options="attriValuesArr"
+              :disabled="disabled"
             >
             </b-form-select>
           </b-form-group>
@@ -59,6 +60,7 @@
                     v-model="attributeKeys[key]"
                     :value="values.value"
                     :aria-describedby="values.value"
+                    :disabled="disabled"
                     @change="onChangeSystemOpsMode"
                   >
                     {{ values.text }}
@@ -194,6 +196,7 @@
                     v-model="attributeKeys[key]"
                     :value="values.value"
                     :aria-describedby="values.value"
+                    :disabled="disabled"
                   >
                     <template v-if="values.value === 'Power Off'">{{
                       $t('pageServerPowerOperations.biosSettings.powerOff')
@@ -273,7 +276,7 @@
               id="bios-option-sysOp-mode"
               v-model="taggedSetting.settingValue"
               :options="taggedSettingsOptions"
-              :disabled="!isAtleastPhypInStandby"
+              :disabled="!isAtleastPhypInStandby || disabled"
               @input="
                 changeTaggedSettingsValue(
                   taggedSetting.settingKey,
@@ -328,7 +331,9 @@
             id="linux_kvm_percentage"
             v-model="linuxKvmPercentageValue"
             type="number"
-            :disabled="attributeKeys.pvm_linux_kvm_memory === 'Automatic'"
+            :disabled="
+              attributeKeys.pvm_linux_kvm_memory === 'Automatic' || disabled
+            "
             step="0.1"
             min="0.0"
             max="100.0"
