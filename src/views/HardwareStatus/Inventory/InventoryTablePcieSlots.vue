@@ -35,20 +35,6 @@
       :busy="isBusy"
       @filtered="onFiltered"
     >
-      <!-- Expand chevron icon -->
-      <template #cell(expandRow)="row">
-        <b-button
-          variant="link"
-          data-test-id="inventory-button-expandPcieSlots"
-          :title="expandRowLabel"
-          class="btn-icon-only"
-          @click="toggleRowDetails(row)"
-        >
-          <icon-chevron />
-          <span class="sr-only">{{ expandRowLabel }}</span>
-        </b-button>
-      </template>
-
       <!-- Toggle identify LED -->
       <template #cell(identifyLed)="row">
         <b-form-checkbox
@@ -70,7 +56,9 @@
           <b-row>
             <b-col sm="6" xl="6">
               <dl>
-                <dt>{{ $t('pageInventory.table.slotType') }}</dt>
+                <dt>
+                  {{ $t('pageInventory.table.slotType') }}
+                </dt>
                 <dd>{{ dataFormatter(item.type) }}</dd>
               </dl>
             </b-col>
@@ -83,7 +71,6 @@
 
 <script>
 import PageSection from '@/components/Global/PageSection';
-import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import TableCellCount from '@/components/Global/TableCellCount';
 
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
@@ -92,20 +79,11 @@ import Search from '@/components/Global/Search';
 import SearchFilterMixin, {
   searchFilter,
 } from '@/components/Mixins/SearchFilterMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
-  components: { IconChevron, PageSection, Search, TableCellCount },
-  mixins: [
-    BVToastMixin,
-    TableRowExpandMixin,
-    DataFormatterMixin,
-    TableSortMixin,
-    SearchFilterMixin,
-  ],
+  components: { PageSection, Search, TableCellCount },
+  mixins: [BVToastMixin, DataFormatterMixin, TableSortMixin, SearchFilterMixin],
   props: {
     chassis: {
       type: String,
@@ -117,16 +95,11 @@ export default {
       isBusy: true,
       fields: [
         {
-          key: 'expandRow',
-          label: '',
-          tdClass: 'table-row-expand',
-          sortable: false,
-        },
-        {
           key: 'type',
           label: this.$t('pageInventory.table.slotType'),
           formatter: this.dataFormatter,
           sortable: true,
+          class: 'text-center',
         },
         {
           key: 'locationNumber',
@@ -142,7 +115,6 @@ export default {
       ],
       searchFilter: searchFilter,
       searchTotalFilteredRows: 0,
-      expandRowLabel: expandRowLabel,
     };
   },
   computed: {

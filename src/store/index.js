@@ -26,11 +26,12 @@ import ProcessorStore from './modules/HardwareStatus/ProcessorStore';
 import AssemblyStore from './modules/HardwareStatus/AssemblyStore';
 import PcieTopologyStore from './modules/HardwareStatus/PcieTopologyStore';
 import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore';
+import AuditLogsStore from './modules/Logs/AuditLogsStore';
 import PoliciesStore from './modules/SecurityAndAccess/PoliciesStore';
 import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
 import KeyClearStore from './modules/Operations/KeyClearStore';
-
+import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
 import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
 import WebSocketPlugin from './plugins/WebSocketPlugin';
 import DateTimeStore from './modules/Settings/DateTimeStore';
@@ -77,6 +78,7 @@ export default new Vuex.Store({
     assemblies: AssemblyStore,
     pcieSlots: PcieSlotsStore,
     postCodeLogs: PostCodeLogsStore,
+    auditLogs: AuditLogsStore,
     virtualMedia: VirtualMediaStore,
     policies: PoliciesStore,
     factoryReset: FactoryResetStore,
@@ -86,6 +88,7 @@ export default new Vuex.Store({
     deconfigurationRecords: DeconfigurationRecordsStore,
     systemParameters: SystemParametersStore,
     fabricAdapters: FabricAdaptersStore,
+    ibmiServiceFunctions: IBMiServiceFunctionsStore,
   },
   plugins: [WebSocketPlugin],
 });

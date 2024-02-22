@@ -1,5 +1,6 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
 
 const HardwareDeconfigurationStore = {
   namespaced: true,
@@ -204,7 +205,7 @@ const HardwareDeconfigurationStore = {
         const messageId =
           error.response.data.error['@Message.ExtendedInfo'][0].MessageId;
 
-        if (messageId === 'Base.1.8.1.ResourceCannotBeDeleted') {
+        if (REGEX_MAPPINGS.resourceCannotBeDeleted.test(messageId)) {
           throw new Error(
             i18n.t('pageDeconfigurationHardware.toast.deleteReqFailed')
           );
@@ -229,7 +230,7 @@ const HardwareDeconfigurationStore = {
         const messageId =
           error.response.data.error['@Message.ExtendedInfo'][0].MessageId;
 
-        if (messageId === 'Base.1.8.1.ResourceCannotBeDeleted') {
+        if (REGEX_MAPPINGS.resourceCannotBeDeleted.test(messageId)) {
           throw new Error(
             i18n.t('pageDeconfigurationHardware.toast.deleteReqFailed')
           );

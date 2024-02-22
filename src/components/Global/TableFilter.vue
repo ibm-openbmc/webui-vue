@@ -15,6 +15,7 @@
       no-caret
       right
       data-test-id="tableFilter-dropdown-options"
+      :disabled="isFilterDisabled"
       @hide="dropdownVisible = false"
       @show="dropdownVisible = true"
     >
@@ -68,6 +69,10 @@ export default {
           (filter) => 'label' in filter && 'values' in filter && 'key' in filter
         );
       },
+    },
+    isFilterDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

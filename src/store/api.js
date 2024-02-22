@@ -5,7 +5,10 @@ import Axios from 'axios';
 import store from '../store';
 import router from '@/router';
 
-Axios.defaults.headers.common['Accept'] = 'application/json';
+Axios.defaults.headers.common['Accept'] = [
+  'application/octet-stream',
+  'application/json',
+];
 Axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 const api = Axios.create({

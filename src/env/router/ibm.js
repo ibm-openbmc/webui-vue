@@ -1,4 +1,5 @@
 import AppLayout from '@/layouts/AppLayout.vue';
+import AuditLogs from '@/views/Logs/AuditLogs';
 import ChangePassword from '@/views/ChangePassword';
 import ConcurrentMaintenance from '@/views/HardwareStatus/ConcurrentMaintenance';
 import Sessions from '@/views/SecurityAndAccess/Sessions';
@@ -39,6 +40,7 @@ import SnmpAlerts from '@/views/Settings/SnmpAlerts';
 import CapacityOnDemand from '@/views/ResourceManagement/CapacityOnDemand';
 import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
 import DeconfigurationRecords from '@/views/Logs/DeconfigurationRecords';
+import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
 
 import i18n from '@/i18n';
 
@@ -150,11 +152,27 @@ const routes = [
         },
       },
       {
+        path: '/logs/ibmi-service-functions',
+        name: 'ibmiServiceFunctions',
+        component: IBMiServiceFunctions,
+        meta: {
+          title: i18n.t('appPageTitle.ibmiServiceFunctions'),
+        },
+      },
+      {
         path: '/logs/event-logs',
         name: 'event-logs',
         component: EventLogs,
         meta: {
           title: i18n.t('appPageTitle.eventLogs'),
+        },
+      },
+      {
+        path: '/logs/audit-logs',
+        name: 'audit-logs',
+        component: AuditLogs,
+        meta: {
+          title: i18n.t('appPageTitle.auditLogs'),
         },
       },
       {

@@ -1,4 +1,5 @@
 import AppLayout from '@/layouts/AppLayout.vue';
+import AuditLogs from '@/views/Logs/AuditLogs';
 import ChangePassword from '@/views/ChangePassword';
 import ConsoleLayout from '@/layouts/ConsoleLayout.vue';
 import ConcurrentMaintenance from '@/views/HardwareStatus/ConcurrentMaintenance';
@@ -124,6 +125,14 @@ const routes = [
         component: EventLogs,
         meta: {
           title: i18n.t('appPageTitle.eventLogs'),
+        },
+      },
+      {
+        path: '/logs/audit-logs',
+        name: 'audit-logs',
+        component: AuditLogs,
+        meta: {
+          title: i18n.t('appPageTitle.auditLogs'),
         },
       },
       {

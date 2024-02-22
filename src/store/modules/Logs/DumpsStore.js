@@ -1,5 +1,6 @@
 import api, { getResponseCount } from '@/store/api';
 import i18n from '@/i18n';
+import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
 
 const DumpsStore = {
   namespaced: true,
@@ -66,12 +67,11 @@ const DumpsStore = {
           const messageId =
             error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
 
-          const message =
-            messageId === 'Base.1.8.1.ResourceInStandby'
-              ? i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
-                  dump: dumpType,
-                })
-              : i18n.t('pageDumps.toast.errorStartBmcDump');
+          const message = REGEX_MAPPINGS.resourceInStandby.test(messageId)
+            ? i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
+                dump: dumpType,
+              })
+            : i18n.t('pageDumps.toast.errorStartBmcDump');
 
           throw new Error(message);
         });
@@ -99,9 +99,11 @@ const DumpsStore = {
         .then(({ data }) => {
           const messageId = data.Messages.filter(
             (message) =>
-              message.MessageId === 'Base.1.8.1.ActionParameterUnknown' ||
-              message.MessageId === 'Base.1.8.1.ResourceAtUriUnauthorized' ||
-              message.MessageId === 'Base.1.8.1.InsufficientPrivilege'
+              REGEX_MAPPINGS.actionParameterUnknown.test(message.MessageId) ||
+              REGEX_MAPPINGS.resourceAtUriUnauthorized.test(
+                message.MessageId
+              ) ||
+              REGEX_MAPPINGS.insufficientPrivilege.test(message.MessageId)
           )[0]?.MessageId;
 
           if (messageId) {
@@ -111,21 +113,22 @@ const DumpsStore = {
         .catch((error) => {
           const errorMsg = error;
           if (
-            error.response?.data?.error?.code ===
-            'Base.1.13.0.ResourceInStandby'
+            REGEX_MAPPINGS.resourceInStandby.test(
+              error.response?.data?.error?.code
+            )
           ) {
             throw new Error(i18n.t('pageDumps.toast.errorPhypInStandby'));
           }
-          switch (errorMsg) {
-            case 'Base.1.8.1.ActionParameterUnknown':
+          switch (true) {
+            case REGEX_MAPPINGS.actionParameterUnknown.test(errorMsg):
               throw new Error(
                 i18n.t('pageDumps.toast.errorStartResourceDumpInvalidSelector')
               );
-            case 'Base.1.8.1.ResourceAtUriUnauthorized':
+            case REGEX_MAPPINGS.resourceAtUriUnauthorized.test(errorMsg):
               throw new Error(
                 i18n.t('pageDumps.toast.errorStartResourceDumpInvalidPassword')
               );
-            case 'Base.1.8.1.InsufficientPrivilege':
+            case REGEX_MAPPINGS.insufficientPrivilege.test(errorMsg):
               throw new Error(i18n.t('global.toast.unAuthDescription'));
             default:
               throw new Error(i18n.t('pageDumps.toast.errorStartResourceDump'));
@@ -146,14 +149,14 @@ const DumpsStore = {
           const errorMsg =
             error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
 
-          switch (errorMsg) {
-            case 'Base.1.8.1.ResourceInUse':
+          switch (true) {
+            case REGEX_MAPPINGS.resourceInUse.test(errorMsg):
               throw new Error(
                 i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
                   dump: dumpType,
                 })
               );
-            case 'Base.1.8.1.ResourceInStandby':
+            case REGEX_MAPPINGS.resourceInStandby.test(errorMsg):
               throw new Error(
                 i18n.t('pageDumps.toast.errorStartDumpResourceInStandby', {
                   dump: dumpType,

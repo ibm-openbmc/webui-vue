@@ -72,11 +72,13 @@
       "copied": "Copied",
       "connected": "Connected",
       "critical": "Critical",
+      "deferring": "Deferring",
       "disabled": "Disabled",
       "disconnected": "Disconnected",
       "enabled": "Enabled",
       "error": "Error",
       "informational": "Informational",
+      "inTest": "InTest",
       "locked": "Locked",
       "nextReboot": "Changes will take effect on next boot.",
       "notAvailable": "Not available",
@@ -84,8 +86,15 @@
       "ok": "OK",
       "on": "On",
       "present": "Present",
+      "qualified": "Qualified",
+      "quiesced": "Quiesced",
+      "standbyOffline":"Standby offline",
+      "standbySpare": "Standby spare",
+      "starting": "Starting",
       "success": "Success",
+      "updating": "Updating",
       "unavailable": "Unavailable",
+      "unavailableOffline": "Unavailable offline",
       "warning": "Warning"
     },
     "table": {
@@ -121,6 +130,7 @@
     "titleShowNavigation": "Show navigation"
   },
   "appNavigation": {
+    "auditLogs": "@:appPageTitle.auditLogs",
     "capacityOnDemand": "@:appPageTitle.capacityOnDemand",
     "certificates": "@:appPageTitle.certificates",
     "concurrentMaintenance": "@:appPageTitle.concurrentMaintenance",
@@ -134,12 +144,13 @@
     "firmware": "@:appPageTitle.firmware",
     "hardwareStatus": "Hardware status",
     "hostConsole": "@:appPageTitle.hostConsole",
+    "ibmiServiceFunctions": "@:appPageTitle.ibmiServiceFunctions",
     "inventory": "@:appPageTitle.inventory",
     "keyClear": "@:appPageTitle.keyClear",
     "kvm": "@:appPageTitle.kvm",
     "systemParameters": "@:appPageTitle.systemParameters",
     "ldap": "@:appPageTitle.ldap",
-    "logs": "Logs",
+    "logs": "Logs and services",
     "memory": "@:appPageTitle.memory",
     "network": "@:appPageTitle.network",
     "notices": "@:appPageTitle.notices",
@@ -164,10 +175,11 @@
     "virtualMedia": "@:appPageTitle.virtualMedia"
   },
   "appPageTitle": {
+    "auditLogs": "Audit logs",
     "capacityOnDemand": "Capacity on demand",
     "certificates": "Certificates",
     "changePassword": "Change password",
-    "concurrentMaintenance":"Concurrent maintenance",
+    "concurrentMaintenance": "Concurrent maintenance",
     "dateTime": "Date and time",
     "deconfigurationHardware": "Hardware deconfiguration",
     "deconfigurationRecords": "Deconfiguration records",
@@ -177,6 +189,7 @@
     "fieldCoreOverride": "Field core override",
     "firmware": "Firmware",
     "hostConsole": "Host console",
+    "ibmiServiceFunctions": "IBM i service functions",
     "inventory": "Inventory and LEDs",
     "keyClear": "Key clear",
     "kvm": "KVM",
@@ -204,6 +217,24 @@
     "userManagement": "User management",
     "virtualMedia": "Virtual media"
   },
+  "pageAuditLogs": {
+    "table": {
+      "id": "ID",
+      "op": "Operation",
+      "acct": "Account",
+      "addr": "Address",
+      "res": "Response",
+      "messageArgs": "MessageArgs",
+      "message": "Message",
+      "searchLogs": "Search logs",
+      "eventTimeStamp": "Date"
+    },
+    "toast": {
+      "infoStartDownload": "Download might take several minutes to complete.",
+      "errorStartDownload": "Error downloading Logs",
+      "successStartDownload": "Logs downloaded successfully"
+    }
+},
   "pageCapacityOnDemand": {
     "absent": "Absent",
     "deferring": "Deferring",
@@ -264,7 +295,7 @@
         "link": "Dumps page."
       }
     },
-    "setting":{
+    "setting": {
       "aixAllowed": "AIX allowed",
       "aixDiagnostics": "AIX Diagnostics",
       "aixUpdateAccessKey": "AIX Update Access Key",
@@ -431,7 +462,7 @@
     "processorChips": "Processor chips",
     "processorCores": "Processor cores",
     "totalCores": "Total cores",
-    "alert":{
+    "alert": {
       "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off."
     },
     "toast": {
@@ -529,10 +560,14 @@
       "bmcDumpHeading": "BMC dump",
       "bmcDumpMessage": "The dump will take some time to complete.",
       "bmcDumpMessageHmcEnabled": "BMC dumps will be offloaded to HMC and will not appear in the table below.",
+      "partitionDumpHeading": "Partition dump",
+      "partitionDumpMessage": "This function initiates a dump of the operating system data in a logical partition.",
       "refreshMessage": "Refresh the application to see the completed dump in the table.",
       "resourceDumpHeading": "Resource dump",
       "resourceDumpMessage": "The Resource dump is a long running process.",
       "resourceDumpMessage2": "If the Dump is not listed in the Dumps table and there are no Resource dump error logs, it has been offloaded to the operating system.",
+      "retryPartitionDumpHeading": "Retry partition dump",
+      "retryPartitionDumpMessage": "This function initiates a retry of the dump of the operating system data in a logical partition.",
       "systemDumpHeading": "System dump",
       "systemDumpMessage": "The System dump is a long running process.",
       "systemDumpMessageHmcDisabled": "System dumps will be offloaded to the operating system and will be deleted by the operating system when the dump is deleted from the host memory.",
@@ -541,11 +576,13 @@
     "form": {
       "bmcDump": "BMC dump (non disruptive)",
       "initiateDump": "Initiate dump",
+      "partitionDump": "Partition dump (disruptive)",
       "password": "Password",
       "passwordTooltip": "Required for resource selectors that need service authorization",
       "resourceDump": "Resource dump",
       "resourceSelector": "Resource selector",
       "resourceSelectorTooltip": "Command length cannot exceed 80 characters",
+      "retryPartitionDump": "Retry partition dump (disruptive)",
       "selectDumpType": "Select dump type",
       "selectDumpTypeTooltip": "Resource dump and system dump are only available when system is powered on",
       "systemDump": "System dump (disruptive)"
@@ -557,7 +594,11 @@
       "initiateSystemDumpMessage1": "Are you sure?",
       "initiateSystemDumpMessage2": "You will not be able to initiate any other dumps while a system dump is in progress.",
       "initiateSystemDumpMessage3": "Initiating a system dump will abnormally terminate all active system partitions.",
-      "initiateSystemDumpMessage4": "Proceed with dump initiation"
+      "initiateSystemDumpMessage4": "Proceed with dump initiation",
+      "initiatePartitionDump": "Initiate partition dump",
+      "initiatePartitionDumpMessage1": "Initiating a partition dump will abnormally terminate all active system partitions.",
+      "initiatePartitionDumpMessage2": "Proceed with dump initiation",
+      "initiateRetryPartitionDump": "Retry partition dump initiation"
     },
     "table": {
       "dateAndTime": "Date and time",
@@ -771,6 +812,31 @@
   "pageHostConsole": {
     "subTitle": "Host console redirects the server's serial port output to this window.",
     "status": "Status"
+  },
+  "pageIbmiServiceFunctions": {
+    "activateDedicatedServiceTool": "Activate Dedicated Service Tools",
+    "activateDedicatedServiceToolDesc": "This function makes dedicated service tools (DST) available on the system console display.",
+    "concurrentMaintenancePowerOff": "Concurrent Maintenance Power Off Domain",
+    "concurrentMaintenancePowerOffDesc": "Use this function to power off the power domain that includes resources that are currently in a disk unit attention state.",
+    "concurrentMaintenancePowerOn": "Concurrent Maintenance Power On Domain",
+    "concurrentMaintenancePowerOnDesc": "Use this function to power on the power domain that was powered off by using function 68.",
+    "disableRemoteService": "Disable Remote Service",
+    "disableRemoteServiceDesc": "Use this function to deactivate a remote service session.",
+    "diskUnitIOP": "Disk Unit IOP Reset/Reload",
+    "diskUnitIOPDesc": "Use this function to initiate an I/O processor dump and reset/reload of an IOP that controls resources that are currently in a disk unit attention state.",
+    "enableRemoteService": "Enable Remote Service",
+    "enableRemoteServiceDesc": "Use this function to activate a remote service session.",
+    "execute": "Execute",
+    "iopControlStorageDump": "IOP Control Storage Dump",
+    "iopControlStorageDumpDesc": "Use this function to initiate an I/O processor dump and reset/reload of the IOP that was designated to control the load source device when the logical partition was activated.",
+    "toast": {
+      "successExecuteFunction": "Request successfully sent to server.",
+      "errorExecuteFunction": "Error sending request to server."
+    },
+    "alert": {
+      "notIBMi": "Default partition environment should be either IBM i or Default.",
+      "osRunning": "Functions available only when OS is Running. Try hitting the refresh button."
+    }
   },
   "pageInventory": {
     "assemblies": "Assemblies",
@@ -1047,7 +1113,7 @@
     "activeMemoryMirroringDescription": "Active Memory Mirroring for hypervisor is designed to ensure that system operation continues even in the unlikely event of an uncorrectable error occurring in main memory used by the system hypervisor.",
     "activeMemoryMirroringHelpText": "Specifies if memory mirroring is enabled, requires a reboot for the change to be applied.",
     "activeMemoryMirroringTitle": "Active memory mirroring",
-    "ioAdapterEnlargedCapacity": "This option controls the size of PCI memory space allocated to each PCI slot.",
+    "ioAdapterEnlargedCapacity": "This option controls the size of PCIe memory space allocated to each PCIe slot.",
     "ioAdapterEnlargedCapacityTitle": "I/O Adapter enlarged capacity",
     "logicalMemorySize": "Logical memory block size",
     "logicalMemorySizeHeading": "Logical memory block size is used for partitioning. Changing the logical memory block size impacts system resource management.",
@@ -1061,6 +1127,9 @@
     "updateLogicalMemoryPageSetup": "Update system memory page setup",
     "updateLogicalMemorySize": "Update logical memory block size",
     "updatePageSetup": "Update system memory page setup",
+    "dynamicIoDrawerAttachmentTitle":"Dynamic I/O drawer attachment",
+    "dynamicIoDrawerAttachment": "This option allocates platform memory during IPL for PCIe slots to enable dynamic I/O drawer attachment.",
+    "updateDynamicIoDrawerAttachment": "Update dynamic I/O drawer attachment",
     "alert": {
       "heading": "Applying changes",
       "message": "System has to be powered off and not managed by HMC. Changes made will take effect on next reboot.",
@@ -1079,7 +1148,9 @@
       "successSavingAdapterEnlargedCapacity": "Successfully updated I/O adapter enlarged capacity",
       "successSavingLogicalMemory": "Successfully updated logical memory block size",
       "successSavingActiveMemoryMirroringMode": "Successfully updated active memory mirroring mode",
-      "successSavingPageSetup": "Successfully updated system memory page setup"
+      "successSavingPageSetup": "Successfully updated system memory page setup",
+      "successSavingAdapterDynamicCapacity": "Successfully updated I/O adapter drawer attachment",
+      "errorSavingAdapterDynamicCapacity": "Error updating I/O adapter drawer attachment"
     }
   },
   "pageNetwork": {
@@ -1194,11 +1265,11 @@
       "powerSaving": "Power saving",
       "static": "Static"
     },
-    "modal" : {
+    "modal": {
       "editAssetTag": "Edit asset tag"
     },
     "toast": {
-      "successSaveAssetTag" : "Successfully updated asset tag.",
+      "successSaveAssetTag": "Successfully updated asset tag.",
       "errorSaveAssetTag": "Error updating asset tag."
     }
   },
@@ -1206,58 +1277,58 @@
     "description": "The requested resource could not be found."
   },
   "pagePcieTopology": {
-      "alert": "This page might take a few minutes to load.",
-      "bridgeOrHost": "PCIe bridge or CAPI host",
-      "cableLength": "Cable length",
-      "cableStatus": "Cable status",
-      "cableType": "Cable type",
-      "id": "@:pageInventory.table.id",
-      "identifyLed": "Identify LEDs",
-      "ioSlots": "I/O slots",
-      "linkProperties": "Link properties",
-      "linkStatus": "Link status",
-      "localPort": "Local port",
-      "localPortLocation": "Local port location",
-      "parentId": "Parent ID",
-      "partNumber": "@:pageInventory.table.partNumber",
-      "remotePort": "Remote port",
-      "remotePortLocation": "Remote port location",
-      "resetLink": "Reset link",
-      "savePcieTopology": "Save PCIe topology",
-      "speed": "Speed",
-      "type": "Type",
-      "warning": "System must at least be in PHYP standby. To power on, visit ",
-      "width": "Width",
-      "modal": {
-        "resetConfirm": "Are you sure?",
-        "resetLinkDescription": "Resetting a link while system partitions are running can cause errors. This operation must be performed with guidance from a support team member.",
-        "resetLinkHeader": "Reset link %{id}"
-      },
-      "table": {
-        "search": "Search",
-        "linkStatusType": "Link status type",
-        "filter": {
-          "degraded": "Degraded",
-          "failed": "Failed",
-          "inactive": "Inactive",
-          "open": "Open",
-          "operational": "Operational",
-          "unknown": "Unknown"
-        }
-      },
-      "toast": {
-        "errorDisableIdentifyLed": "Error disabling Identify LED.",
-        "errorEnableIdentifyLed": "Error enabling Identify LED.",
-        "errorReset": "Error resetting link %{id}",
-        "errorSavePcieTopology": "Error saving PCIe topology Info.",
-        "errorSwitchingLed": "Error turning %{operation} LED for %{value}",
-        "resetInfoTitle": "Link ID %{id} being reset.",
-        "resetInfoDescription": "this operation may take a few seconds to complete.",
-        "successDisableIdentifyLed": "Successfully disabled Identify LED.",
-        "successEnableIdentifyLed": "Successfully enabled Identify LED.",
-        "successReset": "Reset link %{id} successfully initiated. Check event logs for any issues.",
-        "successSavePcieTopology": "Successfully saved PCIe topology Info."
+    "alert": "This page might take a few minutes to load.",
+    "bridgeOrHost": "PCIe bridge or CAPI host",
+    "cableLength": "Cable length",
+    "cableStatus": "Cable status",
+    "cableType": "Cable type",
+    "id": "@:pageInventory.table.id",
+    "identifyLed": "Identify LEDs",
+    "ioSlots": "I/O slots",
+    "linkProperties": "Link properties",
+    "linkStatus": "Link status",
+    "localPort": "Local port",
+    "localPortLocation": "Local port location",
+    "parentId": "Parent ID",
+    "partNumber": "@:pageInventory.table.partNumber",
+    "remotePort": "Remote port",
+    "remotePortLocation": "Remote port location",
+    "resetLink": "Reset link",
+    "savePcieTopology": "Save PCIe topology",
+    "speed": "Speed",
+    "type": "Type",
+    "warning": "System must at least be in PHYP standby. To power on, visit ",
+    "width": "Width",
+    "modal": {
+      "resetConfirm": "Are you sure?",
+      "resetLinkDescription": "Resetting a link while system partitions are running can cause errors. This operation must be performed with guidance from a support team member.",
+      "resetLinkHeader": "Reset link %{id}"
+    },
+    "table": {
+      "search": "Search",
+      "linkStatusType": "Link status type",
+      "filter": {
+        "degraded": "Degraded",
+        "failed": "Failed",
+        "inactive": "Inactive",
+        "open": "Open",
+        "operational": "Operational",
+        "unknown": "Unknown"
       }
+    },
+    "toast": {
+      "errorDisableIdentifyLed": "Error disabling Identify LED.",
+      "errorEnableIdentifyLed": "Error enabling Identify LED.",
+      "errorReset": "Error resetting link %{id}",
+      "errorSavePcieTopology": "Error saving PCIe topology Info.",
+      "errorSwitchingLed": "Error turning %{operation} LED for %{value}",
+      "resetInfoTitle": "Link ID %{id} being reset.",
+      "resetInfoDescription": "this operation may take a few seconds to complete.",
+      "successDisableIdentifyLed": "Successfully disabled Identify LED.",
+      "successEnableIdentifyLed": "Successfully enabled Identify LED.",
+      "successReset": "Reset link %{id} successfully initiated. Check event logs for any issues.",
+      "successSavePcieTopology": "Successfully saved PCIe topology Info."
+    }
   },
   "pagePolicies": {
     "acfUploadEnablement": "Unauthenticated ACF upload enablement",
@@ -1306,7 +1377,12 @@
       "created": "Created",
       "postCode": "Code",
       "searchLogs": "Search logs",
-      "timeStampOffset": "Time stamp offset"
+      "timeStampOffset": "Time stamp offset",
+      "srcDetails": "SRC Details",
+      "srcDetailsToolTip": "System Reference Code Details"
+    },
+    "toast": {
+      "errorSrcFetch": "Error fetching SRC details."
     }
   },
   "pagePower": {
@@ -1453,6 +1529,8 @@
   },
   "pageServerPowerOperations": {
     "currentStatus": "Current status",
+    "discardOsRuntimeButton": "Discard and continue to OS running",
+    "discardOsRuntimeMessage": "Discard changes and continue to OS running state to continue to runtime.",
     "immediateReboot": "Immediate – Server reboots without operating system shutting down; may cause data corruption",
     "immediateShutdown": "Immediate - Server shuts down without operating system shutting down; may cause data corruption",
     "lastPowerOperation": "Last chassis power operation",
@@ -1467,6 +1545,8 @@
     "powerOn": "Power on",
     "reboot": "Reboot",
     "rebootServer": "Reboot server",
+    "saveOsRuntimeButton": "Save and continue to OS running",
+    "saveOsRuntimeMessage": "Save changes and continue to OS running state to continue to runtime.",
     "serverBootSettings": "Settings",
     "serverStatus": "Server status",
     "shutDown": "Shut down",
@@ -1482,6 +1562,9 @@
       "powPolicySection": "will be set to %{powerPolicy}",
       "powerOff": "Power Off",
       "pvm_default_os_type": "Default partition environment",
+      "pvm_ibmi_load_source": "IBM i load source",
+      "pvm_ibmi_alt_load_source": "IBM i alternate load source",
+      "pvm_ibmi_console": "IBM i console",
       "pvm_linux_kvm_memory": "Linux KVM",
       "pvm_linux_kvm_percentage": "System Memory Reserved for KVM Guest Management (%)",
       "pvm_os_boot_type": "IBM i partition boot mode",
@@ -1490,18 +1573,18 @@
       "pvm_system_operating_mode": "Server operating mode",
       "pvm_system_power_off_policy": "Server power policy",
       "selectedOperatingModeManual": "On save operating mode will be set to Manual",
-      "selectedOperatingModeNormal":  "On save operating mode will be set to Normal",
+      "selectedOperatingModeNormal": "On save operating mode will be set to Normal",
       "serverFirmware": "Server firmware start policy",
       "powerSettingDescription": "View power setting descriptions",
       "stayOn": "Stay On",
-      "serverFirmwareItems": { 
-       "setting": {
-        "autoStartOnly": "Auto-start only",
-        "autoStartAlways": "Auto-start always",
-        "standBy": "Standby"
-      },
-      "description": {
-        "autoStartOnly": "Activate server firmware and partitions automatically only in the case of a recovery power on after an abnormal termination (e.g. auto power restart or system termination auto-reboot).",
+      "serverFirmwareItems": {
+        "setting": {
+          "autoStartOnly": "Auto-start only",
+          "autoStartAlways": "Auto-start always",
+          "standBy": "Standby"
+        },
+        "description": {
+          "autoStartOnly": "Activate server firmware and partitions automatically only in the case of a recovery power on after an abnormal termination (e.g. auto power restart or system termination auto-reboot).",
         "autoStartAlways" : "Activate certain partitions automatically. If the server is powered on using the HMC or ASMI menus, the server automatically activates the partitions configured for 'auto-start'. If an auto-power restart or a reboot is performed after the server stops abnormally, the server activates the partitions that were running at the time the system stopped.",
         "standBy": "Do not activate server firmware and partitions automatically for either a user-initiated power on or a recovery power on."
       }
@@ -1511,7 +1594,7 @@
        "aix": "AIX",
        "linux": "Linux",
        "linuxKVM": "Linux KVM",
-       "ibmI": "IBM I",
+       "ibmI": "IBM i",
        "default": "Default"
      },
      "description": {
@@ -1552,6 +1635,15 @@
   "description": "Specifies the percentage of available system memory that will be reserved for the management of KVM guests. The percentage is specified to the 10th of a percent.",
   "errorMessage": "Value must be in range of 0-100 and include decimals with up to one decimal point."
 },
+  "ibmiLoadSource": {
+    "description": "Specifies the load source the system will use to start the logical partition."
+  },
+  "ibmiAltLoadSource": {
+    "description": "Specifies the device the system will use when a D-mode initial program load (IPL) is performed."
+  },
+  "ibmiConsole": {
+    "description": "Specifies the first workstation that the system will activate in the logical partition."
+  },
 "ibmiItems": { 
   "setting": {
    "a": "A",
@@ -1571,7 +1663,7 @@
           "AIX": "AIX",
           "Linux": "Linux",
           "Linux KVM": "Linux KVM",
-          "IBM I": "IBM I",
+          "IBM I": "IBM i",
           "Default": "Default"
         },
         "pvm_os_boot_type": {
@@ -1620,7 +1712,8 @@
       "errorPowerOn": "BMC is not ready to power on the host.",
       "errorSaveSettings": "Error saving settings.",
       "successSaveSettings": "Successfully saved settings.",
-      "successSaveLinuxKvmSettings": "Successfully saved settings. Changes made will take effect on next reboot."
+      "successSaveLinuxKvmSettings": "Successfully saved settings. Changes made will take effect on next reboot.",
+      "successSaveIBMiStandby": "Please press the `Continue to OS running` link to proceed."
     }
   },
   "pageServiceLoginConsoles": {

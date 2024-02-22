@@ -7,6 +7,8 @@ const ResourceMemoryStore = {
     logicalMemorySizeOptions: [],
     logicalMemorySize: null,
     ioAdapterCapacity: null,
+    dynamicIoDrawerCapacity: null,
+    dynamicIoDrawerDefaultCapacity: null,
     maxNumHugePages: null,
     numHugePages: null,
     hmcManaged: null,
@@ -16,6 +18,9 @@ const ResourceMemoryStore = {
     logicalMemorySizeOptions: (state) => state.logicalMemorySizeOptions,
     logicalMemorySize: (state) => state.logicalMemorySize,
     ioAdapterCapacity: (state) => state.ioAdapterCapacity,
+    dynamicIoDrawerCapacity: (state) => state.dynamicIoDrawerCapacity,
+    dynamicIoDrawerDefaultCapacity: (state) =>
+      state.dynamicIoDrawerDefaultCapacity,
     maxNumHugePages: (state) => state.maxNumHugePages,
     numHugePages: (state) => state.numHugePages,
     hmcManaged: (state) => state.hmcManaged,
@@ -28,6 +33,13 @@ const ResourceMemoryStore = {
       (state.logicalMemorySize = logicalMemorySize),
     setIoAdapterCapacity: (state, ioAdapterCapacity) =>
       (state.ioAdapterCapacity = ioAdapterCapacity),
+    setDynamicIoDrawerDefaultCapacity: (
+      state,
+      dynamicIoDrawerDefaultCapacity
+    ) =>
+      (state.dynamicIoDrawerDefaultCapacity = dynamicIoDrawerDefaultCapacity),
+    setDynamicIoDrawerCapacity: (state, dynamicIoDrawerCapacity) =>
+      (state.dynamicIoDrawerCapacity = dynamicIoDrawerCapacity),
     setMaxNumHugePages: (state, maxNumHugePages) =>
       (state.maxNumHugePages = maxNumHugePages),
     setNumHugePages: (state, numHugePages) =>
@@ -87,9 +99,34 @@ const ResourceMemoryStore = {
           );
           let ioEnlargedAdapterCapacity = ioAdapterCapacity[0].CurrentValue;
           commit('setIoAdapterCapacity', ioEnlargedAdapterCapacity);
+
+          const dynamicIoDrawerCapacity = RegistryEntries.Attributes.filter(
+            (Attribute) =>
+              Attribute.AttributeName ==
+              'hb_storage_preallocation_for_drawer_attach'
+          );
+          let dynamicIoDrawerAttachmentCapacity =
+            dynamicIoDrawerCapacity[0].CurrentValue;
+          commit(
+            'setDynamicIoDrawerCapacity',
+            dynamicIoDrawerAttachmentCapacity
+          );
+
+          const dynamicIoDrawerDefaultCapacity = RegistryEntries.Attributes.filter(
+            (Attribute) =>
+              Attribute.AttributeName ==
+              'hb_storage_preallocation_for_drawer_attach'
+          );
+          let dynamicIoDrawerAttachmentDefaultCapacity =
+            dynamicIoDrawerDefaultCapacity[0].DefaultValue;
+          commit(
+            'setDynamicIoDrawerDefaultCapacity',
+            dynamicIoDrawerAttachmentDefaultCapacity
+          );
         })
         .catch((error) => console.log(error));
     },
+
     async getMaxNumHugePages({ commit }) {
       return await api
         .get(
@@ -127,11 +164,13 @@ const ResourceMemoryStore = {
           const activeMemoryMirroringMode = RegistryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'hb_memory_mirror_mode'
           );
-          let activeMemoryMirroringModeValue =
-            activeMemoryMirroringMode[0].CurrentValue;
-          let mirroringModeValue =
-            activeMemoryMirroringModeValue == 'Enabled' ? true : false;
-          commit('setMemoryMirroringMode', mirroringModeValue);
+          if (activeMemoryMirroringMode.length > 0) {
+            let activeMemoryMirroringModeValue =
+              activeMemoryMirroringMode[0].CurrentValue;
+            let mirroringModeValue =
+              activeMemoryMirroringModeValue == 'Enabled' ? true : false;
+            commit('setMemoryMirroringMode', mirroringModeValue);
+          }
         })
         .catch((error) => console.log(error));
     },
@@ -206,6 +245,33 @@ const ResourceMemoryStore = {
           console.log('error', error);
           throw new Error(
             i18n.t('pageMemory.toast.errorSavingAdapterEnlargedCapacity')
+          );
+        });
+    },
+    async saveDynamicCapacity({ commit }) {
+      const updatedIoDynamicCapacity = {
+        Attributes: {
+          hb_storage_preallocation_for_drawer_attach: this.state.resourceMemory
+            .dynamicIoDrawerCapacity,
+        },
+      };
+      return await api
+        .patch(
+          '/redfish/v1/Systems/system/Bios/Settings',
+          updatedIoDynamicCapacity
+        )
+        .then(() => {
+          commit(
+            'setDynamicIoDrawerCapacity',
+            updatedIoDynamicCapacity.Attributes
+              .hb_storage_preallocation_for_drawer_attach
+          );
+          return i18n.t('pageMemory.toast.successSavingAdapterDynamicCapacity');
+        })
+        .catch((error) => {
+          console.log(error);
+          throw new Error(
+            i18n.t('pageMemory.toast.errorSavingAdapterDynamicCapacity')
           );
         });
     },

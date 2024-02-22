@@ -18,6 +18,7 @@
           type="text"
           :aria-label="$t('global.form.search')"
           :placeholder="placeholder"
+          :disabled="isSearchDisabled"
           @input="onChangeInput"
         >
         </b-form-input>
@@ -49,6 +50,10 @@ export default {
       default: function () {
         return this.$t('global.form.search');
       },
+    },
+    isSearchDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

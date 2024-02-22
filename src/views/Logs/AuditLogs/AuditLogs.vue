@@ -1,19 +1,11 @@
 <template>
   <b-container fluid="xl">
-    <page-title :title="$t('appPageTitle.postCodeLogs')" />
-    <b-row>
-      <b-col xl="12" class="text-right">
-        <b-button variant="dark" type="button" @click="openConsoleWindow()">
-          <icon-launch />
-          {{ $t('pagePostCodeLogs.viewCodesInRealtime') }}
-        </b-button>
-      </b-col>
-    </b-row>
+    <page-title :title="$t('appPageTitle.auditLogs')" />
     <div class="section-divider mb-4 mt-4"></div>
     <b-row class="align-items-start">
       <b-col sm="8" xl="6" class="d-sm-flex align-items-end mb-4">
         <search
-          :placeholder="$t('pagePostCodeLogs.table.searchLogs')"
+          :placeholder="$t('pageAuditLogs.table.searchLogs')"
           @change-search="onChangeSearchInput"
           @clear-search="onClearSearchInput"
         />
@@ -29,9 +21,20 @@
       </b-col>
     </b-row>
     <b-row>
+      <b-col class="text-right">
+        <b-button
+          variant="primary"
+          :class="{ disabled: allLogs.length === 0 }"
+          @click="downloadEventLogs('all')"
+        >
+          <icon-download /> {{ $t('global.action.downloadAll') }}
+        </b-button>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col>
         <b-table
-          id="table-post-code-logs"
+          id="table-audit-logs"
           ref="table"
           responsive="md"
           selectable
@@ -51,7 +54,6 @@
           :filter="searchFilter"
           :busy="isBusy"
           @filtered="onFiltered"
-          @row-selected="onRowSelected($event, filteredLogs.length)"
         >
           <!-- Expand chevron icon -->
           <template #cell(expandRow)="row">
@@ -60,27 +62,26 @@
               :aria-label="expandRowLabel"
               :title="expandRowLabel"
               class="btn-icon-only"
-              @click="fetchSrcDetails(row)"
+              @click="toggleRowDetails(row)"
             >
               <icon-chevron />
             </b-button>
           </template>
+
           <template #row-details="{ item }">
-            <b-container fluid
-              ><b-row>
+            <b-container fluid>
+              <b-row>
                 <b-col>
                   <dl>
-                    <!-- SRC Details -->
-                    <dt>
-                      {{ $t('pagePostCodeLogs.table.srcDetails') }}:
-                      <info-tooltip
-                        class="info-icon"
-                        :title="$t('pagePostCodeLogs.table.srcDetailsToolTip')"
-                      >
-                      </info-tooltip>
-                    </dt>
+                    <!-- Id -->
+                    <dt>{{ $t('pageAuditLogs.table.id') }}:</dt>
+                    <dd>{{ dataFormatter(item.auditId) }}</dd>
+                  </dl>
+                  <dl>
+                    <!-- Message -->
+                    <dt>{{ $t('pageAuditLogs.table.message') }}:</dt>
                     <dd>
-                      {{ dataFormatter(srcData[item.timeStampOffset]) }}
+                      {{ dataFormatter(item.message) }}
                     </dd>
                   </dl>
                 </b-col>
@@ -126,19 +127,15 @@
 </template>
 
 <script>
-import IconLaunch from '@carbon/icons-vue/es/launch/20';
+import IconDownload from '@carbon/icons-vue/es/download/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
-import api from '@/store/api';
-import i18n from '@/i18n';
-import { omit } from 'lodash';
 import PageTitle from '@/components/Global/PageTitle';
 import Search from '@/components/Global/Search';
+import i18n from '@/i18n';
 import TableCellCount from '@/components/Global/TableCellCount';
 import TableDateFilter from '@/components/Global/TableDateFilter';
-import InfoTooltip from '@/components/Global/InfoTooltip';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import BVPaginationMixin, {
   currentPage,
   perPage,
@@ -150,6 +147,8 @@ import BVTableSelectableMixin, {
   tableHeaderCheckboxIndeterminate,
 } from '@/components/Mixins/BVTableSelectableMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import TableRowExpandMixin, {
   expandRowLabel,
@@ -160,24 +159,23 @@ import SearchFilterMixin, {
 
 export default {
   components: {
-    IconLaunch,
+    IconDownload,
+    IconChevron,
     PageTitle,
     Search,
     TableCellCount,
     TableDateFilter,
-    IconChevron,
-    InfoTooltip,
   },
   mixins: [
     BVPaginationMixin,
     BVTableSelectableMixin,
     BVToastMixin,
+    DataFormatterMixin,
     LoadingBarMixin,
     TableFilterMixin,
     TableSortMixin,
     TableRowExpandMixin,
     SearchFilterMixin,
-    DataFormatterMixin,
   ],
   beforeRouteLeave(to, from, next) {
     // Hide loader if the user navigates to another page
@@ -187,7 +185,6 @@ export default {
   },
   data() {
     return {
-      srcData: {},
       isBusy: true,
       fields: [
         {
@@ -197,20 +194,23 @@ export default {
         },
         {
           key: 'date',
-          label: this.$t('pagePostCodeLogs.table.created'),
-          sortable: true,
+          label: this.$t('pageAuditLogs.table.eventTimeStamp'),
         },
         {
-          key: 'timeStampOffset',
-          label: this.$t('pagePostCodeLogs.table.timeStampOffset'),
+          key: 'operation',
+          label: this.$t('pageAuditLogs.table.op'),
         },
         {
-          key: 'bootCount',
-          label: this.$t('pagePostCodeLogs.table.bootCount'),
+          key: 'account',
+          label: this.$t('pageAuditLogs.table.acct'),
         },
         {
-          key: 'postCode',
-          label: this.$t('pagePostCodeLogs.table.postCode'),
+          key: 'addr',
+          label: this.$t('pageAuditLogs.table.addr'),
+        },
+        {
+          key: 'res',
+          label: this.$t('pageAuditLogs.table.res'),
         },
       ],
       expandRowLabel,
@@ -234,26 +234,11 @@ export default {
         : this.filteredLogs.length;
     },
     allLogs() {
-      return this.$store.getters['postCodeLogs/allPostCodes'].map(
-        (postCodes) => {
-          return {
-            ...postCodes,
-            actions: [
-              {
-                value: 'export',
-                title: this.$t('pagePostCodeLogs.action.exportLogs'),
-              },
-              {
-                value: 'download',
-                title: this.$t('pagePostCodeLogs.action.downloadDetails'),
-              },
-            ],
-          };
-        }
-      );
-    },
-    batchExportData() {
-      return this.selectedRows.map((row) => omit(row, 'actions'));
+      return this.$store.getters['auditLogs/allAuditLogs'].map((auditLogs) => {
+        return {
+          ...auditLogs,
+        };
+      });
     },
     filteredLogsByDate() {
       return this.getFilteredTableDataByDate(
@@ -271,55 +256,12 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store.dispatch('postCodeLogs/getPostCodesLogData').finally(() => {
+    this.$store.dispatch('auditLogs/getAuditLogData').finally(() => {
       this.endLoader();
       this.isBusy = false;
     });
   },
   methods: {
-    fetchSrcDetails(row) {
-      this.toggleRowDetails(row);
-      if (!row.detailsShowing) {
-        const { timeStampOffset, uri, postCode } = row.item;
-        if (!this.srcData[timeStampOffset]) {
-          api
-            .get(uri)
-            .then((response) => this.generateSrcWords(response.data))
-            .then((srcWords) =>
-              this.$set(
-                this.srcData,
-                timeStampOffset,
-                `${postCode.trim()} ${srcWords}`
-              )
-            )
-            .catch(() =>
-              this.errorToast(i18n.t('pagePostCodeLogs.toast.errorSrcFetch'))
-            );
-        }
-      }
-    },
-    generateSrcWords(data) {
-      const decodedData = Buffer.from(data, 'base64').toString('hex');
-      const srcBulk = decodedData.substring(16, 80).toUpperCase();
-      if (!isNaN(srcBulk) && !Number(srcBulk)) {
-        return '';
-      }
-      let srcWords = '';
-      for (let i = 0; i <= 56; i += 8) {
-        srcWords += `${srcBulk.substring(i, i + 8)} `;
-      }
-      return srcWords.trim();
-    },
-    openConsoleWindow() {
-      window.open(
-        '#/console/post-codes',
-        '_blank',
-        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=200,height=200'
-      );
-    },
-    onFilterChange({ activeFilters }) {
-      this.activeFilters = activeFilters;
-    },
     onChangeDateTimeFilter({ fromDate, toDate }) {
       this.filterStartDate = fromDate;
       this.filterEndDate = toDate;
@@ -327,22 +269,51 @@ export default {
     onFiltered(filteredItems) {
       this.searchTotalFilteredRows = filteredItems.length;
     },
-    // Create export file name based on date and action
-    exportFileNameByDate(value) {
+    downloadFile(data) {
+      const decodedData = atob(data);
       let date = new Date();
       date =
         date.toISOString().slice(0, 10) +
         '_' +
         date.toString().split(':').join('-').split(' ')[4];
       let fileName;
-      if (value === 'download') {
-        fileName = this.$t('pagePostCodeLogs.downloadFilePrefix');
-      } else if (value === 'export') {
-        fileName = this.$t('pagePostCodeLogs.exportFilePrefix');
-      } else {
-        fileName = this.$t('pagePostCodeLogs.allExportFilePrefix');
+      fileName = 'audit_logs_' + date;
+      var element = document.createElement('a');
+      element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(decodedData)
+      );
+      element.setAttribute('download', fileName);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    },
+    async downloadEventLogs(value) {
+      const auditLogsData = [];
+      this.infoToast(this.$t('pageAuditLogs.toast.infoStartDownload'));
+      if (value === 'all') {
+        this.startLoader();
+        await this.$store
+          .dispatch(
+            'auditLogs/downloadLogData',
+            this.allLogs[0].additionalDataUri
+          )
+          .then((response) => {
+            auditLogsData.push(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+            this.errorToast(i18n.t('pageAuditLogs.toast.errorStartDownload'));
+          })
+          .finally(() => {
+            this.downloadFile(auditLogsData);
+            this.successToast(
+              i18n.t('pageAuditLogs.toast.successStartDownload')
+            );
+            this.endLoader();
+          });
       }
-      return fileName + date;
     },
   },
 };

@@ -189,6 +189,70 @@
         </b-col>
       </b-row>
     </page-section>
+    <div class="section-divider mb-3 mt-3"></div>
+    <page-section
+      id="inputDynamicIoDrawerAttachmentCapacity"
+      ref="inputDynamicIoDrawerAttachmentCapacity"
+      :section-title="$t('pageMemory.dynamicIoDrawerAttachmentTitle')"
+    >
+      <b-row>
+        <b-col md="8" xl="6">
+          <p>{{ $t('pageMemory.dynamicIoDrawerAttachment') }}</p>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md="8" xl="6">
+          <b-form @submit.prevent="updateDynamicAdapterCapacity()">
+            <span v-if="dynamicIoDrawerCapacity === null">
+              {{ '--' }}
+            </span>
+            <span v-else>
+              <b-form-group
+                :label="$t('pageMemory.slotCountForNode0')"
+                label-for="dynamic-io-drawer-capacity"
+                class="mb-3"
+              >
+                <b-form-input
+                  id="input-dynamic-io-adapter-drawer-capacity"
+                  v-model.number="dynamicIoDrawerCapacity"
+                  data-test-id="dynamic-io-adapter-drawer-attachment"
+                  type="number"
+                  :min="0"
+                  :max="dynamicIoDrawerDefaultCapacity"
+                  :state="getValidationState($v.dynamicIoDrawerCapacity)"
+                  :disabled="!isSectionEditable()"
+                ></b-form-input>
+                <b-form-invalid-feedback role="alert">
+                  <template
+                    v-if="
+                      !$v.dynamicIoDrawerCapacity.minLength ||
+                      !$v.dynamicIoDrawerCapacity.maxLength
+                    "
+                  >
+                    {{
+                      $t('global.form.valueMustBeBetween', {
+                        min: 0,
+                        max: dynamicIoDrawerDefaultCapacity,
+                      })
+                    }}
+                  </template>
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </span>
+            <span v-if="dynamicIoDrawerCapacity !== null">
+              <b-button
+                variant="primary"
+                type="submit"
+                class="mt-3"
+                :disabled="!isSectionEditable()"
+              >
+                {{ $t('pageMemory.updateDynamicIoDrawerAttachment') }}
+              </b-button>
+            </span>
+          </b-form>
+        </b-col>
+      </b-row>
+    </page-section>
     <div class="section-divider mb-3"></div>
     <page-section
       id="toggleActiveMemoryMirroring"
@@ -212,13 +276,20 @@
               {{ $t('pageMemory.activeMemoryMirroring') }}
             </dt>
             <dd v-if="!isSectionEditable()">
-              <span v-if="activeMemoryMirroringState">
+              <span v-if="activeMemoryMirroringState === null">
+                {{ '--' }}
+              </span>
+              <span v-else-if="activeMemoryMirroringState">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
             </dd>
             <dd v-else>
+              <span v-if="activeMemoryMirroringState === null">
+                {{ '--' }}
+              </span>
               <b-form-checkbox
+                v-else
                 id="activeMemoryMirroringSwitch"
                 v-model="activeMemoryMirroringState"
                 switch
@@ -281,6 +352,12 @@ export default {
           linkText: this.$t('pageMemory.ioAdapterEnlargedCapacityTitle'),
         },
         {
+          id: 'inputDynamicIoDrawerAttachmentCapacity',
+          dataRef: 'inputDynamicIoDrawerAttachmentCapacity',
+          href: '#inputDynamicIoDrawerAttachmentCapacity',
+          linkText: this.$t('pageMemory.dynamicIoDrawerAttachmentTitle'),
+        },
+        {
           id: 'toggleActiveMemoryMirroring',
           dataRef: 'toggleActiveMemoryMirroring',
           href: '#toggleActiveMemoryMirroring',
@@ -305,6 +382,13 @@ export default {
     maxHugePageLimit() {
       return this.$store.getters['resourceMemory/maxNumHugePages'];
     },
+    dynamicIoDrawerDefaultCapacity: {
+      get() {
+        return this.$store.getters[
+          'resourceMemory/dynamicIoDrawerDefaultCapacity'
+        ];
+      },
+    },
     ioAdapterCapacity: {
       get() {
         return this.$store.getters['resourceMemory/ioAdapterCapacity'];
@@ -312,6 +396,15 @@ export default {
       set(value) {
         this.$v.$touch();
         this.$store.commit('resourceMemory/setIoAdapterCapacity', value);
+      },
+    },
+    dynamicIoDrawerCapacity: {
+      get() {
+        return this.$store.getters['resourceMemory/dynamicIoDrawerCapacity'];
+      },
+      set(value) {
+        this.$v.$touch();
+        this.$store.commit('resourceMemory/setDynamicIoDrawerCapacity', value);
       },
     },
     systemMemoryPageSetup: {
@@ -342,6 +435,10 @@ export default {
       ioAdapterCapacity: {
         minValue: minValue(0),
         maxValue: maxValue(21),
+      },
+      dynamicIoDrawerCapacity: {
+        minValue: minValue(0),
+        maxValue: maxValue(this.dynamicIoDrawerDefaultCapacity),
       },
       systemMemoryPageSetup: {
         minValue: minValue(0),
@@ -396,6 +493,17 @@ export default {
       this.startLoader();
       this.$store
         .dispatch('resourceMemory/saveEnlargedCapacity')
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message))
+        .finally(() => {
+          this.$v.form.$reset();
+          this.endLoader();
+        });
+    },
+    updateDynamicAdapterCapacity() {
+      this.startLoader();
+      this.$store
+        .dispatch('resourceMemory/saveDynamicCapacity')
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message))
         .finally(() => {
