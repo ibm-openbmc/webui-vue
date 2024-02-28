@@ -145,6 +145,7 @@ export default {
       this.prefixLength = item.PrefixLength;
       this.prefixLengthIpv6StaticDefaultGateway = item.PrefixLength;
     });
+    this.$store.dispatch('network/setSelectedTabIndex', 0);
   },
   created() {
     this.startLoader();
