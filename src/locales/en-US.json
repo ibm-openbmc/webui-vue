@@ -942,7 +942,7 @@
     "dns": "DNS server",
     "domainName": "domain name",
     "hostname": "Hostname",
-    "hostnameAlert": "You will be logged out when the hostname is changed. Changes will take effect on next log in.",
+    "hostnameAlert": "You will be logged out when the hostname is changed. Changes will take effect on next log in. A browser refresh (or closing the browser) might be required.",
     "interfaceSection": "Interface settings",
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 addresses",

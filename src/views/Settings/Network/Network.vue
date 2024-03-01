@@ -167,11 +167,7 @@ export default {
       this.$store
         .dispatch('network/saveHostname', modalFormData)
         .then((message) => this.successToast(message))
-        .then(
-          setTimeout(() => {
-            this.$store.dispatch('authentication/logout');
-          }, 3000 /* 3 seconds */)
-        )
+        .then(() => this.$store.dispatch('authentication/logout'))
         .catch(({ message }) => this.errorToast(message))
         .finally(() => this.endLoader());
     },
