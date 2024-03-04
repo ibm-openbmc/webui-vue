@@ -302,15 +302,17 @@ export default {
           .then((response) => {
             auditLogsData.push(response.data);
           })
+          .then(() => {
+            this.downloadFile(auditLogsData);
+            this.successToast(
+              i18n.t('pageAuditLogs.toast.successStartDownload')
+            );
+          })
           .catch((error) => {
             console.log(error);
             this.errorToast(i18n.t('pageAuditLogs.toast.errorStartDownload'));
           })
           .finally(() => {
-            this.downloadFile(auditLogsData);
-            this.successToast(
-              i18n.t('pageAuditLogs.toast.successStartDownload')
-            );
             this.endLoader();
           });
       }
