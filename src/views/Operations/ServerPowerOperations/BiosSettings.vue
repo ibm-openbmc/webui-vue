@@ -26,6 +26,7 @@
               id="bios-option-sysOp-mode"
               v-model="attributeKeys[key]"
               :options="attriValuesArr"
+              :disabled="disabled"
             >
             </b-form-select>
           </b-form-group>
@@ -58,6 +59,7 @@
                     v-model="attributeKeys[key]"
                     :value="values.value"
                     :aria-describedby="values.value"
+                    :disabled="disabled"
                     @change="onChangeSystemOpsMode"
                   >
                     {{ values.text }}
@@ -210,6 +212,7 @@
                     :id="values.value"
                     :key="keys"
                     class="ml-4"
+                    :disabled="disabled"
                   >
                     {{
                       $t(
@@ -222,6 +225,7 @@
                     :id="values.value"
                     :key="keys"
                     class="ml-4"
+                    :disabled="disabled"
                   >
                     {{
                       $t(
@@ -234,6 +238,7 @@
                     :id="values.value"
                     :key="keys"
                     class="ml-4"
+                    :disabled="disabled"
                   >
                     {{
                       $t(
