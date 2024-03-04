@@ -39,9 +39,31 @@
       <!-- Status -->
       <template #cell(status)="row">
         {{
-          row.item.statusState === 'Absent'
+          row.item.statusState === 'Enabled'
+            ? $t('global.status.present')
+            : row.item.statusState === 'Absent'
             ? $t('global.status.absent')
-            : $t('global.status.present')
+            : row.item.statusState === 'Deferring'
+            ? $t('global.status.deferring')
+            : row.item.statusState === 'Disabled'
+            ? $t('global.status.disabled')
+            : row.item.statusState === 'InTest'
+            ? $t('global.status.inTest')
+            : row.item.statusState === 'Qualified'
+            ? $t('global.status.qualified')
+            : row.item.statusState === 'Quiesced'
+            ? $t('global.status.quiesced')
+            : row.item.statusState === 'StandbyOffline'
+            ? $t('global.status.standbyOffline')
+            : row.item.statusState === 'StandbySpare'
+            ? $t('global.status.standbySpare')
+            : row.item.statusState === 'Starting'
+            ? $t('global.status.starting')
+            : row.item.statusState === 'UnavailableOffline'
+            ? $t('global.status.unavailableOffline')
+            : row.item.statusState === 'Updating'
+            ? $t('global.status.updating')
+            : row.item.statusState
         }}
       </template>
 
