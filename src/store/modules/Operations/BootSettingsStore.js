@@ -155,7 +155,8 @@ const BootSettingsStore = {
           Attributes: biosSettings,
         })
         .then((response) => {
-          dispatch('saveOperatingModeSettings');
+          dispatch('saveOperatingModeSettings', biosSettings);
+          commit('setDisabled', false);
           return response;
         })
         .catch((error) => {
@@ -179,7 +180,7 @@ const BootSettingsStore = {
           );
         });
     },
-    saveOperatingModeSettings({ dispatch, commit }) {
+    saveOperatingModeSettings({ commit }, biosSettings) {
       return api
         .patch('/redfish/v1/Systems/system', {
           PowerRestorePolicy: this.state.serverBootSettings
@@ -191,7 +192,7 @@ const BootSettingsStore = {
           },
         })
         .then((response) => {
-          dispatch('getBiosAttributes');
+          commit('setBiosAttributes', biosSettings);
           return response;
         })
         .catch((error) => {
