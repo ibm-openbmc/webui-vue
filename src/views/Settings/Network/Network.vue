@@ -145,6 +145,7 @@ export default {
       this.prefixLength = item.PrefixLength;
       this.prefixLengthIpv6StaticDefaultGateway = item.PrefixLength;
     });
+    this.$store.dispatch('network/setSelectedTabIndex', 0);
   },
   created() {
     this.startLoader();
@@ -283,7 +284,7 @@ export default {
       this.startLoader();
       this.$store
         .dispatch('network/saveHostname', modalFormData)
-        .then(this.$store.dispatch('authentication/logout'))
+        .then(() => this.$store.dispatch('authentication/logout'))
         .catch(({ message }) => this.errorToast(message))
         .finally(() => this.endLoader());
     },

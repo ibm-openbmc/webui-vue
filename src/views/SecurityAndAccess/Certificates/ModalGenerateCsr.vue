@@ -349,7 +349,7 @@
       :title="$t('pageCertificates.modal.certificateSigningRequest')"
       @hidden="onHiddenCsrStringModal"
     >
-      {{ csrString }}
+      <span class="span-csr-string">{{ csrString }}</span>
       <template #modal-footer>
         <b-btn variant="secondary" @click="copyCsrString">
           <template v-if="csrStringCopied">
@@ -361,7 +361,9 @@
           </template>
         </b-btn>
         <a
-          :href="`data:text/json;charset=utf-8,${csrString}`"
+          :href="`data:text/plain;charset=utf-8,${encodeURIComponent(
+            csrString
+          )}`"
           download="certificate.txt"
           class="btn btn-primary"
         >
@@ -498,3 +500,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.span-csr-string {
+  white-space: pre;
+}
+</style>

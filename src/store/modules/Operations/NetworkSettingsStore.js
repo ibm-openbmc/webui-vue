@@ -66,14 +66,16 @@ const NetworkSettingsStore = {
           console.log(error);
         });
     },
-    async setDMode({ dispatch }, { form, chapData }) {
+    async setDMode() {
       const setDModeObj = {
         Attributes: { pvm_os_boot_type: 'D_Mode' },
       };
-      await api
+      return await api
         .patch('/redfish/v1/Systems/system/Bios/Settings', setDModeObj)
         .then(() => {
-          dispatch('saveBiosSettings', { form, chapData });
+          return i18n.t(
+            'pageServerPowerOperations.modal.networkSettings.toast.successUpdateDMode'
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -88,7 +90,7 @@ const NetworkSettingsStore = {
       const restoreDefaultObj = {
         Attributes: { pvm_ibmi_iscsi_initiator_name: '' },
       };
-      await api
+      return await api
         .patch('/redfish/v1/Systems/system/Bios/Settings', restoreDefaultObj)
         .then(() => {
           dispatch('getBiosAttributes');
@@ -105,23 +107,15 @@ const NetworkSettingsStore = {
           );
         });
     },
-    async saveBiosSettings({ dispatch }, { form, chapData }) {
-      await api
+    async saveBiosSettings(_, { form }) {
+      return await api
         .patch('/redfish/v1/Systems/system/Bios/Settings', {
           Attributes: form,
         })
         .then(() => {
-          if (
-            form.pvm_ibmi_network_install_type === 'iSCSI' &&
-            chapData.chapName !== '' &&
-            chapData.chapSecret !== ''
-          ) {
-            dispatch('updateChapData', { chapData });
-          } else {
-            return i18n.t(
-              'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting'
-            );
-          }
+          return i18n.t(
+            'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting'
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -133,7 +127,7 @@ const NetworkSettingsStore = {
         });
     },
     async updateChapData(_, { chapData }) {
-      await api
+      return await api
         .patch('/redfish/v1/Systems/system', {
           Oem: {
             IBM: {

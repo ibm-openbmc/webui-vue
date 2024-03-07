@@ -814,20 +814,20 @@
     "status": "Status"
   },
   "pageIbmiServiceFunctions": {
-    "activateDedicatedServiceTool": "Activate Dedicated Service Tools",
+    "activateDedicatedServiceTool": "Activate Dedicated Service Tools (Function 21)",
     "activateDedicatedServiceToolDesc": "This function makes dedicated service tools (DST) available on the system console display.",
-    "concurrentMaintenancePowerOff": "Concurrent Maintenance Power Off Domain",
+    "concurrentMaintenancePowerOff": "Concurrent Maintenance Power Off Domain (Function 68)",
     "concurrentMaintenancePowerOffDesc": "Use this function to power off the power domain that includes resources that are currently in a disk unit attention state.",
-    "concurrentMaintenancePowerOn": "Concurrent Maintenance Power On Domain",
+    "concurrentMaintenancePowerOn": "Concurrent Maintenance Power On Domain (Function 69)",
     "concurrentMaintenancePowerOnDesc": "Use this function to power on the power domain that was powered off by using function 68.",
-    "disableRemoteService": "Disable Remote Service",
+    "disableRemoteService": "Disable Remote Service (Function 65)",
     "disableRemoteServiceDesc": "Use this function to deactivate a remote service session.",
-    "diskUnitIOP": "Disk Unit IOP Reset/Reload",
+    "diskUnitIOP": "Disk Unit IOP Reset/Reload (Function 67)",
     "diskUnitIOPDesc": "Use this function to initiate an I/O processor dump and reset/reload of an IOP that controls resources that are currently in a disk unit attention state.",
-    "enableRemoteService": "Enable Remote Service",
+    "enableRemoteService": "Enable Remote Service (Function 66)",
     "enableRemoteServiceDesc": "Use this function to activate a remote service session.",
     "execute": "Execute",
-    "iopControlStorageDump": "IOP Control Storage Dump",
+    "iopControlStorageDump": "IOP Control Storage Dump (Function 70)",
     "iopControlStorageDumpDesc": "Use this function to initiate an I/O processor dump and reset/reload of the IOP that was designated to control the load source device when the logical partition was activated.",
     "toast": {
       "successExecuteFunction": "Request successfully sent to server.",
@@ -1158,7 +1158,7 @@
     "dns": "DNS server",
     "domainName": "domain name",
     "hostname": "Hostname",
-    "hostnameAlert": "You will be logged out when the hostname is changed. Changes will take effect on next log in.",
+    "hostnameAlert": "You will be logged out when the hostname is changed. Changes will take effect on next log in. A browser refresh (or closing the browser) might be required",
     "interfaceSection": "Interface settings",
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 addresses",
@@ -1563,7 +1563,7 @@
       "powerOff": "Power Off",
       "pvm_default_os_type": "Default partition environment",
       "pvm_ibmi_load_source": "IBM i load source",
-      "pvm_ibmi_alt_load_source": "IBM i alternate load source",
+      "pvm_ibmi_alt_load_source": "IBM i alternate restart device",
       "pvm_ibmi_console": "IBM i console",
       "pvm_linux_kvm_memory": "Linux KVM",
       "pvm_linux_kvm_percentage": "System Memory Reserved for KVM Guest Management (%)",
@@ -1713,8 +1713,8 @@
       "networkSettings": {
         "advanced": "Advanced",
         "advancedSettings": {
-          "vlanTagId": "VLAN tag Id",
-          "maxFrameSize": "Max frame size"
+          "vlanTagId": "VLAN Tag Identifier",
+          "maxFrameSize": "Maximum Frame Size"
         },
         "cancel": "Cancel",
         "header": "Network settings",
@@ -1722,15 +1722,15 @@
         "networkTypeHeading": "Network Install Type",
         "partition": "Partition",
         "partitionSettings": {
-          "ipAddress": "IP address",
-          "subnetMask": "Subnet mask",
+          "ipAddress": "IP Address",
+          "subnetMask": "Subnet Mask",
           "gateway": "Gateway"
         },
         "server": "Server",
         "serverSettings": {
           "bootServerIPAddress": "Boot Server IP Address",
           "imageDirectoryPath": "Image Directory Path",
-          "targetIpAddress": "Target Ip Address",
+          "targetIpAddress": "Target IP Address",
           "targetName": "Target Name",
           "initiatorName": "Initiator Name",
           "targetPort": "Target Port",
@@ -1742,11 +1742,11 @@
         "settingsHeading": "Configure Network settings",
         "submit": "Submit",
         "toast": {
-          "errorSavedSettings": "Error saving network settings",
+          "errorSavedSettings": "Error saving Network settings",
           "errorRestoreDefault": "Error restoring default initiator name",
           "errorUpdateDMode": "Error updating the IBM i boot partition mode",
           "successRestoreDefault": "Successfully restored default initiator name",
-          "successSavedSetting": "Successfully saved network settings",
+          "successSavedSetting": "Successfully saved Network boot settings for IBMi. Please press the `Continue to OS running` link.",
           "successUpdateDMode": "Successfully updated IBM i boot partition mode to D mode"
         },
         "validators": {

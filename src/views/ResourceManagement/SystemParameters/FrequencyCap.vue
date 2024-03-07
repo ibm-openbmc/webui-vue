@@ -36,7 +36,7 @@
     <!-- Form -->
     <b-row class="section-divider">
       <b-col class="d-flex align-items-center justify-content-start col-6 mb-1">
-        <b-form class="form-width">
+        <b-form class="form-width" @submit.prevent>
           <b-form-group
             id="input-group-1"
             label-for="input-1"
@@ -63,7 +63,7 @@
                 :disabled="!frequencyRequestCurrentToggle"
                 :number="true"
                 :state="getValidationState($v.frequencyValue)"
-                @blur="$v.frequencyValue.$touch()"
+                @click="$v.frequencyValue.$touch()"
                 @input="frequencyRequest"
               />
               <b-form-invalid-feedback

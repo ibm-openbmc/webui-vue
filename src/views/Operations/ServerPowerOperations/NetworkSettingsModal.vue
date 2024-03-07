@@ -673,8 +673,32 @@ export default {
       }
       //Set IBM i partition boot mode to 'D_mode'
       this.$store
-        .dispatch('networkSettings/setDMode', { form, chapData })
-        .then((message) => this.successToast(message))
+        .dispatch('networkSettings/setDMode')
+        .then(() => {
+          this.$store
+            .dispatch('networkSettings/saveBiosSettings', { form })
+            .then((msg) => {
+              if (
+                form.pvm_ibmi_network_install_type === 'iSCSI' &&
+                chapData.chapName !== '' &&
+                chapData.chapSecret !== ''
+              ) {
+                this.$store
+                  .dispatch('networkSettings/updateChapData', { chapData })
+                  .then((msge) => {
+                    this.$bvModal.hide('modal-network-settings');
+                    this.successToast(msge);
+                    this.resetForm();
+                  })
+                  .catch((msge) => this.errorToast(msge.message));
+              } else {
+                this.$bvModal.hide('modal-network-settings');
+                this.successToast(msg);
+                this.resetForm();
+              }
+            })
+            .catch((msg) => this.errorToast(msg.message));
+        })
         .catch(({ message }) => this.errorToast(message));
     },
     restoreDefault() {
