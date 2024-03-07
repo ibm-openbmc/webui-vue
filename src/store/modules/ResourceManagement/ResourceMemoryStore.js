@@ -105,24 +105,28 @@ const ResourceMemoryStore = {
               Attribute.AttributeName ==
               'hb_storage_preallocation_for_drawer_attach'
           );
-          let dynamicIoDrawerAttachmentCapacity =
-            dynamicIoDrawerCapacity[0].CurrentValue;
-          commit(
-            'setDynamicIoDrawerCapacity',
-            dynamicIoDrawerAttachmentCapacity
-          );
+          if (dynamicIoDrawerCapacity.length > 0) {
+            let dynamicIoDrawerAttachmentCapacity =
+              dynamicIoDrawerCapacity[0].CurrentValue;
+            commit(
+              'setDynamicIoDrawerCapacity',
+              dynamicIoDrawerAttachmentCapacity
+            );
+          }
 
           const dynamicIoDrawerDefaultCapacity = RegistryEntries.Attributes.filter(
             (Attribute) =>
               Attribute.AttributeName ==
               'hb_storage_preallocation_for_drawer_attach'
           );
-          let dynamicIoDrawerAttachmentDefaultCapacity =
-            dynamicIoDrawerDefaultCapacity[0].DefaultValue;
-          commit(
-            'setDynamicIoDrawerDefaultCapacity',
-            dynamicIoDrawerAttachmentDefaultCapacity
-          );
+          if (dynamicIoDrawerDefaultCapacity.length > 0) {
+            let dynamicIoDrawerAttachmentDefaultCapacity =
+              dynamicIoDrawerDefaultCapacity[0].DefaultValue;
+            commit(
+              'setDynamicIoDrawerDefaultCapacity',
+              dynamicIoDrawerAttachmentDefaultCapacity
+            );
+          }
         })
         .catch((error) => console.log(error));
     },

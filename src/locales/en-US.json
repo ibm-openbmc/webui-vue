@@ -1150,7 +1150,7 @@
       "successSavingActiveMemoryMirroringMode": "Successfully updated active memory mirroring mode",
       "successSavingPageSetup": "Successfully updated system memory page setup",
       "successSavingAdapterDynamicCapacity": "Successfully updated I/O adapter drawer attachment",
-      "errorSavingAdapterDynamicCapacity": "Error updating I/O adapter drawer attachment"
+      "errorSavingAdapterDynamicCapacity": "Error updating dynamic I/O adapter drawer attachment"
     }
   },
   "pageNetwork": {
