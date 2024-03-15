@@ -835,7 +835,7 @@
     },
     "alert": {
       "notIBMi": "Default partition environment should be either IBM i or Default.",
-      "osRunning": "Functions available only when OS is Running. Try hitting the refresh button."
+      "osRunning": "Functions are available only when the IBM i OS enables them. Press the refresh button to see the currently enabled functions."
     }
   },
   "pageInventory": {

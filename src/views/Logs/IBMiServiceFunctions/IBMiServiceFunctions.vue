@@ -3,7 +3,7 @@
     <page-title :title="$t('appPageTitle.ibmiServiceFunctions')" />
     <b-row>
       <b-col v-if="isIBMi" md="8">
-        <b-row v-if="!isOSRunning">
+        <b-row>
           <b-col>
             <alert variant="info" class="mb-4">
               <span>
