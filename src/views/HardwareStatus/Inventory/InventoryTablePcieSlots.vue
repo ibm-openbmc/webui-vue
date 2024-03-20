@@ -35,6 +35,10 @@
       :busy="isBusy"
       @filtered="onFiltered"
     >
+      <template #head(identifyLed)="row">
+        {{ row.label }}
+        <info-tooltip :title="$t('pageInventory.identifyLedInfo')" />
+      </template>
       <!-- Toggle identify LED -->
       <template #cell(identifyLed)="row">
         <b-form-checkbox
@@ -77,6 +81,7 @@ import TableCellCount from '@/components/Global/TableCellCount';
 
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
+import InfoTooltip from '@/components/Global/InfoTooltip';
 import Search from '@/components/Global/Search';
 import SearchFilterMixin, {
   searchFilter,
@@ -84,7 +89,7 @@ import SearchFilterMixin, {
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
-  components: { PageSection, Search, TableCellCount },
+  components: { PageSection, InfoTooltip, Search, TableCellCount },
   mixins: [BVToastMixin, DataFormatterMixin, TableSortMixin, SearchFilterMixin],
   props: {
     chassis: {

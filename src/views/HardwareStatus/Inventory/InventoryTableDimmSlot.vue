@@ -31,6 +31,10 @@
       :busy="isBusy"
       @filtered="onFiltered"
     >
+      <template #head(identifyLed)="row">
+        {{ row.label }}
+        <info-tooltip :title="$t('pageInventory.identifyLedInfo')" />
+      </template>
       <!-- Expand chevron icon -->
       <template #cell(expandRow)="row">
         <b-button
@@ -162,6 +166,7 @@ import StatusIcon from '@/components/Global/StatusIcon';
 import TableCellCount from '@/components/Global/TableCellCount';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+import InfoTooltip from '@/components/Global/InfoTooltip';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import Search from '@/components/Global/Search';
 import SearchFilterMixin, {
@@ -172,7 +177,14 @@ import TableRowExpandMixin, {
 } from '@/components/Mixins/TableRowExpandMixin';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon, Search, TableCellCount },
+  components: {
+    IconChevron,
+    InfoTooltip,
+    PageSection,
+    StatusIcon,
+    Search,
+    TableCellCount,
+  },
   mixins: [
     BVToastMixin,
     TableRowExpandMixin,
