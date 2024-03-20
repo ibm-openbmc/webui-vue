@@ -20,7 +20,7 @@
       </b-row>
 
       <b-form @submit.prevent="submitForm">
-        <b-form-group :disabled="loading || safeMode">
+        <b-form-group :disabled="loading || safeMode || powerCapMin === 0">
           <b-row>
             <b-col sm="8" md="6" xl="12">
               <b-form-group :label="$t('pagePower.powerCapSettingLabel')">
