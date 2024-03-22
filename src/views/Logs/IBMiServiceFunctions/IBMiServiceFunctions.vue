@@ -2,7 +2,7 @@
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.ibmiServiceFunctions')" />
     <b-row>
-      <b-col v-if="isIBMi" md="8">
+      <b-col v-if="isIBMi && !isLoading" md="8">
         <b-row>
           <b-col>
             <alert variant="info" class="mb-4">
@@ -164,7 +164,7 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col v-else>
+      <b-col v-else-if="!isLoading">
         <b-row>
           <b-col>
             <alert variant="danger" class="mb-4">
@@ -188,6 +188,11 @@ export default {
   name: 'IBMiServiceFunctions',
   components: { PageTitle, Alert },
   mixins: [LoadingBarMixin, BVToastMixin],
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
   computed: {
     isOSRunning() {
       return this.$store.getters['global/isOSRunning'];
@@ -211,11 +216,13 @@ export default {
   },
   created() {
     this.startLoader();
+    this.isLoading = true;
     Promise.all([
       this.$store.dispatch('global/getBootProgress'),
       this.$store.dispatch('ibmiServiceFunctions/getAvailableServiceFunctions'),
       this.$store.dispatch('serverBootSettings/getBiosAttributes'),
     ]).finally(() => {
+      this.isLoading = false;
       this.endLoader();
     });
   },
