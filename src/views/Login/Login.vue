@@ -1,4 +1,8 @@
 <template>
-  <div class="page-login">Login Page</div>
-  <!-- Login page -->
+  <div class="d-flex align-center flex-column">
+    <v-card
+      text="eBMC Login page"
+      width="400"
+    ></v-card>
+  </div>
 </template>
