@@ -269,7 +269,12 @@ export default {
     exceuteFunction(value) {
       this.$store
         .dispatch('ibmiServiceFunctions/executeServiceFunction', value)
-        .then((message) => this.successToast(message))
+        .then((message) => {
+          this.infoToast(
+            this.$t('pageDumps.toast.successSavePartitionDumpInfo')
+          );
+          this.successToast(message);
+        })
         .catch(({ message }) => this.errorToast(message));
     },
     isFunctionDisabled(value) {

@@ -627,7 +627,8 @@
       "successStartBmcDumpTitle": "BMC dump started",
       "successStartDump": "The dump will take some time to complete.",
       "successStartResourceDumpTitle": "Resource dump started",
-      "successStartSystemDumpTitle": "System dump started"
+      "successStartSystemDumpTitle": "System dump started",
+      "successSavePartitionDumpInfo": "Partition and Retry partition dump will be listed as Resource Dump Entry"
     }
   },
   "pageEventLogs": {
