@@ -233,9 +233,15 @@ const BootSettingsStore = {
         .then(({ data }) => {
           data.Members.map((chassis) => {
             chassis.PCIeSlots.Slots.map((pcieSlot) => {
-              locationCodes.push(
+              if (
+                pcieSlot?.Links?.PCIeDevice &&
+                pcieSlot?.Links?.PCIeDevice.length > 0 &&
                 pcieSlot?.Location?.PartLocation?.ServiceLabel
-              );
+              ) {
+                locationCodes.push(
+                  pcieSlot?.Location?.PartLocation?.ServiceLabel
+                );
+              }
             });
           });
           commit('setLocationCodes', locationCodes);
