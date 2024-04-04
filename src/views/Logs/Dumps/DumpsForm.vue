@@ -252,7 +252,7 @@ export default {
       this.dumpTypeOptions = [];
       if (this.hmcInfo === 'Enabled') {
         return (this.dumpTypeOptions = minimumOptions);
-      } else {
+      } else if (this.isIBMi) {
         return (this.dumpTypeOptions = [
           ...minimumOptions,
           {
@@ -264,6 +264,8 @@ export default {
             text: this.$t('pageDumps.form.retryPartitionDump'),
           },
         ]);
+      } else {
+        return (this.dumpTypeOptions = minimumOptions);
       }
     },
     exceuteFunction(value) {
