@@ -212,6 +212,9 @@ export default {
     isOperationInProgress() {
       return this.$store.getters['controls/isOperationInProgress'];
     },
+    isReadOnlyUser() {
+      return this.$store.getters['global/isReadOnlyUser'];
+    },
     lastPowerOperationTime() {
       return this.$store.getters['controls/lastPowerOperationTime'];
     },
@@ -245,6 +248,9 @@ export default {
         this.bmc.statusState === 'Enabled' &&
         this.bmc.health === 'OK'
       ) {
+        if (!this.isReadOnlyUser) {
+          this.showHostConsole();
+        }
         this.$store.dispatch('controls/serverPowerOn');
       } else {
         this.errorToast(
@@ -272,16 +278,33 @@ export default {
           this.$bvModal
             .msgBoxConfirm(modalMessage, modalOptions)
             .then((confirmed) => {
-              if (confirmed) this.$store.dispatch('controls/serverSoftReboot');
+              if (confirmed) {
+                if (!this.isReadOnlyUser) {
+                  this.showHostConsole();
+                }
+                this.$store.dispatch('controls/serverSoftReboot');
+              }
             });
         } else if (this.form.rebootOption === 'immediate') {
           this.$bvModal
             .msgBoxConfirm(modalMessage, modalOptions)
             .then((confirmed) => {
-              if (confirmed) this.$store.dispatch('controls/serverHardReboot');
+              if (confirmed) {
+                if (!this.isReadOnlyUser) {
+                  this.showHostConsole();
+                }
+                this.$store.dispatch('controls/serverHardReboot');
+              }
             });
         }
       });
+    },
+    showHostConsole() {
+      window.open(
+        '#/console/host-console-console',
+        '_blank',
+        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550'
+      );
     },
     shutdownServer() {
       const modalMessage = `${
