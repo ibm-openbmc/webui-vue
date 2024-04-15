@@ -877,6 +877,20 @@
       "sectionTitle": "System indicators",
       "tooltipInfo": "Changes all indicators controlled by the BMC and hypervisor to the ON state for four minutes."
     },
+    "enumDescriptionIndicator": {
+      "absent": "This function or device is not currently present or detected. This resource represents a capability or an available location where a device can be installed.",
+      "deferring": "The element does not process any commands but queues new requests.",
+      "disabled": "This function or resource is disabled.",
+      "enabled": "This function or resource is enabled.",
+      "inTest": "This function or resource is undergoing testing or is in the process of capturing information for debugging.",
+      "qualified": "The element quality is within the acceptable range of operation.",
+      "quiesced": "The element is enabled but only processes a restricted set of commands.",
+      "standbyOffline": "This function or resource is enabled but awaits an external action to activate it.",
+      "standbySpare": "This function or resource is part of a redundancy set and awaits a failover or other external action to activate it.",
+      "starting": "This function or resource is starting.",
+      "unavailableOffline": "This function or resource is present but cannot be used.",
+      "updating": "The element is updating and might be unavailable or degraded."
+    },
     "alert": {
       "enclosureAlertTitle": "Viewing enclosure configuration",
       "enclosureAlertMessage": "System needs to be powered on.",

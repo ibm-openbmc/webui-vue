@@ -99,6 +99,7 @@
             ? $t('global.status.updating')
             : row.item.status
         }}
+        <info-tooltip :title="getStatusTooltip(row.item.status)" />
       </template>
       <!-- Toggle identify LED -->
       <template #cell(identifyLed)="row">
@@ -321,6 +322,40 @@ export default {
     },
     hasIdentifyLed(identifyLed) {
       return typeof identifyLed === 'boolean';
+    },
+    getStatusTooltip(status) {
+      switch (status) {
+        case 'Present':
+          return this.$t('pageInventory.enumDescriptionIndicator.enabled');
+        case 'Absent':
+          return this.$t('pageInventory.enumDescriptionIndicator.absent');
+        case 'Deferring':
+          return this.$t('pageInventory.enumDescriptionIndicator.deferring');
+        case 'Disabled':
+          return this.$t('pageInventory.enumDescriptionIndicator.disabled');
+        case 'InTest':
+          return this.$t('pageInventory.enumDescriptionIndicator.inTest');
+        case 'Qualified':
+          return this.$t('pageInventory.enumDescriptionIndicator.qualified');
+        case 'Quiesced':
+          return this.$t('pageInventory.enumDescriptionIndicator.quiesced');
+        case 'StandbyOffline':
+          return this.$t(
+            'pageInventory.enumDescriptionIndicator.standbyOffline'
+          );
+        case 'StandbySpare':
+          return this.$t('pageInventory.enumDescriptionIndicator.standbySpare');
+        case 'Starting':
+          return this.$t('pageInventory.enumDescriptionIndicator.starting');
+        case 'UnavailableOffline':
+          return this.$t(
+            'pageInventory.enumDescriptionIndicator.unavailableOffline'
+          );
+        case 'Updating':
+          return this.$t('pageInventory.enumDescriptionIndicator.updating');
+        default:
+          return '';
+      }
     },
   },
 };
