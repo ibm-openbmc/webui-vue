@@ -641,6 +641,22 @@ const PcieTopologyStore = {
               cableMembers[index]?.Links?.DownstreamPorts &&
               cableMembers[index]?.Links?.DownstreamPorts?.length > 0
             ) {
+              let correspondingUSP = {};
+              if (
+                cableMembers[index]?.Links?.UpstreamPorts &&
+                cableMembers[index]?.Links?.UpstreamPorts?.length > 0
+              ) {
+                await api
+                  .get(
+                    cableMembers[index]?.Links?.UpstreamPorts[0]['@odata.id']
+                  )
+                  .then((coresponse) => {
+                    correspondingUSP = coresponse.data;
+                  })
+                  .catch((error) => {
+                    console.log('error', error);
+                  });
+              }
               const gparentUri = cableMembers[index]?.Links?.DownstreamPorts[0][
                 '@odata.id'
               ]
@@ -660,6 +676,7 @@ const PcieTopologyStore = {
                       ) {
                         cablesData.detailedInfo.downstreamPorts.push({
                           data: dspPorts[p],
+                          corUSP: correspondingUSP,
                           grandParent: dspRes.data,
                           grandParentLocation:
                             dspRes.data?.Location?.PartLocation?.ServiceLabel,
@@ -723,6 +740,7 @@ const PcieTopologyStore = {
             row.linkSpeed = 'unknown';
             row.linkWidth = 'unknown';
             row.localPortLocation = [];
+            row.tempLocalPortLocation = [];
             row.remotePortLocation = [];
             row.ioSlotLocation = [];
             if (slot?.data?.Location?.PartLocation?.ServiceLabel) {
@@ -1004,6 +1022,18 @@ const PcieTopologyStore = {
                                 ],
                             });
                           }
+                          row.tempLocalPortLocation.push({
+                            locationIndicatorActive:
+                              cable.detailedInfo.downstreamPorts[0].corUSP
+                                ?.LocationIndicatorActive,
+                            locationNumber:
+                              cable.detailedInfo.downstreamPorts[0].corUSP
+                                ?.Location?.PartLocation?.ServiceLabel,
+                            uri:
+                              cable.detailedInfo.downstreamPorts[0].corUSP[
+                                '@odata.id'
+                              ],
+                          });
                         }
                         if (cable.data.PartNumber) {
                           row['cablePartNumber'].push(cable.data.PartNumber);
@@ -1028,6 +1058,9 @@ const PcieTopologyStore = {
                           row['cableStatus'].push('Running');
                         } else {
                           row['cableStatus'].push('unknown');
+                        }
+                        if (row.tempLocalPortLocation.length > 0) {
+                          row.localPortLocation = row.tempLocalPortLocation;
                         }
                       }
                     }
