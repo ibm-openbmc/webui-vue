@@ -263,7 +263,7 @@ export default {
     return {
       locale: this.$store.getters['global/languagePreference'],
       form: {
-        configurationSelected: 'manual',
+        configurationSelected: '',
         manual: {
           date: '',
           time: '',
@@ -333,7 +333,7 @@ export default {
   },
   watch: {
     ntpServers() {
-      this.setNtpValues();
+      this.setInitialNtpValues();
     },
     manualDate() {
       this.emitChange();
@@ -349,11 +349,13 @@ export default {
   },
   created() {
     this.startLoader();
-    this.setNtpValues();
     Promise.all([
       this.$store.dispatch('global/getBmcTime'),
       this.$store.dispatch('dateTime/getNtpData'),
-    ]).finally(() => this.endLoader());
+    ]).finally(() => {
+      this.setInitialNtpValues();
+      this.endLoader();
+    });
   },
   methods: {
     isServerOff() {
@@ -366,10 +368,13 @@ export default {
         manualDate: this.manualDate ? new Date(this.manualDate) : null,
       });
     },
-    setNtpValues() {
+    setInitialNtpValues() {
       this.form.configurationSelected = this.isNtpProtocolEnabled
         ? 'ntp'
         : 'manual';
+      this.setNtpValues();
+    },
+    setNtpValues() {
       [
         this.form.ntp.firstAddress = '',
         this.form.ntp.secondAddress = '',
@@ -417,7 +422,6 @@ export default {
         [this.ntpServers[0], this.ntpServers[1], this.ntpServers[2]] = [
           ...dateTimeForm.ntpServersArray,
         ];
-
         this.setNtpValues();
       }
 
