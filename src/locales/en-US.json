@@ -112,6 +112,7 @@
       "viewAll": "View all"
     },
     "toast": {
+      "minMifMessage": "Minimum firmware level supported",
       "unAuthDescription": "The attempted action is not accessible from the logged in account. Contact your system administrator to check your privilege role.",
       "unAuthTitle": "Unauthorized"
     }
