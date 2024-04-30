@@ -277,7 +277,10 @@ const AppNavigationMixin = {
       return this.$store?.getters?.['global/currentUser']?.RoleId;
     },
     model() {
-      if (this.systemInfo?.startsWith('9043')) {
+      if (
+        this.systemInfo?.startsWith('9043') ||
+        this.systemInfo?.startsWith('8860')
+      ) {
         return 'Everest';
       } else {
         return 'NotEverest';
