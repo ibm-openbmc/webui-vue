@@ -182,7 +182,7 @@ export default {
     },
     getStatusTooltip(status) {
       switch (status) {
-        case 'Present':
+        case 'Enabled':
           return this.$t('pageInventory.enumDescriptionIndicator.enabled');
         case 'Absent':
           return this.$t('pageInventory.enumDescriptionIndicator.absent');
