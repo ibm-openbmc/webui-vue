@@ -1,8 +1,8 @@
 <template>
   <pre>
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
+Inspur Power Systems Firmware for Inspur Power Systems models 8880-K8B,
+8870-K7B, TODO-list-all-MTMs
+running firmware version FW1060
 
 Terms and Conditions for Other Internal Licensed Code
 Base Licenses and Attributions
@@ -22,18 +22,18 @@ Preamble and List of Other Internal Licensed Code
 
 TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE
 
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
+Inspur Power Systems Firmware for Inspur Power Systems models 8880-K8B,
+8870-K7B, TODO-list-all-MTMs
+running firmware version FW1060
 
 This file details terms and conditions applicable to
 code included in the products listed above.
 The "Other Internal Licensed Code" identified herein is
 provided to Licensee under terms and conditions that are
-different from the IBM license agreement. Licensee's use
+different from the Inspur Power Systems license agreement. Licensee's use
 of such components or portions thereof is subject to the
 terms of the associated license agreements provided or
-referenced in this file and not the terms of the IBM
+referenced in this file and not the terms of the Inspur Power Systems
 license agreement.
 
 The following are Other Internal Licensed Code:
@@ -5950,15 +5950,12 @@ Source Code Offer Information
 Source code to any of the eligible GPL or LGPL packages listed above that are
 distributed with the firmware is available.
 
-For copies of the source code for this software, send an email to
-askibm@vnet.ibm.com identifying the IBM product and the GPL-licensed program
-for which you are requesting the source code.  Or send the request using
-http://www.ibm.com/support or http://www.ibm.com/contact.  Or send the
+For copies of the source code for this software, send the
 request to the following postal address:
-  IBM Corporation
-  Attn: Linux Technology Center, Dept. 7UDA
-  11501 Burnet Road
-  Austin, TX 78758
+  浪潮集团 Inspur Power Systems Corporation
+  Attn: 
+  TODO-get-postal-address
+  Jinan, Shandong, China
 
 ===========================================================================
 End of Source Code Offer Information
@@ -5966,9 +5963,7 @@ End of Source Code Offer Information
 
 ===========================================================================
 END OF TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE for
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
+Inspur Power Systems Firmware for Inspur Power Systems Power Systems models TODO-get-details
 ===========================================================================
   </pre>
 </template>
