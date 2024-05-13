@@ -128,9 +128,9 @@ export default {
       allData: [],
       fields: [
         {
-          key: 'id',
+          key: 'name',
           sortable: true,
-          label: this.$t('pageDeconfigurationHardware.table.id'),
+          label: this.$t('pageDeconfigurationHardware.table.name'),
         },
         {
           key: 'size',
