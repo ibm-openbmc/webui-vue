@@ -1,8 +1,7 @@
 <template>
   <pre>
-Inspur Power Systems Firmware for Inspur Power Systems models 8880-K8B,
-8870-K7B, TODO-list-all-MTMs
-running firmware version FW1060
+Firmware for Inspur Power Systems models 8860-K6B, 8850-K5B, 8828-K3B, and
+8820-K2B running firmware version FW1060
 
 Terms and Conditions for Other Internal Licensed Code
 Base Licenses and Attributions
@@ -22,9 +21,8 @@ Preamble and List of Other Internal Licensed Code
 
 TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE
 
-Inspur Power Systems Firmware for Inspur Power Systems models 8880-K8B,
-8870-K7B, TODO-list-all-MTMs
-running firmware version FW1060
+Firmware for Inspur Power Systems models 8860-K6B, 8850-K5B, 8828-K3B, and
+8820-K2B running firmware version FW1060
 
 This file details terms and conditions applicable to
 code included in the products listed above.
@@ -5952,9 +5950,9 @@ distributed with the firmware is available.
 
 For copies of the source code for this software, send the
 request to the following postal address:
-  浪潮集团 Inspur Power Systems Corporation
+  Inspur Power Systems Corporation
   Attn: 
-  TODO-get-postal-address
+  TODO: get-postal-address
   Jinan, Shandong, China
 
 ===========================================================================
@@ -5963,7 +5961,8 @@ End of Source Code Offer Information
 
 ===========================================================================
 END OF TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE for
-Inspur Power Systems Firmware for Inspur Power Systems Power Systems models TODO-get-details
+Firmware for Inspur Power Systems models 8860-K6B, 8850-K5B, 8828-K3B, and
+8820-K2B running firmware version FW1060
 ===========================================================================
   </pre>
 </template>
