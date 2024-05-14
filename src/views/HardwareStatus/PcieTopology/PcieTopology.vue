@@ -148,7 +148,7 @@
                     <b-col class="text-nowrap">
                       <b-button
                         v-if="item.resetLinkAvailable"
-                        class="btn btn-secondary float-right"
+                        class="btn btn-secondary float-end"
                         target="_blank"
                         @click="openResetLinkModal(item)"
                       >

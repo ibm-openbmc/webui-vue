@@ -1,15 +1,17 @@
+// @import "/node_modules/bootstrap/scss/variables";
+
 .table {
   position: relative;
   z-index: $zindex-dropdown;
 
   td {
-    border-top: 1px solid gray("300");
-    border-bottom: 1px solid gray("300");
+    border-top: 1px solid gray('300');
+    border-bottom: 1px solid gray('300');
     &:first-of-type {
-      border-left: 1px solid gray("300");
+      border-left: 1px solid gray('300');
     }
     &:last-of-type {
-      border-right: 1px solid gray("300");
+      border-right: 1px solid gray('300');
     }
     vertical-align: middle;
 
@@ -27,15 +29,15 @@
   // thead-light added for specificity
   .thead-light th {
     vertical-align: middle;
-    border-top: 1px solid gray("300");
-    border-bottom: 1px solid gray("300");
+    border-top: 1px solid gray('300');
+    border-bottom: 1px solid gray('300');
     &:first-of-type {
-      border-left: 1px solid gray("300");
+      border-left: 1px solid gray('300');
     }
     &:last-of-type {
-      border-right: 1px solid gray("300");
+      border-right: 1px solid gray('300');
     }
-    color: theme-color("dark");
+    color: theme-color('dark');
     &:focus {
       outline: none;
     }
@@ -56,11 +58,22 @@
   }
 
   .b-table-details {
-    background-color: theme-color("light");
+    background-color: theme-color('light');
     td {
-      padding-left: calc(50px + (#{$table-cell-padding} * 2));
-      padding-right: calc(50px + (#{$table-cell-padding} * 2));
+      padding-left: calc(50px + (#{$table-cell-padding-y} * 2));
+      padding-right: calc(50px + (#{$table-cell-padding-y} * 2));
     }
+    // dl {
+    //   margin: 0;
+    // }
+    // dt {
+    //   float: left;
+    //   clear: left;
+    //   margin-right: math.div($spacer, 2);
+    // }
+    // dd {
+    //   line-height: 1.2;
+    // }
   }
 
   .table-row-expand {
@@ -70,7 +83,7 @@
       width: 50px;
     }
     svg {
-      fill: theme-color("dark");
+      fill: theme-color('dark');
     }
   }
   .b-table-sort-icon-left {
@@ -93,12 +106,11 @@
 // Table stacked style for small screen only
 @include media-breakpoint-down(xs) {
   .b-table-stacked-sm {
-    border: 1px solid gray("300");
+    border: 1px solid gray('300');
 
     tr {
-
       &:not(:first-child) > td[aria-colindex='1'] {
-        border-top: 1px solid gray("300");
+        border-top: 1px solid gray('300');
         padding-top: 0.625rem;
       }
 
@@ -115,9 +127,9 @@
 
         &:before {
           content: '';
-          background-color: gray("200");
+          background-color: gray('200');
           width: 40%;
-          border-right: 1px solid gray("300");
+          border-right: 1px solid gray('300');
         }
 
         &:after {
@@ -127,7 +139,7 @@
         }
 
         &:nth-child(even)::after {
-          background-color: gray("100"); // Zebra striping for the row
+          background-color: gray('100'); // Zebra striping for the row
         }
       }
 
@@ -146,7 +158,7 @@
   .table.b-table.b-table-stacked-sm > tbody > tr > [data-label] {
     &::before {
       text-align: left;
-      padding-left: $spacer /2;
+      padding-left: math.div($spacer, 2);
     }
 
     > div {

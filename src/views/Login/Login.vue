@@ -1,235 +1,152 @@
 <template>
-  <div class="login-form">
-    <b-form
-      class="mb-4 pb-5 section-divider"
-      novalidate
-      @submit.prevent="login"
-    >
-      <alert class="login-error mb-4" :show="authError" variant="danger">
-        <p id="login-error-alert">
-          {{ $t('pageLogin.alert.message') }}
-        </p>
-      </alert>
-      <alert class="login-error mb-4" :show="unauthError" variant="danger">
-        <p id="unauth-login-error-alert">
-          {{ $t('pageLogin.alert.unauthorizedMessage') }}
-        </p>
-      </alert>
-      <b-form-group label-for="language" :label="$t('pageLogin.language')">
-        <b-form-select
-          id="language"
-          v-model="$i18n.locale"
-          :options="languages"
-          data-test-id="login-select-language"
-        ></b-form-select>
-      </b-form-group>
-      <b-form-group label-for="username" :label="$t('pageLogin.username')">
-        <b-form-input
-          id="username"
-          v-model="userInfo.username"
-          aria-describedby="login-error-alert username-required"
-          :state="getValidationState($v.userInfo.username)"
-          type="text"
-          autofocus="autofocus"
-          data-test-id="login-input-username"
-          @input="$v.userInfo.username.$touch()"
-        >
-        </b-form-input>
-        <b-form-invalid-feedback id="username-required" role="alert">
-          <template v-if="!$v.userInfo.username.required">
-            {{ $t('global.form.fieldRequired') }}
-          </template>
-        </b-form-invalid-feedback>
-      </b-form-group>
-      <div class="login-form__section mb-3">
-        <label for="password">{{ $t('pageLogin.password') }}</label>
-        <input-password-toggle>
-          <b-form-input
-            id="password"
-            v-model="userInfo.password"
-            autocomplete="off"
-            aria-describedby="login-error-alert password-required"
-            :state="getValidationState($v.userInfo.password)"
-            type="password"
-            data-test-id="login-input-password"
-            class="form-control-with-button"
-            @input="$v.userInfo.password.$touch()"
-          >
-          </b-form-input>
-        </input-password-toggle>
-        <b-form-invalid-feedback id="password-required" role="alert">
-          <template v-if="!$v.userInfo.password.required">
-            {{ $t('global.form.fieldRequired') }}
-          </template>
-        </b-form-invalid-feedback>
-      </div>
-      <b-button
-        class="mt-4 w-100"
-        type="submit"
-        variant="primary"
-        data-test-id="login-button-submit"
-        :disabled="disableSubmitButton"
-        >{{ $t('pageLogin.logIn') }}</b-button
+  <BForm class="login-form" novalidate @submit.prevent="login">
+    <BFormGroup label-for="language" :label="t('pageLogin.language')">
+      <BFormSelect
+        id="language"
+        v-model="$i18n.locale"
+        :options="languages"
+        data-test-id="login-select-language"
+      ></BFormSelect>
+    </BFormGroup>
+    <BFormGroup label-for="username" :label="t('pageLogin.username')">
+      <BFormInput
+        id="username"
+        v-model="userInfo.username"
+        aria-describedby="login-error-alert username-required"
+        type="text"
+        autofocus="autofocus"
+        data-test-id="login-input-username"
+        :state="getValidationState(v$.username)"
       >
-    </b-form>
-    <!-- Service login -->
-    <b-row class="mt-3">
-      <b-col>
-        <dl>
-          <dt>{{ $t('pageLogin.dateAndTime') }}</dt>
-          <dd v-if="loginPageDetails.dateTime">
-            {{ loginPageDetails.dateTime | formatDate }}
-            {{ loginPageDetails.dateTime | formatTime }}
-          </dd>
-          <dd v-else>--</dd>
-        </dl>
-        <dl>
-          <dt>{{ $t('pageLogin.serialNumber') }}</dt>
-          <dd>{{ dataFormatter(loginPageDetails.serial) }}</dd>
-        </dl>
-        <dl>
-          <dt>{{ $t('pageLogin.model') }}</dt>
-          <dd>{{ dataFormatter(loginPageDetails.model) }}</dd>
-        </dl>
-      </b-col>
-    </b-row>
+      </BFormInput>
+      <BFormInvalidFeedback id="username-required" role="alert">
+        <template v-if="v$.username.required">
+          {{ t('global.form.fieldRequired') }}
+        </template>
+      </BFormInvalidFeedback>
+    </BFormGroup>
+    <BFormGroup label-for="password" :label="t('pageLogin.password')">
+      <BFormInput
+        id="password"
+        v-model="userInfo.password"
+        aria-describedby="login-error-alert password-required"
+        type="password"
+        data-test-id="login-input-password"
+        class="form-control-with-button"
+        :state="getValidationState(v$.password)"
+      >
+      </BFormInput>
+      <BFormInvalidFeedback id="password-required" role="alert">
+        <template v-if="v$.password.required">
+          {{ t('global.form.fieldRequired') }}
+        </template>
+      </BFormInvalidFeedback>
+    </BFormGroup>
     <b-button
-      v-if="acfUploadButton && loginPageDetails.acfWindowActive"
-      class="mt-3 p-0 block"
-      variant="link"
-      @click="initModalUploadCertificate"
+      class="mt-3 btn-primary"
+      type="submit"
+      variant="primary"
+      data-test-id="login-button-submit"
+      :disabled="disableSubmitButton"
     >
-      <icon-upload />
-      {{ $t('pageLogin.uploadServiceLoginCertificate') }}
-    </b-button>
-
-    <!-- Modals -->
-    <modal-upload-certificate @ok="onModalOk" />
-  </div>
+      {{ $t('pageLogin.logIn') }}</b-button
+    >
+  </BForm>
 </template>
 
-<script>
-import { required } from 'vuelidate/lib/validators';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+<script setup>
+import { ref, reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { AuthenticationStore } from '../../store/modules/Authentication/AuthenticationStore';
 import i18n from '@/i18n';
-import Alert from '@/components/Global/Alert';
-import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
-import ModalUploadCertificate from './ModalUploadCertificate';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import IconUpload from '@carbon/icons-vue/es/upload/20';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
-export default {
-  name: 'Login',
-  components: {
-    Alert,
-    InputPasswordToggle,
-    ModalUploadCertificate,
-    IconUpload,
+import { useRouter } from 'vue-router';
+import  useVuelidateComposable  from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import GlobalStore from '../../store/modules/GlobalStore';
+
+const router = useRouter();
+const globalStore = GlobalStore();
+const { getValidationState } = useVuelidateComposable();
+const Authentication = AuthenticationStore();
+const { t } = useI18n();
+const userInfo = reactive({ username: null, password: null });
+const rules = { username: { required }, password: { required } };
+const v$ = useVuelidate(rules, userInfo);
+const languages = ref([
+  {
+    value: 'en-US',
+    text: 'English',
   },
-  mixins: [VuelidateMixin, BVToastMixin, LoadingBarMixin, DataFormatterMixin],
-  data() {
-    return {
-      acfUploadButton: process.env.VUE_APP_ACF_UPLOAD_REQUIRED === 'true',
-      isBusy: true,
-      userInfo: {
-        username: null,
-        password: null,
-      },
-      disableSubmitButton: false,
-      languages: [
-        {
-          value: 'en-US',
-          text: 'English',
-        },
-      ],
-    };
+  {
+    value: 'es',
+    text: 'Español',
   },
-  computed: {
-    authError() {
-      return this.$store.getters['authentication/authError'];
-    },
-    unauthError() {
-      return this.$store.getters['authentication/unauthError'];
-    },
-    loginPageDetails() {
-      return this.$store.getters['authentication/loginPageDetails'];
-    },
+  {
+    value: 'ru-RU',
+    text: 'Русский',
   },
-  created() {
-    this.startLoader();
-    this.$store.dispatch('authentication/dateAndTime').finally(() => {
-      this.endLoader();
-      this.isBusy = false;
-    });
-  },
-  validations: {
-    userInfo: {
-      username: {
-        required,
-      },
-      password: {
-        required,
-      },
-    },
-  },
-  methods: {
-    login: function () {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.disableSubmitButton = true;
-      const username = this.userInfo.username;
-      const password = this.userInfo.password;
-      this.$store
-        .dispatch('authentication/login', { username, password })
-        .then(() => {
-          localStorage.setItem('storedLanguage', i18n.locale);
-          localStorage.setItem('storedUsername', username);
-          this.$store.commit('global/setUsername', username);
-          this.$store.commit('global/setLanguagePreference', i18n.locale);
-          return this.$store.dispatch(
-            'authentication/checkPasswordChangeRequired',
-            username
-          );
-        })
-        .then((passwordChangeRequired) => {
-          if (passwordChangeRequired) {
-            this.$router.push('/change-password');
-          } else {
-            Promise.all([
-              this.$store.dispatch('global/getCurrentUser', username),
-              this.$store.dispatch('global/getSystemInfo'),
-            ])
-              .then(() => {
-                this.$router.push('/');
-              })
-              .catch(() => {
-                Promise.all([
-                  this.$store.dispatch('authentication/unauthlogin'),
-                  this.$store.dispatch('authentication/logout'),
-                ]);
-              });
-          }
-        })
-        .catch((error) => console.log(error))
-        .finally(() => (this.disableSubmitButton = false));
-    },
-    initModalUploadCertificate() {
-      this.$bvModal.show('upload-certificate');
-    },
-    onModalOk({ file }) {
-      this.addNewCertificate(file);
-    },
-    addNewCertificate(file) {
-      const type = 'ServiceLogin Certificate';
-      this.$store
-        .dispatch('certificates/addNewACFCertificateOnLoginPage', {
-          file,
-          type,
-        })
-        .then((success) => this.successToast(success))
-        .catch(({ message }) => this.errorToast(message));
-    },
-  },
+]);
+
+const login = () => {
+  console.log('userinfo', userInfo);
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  Authentication.login(userInfo.username, userInfo.password)
+    .then(() => {
+      localStorage.setItem('storedLanguage', i18n.locale);
+      localStorage.setItem('storedUsername', userInfo.username);
+      globalStore.username = userInfo.username;
+      globalStore.languagePreference = i18n.locale;
+      // router.push('/');
+      return Authentication.getUserInfo(userInfo.username);
+    })
+    .then(({ PasswordChangeRequired, RoleId }) => {
+      if (PasswordChangeRequired) {
+        router.push('/change-password');
+      } else {
+        router.push('/');
+      }
+      if (RoleId) {
+        globalStore.userPrivilege = RoleId;
+      }
+    })
+    .catch((error) => console.log(error));
 };
 </script>
+<style lang="scss">
+.login-form {
+  @include media-breakpoint-up('md') {
+    max-width: 360px;
+  }
+}
+
+.form-label {
+  margin-top: 2rem;
+}
+.btn-primary {
+  color: #ffffff;
+  background-color: #0068b5;
+  border-color: #0068b5;
+  border-radius: 0;
+  padding-top: 10px;
+  padding-right: $spacer;
+  padding-bottom: 10px;
+  padding-left: $spacer;
+  &:hover {
+    color: #ffffff;
+    background-color: #005ca1;
+    border-color: #005ca1;
+  }
+  &:active {
+    color: #ffffff;
+    background-color: #005ca1;
+    border-color: #005ca1;
+  }
+  &:focus {
+    color: #ffffff;
+    background-color: #005ca1;
+    border-color: #005ca1;
+  }
+}
+</style>

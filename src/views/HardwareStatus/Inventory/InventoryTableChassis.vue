@@ -65,7 +65,6 @@
             ? $t('global.status.updating')
             : row.item.statusState
         }}
-        <info-tooltip :title="getStatusTooltip(row.item.statusState)" />
       </template>
       <!-- Toggle identify LED -->
       <template #cell(identifyLed)="row">
@@ -112,7 +111,6 @@ import PageSection from '@/components/Global/PageSection';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import StatusIcon from '@/components/Global/StatusIcon';
-import InfoTooltip from '@/components/Global/InfoTooltip';
 
 import TableRowExpandMixin, {
   expandRowLabel,
@@ -120,7 +118,7 @@ import TableRowExpandMixin, {
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon, InfoTooltip },
+  components: { IconChevron, PageSection, StatusIcon },
   mixins: [BVToastMixin, TableRowExpandMixin, DataFormatterMixin],
   data() {
     return {
@@ -187,40 +185,6 @@ export default {
     // TO DO: Remove this method when the LocationIndicatorActive is added from backend.
     hasIdentifyLed(identifyLed) {
       return typeof identifyLed === 'boolean';
-    },
-    getStatusTooltip(status) {
-      switch (status) {
-        case 'Enabled':
-          return this.$t('pageInventory.enumDescriptionIndicator.enabled');
-        case 'Absent':
-          return this.$t('pageInventory.enumDescriptionIndicator.absent');
-        case 'Deferring':
-          return this.$t('pageInventory.enumDescriptionIndicator.deferring');
-        case 'Disabled':
-          return this.$t('pageInventory.enumDescriptionIndicator.disabled');
-        case 'InTest':
-          return this.$t('pageInventory.enumDescriptionIndicator.inTest');
-        case 'Qualified':
-          return this.$t('pageInventory.enumDescriptionIndicator.qualified');
-        case 'Quiesced':
-          return this.$t('pageInventory.enumDescriptionIndicator.quiesced');
-        case 'StandbyOffline':
-          return this.$t(
-            'pageInventory.enumDescriptionIndicator.standbyOffline'
-          );
-        case 'StandbySpare':
-          return this.$t('pageInventory.enumDescriptionIndicator.standbySpare');
-        case 'Starting':
-          return this.$t('pageInventory.enumDescriptionIndicator.starting');
-        case 'UnavailableOffline':
-          return this.$t(
-            'pageInventory.enumDescriptionIndicator.unavailableOffline'
-          );
-        case 'Updating':
-          return this.$t('pageInventory.enumDescriptionIndicator.updating');
-        default:
-          return '';
-      }
     },
   },
 };

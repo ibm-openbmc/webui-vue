@@ -1,17 +1,18 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const FirmwareStore = {
-  namespaced: true,
-  state: {
+const FirmwareStore = defineStore('firmware', {
+  state: () => ({
     bmcFirmware: [],
     hostFirmware: [],
     bmcActiveFirmwareId: null,
     hostActiveFirmwareId: null,
     applyTime: null,
+    httpPushUri: null,
     tftpAvailable: false,
     firmwareBootSide: null,
-  },
+  }),
   getters: {
     isTftpUploadAvailable: (state) => state.tftpAvailable,
     isSingleFileUploadEnabled: (state) => state.hostFirmware.length === 0,
@@ -35,55 +36,32 @@ const FirmwareStore = {
         (firmware) => firmware.id !== state.hostActiveFirmwareId
       );
     },
-    firmwareBootSide: (state) => state.firmwareBootSide,
-  },
-  mutations: {
-    setActiveBmcFirmwareId: (state, id) => (state.bmcActiveFirmwareId = id),
-    setActiveHostFirmwareId: (state, id) => (state.hostActiveFirmwareId = id),
-    setAccessExpirationDate: (state, expirationDate) =>
-      (state.accessKeyExpirationDate = expirationDate),
-    setBmcFirmware: (state, firmware) => (state.bmcFirmware = firmware),
-    setHostFirmware: (state, firmware) => (state.hostFirmware = firmware),
-    setApplyTime: (state, applyTime) => (state.applyTime = applyTime),
-    setTftpUploadAvailable: (state, tftpAvailable) =>
-      (state.tftpAvailable = tftpAvailable),
-    setFirmwareBootSide: (state, firmwareBootSide) =>
-      (state.firmwareBootSide = firmwareBootSide),
   },
   actions: {
-    async getFirmwareInformation({ dispatch }) {
-      dispatch('getActiveHostFirmware');
-      dispatch('getActiveBmcFirmware');
-      return await dispatch('getFirmwareInventory');
+    async getFirmwareInformation() {
+      this.getActiveHostFirmware();
+      this.getActiveBmcFirmware();
+      return await this.getFirmwareInventory();
     },
-    getActiveBmcFirmware({ commit }) {
+    getActiveBmcFirmware() {
       return api
         .get('/redfish/v1/Managers/bmc')
         .then(({ data: { Links } }) => {
           const id = Links?.ActiveSoftwareImage['@odata.id'].split('/').pop();
-          commit('setActiveBmcFirmwareId', id);
+          this.bmcActiveFirmwareId = id;
         })
         .catch((error) => console.log(error));
     },
-    getActiveHostFirmware({ commit }) {
+    getActiveHostFirmware() {
       return api
         .get('/redfish/v1/Systems/system/Bios')
         .then(({ data: { Links } }) => {
           const id = Links?.ActiveSoftwareImage['@odata.id'].split('/').pop();
-          commit('setActiveHostFirmwareId', id);
+          this.hostActiveFirmwareId = id;
         })
         .catch((error) => console.log(error));
     },
-    getFirmwareBootSide({ commit }) {
-      return api
-        .get('/redfish/v1/Systems/system/Bios')
-        .then(({ data }) => {
-          const fwBootSide = data.Attributes.fw_boot_side_current;
-          commit('setFirmwareBootSide', fwBootSide);
-        })
-        .catch((error) => console.log(error));
-    },
-    async getFirmwareInventory({ commit }) {
+    async getFirmwareInventory() {
       const inventoryList = await api
         .get('/redfish/v1/UpdateService/FirmwareInventory')
         .then(({ data: { Members = [] } = {} }) =>
@@ -111,14 +89,14 @@ const FirmwareStore = {
               hostFirmware.push(item);
             }
           });
-          commit('setBmcFirmware', bmcFirmware);
-          commit('setHostFirmware', hostFirmware);
+          this.bmcFirmware = bmcFirmware;
+          this.hostFirmware = hostFirmware;
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    getUpdateServiceSettings({ commit }) {
+    getUpdateServiceSettings() {
       api
         .get('/redfish/v1/UpdateService')
         .then(({ data }) => {
@@ -128,15 +106,16 @@ const FirmwareStore = {
             data?.Actions?.['#UpdateService.SimpleUpdate']?.[
               'TransferProtocol@Redfish.AllowableValues'
             ];
-
-          commit('setApplyTime', applyTime);
+          this.applyTime = applyTime;
+          const httpPushUri = data.HttpPushUri;
+          this.httpPushUri = httpPushUri;
           if (allowableActions?.includes('TFTP')) {
-            commit('setTftpUploadAvailable', true);
+            this.tftpAvailable = true;
           }
         })
         .catch((error) => console.log(error));
     },
-    setApplyTimeImmediate({ commit }) {
+    setApplyTimeImmediate() {
       const data = {
         HttpPushUriOptions: {
           HttpPushUriApplyTime: {
@@ -146,33 +125,33 @@ const FirmwareStore = {
       };
       return api
         .patch('/redfish/v1/UpdateService', data)
-        .then(() => commit('setApplyTime', 'Immediate'))
+        .then(() => (this.applyTime = 'Immediate'))
         .catch((error) => console.log(error));
     },
-    async uploadFirmware({ state, dispatch }, image) {
-      if (state.applyTime !== 'Immediate') {
+    async uploadFirmware(image) {
+      if (this.applyTime !== 'Immediate') {
         // ApplyTime must be set to Immediate before making
         // request to update firmware
-        await dispatch('setApplyTimeImmediate');
+        await this.setApplyTimeImmediate();
       }
       return await api
-        .post('/redfish/v1/UpdateService', image, {
+        .post(this.httpPushUri, image, {
           headers: { 'Content-Type': 'application/octet-stream' },
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageFirmware.toast.errorUploadFirmware'));
+          throw new Error(i18n.t('pageFirmware.toast.errorUpdateFirmware'));
         });
     },
-    async uploadFirmwareTFTP({ state, dispatch }, fileAddress) {
+    async uploadFirmwareTFTP(fileAddress) {
       const data = {
         TransferProtocol: 'TFTP',
         ImageURI: fileAddress,
       };
-      if (state.applyTime !== 'Immediate') {
+      if (this.applyTime !== 'Immediate') {
         // ApplyTime must be set to Immediate before making
         // request to update firmware
-        await dispatch('setApplyTimeImmediate');
+        await this.setApplyTimeImmediate();
       }
       return await api
         .post(
@@ -201,6 +180,6 @@ const FirmwareStore = {
         });
     },
   },
-};
+});
 
 export default FirmwareStore;

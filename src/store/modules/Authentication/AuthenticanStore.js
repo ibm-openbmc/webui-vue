@@ -7,14 +7,12 @@ const AuthenticationStore = {
   state: {
     loginPageDetails: {},
     authError: false,
-    unauthError: false,
     xsrfCookie: Cookies.get('XSRF-TOKEN'),
     isAuthenticatedCookie: Cookies.get('IsAuthenticated'),
   },
   getters: {
     loginPageDetails: (state) => state.loginPageDetails,
     authError: (state) => state.authError,
-    unauthError: (state) => state.unauthError,
     isLoggedIn: (state) => {
       return (
         state.xsrfCookie !== undefined || state.isAuthenticatedCookie == 'true'
@@ -27,14 +25,10 @@ const AuthenticationStore = {
       (state.loginPageDetails = loginPageDetails),
     authSuccess(state) {
       state.authError = false;
-      state.unauthError = false;
       state.xsrfCookie = Cookies.get('XSRF-TOKEN');
     },
     authError(state, authError = true) {
       state.authError = authError;
-    },
-    unauthError(state, unauthError = true) {
-      state.unauthError = unauthError;
     },
     logout(state) {
       Cookies.remove('XSRF-TOKEN');
@@ -51,7 +45,6 @@ const AuthenticationStore = {
   actions: {
     login({ commit }, { username, password }) {
       commit('authError', false);
-      commit('unauthError', false);
       return api
         .post('/login', { data: [username, password] })
         .then(() => commit('authSuccess'))
@@ -59,9 +52,6 @@ const AuthenticationStore = {
           commit('authError');
           throw new Error(error);
         });
-    },
-    unauthlogin({ commit }) {
-      commit('unauthError');
     },
     logout({ commit }) {
       api
@@ -97,7 +87,6 @@ const AuthenticationStore = {
     },
     resetStoreState({ state }) {
       state.authError = false;
-      state.unauthError = false;
       state.xsrfCookie = Cookies.get('XSRF-TOKEN');
       state.isAuthenticatedCookie = Cookies.get('IsAuthenticated');
     },

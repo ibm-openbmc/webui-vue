@@ -5,18 +5,18 @@
     :title="$t('pageOverview.dumps')"
     :to="`/logs/dumps`"
   >
-    <b-row class="mt-3">
-      <b-col sm="6">
+    <BRow class="mt-3">
+      <BCol sm="6">
         <dl>
           <dt>{{ $t('pageOverview.total') }}</dt>
           <dd class="h3">{{ dataFormatter(dumps.length) }}</dd>
         </dl>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
   </overview-card>
 </template>
 
-<script>
+<script setup>
 import OverviewCard from './OverviewCard';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 

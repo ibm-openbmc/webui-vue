@@ -6,32 +6,29 @@ const ConcurrentMaintenanceStore = {
   state: {
     readyToRemove: false,
     todObject: {},
-    readyToRemoveControlPanel: false,
-    controlPanel: {},
-    readyToRemoveControlPanelDisp: false,
-    controlPanelDisp: {},
+    readyToRemoveOpPanelBase: false,
+    opPanelBase: {},
+    readyToRemoveOpPanelLcd: false,
+    opPanelLcd: {},
   },
   getters: {
     readyToRemove: (state) => state.readyToRemove,
     todObject: (state) => state.todObject,
-    readyToRemoveControlPanel: (state) => state.readyToRemoveControlPanel,
-    controlPanel: (state) => state.controlPanel,
-    readyToRemoveControlPanelDisp: (state) =>
-      state.readyToRemoveControlPanelDisp,
-    controlPanelDisp: (state) => state.controlPanelDisp,
+    readyToRemoveOpPanelBase: (state) => state.readyToRemoveOpPanelBase,
+    opPanelBase: (state) => state.opPanelBase,
+    readyToRemoveOpPanelLcd: (state) => state.readyToRemoveOpPanelLcd,
+    opPanelLcd: (state) => state.opPanelLcd,
   },
   mutations: {
     setReadyToRemove: (state, readyToRemove) =>
       (state.readyToRemove = readyToRemove),
     setTodObject: (state, todObject) => (state.todObject = todObject),
-    setReadyToRemoveControlPanel: (state, readyToRemoveControlPanel) =>
-      (state.readyToRemoveControlPanel = readyToRemoveControlPanel),
-    setControlPanel: (state, controlPanel) =>
-      (state.controlPanel = controlPanel),
-    setReadyToRemoveControlPanelDisp: (state, readyToRemoveControlPanelDisp) =>
-      (state.readyToRemoveControlPanelDisp = readyToRemoveControlPanelDisp),
-    setControlPanelDisp: (state, controlPanelDisp) =>
-      (state.controlPanelDisp = controlPanelDisp),
+    setReadyToRemoveOpPanelBase: (state, readyToRemoveOpPanelBase) =>
+      (state.readyToRemoveOpPanelBase = readyToRemoveOpPanelBase),
+    setOpPanelBase: (state, opPanelBase) => (state.opPanelBase = opPanelBase),
+    setReadyToRemoveOpPanelLcd: (state, readyToRemoveOpPanelLcd) =>
+      (state.readyToRemoveOpPanelLcd = readyToRemoveOpPanelLcd),
+    setOpPanelLcd: (state, opPanelLcd) => (state.opPanelLcd = opPanelLcd),
   },
   actions: {
     async getReadyToRemove({ commit }) {
@@ -39,12 +36,7 @@ const ConcurrentMaintenanceStore = {
         .get('/redfish/v1/Chassis/chassis/Assembly')
         .then((response) =>
           response.data.Assemblies.map((entry) => {
-            if (
-              Object.hasOwn(entry?.Oem?.OpenBMC || {}, 'ReadyToRemove') &&
-              entry?.Location?.PartLocation?.ServiceLabel?.endsWith?.(
-                'P0-C0-E0'
-              )
-            ) {
+            if (entry.Name === 'Time Of Day Battery') {
               commit('setTodObject', entry);
               commit('setReadyToRemove', entry.Oem.OpenBMC.ReadyToRemove);
             }
@@ -52,18 +44,15 @@ const ConcurrentMaintenanceStore = {
         )
         .catch((error) => console.log(error));
     },
-    async getControlPanel({ commit }) {
+    async getOpPanelBase({ commit }) {
       return await api
         .get('/redfish/v1/Chassis/chassis/Assembly')
         .then((response) =>
           response.data.Assemblies.map((entry) => {
-            if (
-              Object.hasOwn(entry?.Oem?.OpenBMC || {}, 'ReadyToRemove') &&
-              entry?.Location?.PartLocation?.ServiceLabel?.endsWith?.('D0')
-            ) {
-              commit('setControlPanel', entry);
+            if (entry.Name === 'Operator Panel Base') {
+              commit('setOpPanelBase', entry);
               commit(
-                'setReadyToRemoveControlPanel',
+                'setReadyToRemoveOpPanelBase',
                 entry.Oem.OpenBMC.ReadyToRemove
               );
             }
@@ -71,18 +60,15 @@ const ConcurrentMaintenanceStore = {
         )
         .catch((error) => console.log(error));
     },
-    async getControlPanelDisp({ commit }) {
+    async getOpPanelLcd({ commit }) {
       return await api
         .get('/redfish/v1/Chassis/chassis/Assembly')
         .then((response) =>
           response.data.Assemblies.map((entry) => {
-            if (
-              Object.hasOwn(entry?.Oem?.OpenBMC || {}, 'ReadyToRemove') &&
-              entry?.Location?.PartLocation?.ServiceLabel?.endsWith?.('D1')
-            ) {
-              commit('setControlPanelDisp', entry);
+            if (entry.Name === 'Operator Panel LCD') {
+              commit('setOpPanelLcd', entry);
               commit(
-                'setReadyToRemoveControlPanelDisp',
+                'setReadyToRemoveOpPanelLcd',
                 entry.Oem.OpenBMC.ReadyToRemove
               );
             }
@@ -123,19 +109,16 @@ const ConcurrentMaintenanceStore = {
           );
         });
     },
-    async saveReadyToRemoveControlPanel(
-      { commit, state },
-      updatedControlPanel
-    ) {
-      commit('setReadyToRemoveControlPanel', updatedControlPanel);
+    async saveReadyToRemoveOpPanelBase({ commit, state }, updatedOpPanelBase) {
+      commit('setReadyToRemoveOpPanelBase', updatedOpPanelBase);
       return await api
         .patch('/redfish/v1/Chassis/chassis/Assembly', {
           Assemblies: [
             {
-              MemberId: state.controlPanel.MemberId,
+              MemberId: state.opPanelBase.MemberId,
               Oem: {
                 OpenBMC: {
-                  ReadyToRemove: updatedControlPanel,
+                  ReadyToRemove: updatedOpPanelBase,
                 },
               },
             },
@@ -145,33 +128,30 @@ const ConcurrentMaintenanceStore = {
           return i18n.t(
             'pageConcurrentMaintenance.toast.successSaveReadyToRemove',
             {
-              state: updatedControlPanel ? 'enabled' : 'disabled',
+              state: updatedOpPanelBase ? 'enabled' : 'disabled',
             }
           );
         })
         .catch((error) => {
           console.log(error);
-          commit('setReadyToRemoveControlPanel', !updatedControlPanel);
+          commit('setReadyToRemoveOpPanelBase', !updatedOpPanelBase);
           throw new Error(
             i18n.t('pageConcurrentMaintenance.toast.errorSaveReadyToRemove', {
-              state: updatedControlPanel ? 'enabling' : 'disabling',
+              state: updatedOpPanelBase ? 'enabling' : 'disabling',
             })
           );
         });
     },
-    async saveReadyToRemoveControlPanelDisp(
-      { commit, state },
-      updatedControlPanelDisp
-    ) {
-      commit('setReadyToRemoveControlPanelDisp', updatedControlPanelDisp);
+    async saveReadyToRemoveOpPanelLcd({ commit, state }, updatedOpPanelLcd) {
+      commit('setReadyToRemoveOpPanelLcd', updatedOpPanelLcd);
       return await api
         .patch('/redfish/v1/Chassis/chassis/Assembly', {
           Assemblies: [
             {
-              MemberId: state.controlPanelDisp.MemberId,
+              MemberId: state.opPanelLcd.MemberId,
               Oem: {
                 OpenBMC: {
-                  ReadyToRemove: updatedControlPanelDisp,
+                  ReadyToRemove: updatedOpPanelLcd,
                 },
               },
             },
@@ -181,16 +161,16 @@ const ConcurrentMaintenanceStore = {
           return i18n.t(
             'pageConcurrentMaintenance.toast.successSaveReadyToRemove',
             {
-              state: updatedControlPanelDisp ? 'enabled' : 'disabled',
+              state: updatedOpPanelLcd ? 'enabled' : 'disabled',
             }
           );
         })
         .catch((error) => {
           console.log(error);
-          commit('setReadyToRemoveControlPanelDisp', !updatedControlPanelDisp);
+          commit('setReadyToRemoveOpPanelLcd', !updatedOpPanelLcd);
           throw new Error(
             i18n.t('pageConcurrentMaintenance.toast.errorSaveReadyToRemove', {
-              state: updatedControlPanelDisp ? 'enabling' : 'disabling',
+              state: updatedOpPanelLcd ? 'enabling' : 'disabling',
             })
           );
         });

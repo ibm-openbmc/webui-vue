@@ -2,29 +2,26 @@ import Axios from 'axios';
 //Do not change store import.
 //Exact match alias set to support
 //dotenv customizations.
-import store from '../store';
-import router from '@/router';
+import { AuthenticationStore } from './modules/Authentication/AuthenticationStore';
+import { GlobalStore } from './modules/GlobalStore';
 
-Axios.defaults.headers.common['Accept'] = [
-  'application/octet-stream',
-  'application/json',
-];
+Axios.defaults.headers.common['Accept'] = 'application/json';
 Axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 const api = Axios.create({
-  baseURL: window.location.origin + window.location.pathname,
   withCredentials: true,
 });
 
 api.interceptors.response.use(undefined, (error) => {
+  const globalStore = GlobalStore();
+  const authenticationStore = AuthenticationStore();
   let response = error.response;
-
   // TODO: Provide user with a notification and way to keep system active
   if (response.status == 401) {
-    if (response.config.url !== '/login') {
+    if (response.config.url != 'api/login') {
+      window.location = '/login';
       // Commit logout to remove XSRF-TOKEN cookie
-      store.commit('authentication/logout');
-      router.replace('/login');
+      authenticationStore.logoutRemove();
     }
   }
 
@@ -32,33 +29,27 @@ api.interceptors.response.use(undefined, (error) => {
     // Check if action is unauthorized.
     // Toast error message will appear on screen
     // when the action is unauthorized.
-    // Hardware deconfiguration is an exception to this
-    const url = response.config.url;
-    const notGetMethod = response.config.method !== 'get';
-    const coreUrl = 'redfish/v1/Systems/system/Processors';
-    const memoryUrl = 'redfish/v1/Systems/system/Memory';
-    if (!(url.includes(coreUrl) || url.includes(memoryUrl)) && notGetMethod)
-      store.commit('global/setUnauthorized');
+    globalStore.setUnauthorized();
   }
 
   return Promise.reject(error);
 });
 
 export default {
-  get(path) {
-    return api.get(path);
+  get(path, config) {
+    return api.get('api' + path, config);
   },
-  delete(path, payload) {
-    return api.delete(path, payload);
+  delete(path, config) {
+    return api.delete('api' + path, config);
   },
   post(path, payload, config) {
-    return api.post(path, payload, config);
+    return api.post('api' + path, payload, config);
   },
-  patch(path, payload) {
-    return api.patch(path, payload);
+  patch(path, payload, config) {
+    return api.patch('api' + path, payload, config);
   },
-  put(path, payload) {
-    return api.put(path, payload);
+  put(path, payload, config) {
+    return api.put('api' + path, payload, config);
   },
   all(promises) {
     return Axios.all(promises);

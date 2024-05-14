@@ -1,34 +1,35 @@
 <template>
   <div class="page-title">
     <h1>{{ title }}</h1>
-    <p v-if="description">
-      {{ description }}
-      <b-link v-if="link" :to="to"> {{ link }} </b-link>
-    </p>
+    <p v-if="description">{{ description }}</p>
+    <!-- <b-link v-if="link" :to="to"> {{ link }} </b-link> -->
   </div>
 </template>
-<script>
-export default {
-  name: 'PageTitle',
-  props: {
-    title: {
-      type: String,
-      default: '',
-    },
-    description: {
-      type: String,
-      default: '',
-    },
-    link: {
-      type: String,
-      default: '',
-    },
-    to: {
-      type: String,
-      default: '',
-    },
-  },
-};
+
+<script setup>
+import i18n from '@/i18n';
+import { reactive } from 'vue';
+import router from '@/router';
+
+const props = defineProps({
+  description: String,
+});
+// let title = reactive(router.currentRoute.value.meta.title);
+let title = reactive(router.currentRoute.value.name);
+let i = 1;
+if (title) {
+  while (i < router.currentRoute.value.name.split('-').length) {
+    let index = title.search('-');
+    title = title.replace(
+      '-' + title.charAt(index + 1),
+      title.charAt(index + 1).toUpperCase()
+    );
+    i++;
+  }
+
+  title = i18n.global.t('appPageTitle.'+title);
+  document.title = title;
+}
 </script>
 
 <style lang="scss" scoped>

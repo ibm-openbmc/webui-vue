@@ -3,24 +3,11 @@
     <slot />
   </main>
 </template>
-
-<script>
-import JumpLinkMixin from '@/components/Mixins/JumpLinkMixin';
-export default {
-  name: 'PageContainer',
-  mixins: [JumpLinkMixin],
-  created() {
-    this.$root.$on('skip-navigation', () => {
-      this.setFocus(this.$el);
-    });
-  },
-};
-</script>
 <style lang="scss" scoped>
 main {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  // overflow-x: hidden;
   padding-top: $spacer * 1.5;
   padding-bottom: $spacer * 3;
   padding-left: $spacer;
@@ -32,7 +19,7 @@ main {
   }
 
   @include media-breakpoint-up($responsive-layout-bp) {
-    padding-left: $spacer * 2;
+  padding-left: $spacer * 2;
   }
 }
 </style>
