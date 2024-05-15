@@ -48,6 +48,14 @@
           <span class="sr-only">{{ expandRowLabel }}</span>
         </b-button>
       </template>
+      <!-- Name -->
+      <template #cell(name)="{ value }">
+        {{
+          value === 'Processor Module'
+            ? $t('pageInventory.processorModule')
+            : dataFormatter(value)
+        }}
+      </template>
       <!-- Health -->
       <template #cell(health)="{ value }">
         <status-icon :status="statusIcon(value)" />
@@ -115,14 +123,10 @@
           <b-row>
             <b-col class="mt-2" sm="6" xl="6">
               <dl>
-                <!-- Name -->
-                <dt>{{ $t('pageInventory.table.name') }}</dt>
+                <!-- Id -->
+                <dt>{{ $t('pageInventory.table.id') }}</dt>
                 <dd>
-                  {{
-                    item.name === 'Processor Module'
-                      ? $t('pageInventory.processorModule')
-                      : dataFormatter(item.name)
-                  }}
+                  {{ dataFormatter(item.id) }}
                 </dd>
                 <!-- Part Number -->
                 <dt>{{ $t('pageInventory.table.partNumber') }}</dt>
@@ -199,7 +203,7 @@ export default {
           sortable: false,
         },
         {
-          key: 'id',
+          key: 'name',
           label: this.$t('pageInventory.table.name'),
           formatter: this.dataFormatter,
           sortable: true,

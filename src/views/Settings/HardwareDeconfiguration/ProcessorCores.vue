@@ -144,6 +144,11 @@ export default {
       isBusy: true,
       fields: [
         {
+          key: 'processorName',
+          sortable: true,
+          label: this.$t('pageDeconfigurationHardware.table.processorName'),
+        },
+        {
           key: 'processorId',
           sortable: true,
           label: this.$t('pageDeconfigurationHardware.table.id'),

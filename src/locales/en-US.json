@@ -489,6 +489,7 @@
       "id": "Id",
       "locationCode": "Location Code",
       "name": "Name",
+      "processorName": "Processor Name",
       "pelId": "Pel ID",
       "eventId": "Event ID",
       "settings": "Settings",

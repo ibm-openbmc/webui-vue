@@ -41,9 +41,9 @@ const HardwareDeconfigurationStore = {
         .get(`${id}`)
         .then((response) => response.data.Location.PartLocation.ServiceLabel)
         .catch((error) => console.log(error));
-      const procId = await api
+      const procData = await api
         .get(`${id}`)
-        .then((response) => response.data.Id)
+        .then((response) => response.data)
         .catch((error) => console.log(error));
       const cores = await api
         .get(`${id}/SubProcessors`)
@@ -110,7 +110,8 @@ const HardwareDeconfigurationStore = {
                   : msgArgs === 'Unknown'
                   ? i18n.t('pageDeconfigurationHardware.table.filter.unknown')
                   : msgArgs,
-              processorId: procId,
+              processorId: procData.Id,
+              processorName: procData.Name,
               eventID: eventId,
             };
           });
