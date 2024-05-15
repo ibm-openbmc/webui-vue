@@ -65,15 +65,6 @@
               <span class="responsive-text">{{ t('appHeader.refresh') }}</span>
             </BButton>
           </li>
-          <li>
-              <BButton
-              id="app-header-toast"
-              data-test-id="appHeader-button-toast"
-              @click="handleToast"
-              >
-              Toast
-            </BButton>
-          </li>
           <li class="nav-item">
             <BDropdown
               id="app-header-user"
@@ -227,12 +218,6 @@ const handleRefresh = () => {
   // Emit a custom eventBus to notify the Applayout component
   emit('refresh')
 }
- const handleToast = () => {
-  console.log('click on toast');
-   successToast('success Toast', {
-  title: 'successfully Toast',
-  });
- }
 const setFocus = (event) => {
   event.preventDefault()
   this.$root.$emit('skip-navigation')
