@@ -135,7 +135,7 @@ const GlobalStore = {
         .catch((error) => console.log(error));
     },
     getCurrentUser(
-      { commit, getters },
+      { commit, dispatch, getters },
       username = localStorage.getItem('storedUsername')
     ) {
       if (localStorage.getItem('storedCurrentUser')) return;
@@ -150,6 +150,18 @@ const GlobalStore = {
         })
         .catch((error) => {
           console.log(error);
+          return dispatch('getAccountService');
+        });
+    },
+    getAccountService() {
+      return api
+        .get('/redfish/v1/AccountService')
+        .then((response) => {
+          if (response.data?.LDAP?.RemoteRoleMapping?.length > 0) {
+            return Promise.resolve();
+          }
+        })
+        .catch(() => {
           return Promise.reject();
         });
     },
