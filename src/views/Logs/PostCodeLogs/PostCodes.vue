@@ -26,11 +26,13 @@ export default {
           let finalConvertedCode = bytearray.toString();
           // Filter out all non readable values and all 00000000
           // Yes, whitespaces for 'STANDBY ' and 'RUNTIME ' must be there
-          if (
+          if (finalConvertedCode === '00000000') {
+            this.setPreviousPostCode('');
+            return '';
+          } else if (
             finalConvertedCode === 'STANDBY ' ||
             finalConvertedCode === 'RUNTIME ' ||
-            (finalConvertedCode != '00000000' &&
-              /^[a-z0-9 ]+$/i.test(finalConvertedCode))
+            /^[a-z0-9 ]+$/i.test(finalConvertedCode)
           ) {
             this.setPreviousPostCode(finalConvertedCode);
             return finalConvertedCode;
