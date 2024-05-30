@@ -14,15 +14,12 @@ const AuthenticationStore = {
     loginPageDetails: (state) => state.loginPageDetails,
     authError: (state) => state.authError,
     isLoggedIn: (state) => {
-      return (
-        state.xsrfCookie !== undefined || state.isAuthenticatedCookie == 'true'
-      );
+      return state.xsrfCookie !== undefined || state.isAuthenticatedCookie == 'true';
     },
     token: (state) => state.xsrfCookie,
   },
   mutations: {
-    setLoginPageDetails: (state, loginPageDetails) =>
-      (state.loginPageDetails = loginPageDetails),
+    setLoginPageDetails: (state, loginPageDetails) => (state.loginPageDetails = loginPageDetails),
     authSuccess(state) {
       state.authError = false;
       state.xsrfCookie = Cookies.get('XSRF-TOKEN');

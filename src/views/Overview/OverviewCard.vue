@@ -27,15 +27,37 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const props = defineProps([
-  'data',
-  'disabled',
-  'downloadButton',
-  'exportButton',
-  'fileName',
-  'title',
-  'to',
-]);
+const props = defineProps({
+  data: {
+    type: Array,
+    default: () => [],
+  },
+  disabled: {
+    type: Boolean,
+    default: true,
+  },
+  downloadButton: {
+    type: Boolean,
+    default: false,
+  },
+  exportButton: {
+    type: Boolean,
+    default: false,
+  },
+
+  fileName: {
+    type: String,
+    default: 'data',
+  },
+  title: {
+    type: String,
+    default: '',
+  },
+  to: {
+    type: String,
+    default: '/',
+  },
+});
 
 const dataForExport = computed(() => {
   return JSON.stringify(props.data);
@@ -44,7 +66,7 @@ const download = computed(() => {
   return `${props.fileName}.json`;
 });
 const href = computed(() => {
-  return `data:text/json;charset=utf-8,${dataForExport}`;
+  return `data:text/json;charset=utf-8,${dataForExport.value}`;
 });
 </script>
 

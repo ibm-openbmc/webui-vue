@@ -48,9 +48,7 @@ const ProcessorStore = {
       commit('setProcessorsInfo', []);
       return await api
         .get('/redfish/v1/Systems/system/Processors')
-        .then(({ data: { Members = [] } }) =>
-          Members.map((member) => api.get(member['@odata.id']))
-        )
+        .then(({ data: { Members = [] } }) => Members.map((member) => api.get(member['@odata.id'])))
         .then((promises) => api.all(promises))
         .then((response) => {
           const data = response.map(({ data }) => data);
@@ -78,13 +76,9 @@ const ProcessorStore = {
           dispatch('getProcessorsInfo');
           console.log('error', error);
           if (led.identifyLed) {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorEnableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorEnableIdentifyLed'));
           } else {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorDisableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorDisableIdentifyLed'));
           }
         });
     },

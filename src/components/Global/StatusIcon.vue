@@ -15,7 +15,7 @@ import IconWarning from '@carbon/icons-vue/es/warning--filled/20';
 import IconSecondary from '@carbon/icons-vue/es/error--filled/20';
 import IconDanger from '@carbon/icons-vue/es/misuse/20';
 
-const props = defineProps(['status']);
+// const props = defineProps(['status']);
 </script>
 
 <style lang="scss" scoped>

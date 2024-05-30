@@ -3,10 +3,7 @@
     <page-title :title="$t('appPageTitle.serverPowerOperations')" />
     <b-row class="mb-4">
       <b-col sm="10">
-        <page-section
-          class="mb-0"
-          :section-title="$t('pageServerPowerOperations.currentStatus')"
-        >
+        <page-section class="mb-0" :section-title="$t('pageServerPowerOperations.currentStatus')">
           <b-row v-if="isInPhypStandby">
             <b-col>
               <alert variant="info">
@@ -49,9 +46,7 @@
                     @click="discardStandbyToRuntime"
                   >
                     <span class="pe-1">
-                      {{
-                        $t('pageServerPowerOperations.discardOsRuntimeButton')
-                      }}
+                      {{ $t('pageServerPowerOperations.discardOsRuntimeButton') }}
                     </span>
                     <icon-arrow-right />
                   </b-button>
@@ -64,10 +59,7 @@
               <b-col sm="3">
                 <dl>
                   <dt>{{ $t('pageServerPowerOperations.serverStatus') }}</dt>
-                  <dd
-                    v-if="serverStatus === 'on'"
-                    data-test-id="powerServerOps-text-hostStatus"
-                  >
+                  <dd v-if="serverStatus === 'on'" data-test-id="powerServerOps-text-hostStatus">
                     {{ $t('global.status.on') }}
                   </dd>
                   <dd
@@ -86,10 +78,7 @@
                   <dt>
                     {{ $t('pageServerPowerOperations.lastPowerOperation') }}
                   </dt>
-                  <dd
-                    v-if="lastPowerOperationTime"
-                    data-test-id="powerServerOps-text-lastPowerOp"
-                  >
+                  <dd v-if="lastPowerOperationTime" data-test-id="powerServerOps-text-lastPowerOp">
                     {{ lastPowerOperationTime | formatDate }}
                     {{ lastPowerOperationTime | formatTime }}
                   </dd>
@@ -103,9 +92,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <page-section
-          :section-title="$t('pageServerPowerOperations.operations')"
-        >
+        <page-section :section-title="$t('pageServerPowerOperations.operations')">
           <template v-if="isOperationInProgress">
             <alert variant="info">
               {{ $t('pageServerPowerOperations.operationInProgress') }}
@@ -145,9 +132,7 @@
               <!-- Shutdown server options -->
               <b-col sm="5">
                 <b-form novalidate @submit.prevent="shutdownServer">
-                  <b-form-group
-                    :label="$t('pageServerPowerOperations.shutdownServer')"
-                  >
+                  <b-form-group :label="$t('pageServerPowerOperations.shutdownServer')">
                     <b-form-radio
                       v-model="form.shutdownOption"
                       name="shutdown-option"
@@ -181,9 +166,7 @@
     </b-row>
     <b-row>
       <b-col sm="8" md="7" lg="7" xl="9">
-        <page-section
-          :section-title="$t('pageServerPowerOperations.serverBootSettings')"
-        >
+        <page-section :section-title="$t('pageServerPowerOperations.serverBootSettings')">
           <b-row class="mt-3 mb-3">
             <b-col>
               <b-button
@@ -296,9 +279,7 @@ export default {
   created() {
     this.startLoader();
     const bootSettingsPromise = new Promise((resolve) => {
-      this.$root.$on('server-power-operations-boot-settings-complete', () =>
-        resolve()
-      );
+      this.$root.$on('server-power-operations-boot-settings-complete', () => resolve());
     });
     Promise.all([
       this.$store.dispatch('serverBootSettings/getOperatingModeSettings'),
@@ -346,9 +327,7 @@ export default {
       ) {
         this.$store.dispatch('controls/serverPowerOn');
       } else {
-        this.errorToast(
-          this.$t('pageServerPowerOperations.toast.errorPowerOn')
-        );
+        this.errorToast(this.$t('pageServerPowerOperations.toast.errorPowerOn'));
       }
     },
     rebootServer() {
@@ -368,17 +347,13 @@ export default {
         };
 
         if (this.form.rebootOption === 'orderly') {
-          this.$bvModal
-            .msgBoxConfirm(modalMessage, modalOptions)
-            .then((confirmed) => {
-              if (confirmed) this.$store.dispatch('controls/serverSoftReboot');
-            });
+          this.$bvModal.msgBoxConfirm(modalMessage, modalOptions).then((confirmed) => {
+            if (confirmed) this.$store.dispatch('controls/serverSoftReboot');
+          });
         } else if (this.form.rebootOption === 'immediate') {
-          this.$bvModal
-            .msgBoxConfirm(modalMessage, modalOptions)
-            .then((confirmed) => {
-              if (confirmed) this.$store.dispatch('controls/serverHardReboot');
-            });
+          this.$bvModal.msgBoxConfirm(modalMessage, modalOptions).then((confirmed) => {
+            if (confirmed) this.$store.dispatch('controls/serverHardReboot');
+          });
         }
       });
     },
@@ -398,18 +373,14 @@ export default {
       };
 
       if (this.form.shutdownOption === 'orderly') {
-        this.$bvModal
-          .msgBoxConfirm(modalMessage, modalOptions)
-          .then((confirmed) => {
-            if (confirmed) this.$store.dispatch('controls/serverSoftPowerOff');
-          });
+        this.$bvModal.msgBoxConfirm(modalMessage, modalOptions).then((confirmed) => {
+          if (confirmed) this.$store.dispatch('controls/serverSoftPowerOff');
+        });
       }
       if (this.form.shutdownOption === 'immediate') {
-        this.$bvModal
-          .msgBoxConfirm(modalMessage, modalOptions)
-          .then((confirmed) => {
-            if (confirmed) this.$store.dispatch('controls/serverHardPowerOff');
-          });
+        this.$bvModal.msgBoxConfirm(modalMessage, modalOptions).then((confirmed) => {
+          if (confirmed) this.$store.dispatch('controls/serverHardPowerOff');
+        });
       }
     },
     standbyToRuntime() {

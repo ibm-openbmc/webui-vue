@@ -9,10 +9,7 @@ const KeyClearStore = {
         Attributes: { hb_key_clear_request: selectedKey },
       };
       return await api
-        .patch(
-          '/redfish/v1/Systems/system/Bios/Settings',
-          selectedKeyForClearing
-        )
+        .patch('/redfish/v1/Systems/system/Bios/Settings', selectedKeyForClearing)
         .then(() => i18n.t('pageKeyClear.toast.selectedKeyClearedSuccess'))
         .catch((error) => {
           console.log('Key clear', error);

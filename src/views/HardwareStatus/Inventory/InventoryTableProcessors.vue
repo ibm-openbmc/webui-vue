@@ -3,10 +3,7 @@
     <!-- Search -->
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
-        <search
-          @change-search="onChangeSearchInput"
-          @clear-search="onClearSearchInput"
-        />
+        <search @change-search="onChangeSearchInput" @clear-search="onClearSearchInput" />
       </b-col>
       <b-col sm="6" md="3" xl="2">
         <table-cell-count
@@ -55,10 +52,10 @@
           value === 'OK'
             ? $t('global.status.ok')
             : value === 'Warning'
-            ? $t('global.status.warning')
-            : value === 'Critical'
-            ? $t('global.status.critical')
-            : '--'
+              ? $t('global.status.warning')
+              : value === 'Critical'
+                ? $t('global.status.critical')
+                : '--'
         }}
       </template>
       <!-- Status -->
@@ -67,28 +64,28 @@
           row.item.status === 'Present'
             ? $t('global.status.present')
             : row.item.status === 'Absent'
-            ? $t('global.status.absent')
-            : row.item.status === 'Deferring'
-            ? $t('global.status.deferring')
-            : row.item.status === 'Disabled'
-            ? $t('global.status.disabled')
-            : row.item.status === 'InTest'
-            ? $t('global.status.inTest')
-            : row.item.status === 'Qualified'
-            ? $t('global.status.qualified')
-            : row.item.status === 'Quiesced'
-            ? $t('global.status.quiesced')
-            : row.item.status === 'StandbyOffline'
-            ? $t('global.status.standbyOffline')
-            : row.item.status === 'StandbySpare'
-            ? $t('global.status.standbySpare')
-            : row.item.status === 'Starting'
-            ? $t('global.status.starting')
-            : row.item.status === 'UnavailableOffline'
-            ? $t('global.status.unavailableOffline')
-            : row.item.status === 'Updating'
-            ? $t('global.status.updating')
-            : row.item.status
+              ? $t('global.status.absent')
+              : row.item.status === 'Deferring'
+                ? $t('global.status.deferring')
+                : row.item.status === 'Disabled'
+                  ? $t('global.status.disabled')
+                  : row.item.status === 'InTest'
+                    ? $t('global.status.inTest')
+                    : row.item.status === 'Qualified'
+                      ? $t('global.status.qualified')
+                      : row.item.status === 'Quiesced'
+                        ? $t('global.status.quiesced')
+                        : row.item.status === 'StandbyOffline'
+                          ? $t('global.status.standbyOffline')
+                          : row.item.status === 'StandbySpare'
+                            ? $t('global.status.standbySpare')
+                            : row.item.status === 'Starting'
+                              ? $t('global.status.starting')
+                              : row.item.status === 'UnavailableOffline'
+                                ? $t('global.status.unavailableOffline')
+                                : row.item.status === 'Updating'
+                                  ? $t('global.status.updating')
+                                  : row.item.status
         }}
       </template>
 
@@ -164,12 +161,8 @@ import InfoTooltip from '@/components/Global/InfoTooltip';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import Search from '@/components/Global/Search';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
 
 export default {
   components: {
@@ -237,9 +230,7 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.processors.length;
+      return this.searchFilter ? this.searchTotalFilteredRows : this.processors.length;
     },
     processors() {
       return this.$store.getters['processors/processors'];

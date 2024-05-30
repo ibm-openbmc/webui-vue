@@ -80,7 +80,7 @@
           </template>
 
           <!-- Actions column -->
-          <template #cell(actions)="row" class="ml-3">
+          <template #cell(actions)="row">
             <table-row-action
               v-for="(action, index) in row.item.actions"
               :key="index"
@@ -145,9 +145,7 @@ import BVTableSelectableMixin, {
   tableHeaderCheckboxIndeterminate,
 } from '@/components/Mixins/BVTableSelectableMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
+import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
 
 export default {
   components: {
@@ -213,9 +211,7 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.allConnections.length;
+      return this.searchFilter ? this.searchTotalFilteredRows : this.allConnections.length;
     },
     allConnections() {
       return this.$store.getters['sessions/allConnections'].map((session) => {
@@ -246,17 +242,15 @@ export default {
       this.searchFilter = event;
     },
     disconnectSessions(uris) {
-      this.$store
-        .dispatch('sessions/disconnectSessions', uris)
-        .then((messages) => {
-          messages.forEach(({ type, message }) => {
-            if (type === 'success') {
-              this.successToast(message);
-            } else if (type === 'error') {
-              this.errorToast(message);
-            }
-          });
+      this.$store.dispatch('sessions/disconnectSessions', uris).then((messages) => {
+        messages.forEach(({ type, message }) => {
+          if (type === 'success') {
+            this.successToast(message);
+          } else if (type === 'error') {
+            this.errorToast(message);
+          }
         });
+      });
     },
     onTableRowAction(action, { uri }) {
       if (action === 'disconnect') {
@@ -276,18 +270,12 @@ export default {
         const uris = this.selectedRows.map((row) => row.uri);
         this.$bvModal
           .msgBoxConfirm(
-            this.$tc(
-              'pageSessions.modal.disconnectMessage',
-              this.selectedRows.length
-            ),
+            this.$tc('pageSessions.modal.disconnectMessage', this.selectedRows.length),
             {
-              title: this.$tc(
-                'pageSessions.modal.disconnectTitle',
-                this.selectedRows.length
-              ),
+              title: this.$tc('pageSessions.modal.disconnectTitle', this.selectedRows.length),
               okTitle: this.$t('pageSessions.action.disconnect'),
               cancelTitle: this.$t('global.action.cancel'),
-            }
+            },
           )
           .then((deleteConfirmed) => {
             if (deleteConfirmed) {

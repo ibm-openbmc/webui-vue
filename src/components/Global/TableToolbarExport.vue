@@ -1,10 +1,5 @@
 <template>
-  <b-button
-    class="d-flex align-items-center"
-    variant="primary"
-    :download="download"
-    :href="href"
-  >
+  <b-button class="d-flex align-items-center" variant="primary" :download="download" :href="href">
     {{ $t('global.action.export') }}
   </b-button>
 </template>

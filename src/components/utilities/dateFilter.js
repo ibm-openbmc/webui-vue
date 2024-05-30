@@ -1,7 +1,9 @@
 import { format } from 'date-fns';
 import { GlobalStore } from '../../store/modules/GlobalStore';
 
-const globalStore = () => { return GlobalStore() };
+const globalStore = () => {
+  return GlobalStore();
+};
 
 // Short time zone filter
 export const shortTimeZone = (value) => {
@@ -15,7 +17,7 @@ export const shortTimeZone = (value) => {
 
 // Date formatting filter
 export const formatDate = (value) => {
-  const isUtcDisplay = globalStore.isUtcDisplay
+  const isUtcDisplay = globalStore.isUtcDisplay;
 
   if (value instanceof Date) {
     if (isUtcDisplay) {

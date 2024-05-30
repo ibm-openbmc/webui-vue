@@ -37,15 +37,8 @@
     <b-row class="section-divider">
       <b-col class="d-flex align-items-center justify-content-start col-6 mb-1">
         <b-form class="form-width" @submit.prevent>
-          <b-form-group
-            id="input-group-1"
-            label-for="input-1"
-            class="mb-0 mr-0"
-          >
-            <b-form-text
-              v-show="frequencyRequestCurrentToggle"
-              id="frequency-cap-help-text"
-            >
+          <b-form-group id="input-group-1" label-for="input-1" class="mb-0 mr-0">
+            <b-form-text v-show="frequencyRequestCurrentToggle" id="frequency-cap-help-text">
               {{
                 $t('pagePower.powerCapLabelTextInfo', {
                   min: dataFormatter(frequencyMin),
@@ -66,10 +59,7 @@
                 @click="$v.frequencyValue.$touch()"
                 @input="frequencyRequest"
               />
-              <b-form-invalid-feedback
-                v-if="frequencyRequestCurrentToggle"
-                role="alert"
-              >
+              <b-form-invalid-feedback v-if="frequencyRequestCurrentToggle" role="alert">
                 {{
                   $t('global.form.valueMustBeBetween', {
                     min: frequencyMin,
@@ -139,9 +129,7 @@ export default {
     },
     frequencyRequestCurrentToggle: {
       get() {
-        return this.$store.getters[
-          'systemParameters/frequencyRequestCurrentToggle'
-        ];
+        return this.$store.getters['systemParameters/frequencyRequestCurrentToggle'];
       },
       set(newValue) {
         return newValue;
@@ -160,9 +148,7 @@ export default {
   created() {
     this.startLoader();
     this.$store.dispatch('systemParameters/getFrequencyCap').then(() => {
-      this.frequencyValue = this.$store.getters[
-        'systemParameters/frequencyRequest'
-      ];
+      this.frequencyValue = this.$store.getters['systemParameters/frequencyRequest'];
       this.endLoader();
     });
   },
@@ -191,10 +177,7 @@ export default {
     saveFrequencyRequest() {
       if (this.$v.$invalid) return;
       this.$store
-        .dispatch(
-          'systemParameters/newFrequencyCapRequest',
-          this.frequencyValue
-        )
+        .dispatch('systemParameters/newFrequencyCapRequest', this.frequencyValue)
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },

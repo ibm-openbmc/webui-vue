@@ -10,25 +10,18 @@ const SessionsStore = {
     allConnections: (state) => state.allConnections,
   },
   mutations: {
-    setAllConnections: (state, allConnections) =>
-      (state.allConnections = allConnections),
+    setAllConnections: (state, allConnections) => (state.allConnections = allConnections),
   },
   actions: {
     async getSessionsData({ commit }) {
       return await api
         .get('/redfish/v1/SessionService/Sessions')
-        .then((response) =>
-          response.data.Members.map((sessionLogs) => sessionLogs['@odata.id'])
-        )
-        .then((sessionUris) =>
-          api.all(sessionUris.map((sessionUri) => api.get(sessionUri)))
-        )
+        .then((response) => response.data.Members.map((sessionLogs) => sessionLogs['@odata.id']))
+        .then((sessionUris) => api.all(sessionUris.map((sessionUri) => api.get(sessionUri))))
         .then((sessionUris) => {
           const allConnectionsData = sessionUris.map((sessionUri) => {
             //For filtering IP address to IPv4
-            let filteredIPAddress = sessionUri.data?.ClientOriginIPAddress.split(
-              '::ffff:'
-            ).pop();
+            let filteredIPAddress = sessionUri.data?.ClientOriginIPAddress.split('::ffff:').pop();
             return {
               clientID: sessionUri.data?.Context,
               username: sessionUri.data?.UserName,
@@ -47,7 +40,7 @@ const SessionsStore = {
         api.delete(uri).catch((error) => {
           console.log(error);
           return error;
-        })
+        }),
       );
       return await api
         .all(promises)
@@ -61,22 +54,16 @@ const SessionsStore = {
             const toastMessages = [];
 
             if (successCount) {
-              const message = i18n.tc(
-                'pageSessions.toast.successDelete',
-                successCount
-              );
+              const message = i18n.tc('pageSessions.toast.successDelete', successCount);
               toastMessages.push({ type: 'success', message });
             }
 
             if (errorCount) {
-              const message = i18n.tc(
-                'pageSessions.toast.errorDelete',
-                errorCount
-              );
+              const message = i18n.tc('pageSessions.toast.errorDelete', errorCount);
               toastMessages.push({ type: 'error', message });
             }
             return toastMessages;
-          })
+          }),
         );
     },
   },

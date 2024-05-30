@@ -17,24 +17,16 @@ const FirmwareStore = defineStore('firmware', {
     isTftpUploadAvailable: (state) => state.tftpAvailable,
     isSingleFileUploadEnabled: (state) => state.hostFirmware.length === 0,
     activeBmcFirmware: (state) => {
-      return state.bmcFirmware.find(
-        (firmware) => firmware.id === state.bmcActiveFirmwareId
-      );
+      return state.bmcFirmware.find((firmware) => firmware.id === state.bmcActiveFirmwareId);
     },
     activeHostFirmware: (state) => {
-      return state.hostFirmware.find(
-        (firmware) => firmware.id === state.hostActiveFirmwareId
-      );
+      return state.hostFirmware.find((firmware) => firmware.id === state.hostActiveFirmwareId);
     },
     backupBmcFirmware: (state) => {
-      return state.bmcFirmware.find(
-        (firmware) => firmware.id !== state.bmcActiveFirmwareId
-      );
+      return state.bmcFirmware.find((firmware) => firmware.id !== state.bmcActiveFirmwareId);
     },
     backupHostFirmware: (state) => {
-      return state.hostFirmware.find(
-        (firmware) => firmware.id !== state.hostActiveFirmwareId
-      );
+      return state.hostFirmware.find((firmware) => firmware.id !== state.hostActiveFirmwareId);
     },
   },
   actions: {
@@ -65,7 +57,7 @@ const FirmwareStore = defineStore('firmware', {
       const inventoryList = await api
         .get('/redfish/v1/UpdateService/FirmwareInventory')
         .then(({ data: { Members = [] } = {} }) =>
-          Members.map((item) => api.get(item['@odata.id']))
+          Members.map((item) => api.get(item['@odata.id'])),
         )
         .catch((error) => console.log(error));
       await api
@@ -74,9 +66,7 @@ const FirmwareStore = defineStore('firmware', {
           const bmcFirmware = [];
           const hostFirmware = [];
           response.forEach(({ data }) => {
-            const firmwareType = data?.RelatedItem?.[0]?.['@odata.id']
-              .split('/')
-              .pop();
+            const firmwareType = data?.RelatedItem?.[0]?.['@odata.id'].split('/').pop();
             const item = {
               version: data?.Version,
               id: data?.Id,
@@ -100,8 +90,7 @@ const FirmwareStore = defineStore('firmware', {
       api
         .get('/redfish/v1/UpdateService')
         .then(({ data }) => {
-          const applyTime =
-            data.HttpPushUriOptions.HttpPushUriApplyTime.ApplyTime;
+          const applyTime = data.HttpPushUriOptions.HttpPushUriApplyTime.ApplyTime;
           const allowableActions =
             data?.Actions?.['#UpdateService.SimpleUpdate']?.[
               'TransferProtocol@Redfish.AllowableValues'
@@ -154,10 +143,7 @@ const FirmwareStore = defineStore('firmware', {
         await this.setApplyTimeImmediate();
       }
       return await api
-        .post(
-          '/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate',
-          data
-        )
+        .post('/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate', data)
         .catch((error) => {
           console.log(error);
           throw new Error(i18n.t('pageFirmware.toast.errorUpdateFirmware'));
@@ -172,12 +158,10 @@ const FirmwareStore = defineStore('firmware', {
           },
         },
       };
-      return await api
-        .patch('/redfish/v1/Managers/bmc', data)
-        .catch((error) => {
-          console.log(error);
-          throw new Error(i18n.t('pageFirmware.toast.errorSwitchImages'));
-        });
+      return await api.patch('/redfish/v1/Managers/bmc', data).catch((error) => {
+        console.log(error);
+        throw new Error(i18n.t('pageFirmware.toast.errorSwitchImages'));
+      });
     },
   },
 });

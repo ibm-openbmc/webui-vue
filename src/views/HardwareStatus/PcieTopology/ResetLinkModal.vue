@@ -16,11 +16,7 @@
     <div>{{ $t('pagePcieTopology.modal.resetLinkDescription') }}</div>
 
     <template #modal-footer="{ cancel }">
-      <b-button
-        variant="secondary"
-        data-test-id="factoryReset-button-cancel"
-        @click="cancel()"
-      >
+      <b-button variant="secondary" data-test-id="factoryReset-button-cancel" @click="cancel()">
         {{ $t('global.action.cancel') }}
       </b-button>
       <b-button
@@ -93,14 +89,14 @@ export default {
           this.successToast(
             this.$t('pagePcieTopology.toast.successReset', {
               id: this.resetType,
-            })
+            }),
           );
         })
         .catch(() => {
           this.errorToast(
             this.$t('pagePcieTopology.toast.errorReset', {
               id: this.resetType,
-            })
+            }),
           );
         });
       this.$nextTick(() => this.$refs.modal.hide());

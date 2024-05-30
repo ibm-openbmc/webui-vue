@@ -7,11 +7,7 @@
           <b-col>
             <alert variant="info" class="mb-4">
               <span>
-                {{
-                  $t(
-                    'pageIbmiServiceFunctions.alert.osRunningIbmiServiceFunctions'
-                  )
-                }}
+                {{ $t('pageIbmiServiceFunctions.alert.osRunningIbmiServiceFunctions') }}
               </span>
             </alert>
           </b-col>
@@ -20,16 +16,10 @@
           <b-col class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
               <dt id="activateDST-label">
-                {{
-                  $t('pageIbmiServiceFunctions.activateDedicatedServiceTool')
-                }}
+                {{ $t('pageIbmiServiceFunctions.activateDedicatedServiceTool') }}
               </dt>
               <dd id="activateDST-description">
-                {{
-                  $t(
-                    'pageIbmiServiceFunctions.activateDedicatedServiceToolDesc'
-                  )
-                }}
+                {{ $t('pageIbmiServiceFunctions.activateDedicatedServiceToolDesc') }}
               </dd>
             </dl>
             <b-button
@@ -102,16 +92,10 @@
           <b-col class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
               <dt id="concurrentMaintenancePowerOff-label">
-                {{
-                  $t('pageIbmiServiceFunctions.concurrentMaintenancePowerOff')
-                }}
+                {{ $t('pageIbmiServiceFunctions.concurrentMaintenancePowerOff') }}
               </dt>
               <dd id="concurrentMaintenancePowerOff-description">
-                {{
-                  $t(
-                    'pageIbmiServiceFunctions.concurrentMaintenancePowerOffDesc'
-                  )
-                }}
+                {{ $t('pageIbmiServiceFunctions.concurrentMaintenancePowerOffDesc') }}
               </dd>
             </dl>
             <b-button
@@ -127,16 +111,10 @@
           <b-col class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
               <dt id="concurrentMaintenancePowerOn-label">
-                {{
-                  $t('pageIbmiServiceFunctions.concurrentMaintenancePowerOn')
-                }}
+                {{ $t('pageIbmiServiceFunctions.concurrentMaintenancePowerOn') }}
               </dt>
               <dd id="concurrentMaintenancePowerOn-description">
-                {{
-                  $t(
-                    'pageIbmiServiceFunctions.concurrentMaintenancePowerOnDesc'
-                  )
-                }}
+                {{ $t('pageIbmiServiceFunctions.concurrentMaintenancePowerOnDesc') }}
               </dd>
             </dl>
             <b-button

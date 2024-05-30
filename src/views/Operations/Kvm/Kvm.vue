@@ -2,7 +2,7 @@
   <BContainer fluid="xl">
     <page-title :title="t('appPageTitle.kvm')" />
     <div class="terminal-container">
-      <kvm-console :isFullWindow="isFullWindow" />
+      <kvm-console :is-full-window="isFullWindow" />
     </div>
   </BContainer>
 </template>
@@ -11,7 +11,7 @@
 import PageTitle from '@/components/Global/PageTitle.vue';
 import KvmConsole from './KvmConsole.vue';
 import { ref } from 'vue';
-const isFullWindow = ref(false)
+const isFullWindow = ref(false);
 </script>
 
 <style scoped>

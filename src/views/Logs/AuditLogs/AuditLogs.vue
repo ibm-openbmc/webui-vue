@@ -150,12 +150,8 @@ import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
 
 export default {
   components: {
@@ -229,9 +225,7 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.filteredLogs.length;
+      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredLogs.length;
     },
     allLogs() {
       return this.$store.getters['auditLogs/allAuditLogs'].map((auditLogs) => {
@@ -244,14 +238,11 @@ export default {
       return this.getFilteredTableDataByDate(
         this.allLogs,
         this.filterStartDate,
-        this.filterEndDate
+        this.filterEndDate,
       );
     },
     filteredLogs() {
-      return this.getFilteredTableData(
-        this.filteredLogsByDate,
-        this.activeFilters
-      );
+      return this.getFilteredTableData(this.filteredLogsByDate, this.activeFilters);
     },
   },
   created() {
@@ -273,15 +264,13 @@ export default {
       const decodedData = atob(data);
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
       let fileName;
       fileName = 'audit_logs_' + date;
       var element = document.createElement('a');
       element.setAttribute(
         'href',
-        'data:text/plain;charset=utf-8,' + encodeURIComponent(decodedData)
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(decodedData),
       );
       element.setAttribute('download', fileName);
       element.style.display = 'none';
@@ -295,18 +284,13 @@ export default {
       if (value === 'all') {
         this.startLoader();
         await this.$store
-          .dispatch(
-            'auditLogs/downloadLogData',
-            this.allLogs[0].additionalDataUri
-          )
+          .dispatch('auditLogs/downloadLogData', this.allLogs[0].additionalDataUri)
           .then((response) => {
             auditLogsData.push(response.data);
           })
           .then(() => {
             this.downloadFile(auditLogsData);
-            this.successToast(
-              i18n.t('pageAuditLogs.toast.successStartDownload')
-            );
+            this.successToast(i18n.t('pageAuditLogs.toast.successStartDownload'));
           })
           .catch((error) => {
             console.log(error);

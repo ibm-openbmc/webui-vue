@@ -263,11 +263,8 @@ export default {
   },
   data() {
     return {
-      unauthenticatedACFUploadEnablementState: this.$store.getters[
-        'policies/acfUploadEnablement'
-      ],
-      modifySSHPolicyDisabled:
-        process.env.VUE_APP_MODIFY_SSH_POLICY_DISABLED === 'true',
+      unauthenticatedACFUploadEnablementState: this.$store.getters['policies/acfUploadEnablement'],
+      modifySSHPolicyDisabled: process.env.VUE_APP_MODIFY_SSH_POLICY_DISABLED === 'true',
     };
   },
   computed: {
@@ -358,9 +355,8 @@ export default {
       this.$store.dispatch('userManagement/getUsers'),
       this.checkForUserData(),
     ]).finally(() => {
-      this.unauthenticatedACFUploadEnablementState = this.$store.getters[
-        'policies/acfUploadEnablement'
-      ];
+      this.unauthenticatedACFUploadEnablementState =
+        this.$store.getters['policies/acfUploadEnablement'];
       setTimeout(() => {
         this.endLoader();
       }, 30000);
@@ -426,14 +422,11 @@ export default {
     changeUnauthenticatedACFUploadEnablement(state) {
       if (state) {
         this.$bvModal
-          .msgBoxConfirm(
-            this.$t('pagePolicies.acfUploadEnablementConfirmText'),
-            {
-              title: this.$tc('pagePolicies.acfUploadEnablement'),
-              okTitle: this.$tc('global.action.confirm'),
-              cancelTitle: this.$t('global.action.cancel'),
-            }
-          )
+          .msgBoxConfirm(this.$t('pagePolicies.acfUploadEnablementConfirmText'), {
+            title: this.$tc('pagePolicies.acfUploadEnablement'),
+            okTitle: this.$tc('global.action.confirm'),
+            cancelTitle: this.$t('global.action.cancel'),
+          })
           .then((value) => {
             this.enableUpload(value, state);
           });
@@ -452,9 +445,7 @@ export default {
         .catch(({ message }) => this.errorToast(message));
     },
     enableUpload(value, state) {
-      value
-        ? this.uploadApi(state)
-        : (this.unauthenticatedACFUploadEnablementState = !state);
+      value ? this.uploadApi(state) : (this.unauthenticatedACFUploadEnablementState = !state);
     },
     checkForUserData() {
       if (!this.currentUser) {

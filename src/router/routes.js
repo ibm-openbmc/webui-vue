@@ -5,7 +5,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import Overview from '@/views/Overview/Overview.vue';
 import VirtualMedia from '@/views/Operations/VirtualMedia/VirtualMedia.vue';
 import Kvm from '@/views/Operations/Kvm';
-import PageNotFound from '@/views/PageNotFound/PageNotFound.vue'
+import PageNotFound from '@/views/PageNotFound/PageNotFound.vue';
 const roles = {
   administrator: 'Administrator',
   operator: 'Operator',

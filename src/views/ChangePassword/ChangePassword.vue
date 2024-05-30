@@ -12,10 +12,7 @@
         <dd>{{ username }}</dd>
       </dl>
       <b-form novalidate @submit.prevent="changePassword">
-        <b-form-group
-          label-for="password"
-          :label="$t('pageChangePassword.newPassword')"
-        >
+        <b-form-group label-for="password" :label="$t('pageChangePassword.newPassword')">
           <template #label>
             {{ $t('pageUserManagement.modal.userPassword') }}
             <info-tooltip-password />

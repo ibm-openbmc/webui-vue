@@ -24,14 +24,13 @@ export const itemsPerPageOptions = [
   },
 ];
 const usePaginationComposable = () => {
-
-    const getTotalRowCount = (count) => {  
-        return perPage === 0 ? 0 : count;
-    };
-  
-    return {
-        getTotalRowCount
-    };
+  const getTotalRowCount = (count) => {
+    return perPage === 0 ? 0 : count;
   };
+
+  return {
+    getTotalRowCount,
+  };
+};
 
 export default usePaginationComposable;

@@ -3,9 +3,7 @@
     <b-row class="d-flex">
       <b-col class="d-flex flex-column justify-content-end">
         <dl class="mb-2" sm="6" md="6">
-          <dt class="d-inline font-weight-bold mr-1">
-            {{ $t('pageHostConsole.status') }}:
-          </dt>
+          <dt class="d-inline font-weight-bold mr-1">{{ $t('pageHostConsole.status') }}:</dt>
           <dd class="d-inline">
             <status-icon :status="serverStatusIcon" /> {{ connectionStatus }}
           </dd>
@@ -53,9 +51,7 @@ export default {
   },
   computed: {
     serverStatus() {
-      return (
-        this.$store.getters['chassis/powerState'] !== 'Off' && this.wsConnection
-      );
+      return this.$store.getters['chassis/powerState'] !== 'Off' && this.wsConnection;
     },
     serverStatusIcon() {
       return this.serverStatus ? 'success' : 'danger';
@@ -92,7 +88,7 @@ export default {
       const token = this.$store.getters['authentication/token'];
       const host = `${window.location.origin.replace(
         'https://',
-        ''
+        '',
       )}${window.location.pathname.replace(/\/$/, '')}`;
       this.ws = new WebSocket(`wss://${host}/console0`, [token]);
 
@@ -135,7 +131,7 @@ export default {
           console.log(
             `websocket console0/ closed.
             code: ${event.code}
-            reason: ${event.reason}`
+            reason: ${event.reason}`,
           );
         };
         this.ws.onmessage = () => {
@@ -152,7 +148,7 @@ export default {
       window.open(
         '#/console/host-console-console',
         '_blank',
-        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550'
+        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550',
       );
     },
   },

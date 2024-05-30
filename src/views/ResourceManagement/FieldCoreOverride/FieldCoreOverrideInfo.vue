@@ -1,9 +1,7 @@
 <template>
   <b-row>
     <b-col xl="8">
-      <page-section
-        :section-title="$t('pageFieldCoreOverride.currentConfiguration')"
-      >
+      <page-section :section-title="$t('pageFieldCoreOverride.currentConfiguration')">
         <b-card bg-variant="light" border-variant="light" class="mb-4">
           <p>
             {{ $t('pageFieldCoreOverride.totalInstalledCores') }}:

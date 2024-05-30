@@ -85,7 +85,7 @@ import TableIpv6 from './TableIpv6.vue';
 import TableIpv6StaticDefaultGateway from './TableIpv6StaticDefaultGateway.vue';
 
 export default {
-  name: 'Network',
+  name: 'NetworkPage',
   components: {
     ModalHostname,
     ModalIpv4,
@@ -126,8 +126,7 @@ export default {
     },
     isIpv6Valid() {
       const ipv6 = this.network[this.tabIndex].ipv6;
-      if (ipv6 === undefined || ipv6 === null || ipv6.length === 0)
-        return false;
+      if (ipv6 === undefined || ipv6 === null || ipv6.length === 0) return false;
       else return true;
     },
   },
@@ -149,31 +148,22 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store
-      .dispatch('network/getEthernetData')
-      .finally(() => this.endLoader());
+    this.$store.dispatch('network/getEthernetData').finally(() => this.endLoader());
   },
   methods: {
     getModalInfo() {
-      this.defaultGateway = this.$store.getters['network/networkSettings'][
-        this.tabIndex
-      ].defaultGateway;
+      this.defaultGateway =
+        this.$store.getters['network/networkSettings'][this.tabIndex].defaultGateway;
 
-      this.currentHostname = this.$store.getters['network/networkSettings'][
-        this.tabIndex
-      ].hostname;
+      this.currentHostname = this.$store.getters['network/networkSettings'][this.tabIndex].hostname;
 
-      this.currentMacAddress = this.$store.getters['network/networkSettings'][
-        this.tabIndex
-      ].macAddress;
+      this.currentMacAddress =
+        this.$store.getters['network/networkSettings'][this.tabIndex].macAddress;
     },
     getTabIndex(selectedIndex) {
       this.tabIndex = selectedIndex;
       this.$store.dispatch('network/setSelectedTabIndex', this.tabIndex);
-      this.$store.dispatch(
-        'network/setSelectedTabId',
-        this.network[this.tabIndex].id
-      );
+      this.$store.dispatch('network/setSelectedTabId', this.network[this.tabIndex].id);
       this.getModalInfo();
     },
     saveIpv4Address(modalFormData) {

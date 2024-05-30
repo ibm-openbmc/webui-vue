@@ -19,7 +19,7 @@ main {
   }
 
   @include media-breakpoint-up($responsive-layout-bp) {
-  padding-left: $spacer * 2;
+    padding-left: $spacer * 2;
   }
 }
 </style>

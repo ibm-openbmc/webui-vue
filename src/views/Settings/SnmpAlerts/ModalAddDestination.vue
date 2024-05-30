@@ -48,9 +48,7 @@
                 @blur="$v.form.port.$touch()"
               />
               <b-form-invalid-feedback role="alert">
-                <template
-                  v-if="!$v.form.port.minLength || !$v.form.port.maxLength"
-                >
+                <template v-if="!$v.form.port.minLength || !$v.form.port.maxLength">
                   {{
                     $t('global.form.valueMustBeBetween', {
                       min: 0,

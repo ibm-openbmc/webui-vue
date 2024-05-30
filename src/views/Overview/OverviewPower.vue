@@ -1,8 +1,5 @@
 <template>
-  <overview-card
-    :title="t('pageOverview.powerInformation')"
-    :to="`/resource-management/power`"
-  >
+  <overview-card :title="t('pageOverview.powerInformation')" :to="`/resource-management/power`">
     <BRow class="mt-3">
       <BCol sm="6">
         <dl>

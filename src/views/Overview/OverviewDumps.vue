@@ -16,12 +16,12 @@
   </overview-card>
 </template>
 
-<script setup>
+<script>
 import OverviewCard from './OverviewCard';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {
-  name: 'Dumps',
+  name: 'OverviewDumps',
   components: {
     OverviewCard,
   },
@@ -41,9 +41,7 @@ export default {
       // Create export file name based on date
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
       let fileName = 'all_dumps_';
       return fileName + date;
     },

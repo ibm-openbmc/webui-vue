@@ -14,14 +14,14 @@
 </template>
 
 <script setup>
-import AppNavigation from "@/components/AppNavigation/AppNavigation.vue";
-import PageContainer from "@/components/Global/PageContainer.vue";
-import AppHeader from "@/components/AppHeader/AppHeader.vue";
-import useJumpLinkComposable from "@/components/Composables/useJumpLinkComposable";
-import {ref, watch, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import AppNavigation from '@/components/AppNavigation/AppNavigation.vue';
+import PageContainer from '@/components/Global/PageContainer.vue';
+import AppHeader from '@/components/AppHeader/AppHeader.vue';
+// import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
+import { ref, watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
-const { setFocus } = useJumpLinkComposable();
+// const { setFocus } = useJumpLinkComposable();
 const routerKey = ref(0);
 const route = useRoute();
 const currentRoute = ref(null);
@@ -31,13 +31,13 @@ onMounted(() => {
 
 watch(
   () => route,
-      () => {
-        nextTick(() => {
-          setFocus(focusTarget.value);
-        });
-      }
+  // () => {
+  //   nextTick(() => {
+  //     setFocus(focusTarget.value);
+  //   });
+  // },
 );
-const refreshPage = async() => {
+const refreshPage = async () => {
   console.log('Refresh called');
   routerKey.value += 1;
 };
@@ -49,14 +49,14 @@ const refreshPage = async() => {
   grid-template-columns: 100% !important;
   grid-template-rows: auto !important;
   grid-template-areas:
-    "header"
-    "content" !important;
+    'header'
+    'content' !important;
 
   @include media-breakpoint-up($responsive-layout-bp) {
-  grid-template-columns: 300px 1fr !important;
-  grid-template-areas:
-    "header header"
-    "navigation content" !important;
+    grid-template-columns: 300px 1fr !important;
+    grid-template-areas:
+      'header header'
+      'navigation content' !important;
   }
 }
 

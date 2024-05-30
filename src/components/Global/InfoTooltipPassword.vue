@@ -1,10 +1,6 @@
 <template>
   <span>
-    <b-button
-      id="tooltip-password"
-      variant="link"
-      class="btn-tooltip btn-icon-only"
-    >
+    <b-button id="tooltip-password" variant="link" class="btn-tooltip btn-icon-only">
       <slot>
         <icon-tooltip />
       </slot>

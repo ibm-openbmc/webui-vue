@@ -36,9 +36,7 @@ export const SystemStore = defineStore('system', {
     async getSystem() {
       return await api
         .get('/redfish/v1')
-        .then((response) =>
-          api.get(`${response.data.Systems['@odata.id']}/system`)
-        )
+        .then((response) => api.get(`${response.data.Systems['@odata.id']}/system`))
         .then(({ data }) => this.setSystemInfo(data))
         .catch((error) => console.log(error));
     },
@@ -51,13 +49,9 @@ export const SystemStore = defineStore('system', {
           this.setSystemInfo(this.state.system.systems[0]);
           console.log('error', error);
           if (ledState) {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorEnableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorEnableIdentifyLed'));
           } else {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorDisableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorDisableIdentifyLed'));
           }
         });
     },

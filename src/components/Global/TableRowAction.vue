@@ -13,9 +13,7 @@
       <span v-if="btnIconOnly" class="sr-only">{{ title }}</span>
     </b-link>
     <b-link
-      v-else-if="
-        value === 'download' && downloadInNewTab && downloadLocation !== ''
-      "
+      v-else-if="value === 'download' && downloadInNewTab && downloadLocation !== ''"
       class="align-bottom btn-icon-only py-0 btn-link"
       target="_blank"
       :href="downloadLocation"

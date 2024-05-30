@@ -19,10 +19,7 @@ const ServerLedStore = {
       return await api
         .get('/redfish/v1/Systems/system')
         .then((response) => {
-          commit(
-            'setIndicatorLedActiveState',
-            response.data.LocationIndicatorActive
-          );
+          commit('setIndicatorLedActiveState', response.data.LocationIndicatorActive);
         })
         .catch((error) => console.log(error));
     },
@@ -36,13 +33,9 @@ const ServerLedStore = {
           console.log(error);
           commit('setIndicatorLedActiveState', !payload);
           if (payload) {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorEnableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorEnableIdentifyLed'));
           } else {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorDisableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorDisableIdentifyLed'));
           }
         });
     },

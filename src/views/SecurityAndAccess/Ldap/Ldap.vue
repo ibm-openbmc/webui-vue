@@ -1,9 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title
-      :title="$t('appPageTitle.ldap')"
-      :description="$t('pageLdap.pageDescription')"
-    />
+    <page-title :title="$t('appPageTitle.ldap')" :description="$t('pageLdap.pageDescription')" />
     <page-section :section-title="$t('pageLdap.settings')">
       <b-form novalidate @submit.prevent="handleSubmit">
         <b-row>
@@ -32,10 +29,7 @@
           >
             <b-row>
               <b-col md="3" lg="4" xl="3">
-                <b-form-group
-                  class="mb-4"
-                  :label="$t('pageLdap.form.secureLdapUsingSsl')"
-                >
+                <b-form-group class="mb-4" :label="$t('pageLdap.form.secureLdapUsingSsl')">
                   <b-form-text id="enable-secure-help-block">
                     {{ $t('pageLdap.form.secureLdapHelper') }}
                   </b-form-text>
@@ -44,9 +38,7 @@
                     v-model="form.secureLdapEnabled"
                     aria-describedby="enable-secure-help-block"
                     data-test-id="ldap-checkbox-secureLdapEnabled"
-                    :disabled="
-                      !caCertificateExpiration || !ldapCertificateExpiration
-                    "
+                    :disabled="!caCertificateExpiration || !ldapCertificateExpiration"
                     @change="$v.form.secureLdapEnabled.$touch()"
                   >
                     {{ $t('global.action.enable') }}
@@ -64,10 +56,7 @@
                   </dd>
                   <dd v-else>--</dd>
                 </dl>
-                <b-link
-                  class="d-inline-block mb-4 m-md-0"
-                  to="/security-and-access/certificates"
-                >
+                <b-link class="d-inline-block mb-4 m-md-0" to="/security-and-access/certificates">
                   {{ $t('pageLdap.form.manageSslCertificates') }}
                 </b-link>
               </b-col>
@@ -99,9 +88,7 @@
                     <b-form-group label-for="server-uri">
                       <template #label>
                         {{ $t('pageLdap.form.serverUri') }}
-                        <info-tooltip
-                          :title="$t('pageLdap.form.serverUriTooltip')"
-                        />
+                        <info-tooltip :title="$t('pageLdap.form.serverUriTooltip')" />
                       </template>
                       <b-input-group :prepend="ldapProtocol">
                         <b-form-input
@@ -118,10 +105,7 @@
                     </b-form-group>
                   </b-col>
                   <b-col sm="6" xl="4">
-                    <b-form-group
-                      :label="$t('pageLdap.form.bindDn')"
-                      label-for="bind-dn"
-                    >
+                    <b-form-group :label="$t('pageLdap.form.bindDn')" label-for="bind-dn">
                       <b-form-input
                         id="bind-dn"
                         v-model="form.bindDn"
@@ -139,9 +123,7 @@
                       :label="$t('pageLdap.form.bindPassword')"
                       label-for="bind-password"
                     >
-                      <input-password-toggle
-                        data-test-id="ldap-input-togglePassword"
-                      >
+                      <input-password-toggle data-test-id="ldap-input-togglePassword">
                         <b-form-input
                           id="bind-password"
                           v-model="form.bindPassword"
@@ -158,10 +140,7 @@
                     </b-form-group>
                   </b-col>
                   <b-col sm="6" xl="4">
-                    <b-form-group
-                      :label="$t('pageLdap.form.baseDn')"
-                      label-for="base-dn"
-                    >
+                    <b-form-group :label="$t('pageLdap.form.baseDn')" label-for="base-dn">
                       <b-form-input
                         id="base-dn"
                         v-model="form.baseDn"
@@ -266,9 +245,7 @@ export default {
       form: {
         ldapAuthenticationEnabled: this.$store.getters['ldap/isServiceEnabled'],
         secureLdapEnabled: false,
-        activeDirectoryEnabled: this.$store.getters[
-          'ldap/isActiveDirectoryEnabled'
-        ],
+        activeDirectoryEnabled: this.$store.getters['ldap/isActiveDirectoryEnabled'],
         serverUri: '',
         bindDn: '',
         bindPassword: '',
@@ -357,20 +334,14 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store
-      .dispatch('ldap/getAccountSettings')
-      .finally(() => this.endLoader());
-    this.$store
-      .dispatch('certificates/getCertificates')
-      .finally(() => this.endLoader());
+    this.$store.dispatch('ldap/getAccountSettings').finally(() => this.endLoader());
+    this.$store.dispatch('certificates/getCertificates').finally(() => this.endLoader());
     this.setFormValues();
   },
   methods: {
     setFormValues(serviceType) {
       if (!serviceType) {
-        serviceType = this.isActiveDirectoryEnabled
-          ? this.activeDirectory
-          : this.ldap;
+        serviceType = this.isActiveDirectoryEnabled ? this.activeDirectory : this.ldap;
       }
       const {
         serviceAddress = '',
@@ -379,16 +350,13 @@ export default {
         userAttribute = '',
         groupsAttribute = '',
       } = serviceType;
-      const secureLdap =
-        serviceAddress && serviceAddress.includes('ldaps://') ? true : false;
-      const serverUri = serviceAddress
-        ? serviceAddress.replace(/ldaps?:\/\//, '')
-        : '';
+      const secureLdap = serviceAddress && serviceAddress.includes('ldaps://') ? true : false;
+      const serverUri = serviceAddress ? serviceAddress.replace(/ldaps?:\/\//, '') : '';
       this.form.secureLdapEnabled = !this.form.ldapAuthenticationEnabled
         ? false
         : !this.caCertificateExpiration || !this.ldapCertificateExpiration
-        ? false
-        : secureLdap;
+          ? false
+          : secureLdap;
       this.form.serverUri = serverUri;
       this.form.bindDn = bindDn;
       this.form.bindPassword = '';
@@ -426,9 +394,7 @@ export default {
     },
     onChangeServiceType(isActiveDirectoryEnabled) {
       this.$v.form.activeDirectoryEnabled.$touch();
-      const serviceType = isActiveDirectoryEnabled
-        ? this.activeDirectory
-        : this.ldap;
+      const serviceType = isActiveDirectoryEnabled ? this.activeDirectory : this.ldap;
       // Set form values according to user selected
       // service type
       this.setFormValues(serviceType);

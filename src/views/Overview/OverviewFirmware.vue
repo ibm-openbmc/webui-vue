@@ -1,8 +1,5 @@
 <template>
-  <overview-card
-    :title="t('pageOverview.firmwareInformation')"
-    :to="`/operations/firmware`"
-  >
+  <overview-card :title="t('pageOverview.firmwareInformation')" :to="`/operations/firmware`">
     <BRow class="mt-3">
       <BCol sm="6">
         <dl>

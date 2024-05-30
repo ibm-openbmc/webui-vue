@@ -4,10 +4,10 @@ import IconDataCheck from '@carbon/icons-vue/es/data--check/16';
 import IconSettingsAdjust from '@carbon/icons-vue/es/settings--adjust/16';
 import IconSettings from '@carbon/icons-vue/es/settings/16';
 import IconSecurity from '@carbon/icons-vue/es/security/16';
-import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
+// import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
 import IconDataBase from '@carbon/icons-vue/es/data--base--alt/16';
 import IconDocument from '@carbon/icons-vue/es/document/16';
-import i18n from '@/i18n';
+// import i18n from '@/i18n';
 // const roles = {
 //   administrator: 'Administrator',
 //   operator: 'Operator',
@@ -494,7 +494,7 @@ import i18n from '@/i18n';
 //     // //     },
 //     // //   ],
 //     // // },
-    
+
 //     {
 //       id: 'overview',
 //       label: i18n.global.t('appNavigation.overview'),
@@ -751,7 +751,7 @@ import i18n from '@/i18n';
 import { ref, computed, onMounted } from 'vue';
 // import { IconDashboard, IconTextLinkAnalysis, IconDataCheck, IconSettingsAdjust, IconSettings, IconSecurity, IconChevronUp, IconDataBase, IconDocument } from '@carbon/icons-vue/es';
 
-export default function AppNavigationData({ $store, $t }) {
+export default function AppNavigationData({ $store, i18n }) {
   const navigationData = ref([
     {
       id: 'overview',
@@ -1006,24 +1006,27 @@ export default function AppNavigationData({ $store, $t }) {
   const systemInfo = computed(() => $store?.getters['global/modelType']);
   const hmcInfo = computed(() => $store?.getters['global/hmcManaged']);
 
-  const model = computed(() => systemInfo.value?.startsWith('9043') ? 'Everest' : 'NotEverest');
-  const isHmcManged = computed(() => hmcInfo.value === 'Enabled' ? 'HMCManaged' : 'NonHMCManaged');
+  const model = computed(() => (systemInfo.value?.startsWith('9043') ? 'Everest' : 'NotEverest'));
+  const isHmcManged = computed(() =>
+    hmcInfo.value === 'Enabled' ? 'HMCManaged' : 'NonHMCManaged',
+  );
 
   const navigationItems = computed(() => {
     return navigationData.value.map((section) => {
       const restrictedPages = [];
       section.children?.forEach((page) => {
         if (page.restrictTo.length > 0) {
-          const isPageNeeded = page.restrictTo.some(requiredRole =>
-            requiredRole === roleId.value ||
-            requiredRole === model.value ||
-            requiredRole === isHmcManged.value
+          const isPageNeeded = page.restrictTo.some(
+            (requiredRole) =>
+              requiredRole === roleId.value ||
+              requiredRole === model.value ||
+              requiredRole === isHmcManged.value,
           );
           if (!isPageNeeded) restrictedPages.push(page);
         }
       });
       if (section?.children && section?.children.length > 0) {
-        const finalSection = section.children.filter(item => !restrictedPages.includes(item));
+        const finalSection = section.children.filter((item) => !restrictedPages.includes(item));
         section.children = finalSection;
       }
       return section;
@@ -1042,4 +1045,3 @@ export default function AppNavigationData({ $store, $t }) {
     isHmcManged,
   };
 }
-

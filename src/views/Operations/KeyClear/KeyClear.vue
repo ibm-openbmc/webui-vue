@@ -21,11 +21,7 @@
       <b-row>
         <b-col md="8">
           <b-form-group :label="$t('pageKeyClear.form.keyClearOptionsLabel')">
-            <b-form-radio-group
-              id="key-clear-options"
-              v-model="keyOption"
-              stacked
-            >
+            <b-form-radio-group id="key-clear-options" v-model="keyOption" stacked>
               <b-form-radio class="mb-1" value="NONE">
                 {{ $t('pageKeyClear.form.none') }}
               </b-form-radio>
@@ -54,11 +50,7 @@
               </template>
             </b-form-radio-group>
           </b-form-group>
-          <b-button
-            type="submit"
-            variant="primary"
-            data-test-id="keyClear-button-submit"
-          >
+          <b-button type="submit" variant="primary" data-test-id="keyClear-button-submit">
             {{ $t('pageKeyClear.form.clear') }}
           </b-button>
         </b-col>

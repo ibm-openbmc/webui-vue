@@ -16,6 +16,7 @@ const {
   VITE_APP_ENV_NAME,
   VITE_CUSTOM_ROUTER,
   VITE_CUSTOM_APP_NAV,
+  VITE_CUSTOM_STORE,
 } = loadEnv(DEV_ENV_CONFIG, CWD);
 const envStyle = () => {
   const envName = VITE_APP_ENV_NAME;
@@ -53,10 +54,7 @@ export default defineConfig({
     VueI18nPlugin({
       /* options */
       // locale messages resource pre-compile option
-      include: resolve(
-        dirname(fileURLToPath(import.meta.url)),
-        './path/to/src/locales/**'
-      ),
+      include: resolve(dirname(fileURLToPath(import.meta.url)), './path/to/src/locales/**'),
     }),
   ],
   css: {
@@ -104,45 +102,44 @@ export default defineConfig({
       },
     ],
   },
-   configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        const crypto = require('crypto');
-        const crypto_orig_createHash = crypto.createHash;
-        crypto.createHash = (algorithm) =>
-          crypto_orig_createHash(algorithm == 'md4' ? 'sha256' : algorithm);
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      const crypto = require('crypto');
+      const crypto_orig_createHash = crypto.createHash;
+      crypto.createHash = (algorithm) =>
+        crypto_orig_createHash(algorithm == 'md4' ? 'sha256' : algorithm);
 
-        const envName = process.env.VUE_APP_ENV_NAME;
-        const hasCustomStore = process.env.CUSTOM_STORE === 'true' ? true : false;
-        const hasCustomRouter = process.env.CUSTOM_ROUTER === 'true' ? true : false;
-        const hasCustomAppNav =
-          process.env.CUSTOM_APP_NAV === 'true' ? true : false;
+      const envName = VITE_APP_ENV_NAME;
+      const hasCustomStore = VITE_CUSTOM_STORE === 'true' ? true : false;
+      const hasCustomRouter = VITE_CUSTOM_ROUTER === 'true' ? true : false;
+      const hasCustomAppNav = VITE_CUSTOM_APP_NAV === 'true' ? true : false;
 
-        if (envName !== undefined) {
-          if (hasCustomStore) {
-            res.locals.config.resolve.alias['./store$'] = `@/env/store/${envName}.js`;
-            res.locals.config.resolve.alias['../store$'] = `@/env/store/${envName}.js`;
-          }
-          if (hasCustomRouter) {
-            res.locals.config.resolve.alias['./routes$'] = `@/env/router/${envName}.js`;
-          }
-          if (hasCustomAppNav) {
-            res.locals.config.resolve.alias[
-              './AppNavigationMixin$'
-            ] = `@/env/components/AppNavigation/${envName}.js`;
-          }
+      if (envName !== undefined) {
+        if (hasCustomStore) {
+          res.locals.config.resolve.alias['./store$'] = `@/env/store/${envName}.js`;
+          res.locals.config.resolve.alias['../store$'] = `@/env/store/${envName}.js`;
         }
-
-        if (process.env.NODE_ENV === 'production') {
-          res.locals.config.plugins.push(
-            new CompressionPlugin({
-              deleteOriginalAssets: true,
-            })
-          );
+        if (hasCustomRouter) {
+          res.locals.config.resolve.alias['./routes$'] = `@/env/router/${envName}.js`;
         }
+        if (hasCustomAppNav) {
+          res.locals.config.resolve.alias['./AppNavigationMixin$'] =
+            `@/env/components/AppNavigation/${envName}.js`;
+        }
+      }
 
-        next();
-      });
-    },
+      if (process.env.NODE_ENV === 'production') {
+        res.locals.config.plugins.push(
+          // eslint-disable-next-line no-undef
+          new CompressionPlugin({
+            deleteOriginalAssets: true,
+          }),
+        );
+      }
+
+      next();
+    });
+  },
   build: {
     chunkSizeWarningLimit: 1000,
     minify: true,
@@ -151,11 +148,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            return id
-              .toString()
-              .split('node_modules/')[1]
-              .split('/')[0]
-              .toString();
+            return id.toString().split('node_modules/')[1].split('/')[0].toString();
           }
         },
       },

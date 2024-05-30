@@ -1,12 +1,7 @@
 <template>
   <div :class="isFullWindow ? 'full-window-container' : 'terminal-container'">
     <b-row class="d-flex">
-      <b-col
-        sm="6"
-        lg="5"
-        xl="4"
-        class="d-flex flex-column justify-content-end"
-      >
+      <b-col sm="6" lg="5" xl="4" class="d-flex flex-column justify-content-end">
         <dl class="mb-2" sm="6" md="6">
           <dt class="d-inline font-weight-bold mr-1">
             {{ $t('pageServiceLoginConsoles.status') }}:
@@ -17,10 +12,7 @@
         </dl>
       </b-col>
 
-      <b-col
-        v-if="!isFullWindow"
-        class="d-flex justify-content-end align-items-end"
-      >
+      <b-col v-if="!isFullWindow" class="d-flex justify-content-end align-items-end">
         <b-button variant="link" type="button" @click="openConsoleWindow()">
           <icon-launch />
           {{ $t('global.action.openNewTab') }}
@@ -114,7 +106,7 @@ export default {
       const token = this.$store.getters['authentication/token'];
       const host = `${window.location.origin.replace(
         'https://',
-        ''
+        '',
       )}${window.location.pathname.replace(/\/$/, '')}`;
       this.ws = new WebSocket(`wss://${host}/${selectedConsole}`, [token]);
 
@@ -157,7 +149,7 @@ export default {
           console.log(
             `websocket ${selectedConsole}/ closed.
             code: ${event.code}
-            reason: ${event.reason}`
+            reason: ${event.reason}`,
           );
         };
         this.ws.onmessage = () => {
@@ -174,7 +166,7 @@ export default {
       window.open(
         '#/console/service-login-consoles',
         '_blank',
-        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550'
+        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550',
       );
     },
   },

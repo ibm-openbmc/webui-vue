@@ -39,12 +39,7 @@
       </b-col>
     </b-row>
 
-    <b-button
-      variant="primary"
-      :disabled="isOperatingModeManual"
-      type="submit"
-      @click="submitForm"
-    >
+    <b-button variant="primary" :disabled="isOperatingModeManual" type="submit" @click="submitForm">
       {{ $t('global.action.save') }}
     </b-button>
   </b-container>
@@ -85,10 +80,9 @@ export default {
     },
     isOperatingModeManual() {
       return (
-        !this.$store.getters['serverBootSettings/biosAttributes']
-          ?.pvm_system_operating_mode ||
-        this.$store.getters['serverBootSettings/biosAttributes']
-          ?.pvm_system_operating_mode === 'Manual'
+        !this.$store.getters['serverBootSettings/biosAttributes']?.pvm_system_operating_mode ||
+        this.$store.getters['serverBootSettings/biosAttributes']?.pvm_system_operating_mode ===
+          'Manual'
       );
     },
   },
@@ -118,7 +112,7 @@ export default {
       this.$store
         .dispatch(
           'powerPolicy/setPowerRestorePolicy',
-          this.policyValue || this.currentPowerRestorePolicy
+          this.policyValue || this.currentPowerRestorePolicy,
         )
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message))

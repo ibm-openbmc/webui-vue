@@ -4,9 +4,7 @@
       <BRow class="d-flex">
         <BCol class="d-flex flex-column justify-content-end" cols="4">
           <dl class="mb-2" sm="2" md="2">
-            <dt class="d-inline font-weight-bold mr-1">
-              {{ $t('pageKvm.status') }}:
-            </dt>
+            <dt class="d-inline font-weight-bold mr-1">{{ $t('pageKvm.status') }}:</dt>
             <dd class="d-inline">
               <status-icon :status="serverStatusIcon" />
               <span class="d-none d-md-inline"> {{ serverStatus }}</span>
@@ -15,21 +13,11 @@
         </BCol>
 
         <BCol class="d-flex justify-content-end pe-1">
-          <BButton
-            v-if="isConnected"
-            variant="link"
-            type="button"
-            @click="sendCtrlAltDel"
-          >
+          <BButton v-if="isConnected" variant="link" type="button" @click="sendCtrlAltDel">
             <icon-arrow-down />
             {{ $t('pageKvm.buttonCtrlAltDelete') }}
           </BButton>
-          <BButton
-            v-if="!isFullWindow"
-            variant="link"
-            type="button"
-            @click="openConsoleWindow()"
-          >
+          <BButton v-if="!isFullWindow" variant="link" type="button" @click="openConsoleWindow()">
             <icon-launch />
             {{ $t('pageKvm.openNewTab') }}
           </BButton>
@@ -54,13 +42,18 @@ const authenticationStore = AuthenticationStore();
 const Connecting = 0;
 const Connected = 1;
 const Disconnected = 2;
-const props = defineProps(['isFullWindow']);
+const props = defineProps({
+  isFullWindow: {
+    type: Boolean,
+    default: true,
+  },
+});
 let rfb = ref(null);
 let isConnected = ref(false);
 const terminalClass = ref(props.isFullWindow ? 'full-window' : '');
 const marginClass = props.isFullWindow ? 'margin-left-full-window' : '';
 let status = Connecting;
-let convasRef = ref(null);
+// let convasRef = ref(null);
 let resizeKvmWindow = ref(null);
 const serverStatusIcon = computed(() => {
   if (status === Connected) {
@@ -89,36 +82,38 @@ onBeforeUnmount(() => {
 });
 
 const sendCtrlAltDel = () => {
-  rfb.sendCtrlAltDel();
+  rfb.value.sendCtrlAltDel();
 };
 const closeTerminal = () => {
-  rfb.disconnect();
-  rfb = null;
+  rfb.value.disconnect();
+  rfb.value = null;
 };
 const panel = ref(null);
 const toolbar = ref(null);
 const openTerminal = () => {
   const token = authenticationStore.token;
-  rfb = new RFB(
+  rfb.value = new RFB(
     document.getElementById('terminal-kvm'),
     `wss://${window.location.host}/kvm/0`,
-    { wsProtocols: [token] }
+    {
+      wsProtocols: [token],
+    },
   );
-  rfb.scaleViewport = true;
-  rfb.clipViewport = true;
+  rfb.value.scaleViewport = true;
+  rfb.value.clipViewport = true;
 
-  resizeKvmWindow = throttle(() => {
+  resizeKvmWindow.value = throttle(() => {
     setTimeout(setWidthToolbar, 0);
   }, 1000);
   window.addEventListener('resize', resizeKvmWindow);
 
-  rfb.addEventListener('connect', () => {
-    isConnected = true;
+  rfb.value.addEventListener('connect', () => {
+    isConnected.value = true;
     status = Connected;
     setWidthToolbar();
   });
-  rfb.addEventListener('disconnect', () => {
-    isConnected = false;
+  rfb.value.addEventListener('disconnect', () => {
+    isConnected.value = false;
     status = Disconnected;
   });
 };
@@ -128,19 +123,16 @@ const setWidthToolbar = () => {
     document.getElementById('terminal-kvm').children.length > 0 &&
     document.getElementById('terminal-kvm').children[0].children.length > 0
   ) {
-    toolbar.style.width =
-      document.getElementById('terminal-kvm').children[0].children[0]
-        .clientWidth -
-      10 +
-      'px';
+    toolbar.value.style.width =
+      document.getElementById('terminal-kvm').children[0].children[0].clientWidth - 10 + 'px';
   }
 };
 const openConsoleWindow = () => {
-        window.open(
-        '#/console/kvm',
-        '_blank',
-        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=700,height=550'
-      );
+  window.open(
+    '#/console/kvm',
+    '_blank',
+    'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=700,height=550',
+  );
 };
 </script>
 

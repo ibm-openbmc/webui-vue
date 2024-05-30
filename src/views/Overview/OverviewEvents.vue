@@ -48,19 +48,14 @@ const eventLogData = computed(() => {
 });
 const criticalEvents = computed(() => {
   return eventLogData.value
-    .filter(
-      (log) =>
-        log.severity === 'Critical' && log.filterByStatus === 'Unresolved'
-    )
+    .filter((log) => log.severity === 'Critical' && log.filterByStatus === 'Unresolved')
     .map((log) => {
       return log;
     });
 });
 const warningEvents = computed(() => {
   return eventLogData.value
-    .filter(
-      (log) => log.severity === 'Warning' && log.filterByStatus === 'Unresolved'
-    )
+    .filter((log) => log.severity === 'Warning' && log.filterByStatus === 'Unresolved')
     .map((log) => {
       return log;
     });
@@ -68,10 +63,7 @@ const warningEvents = computed(() => {
 
 const exportFileNameByDate = () => {
   let date = new Date();
-  date =
-    date.toISOString().slice(0, 10) +
-    '_' +
-    date.toString().split(':').join('-').split(' ')[4];
+  date = date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
   let fileName = 'all_event_logs_';
   return fileName + date;
 };

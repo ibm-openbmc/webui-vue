@@ -30,10 +30,10 @@
           value === 'OK'
             ? $t('global.status.ok')
             : value === 'Warning'
-            ? $t('global.status.warning')
-            : value === 'Critical'
-            ? $t('global.status.critical')
-            : '--'
+              ? $t('global.status.warning')
+              : value === 'Critical'
+                ? $t('global.status.critical')
+                : '--'
         }}
       </template>
       <!-- Status -->
@@ -42,28 +42,28 @@
           row.item.statusState === 'Enabled'
             ? $t('global.status.present')
             : row.item.statusState === 'Absent'
-            ? $t('global.status.absent')
-            : row.item.statusState === 'Deferring'
-            ? $t('global.status.deferring')
-            : row.item.statusState === 'Disabled'
-            ? $t('global.status.disabled')
-            : row.item.statusState === 'InTest'
-            ? $t('global.status.inTest')
-            : row.item.statusState === 'Qualified'
-            ? $t('global.status.qualified')
-            : row.item.statusState === 'Quiesced'
-            ? $t('global.status.quiesced')
-            : row.item.statusState === 'StandbyOffline'
-            ? $t('global.status.standbyOffline')
-            : row.item.statusState === 'StandbySpare'
-            ? $t('global.status.standbySpare')
-            : row.item.statusState === 'Starting'
-            ? $t('global.status.starting')
-            : row.item.statusState === 'UnavailableOffline'
-            ? $t('global.status.unavailableOffline')
-            : row.item.statusState === 'Updating'
-            ? $t('global.status.updating')
-            : row.item.statusState
+              ? $t('global.status.absent')
+              : row.item.statusState === 'Deferring'
+                ? $t('global.status.deferring')
+                : row.item.statusState === 'Disabled'
+                  ? $t('global.status.disabled')
+                  : row.item.statusState === 'InTest'
+                    ? $t('global.status.inTest')
+                    : row.item.statusState === 'Qualified'
+                      ? $t('global.status.qualified')
+                      : row.item.statusState === 'Quiesced'
+                        ? $t('global.status.quiesced')
+                        : row.item.statusState === 'StandbyOffline'
+                          ? $t('global.status.standbyOffline')
+                          : row.item.statusState === 'StandbySpare'
+                            ? $t('global.status.standbySpare')
+                            : row.item.statusState === 'Starting'
+                              ? $t('global.status.starting')
+                              : row.item.statusState === 'UnavailableOffline'
+                                ? $t('global.status.unavailableOffline')
+                                : row.item.statusState === 'Updating'
+                                  ? $t('global.status.updating')
+                                  : row.item.statusState
         }}
       </template>
 
@@ -84,10 +84,7 @@
                 <!-- Asset tag -->
                 <dt>
                   {{ $t('pageInventory.table.assetTag') }}
-                  <info-tooltip
-                    class="info-icon"
-                    :title="$t('pageInventory.table.assetTagInfo')"
-                  />
+                  <info-tooltip class="info-icon" :title="$t('pageInventory.table.assetTagInfo')" />
                 </dt>
                 <dd class="mb-2">
                   {{ dataFormatter(item.assetTag) }}
@@ -123,9 +120,7 @@ import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import InfoTooltip from '@/components/Global/InfoTooltip';
 import StatusIcon from '@/components/Global/StatusIcon';
 
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
+import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {

@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import api from '@/store/api';
 import { useCookies } from 'vue3-cookies';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 const { cookies } = useCookies();
-const router = useRouter();
+// const router = useRouter();
 export const AuthenticationStore = defineStore('authentication', {
   state: () => ({
     consoleWindow: null,

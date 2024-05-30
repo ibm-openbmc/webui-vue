@@ -1,8 +1,5 @@
 <template>
-  <overview-card
-    :title="t('pageOverview.inventory')"
-    :to="`/hardware-status/inventory`"
-  >
+  <overview-card :title="t('pageOverview.inventory')" :to="`/hardware-status/inventory`">
     <BRow class="mt-3">
       <BCol sm="6">
         <dl sm="6">

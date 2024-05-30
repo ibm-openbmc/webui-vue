@@ -62,13 +62,7 @@ export const GlobalStore = defineStore('global', {
         .get('/redfish/v1/Systems/system')
         .then(
           ({
-            data: {
-              AssetTag,
-              Model,
-              PowerState,
-              SerialNumber,
-              Status: { State } = {},
-            },
+            data: { AssetTag, Model, PowerState, SerialNumber, Status: { State } = {} },
           } = {}) => {
             this.assetTag = AssetTag;
             this.serialNumber = SerialNumber;
@@ -82,7 +76,7 @@ export const GlobalStore = defineStore('global', {
             } else {
               this.serverStatus = serverStateMapper(PowerState);
             }
-          }
+          },
         )
         .catch((error) => console.log(error));
     },
@@ -92,8 +86,9 @@ export const GlobalStore = defineStore('global', {
         this.isAuthorized = true;
       }, 100);
     },
-    setUtcTime (state, isUtcDisplay) {
-      state.isUtcDisplay = isUtcDisplay},
+    setUtcTime(state, isUtcDisplay) {
+      state.isUtcDisplay = isUtcDisplay;
+    },
   },
 });
 

@@ -2,11 +2,8 @@ import api from '@/store/api';
 import i18n from '@/i18n';
 
 const parseData = (data) => {
-  const [resourceId = '--', sequenceNumber = '--'] =
-    data?.SerialNumber?.split('-') || '';
-  const expirationDate = data?.ExpirationDate
-    ? new Date(data.ExpirationDate)
-    : '--';
+  const [resourceId = '--', sequenceNumber = '--'] = data?.SerialNumber?.split('-') || '';
+  const expirationDate = data?.ExpirationDate ? new Date(data.ExpirationDate) : '--';
   const licensed = data?.LicenseScope?.MaxNumberOfDevices || '--';
 
   return {
@@ -78,9 +75,7 @@ const LicenseStore = {
         })
         .catch((error) => {
           console.log('Licenses', error);
-          throw new Error(
-            i18n.t('pageCapacityOnDemand.activation.toast.error')
-          );
+          throw new Error(i18n.t('pageCapacityOnDemand.activation.toast.error'));
         });
     },
   },

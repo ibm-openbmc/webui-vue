@@ -21,15 +21,14 @@ const DeconfigurationRecordsStore = {
           const allMembers = await api.all(
             Members.map(async (member) => {
               const arrayNumber = Number(
-                member?.Links?.OriginOfCondition?.['@odata.id'].split('/').pop()
+                member?.Links?.OriginOfCondition?.['@odata.id'].split('/').pop(),
               );
               const uri = member?.Links?.OriginOfCondition?.['@odata.id']
                 .split('/SubProcessors')
                 .shift();
               await api.get(uri).then(async ({ data }) => {
                 if (data?.Location) {
-                  member.LocationCode =
-                    data?.Location?.PartLocation?.ServiceLabel;
+                  member.LocationCode = data?.Location?.PartLocation?.ServiceLabel;
                 } else {
                   const tpmObject = data.Assemblies.filter((member) => {
                     return (
@@ -37,12 +36,11 @@ const DeconfigurationRecordsStore = {
                       `/redfish/v1/Chassis/chassis/Assembly#/Assemblies/${arrayNumber}`
                     );
                   })[0];
-                  member.LocationCode =
-                    tpmObject?.Location?.PartLocation?.ServiceLabel;
+                  member.LocationCode = tpmObject?.Location?.PartLocation?.ServiceLabel;
                 }
               });
               return member;
-            })
+            }),
           );
 
           const deconfigRecords = await api.all(
@@ -71,9 +69,7 @@ const DeconfigurationRecordsStore = {
                 additionalDataUri: AdditionalDataURI,
                 date: new Date(Created),
                 description: Message,
-                filterByStatus: AdditionalData?.Resolved
-                  ? 'Resolved'
-                  : 'Unresolved',
+                filterByStatus: AdditionalData?.Resolved ? 'Resolved' : 'Unresolved',
                 oemPelAttachment: `${AdditionalData?.['@odata.id']}/OemPelAttachment`,
                 id: Id,
                 name: Name,
@@ -84,7 +80,7 @@ const DeconfigurationRecordsStore = {
                 location: LocationCode,
                 eventID: eventId,
               };
-            })
+            }),
           );
           commit('setDeconfigurationRecordInfo', deconfigRecords);
         })
@@ -93,25 +89,19 @@ const DeconfigurationRecordsStore = {
     async clearAllEntries({ dispatch }, data) {
       return await api
         .post(
-          '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Actions/LogService.ClearLog'
+          '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Actions/LogService.ClearLog',
         )
         .then(() => dispatch('getDeconfigurationRecordInfo'))
-        .then(() =>
-          i18n.tc('pageDeconfigurationRecords.toast.successDelete', data.length)
-        )
+        .then(() => i18n.tc('pageDeconfigurationRecords.toast.successDelete', data.length))
         .catch((error) => {
           console.log(error);
-          throw new Error(
-            i18n.tc('pageDeconfigurationRecords.toast.errorDelete', data.length)
-          );
+          throw new Error(i18n.tc('pageDeconfigurationRecords.toast.errorDelete', data.length));
         });
     },
     async downloadLog(_, { uri }) {
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
 
       const fileName = `attachment_${date}`;
 
@@ -123,7 +113,7 @@ const DeconfigurationRecordsStore = {
           const element = document.createElement('a');
           element.setAttribute(
             'href',
-            `data:text/plain;charset=utf-8,${encodeURIComponent(pelJsonInfo)}`
+            `data:text/plain;charset=utf-8,${encodeURIComponent(pelJsonInfo)}`,
           );
           element.setAttribute('download', fileName);
           element.style.display = 'none';
@@ -135,9 +125,7 @@ const DeconfigurationRecordsStore = {
           const message = [
             i18n.t('pageDeconfigurationRecords.toast.successStartDownload'),
             {
-              title: i18n.t(
-                'pageDeconfigurationRecords.toast.successStartDownloadTitle'
-              ),
+              title: i18n.t('pageDeconfigurationRecords.toast.successStartDownloadTitle'),
             },
           ];
 
@@ -145,9 +133,7 @@ const DeconfigurationRecordsStore = {
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(
-            i18n.t('pageDeconfigurationRecords.toast.errorStartDownload')
-          );
+          throw new Error(i18n.t('pageDeconfigurationRecords.toast.errorStartDownload'));
         });
     },
   },

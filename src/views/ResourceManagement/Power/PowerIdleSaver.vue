@@ -37,9 +37,7 @@
                   :disabled="!idlePowerSaver.isIdlePowerSaverEnabled"
                   data-test-id="power-input-enterDwellTimeSeconds"
                   type="number"
-                  :state="
-                    getValidationState($v.idlePowerSaver.enterDwellTimeSeconds)
-                  "
+                  :state="getValidationState($v.idlePowerSaver.enterDwellTimeSeconds)"
                 ></b-form-input>
 
                 <b-form-invalid-feedback role="alert">
@@ -64,26 +62,17 @@
                   :disabled="!idlePowerSaver.isIdlePowerSaverEnabled"
                   data-test-id="power-input-enterUtilizationPercent"
                   type="number"
-                  :state="
-                    getValidationState(
-                      $v.idlePowerSaver.enterUtilizationPercent
-                    )
-                  "
+                  :state="getValidationState($v.idlePowerSaver.enterUtilizationPercent)"
                 ></b-form-input>
 
                 <b-form-invalid-feedback role="alert">
                   {{
                     !$v.idlePowerSaver.enterUtilizationPercent.between
-                      ? $t(
-                          'pagePower.utilizationPercentValidation.utilizationRange',
-                          {
-                            min: utilizationThresholdMin,
-                            max: utilizationThresholdMax,
-                          }
-                        )
-                      : $t(
-                          'pagePower.utilizationPercentValidation.enterUtilization'
-                        )
+                      ? $t('pagePower.utilizationPercentValidation.utilizationRange', {
+                          min: utilizationThresholdMin,
+                          max: utilizationThresholdMax,
+                        })
+                      : $t('pagePower.utilizationPercentValidation.enterUtilization')
                   }}
                 </b-form-invalid-feedback>
               </b-form-group>
@@ -103,9 +92,7 @@
                   :disabled="!idlePowerSaver.isIdlePowerSaverEnabled"
                   data-test-id="power-input-exitDwellTimeSeconds"
                   type="number"
-                  :state="
-                    getValidationState($v.idlePowerSaver.exitDwellTimeSeconds)
-                  "
+                  :state="getValidationState($v.idlePowerSaver.exitDwellTimeSeconds)"
                 ></b-form-input>
 
                 <b-form-invalid-feedback role="alert">
@@ -130,24 +117,17 @@
                   :disabled="!idlePowerSaver.isIdlePowerSaverEnabled"
                   data-test-id="power-input-exitUtilizationPercent"
                   type="number"
-                  :state="
-                    getValidationState($v.idlePowerSaver.exitUtilizationPercent)
-                  "
+                  :state="getValidationState($v.idlePowerSaver.exitUtilizationPercent)"
                 ></b-form-input>
 
                 <b-form-invalid-feedback role="alert">
                   {{
                     !$v.idlePowerSaver.exitUtilizationPercent.between
-                      ? $t(
-                          'pagePower.utilizationPercentValidation.utilizationRange',
-                          {
-                            min: utilizationThresholdMin,
-                            max: utilizationThresholdMax,
-                          }
-                        )
-                      : $t(
-                          'pagePower.utilizationPercentValidation.exitUtilization'
-                        )
+                      ? $t('pagePower.utilizationPercentValidation.utilizationRange', {
+                          min: utilizationThresholdMin,
+                          max: utilizationThresholdMax,
+                        })
+                      : $t('pagePower.utilizationPercentValidation.exitUtilization')
                   }}
                 </b-form-invalid-feedback>
               </b-form-group>
@@ -158,12 +138,7 @@
               <b-button variant="primary" type="submit" form="idle-power-saver">
                 {{ $t('pagePower.idlePowerSubmitUpdate') }}
               </b-button>
-              <b-button
-                variant="secondary"
-                type="reset"
-                form="idle-power-saver"
-                class="ml-3"
-              >
+              <b-button variant="secondary" type="reset" form="idle-power-saver" class="ml-3">
                 {{ $t('pagePower.idlePowerSubmitReset') }}
               </b-button>
             </b-col>
@@ -235,17 +210,11 @@ export default {
           between: between(this.delayTimeMin, this.delayTimeMax),
         },
         enterUtilizationPercent: {
-          between: between(
-            this.utilizationThresholdMin,
-            this.utilizationThresholdMax
-          ),
+          between: between(this.utilizationThresholdMin, this.utilizationThresholdMax),
           maxValue: maxValue(this.idlePowerSaver.exitUtilizationPercent),
         },
         exitUtilizationPercent: {
-          between: between(
-            this.utilizationThresholdMin,
-            this.utilizationThresholdMax
-          ),
+          between: between(this.utilizationThresholdMin, this.utilizationThresholdMax),
           minValue: minValue(this.idlePowerSaver.enterUtilizationPercent),
         },
       },
@@ -256,8 +225,7 @@ export default {
       this.idlePowerSaver.isIdlePowerSaverEnabled = data?.Enabled;
       this.idlePowerSaver.enterDwellTimeSeconds = data?.EnterDwellTimeSeconds;
       this.idlePowerSaver.exitDwellTimeSeconds = data?.ExitDwellTimeSeconds;
-      this.idlePowerSaver.enterUtilizationPercent =
-        data?.EnterUtilizationPercent;
+      this.idlePowerSaver.enterUtilizationPercent = data?.EnterUtilizationPercent;
       this.idlePowerSaver.exitUtilizationPercent = data?.ExitUtilizationPercent;
     },
     saveIdlePowerSaverData() {
@@ -279,11 +247,9 @@ export default {
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message))
         .finally(() => {
-          this.$store
-            .dispatch('powerControl/getIdlePowerSaverData')
-            .then(() => {
-              this.setIdlePowerSaveFormValues(this.idlePowerSaverData);
-            });
+          this.$store.dispatch('powerControl/getIdlePowerSaverData').then(() => {
+            this.setIdlePowerSaveFormValues(this.idlePowerSaverData);
+          });
           this.endLoader();
         });
     },

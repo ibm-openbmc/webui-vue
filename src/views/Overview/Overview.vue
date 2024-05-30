@@ -1,28 +1,25 @@
 <template>
   <BContainer fluid="xl">
-  <page-title />
-  <overview-quick-links class="mb-4" />
-  <page-section
-    :section-title="t('pageOverview.systemInformation')"
-    class="mb-1"
-  >
-    <BCardGroup deck>
-      <overview-server />
-      <overview-firmware />
-    </BCardGroup>
-    <BCardGroup deck>
-      <overview-network />
-      <overview-power />
-    </BCardGroup>
-  </page-section>
-  <page-section :section-title="t('pageOverview.statusInformation')">
-    <BCardGroup deck>
-      <overview-events />
-      <overview-inventory />
-      <overview-dumps v-if="showDumps" />
-    </BCardGroup>
-  </page-section>
-</BContainer>
+    <page-title />
+    <overview-quick-links class="mb-4" />
+    <page-section :section-title="t('pageOverview.systemInformation')" class="mb-1">
+      <BCardGroup deck>
+        <overview-server />
+        <overview-firmware />
+      </BCardGroup>
+      <BCardGroup deck>
+        <overview-network />
+        <overview-power />
+      </BCardGroup>
+    </page-section>
+    <page-section :section-title="t('pageOverview.statusInformation')">
+      <BCardGroup deck>
+        <overview-events />
+        <overview-inventory />
+        <overview-dumps v-if="showDumps" />
+      </BCardGroup>
+    </page-section>
+  </BContainer>
 </template>
 
 <script setup>

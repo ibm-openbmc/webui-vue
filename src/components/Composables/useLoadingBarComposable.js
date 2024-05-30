@@ -1,23 +1,22 @@
-import event from '../../eventBus'
-export const loading = true;
-const useLoadingBarComposable = () => {
+import event from '../../eventBus';
 
-    const startLoader = () => {  
-        event.emit('loader-start');
-        loading = true;  
-    };
-    const endLoader = () => {  
-        event.emit('loader-end');
-        loading = false;
-    };
-    const hideLoader = () => { 
-        event.emit('loader-hide');
-    };
+export default {
+  data() {
     return {
-        startLoader,
-        endLoader,
-        hideLoader
+      loading: true,
     };
-  };
-
-export default useLoadingBarComposable;
+  },
+  methods: {
+    startLoader() {
+      event.emit('loader-start');
+      this.loading = true;
+    },
+    endLoader() {
+      event.emit('loader-end');
+      this.loading = false;
+    },
+    hideLoader() {
+      event.emit('loader-hide');
+    },
+  },
+};

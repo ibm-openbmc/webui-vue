@@ -48,16 +48,12 @@ const PowerSupplyStore = {
         .get(`${requestBody.uri}`)
         .then((response) => api.get(response.data.PowerSubsystem['@odata.id']))
         .then((response) => api.get(response.data.PowerSupplies['@odata.id']))
-        .then(({ data: { Members } }) =>
-          Members.map((member) => member['@odata.id'])
-        )
+        .then(({ data: { Members } }) => Members.map((member) => member['@odata.id']))
         .then((powerSupplyIds) =>
-          api.all(powerSupplyIds.map((powerSupply) => api.get(powerSupply)))
+          api.all(powerSupplyIds.map((powerSupply) => api.get(powerSupply))),
         )
         .then((powerSupplies) => {
-          const powerSuppliesData = powerSupplies.map(
-            (powerSupplies) => powerSupplies.data
-          );
+          const powerSuppliesData = powerSupplies.map((powerSupplies) => powerSupplies.data);
           commit('setPowerSupply', powerSuppliesData);
         })
         .catch((error) => console.log(error));
@@ -79,13 +75,9 @@ const PowerSupplyStore = {
         .catch((error) => {
           console.log(error);
           if (led.identifyLed) {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorEnableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorEnableIdentifyLed'));
           } else {
-            throw new Error(
-              i18n.t('pageInventory.toast.errorDisableIdentifyLed')
-            );
+            throw new Error(i18n.t('pageInventory.toast.errorDisableIdentifyLed'));
           }
         });
     },

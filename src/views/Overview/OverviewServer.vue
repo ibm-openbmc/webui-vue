@@ -1,8 +1,5 @@
 <template>
-  <overview-card
-    :title="t('pageOverview.serverInformation')"
-    :to="`/hardware-status/inventory`"
-  >
+  <overview-card :title="t('pageOverview.serverInformation')" :to="`/hardware-status/inventory`">
     <BRow class="mt-3">
       <BCol sm="6" lg="6">
         <dl>
@@ -23,7 +20,6 @@
         <dl>
           <dt>{{ t('pageOverview.operatingMode') }}</dt>
           <dd>{{ dataFormatterGlobal.dataFormatter(serverManufacturer) }}</dd>
-          
         </dl>
       </BCol>
     </BRow>
@@ -32,7 +28,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { SystemStore } from '../../store/modules/HardwareStatus/SystemStore';
 import OverviewCard from './OverviewCard.vue';
 // import { DataFormatterGlobal } from '@/components/Mixins/DataFormatterGlobal';
@@ -54,7 +50,5 @@ const serverSerialNumber = computed(() => {
 const serverManufacturer = computed(() => {
   return systems.value?.manufacturer;
 });
-const serverSerial = ref(
-  dataFormatterGlobal.dataFormatter(serverSerialNumber.value)
-);
+// const serverSerial = ref(dataFormatterGlobal.dataFormatter(serverSerialNumber.value));
 </script>

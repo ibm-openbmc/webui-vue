@@ -207,9 +207,7 @@ export default {
     allUsers() {
       return this.$store.getters['userManagement/allUsers'].map((user) => {
         // Changing users' description with redfish role description
-        const userDescription = this.accountRoles.filter((role) =>
-          user.RoleId.includes(role)
-        )[0];
+        const userDescription = this.accountRoles.filter((role) => user.RoleId.includes(role))[0];
 
         if (userDescription) user.Description = userDescription;
 
@@ -228,15 +226,15 @@ export default {
             user.Description === 'Administrator'
               ? this.$t('pageUserManagement.table.administrator')
               : user.Description === 'ReadOnly'
-              ? this.$t('pageUserManagement.table.readOnly')
-              : user.Description === 'ServiceAgent'
-              ? this.$t('pageUserManagement.table.serviceAgent')
-              : user.Description,
+                ? this.$t('pageUserManagement.table.readOnly')
+                : user.Description === 'ServiceAgent'
+                  ? this.$t('pageUserManagement.table.serviceAgent')
+                  : user.Description,
           status: user.Locked
             ? this.$t('global.status.locked')
             : user.Enabled
-            ? this.$t('global.status.enabled')
-            : this.$t('global.status.disabled'),
+              ? this.$t('global.status.enabled')
+              : this.$t('global.status.disabled'),
           actions: [
             {
               value: 'edit',
@@ -263,9 +261,7 @@ export default {
           maxLength: 20,
         };
       } else {
-        return this.$store.getters[
-          'userManagement/accountPasswordRequirements'
-        ];
+        return this.$store.getters['userManagement/accountPasswordRequirements'];
       }
     },
   },
@@ -296,7 +292,7 @@ export default {
             title: this.$tc('pageUserManagement.deleteUser'),
             okTitle: this.$tc('pageUserManagement.deleteUser'),
             cancelTitle: this.$t('global.action.cancel'),
-          }
+          },
         )
         .then((deleteConfirmed) => {
           if (deleteConfirmed) {
@@ -338,19 +334,13 @@ export default {
             .msgBoxConfirm(
               this.$tc(
                 'pageUserManagement.modal.batchDeleteConfirmMessage',
-                this.selectedRows.length
+                this.selectedRows.length,
               ),
               {
-                title: this.$tc(
-                  'pageUserManagement.deleteUser',
-                  this.selectedRows.length
-                ),
-                okTitle: this.$tc(
-                  'pageUserManagement.deleteUser',
-                  this.selectedRows.length
-                ),
+                title: this.$tc('pageUserManagement.deleteUser', this.selectedRows.length),
+                okTitle: this.$tc('pageUserManagement.deleteUser', this.selectedRows.length),
                 cancelTitle: this.$t('global.action.cancel'),
-              }
+              },
             )
             .then((deleteConfirmed) => {
               if (deleteConfirmed) {

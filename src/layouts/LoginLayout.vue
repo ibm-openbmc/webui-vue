@@ -4,11 +4,7 @@
       <div class="login-main">
         <div>
           <div class="login-brand mb-5">
-            <img
-              :alt="altLogo"
-              src="@/assets/images/login-company-logo.svg"
-              width="90"
-            />
+            <img :alt="altLogo" src="@/assets/images/login-company-logo.svg" width="90" />
           </div>
           <h1 v-if="customizableGuiName" class="h3 mb-5">
             {{ customizableGuiName }}
@@ -22,11 +18,7 @@
         </div>
         <br />
         <div class="login-aside__logo-bmc">
-          <img
-            alt="Built on OpenBMC"
-            src="@/assets/images/built-on-openbmc-logo.svg"
-            width="60"
-          />
+          <img alt="Built on OpenBMC" src="@/assets/images/built-on-openbmc-logo.svg" width="60" />
         </div>
       </div>
     </div>

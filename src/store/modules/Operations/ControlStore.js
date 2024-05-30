@@ -23,7 +23,7 @@ const checkForServerStatus = function (serverStatus) {
           unwatch();
           clearTimeout(timer);
         }
-      }
+      },
     );
   });
 };
@@ -41,8 +41,7 @@ const ControlStore = {
     lastBmcRebootTime: (state) => state.lastBmcRebootTime,
   },
   mutations: {
-    setOperationInProgress: (state, inProgress) =>
-      (state.isOperationInProgress = inProgress),
+    setOperationInProgress: (state, inProgress) => (state.isOperationInProgress = inProgress),
     setLastPowerOperationTime: (state, lastPowerOperationTime) =>
       (state.lastPowerOperationTime = lastPowerOperationTime),
     setLastBmcRebootTime: (state, lastBmcRebootTime) =>
@@ -119,12 +118,10 @@ const ControlStore = {
     },
     serverPowerChange({ commit }, data) {
       commit('setOperationInProgress', true);
-      api
-        .post('/redfish/v1/Systems/system/Actions/ComputerSystem.Reset', data)
-        .catch((error) => {
-          console.log(error);
-          commit('setOperationInProgress', false);
-        });
+      api.post('/redfish/v1/Systems/system/Actions/ComputerSystem.Reset', data).catch((error) => {
+        console.log(error);
+        commit('setOperationInProgress', false);
+      });
     },
   },
 };

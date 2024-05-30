@@ -42,15 +42,15 @@
         </template>
       </BFormInvalidFeedback>
     </BFormGroup>
-    <b-button
+    <BButton
       class="mt-3 btn-primary"
       type="submit"
       variant="primary"
       data-test-id="login-button-submit"
       :disabled="disableSubmitButton"
     >
-      {{ $t('pageLogin.logIn') }}</b-button
-    >
+      {{ $t('pageLogin.logIn') }}
+    </BButton>
   </BForm>
 </template>
 
@@ -60,7 +60,7 @@ import { useI18n } from 'vue-i18n';
 import { AuthenticationStore } from '../../store/modules/Authentication/AuthenticationStore';
 import i18n from '@/i18n';
 import { useRouter } from 'vue-router';
-import  useVuelidateComposable  from '@/components/Composables/useVuelidateComposable';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import GlobalStore from '../../store/modules/GlobalStore';

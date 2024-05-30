@@ -29,18 +29,12 @@
                   :section-title="$t('pageInventory.quicklinkTitle')"
                 >
                   <b-row class="w-75">
-                    <b-col
-                      v-for="column in quicklinkColumns"
-                      :key="column.id"
-                      xl="4"
-                    >
+                    <b-col v-for="column in quicklinkColumns" :key="column.id" xl="4">
                       <div v-for="item in column" :key="item.id">
                         <b-link
                           :href="item.href"
                           :data-ref="item.dataRef"
-                          @click.prevent="
-                            scrollToOffsetInventory($event, currentTab)
-                          "
+                          @click.prevent="scrollToOffsetInventory($event, currentTab)"
                         >
                           <jump-link /> {{ item.linkText }}
                         </b-link>
@@ -48,23 +42,14 @@
                     </b-col>
                   </b-row>
                 </page-section>
-                <page-section
-                  v-else
-                  :section-title="$t('pageInventory.quicklinkTitle')"
-                >
+                <page-section v-else :section-title="$t('pageInventory.quicklinkTitle')">
                   <b-row class="w-75">
-                    <b-col
-                      v-for="column in quicklinkMexColumns"
-                      :key="column.id"
-                      xl="4"
-                    >
+                    <b-col v-for="column in quicklinkMexColumns" :key="column.id" xl="4">
                       <div v-for="item in column" :key="item.id">
                         <b-link
                           :href="item.href"
                           :data-ref="item.dataRef"
-                          @click.prevent="
-                            scrollToOffsetInventory($event, currentTab)
-                          "
+                          @click.prevent="scrollToOffsetInventory($event, currentTab)"
                         >
                           <jump-link /> {{ item.linkText }}
                         </b-link>
@@ -82,11 +67,7 @@
                 <table-dimm-slot v-if="currentTab === 0" ref="dimms" />
 
                 <!-- Fans table -->
-                <table-fans
-                  v-if="currentTab === 0"
-                  ref="fans"
-                  :chassis="chassis[currentTab].uri"
-                />
+                <table-fans v-if="currentTab === 0" ref="fans" :chassis="chassis[currentTab].uri" />
 
                 <!-- Power supplies table -->
                 <table-power-supplies
@@ -120,21 +101,13 @@
                 />
 
                 <!-- Mex Chassis -->
-                <alert
-                  v-if="currentTab > 0 && isPoweredOff"
-                  variant="info"
-                  class="mb-4"
-                >
+                <alert v-if="currentTab > 0 && isPoweredOff" variant="info" class="mb-4">
                   <span>
                     {{ $t('pageInventory.alert.powerOffExpansionChassis') }}
                   </span>
                 </alert>
                 <!-- Fans table -->
-                <table-fans
-                  v-if="currentTab > 0"
-                  ref="fans"
-                  :chassis="chassis[currentTab].uri"
-                />
+                <table-fans v-if="currentTab > 0" ref="fans" :chassis="chassis[currentTab].uri" />
 
                 <!-- Power supplies table -->
                 <table-power-supplies
@@ -360,9 +333,7 @@ export default {
         this.$root.$on('hardware-status-fans-complete', () => resolve());
       });
       const powerSuppliesTablePromise = new Promise((resolve) => {
-        this.$root.$on('hardware-status-power-supplies-complete', () =>
-          resolve()
-        );
+        this.$root.$on('hardware-status-power-supplies-complete', () => resolve());
       });
       const processorsTablePromise = new Promise((resolve) => {
         this.$root.$on('hardware-status-processors-complete', () => resolve());
@@ -380,9 +351,7 @@ export default {
         this.$root.$on('hardware-status-pcie-slots-complete', () => resolve());
       });
       const fabricAdaptersTablePromise = new Promise((resolve) => {
-        this.$root.$on('hardware-status-fabric-adapters-complete', () =>
-          resolve()
-        );
+        this.$root.$on('hardware-status-fabric-adapters-complete', () => resolve());
       });
       if (this.currentTab === 0 && value === 'created') {
         // Combine all child component Promises to indicate

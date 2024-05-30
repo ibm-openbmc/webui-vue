@@ -1,7 +1,5 @@
 <template>
-  <page-section
-    :section-title="$t('pageInventory.systemIndicator.sectionTitle')"
-  >
+  <page-section :section-title="$t('pageInventory.systemIndicator.sectionTitle')">
     <div class="form-background">
       <b-row class="pl-4 pt-4 pb-1">
         <b-col sm="6" md="3">
@@ -37,11 +35,7 @@
           <dl>
             <dt>
               {{ $t('pageInventory.systemIndicator.attentionLed') }}
-              <info-tooltip
-                :title="
-                  $t('pageInventory.systemIndicator.attentionLedToolTipInfo')
-                "
-              />
+              <info-tooltip :title="$t('pageInventory.systemIndicator.attentionLedToolTipInfo')" />
             </dt>
             <dd>
               <b-form-checkbox
@@ -64,9 +58,7 @@
           <dl>
             <dt>
               {{ $t('pageInventory.systemIndicator.lampTest') }}
-              <info-tooltip
-                :title="$t('pageInventory.systemIndicator.tooltipInfo')"
-              />
+              <info-tooltip :title="$t('pageInventory.systemIndicator.tooltipInfo')" />
             </dt>
             <dd>
               <b-form-checkbox

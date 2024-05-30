@@ -2,10 +2,7 @@
   <page-section :section-title="$t('pageInventory.fabricAdapters')">
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
-        <search
-          @change-search="onChangeSearchInput"
-          @clear-search="onClearSearchInput"
-        />
+        <search @change-search="onChangeSearchInput" @clear-search="onClearSearchInput" />
       </b-col>
 
       <b-col sm="6" md="3" xl="2">
@@ -51,21 +48,18 @@
       </template>
       <!-- Health -->
       <template #cell(health)="{ value }">
-        <status-icon
-          v-if="isIoExpansionChassis && isPoweredOff"
-          :status="statusIcon('')"
-        />
+        <status-icon v-if="isIoExpansionChassis && isPoweredOff" :status="statusIcon('')" />
         <status-icon v-else :status="statusIcon(value)" />
         {{
           isIoExpansionChassis && isPoweredOff
             ? $t('global.status.unavailable')
             : value === 'OK'
-            ? $t('global.status.ok')
-            : value === 'Warning'
-            ? $t('global.status.warning')
-            : value === 'Critical'
-            ? $t('global.status.critical')
-            : '--'
+              ? $t('global.status.ok')
+              : value === 'Warning'
+                ? $t('global.status.warning')
+                : value === 'Critical'
+                  ? $t('global.status.critical')
+                  : '--'
         }}
       </template>
       <!-- Status -->
@@ -74,30 +68,30 @@
           isIoExpansionChassis && isPoweredOff
             ? $t('global.status.unavailable')
             : row.item.status === 'Present'
-            ? $t('global.status.present')
-            : row.item.status === 'Absent'
-            ? $t('global.status.absent')
-            : row.item.status === 'Deferring'
-            ? $t('global.status.deferring')
-            : row.item.status === 'Disabled'
-            ? $t('global.status.disabled')
-            : row.item.status === 'InTest'
-            ? $t('global.status.inTest')
-            : row.item.status === 'Qualified'
-            ? $t('global.status.qualified')
-            : row.item.status === 'Quiesced'
-            ? $t('global.status.quiesced')
-            : row.item.status === 'StandbyOffline'
-            ? $t('global.status.standbyOffline')
-            : row.item.status === 'StandbySpare'
-            ? $t('global.status.standbySpare')
-            : row.item.status === 'Starting'
-            ? $t('global.status.starting')
-            : row.item.status === 'UnavailableOffline'
-            ? $t('global.status.unavailableOffline')
-            : row.item.status === 'Updating'
-            ? $t('global.status.updating')
-            : row.item.status
+              ? $t('global.status.present')
+              : row.item.status === 'Absent'
+                ? $t('global.status.absent')
+                : row.item.status === 'Deferring'
+                  ? $t('global.status.deferring')
+                  : row.item.status === 'Disabled'
+                    ? $t('global.status.disabled')
+                    : row.item.status === 'InTest'
+                      ? $t('global.status.inTest')
+                      : row.item.status === 'Qualified'
+                        ? $t('global.status.qualified')
+                        : row.item.status === 'Quiesced'
+                          ? $t('global.status.quiesced')
+                          : row.item.status === 'StandbyOffline'
+                            ? $t('global.status.standbyOffline')
+                            : row.item.status === 'StandbySpare'
+                              ? $t('global.status.standbySpare')
+                              : row.item.status === 'Starting'
+                                ? $t('global.status.starting')
+                                : row.item.status === 'UnavailableOffline'
+                                  ? $t('global.status.unavailableOffline')
+                                  : row.item.status === 'Updating'
+                                    ? $t('global.status.updating')
+                                    : row.item.status
         }}
       </template>
       <!-- Toggle identify LED -->
@@ -156,12 +150,8 @@ import TableCellCount from '@/components/Global/TableCellCount';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import Search from '@/components/Global/Search';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
@@ -229,9 +219,7 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.fabricAdapters.length;
+      return this.searchFilter ? this.searchTotalFilteredRows : this.fabricAdapters.length;
     },
     fabricAdapters() {
       const adapters = this.$store.getters['fabricAdapters/fabricAdapters'];
@@ -263,12 +251,10 @@ export default {
   },
   watch: {
     chassis: function (value) {
-      this.$store
-        .dispatch('fabricAdapters/getFabricAdaptersInfo', { uri: value })
-        .finally(() => {
-          this.$root.$emit('hardware-status-fabric-adapters-complete');
-          this.isBusy = false;
-        });
+      this.$store.dispatch('fabricAdapters/getFabricAdaptersInfo', { uri: value }).finally(() => {
+        this.$root.$emit('hardware-status-fabric-adapters-complete');
+        this.isBusy = false;
+      });
     },
   },
   created() {

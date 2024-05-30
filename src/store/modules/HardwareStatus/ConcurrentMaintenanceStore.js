@@ -20,8 +20,7 @@ const ConcurrentMaintenanceStore = {
     opPanelLcd: (state) => state.opPanelLcd,
   },
   mutations: {
-    setReadyToRemove: (state, readyToRemove) =>
-      (state.readyToRemove = readyToRemove),
+    setReadyToRemove: (state, readyToRemove) => (state.readyToRemove = readyToRemove),
     setTodObject: (state, todObject) => (state.todObject = todObject),
     setReadyToRemoveOpPanelBase: (state, readyToRemoveOpPanelBase) =>
       (state.readyToRemoveOpPanelBase = readyToRemoveOpPanelBase),
@@ -40,7 +39,7 @@ const ConcurrentMaintenanceStore = {
               commit('setTodObject', entry);
               commit('setReadyToRemove', entry.Oem.OpenBMC.ReadyToRemove);
             }
-          })
+          }),
         )
         .catch((error) => console.log(error));
     },
@@ -51,12 +50,9 @@ const ConcurrentMaintenanceStore = {
           response.data.Assemblies.map((entry) => {
             if (entry.Name === 'Operator Panel Base') {
               commit('setOpPanelBase', entry);
-              commit(
-                'setReadyToRemoveOpPanelBase',
-                entry.Oem.OpenBMC.ReadyToRemove
-              );
+              commit('setReadyToRemoveOpPanelBase', entry.Oem.OpenBMC.ReadyToRemove);
             }
-          })
+          }),
         )
         .catch((error) => console.log(error));
     },
@@ -67,12 +63,9 @@ const ConcurrentMaintenanceStore = {
           response.data.Assemblies.map((entry) => {
             if (entry.Name === 'Operator Panel LCD') {
               commit('setOpPanelLcd', entry);
-              commit(
-                'setReadyToRemoveOpPanelLcd',
-                entry.Oem.OpenBMC.ReadyToRemove
-              );
+              commit('setReadyToRemoveOpPanelLcd', entry.Oem.OpenBMC.ReadyToRemove);
             }
-          })
+          }),
         )
         .catch((error) => console.log(error));
     },
@@ -92,12 +85,9 @@ const ConcurrentMaintenanceStore = {
           ],
         })
         .then(() => {
-          return i18n.t(
-            'pageConcurrentMaintenance.toast.successSaveReadyToRemove',
-            {
-              state: updatedReadyToRemove ? 'enabled' : 'disabled',
-            }
-          );
+          return i18n.t('pageConcurrentMaintenance.toast.successSaveReadyToRemove', {
+            state: updatedReadyToRemove ? 'enabled' : 'disabled',
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -105,7 +95,7 @@ const ConcurrentMaintenanceStore = {
           throw new Error(
             i18n.t('pageConcurrentMaintenance.toast.errorSaveReadyToRemove', {
               state: updatedReadyToRemove ? 'enabling' : 'disabling',
-            })
+            }),
           );
         });
     },
@@ -125,12 +115,9 @@ const ConcurrentMaintenanceStore = {
           ],
         })
         .then(() => {
-          return i18n.t(
-            'pageConcurrentMaintenance.toast.successSaveReadyToRemove',
-            {
-              state: updatedOpPanelBase ? 'enabled' : 'disabled',
-            }
-          );
+          return i18n.t('pageConcurrentMaintenance.toast.successSaveReadyToRemove', {
+            state: updatedOpPanelBase ? 'enabled' : 'disabled',
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -138,7 +125,7 @@ const ConcurrentMaintenanceStore = {
           throw new Error(
             i18n.t('pageConcurrentMaintenance.toast.errorSaveReadyToRemove', {
               state: updatedOpPanelBase ? 'enabling' : 'disabling',
-            })
+            }),
           );
         });
     },
@@ -158,12 +145,9 @@ const ConcurrentMaintenanceStore = {
           ],
         })
         .then(() => {
-          return i18n.t(
-            'pageConcurrentMaintenance.toast.successSaveReadyToRemove',
-            {
-              state: updatedOpPanelLcd ? 'enabled' : 'disabled',
-            }
-          );
+          return i18n.t('pageConcurrentMaintenance.toast.successSaveReadyToRemove', {
+            state: updatedOpPanelLcd ? 'enabled' : 'disabled',
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -171,7 +155,7 @@ const ConcurrentMaintenanceStore = {
           throw new Error(
             i18n.t('pageConcurrentMaintenance.toast.errorSaveReadyToRemove', {
               state: updatedOpPanelLcd ? 'enabling' : 'disabling',
-            })
+            }),
           );
         });
     },

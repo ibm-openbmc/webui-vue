@@ -3,9 +3,7 @@
     <page-title />
     <BRow class="mb-4">
       <BCol md="12">
-        <page-section
-          :section-title="t('pageVirtualMedia.virtualMediaSubTitleFirst')"
-        >
+        <page-section :section-title="t('pageVirtualMedia.virtualMediaSubTitleFirst')">
           <BRow>
             <BCol v-for="(dev, $index) in proxyDevices" :key="$index" md="6">
               <BFormGroup :label="dev.id" label-class="bold">
@@ -24,7 +22,7 @@
               </BFormGroup>
               <BButton
                 v-if="!dev.isActive"
-                 variant="primary"
+                variant="primary"
                 :disabled="!dev.file"
                 @click="startVM(dev)"
               >
@@ -45,20 +43,10 @@
     </BRow>
     <BRow v-if="loadImageFromExternalServer" class="mb-4">
       <BCol md="12">
-        <page-section
-          :section-title="t('pageVirtualMedia.virtualMediaSubTitleSecond')"
-        >
+        <page-section :section-title="t('pageVirtualMedia.virtualMediaSubTitleSecond')">
           <BRow>
-            <BCol
-              v-for="(device, $index) in legacyDevices"
-              :key="$index"
-              md="6"
-            >
-              <BFormGroup
-                :label="device.id"
-                :label-for="device.id"
-                label-class="bold"
-              >
+            <BCol v-for="(device, $index) in legacyDevices" :key="$index" md="6">
+              <BFormGroup :label="device.id" :label-for="device.id" label-class="bold">
                 <BButton
                   variant="primary"
                   :disabled="device.isActive"
@@ -100,64 +88,64 @@
 <script setup>
 import PageTitle from '@/components/Global/PageTitle.vue';
 import { useI18n } from 'vue-i18n';
-import i18n from '@/i18n';
+// import i18n from '@/i18n';
 import PageSection from '@/components/Global/PageSection.vue';
 // import BVToastMixin from '@/components/Mixins/BVToastMixin';
 // import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 // import ModalConfigureConnection from './ModalConfigureConnection.vue';
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 // import NbdServer from '@/utilities/NBDServer';
 import FormFile from '@/components/Global/FormFile.vue';
 import { VirtualMediaStore } from '../../../store/modules/Operations/VirtualMediaStore';
-import { AuthenticationStore } from '../../../store/modules/Authentication/AuthenticationStore';
+// import { AuthenticationStore } from '../../../store/modules/Authentication/AuthenticationStore';
 const virtualMediaStore = VirtualMediaStore();
-const authenticationStore = AuthenticationStore();
+// const authenticationStore = AuthenticationStore();
 const { t } = useI18n();
-const proxyDevFile = ref(null);
-let modalConfigureConnectionData = reactive(null);
+// const proxyDevFile = ref(null);
+// let modalConfigureConnectionData = reactive(null);
 const loadImageFromExternalServer = ref(
-  import.meta.env.VITE_APP_VIRTUAL_MEDIA_LIST_ENABLED === 'true' ? true : true
+  import.meta.env.VITE_APP_VIRTUAL_MEDIA_LIST_ENABLED === 'true' ? true : true,
 );
 
 const proxyDevices = computed(() => {
   return virtualMediaStore.$state.proxyDevices;
 });
-const legacyDevices = computed(() => {
-  virtualMediaStore.$state.legacyDevices;
-});
-if (!(proxyDevices.length > 0 || legacyDevices.length > 0)) {
-  virtualMediaStore.getData();
-}
+// const legacyDevices = computed(() => {
+//   virtualMediaStore.$state.legacyDevices;
+// });
+// if (!(proxyDevices.value.length > 0 || legacyDevices.value.length > 0)) {
+//   virtualMediaStore.getData();
+// }
 // this.startLoader();
 
-const startVM = (device) => {
-  if (device.file) {
-    const token = authenticationStore.token;
-    device.nbd = new NbdServer(
-      `wss://${window.location.host}${device.websocket}`,
-      device.file,
-      device.id,
-      token
-    );
-    device.nbd.socketStarted = () => console.log('serverRunning');
-    // this.successToast(i18n.global.t('pageVirtualMedia.toast.serverRunning'));
-    device.nbd.errorReadingFile = () => console.log('errorReadingFile');
-    // this.errorToast(i18n.global.t('pageVirtualMedia.toast.errorReadingFile'));
-    device.nbd.socketClosed = (code) => {
-      if (code === 1000) console.log('serverClosedSuccessfully');
-      // this.successToast(
-      //   i18n.global.t('pageVirtualMedia.toast.serverClosedSuccessfully')
-      // );
-      else console.log('serverClosedSuccessfully');
-      // this.errorToast(i18n.global.t('pageVirtualMedia.toast.serverClosedWithErrors'));
-      device.file = null;
-      device.isActive = false;
-    };
+// const startVM = (device) => {
+//   if (device.file) {
+//     const token = authenticationStore.token;
+//     device.nbd = new NbdServer(
+//       `wss://${window.location.host}${device.websocket}`,
+//       device.file,
+//       device.id,
+//       token,
+//     );
+//     device.nbd.socketStarted = () => console.log('serverRunning');
+//     // this.successToast(i18n.global.t('pageVirtualMedia.toast.serverRunning'));
+//     device.nbd.errorReadingFile = () => console.log('errorReadingFile');
+//     // this.errorToast(i18n.global.t('pageVirtualMedia.toast.errorReadingFile'));
+//     device.nbd.socketClosed = (code) => {
+//       if (code === 1000) console.log('serverClosedSuccessfully');
+//       // this.successToast(
+//       //   i18n.global.t('pageVirtualMedia.toast.serverClosedSuccessfully')
+//       // );
+//       else console.log('serverClosedSuccessfully');
+//       // this.errorToast(i18n.global.t('pageVirtualMedia.toast.serverClosedWithErrors'));
+//       device.file = null;
+//       device.isActive = false;
+//     };
 
-    device.nbd.start();
-    device.isActive = true;
-  }
-};
+//     device.nbd.start();
+//     device.isActive = true;
+//   }
+// };
 const stopVM = (device) => {
   device.nbd.stop();
 };
@@ -168,10 +156,10 @@ const fileInput = (file, index) => {
 };
 const startLegacy = (connectionData) => {
   var data = ref(null);
-  data.Image = connectionData.serverUri;
-  data.UserName = connectionData.username;
-  data.Password = connectionData.password;
-  data.WriteProtected = !connectionData.isRW;
+  data.value.Image = connectionData.serverUri;
+  data.value.UserName = connectionData.username;
+  data.value.Password = connectionData.password;
+  data.value.WriteProtected = !connectionData.isRW;
   // this.startLoader();
   virtualMediaStore
     .mountImage({
@@ -201,14 +189,14 @@ const stopLegacy = (connectionData) => {
   // )
   // .finally(() => this.endLoader());
 };
-const saveConnection = (connectionData) => {
-  modalConfigureConnectionData.serverUri = connectionData.serverUri;
-  modalConfigureConnectionData.username = connectionData.username;
-  modalConfigureConnectionData.password = connectionData.password;
-  modalConfigureConnectionData.isRW = connectionData.isRW;
-};
-const configureConnection = (connectionData) => {
-  modalConfigureConnectionData = connectionData;
+// const saveConnection = (connectionData) => {
+//   modalConfigureConnectionData.serverUri = connectionData.serverUri;
+//   modalConfigureConnectionData.username = connectionData.username;
+//   modalConfigureConnectionData.password = connectionData.password;
+//   modalConfigureConnectionData.isRW = connectionData.isRW;
+// };
+const configureConnection = () => {
+  // modalConfigureConnectionData = connectionData;
   // this.$bvModal.show('configure-connection');
 };
 const concatId = (val) => {

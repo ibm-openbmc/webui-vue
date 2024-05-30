@@ -16,10 +16,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-form
-            id="form-power-saver"
-            @submit.prevent="handlePowerPerformanceSubmit"
-          >
+          <b-form id="form-power-saver" @submit.prevent="handlePowerPerformanceSubmit">
             <b-form-group :disabled="loading || safeMode">
               <b-row>
                 <b-col>
@@ -41,10 +38,7 @@
         </b-col>
       </b-row>
 
-      <modal-power-performance-modes
-        :title="powerPerformanceMode"
-        @ok="savePowerPerformanceMode"
-      />
+      <modal-power-performance-modes :title="powerPerformanceMode" @ok="savePowerPerformanceMode" />
     </page-section>
   </div>
 </template>
@@ -121,10 +115,7 @@ export default {
     },
     savePowerPerformanceMode() {
       this.$store
-        .dispatch(
-          'powerControl/setPowerPerformanceMode',
-          this.powerPerformanceMode
-        )
+        .dispatch('powerControl/setPowerPerformanceMode', this.powerPerformanceMode)
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },

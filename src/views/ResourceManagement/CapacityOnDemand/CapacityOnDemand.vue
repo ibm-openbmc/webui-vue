@@ -17,11 +17,7 @@
     <!-- Quick links -->
     <page-section :section-title="$t('pageCapacityOnDemand.quickLinks')">
       <div v-for="item in quickLinks" :key="item.id">
-        <b-link
-          :href="item.href"
-          :data-ref="item.dataRef"
-          @click.prevent="scrollToOffset"
-        >
+        <b-link :href="item.href" :data-ref="item.dataRef" @click.prevent="scrollToOffset">
           <icon-jump-link /> {{ item.linkText }}
         </b-link>
       </div>

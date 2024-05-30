@@ -21,10 +21,7 @@
     <b-form-checkbox v-model="confirmed" @input="$v.confirmed.$touch()">
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage2') }}
     </b-form-checkbox>
-    <b-form-invalid-feedback
-      :state="getValidationState($v.confirmed)"
-      role="alert"
-    >
+    <b-form-invalid-feedback :state="getValidationState($v.confirmed)" role="alert">
       {{ $t('global.form.required') }}
     </b-form-invalid-feedback>
     <template #modal-footer="{ cancel }">

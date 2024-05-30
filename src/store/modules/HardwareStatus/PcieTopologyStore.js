@@ -98,43 +98,34 @@ const PcieTopologyStore = {
             chassisData['chassisMember'] = chassisMembers[index];
             chassisData['detailedInfo'] = {};
             chassisData['data'] = singleChassisData;
-            chassisData.detailedInfo['pcieSlotsUri'] =
-              chassisMembers[index].PCIeSlots['@odata.id'];
+            chassisData.detailedInfo['pcieSlotsUri'] = chassisMembers[index].PCIeSlots['@odata.id'];
             chassisData.detailedInfo['pcieSlots'] = {};
-            chassisData.detailedInfo.pcieSlots['data'] =
-              chassisMembers[index].PCIeSlots;
+            chassisData.detailedInfo.pcieSlots['data'] = chassisMembers[index].PCIeSlots;
             let pcieSlotsLength = chassisMembers[index].PCIeSlots.Slots.length;
             let j = 0;
             chassisData.detailedInfo.pcieSlots['eachSlot'] = [];
             while (j < pcieSlotsLength) {
               const singleSlotData = {};
               singleSlotData['data'] = chassisMembers[index].PCIeSlots.Slots[j];
-              if (
-                chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice
-                  .length > 0
-              ) {
+              if (chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice.length > 0) {
                 let isLinkSet = false;
                 if (chassisInfo.length > 0) {
                   for (let z = 0; z < chassisInfo.length && !isLinkSet; z++) {
                     const oneChassis = chassisInfo[z];
                     for (
                       let y = 0;
-                      y < oneChassis.detailedInfo.pcieSlots.eachSlot.length &&
-                      !isLinkSet;
+                      y < oneChassis.detailedInfo.pcieSlots.eachSlot.length && !isLinkSet;
                       y++
                     ) {
-                      const oneSlot =
-                        oneChassis.detailedInfo.pcieSlots.eachSlot[y];
+                      const oneSlot = oneChassis.detailedInfo.pcieSlots.eachSlot[y];
                       if (
                         oneSlot.pcieDeviceLink &&
                         oneSlot.pcieDeviceLink ===
-                          chassisMembers[index].PCIeSlots.Slots[j].Links
-                            ?.PCIeDevice[0]['@odata.id']
+                          chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice[0]['@odata.id']
                       ) {
                         isLinkSet = true;
                         singleSlotData['pcieDevice'] = oneSlot.pcieDevice;
-                        singleSlotData['pcieDeviceLink'] =
-                          oneSlot.pcieDeviceLink;
+                        singleSlotData['pcieDeviceLink'] = oneSlot.pcieDeviceLink;
                         break;
                       }
                     }
@@ -142,17 +133,14 @@ const PcieTopologyStore = {
                 } else {
                   for (
                     let x = 0;
-                    x < chassisData.detailedInfo.pcieSlots.eachSlot.length &&
-                    !isLinkSet;
+                    x < chassisData.detailedInfo.pcieSlots.eachSlot.length && !isLinkSet;
                     x++
                   ) {
-                    const oneSlot =
-                      chassisData.detailedInfo.pcieSlots.eachSlot[x];
+                    const oneSlot = chassisData.detailedInfo.pcieSlots.eachSlot[x];
                     if (
                       oneSlot.pcieDeviceLink &&
                       oneSlot.pcieDeviceLink ===
-                        chassisMembers[index].PCIeSlots.Slots[j].Links
-                          ?.PCIeDevice[0]['@odata.id']
+                        chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice[0]['@odata.id']
                     ) {
                       isLinkSet = true;
                       singleSlotData['pcieDevice'] = oneSlot.pcieDevice;
@@ -165,22 +153,18 @@ const PcieTopologyStore = {
                   pcieDeviceMembers.map((singleDevice) => {
                     if (
                       singleDevice['@odata.id'] ===
-                      chassisMembers[index].PCIeSlots.Slots[j].Links
-                        ?.PCIeDevice[0]['@odata.id']
+                      chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice[0]['@odata.id']
                     ) {
                       singleSlotData['pcieDevice'] = singleDevice;
                       singleSlotData['pcieDeviceLink'] =
-                        chassisMembers[index].PCIeSlots.Slots[
-                          j
-                        ].Links?.PCIeDevice[0]['@odata.id'];
+                        chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice[0]['@odata.id'];
                     }
                   });
                 }
               }
               if (
                 chassisMembers[index].PCIeSlots.Slots[j].Links?.Processors &&
-                chassisMembers[index].PCIeSlots.Slots[j].Links?.Processors
-                  .length > 0
+                chassisMembers[index].PCIeSlots.Slots[j].Links?.Processors.length > 0
               ) {
                 let isProcSet = false;
                 if (chassisInfo.length > 0) {
@@ -188,17 +172,14 @@ const PcieTopologyStore = {
                     const oneChassis = chassisInfo[z];
                     for (
                       let y = 0;
-                      y < oneChassis.detailedInfo.pcieSlots.eachSlot.length &&
-                      !isProcSet;
+                      y < oneChassis.detailedInfo.pcieSlots.eachSlot.length && !isProcSet;
                       y++
                     ) {
-                      const oneSlot =
-                        oneChassis.detailedInfo.pcieSlots.eachSlot[y];
+                      const oneSlot = oneChassis.detailedInfo.pcieSlots.eachSlot[y];
                       if (
                         oneSlot.processorLink &&
                         oneSlot.processorLink ===
-                          chassisMembers[index].PCIeSlots.Slots[j].Links
-                            ?.Processors[0]['@odata.id']
+                          chassisMembers[index].PCIeSlots.Slots[j].Links?.Processors[0]['@odata.id']
                       ) {
                         isProcSet = true;
                         singleSlotData['processor'] = oneSlot.processor;
@@ -210,17 +191,14 @@ const PcieTopologyStore = {
                 } else {
                   for (
                     let x = 0;
-                    x < chassisData.detailedInfo.pcieSlots.eachSlot.length &&
-                    !isProcSet;
+                    x < chassisData.detailedInfo.pcieSlots.eachSlot.length && !isProcSet;
                     x++
                   ) {
-                    const oneSlot =
-                      chassisData.detailedInfo.pcieSlots.eachSlot[x];
+                    const oneSlot = chassisData.detailedInfo.pcieSlots.eachSlot[x];
                     if (
                       oneSlot.processorLink &&
                       oneSlot.processorLink ===
-                        chassisMembers[index].PCIeSlots.Slots[j].Links
-                          ?.Processors[0]['@odata.id']
+                        chassisMembers[index].PCIeSlots.Slots[j].Links?.Processors[0]['@odata.id']
                     ) {
                       isProcSet = true;
                       singleSlotData['processor'] = oneSlot.processor;
@@ -233,83 +211,62 @@ const PcieTopologyStore = {
                   procMembers.map((singleProc) => {
                     if (
                       singleProc['@odata.id'] ===
-                      chassisMembers[index].PCIeSlots.Slots[j].Links
-                        ?.Processors[0]['@odata.id']
+                      chassisMembers[index].PCIeSlots.Slots[j].Links?.Processors[0]['@odata.id']
                     ) {
                       singleSlotData['processor'] = singleProc;
                       singleSlotData['processorLink'] =
-                        chassisMembers[index].PCIeSlots.Slots[
-                          j
-                        ].Links?.Processors[0]['@odata.id'];
+                        chassisMembers[index].PCIeSlots.Slots[j].Links?.Processors[0]['@odata.id'];
                     }
                   });
                 }
               }
-              if (
-                chassisMembers[index].PCIeSlots.Slots[j].Links?.Oem?.IBM
-                  ?.AssociatedAssembly
-              ) {
+              if (chassisMembers[index].PCIeSlots.Slots[j].Links?.Oem?.IBM?.AssociatedAssembly) {
                 let isAssemblySet = false;
                 if (chassisInfo.length > 0) {
                   for (let z = 0; z < chassisInfo.length; z++) {
                     const oneChassis = chassisInfo[z];
-                    for (
-                      let y = 0;
-                      y < oneChassis.detailedInfo.pcieSlots.eachSlot.length;
-                      y++
-                    ) {
-                      const oneSlot =
-                        oneChassis.detailedInfo.pcieSlots.eachSlot[y];
+                    for (let y = 0; y < oneChassis.detailedInfo.pcieSlots.eachSlot.length; y++) {
+                      const oneSlot = oneChassis.detailedInfo.pcieSlots.eachSlot[y];
                       if (
                         chassisMembers[index].PCIeSlots.Slots[j].Links?.Oem?.IBM
                           ?.AssociatedAssembly &&
                         oneSlot.associatedAssemblyLink &&
                         oneSlot.associatedAssemblyLink ===
-                          chassisMembers[index].PCIeSlots.Slots[j].Links?.Oem
-                            ?.IBM?.AssociatedAssembly['@odata.id']
+                          chassisMembers[index].PCIeSlots.Slots[j].Links?.Oem?.IBM
+                            ?.AssociatedAssembly['@odata.id']
                       ) {
                         isAssemblySet = true;
-                        singleSlotData['associatedAssembly'] =
-                          oneSlot.associatedAssembly;
-                        singleSlotData['associatedAssemblyLink'] =
-                          oneSlot.associatedAssemblyLink;
+                        singleSlotData['associatedAssembly'] = oneSlot.associatedAssembly;
+                        singleSlotData['associatedAssemblyLink'] = oneSlot.associatedAssemblyLink;
                       }
                     }
                   }
                 } else {
-                  for (
-                    let x = 0;
-                    x < chassisData.detailedInfo.pcieSlots.eachSlot.length;
-                    x++
-                  ) {
-                    const oneSlot =
-                      chassisData.detailedInfo.pcieSlots.eachSlot[x];
+                  for (let x = 0; x < chassisData.detailedInfo.pcieSlots.eachSlot.length; x++) {
+                    const oneSlot = chassisData.detailedInfo.pcieSlots.eachSlot[x];
                     if (
                       oneSlot?.associatedAssemblyLink ===
-                      chassisMembers[index].PCIeSlots.Slots[j].Links?.Oem.IBM
-                        .AssociatedAssembly['@odata.id']
+                      chassisMembers[index].PCIeSlots.Slots[j].Links?.Oem.IBM.AssociatedAssembly[
+                        '@odata.id'
+                      ]
                     ) {
                       isAssemblySet = true;
-                      singleSlotData['associatedAssembly'] =
-                        oneSlot.associatedAssembly;
-                      singleSlotData['associatedAssemblyLink'] =
-                        oneSlot.associatedAssemblyLink;
+                      singleSlotData['associatedAssembly'] = oneSlot.associatedAssembly;
+                      singleSlotData['associatedAssemblyLink'] = oneSlot.associatedAssemblyLink;
                     }
                   }
                 }
                 if (
-                  chassisMembers[index]?.PCIeSlots?.Slots[j]?.Links?.Oem?.IBM
-                    ?.AssociatedAssembly &&
+                  chassisMembers[index]?.PCIeSlots?.Slots[j]?.Links?.Oem?.IBM?.AssociatedAssembly &&
                   !isAssemblySet
                 ) {
                   await api
                     .get(
-                      chassisMembers[index]?.PCIeSlots?.Slots[j]?.Links?.Oem
-                        ?.IBM?.AssociatedAssembly['@odata.id']
+                      chassisMembers[index]?.PCIeSlots?.Slots[j]?.Links?.Oem?.IBM
+                        ?.AssociatedAssembly['@odata.id'],
                     )
                     .then(async (assemblyResponse) => {
-                      singleSlotData['associatedAssembly'] =
-                        assemblyResponse.data;
+                      singleSlotData['associatedAssembly'] = assemblyResponse.data;
                       singleSlotData['associatedAssemblyLink'] =
                         chassisMembers[index].PCIeSlots.Slots[
                           j
@@ -320,9 +277,7 @@ const PcieTopologyStore = {
                     });
                 }
               }
-              chassisData.detailedInfo.pcieSlots['eachSlot'].push(
-                singleSlotData
-              );
+              chassisData.detailedInfo.pcieSlots['eachSlot'].push(singleSlotData);
               if (j < pcieSlotsLength) {
                 j++;
               }
@@ -350,8 +305,7 @@ const PcieTopologyStore = {
               adapterData['pcieDeviceLink'] =
                 adapterMembers[index].Links?.PCIeDevices[0]['@odata.id'];
               if (adapterMembers[index].Ports) {
-                adapterData['portsLink'] =
-                  adapterMembers[index].Ports['@odata.id'];
+                adapterData['portsLink'] = adapterMembers[index].Ports['@odata.id'];
                 let portMembers = adapterMembers[index].Ports.Members;
                 adapterData['portsData'] = [];
                 const portsLength = portMembers.length;
@@ -403,26 +357,17 @@ const PcieTopologyStore = {
                       !isAssemblySet &&
                       oneSlot.associatedAssemblyLink &&
                       oneSlot.associatedAssemblyLink ===
-                        cableMembers[index]?.Links?.DownstreamResources[0][
-                          '@odata.id'
-                        ]
+                        cableMembers[index]?.Links?.DownstreamResources[0]['@odata.id']
                     ) {
                       isAssemblySet = true;
-                      const parentUri = oneSlot.associatedAssemblyLink
-                        .split('/Assembly')
-                        .shift();
+                      const parentUri = oneSlot.associatedAssemblyLink.split('/Assembly').shift();
                       for (let index = 0; index < chassisInfo.length; index++) {
                         const assemblyChassis = chassisInfo[index];
-                        if (
-                          assemblyChassis.chassisMember['@odata.id'] ===
-                          parentUri
-                        ) {
+                        if (assemblyChassis.chassisMember['@odata.id'] === parentUri) {
                           cablesData.detailedInfo.downstreamResources.push({
                             data: assemblyChassis.detailedInfo.pcieSlots.data,
-                            pcieSlots:
-                              assemblyChassis.detailedInfo.pcieSlots.eachSlot,
-                            pcieSlotsUri:
-                              assemblyChassis.detailedInfo.pcieSlotsUri,
+                            pcieSlots: assemblyChassis.detailedInfo.pcieSlots.eachSlot,
+                            pcieSlotsUri: assemblyChassis.detailedInfo.pcieSlotsUri,
                           });
                           break;
                         }
@@ -433,11 +378,7 @@ const PcieTopologyStore = {
               }
               if (!isAssemblySet) {
                 await api
-                  .get(
-                    cableMembers[index]?.Links?.DownstreamResources[0][
-                      '@odata.id'
-                    ]
-                  )
+                  .get(cableMembers[index]?.Links?.DownstreamResources[0]['@odata.id'])
                   .then(async (downstreamResources) => {
                     const downstreamUri = downstreamResources.data['@odata.id'];
                     const parentUri = downstreamUri.split('/Assembly').shift();
@@ -446,8 +387,7 @@ const PcieTopologyStore = {
                         cablesData.detailedInfo.downstreamResources.push({
                           data: downstreamResources.data,
                           pcieSlots: singleChassisMember.PCIeSlots.Slots,
-                          pcieSlotsUri:
-                            singleChassisMember.PCIeSlots['@odata.id'],
+                          pcieSlotsUri: singleChassisMember.PCIeSlots['@odata.id'],
                         });
                       }
                     });
@@ -461,22 +401,16 @@ const PcieTopologyStore = {
               cableMembers[index]?.Links?.DownstreamChassis &&
               cableMembers[index]?.Links?.DownstreamChassis?.length > 0
             ) {
-              const dsChassis =
-                cableMembers[index]?.Links?.DownstreamChassis[0]['@odata.id'];
+              const dsChassis = cableMembers[index]?.Links?.DownstreamChassis[0]['@odata.id'];
               let isDsChassisSet = false;
               if (chassisInfo.length > 0) {
                 for (let index = 0; index < chassisInfo.length; index++) {
                   const downstreamChassisInfo = chassisInfo[index];
-                  if (
-                    downstreamChassisInfo.chassisMember['@odata.id'] ===
-                    dsChassis
-                  ) {
+                  if (downstreamChassisInfo.chassisMember['@odata.id'] === dsChassis) {
                     cablesData.detailedInfo.downstreamChassis.push({
                       data: downstreamChassisInfo.detailedInfo.pcieSlots.data,
-                      pcieSlots:
-                        downstreamChassisInfo.detailedInfo.pcieSlots.eachSlot,
-                      pcieSlotsUri:
-                        downstreamChassisInfo.detailedInfo.pcieSlotsUri,
+                      pcieSlots: downstreamChassisInfo.detailedInfo.pcieSlots.eachSlot,
+                      pcieSlotsUri: downstreamChassisInfo.detailedInfo.pcieSlotsUri,
                     });
                     isDsChassisSet = true;
                     break;
@@ -499,9 +433,7 @@ const PcieTopologyStore = {
               cableMembers[index]?.Links?.UpstreamPorts &&
               cableMembers[index]?.Links?.UpstreamPorts?.length > 0
             ) {
-              const grandparentUrl = cableMembers[
-                index
-              ].Links?.UpstreamPorts[0]['@odata.id']
+              const grandparentUrl = cableMembers[index].Links?.UpstreamPorts[0]['@odata.id']
                 .split('/Ports')
                 .shift();
               cablesData.detailedInfo.grandparentUri = grandparentUrl;
@@ -515,35 +447,24 @@ const PcieTopologyStore = {
                         const singlePort = element?.portsData[m];
                         if (
                           singlePort['@odata.id'] ===
-                          cableMembers[index]?.Links?.UpstreamPorts[0][
-                            '@odata.id'
-                          ]
+                          cableMembers[index]?.Links?.UpstreamPorts[0]['@odata.id']
                         ) {
-                          cablesData.detailedInfo.upstreamPorts.push(
-                            singlePort
-                          );
+                          cablesData.detailedInfo.upstreamPorts.push(singlePort);
                           cablesData.detailedInfo['grandParentInfo'] = {};
-                          cablesData.detailedInfo.grandParentInfo.data =
-                            element.data;
-                          cablesData.detailedInfo.grandParentInfo.expanderDevice =
-                            element.data;
+                          cablesData.detailedInfo.grandParentInfo.data = element.data;
+                          cablesData.detailedInfo.grandParentInfo.expanderDevice = element.data;
                           if (chassisInfo.length > 0) {
                             chassisInfo.map((oneChassis) => {
                               for (
                                 let k = 0;
-                                k <
-                                oneChassis.detailedInfo.pcieSlots.eachSlot
-                                  .length;
+                                k < oneChassis.detailedInfo.pcieSlots.eachSlot.length;
                                 k++
                               ) {
-                                const oneSlot =
-                                  oneChassis.detailedInfo.pcieSlots.eachSlot[k];
+                                const oneSlot = oneChassis.detailedInfo.pcieSlots.eachSlot[k];
                                 if (
                                   oneSlot.pcieDeviceLink &&
                                   oneSlot.pcieDeviceLink ===
-                                    element.data?.Links?.PCIeDevices[0][
-                                      '@odata.id'
-                                    ]
+                                    element.data?.Links?.PCIeDevices[0]['@odata.id']
                                 ) {
                                   const slotParent = oneSlot.pcieDevice?.Links?.Oem?.IBM?.PCIeSlot[
                                     '@odata.id'
@@ -552,10 +473,7 @@ const PcieTopologyStore = {
                                     .shift();
                                   for (let l = 0; l < chassisInfo.length; l++) {
                                     const oneChassis = chassisInfo[l];
-                                    if (
-                                      oneChassis.chassisMember['@odata.id'] ===
-                                      slotParent
-                                    ) {
+                                    if (oneChassis.chassisMember['@odata.id'] === slotParent) {
                                       cablesData.detailedInfo.grandParentInfo.expanderSlots =
                                         oneChassis.detailedInfo.pcieSlots.eachSlot;
                                       isAdapterSet = true;
@@ -573,9 +491,7 @@ const PcieTopologyStore = {
                 }
               }
               if (!isAdapterSet) {
-                const gparentUri = cableMembers[index]?.Links?.UpstreamPorts[0][
-                  '@odata.id'
-                ]
+                const gparentUri = cableMembers[index]?.Links?.UpstreamPorts[0]['@odata.id']
                   .split('/Ports')
                   .shift();
                 cablesData.detailedInfo.grandparentUri = gparentUri;
@@ -587,18 +503,12 @@ const PcieTopologyStore = {
                       for (let p = 0; p < uspPorts.length; p++) {
                         if (
                           uspPorts[p]['@odata.id'] ===
-                          cableMembers[index]?.Links?.UpstreamPorts[0][
-                            '@odata.id'
-                          ]
+                          cableMembers[index]?.Links?.UpstreamPorts[0]['@odata.id']
                         ) {
                           cablesData.detailedInfo['grandParentInfo'] = {};
-                          cablesData.detailedInfo.grandParentInfo.data =
-                            uspRes.data;
-                          cablesData.detailedInfo.grandParentInfo.expanderDevice =
-                            uspRes.data;
-                          cablesData.detailedInfo.upstreamPorts.push(
-                            uspPorts[p]
-                          );
+                          cablesData.detailedInfo.grandParentInfo.data = uspRes.data;
+                          cablesData.detailedInfo.grandParentInfo.expanderDevice = uspRes.data;
+                          cablesData.detailedInfo.upstreamPorts.push(uspPorts[p]);
                           if (
                             uspRes.data.Links?.PCIeDevices &&
                             uspRes.data.Links?.PCIeDevices.length > 0
@@ -616,9 +526,8 @@ const PcieTopologyStore = {
                                   let slotSet = false;
                                   if (
                                     !slotSet &&
-                                    pcieMember.Links?.Oem?.IBM?.PCIeSlot[
-                                      '@odata.id'
-                                    ] === chas.PCIeSlots['@odata.id']
+                                    pcieMember.Links?.Oem?.IBM?.PCIeSlot['@odata.id'] ===
+                                      chas.PCIeSlots['@odata.id']
                                   ) {
                                     cablesData.detailedInfo.grandParentInfo.expanderSlots =
                                       chas.PCIeSlots.Slots;
@@ -641,33 +550,26 @@ const PcieTopologyStore = {
               cableMembers[index]?.Links?.DownstreamPorts &&
               cableMembers[index]?.Links?.DownstreamPorts?.length > 0
             ) {
-              const gparentUri = cableMembers[index]?.Links?.DownstreamPorts[0][
-                '@odata.id'
-              ]
+              const gparentUri = cableMembers[index]?.Links?.DownstreamPorts[0]['@odata.id']
                 .split('/Ports')
                 .shift();
-              await api
-                .get(`${gparentUri}?$expand=.($levels=2)`)
-                .then((dspRes) => {
-                  if (dspRes.data?.Ports?.Members.length > 0) {
-                    const dspPorts = dspRes.data?.Ports?.Members;
-                    for (let p = 0; p < dspPorts.length; p++) {
-                      if (
-                        dspPorts[p]['@odata.id'] ===
-                        cableMembers[index]?.Links?.DownstreamPorts[0][
-                          '@odata.id'
-                        ]
-                      ) {
-                        cablesData.detailedInfo.downstreamPorts.push({
-                          data: dspPorts[p],
-                          grandParent: dspRes.data,
-                          grandParentLocation:
-                            dspRes.data?.Location?.PartLocation?.ServiceLabel,
-                        });
-                      }
+              await api.get(`${gparentUri}?$expand=.($levels=2)`).then((dspRes) => {
+                if (dspRes.data?.Ports?.Members.length > 0) {
+                  const dspPorts = dspRes.data?.Ports?.Members;
+                  for (let p = 0; p < dspPorts.length; p++) {
+                    if (
+                      dspPorts[p]['@odata.id'] ===
+                      cableMembers[index]?.Links?.DownstreamPorts[0]['@odata.id']
+                    ) {
+                      cablesData.detailedInfo.downstreamPorts.push({
+                        data: dspPorts[p],
+                        grandParent: dspRes.data,
+                        grandParentLocation: dspRes.data?.Location?.PartLocation?.ServiceLabel,
+                      });
                     }
                   }
-                });
+                }
+              });
             }
             if (index < cablesLength) {
               index++;
@@ -688,14 +590,10 @@ const PcieTopologyStore = {
             if (chassisInfo.length > 0) {
               chassisInfo.map((oneChassis) => {
                 oneChassis.detailedInfo.pcieSlots.eachSlot.map((oneSlot) => {
-                  if (
-                    oneSlot.pcieDeviceLink &&
-                    oneSlot.pcieDeviceLink === row.resetLinkUri
-                  ) {
+                  if (oneSlot.pcieDeviceLink && oneSlot.pcieDeviceLink === row.resetLinkUri) {
                     if (oneSlot.pcieDevice?.Oem?.IBM) {
                       row.resetLinkAvailable = true;
-                      row.resetLinkValue =
-                        oneSlot.pcieDevice?.Oem?.IBM?.LinkReset;
+                      row.resetLinkValue = oneSlot.pcieDevice?.Oem?.IBM?.LinkReset;
                     } else {
                       row.resetLinkAvailable = false;
                     }
@@ -703,15 +601,10 @@ const PcieTopologyStore = {
                 });
               });
             }
-            if (
-              slot?.processor &&
-              slot?.processor?.Location?.PartLocation?.ServiceLabel
-            ) {
+            if (slot?.processor && slot?.processor?.Location?.PartLocation?.ServiceLabel) {
               row.pcieHBLocation = {
-                locationIndicatorActive:
-                  slot?.processor?.LocationIndicatorActive,
-                locationNumber:
-                  slot?.processor?.Location?.PartLocation?.ServiceLabel,
+                locationIndicatorActive: slot?.processor?.LocationIndicatorActive,
+                locationNumber: slot?.processor?.Location?.PartLocation?.ServiceLabel,
                 uri: slot?.processor['@odata.id'],
               };
             } else {
@@ -728,8 +621,7 @@ const PcieTopologyStore = {
             if (slot?.data?.Location?.PartLocation?.ServiceLabel) {
               row.ioSlotLocation.push({
                 locationIndicatorActive: slot?.data?.LocationIndicatorActive,
-                locationNumber:
-                  slot?.data?.Location?.PartLocation?.ServiceLabel,
+                locationNumber: slot?.data?.Location?.PartLocation?.ServiceLabel,
                 uri: chassis?.detailedInfo?.pcieSlots?.data['@odata.id'],
               });
             }
@@ -755,9 +647,7 @@ const PcieTopologyStore = {
                 row['linkStatus'] = 'Degraded';
               } else if (slot?.pcieDevice?.Status?.State === 'Absent') {
                 row['linkStatus'] = 'Open';
-              } else if (
-                slot?.pcieDevice?.Status?.State === 'UnavailableOffline'
-              ) {
+              } else if (slot?.pcieDevice?.Status?.State === 'UnavailableOffline') {
                 row['linkStatus'] = 'Failed';
               } else if (slot?.pcieDevice?.Status?.State === 'StandbyOffline') {
                 row['linkStatus'] = 'Inactive';
@@ -765,24 +655,17 @@ const PcieTopologyStore = {
                 row['linkStatus'] = 'Unknown';
               }
               fabricAdapterInfo.map((adapter) => {
-                if (
-                  adapter?.pcieDeviceLink &&
-                  adapter.pcieDeviceLink === slot.pcieDeviceLink
-                ) {
+                if (adapter?.pcieDeviceLink && adapter.pcieDeviceLink === slot.pcieDeviceLink) {
                   adapter.portsData.map((port) => {
                     const duplicate = row.localPortLocation.find((obj) => {
-                      if (
-                        obj.locationNumber ===
-                        port?.Location?.PartLocation?.ServiceLabel
-                      ) {
+                      if (obj.locationNumber === port?.Location?.PartLocation?.ServiceLabel) {
                         return true;
                       }
                     });
                     if (duplicate === undefined) {
                       row.localPortLocation.push({
                         locationIndicatorActive: port?.LocationIndicatorActive,
-                        locationNumber:
-                          port?.Location?.PartLocation?.ServiceLabel,
+                        locationNumber: port?.Location?.PartLocation?.ServiceLabel,
                         uri: port['@odata.id'],
                       });
                     }
@@ -792,41 +675,34 @@ const PcieTopologyStore = {
             }
             cablesInfo.map((cable) => {
               if (cable.detailedInfo?.downstreamResources?.length > 0) {
-                cable.detailedInfo.downstreamResources[0].pcieSlots.map(
-                  (chaSlot) => {
-                    if (
-                      chaSlot.data?.Oem?.IBM?.LinkId === row.linkId &&
-                      chaSlot.data.Links?.Oem?.IBM?.AssociatedAssembly &&
-                      chaSlot.data.Links?.Oem?.IBM?.AssociatedAssembly[
-                        '@odata.id'
-                      ] === cable.detailedInfo.downstreamResourcesUri
+                cable.detailedInfo.downstreamResources[0].pcieSlots.map((chaSlot) => {
+                  if (
+                    chaSlot.data?.Oem?.IBM?.LinkId === row.linkId &&
+                    chaSlot.data.Links?.Oem?.IBM?.AssociatedAssembly &&
+                    chaSlot.data.Links?.Oem?.IBM?.AssociatedAssembly['@odata.id'] ===
+                      cable.detailedInfo.downstreamResourcesUri
+                  ) {
+                    for (
+                      let i = 0;
+                      i < cable.detailedInfo?.grandParentInfo?.expanderSlots?.length;
+                      i++
                     ) {
-                      for (
-                        let i = 0;
-                        i <
-                        cable.detailedInfo?.grandParentInfo?.expanderSlots
-                          ?.length;
-                        i++
+                      const expanderSlot = cable.detailedInfo?.grandParentInfo?.expanderSlots[i];
+                      if (
+                        cable.detailedInfo.grandParentInfo.data?.Links?.PCIeDevices[0][
+                          '@odata.id'
+                        ] === expanderSlot.Links?.PCIeDevice[0]['@odata.id']
                       ) {
-                        const expanderSlot =
-                          cable.detailedInfo?.grandParentInfo?.expanderSlots[i];
-                        if (
-                          cable.detailedInfo.grandParentInfo.data?.Links
-                            ?.PCIeDevices[0]['@odata.id'] ===
-                          expanderSlot.Links?.PCIeDevice[0]['@odata.id']
-                        ) {
-                          row['linkType'] = 'Secondary';
-                          row['parentLinkId'] = expanderSlot.Oem?.IBM?.LinkId;
-                          break;
-                        }
+                        row['linkType'] = 'Secondary';
+                        row['parentLinkId'] = expanderSlot.Oem?.IBM?.LinkId;
+                        break;
                       }
                     }
                   }
-                );
+                });
               }
               if (cable.detailedInfo.downstreamChassis.length > 0) {
-                const downstream_device =
-                  cable.detailedInfo.downstreamPorts[0].grandParent;
+                const downstream_device = cable.detailedInfo.downstreamPorts[0].grandParent;
                 if (
                   slot?.data.Links.PCIeDevice[0]['@odata.id'] ===
                   downstream_device.Links?.PCIeDevices[0]['@odata.id']
@@ -836,11 +712,9 @@ const PcieTopologyStore = {
                     i < cable.detailedInfo.grandParentInfo.expanderSlots.length;
                     i++
                   ) {
-                    const expanderSlot =
-                      cable.detailedInfo.grandParentInfo.expanderSlots[i];
+                    const expanderSlot = cable.detailedInfo.grandParentInfo.expanderSlots[i];
                     if (
-                      cable.detailedInfo.grandParentInfo.data.Links
-                        ?.PCIeDevices[0]['@odata.id'] ===
+                      cable.detailedInfo.grandParentInfo.data.Links?.PCIeDevices[0]['@odata.id'] ===
                       expanderSlot.Links?.PCIeDevice[0]['@odata.id']
                     ) {
                       row['linkType'] = 'Secondary';
@@ -850,14 +724,11 @@ const PcieTopologyStore = {
                       ) {
                         procMembers.map((proc) => {
                           if (
-                            proc['@odata.id'] ===
-                            expanderSlot.Links?.Processors[0]['@odata.id']
+                            proc['@odata.id'] === expanderSlot.Links?.Processors[0]['@odata.id']
                           ) {
                             row.pcieHBLocation = {
-                              locationIndicatorActive:
-                                proc?.LocationIndicatorActive,
-                              locationNumber:
-                                proc?.Location?.PartLocation?.ServiceLabel,
+                              locationIndicatorActive: proc?.LocationIndicatorActive,
+                              locationNumber: proc?.Location?.PartLocation?.ServiceLabel,
                               uri: proc['@odata.id'],
                             };
                           }
@@ -874,139 +745,102 @@ const PcieTopologyStore = {
                 cable?.detailedInfo?.downstreamPorts?.length > 0
               ) {
                 fabricAdapterInfo.map((adapter) => {
-                  if (
-                    adapter?.pcieDeviceLink &&
-                    adapter.pcieDeviceLink === slot.pcieDeviceLink
-                  ) {
+                  if (adapter?.pcieDeviceLink && adapter.pcieDeviceLink === slot.pcieDeviceLink) {
                     if (
                       (cable?.detailedInfo?.upstreamPorts.length > 0 &&
-                        cable?.detailedInfo?.upstreamPorts[0][
-                          '@odata.id'
-                        ].startsWith(adapter.data['@odata.id'])) ||
+                        cable?.detailedInfo?.upstreamPorts[0]['@odata.id'].startsWith(
+                          adapter.data['@odata.id'],
+                        )) ||
                       (cable?.detailedInfo?.downstreamPorts.length > 0 &&
-                        cable?.detailedInfo?.downstreamPorts[0].data[
-                          '@odata.id'
-                        ].startsWith(adapter.data['@odata.id']))
+                        cable?.detailedInfo?.downstreamPorts[0].data['@odata.id'].startsWith(
+                          adapter.data['@odata.id'],
+                        ))
                     ) {
                       if (cable.detailedInfo.downstreamResources.length > 0) {
                         row.ioSlotLocation = [];
-                        cable.detailedInfo.downstreamResources[0].pcieSlots.map(
-                          (slot2) => {
-                            if (
-                              slot2?.data?.Links?.Oem?.IBM
-                                ?.AssociatedAssembly &&
-                              slot2?.data?.Links?.Oem?.IBM?.AssociatedAssembly[
-                                '@odata.id'
-                              ] === cable.detailedInfo.downstreamResourcesUri
-                            ) {
-                              if (
-                                slot2?.data?.Location?.PartLocation
-                                  ?.ServiceLabel
-                              ) {
-                                const duplicate = row.ioSlotLocation.find(
-                                  (obj) => {
+                        cable.detailedInfo.downstreamResources[0].pcieSlots.map((slot2) => {
+                          if (
+                            slot2?.data?.Links?.Oem?.IBM?.AssociatedAssembly &&
+                            slot2?.data?.Links?.Oem?.IBM?.AssociatedAssembly['@odata.id'] ===
+                              cable.detailedInfo.downstreamResourcesUri
+                          ) {
+                            if (slot2?.data?.Location?.PartLocation?.ServiceLabel) {
+                              const duplicate = row.ioSlotLocation.find((obj) => {
+                                if (
+                                  obj.locationNumber ===
+                                  slot2?.data.Location?.PartLocation?.ServiceLabel
+                                ) {
+                                  return true;
+                                }
+                              });
+                              if (duplicate === undefined) {
+                                row.ioSlotLocation.push({
+                                  locationIndicatorActive: slot2?.data.LocationIndicatorActive,
+                                  locationNumber: slot2?.data.Location?.PartLocation?.ServiceLabel,
+                                  uri: cable.detailedInfo.downstreamResources[0].pcieSlotsUri,
+                                });
+                              }
+                            }
+                          }
+                        });
+                      } else if (cable.detailedInfo.downstreamChassis.length > 0) {
+                        row.ioSlotLocation = [];
+                        cable.detailedInfo.downstreamChassis[0].pcieSlots.map((dsSlot) => {
+                          if (
+                            dsSlot?.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters &&
+                            dsSlot?.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.length > 0
+                          ) {
+                            dsSlot?.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.map(
+                              (singleUpstreamFabricAdapter) => {
+                                if (
+                                  singleUpstreamFabricAdapter['@odata.id'] ===
+                                  cable.detailedInfo?.downstreamPorts[0]?.grandParent['@odata.id']
+                                ) {
+                                  const duplicate = row.ioSlotLocation.find((obj) => {
                                     if (
                                       obj.locationNumber ===
-                                      slot2?.data.Location?.PartLocation
-                                        ?.ServiceLabel
+                                      dsSlot?.data?.Location?.PartLocation?.ServiceLabel
                                     ) {
                                       return true;
                                     }
-                                  }
-                                );
-                                if (duplicate === undefined) {
-                                  row.ioSlotLocation.push({
-                                    locationIndicatorActive:
-                                      slot2?.data.LocationIndicatorActive,
-                                    locationNumber:
-                                      slot2?.data.Location?.PartLocation
-                                        ?.ServiceLabel,
-                                    uri:
-                                      cable.detailedInfo.downstreamResources[0]
-                                        .pcieSlotsUri,
                                   });
-                                }
-                              }
-                            }
-                          }
-                        );
-                      } else if (
-                        cable.detailedInfo.downstreamChassis.length > 0
-                      ) {
-                        row.ioSlotLocation = [];
-                        cable.detailedInfo.downstreamChassis[0].pcieSlots.map(
-                          (dsSlot) => {
-                            if (
-                              dsSlot?.data?.Links?.Oem?.IBM
-                                ?.UpstreamFabricAdapters &&
-                              dsSlot?.data?.Links?.Oem?.IBM
-                                ?.UpstreamFabricAdapters.length > 0
-                            ) {
-                              dsSlot?.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.map(
-                                (singleUpstreamFabricAdapter) => {
-                                  if (
-                                    singleUpstreamFabricAdapter['@odata.id'] ===
-                                    cable.detailedInfo?.downstreamPorts[0]
-                                      ?.grandParent['@odata.id']
-                                  ) {
-                                    const duplicate = row.ioSlotLocation.find(
-                                      (obj) => {
-                                        if (
-                                          obj.locationNumber ===
-                                          dsSlot?.data?.Location?.PartLocation
-                                            ?.ServiceLabel
-                                        ) {
-                                          return true;
-                                        }
-                                      }
-                                    );
-                                    if (duplicate === undefined) {
-                                      row.ioSlotLocation.push({
-                                        locationIndicatorActive:
-                                          dsSlot?.data?.LocationIndicatorActive,
-                                        locationNumber:
-                                          dsSlot?.data?.Location?.PartLocation
-                                            ?.ServiceLabel,
-                                        uri:
-                                          cable.detailedInfo
-                                            .downstreamChassis[0].pcieSlotsUri,
-                                      });
-                                    }
+                                  if (duplicate === undefined) {
+                                    row.ioSlotLocation.push({
+                                      locationIndicatorActive:
+                                        dsSlot?.data?.LocationIndicatorActive,
+                                      locationNumber:
+                                        dsSlot?.data?.Location?.PartLocation?.ServiceLabel,
+                                      uri: cable.detailedInfo.downstreamChassis[0].pcieSlotsUri,
+                                    });
                                   }
                                 }
-                              );
-                            }
+                              },
+                            );
                           }
-                        );
+                        });
 
                         if (
                           cable.detailedInfo?.downstreamPorts[0] &&
-                          cable.detailedInfo.downstreamPorts[0].data?.Location
-                            ?.PartLocation?.ServiceLabel
+                          cable.detailedInfo.downstreamPorts[0].data?.Location?.PartLocation
+                            ?.ServiceLabel
                         ) {
-                          const duplicate = row.remotePortLocation.find(
-                            (obj) => {
-                              if (
-                                obj.locationNumber ===
-                                cable.detailedInfo.downstreamPorts[0].data
-                                  ?.Location?.PartLocation?.ServiceLabel
-                              ) {
-                                return true;
-                              }
+                          const duplicate = row.remotePortLocation.find((obj) => {
+                            if (
+                              obj.locationNumber ===
+                              cable.detailedInfo.downstreamPorts[0].data?.Location?.PartLocation
+                                ?.ServiceLabel
+                            ) {
+                              return true;
                             }
-                          );
+                          });
                           if (duplicate === undefined) {
                             row.remotePortLocation.push({
                               locationIndicatorActive:
-                                cable.detailedInfo.downstreamPorts[0].data
-                                  ?.LocationIndicatorActive,
+                                cable.detailedInfo.downstreamPorts[0].data?.LocationIndicatorActive,
                               locationNumber:
-                                cable.detailedInfo.downstreamPorts[0].data
-                                  ?.Location?.PartLocation?.ServiceLabel,
-                              uri:
-                                cable.detailedInfo.downstreamPorts[0].data[
-                                  '@odata.id'
-                                ],
+                                cable.detailedInfo.downstreamPorts[0].data?.Location?.PartLocation
+                                  ?.ServiceLabel,
+                              uri: cable.detailedInfo.downstreamPorts[0].data['@odata.id'],
                             });
                           }
                         }
@@ -1041,53 +875,34 @@ const PcieTopologyStore = {
               }
             });
             fabricAdapterInfo.map((adapter) => {
-              const pcie_device =
-                adapter.data.Links?.PCIeDevices[0]['@odata.id'];
+              const pcie_device = adapter.data.Links?.PCIeDevices[0]['@odata.id'];
               pcieDeviceMembers.map((device) => {
                 if (device['@odata.id'] === pcie_device) {
-                  const expander_slots =
-                    device.Links?.Oem?.IBM?.PCIeSlot['@odata.id'];
+                  const expander_slots = device.Links?.Oem?.IBM?.PCIeSlot['@odata.id'];
                   chassisInfo.map((chassisValue) => {
-                    if (
-                      chassisValue.detailedInfo.pcieSlotsUri === expander_slots
-                    ) {
-                      chassisValue.detailedInfo.pcieSlots.data.Slots.map(
-                        (slot2) => {
+                    if (chassisValue.detailedInfo.pcieSlotsUri === expander_slots) {
+                      chassisValue.detailedInfo.pcieSlots.data.Slots.map((slot2) => {
+                        if (slot2.Links?.PCIeDevice[0]['@odata.id'] === pcie_device) {
                           if (
-                            slot2.Links?.PCIeDevice[0]['@odata.id'] ===
-                            pcie_device
+                            slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters &&
+                            slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.length > 0
                           ) {
-                            if (
-                              slot.data?.Links?.Oem?.IBM
-                                ?.UpstreamFabricAdapters &&
-                              slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters
-                                .length > 0
-                            ) {
-                              slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.map(
-                                (upstreamFabAdapter) => {
-                                  if (
-                                    upstreamFabAdapter['@odata.id'] ===
-                                    adapter.data['@odata.id']
-                                  ) {
-                                    row['linkType'] = 'Secondary';
-                                    row['parentLinkId'] =
-                                      slot2.Oem?.IBM?.LinkId;
-                                    rows.map((singleRow) => {
-                                      if (
-                                        singleRow.linkId ===
-                                        slot2.Oem?.IBM?.LinkId
-                                      ) {
-                                        row.pcieHBLocation =
-                                          singleRow.pcieHBLocation;
-                                      }
-                                    });
-                                  }
+                            slot.data?.Links?.Oem?.IBM?.UpstreamFabricAdapters.map(
+                              (upstreamFabAdapter) => {
+                                if (upstreamFabAdapter['@odata.id'] === adapter.data['@odata.id']) {
+                                  row['linkType'] = 'Secondary';
+                                  row['parentLinkId'] = slot2.Oem?.IBM?.LinkId;
+                                  rows.map((singleRow) => {
+                                    if (singleRow.linkId === slot2.Oem?.IBM?.LinkId) {
+                                      row.pcieHBLocation = singleRow.pcieHBLocation;
+                                    }
+                                  });
                                 }
-                              );
-                            }
+                              },
+                            );
                           }
                         }
-                      );
+                      });
                     }
                   });
                 }
@@ -1123,7 +938,7 @@ const PcieTopologyStore = {
                   } else {
                     req.push({});
                   }
-                })
+                }),
               );
             });
             await api.patch(uri, { Slots: req });
@@ -1135,17 +950,13 @@ const PcieTopologyStore = {
             await api.patch(uri, updatedIdentifyLedValue).catch((error) => {
               console.log('error', error);
               if (requestBody.value.led) {
-                throw new Error(
-                  i18n.t('pagePcieTopology.toast.errorEnableIdentifyLed')
-                );
+                throw new Error(i18n.t('pagePcieTopology.toast.errorEnableIdentifyLed'));
               } else {
-                throw new Error(
-                  i18n.t('pagePcieTopology.toast.errorDisableIdentifyLed')
-                );
+                throw new Error(i18n.t('pagePcieTopology.toast.errorDisableIdentifyLed'));
               }
             });
           }
-        })
+        }),
       );
     },
     async getAllLedValues(_, selectedObj) {
@@ -1176,7 +987,7 @@ const PcieTopologyStore = {
                     uri: data['@odata.id'],
                   });
                 });
-              })
+              }),
             );
           }
           if (selectedObj.remotePortLocation.length > 0) {
@@ -1189,7 +1000,7 @@ const PcieTopologyStore = {
                     uri: data['@odata.id'],
                   });
                 });
-              })
+              }),
             );
           }
           if (selectedObj.ioSlots.length > 0) {
@@ -1199,23 +1010,20 @@ const PcieTopologyStore = {
                   const tempSlots = ioSlotResponse.data.Slots;
                   await api.all(
                     tempSlots.map((tempSlot) => {
-                      if (
-                        tempSlot.Location?.PartLocation?.ServiceLabel ===
-                        ioSlot.locationNumber
-                      ) {
+                      if (tempSlot.Location?.PartLocation?.ServiceLabel === ioSlot.locationNumber) {
                         returningObj.ioSlots.push({
                           led: tempSlot.LocationIndicatorActive,
                           locationNumber: ioSlot.locationNumber,
                           uri: ioSlot.uri,
                         });
                       }
-                    })
+                    }),
                   );
                 });
-              })
+              }),
             );
           }
-        })
+        }),
       );
       return returningObj;
     },

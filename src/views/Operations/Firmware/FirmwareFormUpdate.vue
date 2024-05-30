@@ -110,8 +110,7 @@ export default {
       isWorkstationSelected: true,
       file: null,
       tftpFileAddress: null,
-      isServerPowerOffRequired:
-        process.env.VUE_APP_SERVER_OFF_REQUIRED === 'true',
+      isServerPowerOffRequired: process.env.VUE_APP_SERVER_OFF_REQUIRED === 'true',
       tftpServer: process.env.VUE_APP_TFTP_SERVER === 'true',
     };
   },
@@ -161,13 +160,10 @@ export default {
 
       // Step 1 - Upload
       const uploadFirmware = () => {
-        this.infoToast(
-          this.$t('pageFirmware.toast.updateFirmware.step1Message'),
-          {
-            title: this.$t('pageFirmware.toast.updateFirmware.step1'),
-            timestamp: true,
-          }
-        );
+        this.infoToast(this.$t('pageFirmware.toast.updateFirmware.step1Message'), {
+          title: this.$t('pageFirmware.toast.updateFirmware.step1'),
+          timestamp: true,
+        });
         if (this.isWorkstationSelected) {
           this.dispatchWorkstationUpload(activateFirmware);
         } else {
@@ -191,30 +187,22 @@ export default {
           // if this function runs more than 36 times, it won't run anymore
           if (checkCounter > 36) {
             this.endLoader();
-            return this.errorToast(
-              this.$t('pageFirmware.toast.errorActivation')
-            );
+            return this.errorToast(this.$t('pageFirmware.toast.errorActivation'));
           }
 
           Promise.all([currentTask(data)]).then((res) => {
             // Check to see if activation was aborted
             const activationAborted = res[0].Messages.filter(
-              (message) => message.MessageId === 'TaskEvent.1.0.1.TaskAborted'
+              (message) => message.MessageId === 'TaskEvent.1.0.1.TaskAborted',
             )[0];
 
             if (activationAborted) {
               if (activationAborted?.Oem?.OpenBMC?.AbortReason) {
-                const message = activationAborted?.Oem?.OpenBMC?.AbortReason?.split(
-                  '.'
-                ).pop();
+                const message = activationAborted?.Oem?.OpenBMC?.AbortReason?.split('.').pop();
                 if (message === 'ExpiredAccessKey')
-                  return this.errorToast(
-                    this.$t('pageFirmware.toast.expiredAccessKeyError')
-                  );
+                  return this.errorToast(this.$t('pageFirmware.toast.expiredAccessKeyError'));
               } else {
-                return this.errorToast(
-                  this.$t('pageFirmware.toast.errorActivation')
-                );
+                return this.errorToast(this.$t('pageFirmware.toast.errorActivation'));
               }
             }
 
@@ -231,13 +219,10 @@ export default {
         };
 
         if (taskLink) {
-          this.infoToast(
-            this.$t('pageFirmware.toast.updateFirmware.step2Message'),
-            {
-              title: this.$t('pageFirmware.toast.updateFirmware.step2'),
-              timestamp: true,
-            }
-          );
+          this.infoToast(this.$t('pageFirmware.toast.updateFirmware.step2Message'), {
+            title: this.$t('pageFirmware.toast.updateFirmware.step2'),
+            timestamp: true,
+          });
           currentTaskProgress(0, taskLink);
         } else {
           this.endLoader();
@@ -247,13 +232,10 @@ export default {
 
       // Step 3 - BMC Reboot
       const bmcReboot = async () => {
-        this.infoToast(
-          this.$t('pageFirmware.toast.updateFirmware.step3Message'),
-          {
-            title: this.$t('pageFirmware.toast.updateFirmware.step3'),
-            timestamp: true,
-          }
-        );
+        this.infoToast(this.$t('pageFirmware.toast.updateFirmware.step3Message'), {
+          title: this.$t('pageFirmware.toast.updateFirmware.step3'),
+          timestamp: true,
+        });
 
         const rebootProgress = async () => {
           setTimeout(async () => {
@@ -278,14 +260,11 @@ export default {
       // Step 4 - Activation complete
       const activationComplete = () => {
         this.endLoader();
-        return this.infoToast(
-          this.$t('pageFirmware.toast.updateFirmware.step4Message'),
-          {
-            title: this.$t('pageFirmware.toast.updateFirmware.step4'),
-            refreshAction: true,
-            timestamp: true,
-          }
-        );
+        return this.infoToast(this.$t('pageFirmware.toast.updateFirmware.step4Message'), {
+          title: this.$t('pageFirmware.toast.updateFirmware.step4'),
+          refreshAction: true,
+          timestamp: true,
+        });
       };
 
       uploadFirmware(); // This must be here to run the entire function

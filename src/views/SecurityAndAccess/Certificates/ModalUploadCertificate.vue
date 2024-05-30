@@ -125,10 +125,7 @@ export default {
     certificateOptions() {
       const filteredCertificates = this.certificateTypes
         .filter((certificate) => {
-          if (
-            certificate.type === 'ServiceLogin Certificate' &&
-            this.isNotAdmin
-          ) {
+          if (certificate.type === 'ServiceLogin Certificate' && this.isNotAdmin) {
             return certificate.type !== 'ServiceLogin Certificate';
           }
           return certificate === certificate;
@@ -187,9 +184,7 @@ export default {
         addNew: !this.certificate,
         file: this.form.file,
         location: this.certificate ? this.certificate.location : null,
-        type: this.certificate
-          ? this.certificate.certificate
-          : this.form.certificateType,
+        type: this.certificate ? this.certificate.certificate : this.form.certificateType,
       });
       this.closeModal();
     },

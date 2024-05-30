@@ -8,16 +8,11 @@ const FieldCoreOverrideStore = {
     fieldCoreOverrideCurrent: 0,
   },
   getters: {
-    isPending: (state) =>
-      state.fieldCoreOverrideCurrent !== state.fieldCoreOverridePending,
+    isPending: (state) => state.fieldCoreOverrideCurrent !== state.fieldCoreOverridePending,
     configuredCores: (state, getters) =>
-      getters.isPending
-        ? state.fieldCoreOverridePending
-        : state.fieldCoreOverrideCurrent,
+      getters.isPending ? state.fieldCoreOverridePending : state.fieldCoreOverrideCurrent,
     isEnabled: (state, getters) =>
-      getters.isPending
-        ? state.fieldCoreOverridePending > 0
-        : state.fieldCoreOverrideCurrent > 0,
+      getters.isPending ? state.fieldCoreOverridePending > 0 : state.fieldCoreOverrideCurrent > 0,
   },
   mutations: {
     setBiosAttributes: (state, data) => {
@@ -27,11 +22,9 @@ const FieldCoreOverrideStore = {
   },
   actions: {
     async getBiosAttributes({ commit }) {
-      return await api
-        .get('/redfish/v1/Systems/system/Bios')
-        .then(({ data }) => {
-          commit('setBiosAttributes', data?.Attributes || {});
-        });
+      return await api.get('/redfish/v1/Systems/system/Bios').then(({ data }) => {
+        commit('setBiosAttributes', data?.Attributes || {});
+      });
     },
     async setFieldCoreOverride({ dispatch }, coreOverride) {
       const data = {
@@ -43,15 +36,11 @@ const FieldCoreOverrideStore = {
         .patch('/redfish/v1/Systems/system/Bios/Settings', data)
         .then(() => {
           dispatch('getBiosAttributes');
-          return i18n.t(
-            'pageFieldCoreOverride.toast.configurationChangeSuccess'
-          );
+          return i18n.t('pageFieldCoreOverride.toast.configurationChangeSuccess');
         })
         .catch((error) => {
           console.log('Field core override', error);
-          throw new Error(
-            i18n.t('pageFieldCoreOverride.toast.configurationChangeError')
-          );
+          throw new Error(i18n.t('pageFieldCoreOverride.toast.configurationChangeError'));
         });
     },
   },

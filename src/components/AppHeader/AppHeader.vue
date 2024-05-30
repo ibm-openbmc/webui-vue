@@ -92,140 +92,135 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, provide, onMounted, inject, defineEmits } from 'vue'
+import { computed, ref, watch, onMounted, defineEmits } from 'vue';
 // import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import IconAvatar from '@carbon/icons-vue/es/user--avatar/20'
-import IconClose from '@carbon/icons-vue/es/close/20'
-import IconMenu from '@carbon/icons-vue/es/menu/20'
-import IconRenew from '@carbon/icons-vue/es/renew/20'
-import StatusIcon from '../Global/StatusIcon.vue'
+import IconAvatar from '@carbon/icons-vue/es/user--avatar/20';
+import IconClose from '@carbon/icons-vue/es/close/20';
+import IconMenu from '@carbon/icons-vue/es/menu/20';
+import IconRenew from '@carbon/icons-vue/es/renew/20';
+import StatusIcon from '../Global/StatusIcon.vue';
 // import LoadingBar from '../Global/LoadingBar.vue';
-import { AuthenticationStore } from '../../store/modules/Authentication/AuthenticationStore'
-import { GlobalStore } from '../../store/modules/GlobalStore'
-import { EventLogStore } from '../../store/modules/Logs/EventLogStore'
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import useToastComposable from '@/components/Composables/useToastComposable'
-import eventBus from '@/eventBus'
+import { AuthenticationStore } from '../../store/modules/Authentication/AuthenticationStore';
+import { GlobalStore } from '../../store/modules/GlobalStore';
+import { EventLogStore } from '../../store/modules/Logs/EventLogStore';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import useToastComposable from '@/components/Composables/useToastComposable';
+import eventBus from '@/eventBus';
 
-const { t } = useI18n()
+const { t } = useI18n();
 const props = defineProps({
-  routerKey: Number
-})
+  routerKey: {
+    type: Number,
+    default: 0,
+  },
+});
 
-const { successToast, errorToast, infoToast, warningToast } = useToastComposable()
-const router = useRouter()
-const authenticationStore = AuthenticationStore()
-const globalStore = GlobalStore()
-const eventLogStore = EventLogStore()
-const isNavigationOpen = ref(false)
-const loadingStatus = ref(null)
-const altLogo = 'Built on OpenBMC'
-const headerText =  'ASMI'
-const emit = defineEmits()
-const routerKey = ref(props.routerKey)
+const { errorToast } = useToastComposable();
+const router = useRouter();
+const authenticationStore = AuthenticationStore();
+const globalStore = GlobalStore();
+const eventLogStore = EventLogStore();
+const isNavigationOpen = ref(false);
+// const loadingStatus = ref(null);
+const altLogo = 'Built on OpenBMC';
+const headerText = 'ASMI';
+const emit = defineEmits(['refresh']);
+const routerKey = ref(props.routerKey);
 const getSystemInfo = () => {
-  globalStore.getSystemInfo()
-}
+  globalStore.getSystemInfo();
+};
 const getEvents = () => {
-  eventLogStore.getEventLogData()
-}
+  eventLogStore.getEventLogData();
+};
 //commented due to cookies values are not getting
 // authenticationStore.resetStoreState();
-getSystemInfo()
-getEvents()
+getSystemInfo();
+getEvents();
 
-const assetTag = computed(() => globalStore.assetTag)
+const assetTag = computed(() => globalStore.assetTag);
 const isNavTagPresent = computed(
-  () => assetTag.value || globalStore.modelType || globalStore.serialNumber
-)
-const modelType = computed(() => globalStore.modelType)
-const serialNumber = computed(() => globalStore.serialNumber)
-const isAuthorized = computed(() => globalStore.isAuthorized)
-const userPrivilege = computed(() => globalStore.userPrivilege)
-const serverStatus = computed(() => globalStore.serverStatus)
-const healthStatus = computed(() => eventLogStore.getHealthStatus)
+  () => assetTag.value || globalStore.modelType || globalStore.serialNumber,
+);
+const modelType = computed(() => globalStore.modelType);
+const serialNumber = computed(() => globalStore.serialNumber);
+const isAuthorized = computed(() => globalStore.isAuthorized);
+// const userPrivilege = computed(() => globalStore.userPrivilege);
+const serverStatus = computed(() => globalStore.serverStatus);
+const healthStatus = computed(() => eventLogStore.getHealthStatus);
 const serverStatusIcon = computed(() => {
   switch (serverStatus.value) {
     case 'on':
-      return 'success'
+      return 'success';
     case 'error':
-      return 'danger'
+      return 'danger';
     case 'diagnosticMode':
-      return 'warning'
+      return 'warning';
     case 'off':
     default:
-      return 'secondary'
+      return 'secondary';
   }
-})
+});
 const healthStatusIcon = computed(() => {
-  switch (healthStatus) {
+  switch (healthStatus.value) {
     case 'OK':
-      return 'success'
+      return 'success';
     case 'Warning':
-      return 'warning'
+      return 'warning';
     case 'Critical':
-      return 'danger'
+      return 'danger';
     default:
-      return 'secondary'
+      return 'secondary';
   }
-})
+});
 const username = computed(() => {
-  return globalStore.username
-})
-const consoleWindow = computed(() => authenticationStore.consoleWindow)
+  return globalStore.username;
+});
+const consoleWindow = computed(() => authenticationStore.consoleWindow);
 onMounted(() => {
   watch('consoleWindow', () => {
-    if (consoleWindow === false) this.$eventBus.$consoleWindow.close()
-  })
+    if (consoleWindow.value === false) this.$eventBus.$consoleWindow.close();
+  });
   watch(isAuthorized, (newValue) => {
     if (newValue === false) {
       errorToast(t('global.toast.unAuthDescription'), {
-        title: t('global.toast.unAuthTitle')
-      })
+        title: t('global.toast.unAuthTitle'),
+      });
     }
-  })
+  });
   eventBus.on('change-is-navigation-open', (isNavigationOpen) => {
-    isNavigationOpen.value = isNavigationOpen
+    isNavigationOpen.value = isNavigationOpen;
     // console.log('After change isNavigationOpen...', isNavigationOpen.value)
-  })
-})
+  });
+});
 
 const handleToggleNavigation = () => {
   // this.$root.$emit('toggle-navigation');
   // console.log('handle navigation onclick')
-  isNavigationOpen.value = !isNavigationOpen.value
+  isNavigationOpen.value = !isNavigationOpen.value;
   //  console.log('isnavigation in handle navigation',isNavigationOpen.value );
   eventBus.emit('toggle-navigation', () => {
-    isNavigationOpen
-  })
-}
-const showMe = () => {
-  warningToast(t('global.toast.unAuthDescription'), {
-    title: t('global.toast.unAuthTitle')
-  })
-}
-const checkLoadingStatus = (loadingStatus) => {
-  loadingStatus = loadingStatus
-}
+    isNavigationOpen;
+  });
+};
 const logout = () => {
   authenticationStore.logout().then(() => {
-    router.push('/login')
-  })
-}
+    router.push('/login');
+  });
+};
 
 const handleRefresh = () => {
   // Emit a custom eventBus to notify the Applayout component
-  emit('refresh')
-}
+  emit('refresh');
+};
 const setFocus = (event) => {
-  event.preventDefault()
-  this.$root.$emit('skip-navigation')
-}
-const getImageUrl = () => {
-  let pathName = location.pathname !== '/' ? location.pathname : ''
-  return location.origin + pathName + require('@/assets/images/logo-header.svg')
-}
+  event.preventDefault();
+  this.$root.$emit('skip-navigation');
+};
+// const getImageUrl = () => {
+//   let pathName = location.pathname !== '/' ? location.pathname : '';
+//   return location.origin + pathName + require('@/assets/images/logo-header.svg');
+// };
 </script>
 
 <style lang="scss">
@@ -276,15 +271,13 @@ const getImageUrl = () => {
     }
 
     .helper-menu {
-      @include media-breakpoint-down(sm) {
+      @include media-breakpoint-down(md) {
         background-color: gray('800');
         width: 100%;
         justify-content: flex-end;
-
         .nav-link .btn {
           padding: calc(#{$spacer} / 1.125) calc($spacer / 2);
         }
-
         .nav-link:focus,
         .btn:focus {
           @include focus-box-shadow($gray-800);
@@ -292,7 +285,6 @@ const getImageUrl = () => {
       }
 
       .responsive-text {
-        // position: relative !important;
         @include media-breakpoint-down(sm) {
           @include visually-hidden;
         }
@@ -392,7 +384,9 @@ const getImageUrl = () => {
 .header-logo {
   width: 50px !important;
 }
-.container-fluid {
- justify-content: flex-start;
+#page-header .container-fluid {
+  --bs-gutter-x: 0 !important;
+  --bs-gutter-y: 0 !important;
+  justify-content: flex-start;
 }
 </style>

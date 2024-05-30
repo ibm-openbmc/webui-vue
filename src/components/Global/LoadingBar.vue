@@ -1,39 +1,34 @@
 <template>
   <BTransition name="fade">
     <BProgress v-if="!isLoadingComplete.value">
-      <BProgressBar
-        :value="loadingIndicatorValue.value"
-        aria-label="Loading Progress"
-        animated
-      />
+      <BProgressBar :value="loadingIndicatorValue.value" aria-label="Loading Progress" animated />
     </BProgress>
   </BTransition>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted, defineEmits, inject } from 'vue';
-import { useI18n } from 'vue-i18n';
-import eventBusBus from "@/eventBusBus";
+import { ref, onMounted } from 'vue';
+// import { useI18n } from 'vue-i18n';
+import eventBus from '@/eventBus';
 
 const loadingIndicatorValue = ref(0);
 const isLoadingComplete = ref(false);
 const loadingIntervalId = ref(null);
 const timeoutId = ref(null);
-const emit = defineEmits();
+// const emit = defineEmits();
 
-
-const { t } = useI18n();
+// const { t } = useI18n();
 
 onMounted(() => {
-  console.log('on mounted')
- eventBusBus.on('loader-start', (payload) => {
-  startLoadingInterval
+  console.log('on mounted');
+  eventBus.on('loader-start', () => {
+    startLoadingInterval;
   });
- eventBusBus.on('loader-end', (payload) => {
-  endLoadingInterval
+  eventBus.on('loader-end', () => {
+    endLoadingInterval;
   });
- eventBusBus.on('loader-hide', (payload) => {
-  hideLoadingBar
+  eventBus.on('loader-hide', () => {
+    hideLoadingBar;
   });
 });
 
@@ -80,7 +75,6 @@ const hideLoadingBar = () => {
   loadingIndicatorValue.value = 0;
   isLoadingComplete.value = true;
 };
-
 </script>
 <style lang="scss" scoped>
 .progress {
@@ -92,11 +86,11 @@ const hideLoadingBar = () => {
   transition: opacity $duration--moderate-01 $standard-easing--productive;
   height: 0.4rem;
 
-//   &.fade-enter-from, // This is vue3 based only class modified from 'fade-enter'
-//   &.fade-leave-to {
-//     opacity: 0;
-//   }
-  
+  //   &.fade-enter-from, // This is vue3 based only class modified from 'fade-enter'
+  //   &.fade-leave-to {
+  //     opacity: 0;
+  //   }
+
   .fade-enter-from,
   .fade-leave-to {
     opacity: 0;

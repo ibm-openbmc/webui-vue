@@ -1,9 +1,6 @@
 <template>
   <b-container fluid="xl">
-    <page-title
-      :title="$t('appPageTitle.power')"
-      :description="$t('pagePower.description')"
-    />
+    <page-title :title="$t('appPageTitle.power')" :description="$t('pagePower.description')" />
     <b-row v-if="safeMode">
       <b-col md="9" xl="6">
         <alert variant="danger" class="mb-4">
@@ -12,9 +9,7 @@
           </p>
           <p>
             {{ $t('pagePower.alert.message2') }}
-            <b-link to="/logs/event-logs">
-              {{ $t('pagePower.alert.message2Link') }}</b-link
-            >
+            <b-link to="/logs/event-logs"> {{ $t('pagePower.alert.message2Link') }}</b-link>
           </p>
           <p>
             {{ $t('pagePower.alert.message3') }}

@@ -25,11 +25,7 @@
       </b-row>
       <b-row>
         <b-col class="text-right">
-          <b-button
-            variant="primary"
-            :disabled="isTablesDisabled"
-            @click="initIpv4Modal()"
-          >
+          <b-button variant="primary" :disabled="isTablesDisabled" @click="initIpv4Modal()">
             <icon-add />
             {{ $t('pageNetwork.table.addIpv4Address') }}
           </b-button>
@@ -138,9 +134,7 @@ export default {
     },
     dhcpEnabledState: {
       get() {
-        return this.$store.getters['network/networkSettings'][
-          this.selectedInterface
-        ].dhcpEnabled;
+        return this.$store.getters['network/networkSettings'][this.selectedInterface].dhcpEnabled;
       },
       set(newValue) {
         return newValue;
@@ -172,16 +166,12 @@ export default {
           actions: [
             {
               value: 'edit',
-              enabled:
-                ipv4.AddressOrigin !== 'IPv4LinkLocal' &&
-                ipv4.AddressOrigin !== 'DHCP',
+              enabled: ipv4.AddressOrigin !== 'IPv4LinkLocal' && ipv4.AddressOrigin !== 'DHCP',
               title: this.$t('pageNetwork.table.editIpv4'),
             },
             {
               value: 'delete',
-              enabled:
-                ipv4.AddressOrigin !== 'IPv4LinkLocal' &&
-                ipv4.AddressOrigin !== 'DHCP',
+              enabled: ipv4.AddressOrigin !== 'IPv4LinkLocal' && ipv4.AddressOrigin !== 'DHCP',
               title: this.$t('pageNetwork.table.deleteIpv4'),
             },
           ],
@@ -221,7 +211,7 @@ export default {
             okTitle: this.$t('global.action.delete'),
             okVariant: 'danger',
             cancelTitle: this.$t('global.action.cancel'),
-          }
+          },
         )
         .then((deleteConfirmed) => {
           if (deleteConfirmed) {
@@ -249,16 +239,12 @@ export default {
             : this.$t('pageNetwork.modal.confirmDisableDhcp'),
           {
             title: this.$t('pageNetwork.modal.dhcpConfirmTitle', {
-              dhcpState: state
-                ? this.$t('global.action.enable')
-                : this.$t('global.action.disable'),
+              dhcpState: state ? this.$t('global.action.enable') : this.$t('global.action.disable'),
             }),
-            okTitle: state
-              ? this.$t('global.action.enable')
-              : this.$t('global.action.disable'),
+            okTitle: state ? this.$t('global.action.enable') : this.$t('global.action.disable'),
             okVariant: 'danger',
             cancelTitle: this.$t('global.action.cancel'),
-          }
+          },
         )
         .then((dhcpEnableConfirmed) => {
           if (dhcpEnableConfirmed) {

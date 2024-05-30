@@ -4,16 +4,16 @@
       :title="$t('appPageTitle.network')"
       :description="$t('pageNetwork.pageDescription')"
     />
-     <label for="example-datepicker" class="mb-2">Choose a date</label>
+    <label for="example-datepicker" class="mb-2">Choose a date</label>
     <!-- <b-form-datepicker id="example-datepicker" v-model="value" class="mb-2"></b-form-datepicker> -->
-     <BFormInput :id="`type-${type}`" :type="type" button-only class="mb-4 "/>
-      <BBadge v-for="(tag, index) in tags" :key="index" pill>
-        {{ tag }}
-        <!-- <BButtonCclose
+    <BFormInput :id="`type-${type}`" :type="type" button-only class="mb-4" />
+    <BBadge v-for="(tag, index) in tags" :key="index" pill>
+      {{ tag }}
+      <!-- <BButtonCclose
           :disabled="false"
           :aria-hidden="true"
         /> -->
-      </BBadge>
+    </BBadge>
     <!-- Global settings for all interfaces -->
     <!-- <network-global-settings /> -->
     <!-- Interface tabs -->
@@ -21,13 +21,9 @@
       <BRow>
         <BCol>
           <BCard no-body>
-            <BTabs content-class="mt-3 p-4" v-model="tabIndex">
-            <BTab
-                v-for="(data, index) in network"
-                :key="data.id"
-                :title="data.id"
-              >
-               tabs data
+            <BTabs v-model="tabIndex" content-class="mt-3 p-4">
+              <BTab v-for="data in network" :key="data.id" :title="data.id">
+                tabs data
                 <!-- Interface settings -->
                 <!-- <network-interface-settings :tab-index="tabIndex" /> -->
                 <!-- IPV4 table -->
@@ -69,45 +65,45 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, provide, onMounted, inject, defineEmits } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref, watch, onMounted } from 'vue';
+// import { useRoute } from 'vue-router';
 // import { BVToastMixin, DataFormatterMixin, LoadingBarMixin } from '@/components/Mixins';
-import PageTitle from "@/components/Global/PageTitle.vue";
-import PageSection from "@/components/Global/PageSection.vue";
+import PageTitle from '@/components/Global/PageTitle.vue';
+import PageSection from '@/components/Global/PageSection.vue';
 import NetworkStore from '../../store/modules/Settings/NetworkStore';
 
-const route = useRoute();
+// const route = useRoute();
 
 const tabIndex = ref(0);
 const currentHostname = ref('');
 const defaultGateway = ref('');
-const ipAddress = ref('');
-const ipAddressIpv6 = ref('');
-const prefixLength = ref(0);
-const subnet = ref('');
-const loading = ref(false);
+// const ipAddress = ref('');
+// const ipAddressIpv6 = ref('');
+// const prefixLength = ref(0);
+// const subnet = ref('');
+// const loading = ref(false);
 const networkStore = NetworkStore();
-const type = ref('date')
-const tags = ref(['ok','critical','warning'])
+const type = ref('date');
+const tags = ref(['ok', 'critical', 'warning']);
 
 const network = computed(() => networkStore.getGlobalNetworkSettings);
-console.log('network....', network)
-const isIpv6Valid = computed(() => {
-  const ipv6 = network.value[tabIndex.value].ipv6;
-  return ipv6 && ipv6.length > 0;
-});
+console.log('network....', network);
+// const isIpv6Valid = computed(() => {
+//   const ipv6 = network.value[tabIndex.value].ipv6;
+//   return ipv6 && ipv6.length > 0;
+// });
 
 const getModalInfo = () => {
   defaultGateway.value = network.value[tabIndex.value].defaultGateway;
   currentHostname.value = network.value[tabIndex.value].hostname;
 };
 
-const getTabIndex = (selectedIndex) => {
-  tabIndex.value = selectedIndex;
-  networkStore.setSelectedTabIndex(tabIndex.value);
-  networkStore.setSelectedTabId(network.value[tabIndex.value].id);
-  getModalInfo();
-};
+// const getTabIndex = (selectedIndex) => {
+//   tabIndex.value = selectedIndex;
+//   networkStore.setSelectedTabIndex(tabIndex.value);
+//   networkStore.setSelectedTabId(network.value[tabIndex.value].id);
+//   getModalInfo();
+// };
 
 // const saveIpv4Address = (modalFormData) => {
 //   const modalData = [modalFormData];
@@ -167,7 +163,7 @@ const getTabIndex = (selectedIndex) => {
 watch(network, () => getModalInfo());
 
 onMounted(() => {
-//   startLoader();
+  //   startLoader();
   networkStore.getEthernetData();
 });
 
@@ -176,14 +172,14 @@ onMounted(() => {
 //   next();
 // });
 
-const getTabIndexWrapper = (index) => () => getTabIndex(index);
+// const getTabIndexWrapper = (index) => () => getTabIndex(index);
 </script>
 <style lang="scss" scoped>
 .btn-icon-only svg {
   margin-right: 0;
 }
 .btn-datepicker {
-//   position: absolute;
+  //   position: absolute;
   right: 0;
   top: 0;
   z-index: $zindex-dropdown + 1;

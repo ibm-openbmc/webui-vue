@@ -1,18 +1,17 @@
-export const searchFilter = null;
-
-const useSearchFilterComposable = () => {
-
-    const onChangeSearchInput = (searchValue) => {  
-        searchFilter = searchValue;
-    };
-    const onClearSearchInput = () => {  
-        searchFilter = null;
-    };
-  
+export const searchFilterMixin = {
+  data() {
     return {
-        onChangeSearchInput,
-        onClearSearchInput
+      searchFilter: null,
     };
-  };
+  },
+  methods: {
+    onChangeSearchInput(searchValue) {
+      this.searchFilter = searchValue;
+    },
+    onClearSearchInput() {
+      this.searchFilter = null;
+    },
+  },
+};
 
-export default useSearchFilterComposable;
+export default searchFilterMixin;

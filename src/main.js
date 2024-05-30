@@ -1,12 +1,12 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
-import "bootstrap";
+import 'bootstrap';
 import router from './router';
 import { createBootstrap } from 'bootstrap-vue-next';
 
 // Add the necessary CSSs
-import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 import i18n from './i18n';

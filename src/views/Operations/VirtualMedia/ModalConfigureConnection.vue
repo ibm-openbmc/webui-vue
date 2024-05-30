@@ -1,19 +1,10 @@
 <template>
-  <b-modal
-    id="configure-connection"
-    ref="modal"
-    @ok="onOk"
-    @hidden="resetForm"
-    @show="initModal"
-  >
+  <b-modal id="configure-connection" ref="modal" @ok="onOk" @hidden="resetForm" @show="initModal">
     <template #modal-title>
       {{ $t('pageVirtualMedia.modal.title') }}
     </template>
     <b-form>
-      <b-form-group
-        :label="$t('pageVirtualMedia.modal.serverUri')"
-        label-for="serverUri"
-      >
+      <b-form-group :label="$t('pageVirtualMedia.modal.serverUri')" label-for="serverUri">
         <b-form-input
           id="serverUri"
           v-model="form.serverUri"
@@ -28,10 +19,7 @@
           </template>
         </b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group
-        :label="$t('pageVirtualMedia.modal.username')"
-        label-for="username"
-      >
+      <b-form-group :label="$t('pageVirtualMedia.modal.username')" label-for="username">
         <b-form-input
           id="username"
           v-model="form.username"
@@ -39,10 +27,7 @@
           data-test-id="configureConnection-input-username"
         />
       </b-form-group>
-      <b-form-group
-        :label="$t('pageVirtualMedia.modal.password')"
-        label-for="password"
-      >
+      <b-form-group :label="$t('pageVirtualMedia.modal.password')" label-for="password">
         <b-form-input
           id="password"
           v-model="form.password"

@@ -34,8 +34,7 @@ const NetworkSettingsStore = {
     vlanTagIdUpperBound: (state) => state.vlanTagIdUpperBound,
   },
   mutations: {
-    setBiosAttributes: (state, biosAttributes) =>
-      (state.biosAttributes = biosAttributes),
+    setBiosAttributes: (state, biosAttributes) => (state.biosAttributes = biosAttributes),
     setNfsImageDirMaxLength: (state, nfsImageDirMaxLength) =>
       (state.nfsImageDirMaxLength = nfsImageDirMaxLength),
     setInitiatorNameMaxLength: (state, initiatorNameMaxLength) =>
@@ -73,16 +72,12 @@ const NetworkSettingsStore = {
       return await api
         .patch('/redfish/v1/Systems/system/Bios/Settings', setDModeObj)
         .then(() => {
-          return i18n.t(
-            'pageServerPowerOperations.modal.networkSettings.toast.successUpdateDMode'
-          );
+          return i18n.t('pageServerPowerOperations.modal.networkSettings.toast.successUpdateDMode');
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t(
-              'pageServerPowerOperations.modal.networkSettings.toast.errorUpdateDMode'
-            )
+            i18n.t('pageServerPowerOperations.modal.networkSettings.toast.errorUpdateDMode'),
           );
         });
     },
@@ -95,15 +90,13 @@ const NetworkSettingsStore = {
         .then(() => {
           dispatch('getBiosAttributes');
           return i18n.t(
-            'pageServerPowerOperations.modal.networkSettings.toast.successRestoreDefault'
+            'pageServerPowerOperations.modal.networkSettings.toast.successRestoreDefault',
           );
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t(
-              'pageServerPowerOperations.modal.networkSettings.toast.errorRestoreDefault'
-            )
+            i18n.t('pageServerPowerOperations.modal.networkSettings.toast.errorRestoreDefault'),
           );
         });
     },
@@ -114,15 +107,13 @@ const NetworkSettingsStore = {
         })
         .then(() => {
           return i18n.t(
-            'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting'
+            'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting',
           );
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t(
-              'pageServerPowerOperations.modal.networkSettings.toast.errorSavedSettings'
-            )
+            i18n.t('pageServerPowerOperations.modal.networkSettings.toast.errorSavedSettings'),
           );
         });
     },
@@ -140,54 +131,46 @@ const NetworkSettingsStore = {
         })
         .then(() => {
           return i18n.t(
-            'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting'
+            'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting',
           );
         })
         .catch((error) => {
           console.log('error', error);
           throw new Error(
-            i18n.t(
-              'pageServerPowerOperations.modal.networkSettings.toast.errorSavedSettings'
-            )
+            i18n.t('pageServerPowerOperations.modal.networkSettings.toast.errorSavedSettings'),
           );
         });
     },
     async getPropertyLimits({ commit }) {
       return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry'
-        )
+        .get('/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry')
         .then(({ data: { RegistryEntries } }) => {
           const nfsImageDir = RegistryEntries.Attributes.filter(
-            (Attribute) =>
-              Attribute.AttributeName == 'pvm_ibmi_nfs_image_directory'
+            (Attribute) => Attribute.AttributeName == 'pvm_ibmi_nfs_image_directory',
           );
           const nfsImageDirMaxLength = nfsImageDir[0].MaxLength;
           commit('setNfsImageDirMaxLength', nfsImageDirMaxLength);
 
           const initiatorName = RegistryEntries.Attributes.filter(
-            (Attribute) =>
-              Attribute.AttributeName == 'pvm_ibmi_iscsi_initiator_name'
+            (Attribute) => Attribute.AttributeName == 'pvm_ibmi_iscsi_initiator_name',
           );
           const initiatorNameMaxLength = initiatorName[0].MaxLength;
           commit('setInitiatorNameMaxLength', initiatorNameMaxLength);
 
           const targetName = RegistryEntries.Attributes.filter(
-            (Attribute) =>
-              Attribute.AttributeName == 'pvm_ibmi_iscsi_target_name'
+            (Attribute) => Attribute.AttributeName == 'pvm_ibmi_iscsi_target_name',
           );
           const targetNameMaxLength = targetName[0].MaxLength;
           commit('setTargetNameMaxLength', targetNameMaxLength);
 
           const targetPort = RegistryEntries.Attributes.filter(
-            (Attribute) =>
-              Attribute.AttributeName == 'pvm_ibmi_iscsi_target_port'
+            (Attribute) => Attribute.AttributeName == 'pvm_ibmi_iscsi_target_port',
           );
           const targetPortUpperBound = targetPort[0].UpperBound;
           commit('setTargetPortUpperBound', targetPortUpperBound);
 
           const vlanTagId = RegistryEntries.Attributes.filter(
-            (Attribute) => Attribute.AttributeName == 'pvm_ibmi_vlan_tag_id'
+            (Attribute) => Attribute.AttributeName == 'pvm_ibmi_vlan_tag_id',
           );
           const vlanTagIdUpperBound = vlanTagId[0].UpperBound;
           commit('setVlanTagIdUpperBound', vlanTagIdUpperBound);

@@ -57,20 +57,14 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store
-      .dispatch('controls/getLastBmcRebootTime')
-      .finally(() => this.endLoader());
+    this.$store.dispatch('controls/getLastBmcRebootTime').finally(() => this.endLoader());
   },
   methods: {
     onClick() {
       this.$store.dispatch('serverBootSettings/getBiosAttributes').then(() => {
         this.$bvModal
           .msgBoxConfirm(
-            `${
-              this.systemDumpActive
-                ? this.$t('pageRebootBmc.modal.confirmMessage2')
-                : ''
-            }
+            `${this.systemDumpActive ? this.$t('pageRebootBmc.modal.confirmMessage2') : ''}
             ${this.$t('pageRebootBmc.modal.confirmMessage')}
             `,
             {
@@ -80,7 +74,7 @@ export default {
                 : this.$t('global.action.confirm'),
               okVariant: this.systemDumpActive ? 'danger' : 'primary',
               cancelTitle: this.$t('global.action.cancel'),
-            }
+            },
           )
           .then((confirmed) => {
             if (confirmed) this.rebootBmc();

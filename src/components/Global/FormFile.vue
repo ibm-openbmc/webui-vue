@@ -1,7 +1,7 @@
 <template>
   <div class="custom-form-file-container">
     <label>
-      <BFormFile
+      <b-form-file
         :id="id"
         v-model="file"
         :accept="accept"
@@ -9,21 +9,14 @@
         :state="state"
         @change="$emit('input', file)"
       >
-      </BFormFile>
+      </b-form-file>
       <slot name="invalid"></slot>
     </label>
     <div v-if="file" class="clear-selected-file px-3 py-2 mt-2">
       {{ file ? file.name : '' }}
-      <BButton
-        variant="light"
-        class="px-2 ms-auto"
-        :disabled="disabled"
-        @click="file = null"
+      <BButton variant="light" class="px-2 ms-auto" :disabled="disabled" @click="file = null"
         ><icon-close :title="t('global.fileUpload.clearSelectedFile')" />
-        <span
-          class="sr-only"
-          >{{ $t('global.fileUpload.clearSelectedFile') }}</span
-        >
+        <span class="sr-only">{{ $t('global.fileUpload.clearSelectedFile') }}</span>
       </BButton>
     </div>
   </div>
@@ -33,9 +26,30 @@
 import { useI18n } from 'vue-i18n';
 import { BFormFile } from 'bootstrap-vue-next';
 import IconClose from '@carbon/icons-vue/es/close/20';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
-const props = defineProps(['id', 'disabled', 'accept', 'state', 'variant']);
+const props = defineProps({
+  id: {
+    type: String,
+    default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  accept: {
+    type: String,
+    default: '',
+  },
+  state: {
+    type: Boolean,
+    default: true,
+  },
+  variant: {
+    type: String,
+    default: 'secondary',
+  },
+});
 console.log(
   'id: ',
   props.id,
@@ -46,13 +60,13 @@ console.log(
   'state: ',
   props.state,
   'variant',
-  props.variant
+  props.variant,
 );
 const { t } = useI18n();
 const file = ref(null);
-const isSecondary = computed(() => {
-  return props.variant === 'secondary';
-});
+// const isSecondary = computed(() => {
+//   return props.variant === 'secondary';
+// });
 </script>
 
 <style lang="scss" scoped>

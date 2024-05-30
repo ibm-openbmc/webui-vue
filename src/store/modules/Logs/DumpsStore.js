@@ -60,12 +60,11 @@ const DumpsStore = {
           '/redfish/v1/Managers/bmc/LogServices/Dump/Actions/LogService.CollectDiagnosticData',
           {
             DiagnosticDataType: 'Manager',
-          }
+          },
         )
         .catch((error) => {
           console.log(error);
-          const messageId =
-            error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
+          const messageId = error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
 
           const message = REGEX_MAPPINGS.resourceInStandby.test(messageId)
             ? i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
@@ -77,18 +76,15 @@ const DumpsStore = {
         });
     },
     async createResourceDump(_, { resourceSelector, resourcePassword }) {
-      const delay = (time) =>
-        new Promise((resolve) => setTimeout(resolve, time));
+      const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
       return await api
         .post(
           '/redfish/v1/Systems/system/LogServices/Dump/Actions/LogService.CollectDiagnosticData',
           {
             DiagnosticDataType: 'OEM',
-            OEMDiagnosticDataType: `Resource_${
-              resourceSelector || ''
-            }_${resourcePassword}`,
-          }
+            OEMDiagnosticDataType: `Resource_${resourceSelector || ''}_${resourcePassword}`,
+          },
         )
         .then(({ data }) => {
           // A half second lag is needed while the backend runs a process
@@ -100,10 +96,8 @@ const DumpsStore = {
           const messageId = data.Messages.filter(
             (message) =>
               REGEX_MAPPINGS.actionParameterUnknown.test(message.MessageId) ||
-              REGEX_MAPPINGS.resourceAtUriUnauthorized.test(
-                message.MessageId
-              ) ||
-              REGEX_MAPPINGS.insufficientPrivilege.test(message.MessageId)
+              REGEX_MAPPINGS.resourceAtUriUnauthorized.test(message.MessageId) ||
+              REGEX_MAPPINGS.insufficientPrivilege.test(message.MessageId),
           )[0]?.MessageId;
 
           if (messageId) {
@@ -112,22 +106,14 @@ const DumpsStore = {
         })
         .catch((error) => {
           const errorMsg = error;
-          if (
-            REGEX_MAPPINGS.resourceInStandby.test(
-              error.response?.data?.error?.code
-            )
-          ) {
+          if (REGEX_MAPPINGS.resourceInStandby.test(error.response?.data?.error?.code)) {
             throw new Error(i18n.t('pageDumps.toast.errorPhypInStandby'));
           }
           switch (true) {
             case REGEX_MAPPINGS.actionParameterUnknown.test(errorMsg):
-              throw new Error(
-                i18n.t('pageDumps.toast.errorStartResourceDumpInvalidSelector')
-              );
+              throw new Error(i18n.t('pageDumps.toast.errorStartResourceDumpInvalidSelector'));
             case REGEX_MAPPINGS.resourceAtUriUnauthorized.test(errorMsg):
-              throw new Error(
-                i18n.t('pageDumps.toast.errorStartResourceDumpInvalidPassword')
-              );
+              throw new Error(i18n.t('pageDumps.toast.errorStartResourceDumpInvalidPassword'));
             case REGEX_MAPPINGS.insufficientPrivilege.test(errorMsg):
               throw new Error(i18n.t('global.toast.unAuthDescription'));
             default:
@@ -142,25 +128,24 @@ const DumpsStore = {
           {
             DiagnosticDataType: 'OEM',
             OEMDiagnosticDataType: 'System',
-          }
+          },
         )
         .catch((error) => {
           console.log(error);
-          const errorMsg =
-            error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
+          const errorMsg = error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
 
           switch (true) {
             case REGEX_MAPPINGS.resourceInUse.test(errorMsg):
               throw new Error(
                 i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
                   dump: dumpType,
-                })
+                }),
               );
             case REGEX_MAPPINGS.resourceInStandby.test(errorMsg):
               throw new Error(
                 i18n.t('pageDumps.toast.errorStartDumpResourceInStandby', {
                   dump: dumpType,
-                })
+                }),
               );
             default:
               throw new Error(i18n.t('pageDumps.toast.errorStartSystemDump'));
@@ -172,7 +157,7 @@ const DumpsStore = {
         api.delete(location).catch((error) => {
           console.log(error);
           return error;
-        })
+        }),
       );
       return await api
         .all(promises)
@@ -186,40 +171,30 @@ const DumpsStore = {
             const toastMessages = [];
 
             if (successCount) {
-              const message = i18n.tc(
-                'pageDumps.toast.successDeleteDump',
-                successCount
-              );
+              const message = i18n.tc('pageDumps.toast.successDeleteDump', successCount);
               toastMessages.push({ type: 'success', message });
             }
 
             if (errorCount) {
-              const message = i18n.tc(
-                'pageDumps.toast.errorDeleteDump',
-                errorCount
-              );
+              const message = i18n.tc('pageDumps.toast.errorDeleteDump', errorCount);
               toastMessages.push({ type: 'error', message });
             }
 
             return toastMessages;
-          })
+          }),
         );
     },
     async deleteAllDumps({ commit, state }) {
       const totalDumpCount = state.allDumps.length;
       return await api
-        .post(
-          '/redfish/v1/Managers/bmc/LogServices/Dump/Actions/LogService.ClearLog'
-        )
+        .post('/redfish/v1/Managers/bmc/LogServices/Dump/Actions/LogService.ClearLog')
         .then(() => {
           commit('setAllDumps', []);
           return i18n.tc('pageDumps.toast.successDeleteDump', totalDumpCount);
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(
-            i18n.tc('pageDumps.toast.errorDeleteDump', totalDumpCount)
-          );
+          throw new Error(i18n.tc('pageDumps.toast.errorDeleteDump', totalDumpCount));
         });
     },
   },

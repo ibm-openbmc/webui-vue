@@ -6,9 +6,7 @@
         <alert variant="info" class="mb-4">
           <span>
             {{ $t('pageDateTime.alert.message') }}
-            <b-link to="/profile-settings">
-              {{ $t('pageDateTime.alert.link') }}</b-link
-            >
+            <b-link to="/profile-settings"> {{ $t('pageDateTime.alert.link') }}</b-link>
           </span>
         </alert>
       </b-col>
@@ -61,10 +59,7 @@
           </b-form-radio>
           <b-row class="mt-3 ml-3">
             <b-col sm="6" lg="4" xl="3">
-              <b-form-group
-                :label="$t('pageDateTime.form.date')"
-                label-for="input-manual-date"
-              >
+              <b-form-group :label="$t('pageDateTime.form.date')" label-for="input-manual-date">
                 <b-form-text id="date-format-help">{{
                   $t('global.calendar.dateFormat')
                 }}</b-form-text>
@@ -93,9 +88,7 @@
                     right
                     :hide-header="true"
                     :locale="locale"
-                    :label-help="
-                      $t('global.calendar.useCursorKeysToNavigateCalendarDates')
-                    "
+                    :label-help="$t('global.calendar.useCursorKeysToNavigateCalendarDates')"
                     :title="$t('global.calendar.selectDate')"
                     :disabled="ntpOptionSelected"
                     button-variant="link"
@@ -216,11 +209,7 @@
               </b-form-group>
             </b-col>
           </b-row>
-          <b-button
-            variant="primary"
-            type="submit"
-            data-test-id="dateTime-button-saveSettings"
-          >
+          <b-button variant="primary" type="submit" data-test-id="dateTime-button-saveSettings">
             {{ $t('global.action.save') }}
           </b-button>
         </b-form-group>
@@ -249,12 +238,7 @@ const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 export default {
   name: 'DateTime',
   components: { Alert, IconCalendar, PageTitle, PageSection },
-  mixins: [
-    BVToastMixin,
-    LoadingBarMixin,
-    LocalTimezoneLabelMixin,
-    VuelidateMixin,
-  ],
+  mixins: [BVToastMixin, LoadingBarMixin, LocalTimezoneLabelMixin, VuelidateMixin],
   beforeRouteLeave(to, from, next) {
     this.hideLoader();
     next();
@@ -340,7 +324,7 @@ export default {
     },
     bmcTime() {
       this.form.manual.date = this.$options.filters.formatDate(
-        this.$store.getters['global/bmcTime']
+        this.$store.getters['global/bmcTime'],
       );
       this.form.manual.time = this.$options.filters
         .formatTime(this.$store.getters['global/bmcTime'])
@@ -367,9 +351,7 @@ export default {
       });
     },
     setNtpValues() {
-      this.form.configurationSelected = this.isNtpProtocolEnabled
-        ? 'ntp'
-        : 'manual';
+      this.form.configurationSelected = this.isNtpProtocolEnabled ? 'ntp' : 'manual';
       [
         this.form.ntp.firstAddress = '',
         this.form.ntp.secondAddress = '',
@@ -413,7 +395,6 @@ export default {
         const ntpArrayFiltered = ntpArray.filter((x) => x);
 
         dateTimeForm.ntpServersArray = [...ntpArrayFiltered];
-
         [this.ntpServers[0], this.ntpServers[1], this.ntpServers[2]] = [
           ...dateTimeForm.ntpServersArray,
         ];
@@ -464,7 +445,7 @@ export default {
         parseInt(datesArray[1]) - 1, // User input month
         datesArray[2], // User input day
         timeArray[0], // User input hour
-        timeArray[1] // User input minute
+        timeArray[1], // User input minute
       );
       return new Date(utcDate);
     },

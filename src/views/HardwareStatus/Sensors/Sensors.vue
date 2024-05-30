@@ -28,10 +28,7 @@
           @clear-selected="clearSelectedRows($refs.table)"
         >
           <template #toolbar-buttons>
-            <table-toolbar-export
-              :data="selectedRows"
-              :file-name="exportFileNameByDate()"
-            />
+            <table-toolbar-export :data="selectedRows" :file-name="exportFileNameByDate()" />
           </template>
         </table-toolbar>
         <b-table
@@ -81,21 +78,11 @@
           <template #cell(status)="{ value }">
             <status-icon :status="statusIcon(value)" /> {{ value }}
           </template>
-          <template #cell(currentValue)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-          <template #cell(lowerCaution)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-          <template #cell(upperCaution)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-          <template #cell(lowerCritical)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-          <template #cell(upperCritical)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
+          <template #cell(currentValue)="data"> {{ data.value }} {{ data.item.units }} </template>
+          <template #cell(lowerCaution)="data"> {{ data.value }} {{ data.item.units }} </template>
+          <template #cell(upperCaution)="data"> {{ data.value }} {{ data.item.units }} </template>
+          <template #cell(lowerCritical)="data"> {{ data.value }} {{ data.item.units }} </template>
+          <template #cell(upperCritical)="data"> {{ data.value }} {{ data.item.units }} </template>
         </b-table>
       </b-col>
     </b-row>
@@ -150,9 +137,7 @@ import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
+import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
 export default {
   name: 'Sensors',
   components: {
@@ -230,9 +215,7 @@ export default {
       return this.$store.getters['sensors/sensors'];
     },
     filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.filteredSensors.length;
+      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredSensors.length;
     },
     filteredSensors() {
       return this.getFilteredTableData(this.allSensors, this.activeFilters);
@@ -264,9 +247,7 @@ export default {
       // Create export file name based on date
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
       return this.$t('pageSensors.exportFilePrefix') + date;
     },
   },

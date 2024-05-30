@@ -1,11 +1,11 @@
-const useVuelidateComposable = () =>{
-  const  getValidationState = (model) => {
+const useVuelidateComposable = () => {
+  const getValidationState = (model) => {
     const { $dirty, $error } = model;
     return $dirty ? !$error : null;
-  }
-    return {
-        getValidationState
-    }
+  };
+  return {
+    getValidationState,
+  };
 };
 
 export default useVuelidateComposable;

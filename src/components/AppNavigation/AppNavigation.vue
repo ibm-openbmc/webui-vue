@@ -17,7 +17,7 @@
             </BNavItem>
 
             <!-- Navigation items with children -->
-            <li v-else class="nav-item">
+            <li v-else :key="`${navItem.id}`" class="nav-item">
               <BButton
                 v-b-toggle="`${navItem.id}`"
                 variant="link"
@@ -25,12 +25,9 @@
               >
                 <component :is="navItem.icon" />
                 {{ navItem.label }}
-                <Icon-Chevron-Up class="icon-expand" />
+                <icon-chevron-up class="icon-expand" />
               </BButton>
-              <BCollapse
-                :id="navItem.id"
-                class="nav-item__nav"
-              >
+              <BCollapse :id="navItem.id" class="nav-item__nav">
                 <li class="">
                   <router-link
                     v-for="(subNavItem, i) of filteredNavItem(navItem.children)"
@@ -49,18 +46,13 @@
       </nav>
     </div>
     <transition name="fade">
-      <div
-        v-if="isNavigationOpen"
-        id="nav-overlay"
-        class="nav-overlay"
-        @click="toggleIsOpen"
-      ></div>
+      <div v-if="isNavigationOpen" id="nav-overlay" class="nav-overlay" @click="toggleIsOpen"></div>
     </transition>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, provide, inject } from 'vue';
+import { ref, watch } from 'vue';
 import { AppNavigationData } from './AppNavigationData';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -76,24 +68,28 @@ let isNavigationOpen = ref(false);
 const route = useRoute();
 let currentUserRole = ref(null);
 onMounted(() => {
-  currentUserRole = globalStore.userPrivilege;
-  eventBus.on('toggle-navigation', toggleIsOpen)
+  currentUserRole.value = globalStore.userPrivilege;
+  eventBus.on('toggle-navigation', toggleIsOpen);
 });
 // provide('isNavigationOpen', isNavigationOpen);
 watch(route, () => {
-  isNavigationOpen = false;
+  isNavigationOpen.value = false;
 });
 watch(isNavigationOpen, () => {
-  eventBus.emit('change-is-navigation-open',  () => { isNavigationOpen });
+  eventBus.emit('change-is-navigation-open', () => {
+    isNavigationOpen;
+  });
 });
-const toggleIsOpen = (() => {
+const toggleIsOpen = () => {
   isNavigationOpen.value = !isNavigationOpen.value;
-  eventBus.emit('change-is-navigation-open', () => { isNavigationOpen.value });
-});
+  eventBus.emit('change-is-navigation-open', () => {
+    isNavigationOpen.value;
+  });
+};
 // provide('toggle-navigation', toggleIsOpen);
 
 const filteredNavItem = (navItem) => {
-  if (currentUserRole) {
+  if (currentUserRole.value) {
     return navItem.filter(({ exclusiveToRoles }) => {
       if (!exclusiveToRoles?.length) return true;
       return exclusiveToRoles.includes(currentUserRole);
@@ -174,7 +170,7 @@ svg {
   color: #3f3f3f;
 
   &:hover {
-    background-color: #dadada;;
+    background-color: #dadada;
     color: #161616;
   }
 
@@ -193,7 +189,7 @@ svg {
 .nav-nochild {
   color: #3f3f3f !important;
   &:hover {
-    background-color: #dadada;;
+    background-color: #dadada;
     color: #161616;
   }
 
@@ -279,9 +275,9 @@ svg {
     transition-timing-function: cubic-bezier(0, 0, 0.38, 0.9);
   }
 
-   @include media-breakpoint-up($responsive-layout-bp) {
-      transition-duration: 70ms;
-      transform: translateX(0);
+  @include media-breakpoint-up($responsive-layout-bp) {
+    transition-duration: 70ms;
+    transform: translateX(0);
   }
 }
 
@@ -309,7 +305,7 @@ svg {
   }
 
   @include media-breakpoint-up($responsive-layout-bp) {
-  display: none;
+    display: none;
   }
 }
 </style>

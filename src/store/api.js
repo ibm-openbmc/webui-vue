@@ -34,22 +34,25 @@ api.interceptors.response.use(undefined, (error) => {
 
   return Promise.reject(error);
 });
-
+const constructUrl = (path) => {
+  const basePath = '/api'; // The base path for your API
+  return `${basePath}${path}`;
+};
 export default {
   get(path, config) {
-    return api.get('api' + path, config);
+    return api.get(constructUrl(path), config);
   },
   delete(path, config) {
-    return api.delete('api' + path, config);
+    return api.delete(constructUrl(path), config);
   },
   post(path, payload, config) {
-    return api.post('api' + path, payload, config);
+    return api.post(constructUrl(path), payload, config);
   },
   patch(path, payload, config) {
-    return api.patch('api' + path, payload, config);
+    return api.patch(constructUrl(path), payload, config);
   },
   put(path, payload, config) {
-    return api.put('api' + path, payload, config);
+    return api.put(constructUrl(path), payload, config);
   },
   all(promises) {
     return Axios.all(promises);

@@ -9,11 +9,7 @@
     </b-row>
     <b-row>
       <b-col class="text-right" md="9">
-        <b-btn
-          variant="primary"
-          :disabled="!isServiceEnabled"
-          @click="initRoleGroupModal(null)"
-        >
+        <b-btn variant="primary" :disabled="!isServiceEnabled" @click="initRoleGroupModal(null)">
           <icon-add />
           {{ $t('pageLdap.addRoleGroup') }}
         </b-btn>
@@ -189,15 +185,12 @@ export default {
     onBatchAction() {
       this.$bvModal
         .msgBoxConfirm(
-          this.$tc(
-            'pageLdap.modal.deleteRoleGroupBatchConfirmMessage',
-            this.selectedRows.length
-          ),
+          this.$tc('pageLdap.modal.deleteRoleGroupBatchConfirmMessage', this.selectedRows.length),
           {
             title: this.$t('pageLdap.modal.deleteRoleGroup'),
             okTitle: this.$t('global.action.delete'),
             cancelTitle: this.$t('global.action.cancel'),
-          }
+          },
         )
         .then((deleteConfirmed) => {
           if (deleteConfirmed) {
@@ -227,7 +220,7 @@ export default {
                 title: this.$t('pageLdap.modal.deleteRoleGroup'),
                 okTitle: this.$t('global.action.delete'),
                 cancelTitle: this.$t('global.action.cancel'),
-              }
+              },
             )
             .then((deleteConfirmed) => {
               if (deleteConfirmed) {

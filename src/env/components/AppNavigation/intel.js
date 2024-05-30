@@ -2,8 +2,8 @@ import iconDashboard from '@carbon/icons-vue/es/dashboard/16';
 import iconTextLinkAnalysis from '@carbon/icons-vue/es/text-link--analysis/16';
 import iconDataCheck from '@carbon/icons-vue/es/data--check/16';
 import iconSettings from '@carbon/icons-vue/es/settings/16';
-import iconSecurity from '@carbon/icons-vue/es/security/16';
-import iconDataBase from '@carbon/icons-vue/es/data--base--alt/16';
+// import iconSecurity from '@carbon/icons-vue/es/security/16';
+// import iconDataBase from '@carbon/icons-vue/es/data--base--alt/16';
 import i18n from '@/i18n';
 const roles = {
   administrator: 'Administrator',

@@ -2,10 +2,7 @@
   <b-alert :show="show" :variant="variant" :class="{ small }">
     <div
       v-if="
-        variant == 'info' ||
-        variant == 'success' ||
-        variant == 'warning' ||
-        variant == 'danger'
+        variant == 'info' || variant == 'success' || variant == 'warning' || variant == 'danger'
       "
       class="alert-icon"
     >
@@ -27,6 +24,7 @@ import StatusIcon from '@/components/Global/StatusIcon';
 import { BAlert } from 'bootstrap-vue';
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Alert',
   components: {
     BAlert: BAlert,

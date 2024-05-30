@@ -19,28 +19,24 @@ const PowerPolicyStore = {
   },
   actions: {
     async getPowerRestorePolicies({ commit }) {
-      return await api
-        .get('/redfish/v1/JsonSchemas/ComputerSystem/ComputerSystem.json')
-        .then(
-          ({
-            data: {
-              definitions: { PowerRestorePolicyTypes = {} },
-            },
-          }) => {
-            let powerPoliciesData = PowerRestorePolicyTypes.enum.map(
-              (powerState) => {
-                let desc = `${i18n.t(
-                  `pagePowerRestorePolicy.policies.${powerState}`
-                )} - ${PowerRestorePolicyTypes.enumDescriptions[powerState]}`;
-                return {
-                  state: powerState,
-                  desc,
-                };
-              }
-            );
-            commit('setPowerRestorePolicies', powerPoliciesData);
-          }
-        );
+      return await api.get('/redfish/v1/JsonSchemas/ComputerSystem/ComputerSystem.json').then(
+        ({
+          data: {
+            definitions: { PowerRestorePolicyTypes = {} },
+          },
+        }) => {
+          let powerPoliciesData = PowerRestorePolicyTypes.enum.map((powerState) => {
+            let desc = `${i18n.t(
+              `pagePowerRestorePolicy.policies.${powerState}`,
+            )} - ${PowerRestorePolicyTypes.enumDescriptions[powerState]}`;
+            return {
+              state: powerState,
+              desc,
+            };
+          });
+          commit('setPowerRestorePolicies', powerPoliciesData);
+        },
+      );
     },
     async getPowerRestoreCurrentPolicy({ commit }) {
       return await api
@@ -61,9 +57,7 @@ const PowerPolicyStore = {
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(
-            i18n.t('pagePowerRestorePolicy.toast.errorSaveSettings')
-          );
+          throw new Error(i18n.t('pagePowerRestorePolicy.toast.errorSaveSettings'));
         });
     },
   },

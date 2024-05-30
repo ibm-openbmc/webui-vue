@@ -12,10 +12,7 @@
       <b-row>
         <b-col sm="8">
           <b-form id="role-group" @submit.prevent="handleSubmit">
-            <b-form-group
-              :label="$t('pageLdap.modal.groupName')"
-              label-for="role-group-name"
-            >
+            <b-form-group :label="$t('pageLdap.modal.groupName')" label-for="role-group-name">
               <b-form-input
                 id="role-group-name"
                 v-model="form.groupName"
@@ -27,10 +24,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
 
-            <b-form-group
-              :label="$t('pageLdap.modal.groupPrivilege')"
-              label-for="privilege"
-            >
+            <b-form-group :label="$t('pageLdap.modal.groupPrivilege')" label-for="privilege">
               <b-form-select
                 id="privilege"
                 v-model="form.groupPrivilege"
@@ -98,7 +92,7 @@ export default {
   computed: {
     accountRoles() {
       return this.$store?.getters['userManagement/filteredAccountRoles'].filter(
-        (role) => role !== 'ServiceAgent' && role !== 'Operator'
+        (role) => role !== 'ServiceAgent' && role !== 'Operator',
       );
     },
   },
@@ -129,9 +123,7 @@ export default {
       if (this.$v.$invalid) return;
       this.$emit('ok', {
         addNew: !this.roleGroup,
-        groupNamePreviously: this.roleGroup?.groupName
-          ? this.roleGroup?.groupName
-          : null,
+        groupNamePreviously: this.roleGroup?.groupName ? this.roleGroup?.groupName : null,
         groupName: this.form.groupName,
         groupPrivilege: this.form.groupPrivilege,
       });

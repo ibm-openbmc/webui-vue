@@ -2,9 +2,7 @@
   <b-container fluid="xl">
     <page-title
       :title="$t('appPageTitle.deconfigurationRecords')"
-      :description="
-        $t('pageDeconfigurationRecords.pageDescription.description')
-      "
+      :description="$t('pageDeconfigurationRecords.pageDescription.description')"
       :link="$t('pageDeconfigurationRecords.pageDescription.link')"
       to="/settings/hardware-deconfiguration"
     />
@@ -36,10 +34,7 @@
           @clear-selected="clearSelectedRows($refs.table)"
         >
           <template #toolbar-buttons>
-            <table-toolbar-export
-              :data="batchExportData"
-              :file-name="exportFileNameByDate()"
-            />
+            <table-toolbar-export :data="batchExportData" :file-name="exportFileNameByDate()" />
           </template>
         </table-toolbar>
         <b-table
@@ -84,11 +79,7 @@
                       {{ $t('pageDeconfigurationRecords.table.srcDetails') }}
                       <info-tooltip
                         class="info-icon"
-                        :title="
-                          $t(
-                            'pageDeconfigurationRecords.table.srcDetailsToolTip'
-                          )
-                        "
+                        :title="$t('pageDeconfigurationRecords.table.srcDetailsToolTip')"
                       >
                       </info-tooltip>
                     </dt>
@@ -103,11 +94,7 @@
                     <dd>{{ dataFormatter(item.location) }}</dd>
                   </dl>
                 </b-col>
-                <b-col
-                  v-if="item.additionalDataUri"
-                  cols="4"
-                  class="text-nowrap"
-                >
+                <b-col v-if="item.additionalDataUri" cols="4" class="text-nowrap">
                   <b-button
                     class="btn btn-secondary"
                     target="_blank"
@@ -148,10 +135,10 @@
               value === 'Critical'
                 ? $t('pageDeconfigurationRecords.severityValues.fatal')
                 : value === 'Warning'
-                ? $t('pageDeconfigurationRecords.severityValues.predictive')
-                : value === 'OK'
-                ? $t('pageDeconfigurationRecords.severityValues.manual')
-                : '--'
+                  ? $t('pageDeconfigurationRecords.severityValues.predictive')
+                  : value === 'OK'
+                    ? $t('pageDeconfigurationRecords.severityValues.manual')
+                    : '--'
             }}
           </template>
           <!-- Status column -->
@@ -224,9 +211,7 @@ import BVPaginationMixin, {
   perPage,
   itemsPerPageOptions,
 } from '@/components/Mixins/BVPaginationMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
+import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
 
 export default {
   components: {
@@ -301,10 +286,7 @@ export default {
         {
           key: 'filterByStatus',
           label: this.$t('pageDeconfigurationRecords.table.status'),
-          values: [
-            this.$t('pageEventLogs.resolved'),
-            this.$t('pageEventLogs.unresolved'),
-          ],
+          values: [this.$t('pageEventLogs.resolved'), this.$t('pageEventLogs.unresolved')],
         },
       ],
       activeFilters: [],
@@ -348,39 +330,31 @@ export default {
     },
     clearAllEntries() {
       this.$bvModal
-        .msgBoxConfirm(
-          this.$t('pageDeconfigurationRecords.modal.deleteAllMessage'),
-          {
-            title: this.$t('pageDeconfigurationRecords.modal.deleteAllTitle'),
-            okTitle: this.$t('global.action.delete'),
-            okVariant: 'danger',
-            cancelTitle: this.$t('global.action.cancel'),
-          }
-        )
+        .msgBoxConfirm(this.$t('pageDeconfigurationRecords.modal.deleteAllMessage'), {
+          title: this.$t('pageDeconfigurationRecords.modal.deleteAllTitle'),
+          okTitle: this.$t('global.action.delete'),
+          okVariant: 'danger',
+          cancelTitle: this.$t('global.action.cancel'),
+        })
         .then((deleteConfirmed) => {
           if (deleteConfirmed) {
             this.$store
-              .dispatch(
-                'deconfigurationRecords/clearAllEntries',
-                this.allEntries
-              )
+              .dispatch('deconfigurationRecords/clearAllEntries', this.allEntries)
               .then((message) => this.successToast(message))
               .catch(({ message }) => this.errorToast(message));
           }
         });
     },
     deleteRecords(uris) {
-      this.$store
-        .dispatch('deconfigurationRecords/deleteRecords', uris)
-        .then((messages) => {
-          messages.forEach(({ type, message }) => {
-            if (type === 'success') {
-              this.successToast(message);
-            } else if (type === 'error') {
-              this.errorToast(message);
-            }
-          });
+      this.$store.dispatch('deconfigurationRecords/deleteRecords', uris).then((messages) => {
+        messages.forEach(({ type, message }) => {
+          if (type === 'success') {
+            this.successToast(message);
+          } else if (type === 'error') {
+            this.errorToast(message);
+          }
         });
+      });
     },
     downloadLog(uri, date) {
       this.startLoader();
@@ -397,9 +371,7 @@ export default {
     exportFileNameByDate(value) {
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
       let fileName;
       if (value === 'export') {
         fileName = 'deconfig_record_';
@@ -410,9 +382,7 @@ export default {
     },
     exportAllRecords() {
       {
-        return this.$store.getters[
-          'deconfigurationRecords/deconfigRecords'
-        ].map((records) => {
+        return this.$store.getters['deconfigurationRecords/deconfigRecords'].map((records) => {
           const allDeconfigRecordsString = JSON.stringify(records);
           return allDeconfigRecordsString;
         });
@@ -424,14 +394,11 @@ export default {
     onTableRowAction(action, { uri }) {
       if (action === 'delete') {
         this.$bvModal
-          .msgBoxConfirm(
-            this.$tc('pageDeconfigurationRecords.modal.deleteMessage'),
-            {
-              title: this.$tc('pageDeconfigurationRecords.modal.deleteTitle'),
-              okTitle: this.$t('global.action.delete'),
-              cancelTitle: this.$t('global.action.cancel'),
-            }
-          )
+          .msgBoxConfirm(this.$tc('pageDeconfigurationRecords.modal.deleteMessage'), {
+            title: this.$tc('pageDeconfigurationRecords.modal.deleteTitle'),
+            okTitle: this.$t('global.action.delete'),
+            cancelTitle: this.$t('global.action.cancel'),
+          })
           .then((deleteConfirmed) => {
             if (deleteConfirmed) this.deleteRecords([uri]);
           });

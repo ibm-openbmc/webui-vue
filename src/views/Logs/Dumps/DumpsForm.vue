@@ -1,10 +1,7 @@
 <template>
   <div class="form-background p-3">
     <b-form id="form-new-dump" novalidate @submit.prevent="handleSubmit">
-      <b-form-group
-        :label="$t('pageDumps.form.selectDumpType')"
-        label-for="selectDumpType"
-      >
+      <b-form-group :label="$t('pageDumps.form.selectDumpType')" label-for="selectDumpType">
         <template #label>
           {{ $t('pageDumps.form.selectDumpType') }}
           <info-tooltip :title="$t('pageDumps.form.selectDumpTypeTooltip')" />
@@ -30,13 +27,10 @@
         <b-form-group label-for="resourceSelector">
           <template #label>
             {{ $t('pageDumps.form.resourceSelector') }}
-            <info-tooltip
-              :title="$t('pageDumps.form.resourceSelectorTooltip')"
-            />
+            <info-tooltip :title="$t('pageDumps.form.resourceSelectorTooltip')" />
           </template>
 
-          <b-form-input id="resourceSelector" v-model="resourceSelectorValue">
-          </b-form-input>
+          <b-form-input id="resourceSelector" v-model="resourceSelectorValue"> </b-form-input>
         </b-form-group>
         <template v-if="isServiceUser">
           <b-form-group label-for="password">
@@ -57,25 +51,14 @@
         </template>
       </template>
 
-      <b-button
-        :disabled="isButtonDisabled"
-        variant="primary"
-        type="submit"
-        form="form-new-dump"
-      >
+      <b-button :disabled="isButtonDisabled" variant="primary" type="submit" form="form-new-dump">
         {{ $t('pageDumps.form.initiateDump') }}
       </b-button>
     </b-form>
-    <modal-confirmation
-      @ok="createSystemDump($t(`pageDumps.form.${selectedDumpType}Dump`))"
-    />
+    <modal-confirmation @ok="createSystemDump($t(`pageDumps.form.${selectedDumpType}Dump`))" />
     <modal-partition-dump-confirmation
       :selected="selectedDumpType"
-      @ok="
-        selectedDumpType === 'partition'
-          ? exceuteFunction(22)
-          : exceuteFunction(34)
-      "
+      @ok="selectedDumpType === 'partition' ? exceuteFunction(22) : exceuteFunction(34)"
     />
   </div>
 </template>
@@ -143,14 +126,12 @@ export default {
     isButtonDisabled() {
       if (
         !this.isOSRunning &&
-        (this.selectedDumpType === 'partition' ||
-          this.selectedDumpType === 'retryPartition')
+        (this.selectedDumpType === 'partition' || this.selectedDumpType === 'retryPartition')
       ) {
         return true;
       } else if (
         this.isOSRunning &&
-        (this.selectedDumpType === 'partition' ||
-          this.selectedDumpType === 'retryPartition')
+        (this.selectedDumpType === 'partition' || this.selectedDumpType === 'retryPartition')
       ) {
         if (this.selectedDumpType === 'partition') {
           return this.isFunctionDisabled(22);
@@ -220,7 +201,7 @@ export default {
             this.infoToast(this.$t('pageDumps.toast.successStartDump'), {
               title: this.$t('pageDumps.toast.successStartResourceDumpTitle'),
               timestamp: true,
-            })
+            }),
           )
           .catch(({ message }) => this.errorToast(message));
       }
@@ -232,7 +213,7 @@ export default {
             this.infoToast(this.$t('pageDumps.toast.successStartDump'), {
               title: this.$t('pageDumps.toast.successStartBmcDumpTitle'),
               timestamp: true,
-            })
+            }),
           )
           .catch(({ message }) => this.errorToast(message));
       } else if (this.selectedDumpType === 'partition') {
@@ -272,9 +253,7 @@ export default {
       this.$store
         .dispatch('ibmiServiceFunctions/executeServiceFunction', value)
         .then((message) => {
-          this.infoToast(
-            this.$t('pageDumps.toast.successSavePartitionDumpInfo')
-          );
+          this.infoToast(this.$t('pageDumps.toast.successSavePartitionDumpInfo'));
           this.successToast(message);
         })
         .catch(({ message }) => this.errorToast(message));
@@ -300,7 +279,7 @@ export default {
           this.infoToast(this.$t('pageDumps.toast.successStartDump'), {
             title: this.$t('pageDumps.toast.successStartSystemDumpTitle'),
             timestamp: true,
-          })
+          }),
         )
         .catch(({ message }) => this.errorToast(message));
     },
