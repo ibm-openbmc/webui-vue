@@ -891,6 +891,7 @@
     "uploadServiceLoginCertificate": "Upload service login certificate",
     "username": "Username",
     "alert": {
+      "unauthorizedMessage": "User unauthorized",
       "message": "Invalid username or password"
     },
     "modal": {
