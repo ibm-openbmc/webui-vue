@@ -77,7 +77,13 @@
         <b-row class="section-divider">
           <b-col class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
-              <dt>{{ $t('pagePolicies.vtpm') }}</dt>
+              <dt>
+                {{ $t('pagePolicies.vtpm') }}
+                <info-tooltip :title="$t('global.status.nextReboot')">
+                  <icon-time />
+                </info-tooltip>
+              </dt>
+
               <dd>
                 {{ $t('pagePolicies.vtpmDescription') }}
               </dd>
@@ -210,6 +216,31 @@
             </b-form-checkbox>
           </b-col>
         </b-row>
+        <b-row v-if="isAdminUser || isServiceUser" class="section-divider">
+          <b-col class="d-flex align-items-center justify-content-between">
+            <dl class="mt-3 mr-3 w-75">
+              <dt>{{ $t('pagePolicies.acfUploadEnablement') }}</dt>
+              <dd>
+                {{ $t('pagePolicies.acfUploadEnablementDescription') }}
+              </dd>
+            </dl>
+            <b-form-checkbox
+              id="unauthenticatedACFUploadEnablementSwitch"
+              v-model="unauthenticatedACFUploadEnablementState"
+              data-test-id="policies-toggle-unauthenticatedACFUploadEnablement"
+              switch
+              @change="changeUnauthenticatedACFUploadEnablement"
+            >
+              <span class="sr-only">
+                {{ $t('pagePolicies.usbFirmwareUpdatePolicy') }}
+              </span>
+              <span v-if="unauthenticatedACFUploadEnablementState">
+                {{ $t('global.status.enabled') }}
+              </span>
+              <span v-else>{{ $t('global.status.disabled') }}</span>
+            </b-form-checkbox>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </b-container>
@@ -310,13 +341,23 @@ export default {
         return newValue;
       },
     },
+    unauthenticatedACFUploadEnablementState: {
+      get() {
+        return this.$store.getters['policies/acfUploadEnablement'];
+      },
+      set(newValue) {
+        return newValue;
+      },
+    },
   },
+
   created() {
     this.startLoader();
     Promise.all([
       this.$store.dispatch('policies/getBiosStatus'),
       this.$store.dispatch('policies/getNetworkProtocolStatus'),
       this.$store.dispatch('policies/getUsbFirmwareUpdatePolicyEnabled'),
+      this.$store.dispatch('policies/getUnauthenticatedACFUploadEnablement'),
       this.$store.dispatch('policies/getTpmPolicy'),
       this.$store.dispatch('userManagement/getUsers'),
       this.checkForUserData(),
@@ -370,6 +411,12 @@ export default {
     changeTpmPolicyState(state) {
       this.$store
         .dispatch('policies/saveTpmPolicy', state)
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message));
+    },
+    changeUnauthenticatedACFUploadEnablement(state) {
+      this.$store
+        .dispatch('policies/saveUnauthenticatedACFUploadEnablement', state)
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },

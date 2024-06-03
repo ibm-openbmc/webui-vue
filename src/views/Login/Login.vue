@@ -10,6 +10,11 @@
           {{ $t('pageLogin.alert.message') }}
         </p>
       </alert>
+      <alert class="login-error mb-4" :show="unauthError" variant="danger">
+        <p id="unauth-login-error-alert">
+          {{ $t('pageLogin.alert.unauthorizedMessage') }}
+        </p>
+      </alert>
       <b-form-group label-for="language" :label="$t('pageLogin.language')">
         <b-form-select
           id="language"
@@ -144,6 +149,9 @@ export default {
     authError() {
       return this.$store.getters['authentication/authError'];
     },
+    unauthError() {
+      return this.$store.getters['authentication/unauthError'];
+    },
     loginPageDetails() {
       return this.$store.getters['authentication/loginPageDetails'];
     },
@@ -189,12 +197,18 @@ export default {
             this.$router.push('/change-password');
           } else {
             Promise.all([
-              this.$store.dispatch('userManagement/getUsers'),
               this.$store.dispatch('global/getCurrentUser', username),
               this.$store.dispatch('global/getSystemInfo'),
-            ]).then(() => {
-              this.$router.push('/');
-            });
+            ])
+              .then(() => {
+                this.$router.push('/');
+              })
+              .catch(() => {
+                Promise.all([
+                  this.$store.dispatch('authentication/unauthlogin'),
+                  this.$store.dispatch('authentication/logout'),
+                ]);
+              });
           }
         })
         .catch((error) => console.log(error))

@@ -40,7 +40,7 @@ import SystemParametersStore from './modules/ResourceManagement/SystemParameters
 import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsStore';
 import ConcurrentMaintenanceStore from './modules/HardwareStatus/ConcurrentMaintenanceStore';
 import PcieSlotsStore from './modules/HardwareStatus/PcieSlotsStore';
-
+import FabricAdaptersStore from './modules/HardwareStatus/FabricAdaptersStore';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -85,6 +85,7 @@ export default new Vuex.Store({
     hardwareDeconfiguration: HardwareDeconfigurationStore,
     deconfigurationRecords: DeconfigurationRecordsStore,
     systemParameters: SystemParametersStore,
+    fabricAdapters: FabricAdaptersStore,
   },
   plugins: [WebSocketPlugin],
 });

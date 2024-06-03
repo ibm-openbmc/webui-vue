@@ -52,7 +52,7 @@
       <!-- Status -->
       <template #cell(status)="row">
         {{
-          row.item.statusState === 'Enabled'
+          row.item.status === 'Enabled'
             ? $t('global.status.present')
             : $t('global.status.absent')
         }}

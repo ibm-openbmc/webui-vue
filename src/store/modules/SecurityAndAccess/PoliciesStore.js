@@ -4,6 +4,7 @@ import i18n from '@/i18n';
 const PoliciesStore = {
   namespaced: true,
   state: {
+    acfUploadEnablement: false,
     sshProtocolEnabled: false,
     ipmiProtocolEnabled: false,
     rtadEnabled: 'Disabled',
@@ -14,6 +15,7 @@ const PoliciesStore = {
     hostUsbEnabled: 'Enabled',
   },
   getters: {
+    acfUploadEnablement: (state) => state.acfUploadEnablement,
     sshProtocolEnabled: (state) => state.sshProtocolEnabled,
     ipmiProtocolEnabled: (state) => state.ipmiProtocolEnabled,
     rtadEnabled: (state) => state.rtadEnabled,
@@ -25,6 +27,8 @@ const PoliciesStore = {
     hostUsbEnabled: (state) => state.hostUsbEnabled,
   },
   mutations: {
+    setAcfUploadEnablement: (state, acfUploadEnablement) =>
+      (state.acfUploadEnablement = acfUploadEnablement),
     setSshProtocolEnabled: (state, sshProtocolEnabled) =>
       (state.sshProtocolEnabled = sshProtocolEnabled),
     setIpmiProtocolEnabled: (state, ipmiProtocolEnabled) =>
@@ -61,6 +65,17 @@ const PoliciesStore = {
           commit(
             'setUsbFirmwareUpdatePolicyEnabled',
             response.data.Oem.IBM.USBCodeUpdateEnabled
+          );
+        })
+        .catch((error) => console.log(error));
+    },
+    async getUnauthenticatedACFUploadEnablement({ commit }) {
+      return await api
+        .get('/redfish/v1/AccountService/Accounts/service')
+        .then((response) => {
+          commit(
+            'setAcfUploadEnablement',
+            response?.data?.Oem?.IBM?.ACF?.AllowUnauthACFUpload
           );
         })
         .catch((error) => console.log(error));
@@ -139,6 +154,37 @@ const PoliciesStore = {
           throw new Error(
             i18n.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.t('pagePolicies.usbFirmwareUpdatePolicy'),
+            })
+          );
+        });
+    },
+    async saveUnauthenticatedACFUploadEnablement(
+      { commit },
+      updatedAcfUploadEnablement
+    ) {
+      commit('setAcfUploadEnablement', updatedAcfUploadEnablement);
+      const oem = {
+        Oem: {
+          IBM: {
+            ACF: {
+              AllowUnauthACFUpload: updatedAcfUploadEnablement,
+            },
+          },
+        },
+      };
+      return await api
+        .patch('/redfish/v1/AccountService/Accounts/service', oem)
+        .then(() => {
+          return i18n.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+            policy: i18n.t('pagePolicies.acfUploadEnablement'),
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          commit('setAcfUploadEnablement', !updatedAcfUploadEnablement);
+          throw new Error(
+            i18n.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+              policy: i18n.t('pagePolicies.acfUploadEnablement'),
             })
           );
         });

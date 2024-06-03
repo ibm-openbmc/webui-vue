@@ -25,6 +25,8 @@
         {{ $t('global.passwordValidation.message5') }}
         <br />
         {{ $t('global.passwordValidation.message6') }}
+        <br />
+        {{ $t('global.passwordValidation.message7') }}
       </p>
     </b-tooltip>
   </span>

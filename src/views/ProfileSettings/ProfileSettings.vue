@@ -181,7 +181,16 @@ export default {
       return this.$store.getters['global/isServiceUser'];
     },
     passwordRequirements() {
-      return this.$store.getters['userManagement/accountPasswordRequirements'];
+      if (this.currentUser?.AccountTypes?.includes('IPMI')) {
+        return {
+          minLength: 8,
+          maxLength: 20,
+        };
+      } else {
+        return this.$store.getters[
+          'userManagement/accountPasswordRequirements'
+        ];
+      }
     },
     timezone() {
       return this.localOffset();

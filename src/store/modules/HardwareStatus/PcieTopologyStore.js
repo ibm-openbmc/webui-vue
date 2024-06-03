@@ -428,6 +428,7 @@ const PcieTopologyStore = {
                 cablesData.detailedInfo.downstreamResources = [];
                 cablesData.detailedInfo.upstreamPorts = [];
                 cablesData.detailedInfo.downstreamPorts = [];
+                cablesData.detailedInfo.grandparentUri = '';
                 if (
                   cablesResponse.data.Links?.DownstreamResources &&
                   cablesResponse.data.Links?.DownstreamResources?.length > 0
@@ -585,11 +586,12 @@ const PcieTopologyStore = {
                   cablesResponse.data.Links?.UpstreamPorts &&
                   cablesResponse.data.Links?.UpstreamPorts?.length > 0
                 ) {
-                  const grandparentUri = cablesResponse.data.Links?.UpstreamPorts[0][
+                  const grandparentUrl = cablesResponse.data.Links?.UpstreamPorts[0][
                     '@odata.id'
                   ]
                     .split('/Ports')
                     .shift();
+                  cablesData.detailedInfo.grandparentUri = grandparentUrl;
                   let isAdapterSet = false;
                   if (fabricAdapterInfo.length > 0) {
                     for (
@@ -598,7 +600,7 @@ const PcieTopologyStore = {
                       index++
                     ) {
                       const element = fabricAdapterInfo[index];
-                      if (element.data['@odata.id'] === grandparentUri) {
+                      if (element.data['@odata.id'] === grandparentUrl) {
                         if (element?.portsData?.length > 0) {
                           for (let m = 0; m < element?.portsData?.length; m++) {
                             const singlePort = element?.portsData[m];
@@ -751,21 +753,19 @@ const PcieTopologyStore = {
                         isAdapterSet = true;
                         if (element?.portsData?.length > 0) {
                           for (let m = 0; m < element?.portsData?.length; m++) {
-                            const singlePort = element?.portsData[m];
                             if (
-                              singlePort['@odata.id'] ===
+                              element?.portsData[m]['@odata.id'] ===
                               cablesResponse.data.Links?.DownstreamPorts[0][
                                 '@odata.id'
                               ]
                             ) {
                               cablesData.detailedInfo.downstreamPorts.push({
-                                data: singlePort,
+                                data: element?.portsData[m],
                                 grandParentLocation:
                                   element.data?.Location?.PartLocation
                                     ?.ServiceLabel,
                               });
                             }
-                            break;
                           }
                         }
                       }

@@ -273,13 +273,12 @@ const NetworkStore = {
           );
         });
     },
-    async saveHostname({ state, dispatch }, hostname) {
+    async saveHostname({ state }, hostname) {
       return api
         .patch(
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           hostname
         )
-        .then(dispatch('getEthernetData'))
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.network'),

@@ -94,6 +94,7 @@ export default {
       powerPromise,
       quicklinksPromise,
       serverPromise,
+      this.$store.dispatch('userManagement/getUsers'),
     ]).finally(() => this.endLoader());
   },
 };

@@ -31,7 +31,7 @@ const ProcessorStore = {
           partNumber: PartNumber,
           sparePartNumber: SparePartNumber,
           serialNumber: SerialNumber,
-          statusState: Status.State,
+          status: Status.State,
           model: Model,
           name: Name,
           processorType: ProcessorType,

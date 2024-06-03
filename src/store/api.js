@@ -28,9 +28,10 @@ api.interceptors.response.use(undefined, (error) => {
     // when the action is unauthorized.
     // Hardware deconfiguration is an exception to this
     const url = response.config.url;
+    const notGetMethod = response.config.method !== 'get';
     const coreUrl = 'redfish/v1/Systems/system/Processors';
     const memoryUrl = 'redfish/v1/Systems/system/Memory';
-    if (!(url.includes(coreUrl) || url.includes(memoryUrl)))
+    if (!(url.includes(coreUrl) || url.includes(memoryUrl)) && notGetMethod)
       store.commit('global/setUnauthorized');
   }
 

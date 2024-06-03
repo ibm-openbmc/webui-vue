@@ -1,5 +1,5 @@
 <template>
-  <page-section :section-title="$t('pageInventory.fans')">
+  <page-section :section-title="$t('pageInventory.fabricAdapters')">
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
         <search
@@ -7,10 +7,11 @@
           @clear-search="onClearSearchInput"
         />
       </b-col>
+
       <b-col sm="6" md="3" xl="2">
         <table-cell-count
           :filtered-items-count="filteredRows"
-          :total-number-of-cells="fans.length"
+          :total-number-of-cells="fabricAdapters.length"
         ></table-cell-count>
       </b-col>
     </b-row>
@@ -19,9 +20,9 @@
       no-sort-reset
       hover
       responsive="md"
-      sort-by="name"
+      sort-by="id"
       show-empty
-      :items="fans"
+      :items="fabricAdapters"
       :fields="fields"
       :sort-desc="false"
       :sort-compare="sortCompare"
@@ -35,7 +36,7 @@
       <template #cell(expandRow)="row">
         <b-button
           variant="link"
-          data-test-id="inventory-button-expandFans"
+          data-test-id="inventory-button-expandFabricAdapters"
           :title="expandRowLabel"
           class="btn-icon-only"
           @click="toggleRowDetails(row)"
@@ -44,32 +45,26 @@
           <span class="sr-only">{{ expandRowLabel }}</span>
         </b-button>
       </template>
-      <!-- Name -->
-      <template #cell(name)="row">
-        {{ row.item.name }}
-      </template>
       <!-- Health -->
       <template #cell(health)="{ value }">
         <status-icon :status="statusIcon(value)" />
         {{ value }}
       </template>
-
       <!-- Status -->
       <template #cell(status)="row">
         {{
-          row.item.status === 'Enabled'
-            ? $t('global.status.present')
-            : $t('global.status.absent')
+          row.item.status === 'Absent'
+            ? $t('global.status.absent')
+            : $t('global.status.present')
         }}
       </template>
-
       <!-- Toggle identify LED -->
       <template #cell(identifyLed)="row">
         <b-form-checkbox
+          v-if="hasIdentifyLed(row.item.identifyLed)"
           v-model="row.item.identifyLed"
           name="switch"
           switch
-          :disabled="serverStatus"
           @change="toggleIdentifyLedValue(row.item)"
         >
           <span v-if="row.item.identifyLed">
@@ -77,38 +72,33 @@
           </span>
           <span v-else> {{ $t('global.status.off') }} </span>
         </b-form-checkbox>
+        <div v-else>--</div>
       </template>
-
       <template #row-details="{ item }">
         <b-container fluid>
           <b-row>
             <b-col sm="6" xl="6">
               <dl>
-                <!-- Name -->
                 <dt>{{ $t('pageInventory.table.name') }}</dt>
                 <dd>{{ dataFormatter(item.name) }}</dd>
               </dl>
-              <dl v-if="!isIoExpansionChassis">
-                <!-- Serial number -->
+              <dl>
+                <dt>{{ $t('pageInventory.table.model') }}</dt>
+                <dd>{{ dataFormatter(item.model) }}</dd>
+              </dl>
+              <dl>
                 <dt>{{ $t('pageInventory.table.serialNumber') }}</dt>
                 <dd>{{ dataFormatter(item.serialNumber) }}</dd>
               </dl>
-              <dl v-if="!isIoExpansionChassis">
-                <!-- Part number -->
+            </b-col>
+            <b-col sm="6" xl="6">
+              <dl>
                 <dt>{{ $t('pageInventory.table.partNumber') }}</dt>
                 <dd>{{ dataFormatter(item.partNumber) }}</dd>
               </dl>
-            </b-col>
-            <b-col sm="6" xl="6">
-              <dl v-if="!isIoExpansionChassis">
-                <!-- Spare part number -->
+              <dl>
                 <dt>{{ $t('pageInventory.table.sparePartNumber') }}</dt>
                 <dd>{{ dataFormatter(item.sparePartNumber) }}</dd>
-              </dl>
-              <dl v-if="!isIoExpansionChassis">
-                <!-- Model -->
-                <dt>{{ $t('pageInventory.table.bmcManagerModel') }}</dt>
-                <dd>{{ dataFormatter(item.model) }}</dd>
               </dl>
             </b-col>
           </b-row>
@@ -123,7 +113,6 @@ import PageSection from '@/components/Global/PageSection';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import TableCellCount from '@/components/Global/TableCellCount';
 
-import StatusIcon from '@/components/Global/StatusIcon';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import Search from '@/components/Global/Search';
@@ -136,7 +125,7 @@ import TableRowExpandMixin, {
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
-  components: { IconChevron, PageSection, StatusIcon, Search, TableCellCount },
+  components: { IconChevron, PageSection, Search, TableCellCount },
   mixins: [
     BVToastMixin,
     TableRowExpandMixin,
@@ -152,6 +141,7 @@ export default {
   },
   data() {
     return {
+      created: 0,
       isBusy: true,
       fields: [
         {
@@ -161,8 +151,8 @@ export default {
           sortable: false,
         },
         {
-          key: 'name',
-          label: this.$t('pageInventory.table.name'),
+          key: 'id',
+          label: this.$t('pageInventory.table.id'),
           formatter: this.dataFormatter,
           sortable: true,
         },
@@ -201,47 +191,42 @@ export default {
     filteredRows() {
       return this.searchFilter
         ? this.searchTotalFilteredRows
-        : this.fans.length;
+        : this.fabricAdapters.length;
     },
-    fans() {
-      return this.$store.getters['fan/fans'];
-    },
-    serverStatus() {
-      if (this.chassis.endsWith('chassis')) {
-        return false;
-      } else if (this.$store.getters['global/serverStatus'] !== 'on') {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isIoExpansionChassis() {
-      if (this.chassis.endsWith('chassis')) {
-        return false;
-      } else {
-        return true;
-      }
+    fabricAdapters() {
+      const adapters = this.$store.getters['fabricAdapters/fabricAdapters'];
+      return adapters;
     },
   },
   watch: {
     chassis: function (value) {
-      this.$store.dispatch('fan/getAllFans', { uri: value }).finally(() => {
-        // Emit initial data fetch complete to parent component
-        this.$root.$emit('hardware-status-fans-complete');
-        this.isBusy = false;
-      });
+      this.$store
+        .dispatch('fabricAdapters/getFabricAdaptersInfo', { uri: value })
+        .finally(() => {
+          this.$root.$emit('hardware-status-fabric-adapters-complete');
+          this.isBusy = false;
+        });
     },
   },
   created() {
     this.$store
-      .dispatch('fan/getAllFans', { uri: this.chassis })
+      .dispatch('fabricAdapters/getFabricAdaptersInfo', { uri: this.chassis })
       .finally(() => {
-        // Emit initial data fetch complete to parent component
-        this.$root.$emit('hardware-status-fans-complete');
+        this.$root.$emit('hardware-status-fabric-adapters-complete');
         this.isBusy = false;
       });
   },
   methods: {
+    toggleIdentifyLedValue(row) {
+      this.$store
+        .dispatch('fabricAdapters/updateIdentifyLedValue', {
+          uri: row.uri,
+          memberId: row.id,
+          identifyLed: row.identifyLed,
+        })
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message));
+    },
     sortCompare(a, b, key) {
       if (key === 'health') {
         return this.sortStatus(a, b, key);
@@ -250,13 +235,8 @@ export default {
     onFiltered(filteredItems) {
       this.searchTotalFilteredRows = filteredItems.length;
     },
-    toggleIdentifyLedValue(row) {
-      this.$store
-        .dispatch('fan/updateIdentifyLedValue', {
-          uri: row.uri,
-          identifyLed: row.identifyLed,
-        })
-        .catch(({ message }) => this.errorToast(message));
+    hasIdentifyLed(identifyLed) {
+      return typeof identifyLed === 'boolean';
     },
   },
 };

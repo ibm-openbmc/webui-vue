@@ -73,6 +73,8 @@ const GlobalStore = {
       state.currentUser?.RoleId === 'OemIBMServiceAgent' || !state.currentUser,
     isAdminUser: (state) =>
       state.currentUser?.RoleId === 'Administrator' || !state.currentUser,
+    isReadOnlyUser: (state) =>
+      state.currentUser?.RoleId === 'ReadOnly' || !state.currentUser,
     isAuthorized: (state) => state.isAuthorized,
     isServiceLoginEnabled: (state) => state.isServiceLoginEnabled,
   },
@@ -129,7 +131,7 @@ const GlobalStore = {
         .catch((error) => console.log(error));
     },
     getCurrentUser(
-      { commit, getters },
+      { commit, dispatch, getters },
       username = localStorage.getItem('storedUsername')
     ) {
       if (sessionStorage.getItem('storedCurrentUser')) return;
@@ -142,7 +144,22 @@ const GlobalStore = {
             JSON.stringify(getters.currentUser)
           );
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          return dispatch('getAccountService');
+        });
+    },
+    getAccountService() {
+      return api
+        .get('/redfish/v1/AccountService')
+        .then((response) => {
+          if (response.data?.LDAP?.RemoteRoleMapping?.length > 0) {
+            return Promise.resolve();
+          }
+        })
+        .catch(() => {
+          return Promise.reject();
+        });
     },
     getSystemInfo({ commit }) {
       api
@@ -175,7 +192,10 @@ const GlobalStore = {
             }
           }
         )
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          return Promise.reject();
+        });
     },
     async getBootProgress({ commit }) {
       api

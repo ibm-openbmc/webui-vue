@@ -64,7 +64,8 @@
       "message3": "3. Not contain the account username",
       "message4": "4. Not contain a dictionary word",
       "message5": "5. Not contain sequential characters",
-      "message6": "6. Must be 20 characters or less if used for IPMI"
+      "message6": "6. Must be 20 characters or less if used for IPMI",
+      "message7": "7. Must contain any two from lowercase letters, uppercase letters, digits and other characters"
     },
     "status": {
       "absent": "Absent",
@@ -98,6 +99,7 @@
       "viewAll": "View all"
     },
     "toast": {
+      "minMifMessage": "Minimum firmware level supported",
       "unAuthDescription": "The attempted action is not accessible from the logged in account. Contact your system administrator to check your privilege role.",
       "unAuthTitle": "Unauthorized"
     }
@@ -674,6 +676,7 @@
     "bmcManager": "BMC manager",
     "chassis": "Chassis",
     "dimmSlot": "DIMM slot",
+    "fabricAdapters": "Fabric Adapters",
     "fans": "Fans",
     "identifyLedInfo": "For parts with no LEDs, the Identify LED toggle switch will only turn on the Enclosure LED",
     "pcieSlots": "PCIe slots",
@@ -940,7 +943,7 @@
     "dns": "DNS server",
     "domainName": "domain name",
     "hostname": "Hostname",
-    "hostnameAlert": "You will be logged out when the hostname is changed. Changes will take effect on next log in.",
+    "hostnameAlert": "You will be logged out when the hostname is changed. Changes will take effect on next log in. A browser refresh (or closing the browser) might be required.",
     "interfaceSection": "Interface settings",
     "ipv4": "IPv4",
     "ipv4Addresses": "IPv4 addresses",
@@ -1079,6 +1082,8 @@
       }
   },
   "pagePolicies": {
+    "acfUploadEnablement": "Unauthenticated ACF upload enablement",
+    "acfUploadEnablementDescription": "Allow unauthenticated users to upload ACFs.",
     "hostTpm": "Host TPM",
     "hostTpmDescription": "Enable to ensure the system only boots when the TPM is functional.",
     "hostUsb": "Host USB enablement",
@@ -1277,11 +1282,13 @@
     "serverStatus": "Server status",
     "shutDown": "Shut down",
     "shutdownServer": "Shutdown server",
+    "userRefresh": "Reload the browser page to get the updated content.",
     "biosSettings": {
       "aixLinux": "AIX/LINUX partition boot mode",
       "currentOperatingMode": "Current operating mode %{currOptMode}",
       "defaultPartition": "Default partition environment",
       "ibmIPartition": "IBM i partition boot mode",
+      "nonHMCManaged": "Enabled only when the system is non HMC-managed",
       "powPolicySection": "will be set to %{powerPolicy}",
       "pvm_default_os_type": "Default partition environment",
       "pvm_os_boot_type": "IBM i partition boot mode",

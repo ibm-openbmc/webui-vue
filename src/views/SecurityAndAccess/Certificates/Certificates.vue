@@ -62,6 +62,14 @@
           :items="tableItems"
           :empty-text="$t('global.table.emptyMessage')"
         >
+          <!-- Certificate -->
+          <template #cell(certificate)="row">
+            {{
+              row.item.certificate === 'ServiceLogin Certificate'
+                ? $t('pageCertificates.serviceLoginCertificate')
+                : row.item.certificate
+            }}
+          </template>
           <template #cell(validFrom)="{ value }">
             {{ value | formatDate }}
           </template>

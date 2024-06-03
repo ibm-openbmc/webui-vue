@@ -69,7 +69,9 @@ export default {
       if (this.consoleType === 'bmc-console') status = this.wsConnection;
       if (this.consoleType === 'console1')
         status =
-          this.$store.getters['global/isInPhypStandby'] && this.wsConnection;
+          this.$store.getters['chassis/powerState'] !== 'Off' &&
+          this.wsConnection;
+
       return status;
     },
     serverStatusIcon() {

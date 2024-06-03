@@ -211,16 +211,19 @@
               {{
                 $t('pageServerPowerOperations.biosSettings.defaultPartition')
               }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
             </template>
           </b-table>
           <b-table stacked="sm" hover :items="aixPartitionItems" caption-top>
             <template #table-caption>
               {{ $t('pageServerPowerOperations.biosSettings.aixLinux') }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
             </template>
           </b-table>
           <b-table stacked="sm" hover :items="ibmiItems" caption-top>
             <template #table-caption>
               {{ $t('pageServerPowerOperations.biosSettings.ibmIPartition') }}
+              ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
             </template>
           </b-table>
         </b-collapse>

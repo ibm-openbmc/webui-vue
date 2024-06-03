@@ -40,7 +40,7 @@
               v-model="row.item.settings"
               name="switch"
               switch
-              :disabled="!isServerOff || isBusy"
+              :disabled="!isServerOff || isBusy || isReadOnlyUser"
               @change="toggleSettingsSwitch(row)"
             >
               <span v-if="row.item.settings">
@@ -219,6 +219,9 @@ export default {
     },
     isServerOff() {
       return this.serverStatus === 'off' ? true : false;
+    },
+    isReadOnlyUser() {
+      return this.$store.getters['global/isReadOnlyUser'];
     },
   },
   created() {
