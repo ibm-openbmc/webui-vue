@@ -78,7 +78,7 @@ export default defineConfig({
   },
   server: {
     https: true, // Enable HTTPS
-    port: 8002, // TCP Port 8000 is commonly used for development environments of web server software.
+    port: 8000, // TCP Port 8000 is commonly used for development environments of web server software.
     proxy: {
       // Proxy settings if you need to proxy API requests
       '/api': {
@@ -87,6 +87,14 @@ export default defineConfig({
         // Bypass SSL certificate validation (for development only)
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyRes', (proxyRes) => {
+            const setCookieHeader = proxyRes.headers['set-cookie'];
+            if (setCookieHeader) {
+              proxyRes.headers['set-cookie'] = setCookieHeader.map((cookie) => cookie + '; Path=/');
+            }
+          });
+        },
         // Custom middleware to modify proxy response headers
         onProxyRes: (proxyRes) => {
           // Remove the 'strict-transport-security' header
