@@ -24,13 +24,13 @@ const useToastComposable = () => {
   };
   const successToast = (
     message,
-    { title: t = i18n.global.t('global.status.Success'), timestamp, refreshAction } = {},
+    { title: t = i18n.global.t('global.status.success'), timestamp, refreshAction } = {},
   ) => {
     initToast(t, message, 'success', timestamp, refreshAction);
   };
   const errorToast = (
     message,
-    { title: t = i18n.global.t('global.status.Error'), timestamp, refreshAction } = {},
+    { title: t = i18n.global.t('global.status.error'), timestamp, refreshAction } = {},
   ) => {
     initToast(t, message, 'danger', timestamp, refreshAction);
   };
