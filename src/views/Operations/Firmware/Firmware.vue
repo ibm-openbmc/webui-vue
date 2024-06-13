@@ -1,7 +1,10 @@
 <template>
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.firmware')" />
-    <alerts-server-power v-if="isServerPowerOffRequired" :is-server-off="isServerOff" />
+    <alerts-server-power
+      v-if="isServerPowerOffRequired"
+      :is-server-off="isServerOff"
+    />
 
     <!-- Firmware cards -->
     <b-row>
@@ -19,11 +22,16 @@
     </b-row>
 
     <!-- Update firmware-->
-    <page-section :section-title="$t('pageFirmware.sectionTitleUpdateFirmware')">
+    <page-section
+      :section-title="$t('pageFirmware.sectionTitleUpdateFirmware')"
+    >
       <b-row>
         <b-col class="mb-4" sm="8" md="6" xl="4">
           <!-- Update form -->
-          <form-update :is-page-disabled="isPageDisabled" @loadingStatus="loadingStatus" />
+          <form-update
+            :is-page-disabled="isPageDisabled"
+            @loadingStatus="loadingStatus"
+          />
         </b-col>
         <b-col sm="8" md="6" xl="4">
           <!-- Access key expiration -->
@@ -64,7 +72,8 @@ export default {
   data() {
     return {
       loading,
-      isServerPowerOffRequired: process.env.VUE_APP_SERVER_OFF_REQUIRED === 'true',
+      isServerPowerOffRequired:
+        process.env.VUE_APP_SERVER_OFF_REQUIRED === 'true',
     };
   },
   computed: {

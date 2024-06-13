@@ -2,7 +2,9 @@
   <transition name="slide">
     <div v-if="isToolbarActive" class="toolbar-container">
       <div class="toolbar-content">
-        <p class="toolbar-selected">{{ selectedItemsCount }} {{ $t('global.action.selected') }}</p>
+        <p class="toolbar-selected">
+          {{ selectedItemsCount }} {{ $t('global.action.selected') }}
+        </p>
         <div class="toolbar-actions d-flex">
           <slot name="toolbar-buttons"></slot>
           <b-button
@@ -15,7 +17,11 @@
           >
             {{ action.label }}
           </b-button>
-          <b-button variant="secondary" class="d-block" @click="$emit('clear-selected')">
+          <b-button
+            variant="secondary"
+            class="d-block"
+            @click="$emit('clear-selected')"
+          >
             {{ $t('global.action.cancel') }}
           </b-button>
         </div>

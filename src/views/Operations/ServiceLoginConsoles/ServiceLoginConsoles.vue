@@ -1,7 +1,12 @@
 <template>
   <div :class="isFullWindow ? 'full-window-container' : 'terminal-container'">
     <b-row class="d-flex">
-      <b-col sm="6" lg="5" xl="4" class="d-flex flex-column justify-content-end">
+      <b-col
+        sm="6"
+        lg="5"
+        xl="4"
+        class="d-flex flex-column justify-content-end"
+      >
         <dl class="mb-2" sm="6" md="6">
           <dt class="d-inline font-weight-bold mr-1">
             {{ $t('pageServiceLoginConsoles.status') }}:
@@ -12,7 +17,10 @@
         </dl>
       </b-col>
 
-      <b-col v-if="!isFullWindow" class="d-flex justify-content-end align-items-end">
+      <b-col
+        v-if="!isFullWindow"
+        class="d-flex justify-content-end align-items-end"
+      >
         <b-button variant="link" type="button" @click="openConsoleWindow()">
           <icon-launch />
           {{ $t('global.action.openNewTab') }}

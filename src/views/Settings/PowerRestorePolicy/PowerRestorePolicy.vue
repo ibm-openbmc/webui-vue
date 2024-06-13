@@ -39,7 +39,12 @@
       </b-col>
     </b-row>
 
-    <b-button variant="primary" :disabled="isOperatingModeManual" type="submit" @click="submitForm">
+    <b-button
+      variant="primary"
+      :disabled="isOperatingModeManual"
+      type="submit"
+      @click="submitForm"
+    >
       {{ $t('global.action.save') }}
     </b-button>
   </b-container>
@@ -80,9 +85,10 @@ export default {
     },
     isOperatingModeManual() {
       return (
-        !this.$store.getters['serverBootSettings/biosAttributes']?.pvm_system_operating_mode ||
-        this.$store.getters['serverBootSettings/biosAttributes']?.pvm_system_operating_mode ===
-          'Manual'
+        !this.$store.getters['serverBootSettings/biosAttributes']
+          ?.pvm_system_operating_mode ||
+        this.$store.getters['serverBootSettings/biosAttributes']
+          ?.pvm_system_operating_mode === 'Manual'
       );
     },
   },

@@ -84,7 +84,10 @@
                 <!-- Asset tag -->
                 <dt>
                   {{ $t('pageInventory.table.assetTag') }}
-                  <info-tooltip class="info-icon" :title="$t('pageInventory.table.assetTagInfo')" />
+                  <info-tooltip
+                    class="info-icon"
+                    :title="$t('pageInventory.table.assetTagInfo')"
+                  />
                 </dt>
                 <dd class="mb-2">
                   {{ dataFormatter(item.assetTag) }}
@@ -120,7 +123,9 @@ import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import InfoTooltip from '@/components/Global/InfoTooltip';
 import StatusIcon from '@/components/Global/StatusIcon';
 
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {

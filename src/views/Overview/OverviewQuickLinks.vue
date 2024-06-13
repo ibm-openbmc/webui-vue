@@ -1,3 +1,4 @@
+<!-- TODO: Work Requird -->
 <template>
   <BCard bg-variant="light" border-variant="light">
     <BRow class="d-flex justify-content-between align-items-center">
@@ -26,7 +27,7 @@
 </template>
 
 <script setup>
-import { AuthenticationStore } from '../../store/modules/Authentication/AuthenticationStore';
+import { AuthenticationStore } from '@/store';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 

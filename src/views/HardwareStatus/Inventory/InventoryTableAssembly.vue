@@ -2,7 +2,10 @@
   <page-section :section-title="$t('pageInventory.assemblies')">
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
-        <search @change-search="onChangeSearchInput" @clear-search="onClearSearchInput" />
+        <search
+          @change-search="onChangeSearchInput"
+          @clear-search="onClearSearchInput"
+        />
       </b-col>
       <b-col sm="6" md="3" xl="2">
         <table-cell-count
@@ -46,7 +49,10 @@
       </template>
       <!-- Health -->
       <template #cell(health)="row">
-        <status-icon v-if="isIoExpansionChassis && isPoweredOff" :status="statusIcon('')" />
+        <status-icon
+          v-if="isIoExpansionChassis && isPoweredOff"
+          :status="statusIcon('')"
+        />
         <status-icon v-else :status="statusIcon(row.item.health)" />
         {{
           isIoExpansionChassis && isPoweredOff
@@ -148,16 +154,25 @@
 import PageSection from '@/components/Global/PageSection';
 import Search from '@/components/Global/Search';
 import TableCellCount from '@/components/Global/TableCellCount';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
 import InfoTooltip from '@/components/Global/InfoTooltip';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {
   components: { IconChevron, Search, InfoTooltip, PageSection, TableCellCount },
-  mixins: [BVToastMixin, SearchFilterMixin, TableRowExpandMixin, DataFormatterMixin],
+  mixins: [
+    BVToastMixin,
+    SearchFilterMixin,
+    TableRowExpandMixin,
+    DataFormatterMixin,
+  ],
   props: {
     chassis: {
       type: String,
@@ -212,7 +227,9 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.items.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.items.length;
     },
     assemblies() {
       return this.$store.getters['assemblies/assemblies'];
@@ -262,19 +279,23 @@ export default {
   },
   watch: {
     chassis: function (value) {
-      this.$store.dispatch('assemblies/getAssemblyInfo', { uri: value }).finally(() => {
+      this.$store
+        .dispatch('assemblies/getAssemblyInfo', { uri: value })
+        .finally(() => {
+          // Emit initial data fetch complete to parent component
+          this.$root.$emit('hardware-status-assembly-complete');
+          this.isBusy = false;
+        });
+    },
+  },
+  created() {
+    this.$store
+      .dispatch('assemblies/getAssemblyInfo', { uri: this.chassis })
+      .finally(() => {
         // Emit initial data fetch complete to parent component
         this.$root.$emit('hardware-status-assembly-complete');
         this.isBusy = false;
       });
-    },
-  },
-  created() {
-    this.$store.dispatch('assemblies/getAssemblyInfo', { uri: this.chassis }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      this.$root.$emit('hardware-status-assembly-complete');
-      this.isBusy = false;
-    });
   },
   methods: {
     onFiltered(filteredItems) {

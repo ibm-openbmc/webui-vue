@@ -9,15 +9,18 @@ const BVToastMixin = {
       const statusIcon = this.$createElement('StatusIcon', {
         props: { status },
       });
-      const titleWithIcon = this.$createElement('strong', { class: 'toast-icon' }, [
-        statusIcon,
-        title,
-      ]);
+      const titleWithIcon = this.$createElement(
+        'strong',
+        { class: 'toast-icon' },
+        [statusIcon, title],
+      );
       return titleWithIcon;
     },
     $_BVToastMixin_createBody(messageBody) {
       if (Array.isArray(messageBody)) {
-        return messageBody.map((message) => this.$createElement('p', { class: 'mb-0' }, message));
+        return messageBody.map((message) =>
+          this.$createElement('p', { class: 'mb-0' }, message),
+        );
       } else {
         return [this.$createElement('p', { class: 'mb-0' }, messageBody)];
       }
@@ -52,7 +55,11 @@ const BVToastMixin = {
     },
     successToast(
       message,
-      { title: t = this.$t('global.status.success'), timestamp, refreshAction } = {},
+      {
+        title: t = this.$t('global.status.success'),
+        timestamp,
+        refreshAction,
+      } = {},
     ) {
       const body = this.$_BVToastMixin_createBody(message);
       const title = this.$_BVToastMixin_createTitle(t, 'success');
@@ -62,7 +69,11 @@ const BVToastMixin = {
     },
     errorToast(
       message,
-      { title: t = this.$t('global.status.error'), timestamp, refreshAction } = {},
+      {
+        title: t = this.$t('global.status.error'),
+        timestamp,
+        refreshAction,
+      } = {},
     ) {
       const body = this.$_BVToastMixin_createBody(message);
       const title = this.$_BVToastMixin_createTitle(t, 'danger');
@@ -72,7 +83,11 @@ const BVToastMixin = {
     },
     warningToast(
       message,
-      { title: t = this.$t('global.status.warning'), timestamp, refreshAction } = {},
+      {
+        title: t = this.$t('global.status.warning'),
+        timestamp,
+        refreshAction,
+      } = {},
     ) {
       const body = this.$_BVToastMixin_createBody(message);
       const title = this.$_BVToastMixin_createTitle(t, 'warning');
@@ -82,7 +97,11 @@ const BVToastMixin = {
     },
     infoToast(
       message,
-      { title: t = this.$t('global.status.informational'), timestamp, refreshAction } = {},
+      {
+        title: t = this.$t('global.status.informational'),
+        timestamp,
+        refreshAction,
+      } = {},
     ) {
       const body = this.$_BVToastMixin_createBody(message);
       const title = this.$_BVToastMixin_createTitle(t, 'info');

@@ -22,7 +22,8 @@ const PoliciesStore = {
     vtpmEnabled: (state) => state.vtpmEnabled,
     svleEnabled: (state) => state.svleEnabled,
     tpmPolicyEnabled: (state) => state.tpmPolicyEnabled,
-    usbFirmwareUpdatePolicyEnabled: (state) => state.usbFirmwareUpdatePolicyEnabled,
+    usbFirmwareUpdatePolicyEnabled: (state) =>
+      state.usbFirmwareUpdatePolicyEnabled,
     hostUsbEnabled: (state) => state.hostUsbEnabled,
   },
   mutations: {
@@ -35,10 +36,15 @@ const PoliciesStore = {
     setRtadEnabled: (state, rtadEnabled) => (state.rtadEnabled = rtadEnabled),
     setVtpmEnabled: (state, vtpmEnabled) => (state.vtpmEnabled = vtpmEnabled),
     setSvleEnabled: (state, svleEnabled) => (state.svleEnabled = svleEnabled),
-    setTpmPolicyEnabled: (state, tpmPolicyEnabled) => (state.tpmPolicyEnabled = tpmPolicyEnabled),
-    setUsbFirmwareUpdatePolicyEnabled: (state, usbFirmwareUpdatePolicyEnabled) =>
+    setTpmPolicyEnabled: (state, tpmPolicyEnabled) =>
+      (state.tpmPolicyEnabled = tpmPolicyEnabled),
+    setUsbFirmwareUpdatePolicyEnabled: (
+      state,
+      usbFirmwareUpdatePolicyEnabled,
+    ) =>
       (state.usbFirmwareUpdatePolicyEnabled = usbFirmwareUpdatePolicyEnabled),
-    setHostUsbEnabled: (state, hostUsbEnabled) => (state.hostUsbEnabled = hostUsbEnabled),
+    setHostUsbEnabled: (state, hostUsbEnabled) =>
+      (state.hostUsbEnabled = hostUsbEnabled),
   },
   actions: {
     async getNetworkProtocolStatus({ commit }) {
@@ -56,7 +62,10 @@ const PoliciesStore = {
       return await api
         .get('/redfish/v1/Managers/bmc')
         .then((response) => {
-          commit('setUsbFirmwareUpdatePolicyEnabled', response.data.Oem.IBM.USBCodeUpdateEnabled);
+          commit(
+            'setUsbFirmwareUpdatePolicyEnabled',
+            response.data.Oem.IBM.USBCodeUpdateEnabled,
+          );
         })
         .catch((error) => console.log(error));
     },
@@ -64,7 +73,10 @@ const PoliciesStore = {
       return await api
         .get('/redfish/v1/AccountService/Accounts/service')
         .then((response) => {
-          commit('setAcfUploadEnablement', response?.data?.Oem?.IBM?.ACF?.AllowUnauthACFUpload);
+          commit(
+            'setAcfUploadEnablement',
+            response?.data?.Oem?.IBM?.ACF?.AllowUnauthACFUpload,
+          );
         })
         .catch((error) => console.log(error));
     },
@@ -74,8 +86,14 @@ const PoliciesStore = {
         .then((response) => {
           commit('setRtadEnabled', response.data.Attributes.pvm_rtad);
           commit('setVtpmEnabled', response.data.Attributes.pvm_vtpm);
-          commit('setSvleEnabled', response.data.Attributes.hb_secure_ver_lockin_enabled);
-          commit('setHostUsbEnabled', response.data.Attributes.hb_host_usb_enablement);
+          commit(
+            'setSvleEnabled',
+            response.data.Attributes.hb_secure_ver_lockin_enabled,
+          );
+          commit(
+            'setHostUsbEnabled',
+            response.data.Attributes.hb_host_usb_enablement,
+          );
         })
         .catch((error) => console.log(error));
     },
@@ -140,7 +158,10 @@ const PoliciesStore = {
           );
         });
     },
-    async saveUnauthenticatedACFUploadEnablement({ commit }, updatedAcfUploadEnablement) {
+    async saveUnauthenticatedACFUploadEnablement(
+      { commit },
+      updatedAcfUploadEnablement,
+    ) {
       commit('setAcfUploadEnablement', updatedAcfUploadEnablement);
       const oem = {
         Oem: {

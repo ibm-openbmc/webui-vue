@@ -1,7 +1,9 @@
 <template>
   <b-row>
     <b-col>
-      <page-section :section-title="$t('pageCapacityOnDemand.activation.sectionTitle')">
+      <page-section
+        :section-title="$t('pageCapacityOnDemand.activation.sectionTitle')"
+      >
         <b-row>
           <b-col xl="5" md="6" lg="6" sm="7">
             <alert variant="info" class="mb-4">
@@ -13,13 +15,18 @@
         </b-row>
         <div>
           {{ $t('pageCapacityOnDemand.activation.helperText') }}
-          <b-link target="_blank" href="https://www.ibm.com/servers/eserver/ess">{{
-            accessKeyLink
-          }}</b-link>
+          <b-link
+            target="_blank"
+            href="https://www.ibm.com/servers/eserver/ess"
+            >{{ accessKeyLink }}</b-link
+          >
         </div>
         <b-row>
           <b-col sm="12" md="9" lg="9" xl="8">
-            <b-form class="d-flex align-items-center mt-3" @submit.prevent="submitForm">
+            <b-form
+              class="d-flex align-items-center mt-3"
+              @submit.prevent="submitForm"
+            >
               <b-form-group
                 :label="$t('pageCapacityOnDemand.activation.srLabel')"
                 label-for="input-license-key"
@@ -34,7 +41,9 @@
                     :maxlength="maxLength"
                     :disabled="isActivationDisabled"
                     :state="getValidationState($v.licenseKey)"
-                    :placeholder="$t('pageCapacityOnDemand.activation.placeholder')"
+                    :placeholder="
+                      $t('pageCapacityOnDemand.activation.placeholder')
+                    "
                     @input="$v.licenseKey.$touch()"
                   />
                   <b-form-invalid-feedback role="alert">
@@ -43,7 +52,11 @@
                 </b-input-group>
               </b-form-group>
               <b-col align-self="baseline">
-                <b-button variant="primary" type="submit" :disabled="isActivationDisabled">
+                <b-button
+                  variant="primary"
+                  type="submit"
+                  :disabled="isActivationDisabled"
+                >
                   {{ $t('global.action.activate') }}
                 </b-button>
               </b-col>
@@ -89,7 +102,8 @@ export default {
     },
     isActivationDisabled() {
       if (
-        this.$store.getters['licenses/licenses']?.UAK?.Status?.State === 'Enabled' &&
+        this.$store.getters['licenses/licenses']?.UAK?.Status?.State ===
+          'Enabled' &&
         this.isInPhypStandby
       ) {
         return false;

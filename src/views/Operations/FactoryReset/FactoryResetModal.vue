@@ -11,7 +11,9 @@
     </p>
     <ul class="pl-3 mb-4">
       <li
-        v-for="(item, index) in $t(`pageFactoryReset.modal.${resetType}SettingsList`)"
+        v-for="(item, index) in $t(
+          `pageFactoryReset.modal.${resetType}SettingsList`,
+        )"
         :key="index"
         class="mt-1 mb-1"
       >
@@ -34,13 +36,20 @@
       >
         {{ $t(`pageFactoryReset.modal.resetWarningCheckLabel`) }}
       </b-form-checkbox>
-      <b-form-invalid-feedback role="alert" :state="getValidationState($v.confirm)">
+      <b-form-invalid-feedback
+        role="alert"
+        :state="getValidationState($v.confirm)"
+      >
         {{ $t('global.form.fieldRequired') }}
       </b-form-invalid-feedback>
     </template>
 
     <template #modal-footer="{ cancel }">
-      <b-button variant="secondary" data-test-id="factoryReset-button-cancel" @click="cancel()">
+      <b-button
+        variant="secondary"
+        data-test-id="factoryReset-button-cancel"
+        @click="cancel()"
+      >
         {{ $t('global.action.cancel') }}
       </b-button>
       <b-button

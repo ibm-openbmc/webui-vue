@@ -1,9 +1,9 @@
+// TODO: Work Requird -->
 import Axios from 'axios';
 //Do not change store import.
 //Exact match alias set to support
 //dotenv customizations.
-import { AuthenticationStore } from './modules/Authentication/AuthenticationStore';
-import { GlobalStore } from './modules/GlobalStore';
+import { GlobalStore, AuthenticationStore } from '@/store';
 
 Axios.defaults.headers.common['Accept'] = 'application/json';
 Axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

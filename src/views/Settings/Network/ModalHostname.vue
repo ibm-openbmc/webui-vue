@@ -17,7 +17,10 @@
       </b-row>
       <b-row>
         <b-col sm="6">
-          <b-form-group :label="$t('pageNetwork.hostname')" label-for="hostname">
+          <b-form-group
+            :label="$t('pageNetwork.hostname')"
+            label-for="hostname"
+          >
             <b-form-input
               id="hostname"
               v-model="form.hostname"
@@ -41,7 +44,12 @@
       <b-button variant="secondary" @click="cancel()">
         {{ $t('global.action.cancel') }}
       </b-button>
-      <b-button form="hostname-settings" type="submit" variant="primary" @click="onOk">
+      <b-button
+        form="hostname-settings"
+        type="submit"
+        variant="primary"
+        @click="onOk"
+      >
         {{ $t('global.action.save') }}
       </b-button>
     </template>

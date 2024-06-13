@@ -1,3 +1,4 @@
+//Work Required
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import { resolve, dirname } from 'node:path';
@@ -54,7 +55,10 @@ export default defineConfig({
     VueI18nPlugin({
       /* options */
       // locale messages resource pre-compile option
-      include: resolve(dirname(fileURLToPath(import.meta.url)), './path/to/src/locales/**'),
+      include: resolve(
+        dirname(fileURLToPath(import.meta.url)),
+        './path/to/src/locales/**',
+      ),
     }),
   ],
   css: {
@@ -88,17 +92,17 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy) => {
+          // Custom middleware to modify proxy response headers
           proxy.on('proxyRes', (proxyRes) => {
             const setCookieHeader = proxyRes.headers['set-cookie'];
             if (setCookieHeader) {
-              proxyRes.headers['set-cookie'] = setCookieHeader.map((cookie) => cookie + '; Path=/');
+              proxyRes.headers['set-cookie'] = setCookieHeader.map(
+                (cookie) => cookie + '; Path=/',
+              );
             }
+            // Remove the 'strict-transport-security' header
+            delete proxyRes.headers['strict-transport-security'];
           });
-        },
-        // Custom middleware to modify proxy response headers
-        onProxyRes: (proxyRes) => {
-          // Remove the 'strict-transport-security' header
-          delete proxyRes.headers['strict-transport-security'];
         },
       },
     },
@@ -124,18 +128,20 @@ export default defineConfig({
 
       if (envName !== undefined) {
         if (hasCustomStore) {
-          res.locals.config.resolve.alias['./store$'] = `@/env/store/${envName}.js`;
-          res.locals.config.resolve.alias['../store$'] = `@/env/store/${envName}.js`;
+          res.locals.config.resolve.alias['./store$'] =
+            `@/env/store/${envName}.js`;
+          res.locals.config.resolve.alias['../store$'] =
+            `@/env/store/${envName}.js`;
         }
         if (hasCustomRouter) {
-          res.locals.config.resolve.alias['./routes$'] = `@/env/router/${envName}.js`;
+          res.locals.config.resolve.alias['./routes$'] =
+            `@/env/router/${envName}.js`;
         }
         if (hasCustomAppNav) {
           res.locals.config.resolve.alias['./AppNavigationMixin$'] =
             `@/env/components/AppNavigation/${envName}.js`;
         }
       }
-
       if (process.env.NODE_ENV === 'production') {
         res.locals.config.plugins.push(
           // eslint-disable-next-line no-undef
@@ -156,7 +162,11 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            return id
+              .toString()
+              .split('node_modules/')[1]
+              .split('/')[0]
+              .toString();
           }
         },
       },

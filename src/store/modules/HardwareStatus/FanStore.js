@@ -44,9 +44,13 @@ const FanStore = {
       commit('setFanInfo', []);
       return await api
         .get(`${requestBody.uri}`)
-        .then((response) => api.get(response.data.ThermalSubsystem['@odata.id']))
+        .then((response) =>
+          api.get(response.data.ThermalSubsystem['@odata.id']),
+        )
         .then((response) => api.get(response.data.Fans['@odata.id']))
-        .then(({ data: { Members } }) => Members.map((member) => member['@odata.id']))
+        .then(({ data: { Members } }) =>
+          Members.map((member) => member['@odata.id']),
+        )
         .then((fanIds) => api.all(fanIds.map((fan) => api.get(fan))))
         .then((fans) => {
           const fansData = fans.map((fans) => fans.data);
@@ -71,9 +75,13 @@ const FanStore = {
         .catch((error) => {
           console.log(error);
           if (led.identifyLed) {
-            throw new Error(i18n.t('pageInventory.toast.errorEnableIdentifyLed'));
+            throw new Error(
+              i18n.t('pageInventory.toast.errorEnableIdentifyLed'),
+            );
           } else {
-            throw new Error(i18n.t('pageInventory.toast.errorDisableIdentifyLed'));
+            throw new Error(
+              i18n.t('pageInventory.toast.errorDisableIdentifyLed'),
+            );
           }
         });
     },

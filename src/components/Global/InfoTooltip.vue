@@ -1,5 +1,10 @@
 <template>
-  <b-button v-b-tooltip variant="link" class="btn-tooltip btn-icon-only" :title="title">
+  <b-button
+    v-b-tooltip
+    variant="link"
+    class="btn-tooltip btn-icon-only"
+    :title="title"
+  >
     <slot>
       <icon-tooltip />
     </slot>

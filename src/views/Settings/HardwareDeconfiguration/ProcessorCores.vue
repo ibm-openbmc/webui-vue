@@ -13,7 +13,10 @@
           @clear-selected="clearSelectedRows($refs.table)"
         >
           <template #toolbar-buttons>
-            <table-toolbar-export :data="selectedRows" :file-name="exportFileNameByDate()" />
+            <table-toolbar-export
+              :data="selectedRows"
+              :file-name="exportFileNameByDate()"
+            />
           </template>
         </table-toolbar>
         <b-table
@@ -56,7 +59,9 @@
               <span v-if="row.item.settings">
                 {{ $t('pageDeconfigurationHardware.configure') }}
               </span>
-              <span v-else>{{ $t('pageDeconfigurationHardware.deconfigure') }}</span>
+              <span v-else>{{
+                $t('pageDeconfigurationHardware.deconfigure')
+              }}</span>
             </b-form-checkbox>
           </template>
         </b-table>
@@ -110,7 +115,9 @@ import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
 export default {
   name: 'ProcessorCores',
   components: {
@@ -169,7 +176,9 @@ export default {
           key: 'deconfigurationType',
           sortable: true,
           formatter: this.dataFormatter,
-          label: this.$t('pageDeconfigurationHardware.table.deconfigurationType'),
+          label: this.$t(
+            'pageDeconfigurationHardware.table.deconfigurationType',
+          ),
         },
         {
           key: 'settings',
@@ -181,7 +190,9 @@ export default {
       tableFilters: [
         {
           key: 'deconfigurationType',
-          label: this.$t('pageDeconfigurationHardware.table.deconfigurationType'),
+          label: this.$t(
+            'pageDeconfigurationHardware.table.deconfigurationType',
+          ),
           values: [
             this.$t('pageDeconfigurationHardware.table.filter.byAssociation'),
             this.$t('pageDeconfigurationHardware.table.filter.error'),
@@ -212,7 +223,9 @@ export default {
       return this.$store.getters['hardwareDeconfiguration/cores'];
     },
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredCores.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.filteredCores.length;
     },
     filteredCores() {
       return this.getFilteredTableData(this.allCores, this.activeFilters);
@@ -229,10 +242,12 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store.dispatch('hardwareDeconfiguration/getProcessors').finally(() => {
-      this.endLoader();
-      this.isBusy = false;
-    });
+    this.$store
+      .dispatch('hardwareDeconfiguration/getProcessors')
+      .finally(() => {
+        this.endLoader();
+        this.isBusy = false;
+      });
   },
   methods: {
     onFilterChange({ activeFilters }) {

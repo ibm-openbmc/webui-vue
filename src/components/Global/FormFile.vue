@@ -14,9 +14,15 @@
     </label>
     <div v-if="file" class="clear-selected-file px-3 py-2 mt-2">
       {{ file ? file.name : '' }}
-      <BButton variant="light" class="px-2 ms-auto" :disabled="disabled" @click="file = null"
+      <BButton
+        variant="light"
+        class="px-2 ms-auto"
+        :disabled="disabled"
+        @click="file = null"
         ><icon-close :title="t('global.fileUpload.clearSelectedFile')" />
-        <span class="sr-only">{{ $t('global.fileUpload.clearSelectedFile') }}</span>
+        <span class="sr-only">{{
+          $t('global.fileUpload.clearSelectedFile')
+        }}</span>
       </BButton>
     </div>
   </div>

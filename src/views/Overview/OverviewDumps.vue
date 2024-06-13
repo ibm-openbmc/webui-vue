@@ -1,3 +1,4 @@
+<!-- TODO: Work Requird -->
 <template>
   <overview-card
     :data="dumps"
@@ -41,7 +42,9 @@ export default {
       // Create export file name based on date
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) +
+        '_' +
+        date.toString().split(':').join('-').split(' ')[4];
       let fileName = 'all_dumps_';
       return fileName + date;
     },

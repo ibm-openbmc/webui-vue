@@ -49,7 +49,11 @@
       </b-row>
       <b-row>
         <b-col class="text-right">
-          <b-button variant="primary" :disabled="isTablesDisabled" @click="initIpv6Modal()">
+          <b-button
+            variant="primary"
+            :disabled="isTablesDisabled"
+            @click="initIpv6Modal()"
+          >
             <icon-add />
             {{ $t('pageNetwork.table.addIpv6Address') }}
           </b-button>
@@ -153,13 +157,15 @@ export default {
       return this.$store.getters['network/selectedInterfaceIndex'];
     },
     ipv6DefaultGateway() {
-      return this.$store.getters['network/networkSettings'][this.selectedInterface]
-        .ipv6DefaultGateway;
+      return this.$store.getters['network/networkSettings'][
+        this.selectedInterface
+      ].ipv6DefaultGateway;
     },
     dhcpEnabledState: {
       get() {
-        return this.$store.getters['network/networkSettings'][this.selectedInterface]
-          .ipv6OperatingMode === 'Enabled'
+        return this.$store.getters['network/networkSettings'][
+          this.selectedInterface
+        ].ipv6OperatingMode === 'Enabled'
           ? true
           : false;
       },
@@ -169,8 +175,9 @@ export default {
     },
     ipv6AutoConfigState: {
       get() {
-        return this.$store.getters['network/networkSettings'][this.selectedInterface]
-          .ipv6AutoConfigEnabled;
+        return this.$store.getters['network/networkSettings'][
+          this.selectedInterface
+        ].ipv6AutoConfigEnabled;
       },
       set(newValue) {
         return newValue;

@@ -1,7 +1,12 @@
+<!-- Work Requird -->
 <template>
   <div>
     <header id="page-header">
-      <a class="link-skip-nav btn btn-light" href="#main-content" @click="setFocus">
+      <a
+        class="link-skip-nav btn btn-light"
+        href="#main-content"
+        @click="setFocus"
+      >
         {{ t('appHeader.skipToContent') }}
       </a>
 
@@ -16,8 +21,14 @@
           :class="{ open: isNavigationOpen }"
           @click="handleToggleNavigation"
         >
-          <icon-close v-if="isNavigationOpen" :title="t('appHeader.titleHideNavigation')" />
-          <icon-menu v-if="!isNavigationOpen" :title="t('appHeader.titleShowNavigation')" />
+          <icon-close
+            v-if="isNavigationOpen"
+            :title="t('appHeader.titleHideNavigation')"
+          />
+          <icon-menu
+            v-if="!isNavigationOpen"
+            :title="t('appHeader.titleShowNavigation')"
+          />
         </BButton>
         <BNavbarNav>
           <BNavbarBrand
@@ -42,7 +53,10 @@
         </BNavbarNav>
         <!-- Right aligned nav items -->
         <BNavbarNav class="ms-auto helper-menu">
-          <BNavItem to="/logs/eventBus-logs" data-test-id="appHeader-container-health">
+          <BNavItem
+            to="/logs/eventBus-logs"
+            data-test-id="appHeader-container-health"
+          >
             <status-icon :status="healthStatusIcon" />
             {{ t('appHeader.health') }}
           </BNavItem>
@@ -76,10 +90,15 @@
                 <icon-avatar :title="t('appHeader.titleProfile')" />
                 <span class="responsive-text">{{ username }}</span>
               </template>
-              <BDropdownItem to="/profile-settings" data-test-id="appHeader-link-profile"
+              <BDropdownItem
+                to="/profile-settings"
+                data-test-id="appHeader-link-profile"
                 >{{ t('appHeader.profileSettings') }}
               </BDropdownItem>
-              <BDropdownItem data-test-id="appHeader-link-logout" @click="logout">
+              <BDropdownItem
+                data-test-id="appHeader-link-logout"
+                @click="logout"
+              >
                 {{ t('appHeader.logOut') }}
               </BDropdownItem>
             </BDropdown>
@@ -100,9 +119,7 @@ import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '../Global/StatusIcon.vue';
 // import LoadingBar from '../Global/LoadingBar.vue';
-import { AuthenticationStore } from '../../store/modules/Authentication/AuthenticationStore';
-import { GlobalStore } from '../../store/modules/GlobalStore';
-import { EventLogStore } from '../../store/modules/Logs/EventLogStore';
+import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import useToastComposable from '@/components/Composables/useToastComposable';
@@ -134,7 +151,7 @@ const getEvents = () => {
   eventLogStore.getEventLogData();
 };
 //commented due to cookies values are not getting
-// authenticationStore.resetStoreState();
+authenticationStore.resetStoreState();
 getSystemInfo();
 getEvents();
 

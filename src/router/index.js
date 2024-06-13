@@ -1,7 +1,7 @@
+//TODO: Work Requird -->
 import { createRouter, createWebHistory } from 'vue-router';
 import routes from './routes';
-import { GlobalStore } from '../store/modules/GlobalStore';
-import { AuthenticationStore } from '../store/modules/Authentication/AuthenticationStore';
+import { GlobalStore, AuthenticationStore } from '@/store';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

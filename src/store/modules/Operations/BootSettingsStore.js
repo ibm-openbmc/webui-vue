@@ -33,11 +33,14 @@ const BootSettingsStore = {
     biosAttributes: (state) => state.biosAttributes,
     bootFaultValue: (state) => state.bootFault,
     powerRestorePolicyValue: (state) => state.powerRestorePolicyValue,
-    systemDumpActive: (state) => state.biosAttributes?.pvm_sys_dump_active === 'Enabled',
+    systemDumpActive: (state) =>
+      state.biosAttributes?.pvm_sys_dump_active === 'Enabled',
     disabled: (state) => state.disabled,
     linuxKvmPercentageValue: (state) => state.linuxKvmPercentageValue,
-    linuxKvmPercentageInitialValue: (state) => state.linuxKvmPercentageInitialValue,
-    linuxKvmPercentageCurrentValue: (state) => state.linuxKvmPercentageCurrentValue,
+    linuxKvmPercentageInitialValue: (state) =>
+      state.linuxKvmPercentageInitialValue,
+    linuxKvmPercentageCurrentValue: (state) =>
+      state.linuxKvmPercentageCurrentValue,
     locationCodes: (state) => state.locationCodes,
     ibmiLoadSourceValue: (state) => state.ibmiLoadSourceValue,
     ibmiAltLoadSourceValue: (state) => state.ibmiAltLoadSourceValue,
@@ -45,25 +48,36 @@ const BootSettingsStore = {
   },
   mutations: {
     setDisabled: (state, disabled) => (state.disabled = disabled),
-    setAttributeValues: (state, attributeValues) => (state.attributeValues = attributeValues),
-    setBiosAttributes: (state, biosAttributes) => (state.biosAttributes = biosAttributes),
-    setStopBootOnFaultValue: (state, bootFault) => (state.bootFault = bootFault),
+    setAttributeValues: (state, attributeValues) =>
+      (state.attributeValues = attributeValues),
+    setBiosAttributes: (state, biosAttributes) =>
+      (state.biosAttributes = biosAttributes),
+    setStopBootOnFaultValue: (state, bootFault) =>
+      (state.bootFault = bootFault),
     setPowerRestorePolicyValue: (state, powerRestorePolicyValue) =>
       (state.powerRestorePolicyValue = powerRestorePolicyValue),
     setAutomaticRetryConfigValue: (state, automaticRetryConfigValue) =>
       (state.automaticRetryConfigValue = automaticRetryConfigValue),
     setLinuxKvmPercentageValue: (state, linuxKvmPercentageValue) =>
       (state.linuxKvmPercentageValue = linuxKvmPercentageValue),
-    setLinuxKvmPercentageInitialValue: (state, linuxKvmPercentageInitialValue) =>
+    setLinuxKvmPercentageInitialValue: (
+      state,
+      linuxKvmPercentageInitialValue,
+    ) =>
       (state.linuxKvmPercentageInitialValue = linuxKvmPercentageInitialValue),
-    setLinuxKvmPercentageCurrentValue: (state, linuxKvmPercentageCurrentValue) =>
+    setLinuxKvmPercentageCurrentValue: (
+      state,
+      linuxKvmPercentageCurrentValue,
+    ) =>
       (state.linuxKvmPercentageCurrentValue = linuxKvmPercentageCurrentValue),
-    setLocationCodes: (state, locationCodes) => (state.locationCodes = locationCodes),
+    setLocationCodes: (state, locationCodes) =>
+      (state.locationCodes = locationCodes),
     set_pvm_ibmi_load_source: (state, ibmiLoadSourceValue) =>
       (state.ibmiLoadSourceValue = ibmiLoadSourceValue),
     set_pvm_ibmi_alt_load_source: (state, ibmiAltLoadSourceValue) =>
       (state.ibmiAltLoadSourceValue = ibmiAltLoadSourceValue),
-    set_pvm_ibmi_console: (state, ibmiConsoleValue) => (state.ibmiConsoleValue = ibmiConsoleValue),
+    set_pvm_ibmi_console: (state, ibmiConsoleValue) =>
+      (state.ibmiConsoleValue = ibmiConsoleValue),
   },
   actions: {
     async getOperatingModeSettings({ commit }) {
@@ -84,10 +98,14 @@ const BootSettingsStore = {
       }
       return await api.all(promises).then(
         api.spread((...responses) => {
-          let message = i18n.t('pageServerPowerOperations.toast.successSaveSettings');
+          let message = i18n.t(
+            'pageServerPowerOperations.toast.successSaveSettings',
+          );
           responses.forEach((response) => {
             if (response instanceof Error) {
-              throw new Error(i18n.t('pageServerPowerOperations.toast.errorSaveSettings'));
+              throw new Error(
+                i18n.t('pageServerPowerOperations.toast.errorSaveSettings'),
+              );
             }
           });
           return message;
@@ -116,7 +134,9 @@ const BootSettingsStore = {
     },
     async getAttributeValues({ commit, state }) {
       return await api
-        .get('/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry')
+        .get(
+          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
+        )
         .then(
           ({
             data: {
@@ -138,17 +158,26 @@ const BootSettingsStore = {
               (itm) => itm.AttributeName === 'pvm_ibmi_alt_load_source',
             );
             let ibmi_alt_load_source_value = ibmi_alt_load_source?.CurrentValue;
-            let ibmi_console = Attributes.find((itm) => itm.AttributeName === 'pvm_ibmi_console');
+            let ibmi_console = Attributes.find(
+              (itm) => itm.AttributeName === 'pvm_ibmi_console',
+            );
             let ibmi_console_value = ibmi_console?.CurrentValue;
-            let linuxPercentCurrentValue = linuxPercentCurrentObj?.CurrentValue / 10;
+            let linuxPercentCurrentValue =
+              linuxPercentCurrentObj?.CurrentValue / 10;
             commit('setLinuxKvmPercentageValue', linuxValue);
             commit('setLinuxKvmPercentageInitialValue', linuxValue);
-            commit('setLinuxKvmPercentageCurrentValue', linuxPercentCurrentValue);
+            commit(
+              'setLinuxKvmPercentageCurrentValue',
+              linuxPercentCurrentValue,
+            );
             if (ibmi_load_source_value !== undefined) {
               commit('set_pvm_ibmi_load_source', ibmi_load_source_value);
             }
             if (ibmi_alt_load_source_value !== undefined) {
-              commit('set_pvm_ibmi_alt_load_source', ibmi_alt_load_source_value);
+              commit(
+                'set_pvm_ibmi_alt_load_source',
+                ibmi_alt_load_source_value,
+              );
             }
             if (ibmi_console_value !== undefined) {
               commit('set_pvm_ibmi_console', ibmi_console_value);
@@ -160,7 +189,8 @@ const BootSettingsStore = {
                   ...arr,
                   ...Attributes.filter((value) => {
                     return (
-                      attriValue !== 'pvm_sys_dump_active' && attriValue === value.AttributeName
+                      attriValue !== 'pvm_sys_dump_active' &&
+                      attriValue === value.AttributeName
                     );
                   }),
                 ];
@@ -169,24 +199,26 @@ const BootSettingsStore = {
               .reduce((obj, attributeObj) => {
                 return {
                   ...obj,
-                  [attributeObj?.AttributeName]: attributeObj.Value.map((item) => {
-                    return {
-                      value: item.ValueName,
-                      text:
-                        [
-                          'pvm_default_os_type',
-                          'pvm_os_boot_type',
-                          'pvm_rpa_boot_mode',
-                          'pvm_stop_at_standby',
-                          'pvm_system_operating_mode',
-                          'pvm_linux_kvm_memory',
-                        ].indexOf(attributeObj.AttributeName) >= 0
-                          ? i18n.t(
-                              `pageServerPowerOperations.biosSettings.attributeValues.${attributeObj.AttributeName}.${item.ValueName}`,
-                            )
-                          : item.ValueName,
-                    };
-                  }),
+                  [attributeObj?.AttributeName]: attributeObj.Value.map(
+                    (item) => {
+                      return {
+                        value: item.ValueName,
+                        text:
+                          [
+                            'pvm_default_os_type',
+                            'pvm_os_boot_type',
+                            'pvm_rpa_boot_mode',
+                            'pvm_stop_at_standby',
+                            'pvm_system_operating_mode',
+                            'pvm_linux_kvm_memory',
+                          ].indexOf(attributeObj.AttributeName) >= 0
+                            ? i18n.t(
+                                `pageServerPowerOperations.biosSettings.attributeValues.${attributeObj.AttributeName}.${item.ValueName}`,
+                              )
+                            : item.ValueName,
+                      };
+                    },
+                  ),
                 };
               }, {});
             commit('setAttributeValues', filteredAttributeValues);
@@ -196,20 +228,24 @@ const BootSettingsStore = {
     },
     async getLocationCodes({ commit }) {
       let locationCodes = [];
-      return await api.get('/redfish/v1/Chassis?$expand=.($levels=2)').then(({ data }) => {
-        data.Members.map((chassis) => {
-          chassis.PCIeSlots.Slots.map((pcieSlot) => {
-            if (
-              pcieSlot?.Links?.PCIeDevice &&
-              pcieSlot?.Links?.PCIeDevice.length > 0 &&
-              pcieSlot?.Location?.PartLocation?.ServiceLabel
-            ) {
-              locationCodes.push(pcieSlot?.Location?.PartLocation?.ServiceLabel);
-            }
+      return await api
+        .get('/redfish/v1/Chassis?$expand=.($levels=2)')
+        .then(({ data }) => {
+          data.Members.map((chassis) => {
+            chassis.PCIeSlots.Slots.map((pcieSlot) => {
+              if (
+                pcieSlot?.Links?.PCIeDevice &&
+                pcieSlot?.Links?.PCIeDevice.length > 0 &&
+                pcieSlot?.Location?.PartLocation?.ServiceLabel
+              ) {
+                locationCodes.push(
+                  pcieSlot?.Location?.PartLocation?.ServiceLabel,
+                );
+              }
+            });
           });
+          commit('setLocationCodes', locationCodes);
         });
-        commit('setLocationCodes', locationCodes);
-      });
     },
     saveBiosSettings({ dispatch, commit }, biosSettings) {
       return api
@@ -237,15 +273,19 @@ const BootSettingsStore = {
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.tc('pageServerPowerOperations.toast.errorSaveSettings'));
+          throw new Error(
+            i18n.tc('pageServerPowerOperations.toast.errorSaveSettings'),
+          );
         });
     },
     saveOperatingModeSettings({ commit }, biosSettings) {
       return api
         .patch('/redfish/v1/Systems/system', {
-          PowerRestorePolicy: this.state.serverBootSettings.powerRestorePolicyValue,
+          PowerRestorePolicy:
+            this.state.serverBootSettings.powerRestorePolicyValue,
           Boot: {
-            AutomaticRetryConfig: this.state.serverBootSettings.automaticRetryConfigValue,
+            AutomaticRetryConfig:
+              this.state.serverBootSettings.automaticRetryConfigValue,
             StopBootOnFault: this.state.serverBootSettings.bootFault,
           },
         })

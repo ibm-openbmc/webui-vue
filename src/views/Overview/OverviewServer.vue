@@ -1,5 +1,9 @@
+<!-- TODO: Work Requird -->
 <template>
-  <overview-card :title="t('pageOverview.serverInformation')" :to="`/hardware-status/inventory`">
+  <overview-card
+    :title="t('pageOverview.serverInformation')"
+    :to="`/hardware-status/inventory`"
+  >
     <BRow class="mt-3">
       <BCol sm="6" lg="6">
         <dl>
@@ -29,7 +33,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
-import { SystemStore } from '../../store/modules/HardwareStatus/SystemStore';
+import { SystemStore } from '@/store';
 import OverviewCard from './OverviewCard.vue';
 // import { DataFormatterGlobal } from '@/components/Mixins/DataFormatterGlobal';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';

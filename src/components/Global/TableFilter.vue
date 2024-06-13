@@ -3,7 +3,11 @@
     <p class="d-inline-block mb-0">
       <b-badge v-for="(tag, index) in tags" :key="index" pill>
         {{ tag }}
-        <b-button-close :disabled="dropdownVisible" :aria-hidden="true" @click="removeTag(tag)" />
+        <b-button-close
+          :disabled="dropdownVisible"
+          :aria-hidden="true"
+          @click="removeTag(tag)"
+        />
       </b-badge>
     </p>
     <b-dropdown
@@ -20,7 +24,11 @@
         {{ $t('global.action.filter') }}
       </template>
       <b-dropdown-form>
-        <b-form-group v-for="(filter, index) of filters" :key="index" :label="filter.label">
+        <b-form-group
+          v-for="(filter, index) of filters"
+          :key="index"
+          :label="filter.label"
+        >
           <b-form-checkbox-group v-model="tags">
             <b-form-checkbox
               v-for="value in filter.values"
@@ -57,7 +65,10 @@ export default {
       type: Array,
       default: () => [],
       validator: (prop) => {
-        return prop.every((filter) => 'label' in filter && 'values' in filter && 'key' in filter);
+        return prop.every(
+          (filter) =>
+            'label' in filter && 'values' in filter && 'key' in filter,
+        );
       },
     },
     isFilterDisabled: {
@@ -88,7 +99,9 @@ export default {
     },
     emitChange() {
       const activeFilters = this.filters.map(({ key, values }) => {
-        const activeValues = values.filter((value) => this.tags.indexOf(value) !== -1);
+        const activeValues = values.filter(
+          (value) => this.tags.indexOf(value) !== -1,
+        );
         return {
           key,
           values: activeValues,

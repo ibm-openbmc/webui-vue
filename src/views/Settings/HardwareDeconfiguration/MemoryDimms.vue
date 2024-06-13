@@ -46,7 +46,9 @@
               <span v-if="row.item.settings">
                 {{ $t('pageDeconfigurationHardware.configure') }}
               </span>
-              <span v-else>{{ $t('pageDeconfigurationHardware.deconfigure') }}</span>
+              <span v-else>{{
+                $t('pageDeconfigurationHardware.deconfigure')
+              }}</span>
             </b-form-checkbox>
           </template>
         </b-table>
@@ -98,7 +100,9 @@ import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
 export default {
   name: 'MemoryDimms',
   components: {
@@ -156,7 +160,9 @@ export default {
           key: 'deconfigurationType',
           sortable: true,
           formatter: this.dataFormatter,
-          label: this.$t('pageDeconfigurationHardware.table.deconfigurationType'),
+          label: this.$t(
+            'pageDeconfigurationHardware.table.deconfigurationType',
+          ),
         },
         {
           key: 'settings',
@@ -168,7 +174,9 @@ export default {
       tableFilters: [
         {
           key: 'deconfigurationType',
-          label: this.$t('pageDeconfigurationHardware.table.deconfigurationType'),
+          label: this.$t(
+            'pageDeconfigurationHardware.table.deconfigurationType',
+          ),
           values: [
             this.$t('pageDeconfigurationHardware.table.filter.byAssociation'),
             this.$t('pageDeconfigurationHardware.table.filter.error'),
@@ -199,7 +207,9 @@ export default {
       return this.$store.getters['hardwareDeconfiguration/dimms'];
     },
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredDimms.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.filteredDimms.length;
     },
     filteredDimms() {
       return this.getFilteredTableData(this.allDimms, this.activeFilters);

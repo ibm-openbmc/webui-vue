@@ -1,5 +1,9 @@
+<!-- TODO: Work Requird -->
 <template>
-  <overview-card :title="t('pageOverview.firmwareInformation')" :to="`/operations/firmware`">
+  <overview-card
+    :title="t('pageOverview.firmwareInformation')"
+    :to="`/operations/firmware`"
+  >
     <BRow class="mt-3">
       <BCol sm="6">
         <dl>
@@ -25,8 +29,7 @@ import { useI18n } from 'vue-i18n';
 import OverviewCard from './OverviewCard.vue';
 // import DataFormatterGlobal from '@/components/Mixins/DataFormatterGlobal';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import FirmwareStore from '../../store/modules/Operations/FirmwareStore';
-import SystemStore from '../../store/modules/HardwareStatus/SystemStore';
+import { FirmwareStore, SystemStore } from '@/store';
 
 const { t } = useI18n();
 const firmwareStore = FirmwareStore();

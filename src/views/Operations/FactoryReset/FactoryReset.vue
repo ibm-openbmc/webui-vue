@@ -18,7 +18,11 @@
       <b-row>
         <b-col md="8">
           <b-form-group :label="$t('pageFactoryReset.form.resetOptionsLabel')">
-            <b-form-radio-group id="factory-reset-options" v-model="resetOption" stacked>
+            <b-form-radio-group
+              id="factory-reset-options"
+              v-model="resetOption"
+              stacked
+            >
               <b-form-radio
                 class="mb-1"
                 value="resetBios"
@@ -42,7 +46,9 @@
                 {{ $t('pageFactoryReset.form.resetToDefaultsOptionLabel') }}
               </b-form-radio>
               <b-form-text id="reset-to-defaults" class="ml-4 mb-3">
-                {{ $t('pageFactoryReset.form.resetToDefaultsOptionHelperText') }}
+                {{
+                  $t('pageFactoryReset.form.resetToDefaultsOptionHelperText')
+                }}
               </b-form-text>
             </b-form-radio-group>
           </b-form-group>

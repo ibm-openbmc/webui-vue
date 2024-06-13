@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { GlobalStore } from '../../store/modules/GlobalStore';
+import { GlobalStore } from '@/store';
 
 const globalStore = () => {
   return GlobalStore();

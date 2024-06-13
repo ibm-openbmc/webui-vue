@@ -26,7 +26,9 @@ export const VirtualMediaStore = defineStore('virtualMedia', {
     async getData() {
       try {
         const virtualMediaListEnabled =
-          import.meta.env.VITE_APP_VIRTUAL_MEDIA_LIST_ENABLED === 'true' ? true : false;
+          import.meta.env.VITE_APP_VIRTUAL_MEDIA_LIST_ENABLED === 'true'
+            ? true
+            : false;
         if (!virtualMediaListEnabled) {
           const device = {
             id: i18n.global.t('pageVirtualMedia.defaultDeviceName'),
@@ -41,7 +43,9 @@ export const VirtualMediaStore = defineStore('virtualMedia', {
         return await api
           .get('/redfish/v1/Managers/bmc/VirtualMedia')
           .then((response) =>
-            response.data.Members.map((virtualMedia) => virtualMedia['@odata.id']),
+            response.data.Members.map(
+              (virtualMedia) => virtualMedia['@odata.id'],
+            ),
           )
           .then((devices) => api.all(devices.map((device) => api.get(device))))
           .then((devices) => {
@@ -55,7 +59,9 @@ export const VirtualMediaStore = defineStore('virtualMedia', {
               };
             });
             const proxyDevices = deviceData
-              .filter((d) => d.transferProtocolType === transferProtocolType.OEM)
+              .filter(
+                (d) => d.transferProtocolType === transferProtocolType.OEM,
+              )
               .map((device) => {
                 return {
                   ...device,
@@ -63,7 +69,9 @@ export const VirtualMediaStore = defineStore('virtualMedia', {
                 };
               });
             const legacyDevices = deviceData
-              .filter((d) => d.transferProtocolType !== transferProtocolType.OEM)
+              .filter(
+                (d) => d.transferProtocolType !== transferProtocolType.OEM,
+              )
               .map((device) => {
                 return {
                   ...device,
@@ -82,7 +90,10 @@ export const VirtualMediaStore = defineStore('virtualMedia', {
     },
     async mountImage(_, { id, data }) {
       return await api
-        .post(`/redfish/v1/Managers/bmc/VirtualMedia/${id}/Actions/VirtualMedia.InsertMedia`, data)
+        .post(
+          `/redfish/v1/Managers/bmc/VirtualMedia/${id}/Actions/VirtualMedia.InsertMedia`,
+          data,
+        )
         .catch((error) => {
           console.log('Mount image:', error);
           throw new Error();
@@ -90,7 +101,9 @@ export const VirtualMediaStore = defineStore('virtualMedia', {
     },
     async unmountImage(_, id) {
       return await api
-        .post(`/redfish/v1/Managers/bmc/VirtualMedia/${id}/Actions/VirtualMedia.EjectMedia`)
+        .post(
+          `/redfish/v1/Managers/bmc/VirtualMedia/${id}/Actions/VirtualMedia.EjectMedia`,
+        )
         .catch((error) => {
           console.log('Unmount image:', error);
           throw new Error();

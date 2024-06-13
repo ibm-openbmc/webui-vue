@@ -20,7 +20,10 @@ let i = 1;
 if (title) {
   while (i < router.currentRoute.value.name.split('-').length) {
     let index = title.search('-');
-    title = title.replace('-' + title.charAt(index + 1), title.charAt(index + 1).toUpperCase());
+    title = title.replace(
+      '-' + title.charAt(index + 1),
+      title.charAt(index + 1).toUpperCase(),
+    );
     i++;
   }
 

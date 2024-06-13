@@ -57,7 +57,9 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store.dispatch('controls/getLastBmcRebootTime').finally(() => this.endLoader());
+    this.$store
+      .dispatch('controls/getLastBmcRebootTime')
+      .finally(() => this.endLoader());
   },
   methods: {
     onClick() {

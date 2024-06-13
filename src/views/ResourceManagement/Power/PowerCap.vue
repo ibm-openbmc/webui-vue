@@ -9,7 +9,11 @@
               <info-tooltip :title="$t('pagePower.powerConsumptionTooltip')" />
             </dt>
             <dd>
-              {{ powerConsumption ? `${powerConsumption} W` : $t('global.status.notAvailable') }}
+              {{
+                powerConsumption
+                  ? `${powerConsumption} W`
+                  : $t('global.status.notAvailable')
+              }}
             </dd>
           </dl>
         </b-col>
@@ -70,7 +74,11 @@
             </b-col>
           </b-row>
 
-          <b-button variant="primary" type="submit" data-test-id="power-button-savePowerCapValue">
+          <b-button
+            variant="primary"
+            type="submit"
+            data-test-id="power-button-savePowerCapValue"
+          >
             {{ $t('global.action.save') }}
           </b-button>
         </b-form-group>
@@ -135,7 +143,9 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store.dispatch('powerControl/getPowerControl').finally(() => this.endLoader());
+    this.$store
+      .dispatch('powerControl/getPowerControl')
+      .finally(() => this.endLoader());
   },
   validations() {
     return {

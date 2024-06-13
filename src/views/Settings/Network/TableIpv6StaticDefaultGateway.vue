@@ -30,7 +30,9 @@
             :value="action.value"
             :title="action.title"
             :enabled="action.enabled"
-            @click-table-action="onIpv6DefaultGatewayTableAction(action, $event, item)"
+            @click-table-action="
+              onIpv6DefaultGatewayTableAction(action, $event, item)
+            "
           >
             <template #icon>
               <icon-edit v-if="action.value === 'edit'" />
@@ -136,7 +138,9 @@ export default {
             {
               value: 'delete',
               enabled: true,
-              title: this.$t('pageNetwork.table.deleteIpv6StaticDefaultGateway'),
+              title: this.$t(
+                'pageNetwork.table.deleteIpv6StaticDefaultGateway',
+              ),
             },
           ],
         };
@@ -179,7 +183,10 @@ export default {
         .then((deleteConfirmed) => {
           if (deleteConfirmed) {
             this.$store
-              .dispatch('network/deleteIpv6StaticDefaultGatewayAddress', newIpv6Array)
+              .dispatch(
+                'network/deleteIpv6StaticDefaultGatewayAddress',
+                newIpv6Array,
+              )
               .then((message) => {
                 this.successToast(message);
                 this.startLoader();

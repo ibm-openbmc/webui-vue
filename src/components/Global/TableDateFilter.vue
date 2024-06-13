@@ -31,7 +31,9 @@
             :max="toDate"
             :hide-header="true"
             :locale="locale"
-            :label-help="$t('global.calendar.useCursorKeysToNavigateCalendarDates')"
+            :label-help="
+              $t('global.calendar.useCursorKeysToNavigateCalendarDates')
+            "
             :title="$t('global.calendar.selectDate')"
             button-variant="link"
             aria-controls="input-from-date"
@@ -45,7 +47,11 @@
           </b-form-datepicker>
         </b-input-group>
       </b-form-group>
-      <b-form-group :label="$t('global.table.toDate')" label-for="input-to-date" class="my-0 w-100">
+      <b-form-group
+        :label="$t('global.table.toDate')"
+        label-for="input-to-date"
+        class="my-0 w-100"
+      >
         <b-input-group>
           <b-form-input
             id="input-to-date"
@@ -71,7 +77,9 @@
             :min="fromDate"
             :hide-header="true"
             :locale="locale"
-            :label-help="$t('global.calendar.useCursorKeysToNavigateCalendarDates')"
+            :label-help="
+              $t('global.calendar.useCursorKeysToNavigateCalendarDates')
+            "
             :title="$t('global.calendar.selectDate')"
             button-variant="link"
             aria-controls="input-to-date"

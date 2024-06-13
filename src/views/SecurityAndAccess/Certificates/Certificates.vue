@@ -74,7 +74,10 @@
             {{ value | formatDate }}
           </template>
           <template #cell(validUntil)="{ value }">
-            <status-icon v-if="getDaysUntilExpired(value) < 31" :status="getIconStatus(value)" />
+            <status-icon
+              v-if="getDaysUntilExpired(value) < 31"
+              :status="getIconStatus(value)"
+            />
             {{ value | formatDate }}
           </template>
           <template #cell(actions)="{ value, item }">

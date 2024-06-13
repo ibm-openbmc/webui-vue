@@ -15,17 +15,29 @@
     <b-form id="network-settings-form" novalidate @submit.prevent>
       <b-container fluid="xl">
         <h3>
-          {{ $t('pageServerPowerOperations.modal.networkSettings.settingsHeading') }}
+          {{
+            $t(
+              'pageServerPowerOperations.modal.networkSettings.settingsHeading',
+            )
+          }}
         </h3>
         <span>
-          {{ $t('pageServerPowerOperations.modal.networkSettings.settingsDescription') }}
+          {{
+            $t(
+              'pageServerPowerOperations.modal.networkSettings.settingsDescription',
+            )
+          }}
         </span>
         <!-- network-install-type -->
         <b-row v-if="attributesList !== null" class="mt-3 mb-3">
           <b-col>
             <b-col sm="6" xl="6">
               <b-form-group
-                :label="$t('pageServerPowerOperations.modal.networkSettings.networkTypeHeading')"
+                :label="
+                  $t(
+                    'pageServerPowerOperations.modal.networkSettings.networkTypeHeading',
+                  )
+                "
                 class="mb-2"
               >
                 <b-form-select
@@ -45,7 +57,9 @@
                   attributesList['pvm_ibmi_network_install_type'] !== 'Disabled'
                 "
                 :label="
-                  $t('pageServerPowerOperations.modal.networkSettings.ipAddressProtocolHeading')
+                  $t(
+                    'pageServerPowerOperations.modal.networkSettings.ipAddressProtocolHeading',
+                  )
                 "
                 class="mb-2"
               >
@@ -74,7 +88,9 @@
                 "
                 class="mt-4"
               >
-                {{ $t('pageServerPowerOperations.modal.networkSettings.server') }}:
+                {{
+                  $t('pageServerPowerOperations.modal.networkSettings.server')
+                }}:
               </h5>
               <b-row
                 v-for="(server, index) in selectedIpProtocol.server"
@@ -84,7 +100,8 @@
                   <b-form-group
                     v-if="
                       attributesList !== null &&
-                      attributesList['pvm_ibmi_network_install_type'] !== 'Disabled'
+                      attributesList['pvm_ibmi_network_install_type'] !==
+                        'Disabled'
                     "
                     :key="server.property + index"
                     :label="
@@ -101,7 +118,9 @@
                     <b-form-input
                       :id="server.property"
                       v-model="properties[server.attribute]"
-                      :state="getValidationState($v.properties[server.attribute])"
+                      :state="
+                        getValidationState($v.properties[server.attribute])
+                      "
                       :type="server.type"
                       size="sm"
                       @input="$v.properties[server.attribute].$touch()"
@@ -143,7 +162,11 @@
                 "
                 class="mt-4"
               >
-                {{ $t('pageServerPowerOperations.modal.networkSettings.partition') }}:
+                {{
+                  $t(
+                    'pageServerPowerOperations.modal.networkSettings.partition',
+                  )
+                }}:
               </h5>
               <b-row
                 v-for="(partition, index) in selectedIpProtocol.partition"
@@ -153,7 +176,8 @@
                   <b-form-group
                     v-if="
                       attributesList !== null &&
-                      attributesList['pvm_ibmi_network_install_type'] !== 'Disabled'
+                      attributesList['pvm_ibmi_network_install_type'] !==
+                        'Disabled'
                     "
                     :key="partition.property + 'group'"
                     :label="
@@ -174,7 +198,9 @@
                       sm="6"
                       xl="6"
                       size="sm"
-                      :state="getValidationState($v.properties[partition.attribute])"
+                      :state="
+                        getValidationState($v.properties[partition.attribute])
+                      "
                       @input="$v.properties[partition.attribute].$touch()"
                     >
                     </b-form-input>
@@ -199,7 +225,11 @@
                 "
                 class="mt-4"
               >
-                {{ $t('pageServerPowerOperations.modal.networkSettings.advanced') }}:
+                {{
+                  $t(
+                    'pageServerPowerOperations.modal.networkSettings.advanced',
+                  )
+                }}:
               </h5>
               <b-row
                 v-for="(advanced, index) in selectedIpProtocol.advanced"
@@ -209,7 +239,8 @@
                   <b-form-group
                     v-if="
                       attributesList !== null &&
-                      attributesList['pvm_ibmi_network_install_type'] !== 'Disabled'
+                      attributesList['pvm_ibmi_network_install_type'] !==
+                        'Disabled'
                     "
                     :key="advanced.property + 'group'"
                     :label="
@@ -237,7 +268,9 @@
                         sm="6"
                         xl="6"
                         size="sm"
-                        :state="getValidationState($v.properties[advanced.attribute])"
+                        :state="
+                          getValidationState($v.properties[advanced.attribute])
+                        "
                         @input="$v.properties[advanced.attribute].$touch()"
                       >
                       </b-form-input>
@@ -319,7 +352,10 @@ export default {
             },
             pvm_ibmi_nfs_image_directory: {
               required,
-              imageDirectory: helpers.regex('imageDir', REGEX_MAPPINGS.imageDirectory),
+              imageDirectory: helpers.regex(
+                'imageDir',
+                REGEX_MAPPINGS.imageDirectory,
+              ),
               maxLength: maxLength(this.nfsImageDirMaxLength),
             },
             pvm_ibmi_local_ipaddress: {
@@ -348,7 +384,10 @@ export default {
             },
             pvm_ibmi_nfs_image_directory: {
               required,
-              imageDirectory: helpers.regex('imageDir', REGEX_MAPPINGS.imageDirectory),
+              imageDirectory: helpers.regex(
+                'imageDir',
+                REGEX_MAPPINGS.imageDirectory,
+              ),
               maxLength: maxLength(this.nfsImageDirMaxLength),
             },
             pvm_ibmi_local_ipaddress: {
@@ -365,7 +404,9 @@ export default {
           },
         };
       }
-    } else if (this.attributesList['pvm_ibmi_network_install_type'] === 'iSCSI') {
+    } else if (
+      this.attributesList['pvm_ibmi_network_install_type'] === 'iSCSI'
+    ) {
       return {
         properties: {
           pvm_ibmi_server_ipaddress: {
@@ -420,7 +461,8 @@ export default {
       return this.$store.getters['networkSettings/biosAttributes'];
     },
     computedIPAddressProtocolList() {
-      if (this.attributesList['pvm_ibmi_network_install_type'] === 'NFS') return ['IPv4', 'IPv6'];
+      if (this.attributesList['pvm_ibmi_network_install_type'] === 'NFS')
+        return ['IPv4', 'IPv6'];
       else return ['IPv4'];
     },
     nfsImageDirMaxLength() {
@@ -449,7 +491,9 @@ export default {
           } else {
             this.selectedIpProtocol = this.networkObject.nfs.ipv6;
           }
-        } else if (this.attributesList['pvm_ibmi_network_install_type'] === 'iSCSI') {
+        } else if (
+          this.attributesList['pvm_ibmi_network_install_type'] === 'iSCSI'
+        ) {
           this.attributesList['pvm_ibmi_ipaddress_protocol'] = 'IPv4';
           this.selectedNetwork = this.networkObject.iscsi;
           this.selectedIpProtocol = this.networkObject.iscsi.ipv4;
@@ -461,7 +505,8 @@ export default {
             let initiatorName = this.selectedIpProtocol.server.find(
               (element) => element.property === 'initiatorName',
             );
-            initiatorName.value = this.attributesList['pvm_ibmi_iscsi_initiator_name'];
+            initiatorName.value =
+              this.attributesList['pvm_ibmi_iscsi_initiator_name'];
             this.properties.pvm_ibmi_iscsi_initiator_name =
               this.attributesList['pvm_ibmi_iscsi_initiator_name'];
           }
@@ -522,49 +567,73 @@ export default {
       if (this.attributesList['pvm_ibmi_network_install_type'] === 'NFS') {
         if (this.attributesList['pvm_ibmi_ipaddress_protocol'] === 'IPv4') {
           form = {
-            pvm_ibmi_network_install_type: this.attributesList['pvm_ibmi_network_install_type'],
-            pvm_ibmi_ipaddress_protocol: this.attributesList['pvm_ibmi_ipaddress_protocol'],
-            pvm_ibmi_server_ipaddress: this.properties.pvm_ibmi_server_ipaddress,
-            pvm_ibmi_nfs_image_directory: this.properties.pvm_ibmi_nfs_image_directory,
+            pvm_ibmi_network_install_type:
+              this.attributesList['pvm_ibmi_network_install_type'],
+            pvm_ibmi_ipaddress_protocol:
+              this.attributesList['pvm_ibmi_ipaddress_protocol'],
+            pvm_ibmi_server_ipaddress:
+              this.properties.pvm_ibmi_server_ipaddress,
+            pvm_ibmi_nfs_image_directory:
+              this.properties.pvm_ibmi_nfs_image_directory,
             pvm_ibmi_local_ipaddress: this.properties.pvm_ibmi_local_ipaddress,
             pvm_ibmi_subnet_mask: this.properties.pvm_ibmi_subnet_mask,
-            pvm_ibmi_gateway_ipaddress: this.properties.pvm_ibmi_gateway_ipaddress,
-            pvm_ibmi_max_frame_size: this.attributesList['pvm_ibmi_max_frame_size'],
+            pvm_ibmi_gateway_ipaddress:
+              this.properties.pvm_ibmi_gateway_ipaddress,
+            pvm_ibmi_max_frame_size:
+              this.attributesList['pvm_ibmi_max_frame_size'],
           };
           if (this.properties.pvm_ibmi_vlan_tag_id !== '') {
             form = {
               ...form,
-              pvm_ibmi_vlan_tag_id: Number(this.properties.pvm_ibmi_vlan_tag_id),
+              pvm_ibmi_vlan_tag_id: Number(
+                this.properties.pvm_ibmi_vlan_tag_id,
+              ),
             };
           }
         } else {
           form = {
-            pvm_ibmi_network_install_type: this.attributesList['pvm_ibmi_network_install_type'],
-            pvm_ibmi_ipaddress_protocol: this.attributesList['pvm_ibmi_ipaddress_protocol'],
-            pvm_ibmi_server_ipaddress: this.properties.pvm_ibmi_server_ipaddress,
-            pvm_ibmi_nfs_image_directory: this.properties.pvm_ibmi_nfs_image_directory,
+            pvm_ibmi_network_install_type:
+              this.attributesList['pvm_ibmi_network_install_type'],
+            pvm_ibmi_ipaddress_protocol:
+              this.attributesList['pvm_ibmi_ipaddress_protocol'],
+            pvm_ibmi_server_ipaddress:
+              this.properties.pvm_ibmi_server_ipaddress,
+            pvm_ibmi_nfs_image_directory:
+              this.properties.pvm_ibmi_nfs_image_directory,
             pvm_ibmi_local_ipaddress: this.properties.pvm_ibmi_local_ipaddress,
-            pvm_ibmi_gateway_ipaddress: this.properties.pvm_ibmi_gateway_ipaddress,
-            pvm_ibmi_max_frame_size: this.attributesList['pvm_ibmi_max_frame_size'],
+            pvm_ibmi_gateway_ipaddress:
+              this.properties.pvm_ibmi_gateway_ipaddress,
+            pvm_ibmi_max_frame_size:
+              this.attributesList['pvm_ibmi_max_frame_size'],
           };
           if (this.properties.pvm_ibmi_vlan_tag_id !== '') {
             form = {
               ...form,
-              pvm_ibmi_vlan_tag_id: Number(this.properties.pvm_ibmi_vlan_tag_id),
+              pvm_ibmi_vlan_tag_id: Number(
+                this.properties.pvm_ibmi_vlan_tag_id,
+              ),
             };
           }
         }
-      } else if (this.attributesList['pvm_ibmi_network_install_type'] === 'iSCSI') {
+      } else if (
+        this.attributesList['pvm_ibmi_network_install_type'] === 'iSCSI'
+      ) {
         form = {
-          pvm_ibmi_network_install_type: this.attributesList['pvm_ibmi_network_install_type'],
-          pvm_ibmi_ipaddress_protocol: this.attributesList['pvm_ibmi_ipaddress_protocol'],
+          pvm_ibmi_network_install_type:
+            this.attributesList['pvm_ibmi_network_install_type'],
+          pvm_ibmi_ipaddress_protocol:
+            this.attributesList['pvm_ibmi_ipaddress_protocol'],
           pvm_ibmi_server_ipaddress: this.properties.pvm_ibmi_server_ipaddress,
           pvm_ibmi_local_ipaddress: this.properties.pvm_ibmi_local_ipaddress,
           pvm_ibmi_subnet_mask: this.properties.pvm_ibmi_subnet_mask,
-          pvm_ibmi_gateway_ipaddress: this.properties.pvm_ibmi_gateway_ipaddress,
-          pvm_ibmi_iscsi_target_name: this.properties.pvm_ibmi_iscsi_target_name,
-          pvm_ibmi_iscsi_initiator_name: this.properties.pvm_ibmi_iscsi_initiator_name,
-          pvm_ibmi_max_frame_size: this.attributesList['pvm_ibmi_max_frame_size'],
+          pvm_ibmi_gateway_ipaddress:
+            this.properties.pvm_ibmi_gateway_ipaddress,
+          pvm_ibmi_iscsi_target_name:
+            this.properties.pvm_ibmi_iscsi_target_name,
+          pvm_ibmi_iscsi_initiator_name:
+            this.properties.pvm_ibmi_iscsi_initiator_name,
+          pvm_ibmi_max_frame_size:
+            this.attributesList['pvm_ibmi_max_frame_size'],
         };
         chapData = {
           chapName: this.properties.chapName,
@@ -579,12 +648,15 @@ export default {
         if (this.properties.pvm_ibmi_iscsi_target_port !== '') {
           form = {
             ...form,
-            pvm_ibmi_iscsi_target_port: Number(this.properties.pvm_ibmi_iscsi_target_port),
+            pvm_ibmi_iscsi_target_port: Number(
+              this.properties.pvm_ibmi_iscsi_target_port,
+            ),
           };
         }
       } else {
         form = {
-          pvm_ibmi_network_install_type: this.attributesList['pvm_ibmi_network_install_type'],
+          pvm_ibmi_network_install_type:
+            this.attributesList['pvm_ibmi_network_install_type'],
         };
       }
       //Set IBM i partition boot mode to 'D_mode'
@@ -624,7 +696,10 @@ export default {
         .catch(({ message }) => this.errorToast(message));
     },
     isInvalid(attributeValue, validationValue) {
-      return Object.hasOwn(attributeValue, validationValue) && !attributeValue[validationValue];
+      return (
+        Object.hasOwn(attributeValue, validationValue) &&
+        !attributeValue[validationValue]
+      );
     },
     generateErrorMsg(value) {
       const validationAttribute = this.$v.properties[value.attribute];
@@ -633,9 +708,13 @@ export default {
         return this.$t('global.form.fieldRequired');
       } else if (this.isInvalid(validationAttribute, 'ipAddress')) {
         if (validationAttribute.$params.ipAddress.type === 'ipv6') {
-          return this.$t('pageServerPowerOperations.modal.networkSettings.validators.invalidIpv6');
+          return this.$t(
+            'pageServerPowerOperations.modal.networkSettings.validators.invalidIpv6',
+          );
         }
-        return this.$t('pageServerPowerOperations.modal.networkSettings.validators.invalidIpv4');
+        return this.$t(
+          'pageServerPowerOperations.modal.networkSettings.validators.invalidIpv4',
+        );
       } else if (this.isInvalid(validationAttribute, 'imageDirectory'))
         return this.$t(
           'pageServerPowerOperations.modal.networkSettings.validators.invalidImageDirectory',

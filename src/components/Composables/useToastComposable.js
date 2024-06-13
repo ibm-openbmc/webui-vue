@@ -24,25 +24,41 @@ const useToastComposable = () => {
   };
   const successToast = (
     message,
-    { title: t = i18n.global.t('global.status.Success'), timestamp, refreshAction } = {},
+    {
+      title: t = i18n.global.t('global.status.Success'),
+      timestamp,
+      refreshAction,
+    } = {},
   ) => {
     initToast(t, message, 'success', timestamp, refreshAction);
   };
   const errorToast = (
     message,
-    { title: t = i18n.global.t('global.status.Error'), timestamp, refreshAction } = {},
+    {
+      title: t = i18n.global.t('global.status.Error'),
+      timestamp,
+      refreshAction,
+    } = {},
   ) => {
     initToast(t, message, 'danger', timestamp, refreshAction);
   };
   const warningToast = (
     message,
-    { title: t = i18n.global.t('global.status.warning'), timestamp, refreshAction } = {},
+    {
+      title: t = i18n.global.t('global.status.warning'),
+      timestamp,
+      refreshAction,
+    } = {},
   ) => {
     initToast(t, message, 'warning', timestamp, refreshAction);
   };
   const infoToast = (
     message,
-    { title: t = i18n.global.t('global.status.informational'), timestamp, refreshAction } = {},
+    {
+      title: t = i18n.global.t('global.status.informational'),
+      timestamp,
+      refreshAction,
+    } = {},
   ) => {
     initToast(t, message, 'info', timestamp, refreshAction);
   };

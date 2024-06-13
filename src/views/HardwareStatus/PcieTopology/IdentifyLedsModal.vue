@@ -1,5 +1,11 @@
 <template>
-  <b-modal id="modal-leds" ref="modal" hide-footer title="Identify LEDs" title-tag="h2">
+  <b-modal
+    id="modal-leds"
+    ref="modal"
+    hide-footer
+    title="Identify LEDs"
+    title-tag="h2"
+  >
     <b-row>
       <b-col>
         <dt>{{ $t('pagePcieTopology.id') }}</dt>
@@ -15,7 +21,9 @@
       {{ $t('pagePcieTopology.bridgeOrHost') }}
     </div>
     <b-row v-if="pcieBridgeLed.length > 0">
-      <b-col cols="8">{{ dataFormatter(pcieBridgeLed[0].locationNumber) }}</b-col>
+      <b-col cols="8">{{
+        dataFormatter(pcieBridgeLed[0].locationNumber)
+      }}</b-col>
       <b-col cols="4">
         <b-form-checkbox
           id="switch"
@@ -141,17 +149,25 @@ export default {
         .then(() => {
           this.getAllLeds();
           if (value.led) {
-            this.successToast(this.$t('pagePcieTopology.toast.successEnableIdentifyLed'));
+            this.successToast(
+              this.$t('pagePcieTopology.toast.successEnableIdentifyLed'),
+            );
           } else {
-            this.successToast(this.$t('pagePcieTopology.toast.successDisableIdentifyLed'));
+            this.successToast(
+              this.$t('pagePcieTopology.toast.successDisableIdentifyLed'),
+            );
           }
         })
         .catch(() => {
           this.getAllLeds();
           if (value.led) {
-            this.errorToast(this.$t('pagePcieTopology.toast.errorEnableIdentifyLed'));
+            this.errorToast(
+              this.$t('pagePcieTopology.toast.errorEnableIdentifyLed'),
+            );
           } else {
-            this.errorToast(this.$t('pagePcieTopology.toast.errorDisableIdentifyLed'));
+            this.errorToast(
+              this.$t('pagePcieTopology.toast.errorDisableIdentifyLed'),
+            );
           }
         });
     },

@@ -1,3 +1,4 @@
+<!-- Work Requird -->
 <template>
   <div>
     <div class="nav-container" :class="{ open: isNavigationOpen }">
@@ -46,7 +47,12 @@
       </nav>
     </div>
     <transition name="fade">
-      <div v-if="isNavigationOpen" id="nav-overlay" class="nav-overlay" @click="toggleIsOpen"></div>
+      <div
+        v-if="isNavigationOpen"
+        id="nav-overlay"
+        class="nav-overlay"
+        @click="toggleIsOpen"
+      ></div>
     </transition>
   </div>
 </template>
@@ -57,7 +63,7 @@ import { AppNavigationData } from './AppNavigationData';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { onMounted } from 'vue';
-import GlobalStore from '../../store/modules/GlobalStore';
+import { GlobalStore } from '@/store';
 import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
 import eventBus from '@/eventBus';
 
@@ -99,10 +105,6 @@ const filteredNavItem = (navItem) => {
 </script>
 
 <style scoped lang="scss">
-// @import '../node_modules/bootstrap/scss/functions';
-// @import '../node_modules/bootstrap/scss/variables';
-// @import '../node_modules/bootstrap/scss/mixins';
-// @import '../../assets/styles/bmc/helpers/functions';
 svg {
   fill: currentColor;
   height: 1.2rem;

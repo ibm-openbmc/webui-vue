@@ -6,7 +6,9 @@
         <alert variant="info" class="mb-4">
           <span>
             {{ $t('pageDateTime.alert.message') }}
-            <b-link to="/profile-settings"> {{ $t('pageDateTime.alert.link') }}</b-link>
+            <b-link to="/profile-settings">
+              {{ $t('pageDateTime.alert.link') }}</b-link
+            >
           </span>
         </alert>
       </b-col>
@@ -59,7 +61,10 @@
           </b-form-radio>
           <b-row class="mt-3 ml-3">
             <b-col sm="6" lg="4" xl="3">
-              <b-form-group :label="$t('pageDateTime.form.date')" label-for="input-manual-date">
+              <b-form-group
+                :label="$t('pageDateTime.form.date')"
+                label-for="input-manual-date"
+              >
                 <b-form-text id="date-format-help">{{
                   $t('global.calendar.dateFormat')
                 }}</b-form-text>
@@ -88,7 +93,9 @@
                     right
                     :hide-header="true"
                     :locale="locale"
-                    :label-help="$t('global.calendar.useCursorKeysToNavigateCalendarDates')"
+                    :label-help="
+                      $t('global.calendar.useCursorKeysToNavigateCalendarDates')
+                    "
                     :title="$t('global.calendar.selectDate')"
                     :disabled="ntpOptionSelected"
                     button-variant="link"
@@ -209,7 +216,11 @@
               </b-form-group>
             </b-col>
           </b-row>
-          <b-button variant="primary" type="submit" data-test-id="dateTime-button-saveSettings">
+          <b-button
+            variant="primary"
+            type="submit"
+            data-test-id="dateTime-button-saveSettings"
+          >
             {{ $t('global.action.save') }}
           </b-button>
         </b-form-group>
@@ -238,7 +249,12 @@ const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 export default {
   name: 'DateTime',
   components: { Alert, IconCalendar, PageTitle, PageSection },
-  mixins: [BVToastMixin, LoadingBarMixin, LocalTimezoneLabelMixin, VuelidateMixin],
+  mixins: [
+    BVToastMixin,
+    LoadingBarMixin,
+    LocalTimezoneLabelMixin,
+    VuelidateMixin,
+  ],
   beforeRouteLeave(to, from, next) {
     this.hideLoader();
     next();
@@ -351,7 +367,9 @@ export default {
       });
     },
     setNtpValues() {
-      this.form.configurationSelected = this.isNtpProtocolEnabled ? 'ntp' : 'manual';
+      this.form.configurationSelected = this.isNtpProtocolEnabled
+        ? 'ntp'
+        : 'manual';
       [
         this.form.ntp.firstAddress = '',
         this.form.ntp.secondAddress = '',

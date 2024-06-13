@@ -67,7 +67,9 @@
                 </span>
               </p>
               <p>
-                {{ $t('pageCapacityOnDemand.orderInfo.processorSequenceNumber') }}
+                {{
+                  $t('pageCapacityOnDemand.orderInfo.processorSequenceNumber')
+                }}
 
                 <span class="font-weight-bold">
                   {{ processorInfo.sequenceNumber }}
@@ -134,17 +136,28 @@
                 {{ $t('pageCapacityOnDemand.orderInfo.accessKeyInfo') }}
               </h3>
               <p>
-                {{ $t('pageCapacityOnDemand.orderInfo.firmwareAccessKeyExpiration') }}
+                {{
+                  $t(
+                    'pageCapacityOnDemand.orderInfo.firmwareAccessKeyExpiration',
+                  )
+                }}
                 <span v-if="hasLicenses" class="font-weight-bold">--</span>
                 <span v-else class="font-weight-bold">
-                  {{ dataFormatter(firmwareAccessKeyInfo.expirationDate) | formatDate }}
+                  {{
+                    dataFormatter(firmwareAccessKeyInfo.expirationDate)
+                      | formatDate
+                  }}
                 </span>
               </p>
               <p>
-                {{ $t('pageCapacityOnDemand.orderInfo.aixAccessKeyExpiration') }}
+                {{
+                  $t('pageCapacityOnDemand.orderInfo.aixAccessKeyExpiration')
+                }}
                 <span v-if="hasLicenses" class="font-weight-bold">--</span>
                 <span v-else class="font-weight-bold">
-                  {{ dataFormatter(aixAccessKeyInfo.expirationDate) | formatDate }}
+                  {{
+                    dataFormatter(aixAccessKeyInfo.expirationDate) | formatDate
+                  }}
                 </span>
               </p>
             </b-col>
@@ -188,10 +201,14 @@ export default {
         : '0000';
     },
     processorEntryCheck() {
-      return this.licenses?.PermProcs?.EntryCheck ? this.licenses?.PermProcs?.EntryCheck : 'XX';
+      return this.licenses?.PermProcs?.EntryCheck
+        ? this.licenses?.PermProcs?.EntryCheck
+        : 'XX';
     },
     memoryEntryCheck() {
-      return this.licenses?.PermMem?.EntryCheck ? this.licenses?.PermMem?.EntryCheck : 'XX';
+      return this.licenses?.PermMem?.EntryCheck
+        ? this.licenses?.PermMem?.EntryCheck
+        : 'XX';
     },
     processorLicensed() {
       return this.licenses?.PermProcs?.MaxAuthorizedDevices;

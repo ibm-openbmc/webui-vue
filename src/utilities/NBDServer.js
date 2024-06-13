@@ -62,7 +62,9 @@ export default class NBDServer {
       console.log(JSON.stringify(ev));
     };
     this._on_ws_close = function (ev) {
-      console.log(`${endpoint} closed with code: ${ev.code} + reason: ${ev.reason}`);
+      console.log(
+        `${endpoint} closed with code: ${ev.code} + reason: ${ev.reason}`,
+      );
       console.log(JSON.stringify(ev));
       this.socketClosed(ev.code);
     };
@@ -93,7 +95,9 @@ export default class NBDServer {
         }
         var consumed = handler(this.msgbuf);
         if (consumed < 0) {
-          console.log('handler[state=' + this.state + '] returned error ' + consumed);
+          console.log(
+            'handler[state=' + this.state + '] returned error ' + consumed,
+          );
           this.stop();
           break;
         }

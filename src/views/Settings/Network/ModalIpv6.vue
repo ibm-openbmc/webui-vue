@@ -2,13 +2,20 @@
   <b-modal
     id="modal-add-ipv6"
     ref="modal"
-    :title="editModal ? $t('pageNetwork.table.editIpv6') : $t('pageNetwork.table.addIpv6Address')"
+    :title="
+      editModal
+        ? $t('pageNetwork.table.editIpv6')
+        : $t('pageNetwork.table.addIpv6Address')
+    "
     @hidden="resetForm"
   >
     <b-form id="form-ipv6" @submit.prevent="handleSubmit">
       <b-row>
         <b-col sm="6">
-          <b-form-group :label="$t('pageNetwork.modal.ipAddress')" label-for="ipAddress">
+          <b-form-group
+            :label="$t('pageNetwork.modal.ipAddress')"
+            label-for="ipAddress"
+          >
             <b-form-input
               id="ipAddress"
               v-model="form.ipAddress"
@@ -27,7 +34,10 @@
           </b-form-group>
         </b-col>
         <b-col sm="6">
-          <b-form-group :label="$t('pageNetwork.modal.prefixLength')" label-for="prefixLength">
+          <b-form-group
+            :label="$t('pageNetwork.modal.prefixLength')"
+            label-for="prefixLength"
+          >
             <b-form-input
               id="prefixLength"
               v-model="form.prefixLength"
@@ -39,7 +49,12 @@
               <template v-if="!$v.form.prefixLength.required">
                 {{ $t('global.form.fieldRequired') }}
               </template>
-              <template v-if="!$v.form.prefixLength.minLength || !$v.form.prefixLength.maxLength">
+              <template
+                v-if="
+                  !$v.form.prefixLength.minLength ||
+                  !$v.form.prefixLength.maxLength
+                "
+              >
                 {{
                   $t('global.form.valueMustBeBetween', {
                     min: 0,
@@ -65,7 +80,12 @@
 
 <script>
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import { required, minValue, maxValue, helpers } from 'vuelidate/lib/validators';
+import {
+  required,
+  minValue,
+  maxValue,
+  helpers,
+} from 'vuelidate/lib/validators';
 
 export default {
   mixins: [VuelidateMixin],

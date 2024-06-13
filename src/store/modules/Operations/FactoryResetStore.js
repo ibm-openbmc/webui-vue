@@ -14,7 +14,9 @@ const FactoryResetStore = {
         })
         .catch((error) => {
           console.log('Factory Reset: ', error);
-          throw new Error(i18n.t('pageFactoryReset.toast.resetToDefaultsError'));
+          throw new Error(
+            i18n.t('pageFactoryReset.toast.resetToDefaultsError'),
+          );
         });
     },
     async resetBios() {

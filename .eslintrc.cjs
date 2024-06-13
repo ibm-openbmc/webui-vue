@@ -14,7 +14,6 @@ module.exports = {
         singleQuote: true,
         semi: true,
         tabWidth: 2,
-        printWidth: 100,
         trailingComma: 'all',
       },
     ],
@@ -23,7 +22,10 @@ module.exports = {
   ignorePatterns: ['*.timestamp-*.mjs'],
   overrides: [
     {
-      files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)',
+      ],
       env: {
         jest: true,
       },

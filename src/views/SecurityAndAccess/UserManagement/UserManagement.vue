@@ -207,7 +207,9 @@ export default {
     allUsers() {
       return this.$store.getters['userManagement/allUsers'].map((user) => {
         // Changing users' description with redfish role description
-        const userDescription = this.accountRoles.filter((role) => user.RoleId.includes(role))[0];
+        const userDescription = this.accountRoles.filter((role) =>
+          user.RoleId.includes(role),
+        )[0];
 
         if (userDescription) user.Description = userDescription;
 
@@ -261,7 +263,9 @@ export default {
           maxLength: 20,
         };
       } else {
-        return this.$store.getters['userManagement/accountPasswordRequirements'];
+        return this.$store.getters[
+          'userManagement/accountPasswordRequirements'
+        ];
       }
     },
   },
@@ -337,8 +341,14 @@ export default {
                 this.selectedRows.length,
               ),
               {
-                title: this.$tc('pageUserManagement.deleteUser', this.selectedRows.length),
-                okTitle: this.$tc('pageUserManagement.deleteUser', this.selectedRows.length),
+                title: this.$tc(
+                  'pageUserManagement.deleteUser',
+                  this.selectedRows.length,
+                ),
+                okTitle: this.$tc(
+                  'pageUserManagement.deleteUser',
+                  this.selectedRows.length,
+                ),
                 cancelTitle: this.$t('global.action.cancel'),
               },
             )

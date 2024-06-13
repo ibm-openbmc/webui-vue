@@ -18,7 +18,9 @@ const useTableSelectableComposable = () => {
     if (tableRef && rowIndex !== undefined) {
       if (tableRef.isRowSelected(rowIndex)) {
         tableRef.unselectRow(rowIndex);
-        state.selectedRows = state.selectedRows.filter((index) => index !== rowIndex);
+        state.selectedRows = state.selectedRows.filter(
+          (index) => index !== rowIndex,
+        );
       } else {
         tableRef.selectRow(rowIndex);
         state.selectedRows.push(rowIndex);

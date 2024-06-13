@@ -106,18 +106,20 @@ export default {
     },
     dhcpState() {
       const ipv4Dhcp =
-        this.$store.getters['network/networkSettings'][this.selectedInterface].dhcpEnabled;
+        this.$store.getters['network/networkSettings'][this.selectedInterface]
+          .dhcpEnabled;
       const ipv6Dhcp =
-        this.$store.getters['network/networkSettings'][this.selectedInterface].ipv6OperatingMode ===
-        'Enabled'
+        this.$store.getters['network/networkSettings'][this.selectedInterface]
+          .ipv6OperatingMode === 'Enabled'
           ? true
           : false;
       return ipv4Dhcp || ipv6Dhcp ? true : false;
     },
     useDomainNameState: {
       get() {
-        return this.$store.getters['network/networkSettings'][this.selectedInterface]
-          .useDomainNameEnabled;
+        return this.$store.getters['network/networkSettings'][
+          this.selectedInterface
+        ].useDomainNameEnabled;
       },
       set(newValue) {
         return newValue;
@@ -125,7 +127,9 @@ export default {
     },
     useDnsState: {
       get() {
-        return this.$store.getters['network/networkSettings'][this.selectedInterface].useDnsEnabled;
+        return this.$store.getters['network/networkSettings'][
+          this.selectedInterface
+        ].useDnsEnabled;
       },
       set(newValue) {
         return newValue;
@@ -133,7 +137,9 @@ export default {
     },
     useNtpState: {
       get() {
-        return this.$store.getters['network/networkSettings'][this.selectedInterface].useNtpEnabled;
+        return this.$store.getters['network/networkSettings'][
+          this.selectedInterface
+        ].useNtpEnabled;
       },
       set(newValue) {
         return newValue;

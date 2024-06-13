@@ -3,7 +3,9 @@
     <page-title />
     <BRow class="mb-4">
       <BCol md="12">
-        <page-section :section-title="t('pageVirtualMedia.virtualMediaSubTitleFirst')">
+        <page-section
+          :section-title="t('pageVirtualMedia.virtualMediaSubTitleFirst')"
+        >
           <BRow>
             <BCol v-for="(dev, $index) in proxyDevices" :key="$index" md="6">
               <BFormGroup :label="dev.id" label-class="bold">
@@ -43,10 +45,20 @@
     </BRow>
     <BRow v-if="loadImageFromExternalServer" class="mb-4">
       <BCol md="12">
-        <page-section :section-title="t('pageVirtualMedia.virtualMediaSubTitleSecond')">
+        <page-section
+          :section-title="t('pageVirtualMedia.virtualMediaSubTitleSecond')"
+        >
           <BRow>
-            <BCol v-for="(device, $index) in legacyDevices" :key="$index" md="6">
-              <BFormGroup :label="device.id" :label-for="device.id" label-class="bold">
+            <BCol
+              v-for="(device, $index) in legacyDevices"
+              :key="$index"
+              md="6"
+            >
+              <BFormGroup
+                :label="device.id"
+                :label-for="device.id"
+                label-class="bold"
+              >
                 <BButton
                   variant="primary"
                   :disabled="device.isActive"

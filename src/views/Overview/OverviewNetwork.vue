@@ -1,3 +1,4 @@
+<!-- TODO: Work Requird -->
 <template>
   <overview-card
     v-if="network"
@@ -35,7 +36,9 @@
           <dd>
             {{
               dataFormatterGlobal.dataFormatter(
-                network.dhcpAddress.length !== 0 ? network.dhcpAddress[0].Address : null,
+                network.dhcpAddress.length !== 0
+                  ? network.dhcpAddress[0].Address
+                  : null,
               )
             }}
           </dd>
@@ -50,7 +53,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import NetworkStore from '../../store/modules/Settings/NetworkStore';
+import { NetworkStore } from '@/store';
 
 const { t } = useI18n();
 const dataFormatterGlobal = useDataFormatterGlobal();

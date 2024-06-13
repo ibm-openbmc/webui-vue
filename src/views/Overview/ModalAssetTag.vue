@@ -8,7 +8,10 @@
     <b-form id="asset-settings" @submit.prevent="handleSubmit">
       <b-row>
         <b-col sm="8">
-          <b-form-group :label="$t('pageOverview.assetTag')" label-for="asset-tag">
+          <b-form-group
+            :label="$t('pageOverview.assetTag')"
+            label-for="asset-tag"
+          >
             <b-form-input
               id="asset-tag"
               v-model="form.assetTag"
@@ -29,7 +32,12 @@
       <b-button variant="secondary" @click="cancel()">
         {{ $t('global.action.cancel') }}
       </b-button>
-      <b-button form="asset-settings" type="submit" variant="primary" @click="onOk">
+      <b-button
+        form="asset-settings"
+        type="submit"
+        variant="primary"
+        @click="onOk"
+      >
         {{ $t('global.action.save') }}
       </b-button>
     </template>

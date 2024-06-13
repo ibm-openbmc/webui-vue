@@ -1,3 +1,4 @@
+// TODO: Work Requird
 import IconDashboard from '@carbon/icons-vue/es/dashboard/16';
 import IconTextLinkAnalysis from '@carbon/icons-vue/es/text-link--analysis/16';
 import IconDataCheck from '@carbon/icons-vue/es/data--check/16';
@@ -1002,11 +1003,15 @@ export default function AppNavigationData({ $store, i18n }) {
     // Other navigation data...
   ]);
 
-  const roleId = computed(() => $store?.getters?.['global/currentUser']?.RoleId);
+  const roleId = computed(
+    () => $store?.getters?.['global/currentUser']?.RoleId,
+  );
   const systemInfo = computed(() => $store?.getters['global/modelType']);
   const hmcInfo = computed(() => $store?.getters['global/hmcManaged']);
 
-  const model = computed(() => (systemInfo.value?.startsWith('9043') ? 'Everest' : 'NotEverest'));
+  const model = computed(() =>
+    systemInfo.value?.startsWith('9043') ? 'Everest' : 'NotEverest',
+  );
   const isHmcManged = computed(() =>
     hmcInfo.value === 'Enabled' ? 'HMCManaged' : 'NonHMCManaged',
   );
@@ -1026,7 +1031,9 @@ export default function AppNavigationData({ $store, i18n }) {
         }
       });
       if (section?.children && section?.children.length > 0) {
-        const finalSection = section.children.filter((item) => !restrictedPages.includes(item));
+        const finalSection = section.children.filter(
+          (item) => !restrictedPages.includes(item),
+        );
         section.children = finalSection;
       }
       return section;

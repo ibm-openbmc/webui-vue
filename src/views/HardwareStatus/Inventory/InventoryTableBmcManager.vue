@@ -24,7 +24,11 @@
       </template>
       <!-- Name -->
       <template #cell(name)="row">
-        {{ row.item.name === 'OpenBmc Manager' ? $t('pageEventLogs.bmcManager') : row.item.name }}
+        {{
+          row.item.name === 'OpenBmc Manager'
+            ? $t('pageEventLogs.bmcManager')
+            : row.item.name
+        }}
       </template>
       <!-- Health -->
       <template #cell(health)="{ value }">
@@ -126,7 +130,9 @@ import PageSection from '@/components/Global/PageSection';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import StatusIcon from '@/components/Global/StatusIcon';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 
 export default {

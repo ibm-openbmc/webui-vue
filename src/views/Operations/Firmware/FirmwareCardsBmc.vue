@@ -93,7 +93,8 @@ export default {
   data() {
     return {
       loading,
-      switchToBackupImageDisabled: process.env.VUE_APP_SWITCH_TO_BACKUP_IMAGE_DISABLED === 'true',
+      switchToBackupImageDisabled:
+        process.env.VUE_APP_SWITCH_TO_BACKUP_IMAGE_DISABLED === 'true',
     };
   },
   computed: {
@@ -125,7 +126,9 @@ export default {
       return this.backup?.status || null;
     },
     showBackupImageStatus() {
-      return this.backupStatus === 'Critical' || this.backupStatus === 'Warning';
+      return (
+        this.backupStatus === 'Critical' || this.backupStatus === 'Warning'
+      );
     },
     firmwareBootSide() {
       return this.$store.getters['firmware/firmwareBootSide'];
@@ -143,10 +146,13 @@ export default {
 
       // Step 1 - Switch firmware
       const switchFirmware = () => {
-        this.infoToast(this.$t('pageFirmware.toast.switchToRunning.step1Message'), {
-          title: this.$t('pageFirmware.toast.switchToRunning.step1'),
-          timestamp: true,
-        });
+        this.infoToast(
+          this.$t('pageFirmware.toast.switchToRunning.step1Message'),
+          {
+            title: this.$t('pageFirmware.toast.switchToRunning.step1'),
+            timestamp: true,
+          },
+        );
         this.$store
           .dispatch('firmware/switchBmcFirmwareAndReboot')
           .then(async () => bmcReboot())
@@ -158,10 +164,13 @@ export default {
 
       // Step 2 - BMC Reboot
       const bmcReboot = () => {
-        this.infoToast(this.$t('pageFirmware.toast.switchToRunning.step2Message'), {
-          title: this.$t('pageFirmware.toast.switchToRunning.step2'),
-          timestamp: true,
-        });
+        this.infoToast(
+          this.$t('pageFirmware.toast.switchToRunning.step2Message'),
+          {
+            title: this.$t('pageFirmware.toast.switchToRunning.step2'),
+            timestamp: true,
+          },
+        );
         const timer = (checkCounter = 0) => {
           checkCounter++;
 
@@ -170,7 +179,9 @@ export default {
           // if this function runs more than 10 times, it won't run anymore
           if (checkCounter > 10) {
             this.endLoader();
-            return this.errorToast(this.$t('pageFirmware.toast.errorSwitchImages'));
+            return this.errorToast(
+              this.$t('pageFirmware.toast.errorSwitchImages'),
+            );
           }
 
           this.$store.dispatch('global/getBootProgress').then(() => {
@@ -190,11 +201,14 @@ export default {
       const step3 = () => {
         setTimeout(() => {
           this.endLoader();
-          return this.infoToast(this.$t('pageFirmware.toast.switchToRunning.step3Message'), {
-            title: this.$t('pageFirmware.toast.switchToRunning.step3'),
-            refreshAction: true,
-            timestamp: true,
-          });
+          return this.infoToast(
+            this.$t('pageFirmware.toast.switchToRunning.step3Message'),
+            {
+              title: this.$t('pageFirmware.toast.switchToRunning.step3'),
+              refreshAction: true,
+              timestamp: true,
+            },
+          );
         }, 120000); // 2 minutes
       };
 

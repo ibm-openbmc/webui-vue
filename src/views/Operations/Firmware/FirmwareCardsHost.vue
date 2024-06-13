@@ -58,7 +58,9 @@ export default {
       return this.backup?.status || null;
     },
     showBackupImageStatus() {
-      return this.backupStatus === 'Critical' || this.backupStatus === 'Warning';
+      return (
+        this.backupStatus === 'Critical' || this.backupStatus === 'Warning'
+      );
     },
   },
 };

@@ -10,7 +10,8 @@ const IBMiServiceFunctionsStore = {
     serviceFunctions: (state) => state.serviceFunctions,
   },
   mutations: {
-    setServiceFunctions: (state, serviceFunctions) => (state.serviceFunctions = serviceFunctions),
+    setServiceFunctions: (state, serviceFunctions) =>
+      (state.serviceFunctions = serviceFunctions),
   },
   actions: {
     async getAvailableServiceFunctions({ commit }) {
@@ -21,17 +22,24 @@ const IBMiServiceFunctionsStore = {
     },
     async executeServiceFunction({ dispatch }, value) {
       return await api
-        .post('/redfish/v1/Systems/system/Actions/Oem/OemComputerSystem.ExecutePanelFunction', {
-          FuncNo: value,
-        })
+        .post(
+          '/redfish/v1/Systems/system/Actions/Oem/OemComputerSystem.ExecutePanelFunction',
+          {
+            FuncNo: value,
+          },
+        )
         .then(() => {
           dispatch('getAvailableServiceFunctions');
-          return i18n.tc('pageIbmiServiceFunctions.toast.successExecuteFunction');
+          return i18n.tc(
+            'pageIbmiServiceFunctions.toast.successExecuteFunction',
+          );
         })
         .catch((error) => {
           console.log(error);
           dispatch('getAvailableServiceFunctions');
-          throw new Error(i18n.tc('pageIbmiServiceFunctions.toast.errorExecuteFunction'));
+          throw new Error(
+            i18n.tc('pageIbmiServiceFunctions.toast.errorExecuteFunction'),
+          );
         });
     },
   },

@@ -1,3 +1,4 @@
+<!-- TODO: Work Requird -->
 <template>
   <BForm class="login-form" novalidate @submit.prevent="login">
     <BFormGroup label-for="language" :label="t('pageLogin.language')">
@@ -57,13 +58,14 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { AuthenticationStore } from '../../store/modules/Authentication/AuthenticationStore';
+import { AuthenticationStore } from '@/store';
 import i18n from '@/i18n';
 import { useRouter } from 'vue-router';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import GlobalStore from '../../store/modules/GlobalStore';
+// import GlobalStore from '../../store/modules/GlobalStore';
+import { GlobalStore } from '@/store';
 
 const router = useRouter();
 const globalStore = GlobalStore();

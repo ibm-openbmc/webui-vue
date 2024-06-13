@@ -50,7 +50,8 @@ export default {
       isLinuxKvmValid: true,
       form: {
         attributes: this.$store.getters['serverBootSettings/biosAttributes'],
-        attributeValues: this.$store.getters['serverBootSettings/attributeValues'],
+        attributeValues:
+          this.$store.getters['serverBootSettings/attributeValues'],
       },
     };
   },
@@ -80,7 +81,9 @@ export default {
     Promise.all([
       this.$store.dispatch('serverBootSettings/getBiosAttributes'),
       this.$store.dispatch('serverBootSettings/getAttributeValues'),
-    ]).finally(this.$root.$emit('server-power-operations-boot-settings-complete'));
+    ]).finally(
+      this.$root.$emit('server-power-operations-boot-settings-complete'),
+    );
   },
   methods: {
     updateAttributeKeys(attributeKeys) {
@@ -101,7 +104,9 @@ export default {
           if (!this.isUpdated) {
             if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
               this.successToast(
-                this.$t('pageServerPowerOperations.toast.successSaveLinuxKvmSettings'),
+                this.$t(
+                  'pageServerPowerOperations.toast.successSaveLinuxKvmSettings',
+                ),
               );
             } else if (
               (settings.biosSettings.pvm_default_os_type == 'IBM I' &&
@@ -110,13 +115,27 @@ export default {
                 this.isAtleastPhypInStandby)
             ) {
               if (this.isInPhypStandby) {
-                this.infoToast(this.$t('pageServerPowerOperations.toast.successSaveIBMiStandby')),
-                  this.successToast(this.$t('pageServerPowerOperations.toast.successSaveSettings'));
+                this.infoToast(
+                  this.$t(
+                    'pageServerPowerOperations.toast.successSaveIBMiStandby',
+                  ),
+                ),
+                  this.successToast(
+                    this.$t(
+                      'pageServerPowerOperations.toast.successSaveSettings',
+                    ),
+                  );
               } else {
                 this.infoToast(
-                  this.$t('pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo'),
+                  this.$t(
+                    'pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo',
+                  ),
                 ),
-                  this.successToast(this.$t('pageServerPowerOperations.toast.successSaveSettings'));
+                  this.successToast(
+                    this.$t(
+                      'pageServerPowerOperations.toast.successSaveSettings',
+                    ),
+                  );
               }
             } else {
               this.successToast(message);

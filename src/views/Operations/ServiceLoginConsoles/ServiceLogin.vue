@@ -4,7 +4,12 @@
 
     <page-section class="mb-0">
       <b-row class="d-flex">
-        <b-col sm="6" lg="5" xl="4" class="d-flex flex-column justify-content-end">
+        <b-col
+          sm="6"
+          lg="5"
+          xl="4"
+          class="d-flex flex-column justify-content-end"
+        >
           <b-form id="form-new-dump">
             <b-form-group
               :label="$t('pageServiceLoginConsoles.selectConsoleType')"

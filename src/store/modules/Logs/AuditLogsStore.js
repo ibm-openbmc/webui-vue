@@ -9,7 +9,8 @@ const AuditLogsStore = {
     allAuditLogs: (state) => state.allAuditLogs,
   },
   mutations: {
-    setAllAuditLogs: (state, allAuditLogs) => (state.allAuditLogs = allAuditLogs),
+    setAllAuditLogs: (state, allAuditLogs) =>
+      (state.allAuditLogs = allAuditLogs),
   },
   actions: {
     async getAuditLogData({ commit }) {

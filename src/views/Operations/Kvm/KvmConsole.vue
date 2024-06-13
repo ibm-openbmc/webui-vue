@@ -4,7 +4,9 @@
       <BRow class="d-flex">
         <BCol class="d-flex flex-column justify-content-end" cols="4">
           <dl class="mb-2" sm="2" md="2">
-            <dt class="d-inline font-weight-bold mr-1">{{ $t('pageKvm.status') }}:</dt>
+            <dt class="d-inline font-weight-bold mr-1">
+              {{ $t('pageKvm.status') }}:
+            </dt>
             <dd class="d-inline">
               <status-icon :status="serverStatusIcon" />
               <span class="d-none d-md-inline"> {{ serverStatus }}</span>
@@ -13,11 +15,21 @@
         </BCol>
 
         <BCol class="d-flex justify-content-end pe-1">
-          <BButton v-if="isConnected" variant="link" type="button" @click="sendCtrlAltDel">
+          <BButton
+            v-if="isConnected"
+            variant="link"
+            type="button"
+            @click="sendCtrlAltDel"
+          >
             <icon-arrow-down />
             {{ $t('pageKvm.buttonCtrlAltDelete') }}
           </BButton>
-          <BButton v-if="!isFullWindow" variant="link" type="button" @click="openConsoleWindow()">
+          <BButton
+            v-if="!isFullWindow"
+            variant="link"
+            type="button"
+            @click="openConsoleWindow()"
+          >
             <icon-launch />
             {{ $t('pageKvm.openNewTab') }}
           </BButton>
@@ -124,7 +136,10 @@ const setWidthToolbar = () => {
     document.getElementById('terminal-kvm').children[0].children.length > 0
   ) {
     toolbar.value.style.width =
-      document.getElementById('terminal-kvm').children[0].children[0].clientWidth - 10 + 'px';
+      document.getElementById('terminal-kvm').children[0].children[0]
+        .clientWidth -
+      10 +
+      'px';
   }
 };
 const openConsoleWindow = () => {

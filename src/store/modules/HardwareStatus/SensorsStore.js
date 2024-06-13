@@ -16,7 +16,9 @@ const SensorsStore = {
       return await api
         .get('/redfish/v1/')
         .then((response) => api.get(response.data.Chassis['@odata.id']))
-        .then(({ data: { Members } }) => Members.map((member) => member['@odata.id']))
+        .then(({ data: { Members } }) =>
+          Members.map((member) => member['@odata.id']),
+        )
         .catch((error) => console.log(error));
     },
     async getAllSensors({ commit, dispatch }) {

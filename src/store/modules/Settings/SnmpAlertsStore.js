@@ -28,7 +28,9 @@ const SnmpAlertsStore = {
       const snmpAlertUrl = await dispatch('getSnmpAlertUrl');
       return await api
         .get(snmpAlertUrl)
-        .then((response) => response.data.Members.map((user) => user['@odata.id']))
+        .then((response) =>
+          response.data.Members.map((user) => user['@odata.id']),
+        )
         .then((userIds) => api.all(userIds.map((user) => api.get(user))))
         .then((users) => {
           const snmpDetailsData = users.map((user) => user.data);
@@ -55,9 +57,12 @@ const SnmpAlertsStore = {
         )
         .catch((error) => {
           console.log(error);
-          const message = i18n.t('pageSnmpAlerts.toast.errorDeleteDestination', {
-            id,
-          });
+          const message = i18n.t(
+            'pageSnmpAlerts.toast.errorDeleteDestination',
+            {
+              id,
+            },
+          );
           throw new Error(message);
         });
     },
@@ -80,11 +85,17 @@ const SnmpAlertsStore = {
             const { successCount, errorCount } = getResponseCount(responses);
             let toastMessages = [];
             if (successCount) {
-              const message = i18n.tc('pageSnmpAlerts.toast.successBatchDelete', successCount);
+              const message = i18n.tc(
+                'pageSnmpAlerts.toast.successBatchDelete',
+                successCount,
+              );
               toastMessages.push({ type: 'success', message });
             }
             if (errorCount) {
-              const message = i18n.tc('pageSnmpAlerts.toast.errorBatchDelete', errorCount);
+              const message = i18n.tc(
+                'pageSnmpAlerts.toast.errorBatchDelete',
+                errorCount,
+              );
               toastMessages.push({ type: 'error', message });
             }
             return toastMessages;

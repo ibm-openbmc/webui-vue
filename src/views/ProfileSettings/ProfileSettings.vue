@@ -4,7 +4,9 @@
 
     <b-row>
       <b-col md="8" lg="8" xl="6">
-        <page-section :section-title="$t('pageProfileSettings.profileInfoTitle')">
+        <page-section
+          :section-title="$t('pageProfileSettings.profileInfoTitle')"
+        >
           <dl>
             <dt>{{ $t('pageProfileSettings.username') }}</dt>
             <dd>
@@ -53,7 +55,12 @@
                   @input="$v.form.newPassword.$touch()"
                 />
                 <b-form-invalid-feedback role="alert">
-                  <template v-if="!$v.form.newPassword.minLength || !$v.form.newPassword.maxLength">
+                  <template
+                    v-if="
+                      !$v.form.newPassword.minLength ||
+                      !$v.form.newPassword.maxLength
+                    "
+                  >
                     {{
                       $t('pageProfileSettings.newPassLabelTextInfo', {
                         min: passwordRequirements.minLength,
@@ -118,7 +125,11 @@
           </b-col>
         </b-row>
       </page-section>
-      <b-button variant="primary" type="submit" data-test-id="profileSettings-button-saveSettings">
+      <b-button
+        variant="primary"
+        type="submit"
+        data-test-id="profileSettings-button-saveSettings"
+      >
         {{ $t('global.action.save') }}
       </b-button>
     </b-form>
@@ -144,7 +155,12 @@ export default {
     PageSection,
     PageTitle,
   },
-  mixins: [BVToastMixin, LocalTimezoneLabelMixin, LoadingBarMixin, VuelidateMixin],
+  mixins: [
+    BVToastMixin,
+    LocalTimezoneLabelMixin,
+    LoadingBarMixin,
+    VuelidateMixin,
+  ],
   data() {
     return {
       form: {
@@ -171,7 +187,9 @@ export default {
           maxLength: 20,
         };
       } else {
-        return this.$store.getters['userManagement/accountPasswordRequirements'];
+        return this.$store.getters[
+          'userManagement/accountPasswordRequirements'
+        ];
       }
     },
     timezone() {
@@ -228,7 +246,9 @@ export default {
     saveTimeZonePrefrenceData() {
       localStorage.setItem('storedUtcDisplay', this.form.isUtcDisplay);
       this.$store.commit('global/setUtcTime', this.form.isUtcDisplay);
-      this.successToast(this.$t('pageProfileSettings.toast.successUpdatingTimeZone'));
+      this.successToast(
+        this.$t('pageProfileSettings.toast.successUpdatingTimeZone'),
+      );
     },
     submitForm() {
       if (this.form.confirmPassword || this.form.newPassword) {

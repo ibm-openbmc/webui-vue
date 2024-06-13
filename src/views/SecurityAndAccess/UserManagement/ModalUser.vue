@@ -70,7 +70,11 @@
               <b-form-text id="username-help-block">
                 {{ $t('pageUserManagement.modal.cannotStartWithANumber') }}
                 <br />
-                {{ $t('pageUserManagement.modal.noSpecialCharactersExceptUnderscore') }}
+                {{
+                  $t(
+                    'pageUserManagement.modal.noSpecialCharactersExceptUnderscore',
+                  )
+                }}
               </b-form-text>
               <b-form-input
                 id="username"
@@ -87,7 +91,9 @@
                   {{ $t('global.form.fieldRequired') }}
                 </template>
                 <template v-else-if="!$v.form.username.maxLength">
-                  {{ $t('global.form.lengthMustBeBetween', { min: 1, max: 16 }) }}
+                  {{
+                    $t('global.form.lengthMustBeBetween', { min: 1, max: 16 })
+                  }}
                 </template>
                 <template v-else-if="!$v.form.username.pattern">
                   {{ $t('global.form.invalidFormat') }}
@@ -146,7 +152,11 @@
                   <template v-if="!$v.form.password.required">
                     {{ $t('global.form.fieldRequired') }}
                   </template>
-                  <template v-if="!$v.form.password.minLength || !$v.form.password.maxLength">
+                  <template
+                    v-if="
+                      !$v.form.password.minLength || !$v.form.password.maxLength
+                    "
+                  >
                     {{
                       $t('pageUserManagement.modal.passwordMustBeBetween', {
                         min: passwordRequirements.minLength,
@@ -177,7 +187,9 @@
                   <template v-if="!$v.form.passwordConfirmation.required">
                     {{ $t('global.form.fieldRequired') }}
                   </template>
-                  <template v-else-if="!$v.form.passwordConfirmation.sameAsPassword">
+                  <template
+                    v-else-if="!$v.form.passwordConfirmation.sameAsPassword"
+                  >
                     {{ $t('pageUserManagement.modal.passwordsDoNotMatch') }}
                   </template>
                 </b-form-invalid-feedback>
@@ -188,7 +200,11 @@
       </b-container>
     </b-form>
     <template #modal-footer="{ cancel }">
-      <b-button variant="secondary" data-test-id="userManagement-button-cancel" @click="cancel()">
+      <b-button
+        variant="secondary"
+        data-test-id="userManagement-button-cancel"
+        @click="cancel()"
+      >
         {{ $t('global.action.cancel') }}
       </b-button>
       <b-button

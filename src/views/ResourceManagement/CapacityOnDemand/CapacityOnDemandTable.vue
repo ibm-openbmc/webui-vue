@@ -56,7 +56,9 @@
             <div v-else-if="value == 'Live partition mobility'">
               {{ $t('pageCapacityOnDemand.setting.livePartitionMobility') }}
             </div>
-            <div v-else-if="value == 'Greater than 128 processors per partition'">
+            <div
+              v-else-if="value == 'Greater than 128 processors per partition'"
+            >
               {{ $t('pageCapacityOnDemand.setting.perPartition') }}
             </div>
             <div v-else-if="value == 'P05 Virtual Tier'">
@@ -75,7 +77,9 @@
               {{ $t('pageCapacityOnDemand.setting.permanentMemoryLicenses') }}
             </div>
             <div v-else-if="value == 'Permanent Processor Licenses'">
-              {{ $t('pageCapacityOnDemand.setting.permanentProcessorLicenses') }}
+              {{
+                $t('pageCapacityOnDemand.setting.permanentProcessorLicenses')
+              }}
             </div>
             <div v-else-if="value == 'Subprocessor partitioning'">
               {{ $t('pageCapacityOnDemand.setting.subprocessorPartitioning') }}
@@ -90,7 +94,11 @@
               {{ $t('pageCapacityOnDemand.setting.firmwareUpdateAccessKey') }}
             </div>
             <div v-else-if="value == 'Virtualization Engine Technology'">
-              {{ $t('pageCapacityOnDemand.setting.virtualizationEngineTechnology') }}
+              {{
+                $t(
+                  'pageCapacityOnDemand.setting.virtualizationEngineTechnology',
+                )
+              }}
             </div>
             <div v-else-if="value == 'Virtual I/O server capable'">
               {{ $t('pageCapacityOnDemand.setting.virtualIoServer') }}
@@ -106,23 +114,39 @@
               v-if="value == 'Enabled'"
               >{{ $t('pageCapacityOnDemand.enabled') }}</span
             >
-            <span v-else-if="value == 'Disabled'">{{ $t('pageCapacityOnDemand.disabled') }}</span>
+            <span v-else-if="value == 'Disabled'">{{
+              $t('pageCapacityOnDemand.disabled')
+            }}</span>
             <span v-else-if="value == 'StandbyOffline'">{{
               $t('pageCapacityOnDemand.standbyOffline')
             }}</span>
             <span v-else-if="value == 'StandbySpare'">{{
               $t('pageCapacityOnDemand.standbySpare')
             }}</span>
-            <span v-else-if="value == 'InTest'">{{ $t('pageCapacityOnDemand.inTest') }}</span>
-            <span v-else-if="value == 'Starting'">{{ $t('pageCapacityOnDemand.starting') }}</span>
-            <span v-else-if="value == 'Absent'">{{ $t('pageCapacityOnDemand.absent') }}</span>
+            <span v-else-if="value == 'InTest'">{{
+              $t('pageCapacityOnDemand.inTest')
+            }}</span>
+            <span v-else-if="value == 'Starting'">{{
+              $t('pageCapacityOnDemand.starting')
+            }}</span>
+            <span v-else-if="value == 'Absent'">{{
+              $t('pageCapacityOnDemand.absent')
+            }}</span>
             <span v-else-if="value == 'UnavailableOffline'">{{
               $t('pageCapacityOnDemand.unavailableOffline')
             }}</span>
-            <span v-else-if="value == 'Deferring'">{{ $t('pageCapacityOnDemand.deferring') }}</span>
-            <span v-else-if="value == 'Quiesced'">{{ $t('pageCapacityOnDemand.quiesced') }}</span>
-            <span v-else-if="value == 'Updating'">{{ $t('pageCapacityOnDemand.updating') }}</span>
-            <span v-else-if="value == 'Qualified'">{{ $t('pageCapacityOnDemand.qualified') }}</span>
+            <span v-else-if="value == 'Deferring'">{{
+              $t('pageCapacityOnDemand.deferring')
+            }}</span>
+            <span v-else-if="value == 'Quiesced'">{{
+              $t('pageCapacityOnDemand.quiesced')
+            }}</span>
+            <span v-else-if="value == 'Updating'">{{
+              $t('pageCapacityOnDemand.updating')
+            }}</span>
+            <span v-else-if="value == 'Qualified'">{{
+              $t('pageCapacityOnDemand.qualified')
+            }}</span>
           </template>
         </b-table>
       </page-section>

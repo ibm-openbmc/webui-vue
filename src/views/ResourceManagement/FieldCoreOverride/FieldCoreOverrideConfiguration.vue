@@ -1,9 +1,15 @@
 <template>
   <b-row>
     <b-col xl="4">
-      <page-section :section-title="$t('pageFieldCoreOverride.changeConfiguration')">
+      <page-section
+        :section-title="$t('pageFieldCoreOverride.changeConfiguration')"
+      >
         <b-form @submit.prevent="submitForm">
-          <b-form-checkbox id="checkbox-1" v-model="inputEnableFieldCoreOverride" class="mb-3">
+          <b-form-checkbox
+            id="checkbox-1"
+            v-model="inputEnableFieldCoreOverride"
+            class="mb-3"
+          >
             {{ $t('pageFieldCoreOverride.enableFieldCoreOverride') }}
           </b-form-checkbox>
           <b-form-group
@@ -58,8 +64,10 @@ export default {
   mixins: [VuelidateMixin, BVToastMixin],
   data() {
     return {
-      inputEnableFieldCoreOverride: this.$store.getters['fieldCoreOverride/isEnabled'],
-      inputConfiguredCores: this.$store.getters['fieldCoreOverride/configuredCores'] || null,
+      inputEnableFieldCoreOverride:
+        this.$store.getters['fieldCoreOverride/isEnabled'],
+      inputConfiguredCores:
+        this.$store.getters['fieldCoreOverride/configuredCores'] || null,
       minValue: 1,
     };
   },
@@ -109,7 +117,10 @@ export default {
       this.$v.$touch();
       if (this.$v.$invalid) return;
       this.$store
-        .dispatch('fieldCoreOverride/setFieldCoreOverride', this.inputConfiguredCores)
+        .dispatch(
+          'fieldCoreOverride/setFieldCoreOverride',
+          this.inputConfiguredCores,
+        )
         .then((success) => this.successToast(success))
         .catch(({ message }) => this.errorToast(message));
     },

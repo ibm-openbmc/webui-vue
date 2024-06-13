@@ -17,7 +17,8 @@ const getHealthStatus = (events, loadedEvents) => {
 
 // TODO: High priority events should also check if Log
 // is resolved when the property is available in Redfish
-const getHighPriorityEvents = (events) => events.filter(({ severity }) => severity === 'Critical');
+const getHighPriorityEvents = (events) =>
+  events.filter(({ severity }) => severity === 'Critical');
 
 export const EventLogStore = defineStore('eventLog', {
   state: () => ({
@@ -27,7 +28,8 @@ export const EventLogStore = defineStore('eventLog', {
   getters: {
     getAllEvents: (state) => state.allEvents,
     highPriorityEvents: (state) => getHighPriorityEvents(state.allEvents),
-    healthStatus: (state) => getHealthStatus(state.allEvents, state.loadedEvents),
+    healthStatus: (state) =>
+      getHealthStatus(state.allEvents, state.loadedEvents),
   },
   actions: {
     async getEventLogData() {
@@ -69,12 +71,18 @@ export const EventLogStore = defineStore('eventLog', {
     },
     async deleteAllEventLogs(data) {
       return await api
-        .post('/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog')
+        .post(
+          '/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog',
+        )
         .then(() => this.getEventLogData())
-        .then(() => i18n.global.t('pageEventLogs.toast.successDelete', data.length))
+        .then(() =>
+          i18n.global.t('pageEventLogs.toast.successDelete', data.length),
+        )
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.global.t('pageEventLogs.toast.errorDelete', data.length));
+          throw new Error(
+            i18n.global.t('pageEventLogs.toast.errorDelete', data.length),
+          );
         });
     },
     async deleteEventLogs(uris = []) {
@@ -96,12 +104,18 @@ export const EventLogStore = defineStore('eventLog', {
             const toastMessages = [];
 
             if (successCount) {
-              const message = i18n.global.t('pageEventLogs.toast.successDelete', successCount);
+              const message = i18n.global.t(
+                'pageEventLogs.toast.successDelete',
+                successCount,
+              );
               toastMessages.push({ type: 'success', message });
             }
 
             if (errorCount) {
-              const message = i18n.global.t('pageEventLogs.toast.errorDelete', errorCount);
+              const message = i18n.global.t(
+                'pageEventLogs.toast.errorDelete',
+                errorCount,
+              );
               toastMessages.push({ type: 'error', message });
             }
 
@@ -127,11 +141,17 @@ export const EventLogStore = defineStore('eventLog', {
             const { successCount, errorCount } = getResponseCount(responses);
             const toastMessages = [];
             if (successCount) {
-              const message = i18n.global.t('pageEventLogs.toast.successResolveLogs', successCount);
+              const message = i18n.global.t(
+                'pageEventLogs.toast.successResolveLogs',
+                successCount,
+              );
               toastMessages.push({ type: 'success', message });
             }
             if (errorCount) {
-              const message = i18n.global.t('pageEventLogs.toast.errorResolveLogs', errorCount);
+              const message = i18n.global.t(
+                'pageEventLogs.toast.errorResolveLogs',
+                errorCount,
+              );
               toastMessages.push({ type: 'error', message });
             }
             return toastMessages;
@@ -163,7 +183,10 @@ export const EventLogStore = defineStore('eventLog', {
               toastMessages.push({ type: 'success', message });
             }
             if (errorCount) {
-              const message = i18n.global.t('pageEventLogs.toast.errorUnresolveLogs', errorCount);
+              const message = i18n.global.t(
+                'pageEventLogs.toast.errorUnresolveLogs',
+                errorCount,
+              );
               toastMessages.push({ type: 'error', message });
             }
             return toastMessages;

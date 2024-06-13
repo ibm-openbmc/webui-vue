@@ -2,7 +2,10 @@
   <page-section :section-title="$t('pageInventory.fans')">
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
-        <search @change-search="onChangeSearchInput" @clear-search="onClearSearchInput" />
+        <search
+          @change-search="onChangeSearchInput"
+          @clear-search="onClearSearchInput"
+        />
       </b-col>
       <b-col sm="6" md="3" xl="2">
         <table-cell-count
@@ -47,7 +50,10 @@
       </template>
       <!-- Health -->
       <template #cell(health)="{ value }">
-        <status-icon v-if="isIoExpansionChassis && isPoweredOff" :status="statusIcon('')" />
+        <status-icon
+          v-if="isIoExpansionChassis && isPoweredOff"
+          :status="statusIcon('')"
+        />
         <status-icon v-else :status="statusIcon(value)" />
         {{
           isIoExpansionChassis && isPoweredOff
@@ -161,8 +167,12 @@ import StatusIcon from '@/components/Global/StatusIcon';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import Search from '@/components/Global/Search';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
@@ -229,7 +239,9 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.fans.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.fans.length;
     },
     fans() {
       return this.$store.getters['fan/fans'];
@@ -268,11 +280,13 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('fan/getAllFans', { uri: this.chassis }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      this.$root.$emit('hardware-status-fans-complete');
-      this.isBusy = false;
-    });
+    this.$store
+      .dispatch('fan/getAllFans', { uri: this.chassis })
+      .finally(() => {
+        // Emit initial data fetch complete to parent component
+        this.$root.$emit('hardware-status-fans-complete');
+        this.isBusy = false;
+      });
   },
   methods: {
     sortCompare(a, b, key) {

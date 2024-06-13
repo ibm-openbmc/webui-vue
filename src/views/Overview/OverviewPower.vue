@@ -1,5 +1,9 @@
+<!-- TODO: Work Requird -->
 <template>
-  <overview-card :title="t('pageOverview.powerInformation')" :to="`/resource-management/power`">
+  <overview-card
+    :title="t('pageOverview.powerInformation')"
+    :to="`/resource-management/power`"
+  >
     <BRow class="mt-3">
       <BCol sm="6">
         <dl>
@@ -22,7 +26,8 @@
 <script setup>
 import { computed } from 'vue';
 import OverviewCard from './OverviewCard.vue';
-import PowerControlStore from '../../store/modules/ResourceManagement/PowerControlStore';
+import { PowerControlStore } from '@/store';
+
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

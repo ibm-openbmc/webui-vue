@@ -1,7 +1,12 @@
+<!-- TODO: Work Requird -->
 <template>
   <BTransition name="fade">
     <BProgress v-if="!isLoadingComplete.value">
-      <BProgressBar :value="loadingIndicatorValue.value" aria-label="Loading Progress" animated />
+      <BProgressBar
+        :value="loadingIndicatorValue.value"
+        aria-label="Loading Progress"
+        animated
+      />
     </BProgress>
   </BTransition>
 </template>

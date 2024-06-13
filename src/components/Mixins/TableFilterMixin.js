@@ -23,7 +23,12 @@ const TableFilterMixin = {
         return returnRow;
       });
     },
-    getFilteredTableDataByDate(tableData = [], startDate, endDate, propertyKey = 'date') {
+    getFilteredTableDataByDate(
+      tableData = [],
+      startDate,
+      endDate,
+      propertyKey = 'date',
+    ) {
       if (!startDate && !endDate) return tableData;
       let startDateInMs = startDate ? startDate.getTime() : 0;
       let endDateInMs = endDate ? endDate.getTime() : Number.POSITIVE_INFINITY;
@@ -32,7 +37,9 @@ const TableFilterMixin = {
 
       //Offset preference selected
       if (!isUtcDisplay) {
-        startDateInMs = startDate ? startDate.getTime() + startDate.getTimezoneOffset() * 60000 : 0;
+        startDateInMs = startDate
+          ? startDate.getTime() + startDate.getTimezoneOffset() * 60000
+          : 0;
         endDateInMs = endDate
           ? endDate.getTime() + endDate.getTimezoneOffset() * 60000
           : Number.POSITIVE_INFINITY;

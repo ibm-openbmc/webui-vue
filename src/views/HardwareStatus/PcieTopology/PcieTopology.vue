@@ -115,7 +115,9 @@
                 <b-col lg="4" xl="4" md="4" sm="4" xs="4">
                   <dl class="fontStyle">
                     <!-- Link properties -->
-                    <dt class="headerStyle">{{ $t('pagePcieTopology.linkProperties') }}:</dt>
+                    <dt class="headerStyle">
+                      {{ $t('pagePcieTopology.linkProperties') }}:
+                    </dt>
                     <dd>
                       {{ $t('pagePcieTopology.speed') }}:
                       {{ dataFormatter(item.linkPropertiesSpeed) }}
@@ -135,7 +137,9 @@
                     <b-col>
                       <dl class="fontStyle">
                         <!-- PCIe Bridge -->
-                        <dt class="headerStyle">{{ $t('pagePcieTopology.bridgeOrHost') }}:</dt>
+                        <dt class="headerStyle">
+                          {{ $t('pagePcieTopology.bridgeOrHost') }}:
+                        </dt>
                         <dd>
                           {{ dataFormatter(item.pcieBridge.locationNumber) }}
                         </dd>
@@ -162,7 +166,8 @@
                         <div class="fontStyle">
                           {{ $t('pagePcieTopology.localPort') }}:
                           {{
-                            item.localPortLocation.length > 0 && item.localPortLocation[i]
+                            item.localPortLocation.length > 0 &&
+                            item.localPortLocation[i]
                               ? item.localPortLocation[i].locationNumber
                               : '--'
                           }}
@@ -171,7 +176,8 @@
                           {{ $t('pagePcieTopology.remotePort') }}:
                           {{
                             dataFormatter(
-                              item.remotePortLocation.length > 0 && item.remotePortLocation[i]
+                              item.remotePortLocation.length > 0 &&
+                                item.remotePortLocation[i]
                                 ? item.remotePortLocation[i].locationNumber
                                 : '--',
                             )
@@ -207,7 +213,11 @@
                   <b-row>
                     <b-col>
                       <template v-if="item.ioSlots.length > 0">
-                        <div v-for="(val, i) in item.ioSlots" :key="i" class="fontStyle">
+                        <div
+                          v-for="(val, i) in item.ioSlots"
+                          :key="i"
+                          class="fontStyle"
+                        >
                           {{ dataFormatter(val.locationNumber) }}
                         </div>
                       </template>
@@ -278,8 +288,12 @@ import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import ModalReset from './ResetLinkModal';
 import ModalLeds from './IdentifyLedsModal';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
 
 export default {
   name: 'PcieTopology',
@@ -388,7 +402,9 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredEntries.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.filteredEntries.length;
     },
     entries() {
       return this.$store.getters['pcieTopology/entries'];
@@ -437,8 +453,16 @@ export default {
     savePcieTopology() {
       this.$store
         .dispatch('pcieTopology/savePcie')
-        .then(() => this.successToast(this.$t('pagePcieTopology.toast.successSavePcieTopology')))
-        .catch(() => this.errorToast(this.$t('pagePcieTopology.toast.errorSavePcieTopology')));
+        .then(() =>
+          this.successToast(
+            this.$t('pagePcieTopology.toast.successSavePcieTopology'),
+          ),
+        )
+        .catch(() =>
+          this.errorToast(
+            this.$t('pagePcieTopology.toast.errorSavePcieTopology'),
+          ),
+        );
     },
     onFilterChange({ activeFilters }) {
       this.activeFilters = activeFilters;

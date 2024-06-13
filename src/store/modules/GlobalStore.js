@@ -62,7 +62,13 @@ export const GlobalStore = defineStore('global', {
         .get('/redfish/v1/Systems/system')
         .then(
           ({
-            data: { AssetTag, Model, PowerState, SerialNumber, Status: { State } = {} },
+            data: {
+              AssetTag,
+              Model,
+              PowerState,
+              SerialNumber,
+              Status: { State } = {},
+            },
           } = {}) => {
             this.assetTag = AssetTag;
             this.serialNumber = SerialNumber;

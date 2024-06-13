@@ -1,3 +1,4 @@
+<!-- TODO: Work Requird -->
 <template>
   <overview-card
     :data="eventLogData"
@@ -37,7 +38,7 @@ import StatusIcon from '@/components/Global/StatusIcon.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import EventLogStore from '../../store/modules/Logs/EventLogStore';
+import { EventLogStore } from '@/store';
 
 const { t } = useI18n();
 const eventLogStore = EventLogStore();
@@ -48,14 +49,20 @@ const eventLogData = computed(() => {
 });
 const criticalEvents = computed(() => {
   return eventLogData.value
-    .filter((log) => log.severity === 'Critical' && log.filterByStatus === 'Unresolved')
+    .filter(
+      (log) =>
+        log.severity === 'Critical' && log.filterByStatus === 'Unresolved',
+    )
     .map((log) => {
       return log;
     });
 });
 const warningEvents = computed(() => {
   return eventLogData.value
-    .filter((log) => log.severity === 'Warning' && log.filterByStatus === 'Unresolved')
+    .filter(
+      (log) =>
+        log.severity === 'Warning' && log.filterByStatus === 'Unresolved',
+    )
     .map((log) => {
       return log;
     });
@@ -63,7 +70,10 @@ const warningEvents = computed(() => {
 
 const exportFileNameByDate = () => {
   let date = new Date();
-  date = date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
+  date =
+    date.toISOString().slice(0, 10) +
+    '_' +
+    date.toString().split(':').join('-').split(' ')[4];
   let fileName = 'all_event_logs_';
   return fileName + date;
 };

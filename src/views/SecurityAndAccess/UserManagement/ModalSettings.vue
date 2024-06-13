@@ -21,7 +21,9 @@
                   })
                 }}
               </b-form-text>
-              <b-form-text>{{ $t('pageUserManagement.modal.zeroLoginAttempts') }}</b-form-text>
+              <b-form-text>{{
+                $t('pageUserManagement.modal.zeroLoginAttempts')
+              }}</b-form-text>
               <b-form-input
                 id="lockout-threshold"
                 v-model.number="form.lockoutThreshold"
@@ -36,7 +38,10 @@
                   {{ $t('global.form.fieldRequired') }}
                 </template>
                 <template
-                  v-if="!$v.form.lockoutThreshold.minLength || !$v.form.lockoutThreshold.maxLength"
+                  v-if="
+                    !$v.form.lockoutThreshold.minLength ||
+                    !$v.form.lockoutThreshold.maxLength
+                  "
                 >
                   {{
                     $t('global.form.valueMustBeBetween', {
@@ -49,7 +54,9 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group :label="$t('pageUserManagement.modal.userUnlockMethod')">
+            <b-form-group
+              :label="$t('pageUserManagement.modal.userUnlockMethod')"
+            >
               <b-form-radio
                 v-model="form.unlockMethod"
                 name="unlock-method"
@@ -97,7 +104,11 @@
       </b-container>
     </b-form>
     <template #modal-footer="{ cancel }">
-      <b-button variant="secondary" data-test-id="userManagement-button-cancel" @click="cancel()">
+      <b-button
+        variant="secondary"
+        data-test-id="userManagement-button-cancel"
+        @click="cancel()"
+      >
         {{ $t('global.action.cancel') }}
       </b-button>
       <b-button
@@ -115,7 +126,12 @@
 
 <script>
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import { required, requiredIf, minValue, maxValue } from 'vuelidate/lib/validators';
+import {
+  required,
+  requiredIf,
+  minValue,
+  maxValue,
+} from 'vuelidate/lib/validators';
 
 export default {
   mixins: [VuelidateMixin],
@@ -170,7 +186,9 @@ export default {
         lockoutThreshold = this.form.lockoutThreshold;
       }
       if (this.$v.form.unlockMethod.$dirty) {
-        lockoutDuration = this.form.unlockMethod ? this.form.lockoutDuration : 0;
+        lockoutDuration = this.form.unlockMethod
+          ? this.form.lockoutDuration
+          : 0;
       }
 
       this.$emit('ok', { lockoutThreshold, lockoutDuration });

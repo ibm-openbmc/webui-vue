@@ -10,7 +10,10 @@
           {{ firmwareAccessKeyInfo.expirationDate | formatDate }}
         </span>
       </dd>
-      <b-link class="d-inline-block mb-4 m-md-0" to="/resource-management/capacity-on-demand">
+      <b-link
+        class="d-inline-block mb-4 m-md-0"
+        to="/resource-management/capacity-on-demand"
+      >
         {{ $t('pageFirmware.form.updateFirmware.manageAccessKeys') }}
       </b-link>
     </dl>

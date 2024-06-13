@@ -2,7 +2,10 @@
   <page-section :section-title="$t('pageInventory.powerSupplies')">
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
-        <search @change-search="onChangeSearchInput" @clear-search="onClearSearchInput" />
+        <search
+          @change-search="onChangeSearchInput"
+          @clear-search="onClearSearchInput"
+        />
       </b-col>
       <b-col sm="6" md="3" xl="2">
         <table-cell-count
@@ -48,7 +51,10 @@
 
       <!-- Health -->
       <template #cell(health)="{ value }">
-        <status-icon v-if="isIoExpansionChassis && isPoweredOff" :status="statusIcon('')" />
+        <status-icon
+          v-if="isIoExpansionChassis && isPoweredOff"
+          :status="statusIcon('')"
+        />
         <status-icon v-else :status="statusIcon(value)" />
         {{
           isIoExpansionChassis && isPoweredOff
@@ -165,8 +171,12 @@ import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import InfoTooltip from '@/components/Global/InfoTooltip';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
 import Search from '@/components/Global/Search';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
@@ -240,7 +250,9 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.powerSupplies.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.powerSupplies.length;
     },
     powerSupplies() {
       return this.$store.getters['powerSupply/powerSupplies'];
@@ -271,19 +283,23 @@ export default {
   },
   watch: {
     chassis: function (value) {
-      this.$store.dispatch('powerSupply/getAllPowerSupplies', { uri: value }).finally(() => {
+      this.$store
+        .dispatch('powerSupply/getAllPowerSupplies', { uri: value })
+        .finally(() => {
+          // Emit initial data fetch complete to parent component
+          this.$root.$emit('hardware-status-power-supplies-complete');
+          this.isBusy = false;
+        });
+    },
+  },
+  created() {
+    this.$store
+      .dispatch('powerSupply/getAllPowerSupplies', { uri: this.chassis })
+      .finally(() => {
         // Emit initial data fetch complete to parent component
         this.$root.$emit('hardware-status-power-supplies-complete');
         this.isBusy = false;
       });
-    },
-  },
-  created() {
-    this.$store.dispatch('powerSupply/getAllPowerSupplies', { uri: this.chassis }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      this.$root.$emit('hardware-status-power-supplies-complete');
-      this.isBusy = false;
-    });
   },
   methods: {
     sortCompare(a, b, key) {

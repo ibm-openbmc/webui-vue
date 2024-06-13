@@ -16,7 +16,10 @@
     <b-row>
       <b-col md="8" xl="6">
         <b-form novalidate @submit.prevent="updateRpdFeature">
-          <b-select v-model="selectedFeatureOption" :options="rpdFeatOptions"></b-select>
+          <b-select
+            v-model="selectedFeatureOption"
+            :options="rpdFeatOptions"
+          ></b-select>
           <b-button variant="primary" type="submit" class="mt-3 mb-3">
             {{ $t('pageSystemParameters.updateRpdFeature') }}
           </b-button>
@@ -106,7 +109,8 @@
             <b-form-invalid-feedback role="alert">
               <template
                 v-if="
-                  !$v.rpdScheduledRunDuration.minLength || !$v.rpdScheduledRunDuration.maxLength
+                  !$v.rpdScheduledRunDuration.minLength ||
+                  !$v.rpdScheduledRunDuration.maxLength
                 "
               >
                 {{
@@ -121,7 +125,9 @@
               variant="primary"
               class="mt-3 mb-3"
               :disabled="isRpdFeatureCurrentDisabled || !isRpdPolicyScheduled"
-              @click="updateRpdScheduledRun(rpdScheduledRun, rpdScheduledRunDuration)"
+              @click="
+                updateRpdScheduledRun(rpdScheduledRun, rpdScheduledRunDuration)
+              "
             >
               {{ $t('pageSystemParameters.updateRpdScheduledRun') }}
             </b-button>
@@ -255,7 +261,9 @@ export default {
       }));
     },
     isRpdFeatureCurrentDisabled() {
-      return this.$store.getters['systemParameters/rpdPolicyCurrent'] === 'Disabled';
+      return (
+        this.$store.getters['systemParameters/rpdPolicyCurrent'] === 'Disabled'
+      );
     },
     aggressivePrefetchState: {
       get() {
@@ -288,7 +296,10 @@ export default {
       },
       set(value) {
         this.$v.$touch();
-        this.$store.commit('systemParameters/setRpdScheduledRunDuration', value);
+        this.$store.commit(
+          'systemParameters/setRpdScheduledRunDuration',
+          value,
+        );
       },
     },
     guardOnErrorState: {
@@ -337,7 +348,9 @@ export default {
         .then((message) => {
           if (value && this.isServerOff) {
             this.successToast(
-              this.$t('pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff'),
+              this.$t(
+                'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
+              ),
             );
           } else {
             this.successToast(message);

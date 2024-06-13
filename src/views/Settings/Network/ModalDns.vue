@@ -8,7 +8,10 @@
     <b-form id="form-dns" @submit.prevent="handleSubmit">
       <b-row>
         <b-col sm="6">
-          <b-form-group :label="$t('pageNetwork.modal.staticDns')" label-for="staticDns">
+          <b-form-group
+            :label="$t('pageNetwork.modal.staticDns')"
+            label-for="staticDns"
+          >
             <b-form-input
               id="staticDns"
               v-model="form.staticDns"

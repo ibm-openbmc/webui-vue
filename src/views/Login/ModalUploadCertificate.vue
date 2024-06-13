@@ -1,6 +1,8 @@
 <template>
   <b-modal id="upload-certificate" ref="modal" @ok="onOk" @hidden="resetForm">
-    <template #modal-title> {{ $t('pageLogin.modal.addNewServiceLoginCertificate') }}</template>
+    <template #modal-title>
+      {{ $t('pageLogin.modal.addNewServiceLoginCertificate') }}</template
+    >
     <b-form>
       <b-form-group :label="$t('pageLogin.modal.certificateFile')">
         <form-file

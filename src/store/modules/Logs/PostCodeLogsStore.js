@@ -9,7 +9,8 @@ const PostCodeLogsStore = {
     allPostCodes: (state) => state.allPostCodes,
   },
   mutations: {
-    setAllPostCodes: (state, allPostCodes) => (state.allPostCodes = allPostCodes),
+    setAllPostCodes: (state, allPostCodes) =>
+      (state.allPostCodes = allPostCodes),
   },
   actions: {
     async getPostCodesLogData({ commit }) {

@@ -14,7 +14,14 @@ const ChassisStore = {
   mutations: {
     setChassisInfo: (state, data) => {
       state.chassis = data.map((chassis) => {
-        const { Id, Status = {}, LocationIndicatorActive, Name, Location, Oem } = chassis;
+        const {
+          Id,
+          Status = {},
+          LocationIndicatorActive,
+          Name,
+          Location,
+          Oem,
+        } = chassis;
 
         return {
           id: Id,
@@ -34,7 +41,9 @@ const ChassisStore = {
     async getChassisInfo({ commit }) {
       return await api
         .get('/redfish/v1/Chassis')
-        .then(({ data: { Members = [] } }) => Members.map((member) => api.get(member['@odata.id'])))
+        .then(({ data: { Members = [] } }) =>
+          Members.map((member) => api.get(member['@odata.id'])),
+        )
         .then((promises) => api.all(promises))
         .then((response) => {
           const data = response.map(({ data }) => data);
@@ -61,9 +70,13 @@ const ChassisStore = {
           dispatch('getChassisInfo');
           console.log('error', error);
           if (led.identifyLed) {
-            throw new Error(i18n.t('pageInventory.toast.errorEnableIdentifyLed'));
+            throw new Error(
+              i18n.t('pageInventory.toast.errorEnableIdentifyLed'),
+            );
           } else {
-            throw new Error(i18n.t('pageInventory.toast.errorDisableIdentifyLed'));
+            throw new Error(
+              i18n.t('pageInventory.toast.errorDisableIdentifyLed'),
+            );
           }
         });
     },

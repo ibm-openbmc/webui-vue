@@ -40,7 +40,10 @@
                   </b-form-group>
                 </b-col>
                 <b-col lg="6">
-                  <b-form-group :label="$t('pageCertificates.modal.country')" label-for="country">
+                  <b-form-group
+                    :label="$t('pageCertificates.modal.country')"
+                    label-for="country"
+                  >
                     <b-form-select
                       id="country"
                       v-model="form.country"
@@ -63,7 +66,10 @@
               </b-row>
               <b-row>
                 <b-col lg="6">
-                  <b-form-group :label="$t('pageCertificates.modal.state')" label-for="state">
+                  <b-form-group
+                    :label="$t('pageCertificates.modal.state')"
+                    label-for="state"
+                  >
                     <b-form-input
                       id="state"
                       v-model="form.state"
@@ -77,7 +83,10 @@
                   </b-form-group>
                 </b-col>
                 <b-col lg="6">
-                  <b-form-group :label="$t('pageCertificates.modal.city')" label-for="city">
+                  <b-form-group
+                    :label="$t('pageCertificates.modal.city')"
+                    label-for="city"
+                  >
                     <b-form-input
                       id="city"
                       v-model="form.city"
@@ -218,7 +227,9 @@
                       :input-attrs="{
                         'aria-describedby': 'alternate-name-help-block',
                       }"
-                      :duplicate-tag-text="$t('pageCertificates.modal.duplicateAlternateName')"
+                      :duplicate-tag-text="
+                        $t('pageCertificates.modal.duplicateAlternateName')
+                      "
                       placeholder=""
                       data-test-id="modalGenerateCsr-input-alternateName"
                     >
@@ -395,7 +406,10 @@ export default {
         keyBitLength: null,
       },
       certificateOptions: CERTIFICATE_TYPES.reduce((arr, cert) => {
-        if (cert.type === 'TrustStore Certificate' || cert.type === 'ServiceLogin Certificate')
+        if (
+          cert.type === 'TrustStore Certificate' ||
+          cert.type === 'ServiceLogin Certificate'
+        )
           return arr;
         arr.push({
           text: cert.label,

@@ -2,13 +2,20 @@
   <b-modal
     id="modal-add-ipv4"
     ref="modal"
-    :title="editModal ? $t('pageNetwork.table.editIpv4') : $t('pageNetwork.table.addIpv4Address')"
+    :title="
+      editModal
+        ? $t('pageNetwork.table.editIpv4')
+        : $t('pageNetwork.table.addIpv4Address')
+    "
     @hidden="resetForm"
   >
     <b-form id="form-ipv4" @submit.prevent="handleSubmit">
       <b-row>
         <b-col sm="6">
-          <b-form-group :label="$t('pageNetwork.modal.ipAddress')" label-for="ipAddress">
+          <b-form-group
+            :label="$t('pageNetwork.modal.ipAddress')"
+            label-for="ipAddress"
+          >
             <b-form-input
               id="ipAddress"
               v-model="form.ipAddress"
@@ -27,7 +34,10 @@
           </b-form-group>
         </b-col>
         <b-col sm="6">
-          <b-form-group :label="$t('pageNetwork.modal.gateway')" label-for="gateway">
+          <b-form-group
+            :label="$t('pageNetwork.modal.gateway')"
+            label-for="gateway"
+          >
             <b-form-input
               id="gateway"
               v-model="form.gateway"
@@ -48,7 +58,10 @@
       </b-row>
       <b-row>
         <b-col sm="6">
-          <b-form-group :label="$t('pageNetwork.modal.subnetMask')" label-for="subnetMask">
+          <b-form-group
+            :label="$t('pageNetwork.modal.subnetMask')"
+            label-for="subnetMask"
+          >
             <b-form-input
               id="subnetMask"
               v-model="form.subnetMask"

@@ -10,10 +10,17 @@
           <p>
             {{ $t(`pageDumps.alert.${selectedDumpType}DumpMessage`) }}
             <span v-if="selectedDumpType === 'bmc'">
-              {{ hmcManaged === 'Disabled' ? $t(`pageDumps.alert.refreshMessage`) : '' }}
+              {{
+                hmcManaged === 'Disabled'
+                  ? $t(`pageDumps.alert.refreshMessage`)
+                  : ''
+              }}
             </span>
             <span
-              v-else-if="selectedDumpType === 'partition' || selectedDumpType === 'retryPartition'"
+              v-else-if="
+                selectedDumpType === 'partition' ||
+                selectedDumpType === 'retryPartition'
+              "
             >
               {{ $t(`pageIbmiServiceFunctions.alert.osRunningPartitionDump`) }}
             </span>
@@ -63,7 +70,10 @@
           </b-row>
           <b-row>
             <b-col class="text-right">
-              <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
+              <table-filter
+                :filters="tableFilters"
+                @filter-change="onFilterChange"
+              />
             </b-col>
           </b-row>
           <table-toolbar
@@ -101,7 +111,9 @@
             </template>
 
             <!-- Size column -->
-            <template #cell(size)="{ value }"> {{ convertBytesToMegabytes(value) }} MB </template>
+            <template #cell(size)="{ value }">
+              {{ convertBytesToMegabytes(value) }} MB
+            </template>
 
             <!-- Actions column -->
             <template #cell(actions)="row">
@@ -165,7 +177,9 @@ import TableCellCount from '@/components/Global/TableCellCount';
 import TableDateFilter from '@/components/Global/TableDateFilter';
 import TableRowAction from '@/components/Global/TableRowAction';
 import TableToolbar from '@/components/Global/TableToolbar';
-import BVTableSelectableMixin, { selectedRows } from '@/components/Mixins/BVTableSelectableMixin';
+import BVTableSelectableMixin, {
+  selectedRows,
+} from '@/components/Mixins/BVTableSelectableMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import BVPaginationMixin, {
   currentPage,
@@ -173,7 +187,9 @@ import BVPaginationMixin, {
   itemsPerPageOptions,
 } from '@/components/Mixins/BVPaginationMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
 import TableFilter from '@/components/Global/TableFilter';
 import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
 
@@ -269,7 +285,9 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredDumps.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.filteredDumps.length;
     },
     allDumps() {
       return this.$store.getters['dumps/allDumps'].map((item) => {
@@ -297,7 +315,10 @@ export default {
       );
     },
     filteredDumps() {
-      return this.getFilteredTableData(this.filteredDumpsByDate, this.activeFilters);
+      return this.getFilteredTableData(
+        this.filteredDumpsByDate,
+        this.activeFilters,
+      );
     },
     isInPhypStandby() {
       return this.$store.getters['global/isInPhypStandby'];
@@ -345,15 +366,17 @@ export default {
           })
           .then((deleteConfrimed) => {
             if (deleteConfrimed) {
-              this.$store.dispatch('dumps/deleteDumps', [dump]).then((messages) => {
-                messages.forEach(({ type, message }) => {
-                  if (type === 'success') {
-                    this.successToast(message);
-                  } else if (type === 'error') {
-                    this.errorToast(message);
-                  }
+              this.$store
+                .dispatch('dumps/deleteDumps', [dump])
+                .then((messages) => {
+                  messages.forEach(({ type, message }) => {
+                    if (type === 'success') {
+                      this.successToast(message);
+                    } else if (type === 'error') {
+                      this.errorToast(message);
+                    }
+                  });
                 });
-              });
             }
           });
       }
@@ -362,10 +385,19 @@ export default {
       if (action === 'delete') {
         this.$bvModal
           .msgBoxConfirm(
-            this.$tc('pageDumps.modal.deleteDumpConfirmation', this.selectedRows.length),
+            this.$tc(
+              'pageDumps.modal.deleteDumpConfirmation',
+              this.selectedRows.length,
+            ),
             {
-              title: this.$tc('pageDumps.modal.deleteDump', this.selectedRows.length),
-              okTitle: this.$tc('pageDumps.modal.deleteDump', this.selectedRows.length),
+              title: this.$tc(
+                'pageDumps.modal.deleteDump',
+                this.selectedRows.length,
+              ),
+              okTitle: this.$tc(
+                'pageDumps.modal.deleteDump',
+                this.selectedRows.length,
+              ),
               cancelTitle: this.$t('global.action.cancel'),
             },
           )
@@ -377,15 +409,17 @@ export default {
                   .then((success) => this.successToast(success))
                   .catch(({ message }) => this.errorToast(message));
               } else {
-                this.$store.dispatch('dumps/deleteDumps', this.selectedRows).then((messages) => {
-                  messages.forEach(({ type, message }) => {
-                    if (type === 'success') {
-                      this.successToast(message);
-                    } else if (type === 'error') {
-                      this.errorToast(message);
-                    }
+                this.$store
+                  .dispatch('dumps/deleteDumps', this.selectedRows)
+                  .then((messages) => {
+                    messages.forEach(({ type, message }) => {
+                      if (type === 'success') {
+                        this.successToast(message);
+                      } else if (type === 'error') {
+                        this.errorToast(message);
+                      }
+                    });
                   });
-                });
               }
             }
           });

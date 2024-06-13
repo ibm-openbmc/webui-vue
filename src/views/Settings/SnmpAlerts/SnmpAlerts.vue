@@ -150,8 +150,12 @@ export default {
         ];
         //condition to check if destination comes with protocol or not
         const conditionForProtocolCheck = destination.includes('://');
-        const ip = conditionForProtocolCheck ? dataWithProtocol[0] : dataWithoutProtocol[0];
-        const port = conditionForProtocolCheck ? dataWithProtocol[1] : dataWithoutProtocol[1];
+        const ip = conditionForProtocolCheck
+          ? dataWithProtocol[0]
+          : dataWithoutProtocol[0];
+        const port = conditionForProtocolCheck
+          ? dataWithProtocol[1]
+          : dataWithoutProtocol[1];
         return {
           ip: ip,
           port: port,
@@ -170,12 +174,16 @@ export default {
   },
   created() {
     this.startLoader();
-    this.$store.dispatch('snmpAlerts/getSnmpDetails').finally(() => this.endLoader());
+    this.$store
+      .dispatch('snmpAlerts/getSnmpDetails')
+      .finally(() => this.endLoader());
   },
   methods: {
     onModalOk({ ipAddress, port }) {
       const protocolIpAddress = 'snmp://' + ipAddress;
-      const destination = port ? protocolIpAddress + ':' + port : protocolIpAddress;
+      const destination = port
+        ? protocolIpAddress + ':' + port
+        : protocolIpAddress;
       const data = {
         Destination: destination,
         SubscriptionType: 'SNMPTrap',
@@ -222,13 +230,19 @@ export default {
       if (action === 'delete') {
         this.$bvModal
           .msgBoxConfirm(
-            this.$tc('pageSnmpAlerts.modal.batchDeleteConfirmMessage', this.selectedRows.length),
+            this.$tc(
+              'pageSnmpAlerts.modal.batchDeleteConfirmMessage',
+              this.selectedRows.length,
+            ),
             {
               title: this.$tc(
                 'pageSnmpAlerts.modal.deleteSnmpDestinationTitle',
                 this.selectedRows.length,
               ),
-              okTitle: this.$tc('pageSnmpAlerts.deleteDestination', this.selectedRows.length),
+              okTitle: this.$tc(
+                'pageSnmpAlerts.deleteDestination',
+                this.selectedRows.length,
+              ),
               cancelTitle: this.$t('global.action.cancel'),
             },
           )
@@ -236,7 +250,10 @@ export default {
             if (deleteConfirmed) {
               this.startLoader();
               this.$store
-                .dispatch('snmpAlerts/deleteMultipleDestinations', this.selectedRows)
+                .dispatch(
+                  'snmpAlerts/deleteMultipleDestinations',
+                  this.selectedRows,
+                )
                 .then((messages) => {
                   messages.forEach(({ type, message }) => {
                     if (type === 'success') this.successToast(message);

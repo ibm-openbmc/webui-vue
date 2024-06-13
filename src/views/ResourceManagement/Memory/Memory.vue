@@ -16,7 +16,11 @@
     <!-- Quicklinks section -->
     <page-section :section-title="$t('pageCapacityOnDemand.quickLinks')">
       <div v-for="item in quickLinks" :key="item.id">
-        <b-link :href="item.href" :data-ref="item.dataRef" @click.prevent="scrollToOffset">
+        <b-link
+          :href="item.href"
+          :data-ref="item.dataRef"
+          @click.prevent="scrollToOffset"
+        >
           <icon-jump-link /> {{ item.linkText }}
         </b-link>
       </div>
@@ -102,7 +106,10 @@
               ></b-form-input>
               <b-form-invalid-feedback role="alert">
                 <template
-                  v-if="!$v.systemMemoryPageSetup.minLength || !$v.systemMemoryPageSetup.maxLength"
+                  v-if="
+                    !$v.systemMemoryPageSetup.minLength ||
+                    !$v.systemMemoryPageSetup.maxLength
+                  "
                 >
                   {{
                     $t('global.form.valueMustBeBetween', {
@@ -155,7 +162,12 @@
                 :disabled="!isSectionEditable()"
               ></b-form-input>
               <b-form-invalid-feedback role="alert">
-                <template v-if="!$v.ioAdapterCapacity.minLength || !$v.ioAdapterCapacity.maxLength">
+                <template
+                  v-if="
+                    !$v.ioAdapterCapacity.minLength ||
+                    !$v.ioAdapterCapacity.maxLength
+                  "
+                >
                   {{
                     $t('global.form.valueMustBeBetween', {
                       min: 0,
@@ -165,7 +177,12 @@
                 </template>
               </b-form-invalid-feedback>
             </b-form-group>
-            <b-button variant="primary" type="submit" class="mt-3" :disabled="!isSectionEditable()">
+            <b-button
+              variant="primary"
+              type="submit"
+              class="mt-3"
+              :disabled="!isSectionEditable()"
+            >
               {{ $t('pageMemory.updateIoAdapterEnlargedCapacity') }}
             </b-button>
           </b-form>
@@ -208,7 +225,8 @@
                 <b-form-invalid-feedback role="alert">
                   <template
                     v-if="
-                      !$v.dynamicIoDrawerCapacity.minLength || !$v.dynamicIoDrawerCapacity.maxLength
+                      !$v.dynamicIoDrawerCapacity.minLength ||
+                      !$v.dynamicIoDrawerCapacity.maxLength
                     "
                   >
                     {{
@@ -248,7 +266,11 @@
         </b-col>
       </b-row>
       <b-row class="mt-3 mb-3">
-        <b-col md="8" xl="6" class="mb-3 d-flex align-items-center justify-content-between">
+        <b-col
+          md="8"
+          xl="6"
+          class="mb-3 d-flex align-items-center justify-content-between"
+        >
           <dl class="mr-3 w-75">
             <dt>
               {{ $t('pageMemory.activeMemoryMirroring') }}
@@ -306,7 +328,8 @@ export default {
   data() {
     return {
       form: {
-        logicalMemorySizeOption: this.$store.getters['resourceMemory/logicalMemorySize'],
+        logicalMemorySizeOption:
+          this.$store.getters['resourceMemory/logicalMemorySize'],
       },
       quickLinks: [
         {
@@ -343,7 +366,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('resourceMemory', ['logicalMemorySizeOptions', 'logicalMemorySize']),
+    ...mapState('resourceMemory', [
+      'logicalMemorySizeOptions',
+      'logicalMemorySize',
+    ]),
     activeMemoryMirroringState: {
       get() {
         return this.$store.getters['resourceMemory/memoryMirroringMode'];
@@ -357,7 +383,9 @@ export default {
     },
     dynamicIoDrawerDefaultCapacity: {
       get() {
-        return this.$store.getters['resourceMemory/dynamicIoDrawerDefaultCapacity'];
+        return this.$store.getters[
+          'resourceMemory/dynamicIoDrawerDefaultCapacity'
+        ];
       },
     },
     ioAdapterCapacity: {

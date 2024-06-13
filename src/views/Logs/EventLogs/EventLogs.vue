@@ -23,7 +23,11 @@
     <b-row>
       <b-col class="text-right">
         <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
-        <b-button variant="link" :disabled="allLogs.length === 0" @click="deleteAllLogs">
+        <b-button
+          variant="link"
+          :disabled="allLogs.length === 0"
+          @click="deleteAllLogs"
+        >
           <icon-delete /> {{ $t('global.action.deleteAll') }}
         </b-button>
         <b-button
@@ -300,8 +304,12 @@ import BVTableSelectableMixin, {
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
 
 export default {
   components: {
@@ -395,7 +403,10 @@ export default {
         {
           key: 'filterByStatus',
           label: this.$t('pageEventLogs.table.status'),
-          values: [this.$t('pageEventLogs.resolved'), this.$t('pageEventLogs.unresolved')],
+          values: [
+            this.$t('pageEventLogs.resolved'),
+            this.$t('pageEventLogs.unresolved'),
+          ],
         },
       ],
       expandRowLabel,
@@ -426,7 +437,9 @@ export default {
       return this.$store.getters['global/isServiceUser'];
     },
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredLogs.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.filteredLogs.length;
     },
     allLogs() {
       return this.$store.getters['eventLog/eventlogs'].map((event) => {
@@ -453,7 +466,10 @@ export default {
       );
     },
     filteredLogs() {
-      return this.getFilteredTableData(this.filteredLogsByDate, this.activeFilters);
+      return this.getFilteredTableData(
+        this.filteredLogsByDate,
+        this.activeFilters,
+      );
     },
   },
   created() {
@@ -473,7 +489,9 @@ export default {
     downloadFile(pelJsonInfo) {
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) +
+        '_' +
+        date.toString().split(':').join('-').split(' ')[4];
       let fileName;
       fileName = 'event_logs_' + date;
       var element = document.createElement('a');
@@ -541,16 +559,18 @@ export default {
         });
     },
     deleteLogs(uris) {
-      this.$store.dispatch('eventLog/deleteEventLogs', uris).then((messages) => {
-        messages.forEach(({ type, message }) => {
-          this.reloadEventLogData();
-          if (type === 'success') {
-            this.successToast(message);
-          } else if (type === 'error') {
-            this.errorToast(message);
-          }
+      this.$store
+        .dispatch('eventLog/deleteEventLogs', uris)
+        .then((messages) => {
+          messages.forEach(({ type, message }) => {
+            this.reloadEventLogData();
+            if (type === 'success') {
+              this.successToast(message);
+            } else if (type === 'error') {
+              this.errorToast(message);
+            }
+          });
         });
-      });
     },
     onFilterChange({ activeFilters }) {
       this.activeFilters = activeFilters;
@@ -590,11 +610,20 @@ export default {
       if (action === 'delete') {
         const uris = this.selectedRows.map((row) => row.uri);
         this.$bvModal
-          .msgBoxConfirm(this.$tc('pageEventLogs.modal.deleteMessage', this.selectedRows.length), {
-            title: this.$tc('pageEventLogs.modal.deleteTitle', this.selectedRows.length),
-            okTitle: this.$t('global.action.delete'),
-            cancelTitle: this.$t('global.action.cancel'),
-          })
+          .msgBoxConfirm(
+            this.$tc(
+              'pageEventLogs.modal.deleteMessage',
+              this.selectedRows.length,
+            ),
+            {
+              title: this.$tc(
+                'pageEventLogs.modal.deleteTitle',
+                this.selectedRows.length,
+              ),
+              okTitle: this.$t('global.action.delete'),
+              cancelTitle: this.$t('global.action.cancel'),
+            },
+          )
           .then((deleteConfirmed) => {
             if (deleteConfirmed) {
               if (this.selectedRows.length === this.allLogs.length) {
@@ -620,28 +649,32 @@ export default {
       this.searchTotalFilteredRows = filteredItems.length;
     },
     resolveLogs() {
-      this.$store.dispatch('eventLog/resolveEventLogs', this.selectedRows).then((messages) => {
-        messages.forEach(({ type, message }) => {
-          if (type === 'success') {
-            this.reloadEventLogData();
-            this.successToast(message);
-          } else if (type === 'error') {
-            this.errorToast(message);
-          }
+      this.$store
+        .dispatch('eventLog/resolveEventLogs', this.selectedRows)
+        .then((messages) => {
+          messages.forEach(({ type, message }) => {
+            if (type === 'success') {
+              this.reloadEventLogData();
+              this.successToast(message);
+            } else if (type === 'error') {
+              this.errorToast(message);
+            }
+          });
         });
-      });
     },
     unresolveLogs() {
-      this.$store.dispatch('eventLog/unresolveEventLogs', this.selectedRows).then((messages) => {
-        messages.forEach(({ type, message }) => {
-          if (type === 'success') {
-            this.reloadEventLogData();
-            this.successToast(message);
-          } else if (type === 'error') {
-            this.errorToast(message);
-          }
+      this.$store
+        .dispatch('eventLog/unresolveEventLogs', this.selectedRows)
+        .then((messages) => {
+          messages.forEach(({ type, message }) => {
+            if (type === 'success') {
+              this.reloadEventLogData();
+              this.successToast(message);
+            } else if (type === 'error') {
+              this.errorToast(message);
+            }
+          });
         });
-      });
     },
     async downloadEventLogs(value) {
       const pelJsonInfo = [];
@@ -670,7 +703,10 @@ export default {
         while (counter <= this.selectedRows.length) {
           this.startLoader();
           await this.$store
-            .dispatch('eventLog/downloadLogData', this.selectedRows[counter - 1].uri)
+            .dispatch(
+              'eventLog/downloadLogData',
+              this.selectedRows[counter - 1].uri,
+            )
             .then((returned) => {
               pelJsonInfo.push(returned);
               counter = counter + 1;

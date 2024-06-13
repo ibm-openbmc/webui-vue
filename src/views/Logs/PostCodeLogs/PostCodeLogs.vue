@@ -151,8 +151,12 @@ import BVTableSelectableMixin, {
 } from '@/components/Mixins/BVTableSelectableMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import TableRowExpandMixin, {
+  expandRowLabel,
+} from '@/components/Mixins/TableRowExpandMixin';
+import SearchFilterMixin, {
+  searchFilter,
+} from '@/components/Mixins/SearchFilterMixin';
 
 export default {
   components: {
@@ -225,24 +229,28 @@ export default {
   },
   computed: {
     filteredRows() {
-      return this.searchFilter ? this.searchTotalFilteredRows : this.filteredLogs.length;
+      return this.searchFilter
+        ? this.searchTotalFilteredRows
+        : this.filteredLogs.length;
     },
     allLogs() {
-      return this.$store.getters['postCodeLogs/allPostCodes'].map((postCodes) => {
-        return {
-          ...postCodes,
-          actions: [
-            {
-              value: 'export',
-              title: this.$t('pagePostCodeLogs.action.exportLogs'),
-            },
-            {
-              value: 'download',
-              title: this.$t('pagePostCodeLogs.action.downloadDetails'),
-            },
-          ],
-        };
-      });
+      return this.$store.getters['postCodeLogs/allPostCodes'].map(
+        (postCodes) => {
+          return {
+            ...postCodes,
+            actions: [
+              {
+                value: 'export',
+                title: this.$t('pagePostCodeLogs.action.exportLogs'),
+              },
+              {
+                value: 'download',
+                title: this.$t('pagePostCodeLogs.action.downloadDetails'),
+              },
+            ],
+          };
+        },
+      );
     },
     batchExportData() {
       return this.selectedRows.map((row) => omit(row, 'actions'));
@@ -255,7 +263,10 @@ export default {
       );
     },
     filteredLogs() {
-      return this.getFilteredTableData(this.filteredLogsByDate, this.activeFilters);
+      return this.getFilteredTableData(
+        this.filteredLogsByDate,
+        this.activeFilters,
+      );
     },
   },
   created() {
@@ -275,9 +286,15 @@ export default {
             .get(uri)
             .then((response) => this.generateSrcWords(response.data))
             .then((srcWords) =>
-              this.$set(this.srcData, timeStampOffset, `${postCode.trim()} ${srcWords}`),
+              this.$set(
+                this.srcData,
+                timeStampOffset,
+                `${postCode.trim()} ${srcWords}`,
+              ),
             )
-            .catch(() => this.errorToast(i18n.t('pagePostCodeLogs.toast.errorSrcFetch')));
+            .catch(() =>
+              this.errorToast(i18n.t('pagePostCodeLogs.toast.errorSrcFetch')),
+            );
         }
       }
     },
@@ -314,7 +331,9 @@ export default {
     exportFileNameByDate(value) {
       let date = new Date();
       date =
-        date.toISOString().slice(0, 10) + '_' + date.toString().split(':').join('-').split(' ')[4];
+        date.toISOString().slice(0, 10) +
+        '_' +
+        date.toString().split(':').join('-').split(' ')[4];
       let fileName;
       if (value === 'download') {
         fileName = this.$t('pagePostCodeLogs.downloadFilePrefix');

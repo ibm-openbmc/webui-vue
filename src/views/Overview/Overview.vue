@@ -1,8 +1,12 @@
+<!-- TODO: Work Requird -->
 <template>
   <BContainer fluid="xl">
     <page-title />
     <overview-quick-links class="mb-4" />
-    <page-section :section-title="t('pageOverview.systemInformation')" class="mb-1">
+    <page-section
+      :section-title="t('pageOverview.systemInformation')"
+      class="mb-1"
+    >
       <BCardGroup deck>
         <overview-server />
         <overview-firmware />
@@ -36,7 +40,10 @@ import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 
 const { t } = useI18n();
-console.log('import.meta.env.VITE_APP_ENV_NAME', import.meta.env.VITE_APP_ENV_NAME);
+console.log(
+  'import.meta.env.VITE_APP_ENV_NAME',
+  import.meta.env.VITE_APP_ENV_NAME,
+);
 console.log('import.meta.env', import.meta.env);
 
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
