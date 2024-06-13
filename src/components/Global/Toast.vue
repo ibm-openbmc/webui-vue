@@ -1,3 +1,4 @@
+<!-- TODO: Work Requird -->
 <template>
   <BToast :show="showToast" :variant="statusPassed" class="toast-top-right">
     <template #title>
@@ -53,10 +54,6 @@ const handleRefresh = () => {
 </script>
 
 <style scoped lang="scss">
-// @import '../../../node_modules/bootstrap/scss/_functions.scss';
-// @import '../../../node_modules/bootstrap/scss/_variables.scss';
-// @import '../../../node_modules/bootstrap/scss/_variables-dark.scss';
-// @import '../../../node_modules/bootstrap/scss/mixins';
 .toast-top-right {
   top: 1rem;
   right: 1rem;
