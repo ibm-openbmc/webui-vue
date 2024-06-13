@@ -24,5 +24,8 @@ export default {
     PageTitle,
     HostConsoleConsole,
   },
+  mounted() {
+    this.$root.$emit('loading-bar-status', true);
+  },
 };
 </script>

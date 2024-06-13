@@ -8,6 +8,7 @@ const LoadingBarMixin = {
     },
     endLoader() {
       this.$root.$emit('loader-end');
+      this.$root.$emit('loading-bar-status', true);
       this.loading = false;
     },
     hideLoader() {

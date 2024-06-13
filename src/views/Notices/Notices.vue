@@ -11,6 +11,9 @@ import PageTitle from '@/components/Global/PageTitle';
 export default {
   name: 'Notices',
   components: { NoticesText, PageTitle },
+  mounted() {
+    this.$root.$emit('loading-bar-status', true);
+  },
 };
 </script>
 

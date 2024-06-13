@@ -93,6 +93,9 @@ export default {
   created() {
     this.hideLoader();
   },
+  mounted() {
+    this.$root.$emit('loading-bar-status', true);
+  },
   methods: {
     onResetSubmit() {
       this.$bvModal.show('modal-reset');

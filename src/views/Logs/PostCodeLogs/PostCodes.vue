@@ -18,31 +18,30 @@ export default {
     },
     postCodes: {
       get() {
-        const value = () => {
-          if (this.postCodeValue) {
-            const { U64 } = require('n64');
-            let big = U64(this.postCodeValue, 10);
-            big.toString();
-            let bytearray = big.toLE(Buffer);
-            let finalConvertedCode = bytearray.toString();
-            // Filter out all non readable values and all 00000000
-            // Yes, whitespaces for 'STANDBY ' and 'RUNTIME ' must be there
-            if (
-              finalConvertedCode === 'STANDBY ' ||
-              finalConvertedCode === 'RUNTIME ' ||
-              (finalConvertedCode != '00000000' &&
-                /^[a-z0-9]+$/i.test(finalConvertedCode))
-            ) {
-              this.previousPostCode = finalConvertedCode;
-              return finalConvertedCode;
-            } else {
-              return this.previousPostCode;
-            }
-          } else {
+        if (this.postCodeValue) {
+          const { U64 } = require('n64');
+          let big = U64(this.postCodeValue, 10);
+          big.toString();
+          let bytearray = big.toLE(Buffer);
+          let finalConvertedCode = bytearray.toString();
+          // Filter out all non readable values and all 00000000
+          // Yes, whitespaces for 'STANDBY ' and 'RUNTIME ' must be there
+          if (finalConvertedCode === '00000000') {
+            this.setPreviousPostCode('');
             return '';
+          } else if (
+            finalConvertedCode === 'STANDBY ' ||
+            finalConvertedCode === 'RUNTIME ' ||
+            /^[a-z0-9 ]+$/i.test(finalConvertedCode)
+          ) {
+            this.setPreviousPostCode(finalConvertedCode);
+            return finalConvertedCode;
+          } else {
+            return this.previousPostCode;
           }
-        };
-        return value();
+        } else {
+          return '';
+        }
       },
       set(value = '') {
         // Default value is an empty string
@@ -60,6 +59,11 @@ export default {
             value.slice(0, -1) + (Number(value[value.length - 1]) + 1);
         }
       },
+    },
+  },
+  methods: {
+    setPreviousPostCode(finalConvertedCode) {
+      this.previousPostCode = finalConvertedCode;
     },
   },
 };

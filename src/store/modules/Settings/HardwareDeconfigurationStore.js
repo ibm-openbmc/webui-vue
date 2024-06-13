@@ -161,6 +161,7 @@ const HardwareDeconfigurationStore = {
             }
             return {
               id: data.Id,
+              name: data.Name,
               functionalState: data.Status?.Health,
               size: data.CapacityMiB,
               locationCode: data.Location?.PartLocation?.ServiceLabel,

@@ -424,6 +424,9 @@ export default {
       this.checkIfInPhypStandby();
     });
   },
+  mounted() {
+    this.$root.$emit('loading-bar-status', true);
+  },
   methods: {
     checkIfInPhypStandby(checkCounter = 0) {
       checkCounter++;
