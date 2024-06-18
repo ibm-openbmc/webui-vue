@@ -136,30 +136,7 @@ export const FirmwareStore = defineStore('firmware', {
         })
         .catch((error) => console.log(error));
     },
-    setApplyTimeImmediate() {
-      const data = {
-        HttpPushUriOptions: {
-          HttpPushUriApplyTime: {
-            ApplyTime: 'Immediate',
-          },
-        },
-      };
-      return api
-        .patch('/redfish/v1/UpdateService', data)
-        .then(() => (this.applyTime = 'Immediate'))
-        .catch((error) => {
-          console.log(error);
-          throw new Error(
-            i18n.global.t('pageFirmware.toast.errorUploadFirmware'),
-          );
-        });
-    },
     async uploadFirmware(image) {
-      if (this.applyTime !== 'Immediate') {
-        // ApplyTime must be set to Immediate before making
-        // request to update firmware
-        await this.setApplyTimeImmediate();
-      }
       return await api
         .post('/redfish/v1/UpdateService/update', image, {
           headers: { 'Content-Type': 'application/octet-stream' },
@@ -179,6 +156,21 @@ export const FirmwareStore = defineStore('firmware', {
           throw new Error(
             i18n.global.t('pageFirmware.toast.errorUpdateFirmware'),
           );
+        });
+    },
+    async uploadFirmwareTFTP(fileAddress) {
+      const data = {
+        TransferProtocol: 'TFTP',
+        ImageURI: fileAddress,
+      };
+      return await api
+        .post(
+          '/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate',
+          data,
+        )
+        .catch((error) => {
+          console.log(error);
+          throw new Error(i18n.t('pageFirmware.toast.errorUpdateFirmware'));
         });
     },
     async switchBmcFirmwareAndReboot() {
