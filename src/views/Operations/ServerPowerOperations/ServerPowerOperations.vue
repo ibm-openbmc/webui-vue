@@ -28,7 +28,7 @@
                     class="mt-3 d-flex justify-content-between align-items-center"
                     @click="standbyToRuntime"
                   >
-                    <span class="pe-1">
+                    <span class="pr-1">
                       {{ $t('pageServerPowerOperations.osRuntimeButton') }}
                     </span>
                     <icon-arrow-right />
@@ -38,7 +38,7 @@
                     class="d-flex justify-content-between align-items-center"
                     @click="saveStandbyToRuntime"
                   >
-                    <span class="pe-1">
+                    <span class="pr-1">
                       {{ $t('pageServerPowerOperations.saveOsRuntimeButton') }}
                     </span>
                     <icon-arrow-right />
@@ -48,7 +48,7 @@
                     class="d-flex justify-content-between align-items-center"
                     @click="discardStandbyToRuntime"
                   >
-                    <span class="pe-1">
+                    <span class="pr-1">
                       {{
                         $t('pageServerPowerOperations.discardOsRuntimeButton')
                       }}
@@ -345,6 +345,7 @@ export default {
         this.bmc.health === 'OK'
       ) {
         this.$store.dispatch('controls/serverPowerOn');
+        this.infoToast(this.$t('pageServerPowerOperations.userRefresh'));
       } else {
         this.errorToast(
           this.$t('pageServerPowerOperations.toast.errorPowerOn'),
@@ -371,13 +372,23 @@ export default {
           this.$bvModal
             .msgBoxConfirm(modalMessage, modalOptions)
             .then((confirmed) => {
-              if (confirmed) this.$store.dispatch('controls/serverSoftReboot');
+              if (confirmed) {
+                this.$store.dispatch('controls/serverSoftReboot');
+                this.infoToast(
+                  this.$t('pageServerPowerOperations.userRefresh'),
+                );
+              }
             });
         } else if (this.form.rebootOption === 'immediate') {
           this.$bvModal
             .msgBoxConfirm(modalMessage, modalOptions)
             .then((confirmed) => {
-              if (confirmed) this.$store.dispatch('controls/serverHardReboot');
+              if (confirmed) {
+                this.$store.dispatch('controls/serverHardReboot');
+                this.infoToast(
+                  this.$t('pageServerPowerOperations.userRefresh'),
+                );
+              }
             });
         }
       });
@@ -401,14 +412,20 @@ export default {
         this.$bvModal
           .msgBoxConfirm(modalMessage, modalOptions)
           .then((confirmed) => {
-            if (confirmed) this.$store.dispatch('controls/serverSoftPowerOff');
+            if (confirmed) {
+              this.$store.dispatch('controls/serverSoftPowerOff');
+              this.infoToast(this.$t('pageServerPowerOperations.userRefresh'));
+            }
           });
       }
       if (this.form.shutdownOption === 'immediate') {
         this.$bvModal
           .msgBoxConfirm(modalMessage, modalOptions)
           .then((confirmed) => {
-            if (confirmed) this.$store.dispatch('controls/serverHardPowerOff');
+            if (confirmed) {
+              this.$store.dispatch('controls/serverHardPowerOff');
+              this.infoToast(this.$t('pageServerPowerOperations.userRefresh'));
+            }
           });
       }
     },

@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: 'Console',
+  name: 'ConsoleLayout',
 };
 </script>

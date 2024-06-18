@@ -42,7 +42,7 @@ import IconSearch from '@carbon/icons-vue/es/search/16';
 import IconClose from '@carbon/icons-vue/es/close/20';
 
 export default {
-  name: 'Search',
+  name: 'GlobalSearch',
   components: { IconSearch, IconClose },
   props: {
     placeholder: {

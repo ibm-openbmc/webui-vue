@@ -112,6 +112,7 @@
       "viewAll": "View all"
     },
     "toast": {
+      "minMifMessage": "Minimum firmware level supported",
       "unAuthDescription": "The attempted action is not accessible from the logged in account. Contact your system administrator to check your privilege role.",
       "unAuthTitle": "Unauthorized"
     }
@@ -430,12 +431,12 @@
   },
   "pageConcurrentMaintenance": {
     "concurrentMaintenance": "Concurrent maintenance",
-    "opPanelBase": "Operator panel base maintenance",
-    "opPanelLcd": "Operator panel LCD maintenance",
+    "controlPanel": "Control panel maintenance",
+    "controlPanelDisp": "Control panel display maintenance",
     "tod": "Time of day battery maintenance",
     "alert": {
-      "message": "To remove or replace the battery, operator panel base or operator panel LCD enable the respective toggle switch. Once it is done, it is recommended to disable to go back to normal mode.",
-      "title": "Concurrent repair of the battery, operator panel base and operator panel LCD"
+      "message": "To remove or replace the battery, control panel or control panel display enable the respective toggle switch. Once it is done, it is recommended to disable to go back to normal mode.",
+      "title": "Concurrent repair of the battery, control panel and control panel display"
     },
     "toast": {
       "errorSaveReadyToRemove": "Error %{state} ready to remove state.",
@@ -836,7 +837,9 @@
     },
     "alert": {
       "notIBMi": "Default partition environment should be either IBM i or Default.",
-      "osRunning": "Functions are available only when the IBM i OS enables them. Press the refresh button to see the currently enabled functions."
+      "osRunning": "Functions are available only when the IBM i OS enables them. Press the refresh button to see the currently enabled functions.",
+      "osRunningPartitionDump": "This function is only available when the OS is running and only when the IBM i OS enables them. If the function is not available, press the refresh button to see the latest status.",
+      "osRunningIbmiServiceFunctions": "Functions are only available when the OS is running and only when the IBM i OS enables them. If functions are not available, press the refresh button to see the latest status."
     }
   },
   "pageInventory": {
@@ -874,6 +877,20 @@
       "powerStatus": "Power status",
       "sectionTitle": "System indicators",
       "tooltipInfo": "Changes all indicators controlled by the BMC and hypervisor to the ON state for four minutes."
+    },
+    "enumDescriptionIndicator": {
+      "absent": "This device is not currently present or detected.",
+      "deferring": "This device does not process any commands but queues new requests.",
+      "disabled": "This device is disabled.",
+      "enabled": "This device is enabled.",
+      "inTest": "This device is undergoing testing or is in the process of capturing information for debugging.",
+      "qualified": "This device quality is within the acceptable range of operation.",
+      "quiesced": "This device is terminated and only processes a restricted set of commands.",
+      "standbyOffline": "This device is enabled but awaits an external action to activate it.",
+      "standbySpare": "This device is part of a redundancy set and awaits a failover or other external action to activate it.",
+      "starting": "This device is starting.",
+      "unavailableOffline": "This device is present but cannot be used.",
+      "updating": "This device is updating and might be unavailable or degraded."
     },
     "alert": {
       "enclosureAlertTitle": "Viewing enclosure configuration",
@@ -1552,6 +1569,7 @@
     "serverStatus": "Server status",
     "shutDown": "Shut down",
     "shutdownServer": "Shutdown server",
+    "userRefresh": "Reload the browser page to get the updated content.",
     "biosSettings": {
       "aixLinux": "AIX/LINUX partition boot mode",
       "automatic": "Automatic",
@@ -1768,7 +1786,8 @@
       "errorSaveSettings": "Error saving settings.",
       "successSaveSettings": "Successfully saved settings.",
       "successSaveLinuxKvmSettings": "Successfully saved settings. Changes made will take effect on next reboot.",
-      "successSaveIBMiStandby": "Please press the `Continue to OS running` link to proceed."
+      "successSaveIBMiStandby": "If changes made in IBM i load source, IBM i alternate restart device, or IBM i console, please press the `Continue to OS running` link to proceed.",
+      "successSaveIbmiOsRunningInfo": "Changes made in either IBM i load source, IBM i alternate restart device, or IBM i console will be applied from the next OS boot onwards."
     }
   },
   "pageServiceLoginConsoles": {

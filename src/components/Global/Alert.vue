@@ -27,7 +27,7 @@ import StatusIcon from '@/components/Global/StatusIcon';
 import { BAlert } from 'bootstrap-vue';
 
 export default {
-  name: 'Alert',
+  name: 'GlobalAlert',
   components: {
     BAlert: BAlert,
     StatusIcon: StatusIcon,

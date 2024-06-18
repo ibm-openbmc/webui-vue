@@ -32,7 +32,9 @@ export const GlobalStore = defineStore('global', {
   state: () => ({
     assetTag: null,
     bmcTime: null,
-    modelType: null,
+    acfInstalled: false,
+    expirationDate: null,
+    modelType: localStorage.getItem('storedModelType') || '--',
     serialNumber: null,
     serverStatus: 'unreachable',
     languagePreference: localStorage.getItem('storedLanguage') || 'en-US',
