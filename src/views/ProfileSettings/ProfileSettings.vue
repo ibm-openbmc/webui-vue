@@ -17,7 +17,7 @@
       </b-col>
     </b-row>
 
-    <b-form @submit.prevent="submitForm">
+    <b-form @submit.prevent="submitPassword">
       <b-row>
         <b-col sm="8" md="6" xl="3">
           <page-section
@@ -52,11 +52,13 @@
                   :state="getValidationState($v.form.newPassword)"
                   data-test-id="profileSettings-input-newPassword"
                   class="form-control-with-button"
-                  @input="$v.form.newPassword.$touch()"
                 />
                 <b-form-invalid-feedback role="alert">
+                  <template v-if="!$v.form.newPassword.required">
+                    {{ $t('global.form.fieldRequired') }}
+                  </template>
                   <template
-                    v-if="
+                    v-else-if="
                       !$v.form.newPassword.minLength ||
                       !$v.form.newPassword.maxLength
                     "
@@ -86,10 +88,12 @@
                   :state="getValidationState($v.form.confirmPassword)"
                   data-test-id="profileSettings-input-confirmPassword"
                   class="form-control-with-button"
-                  @input="$v.form.confirmPassword.$touch()"
                 />
                 <b-form-invalid-feedback role="alert">
-                  <template v-if="!$v.form.confirmPassword.sameAsPassword">
+                  <template v-if="!$v.form.confirmPassword.required">
+                    {{ $t('global.form.fieldRequired') }}
+                  </template>
+                  <template v-else-if="!$v.form.confirmPassword.sameAsPassword">
                     {{ $t('pageProfileSettings.passwordsDoNotMatch') }}
                   </template>
                 </b-form-invalid-feedback>
@@ -98,6 +102,19 @@
           </page-section>
         </b-col>
       </b-row>
+      <b-row v-if="!isServiceUser" class="mb-5">
+        <b-col>
+          <b-button
+            variant="primary"
+            type="submit"
+            data-test-id="profileSettings-button-savePassword"
+          >
+            {{ $t('global.action.save') }}
+          </b-button>
+        </b-col>
+      </b-row>
+    </b-form>
+    <b-form @submit.prevent="submitForm">
       <page-section :section-title="$t('pageProfileSettings.timezoneDisplay')">
         <p>{{ $t('pageProfileSettings.timezoneDisplayDesc') }}</p>
         <b-row>
@@ -140,7 +157,12 @@
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
-import { maxLength, minLength, sameAs } from 'vuelidate/lib/validators';
+import {
+  required,
+  maxLength,
+  minLength,
+  sameAs,
+} from 'vuelidate/lib/validators';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import LocalTimezoneLabelMixin from '@/components/Mixins/LocalTimezoneLabelMixin';
 import PageTitle from '@/components/Global/PageTitle';
@@ -164,8 +186,8 @@ export default {
   data() {
     return {
       form: {
-        newPassword: '',
-        confirmPassword: '',
+        newPassword: null,
+        confirmPassword: null,
         isUtcDisplay: this.$store.getters['global/isUtcDisplay'],
       },
     };
@@ -209,10 +231,12 @@ export default {
     return {
       form: {
         newPassword: {
+          required,
           minLength: minLength(this.passwordRequirements.minLength),
           maxLength: maxLength(this.passwordRequirements.maxLength),
         },
         confirmPassword: {
+          required,
           sameAsPassword: sameAs('newPassword'),
         },
       },
@@ -251,10 +275,10 @@ export default {
       );
     },
     submitForm() {
-      if (this.form.confirmPassword || this.form.newPassword) {
-        this.saveNewPasswordInputData();
-      }
       this.saveTimeZonePrefrenceData();
+    },
+    submitPassword() {
+      this.saveNewPasswordInputData();
     },
   },
 };
