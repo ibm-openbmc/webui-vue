@@ -343,7 +343,7 @@ export default {
         this.$store.dispatch('systemParameters/saveImmediateTestRequested', {
           value: value ? 'Enabled' : 'Disabled',
         }),
-        this.$store.dispatch('systemParameters/getRpdScheduledRun'),
+        this.$store.dispatch('systemParameters/getBiosAttributesRegistry'),
       ])
         .then((message) => {
           if (value && this.isServerOff) {

@@ -41,19 +41,9 @@ export default {
   },
   created() {
     this.startLoader();
-    Promise.all([
-      this.$store.dispatch('systemParameters/getLateralCastOutMode'),
-      this.$store.dispatch('systemParameters/getAggressivePrefetch'),
-      this.$store.dispatch('systemParameters/getImmediateTestRequested'),
-      this.$store.dispatch('systemParameters/getGuardOnError'),
-      this.$store.dispatch('systemParameters/getRpdPolicyOptions'),
-      this.$store.dispatch('systemParameters/getRpdFeatureOptions'),
-      this.$store.dispatch('systemParameters/getRpdPolicy'),
-      this.$store.dispatch('systemParameters/getRpdPolicyCurrent'),
-      this.$store.dispatch('systemParameters/getRpdFeature'),
-      this.$store.dispatch('systemParameters/getRpdScheduledRun'),
-      this.$store.dispatch('systemParameters/getRpdScheduledRunDuration'),
-    ]).finally(() => this.endLoader());
+    this.$store
+      .dispatch('systemParameters/getBiosAttributesRegistry')
+      .finally(() => this.endLoader());
   },
 };
 </script>
