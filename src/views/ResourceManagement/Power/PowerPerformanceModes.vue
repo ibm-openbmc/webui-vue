@@ -131,3 +131,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.btn.collapsed {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+</style>
