@@ -1,396 +1,253 @@
 <template>
   <pre>
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
+开源软件使用声明
 
-Terms and Conditions for Other Internal Licensed Code
-Base Licenses and Attributions
+开源软件使用声明
+    本页面为浪潮商用机器有限公司K1 Power服务器固件所使用的开源软件声明，开源软件许可证由开源软件权利持有人授权。
 
-===========================================================================
+开源软件及许可证信息
 
-Contents
+软件模块名称: 许可证
+audit: GPL-2.0-or-later, LGPL-2.0-or-later, 
+avahi: LGPL-2.1-or-later, 
+base-files: GPL-2.0-only, 
+base-passwd: GPL-2.0-only, 
+bash: GPL-3.0-or-later, 
+biosconfig-manager: Apache-2.0, 
+bmcweb: Apache-2.0, 
+boost: BSL-1.0, MIT, Python-2.0, 
+busybox: bzip2-1.0.4, GPL-2.0-only, 
+bzip2: bzip2-1.0.6, 
+ca-certificates: GPL-2.0-or-later, MPL-2.0, 
+cjson: MIT, 
+clear-once: Apache-2.0, 
+cracklib: LGPL-2.1-or-later, 
+croserver: Apache-2.0, 
+curl: curl, 
+dbus: GPL-2.0-or-later, 
+dbus-broker: Apache-2.0, 
+dbus-perms: Apache-2.0, 
+dbus-sensors: Apache-2.0, 
+debug-trigger: Apache-2.0, 
+dropbear: BSD-2-Clause, BSD-3-Clause, MIT, PD, 
+e2fsprogs: BSD-3-Clause, GPL-2.0-only, LGPL-2.0-only, MIT, 
+ecmd-pdbg: Apache-2.0, 
+entity-manager: Apache-2.0, 
+expat: MIT, 
+fan-watchdog: Apache-2.0, 
+ffdc: Apache-2.0, 
+fmt: MIT, 
+fuse: GPL-2.0-only, LGPL-2.0-only, 
+gcc-runtime: GPL-3.0-with-GCC-exception, 
+gdb: GPL-2.0-only, GPL-3.0-only, LGPL-2.0-only, LGPL-3.0-only, 
+gdbm: GPL-3.0-only, 
+glib-2.0: BSD-3-Clause, LGPL-2.1-or-later, PD, 
+glibc: GPL-2.0-only, LGPL-2.1-only, 
+gpioplus: Apache-2.0, 
+gptfdisk: GPL-2.0-only, 
+guard: Apache-2.0, 
+gzip: GPL-3.0-or-later, 
+hostboot-pel-parsers: Apache-2.0, 
+i2c-tools: GPL-2.0-or-later, 
+ibm-acf: Apache-2.0, 
+ibmtpm2tss: BSD-2-Clause, 
+ipl: Apache-2.0, 
+jsmn: MIT, 
+jsnbd: Apache-2.0, 
+json-c: MIT, 
+kmod: GPL-2.0-or-later, LGPL-2.1-or-later, 
+krb5: MIT, 
+libarchive: BSD-2-Clause, 
+libcap: GPL-2.0-only, 
+libcap-ng: GPL-2.0-or-later, LGPL-2.1-or-later, 
+libdaemon: LGPL-2.1-or-later, 
+libekb: Apache-2.0, 
+libestr: LGPL-2.1-only, 
+libevdev: MIT, 
+libfastjson: MIT, 
+libffi: MIT, 
+libgcc: GPL-3.0-with-GCC-exception, 
+libgpiod: LGPL-2.1-or-later, 
+libidn2: GPL-2.0-or-later, Unicode-DFS-2016, 
+libmctp: Apache-2.0, 
+libnl: LGPL-2.1-only, 
+libnsl2: LGPL-2.1-only, 
+libnss-mdns: LGPL-2.1-or-later, 
+libpam: GPL-2.0-or-later, 
+libpcap: BSD-3-Clause, 
+libpcre2: BSD-3-Clause, 
+libpldm: Apache-2.0, 
+libpwquality: GPL-2.0-only, 
+libseccomp: LGPL-2.1-only, 
+libtinyxml2: Zlib
+libtirpc: BSD-3-Clause, 
+libunistring: GPL-2.0-or-later, 
+liburing: MIT, 
+libxcrypt: LGPL-2.1-only, 
+libyaml: MIT, 
+license-manager: Apache-2.0, 
+linux-aspeed: GPL-2.0-only, 
+logrotate: GPL-2.0-only, 
+lrzsz: GPL-2.0-or-later, 
+lz4: GPL-2.0-only, 
+lzo: GPL-2.0-or-later, 
+mboxd: Apache-2.0, 
+mux-workarounds: Apache-2.0, 
+nbd: GPL-2.0-only, 
+ncurses: MIT, 
+netbase: GPL-2.0-only, 
+net-snmp: BSD-3-Clause, MIT, 
+npm-axios: MIT, 
+npm-bootstrap: MIT, 
+npm-bootstrap-vue: MIT, 
+npm-carbon: MIT, 
+npm-core-js: MIT, 
+npm-date-fns: MIT, 
+npm-date-fns-tz: MIT, 
+npm-js-cookie: MIT, 
+npm-json-bigint: MIT, 
+npm-lodash: MIT, 
+npm-n64: MIT, 
+npm-novnc: MPL-2.0, 
+npm-vue: MIT, 
+npm-vue-i18n: MIT, 
+npm-vuelidate: MIT, 
+npm-vue-router: MIT, 
+npm-vuex: MIT, 
+npm-xterm: MIT, 
+npm-xterm-addon-attach: MIT, 
+npm-xterm-addon-fit: MIT, 
+nss-pam-ldapd: LGPL-2.1-or-later, 
+obmc-console: Apache-2.0, 
+obmc-host-failure-reboots: Apache-2.0, 
+obmc-libobmc-intf: Apache-2.0, 
+obmc-phosphor-buttons: Apache-2.0, 
+obmc-phosphor-power: Apache-2.0, 
+openldap: OpenLDAP, 
+openpower-debug-collector: Apache-2.0, 
+openpower-fru-vpd: Apache-2.0, 
+openpower-host-ipmi-flash: Apache-2.0, 
+openpower-hw-diags: Apache-2.0, 
+openpower-hw-diags-pel-parser-data: Apache-2.0, 
+openpower-hw-isolation: Apache-2.0, 
+openpower-ipmi-oem: Apache-2.0, 
+openpower-libhei: Apache-2.0, 
+openpower-occ-control: Apache-2.0, 
+openpower-pel-parsers: Apache-2.0, 
+openpower-software-manager: Apache-2.0, 
+openssh: BSD-2-Clause, BSD-3-Clause, ISC, MIT, 
+openssl: Apache-2.0, 
+op-fsi: Apache-2.0, 
+opkg: GPL-2.0-or-later, 
+opkg-arch-config: MIT, 
+opkg-utils: GPL-2.0-or-later, 
+op-proc-control: Apache-2.0, 
+op-proc-control-systemd-links: Apache-2.0, 
+os-release: MIT, 
+p9-host-start: Apache-2.0, 
+packagegroup-base: MIT, 
+packagegroup-core-boot: MIT, 
+packagegroup-core-ssh-dropbear: MIT, 
+packagegroup-obmc-apps: MIT, 
+packagegroup-obmc-ipmid-providers: MIT, 
+packagegroup-op-apps: MIT, 
+pam-ipmi: Apache-2.0, 
+panel: Apache-2.0, 
+parted: GPL-3.0-or-later, 
+pdata: Apache-2.0, 
+pdbg: Apache-2.0, 
+phal-devtree: Apache-2.0, 
+phosphor-boot-indicator: Apache-2.0, 
+phosphor-certificate-manager: Apache-2.0, 
+phosphor-dbus-interfaces: Apache-2.0, 
+phosphor-dbus-monitor: Apache-2.0, 
+phosphor-debug-collector: Apache-2.0, 
+phosphor-fan: Apache-2.0, 
+phosphor-gpio-monitor: Apache-2.0, 
+phosphor-health-monitor: Apache-2.0, 
+phosphor-hostfw-image: Apache-2.0, 
+phosphor-host-postd: Apache-2.0, 
+phosphor-hwmon: Apache-2.0, 
+phosphor-image-signing: Apache-2.0, 
+phosphor-inventory-manager: Apache-2.0, 
+phosphor-ipmi-bt: Apache-2.0, 
+phosphor-ipmi-config: Apache-2.0, 
+phosphor-ipmi-fru: GPL-3.0-or-later, 
+phosphor-ipmi-host: Apache-2.0, 
+phosphor-ipmi-net: Apache-2.0, 
+phosphor-led-manager: Apache-2.0, 
+phosphor-led-sysfs: Apache-2.0, 
+phosphor-logging: Apache-2.0, 
+phosphor-mmc-init: Apache-2.0, 
+phosphor-network: Apache-2.0, 
+phosphor-objmgr: Apache-2.0, 
+phosphor-post-code-manager: Apache-2.0, 
+phosphor-power: Apache-2.0, 
+phosphor-power-systemd-links-regulators: Apache-2.0, 
+phosphor-settings-manager: Apache-2.0, 
+phosphor-skeleton-control-power: Apache-2.0, 
+phosphor-snmp: Apache-2.0, 
+phosphor-software-manager: Apache-2.0, 
+phosphor-state-manager: Apache-2.0, 
+phosphor-systemd-policy: Apache-2.0, 
+phosphor-time-manager: Apache-2.0, 
+phosphor-user-manager: Apache-2.0, 
+phosphor-virtual-sensor: Apache-2.0, 
+phosphor-watchdog: Apache-2.0, 
+platform-fru-detect: Apache-2.0, 
+pldm: Apache-2.0, 
+popt: MIT, 
+powervm-handler: Apache-2.0, 
+python3: PSF-2.0, 
+python3-sbe-log-parsers: Apache-2.0, 
+readline: GPL-3.0-or-later, 
+rng-tools: GPL-2.0-only, 
+rsync: GPL-3.0-or-later, 
+rsyslog: Apache-2.0, GPL-3.0-only, LGPL-3.0-only, 
+run-postinsts: MIT, 
+sdbusplus: Apache-2.0, 
+sdeventplus: Apache-2.0, 
+shadow: BSD-3-Clause, 
+shadow-securetty: MIT, 
+slpd-lite: Apache-2.0, 
+sqlite3: PD, 
+squashfs-tools: GPL-2.0-only, 
+srvcfg-manager: Apache-2.0, 
+stdplus: Apache-2.0, 
+strace: GPL-2.0-or-later, LGPL-2.1-or-later, 
+sudo: BSD-2-Clause, BSD-3-Clause, ISC, Zlib
+systemd: GPL-2.0-only, LGPL-2.1-or-later, 
+systemd-compat-units: MIT, 
+systemd-conf: MIT, 
+systemd-serialgetty: GPL-2.0-or-later, 
+tcp-wrappers: BSD-1-Clause, 
+telemetry: Apache-2.0, 
+trace-enable: Apache-2.0, 
+u-boot-aspeed-sdk: GPL-2.0-or-later, 
+u-boot-fw-utils-aspeed-sdk: GPL-2.0-or-later, 
+udev-aspeed-mtd-partitions: Apache-2.0, 
+udev-aspeed-vuart: Apache-2.0, 
+update-rc.d: GPL-2.0-or-later, 
+util-linux: BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, GPL-2.0-or-later, LGPL-2.1-or-later, 
+util-linux-libuuid: BSD-3-Clause, 
+volatile-binds: MIT, 
+webui-vue: Apache-2.0, 
+xz: GPL-2.0-or-later, PD, 
+zlib: Zlib
+zstd: BSD-3-Clause, GPL-2.0-only, 
 
-Preamble and List of Other Internal Licensed Code
-Other Internal Licensed Code information
-Copyrights and Notices
-Source Code Offer Information
 
-===========================================================================
-
-Preamble and List of Other Internal Licensed Code
-
-TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE
-
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
-
-This file details terms and conditions applicable to
-code included in the products listed above.
-The "Other Internal Licensed Code" identified herein is
-provided to Licensee under terms and conditions that are
-different from the IBM license agreement. Licensee's use
-of such components or portions thereof is subject to the
-terms of the associated license agreements provided or
-referenced in this file and not the terms of the IBM
-license agreement.
-
-The following are Other Internal Licensed Code:
-
-audit
-avahi
-base-files
-base-passwd
-bash
-biosconfig-manager
-bmcweb
-boost
-busybox
-bzip2
-ca-certificates
-cjson
-clear-once
-cracklib
-croserver
-curl
-dbus
-dbus-broker
-dbus-perms
-dbus-sensors
-debug-trigger
-dropbear
-e2fsprogs
-ecmd-pdbg
-entity-manager
-expat
-fan-watchdog
-ffdc
-fmt
-fuse
-gcc-runtime
-gdb
-gdbm
-glib-2.0
-glibc
-gpioplus
-gptfdisk
-guard
-gzip
-hostboot-pel-parsers
-i2c-tools
-ibm-acf
-ibmtpm2tss
-ipl
-jsmn
-jsnbd
-json-c
-kmod
-krb5
-libarchive
-libcap
-libcap-ng
-libdaemon
-libekb
-libestr
-libevdev
-libfastjson
-libffi
-libgcc
-libgpiod
-libidn2
-libmctp
-libnl
-libnsl2
-libnss-mdns
-libpam
-libpcap
-libpcre2
-libpldm
-libpwquality
-libseccomp
-libtinyxml2
-libtirpc
-libunistring
-liburing
-libxcrypt
-libyaml
-license-manager
-linux-aspeed
-logrotate
-lrzsz
-lz4
-lzo
-mboxd
-mux-workarounds
-nbd
-ncurses
-netbase
-net-snmp
-npm-axios
-npm-bootstrap
-npm-bootstrap-vue-next
-npm-buffer
-npm-@carbon/motion
-npm-@carbon/themes
-npm-date-fns
-npm-date-fns-tz
-npm-js-cookie
-npm-json-bigint
-npm-lodash
-npm-n64
-npm-novnc
-npm-pinia
-npm-tiny-emitter
-npm-vitejs/plugin-basic-ssl
-npm-vue
-npm-vue-axios
-npm-vue-i18n
-npm-vuelidate
-npm-vue-router
-npm-vue3-cookies
-npm-xterm
-npm-xterm-addon-attach
-npm-xterm-addon-fit
-nss-pam-ldapd
-obmc-console
-obmc-host-failure-reboots
-obmc-libobmc-intf
-obmc-phosphor-buttons
-obmc-phosphor-power
-openldap
-openpower-debug-collector
-openpower-fru-vpd
-openpower-host-ipmi-flash
-openpower-hw-diags
-openpower-hw-diags-pel-parser-data
-openpower-hw-isolation
-openpower-ipmi-oem
-openpower-libhei
-openpower-occ-control
-openpower-pel-parsers
-openpower-software-manager
-openssh
-openssl
-op-fsi
-opkg
-opkg-arch-config
-opkg-utils
-op-proc-control
-op-proc-control-systemd-links
-os-release
-p9-host-start
-packagegroup-base
-packagegroup-core-boot
-packagegroup-core-ssh-dropbear
-packagegroup-obmc-apps
-packagegroup-obmc-ipmid-providers
-packagegroup-op-apps
-pam-ipmi
-panel
-parted
-pdata
-pdbg
-phal-devtree
-phosphor-boot-indicator
-phosphor-certificate-manager
-phosphor-dbus-interfaces
-phosphor-dbus-monitor
-phosphor-debug-collector
-phosphor-fan
-phosphor-gpio-monitor
-phosphor-health-monitor
-phosphor-hostfw-image
-phosphor-host-postd
-phosphor-hwmon
-phosphor-image-signing
-phosphor-inventory-manager
-phosphor-ipmi-bt
-phosphor-ipmi-config
-phosphor-ipmi-fru
-phosphor-ipmi-host
-phosphor-ipmi-net
-phosphor-led-manager
-phosphor-led-sysfs
-phosphor-logging
-phosphor-mmc-init
-phosphor-network
-phosphor-objmgr
-phosphor-post-code-manager
-phosphor-power
-phosphor-power-systemd-links-regulators
-phosphor-settings-manager
-phosphor-skeleton-control-power
-phosphor-snmp
-phosphor-software-manager
-phosphor-state-manager
-phosphor-systemd-policy
-phosphor-time-manager
-phosphor-user-manager
-phosphor-virtual-sensor
-phosphor-watchdog
-platform-fru-detect
-pldm
-popt
-powervm-handler
-python3
-python3-sbe-log-parsers
-readline
-rng-tools
-rsync
-rsyslog
-run-postinsts
-sdbusplus
-sdeventplus
-shadow
-shadow-securetty
-slpd-lite
-sqlite3
-squashfs-tools
-srvcfg-manager
-stdplus
-strace
-sudo
-systemd
-systemd-compat-units
-systemd-conf
-systemd-serialgetty
-tcp-wrappers
-telemetry
-trace-enable
-u-boot-aspeed-sdk
-u-boot-fw-utils-aspeed-sdk
-udev-aspeed-mtd-partitions
-udev-aspeed-vuart
-update-rc.d
-util-linux
-util-linux-libuuid
-volatile-binds
-webui-vue
-xz
-zlib
-zstd
-
-===========================================================================
-Other Internal Licensed Code information
-===========================================================================
-
-@@@@@@@@@@@@
-===========================================================================
-Apache-2.0: Apache License Version 2.0
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Apache License Version 2.0
-
-biosconfig-manager
-bmcweb
-npm-@carbon/motion
-npm-@carbon/themes
-clear-once
-croserver
-dbus-broker
-dbus-perms
-dbus-sensors
-debug-trigger
-ecmd-pdbg
-entity-manager
-fan-watchdog
-ffdc
-gpioplus
-guard
-hostboot-pel-parsers
-ibm-acf
-ipl
-jsnbd
-libekb
-libmctp
-libpldm
-license-manager
-mboxd
-mux-workarounds
-obmc-console
-obmc-host-failure-reboots
-obmc-libobmc-intf
-obmc-phosphor-buttons
-obmc-phosphor-power
-openpower-debug-collector
-openpower-fru-vpd
-openpower-host-ipmi-flash
-openpower-hw-diags
-openpower-hw-diags-pel-parser-data
-openpower-hw-isolation
-openpower-ipmi-oem
-openpower-libhei
-openpower-occ-control
-openpower-pel-parsers
-openpower-software-manager
-openssl
-op-fsi
-op-proc-control
-op-proc-control-systemd-links
-p9-host-start
-pam-ipmi
-panel
-pdata
-pdbg
-phal-devtree
-phosphor-boot-indicator
-phosphor-certificate-manager
-phosphor-dbus-interfaces
-phosphor-dbus-monitor
-phosphor-debug-collector
-phosphor-fan
-phosphor-gpio-monitor
-phosphor-health-monitor
-phosphor-hostfw-image
-phosphor-host-postd
-phosphor-hwmon
-phosphor-image-signing
-phosphor-inventory-manager
-phosphor-ipmi-bt
-phosphor-ipmi-config
-phosphor-ipmi-host
-phosphor-ipmi-net
-phosphor-led-manager
-phosphor-led-sysfs
-phosphor-logging
-phosphor-mmc-init
-phosphor-network
-phosphor-objmgr
-phosphor-post-code-manager
-phosphor-power
-phosphor-power-systemd-links-regulators
-phosphor-settings-manager
-phosphor-skeleton-control-power
-phosphor-snmp
-phosphor-software-manager
-phosphor-state-manager
-phosphor-systemd-policy
-phosphor-time-manager
-phosphor-user-manager
-phosphor-virtual-sensor
-phosphor-watchdog
-platform-fru-detect
-pldm
-powervm-handler
-python3-sbe-log-parsers
-rsyslog
-sdbusplus
-sdeventplus
-slpd-lite
-srvcfg-manager
-stdplus
-telemetry
-trace-enable
-udev-aspeed-mtd-partitions
-udev-aspeed-vuart
-webui-vue
-
+书面要约
+    如果您或任何第三方需要上表中许可证为GPL或LGPL软件包的源代码副本，请发送电子邮件到：ipsservice@inspurpower.com，邮件中请注明产品名称和您需要的源代码所对应的固件版本，以及您的联系方式。
+    
+    请注意，您将需要支付数据载体的费用以及其所需要的邮政运费。提供源代码的要约从产品发出日起三年有效，若该产品仍提供备件支持和客户支持时，提供源代码的要约依旧有效。
+免责声明
+	开源软件的分发，是出于提供帮助的目的，但不提供任何保证，也不对适销性或就某一用途的使用性提供任何暗含保证。
+    
+许可证信息
 ---------------------------------------------------------------------------
 Start of Apache License Version 2.0
 ---------------------------------------------------------------------------
-
-
-
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -592,25 +449,15 @@ Start of Apache License Version 2.0
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-
 ---------------------------------------------------------------------------
 End of Apache License Version 2.0
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-BSD-1-Clause: BSD license
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license
 
-tcp-wrappers
 
 ---------------------------------------------------------------------------
 Start of BSD license
 ---------------------------------------------------------------------------
-
-
 Copyright (c) &lt;YEAR&gt;, &lt;OWNER&gt;
 All rights reserved.
 
@@ -618,30 +465,15 @@ Redistribution and use in source and binary forms, with or without modification,
 
 Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 THIS SOFTWARE IS PROVIDED BY Berkeley Software Design, Inc. "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Berkeley Software Design, Inc. BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
 ---------------------------------------------------------------------------
 End of BSD license
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-BSD-2-Clause: BSD license 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license 2
 
-dropbear
-ibmtpm2tss
-libarchive
-openssh
-sudo
-util-linux
 
 ---------------------------------------------------------------------------
 Start of BSD license 2
 ---------------------------------------------------------------------------
-
-
 Copyright &lt;YEAR&gt; &lt;COPYRIGHT HOLDER&gt;
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -651,36 +483,15 @@ Redistribution and use in source and binary forms, with or without modification,
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 ---------------------------------------------------------------------------
 End of BSD license 2
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-BSD-3-Clause: BSD license 3
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license 3
 
-dropbear
-e2fsprogs
-glib-2.0
-libpcap
-libpcre2
-libtirpc
-net-snmp
-openssh
-shadow
-sudo
-util-linux
-util-linux-libuuid
-zstd
 
 ---------------------------------------------------------------------------
 Start of BSD license 3
 ---------------------------------------------------------------------------
-
-
 Copyright (c) &lt;YEAR&gt;, &lt;OWNER&gt;
 All rights reserved.
 
@@ -690,25 +501,15 @@ Redistributions of source code must retain the above copyright notice, this list
 Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 Neither the name of the &lt;ORGANIZATION&gt; nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
 ---------------------------------------------------------------------------
 End of BSD license 3
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-BSD-4-Clause: BSD license 4
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license 4
 
-util-linux
 
 ---------------------------------------------------------------------------
 Start of BSD license 4
 ---------------------------------------------------------------------------
-
-
 Copyright (c) &lt;year&gt;, &lt;copyright holder&gt;
 All rights reserved.
 
@@ -736,25 +537,15 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
 ---------------------------------------------------------------------------
 End of BSD license 4
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-BSL-1.0: Boost Software License - Version 1.0
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Boost Software License - Version 1.0
 
-boost
 
 ---------------------------------------------------------------------------
 Start of Boost Software License - Version 1.0
 ---------------------------------------------------------------------------
-
-
 Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization
@@ -778,27 +569,15 @@ SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
 FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
-
-
 ---------------------------------------------------------------------------
 End of Boost Software License - Version 1.0
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-bzip2-1.0.4: Bzip license 1.0.4
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Bzip license 1.0.4
 
-busybox
 
 ---------------------------------------------------------------------------
 Start of Bzip license 1.0.4
 ---------------------------------------------------------------------------
-
-
---------------------------------------------------------------------------
-
 This program, "bzip2", the associated library "libbzip2", and all
 documentation, are copyright (C) 1996-2006 Julian R Seward.  All
 rights reserved.
@@ -837,27 +616,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Julian Seward, Cambridge, UK.
 jseward@bzip.org
 bzip2/libbzip2 version 1.0.4 of 20 December 2006
-
---------------------------------------------------------------------------
-
 ---------------------------------------------------------------------------
 End of Bzip license 1.0.4
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-bzip2-1.0.6: Bzip license 1.0.6
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Bzip license 1.0.6
 
-bzip2
 
 ---------------------------------------------------------------------------
 Start of Bzip license 1.0.6
 ---------------------------------------------------------------------------
-
---------------------------------------------------------------------------
-
 This program, "bzip2", the associated library "libbzip2", and all
 documentation, are copyright (C) 1996-2010 Julian R Seward.  All
 rights reserved.
@@ -895,25 +662,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Julian Seward, jseward@bzip.org
 bzip2/libbzip2 version 1.0.6 of 6 September 2010
-
---------------------------------------------------------------------------
-
 ---------------------------------------------------------------------------
 End of Bzip license 1.0.6
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-curl: Curl COPYRIGHT AND PERMISSION NOTICE
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Curl COPYRIGHT AND PERMISSION NOTICE
 
-curl
 
 ---------------------------------------------------------------------------
 Start of Curl COPYRIGHT AND PERMISSION NOTICE
 ---------------------------------------------------------------------------
-
 COPYRIGHT AND PERMISSION NOTICE
 
 Copyright (c) 1996 - 2015, Daniel Stenberg, &lt;daniel@haxx.se&gt;.
@@ -924,42 +681,15 @@ Permission to use, copy, modify, and distribute this software for any purpose wi
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Except as contained in this notice, the name of a copyright holder shall not be used in advertising or otherwise to promote the sale, use or other dealings in this Software without prior written authorization of the copyright holder.
-
 ---------------------------------------------------------------------------
 End of Curl COPYRIGHT AND PERMISSION NOTICE
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-GPL-2.0-only: GNU GENERAL PUBLIC LICENSE Version 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 2
 
-base-files
-base-passwd
-busybox
-e2fsprogs
-fuse
-gdb
-glibc
-gptfdisk
-libcap
-libpwquality
-linux-aspeed
-logrotate
-lz4
-nbd
-netbase
-rng-tools
-squashfs-tools
-systemd
-zstd
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 2
 ---------------------------------------------------------------------------
-
-
 GNU GENERAL PUBLIC LICENSE
 
 Version 2, June 1991
@@ -1090,43 +820,15 @@ by James Hacker.
 signature of Ty Coon, 1 April 1989
 Ty Coon, President of Vice
 This General Public License does not permit incorporating your program into proprietary programs. If your program is a subroutine library, you may consider it more useful to permit linking proprietary applications with the library. If this is what you want to do, use the GNU Lesser General Public License instead of this License.
-
-
 ---------------------------------------------------------------------------
 End of GNU GENERAL PUBLIC LICENSE Version 2
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-GPL-2.0-or-later: GNU GENERAL PUBLIC LICENSE Version 2 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 2 or later
 
-audit
-ca-certificates
-dbus
-i2c-tools
-kmod
-libcap-ng
-libidn2
-libpam
-libunistring
-lrzsz
-lzo
-opkg
-opkg-utils
-strace
-systemd-serialgetty
-u-boot-aspeed-sdk
-u-boot-fw-utils-aspeed-sdk
-update-rc.d
-util-linux
-xz
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 2 or later
 ---------------------------------------------------------------------------
-
 GNU GENERAL PUBLIC LICENSE
 
 Version 2, June 1991
@@ -1446,25 +1148,15 @@ programs. If your program is a subroutine library, you may consider it more
 useful to permit linking proprietary applications with the library. If this
 is what you want to do, use the GNU Lesser General Public License instead
 of this License.
-
 ---------------------------------------------------------------------------
 End of GNU GENERAL PUBLIC LICENSE Version 2 or later
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-GPL-3.0-only: GNU GENERAL PUBLIC LICENSE Version 3
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 3
 
-gdb
-gdbm
-rsyslog
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 3
 ---------------------------------------------------------------------------
-
 GNU GENERAL PUBLIC LICENSE
 
 Version 3, 29 June 2007
@@ -1690,28 +1382,15 @@ The hypothetical commands `show w' and `show c' should show the appropriate part
 You should also get your employer (if you work as a programmer) or school, if any, to sign a “copyright disclaimer” for the program, if necessary. For more information on this, and how to apply and follow the GNU GPL, see &lt;http://www.gnu.org/licenses/&gt;.
 
 The GNU General Public License does not permit incorporating your program into proprietary programs. If your program is a subroutine library, you may consider it more useful to permit linking proprietary applications with the library. If this is what you want to do, use the GNU Lesser General Public License instead of this License. But first, please read &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.
-
 ---------------------------------------------------------------------------
 End of GNU GENERAL PUBLIC LICENSE Version 3
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-GPL-3.0-or-later: GNU GENERAL PUBLIC LICENSE Version 3 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 3 or later
 
-bash
-gzip
-parted
-phosphor-ipmi-fru
-readline
-rsync
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 3 or later
 ---------------------------------------------------------------------------
-
 GNU GENERAL PUBLIC LICENSE
 
 Version 3, 29 June 2007
@@ -2337,25 +2016,15 @@ consider it more useful to permit linking proprietary applications with the
 library. If this is what you want to do, use the GNU Lesser General Public
 License instead of this License. But first, please read &lt;https://www.gnu.org/
 licenses /why-not-lgpl.html&gt;.
-
 ---------------------------------------------------------------------------
 End of GNU GENERAL PUBLIC LICENSE Version 3 or later
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-GPL-3.0-with-GCC-exception: GCC RUNTIME LIBRARY EXCEPTION Version 3.1
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GCC RUNTIME LIBRARY EXCEPTION Version 3.1
 
-gcc-runtime
-libgcc
 
 ---------------------------------------------------------------------------
 Start of GCC RUNTIME LIBRARY EXCEPTION Version 3.1
 ---------------------------------------------------------------------------
-
-
 insert GPL v3 text here
 
 GCC RUNTIME LIBRARY EXCEPTION
@@ -2381,26 +2050,15 @@ You have permission to propagate a work of Target Code formed by combining the R
 
 2. No Weakening of GCC Copyleft.
 The availability of this Exception does not imply any general presumption that third-party software is unaffected by the copyleft requirements of the license of GCC.
-
-
 ---------------------------------------------------------------------------
 End of GCC RUNTIME LIBRARY EXCEPTION Version 3.1
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-ISC: ISC License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the ISC License
 
-openssh
-sudo
 
 ---------------------------------------------------------------------------
 Start of ISC License
 ---------------------------------------------------------------------------
-
-
 ISC License:
 
 Copyright &#169; 2004-2010 by Internet Systems Consortium, Inc. ("ISC")
@@ -2409,26 +2067,15 @@ Copyright &#169; 1995-2003 by Internet Software Consortium
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
 
 THE SOFTWARE IS PROVIDED "AS IS" AND ISC DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL ISC BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-
 ---------------------------------------------------------------------------
 End of ISC License
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-LGPL-2.0-only: GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
 
-e2fsprogs
-fuse
-gdb
 
 ---------------------------------------------------------------------------
 Start of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
 ---------------------------------------------------------------------------
-
 GNU LIBRARY GENERAL PUBLIC LICENSE
 
 
@@ -2770,25 +2417,15 @@ signature of Ty Coon, 1 April 1990
 Ty Coon, President of Vice
 
 That's all there is to it!
-
-
 ---------------------------------------------------------------------------
 End of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-LGPL-2.0-or-later: GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 
-or later
 
-audit
 
 ---------------------------------------------------------------------------
 Start of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 or later
 ---------------------------------------------------------------------------
-
 GNU LIBRARY GENERAL PUBLIC LICENSE
 
 Version 2, June 1991 Copyright (C) 1991 Free Software Foundation, Inc.
@@ -3235,29 +2872,15 @@ signature of Ty Coon, 1 April 1990
 Ty Coon, President of Vice
 
 That's all there is to it!
-
 ---------------------------------------------------------------------------
 End of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 or later
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-LGPL-2.1-only: GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
 
-glibc
-libestr
-libnl
-libnsl2
-libseccomp
-libxcrypt
 
 ---------------------------------------------------------------------------
 Start of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
 ---------------------------------------------------------------------------
-
-
 GNU LESSER GENERAL PUBLIC LICENSE
 
 Version 2.1, February 1999
@@ -3432,36 +3055,15 @@ by James Random Hacker.
 signature of Ty Coon, 1 April 1990
 Ty Coon, President of Vice
 That`s all there is to it!
-
-
 ---------------------------------------------------------------------------
 End of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-LGPL-2.1-or-later: GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LESSER GENERAL PUBLIC LICENSE Version 
-2.1 or later
 
-avahi
-cracklib
-glib-2.0
-kmod
-libcap-ng
-libdaemon
-libgpiod
-libnss-mdns
-nss-pam-ldapd
-strace
-systemd
-util-linux
 
 ---------------------------------------------------------------------------
 Start of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 or later
 ---------------------------------------------------------------------------
-
 GNU LESSER GENERAL PUBLIC LICENSE
 
 Version 2.1, February 1999
@@ -3929,24 +3531,14 @@ by James Random Hacker.
 Ty Coon, President of Vice
 
 That's all there is to it!
-
 ---------------------------------------------------------------------------
 End of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 or later
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-LGPL-3.0-only: GNU LESSER GENERAL PUBLIC LICENSE Version 3
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LESSER GENERAL PUBLIC LICENSE Version 3
-
-gdb
-rsyslog
 
 ---------------------------------------------------------------------------
 Start of GNU LESSER GENERAL PUBLIC LICENSE Version 3
 ---------------------------------------------------------------------------
-
 GNU LESSER GENERAL PUBLIC LICENSE
 
 Version 3, 29 June 2007
@@ -4012,78 +3604,15 @@ The Free Software Foundation may publish revised and/or new versions of the GNU 
 Each version is given a distinguishing version number. If the Library as you received it specifies that a certain numbered version of the GNU Lesser General Public License “or any later version” applies to it, you have the option of following the terms and conditions either of that published version or of any later version published by the Free Software Foundation. If the Library as you received it does not specify a version number of the GNU Lesser General Public License, you may choose any version of the GNU Lesser General Public License ever published by the Free Software Foundation.
 
 If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.
-
 ---------------------------------------------------------------------------
 End of GNU LESSER GENERAL PUBLIC LICENSE Version 3
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-MIT: MIT License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the MIT License
 
-boost
-cjson
-dropbear
-e2fsprogs
-expat
-fmt
-jsmn
-json-c
-krb5
-libevdev
-libfastjson
-libffi
-liburing
-libyaml
-ncurses
-net-snmp
-npm-axios
-npm-bootstrap
-npm-bootstrap-vue-next
-npm-buffer
-npm-@carbon/motion
-npm-@carbon/themes
-npm-date-fns
-npm-date-fns-tz
-npm-js-cookie
-npm-json-bigint
-npm-lodash
-npm-n64
-npm-pinia
-npm-tiny-emitter
-npm-vitejs/plugin-basic-ssl
-npm-vue
-npm-vue-axios
-npm-vue-i18n
-npm-vuelidate
-npm-vue-router
-npm-vue3-cookies
-npm-xterm
-npm-xterm-addon-attach
-npm-xterm-addon-fit
-openssh
-opkg-arch-config
-os-release
-packagegroup-base
-packagegroup-core-boot
-packagegroup-core-ssh-dropbear
-packagegroup-obmc-apps
-packagegroup-obmc-ipmid-providers
-packagegroup-op-apps
-popt
-run-postinsts
-shadow-securetty
-systemd-compat-units
-systemd-conf
-volatile-binds
 
 ---------------------------------------------------------------------------
 Start of MIT License
 ---------------------------------------------------------------------------
-
-
 MIT License
 
 Copyright (c) &lt;year&gt; &lt;copyright holders&gt;
@@ -4105,25 +3634,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-
 ---------------------------------------------------------------------------
 End of MIT License
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-MPL-2.0: Mozilla Public License Version 2.0
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Mozilla Public License Version 2.0
 
-ca-certificates
-npm-@novnc/novnc
 
 ---------------------------------------------------------------------------
 Start of Mozilla Public License Version 2.0
 ---------------------------------------------------------------------------
-
 Mozilla Public License Version 2.0
 ==================================
 
@@ -4497,23 +4016,15 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
-
 ---------------------------------------------------------------------------
 End of Mozilla Public License Version 2.0
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-OpenLDAP: OpenLDAP Public License Version 2.8
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the OpenLDAP Public License Version 2.8
 
-openldap
 
 ---------------------------------------------------------------------------
 Start of OpenLDAP Public License Version 2.8
 ---------------------------------------------------------------------------
-
 The OpenLDAP Public License
   Version 2.8, 17 August 2003
 
@@ -4561,21 +4072,11 @@ OpenLDAP is a registered trademark of the OpenLDAP Foundation.
 Copyright 1999-2003 The OpenLDAP Foundation, Redwood City,
 California, USA.  All Rights Reserved.  Permission to copy and
 distribute verbatim copies of this document is granted.
-
 ---------------------------------------------------------------------------
 End of OpenLDAP Public License Version 2.8
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-PD: Public Domain License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Public Domain License
 
-dropbear
-glib-2.0
-sqlite3
-xz
 
 ---------------------------------------------------------------------------
 Start of Public Domain License
@@ -4587,19 +4088,11 @@ This is a placeholder for the Public Domain License
 End of Public Domain License
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-PSF-2.0: PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 
-python3
 
 ---------------------------------------------------------------------------
 Start of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 ---------------------------------------------------------------------------
-
-
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 --------------------------------------------
 
@@ -4648,25 +4141,14 @@ products or services of Licensee, or any third party.
 8. By copying, installing or otherwise using Python, Licensee
 agrees to be bound by the terms and conditions of this License
 Agreement.
-
 ---------------------------------------------------------------------------
 End of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-Python-2.0: PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 
-& BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
-
-boost
 
 ---------------------------------------------------------------------------
 Start of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
 ---------------------------------------------------------------------------
-
-
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 --------------------------------------------
 
@@ -4857,25 +4339,15 @@ FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-
 ---------------------------------------------------------------------------
 End of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-Unicode-DFS-2016: UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the UNICODE, INC. LICENSE AGREEMENT - DATA FILES 
-AND SOFTWARE
 
-libidn2
 
 ---------------------------------------------------------------------------
 Start of UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
 ---------------------------------------------------------------------------
-
 UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
 
 Unicode Data Files include all data files under the directories http://www.unicode.org/Public/, http://www.unicode.org/reports/, http://www.unicode.org/cldr/data/, http://source.icu-project.org/repos/icu/, and http://www.unicode.org/utility/trac/browser/.
@@ -4898,26 +4370,15 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE DATA FILES OR SOFTWARE.
 
 Except as contained in this notice, the name of a copyright holder shall not be used in advertising or otherwise to promote the sale, use or other dealings in these Data Files or Software without prior written authorization of the copyright holder.
-
 ---------------------------------------------------------------------------
 End of UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
 ---------------------------------------------------------------------------
 
-@@@@@@@@@@@@
-===========================================================================
-Zlib: zlib License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the zlib License
 
-libtinyxml2
-sudo
-zlib
 
 ---------------------------------------------------------------------------
 Start of zlib License
 ---------------------------------------------------------------------------
-
-
 zlib License
 
 
@@ -4936,22 +4397,13 @@ zlib License
   2. Altered source versions must be plainly marked as such, and must not be
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
-
-
-
 ---------------------------------------------------------------------------
 End of zlib License
 ---------------------------------------------------------------------------
 
-===========================================================================
-End of Other Internal Licensed Code information
-===========================================================================
-@@@@@@@@@@@@
-===========================================================================
-Copyrights and Notices
-===========================================================================
 
-===========================================================================
+版权及声明
+====================================================================
 Notices for ca-certificates/copyright
 ---------------------------------------------------------------------------
 
@@ -4996,381 +4448,8 @@ Comment: Original Copyright: 1994-2000 Netscape Communications Corporation
          required Copyright: field in Debian's machine-readable format.
          https://bugzilla.mozilla.org/show_bug.cgi?id=850003
 License: MPL-2.0
- Mozilla Public License Version 2.0
- ==================================
- .
- 1. Definitions
- --------------
- .
- 1.1. "Contributor"
-     means each individual or legal entity that creates, contributes to
-     the creation of, or owns Covered Software.
- .
- 1.2. "Contributor Version"
-     means the combination of the Contributions of others (if any) used
-     by a Contributor and that particular Contributor's Contribution.
- .
- 1.3. "Contribution"
-     means Covered Software of a particular Contributor.
- .
- 1.4. "Covered Software"
-     means Source Code Form to which the initial Contributor has attached
-     the notice in Exhibit A, the Executable Form of such Source Code
-     Form, and Modifications of such Source Code Form, in each case
-     including portions thereof.
- .
- 1.5. "Incompatible With Secondary Licenses"
-     means
- .
-     (a) that the initial Contributor has attached the notice described
-     in Exhibit B to the Covered Software; or
- .
-     (b) that the Covered Software was made available under the terms of
-     version 1.1 or earlier of the License, but not also under the
-     terms of a Secondary License.
- .
- 1.6. "Executable Form"
-     means any form of the work other than Source Code Form.
- .
- 1.7. "Larger Work"
-     means a work that combines Covered Software with other material, in
-     a separate file or files, that is not Covered Software.
- .
- 1.8. "License"
-     means this document.
- .
- 1.9. "Licensable"
-     means having the right to grant, to the maximum extent possible,
-     whether at the time of the initial grant or subsequently, any and
-     all of the rights conveyed by this License.
- .
- 1.10. "Modifications"
-     means any of the following:
- .
-     (a) any file in Source Code Form that results from an addition to,
-     deletion from, or modification of the contents of Covered
-     Software; or
- .
-     (b) any new file in Source Code Form that contains any Covered
-     Software.
- .
- 1.11. "Patent Claims" of a Contributor
-     means any patent claim(s), including without limitation, method,
-     process, and apparatus claims, in any patent Licensable by such
-     Contributor that would be infringed, but for the grant of the
-     License, by the making, using, selling, offering for sale, having
-     made, import, or transfer of either its Contributions or its
-     Contributor Version.
- .
- 1.12. "Secondary License"
-     means either the GNU General Public License, Version 2.0, the GNU
-     Lesser General Public License, Version 2.1, the GNU Affero General
-     Public License, Version 3.0, or any later versions of those
-     licenses.
- .
- 1.13. "Source Code Form"
-     means the form of the work preferred for making modifications.
- .
- 1.14. "You" (or "Your")
-     means an individual or a legal entity exercising rights under this
-     License. For legal entities, "You" includes any entity that
-     controls, is controlled by, or is under common control with You. For
-     purposes of this definition, "control" means (a) the power, direct
-     or indirect, to cause the direction or management of such entity,
-     whether by contract or otherwise, or (b) ownership of more than
-     fifty percent (50%) of the outstanding shares or beneficial
-     ownership of such entity.
- .
- 2. License Grants and Conditions
- --------------------------------
- .
- 2.1. Grants
- .
- Each Contributor hereby grants You a world-wide, royalty-free,
- non-exclusive license:
- .
- (a) under intellectual property rights (other than patent or trademark)
-     Licensable by such Contributor to use, reproduce, make available,
-     modify, display, perform, distribute, and otherwise exploit its
-     Contributions, either on an unmodified basis, with Modifications, or
-     as part of a Larger Work; and
- .
- (b) under Patent Claims of such Contributor to make, use, sell, offer
-     for sale, have made, import, and otherwise transfer either its
-     Contributions or its Contributor Version.
- .
- 2.2. Effective Date
- .
- The licenses granted in Section 2.1 with respect to any Contribution
- become effective for each Contribution on the date the Contributor first
- distributes such Contribution.
- .
- 2.3. Limitations on Grant Scope
- .
- The licenses granted in this Section 2 are the only rights granted under
- this License. No additional rights or licenses will be implied from the
- distribution or licensing of Covered Software under this License.
- Notwithstanding Section 2.1(b) above, no patent license is granted by a
- Contributor:
- .
- (a) for any code that a Contributor has removed from Covered Software;
-     or
- .
- (b) for infringements caused by: (i) Your and any other third party's
-     modifications of Covered Software, or (ii) the combination of its
-     Contributions with other software (except as part of its Contributor
-     Version); or
- .
- (c) under Patent Claims infringed by Covered Software in the absence of
-     its Contributions.
- .
- This License does not grant any rights in the trademarks, service marks,
- or logos of any Contributor (except as may be necessary to comply with
- the notice requirements in Section 3.4).
- .
- 2.4. Subsequent Licenses
- .
- No Contributor makes additional grants as a result of Your choice to
- distribute the Covered Software under a subsequent version of this
- License (see Section 10.2) or under the terms of a Secondary License (if
- permitted under the terms of Section 3.3).
- .
- 2.5. Representation
- .
- Each Contributor represents that the Contributor believes its
- Contributions are its original creation(s) or it has sufficient rights
- to grant the rights to its Contributions conveyed by this License.
- .
- 2.6. Fair Use
- .
- This License is not intended to limit any rights You have under
- applicable copyright doctrines of fair use, fair dealing, or other
- equivalents.
- .
- 2.7. Conditions
- .
- Sections 3.1, 3.2, 3.3, and 3.4 are conditions of the licenses granted
- in Section 2.1.
- .
- 3. Responsibilities
- -------------------
- .
- 3.1. Distribution of Source Form
- .
- All distribution of Covered Software in Source Code Form, including any
- Modifications that You create or to which You contribute, must be under
- the terms of this License. You must inform recipients that the Source
- Code Form of the Covered Software is governed by the terms of this
- License, and how they can obtain a copy of this License. You may not
- attempt to alter or restrict the recipients' rights in the Source Code
- Form.
- .
- 3.2. Distribution of Executable Form
- .
- If You distribute Covered Software in Executable Form then:
- .
- (a) such Covered Software must also be made available in Source Code
-     Form, as described in Section 3.1, and You must inform recipients of
-     the Executable Form how they can obtain a copy of such Source Code
-     Form by reasonable means in a timely manner, at a charge no more
-     than the cost of distribution to the recipient; and
- .
- (b) You may distribute such Executable Form under the terms of this
-     License, or sublicense it under different terms, provided that the
-     license for the Executable Form does not attempt to limit or alter
-     the recipients' rights in the Source Code Form under this License.
- .
- 3.3. Distribution of a Larger Work
- .
- You may create and distribute a Larger Work under terms of Your choice,
- provided that You also comply with the requirements of this License for
- the Covered Software. If the Larger Work is a combination of Covered
- Software with a work governed by one or more Secondary Licenses, and the
- Covered Software is not Incompatible With Secondary Licenses, this
- License permits You to additionally distribute such Covered Software
- under the terms of such Secondary License(s), so that the recipient of
- the Larger Work may, at their option, further distribute the Covered
- Software under the terms of either this License or such Secondary
- License(s).
- .
- 3.4. Notices
- .
- You may not remove or alter the substance of any license notices
- (including copyright notices, patent notices, disclaimers of warranty,
- or limitations of liability) contained within the Source Code Form of
- the Covered Software, except that You may alter any license notices to
- the extent required to remedy known factual inaccuracies.
- .
- 3.5. Application of Additional Terms
- .
- You may choose to offer, and to charge a fee for, warranty, support,
- indemnity or liability obligations to one or more recipients of Covered
- Software. However, You may do so only on Your own behalf, and not on
- behalf of any Contributor. You must make it absolutely clear that any
- such warranty, support, indemnity, or liability obligation is offered by
- You alone, and You hereby agree to indemnify every Contributor for any
- liability incurred by such Contributor as a result of warranty, support,
- indemnity or liability terms You offer. You may include additional
- disclaimers of warranty and limitations of liability specific to any
- jurisdiction.
- .
- 4. Inability to Comply Due to Statute or Regulation
- ---------------------------------------------------
- .
- If it is impossible for You to comply with any of the terms of this
- License with respect to some or all of the Covered Software due to
- statute, judicial order, or regulation then You must: (a) comply with
- the terms of this License to the maximum extent possible; and (b)
- describe the limitations and the code they affect. Such description must
- be placed in a text file included with all distributions of the Covered
- Software under this License. Except to the extent prohibited by statute
- or regulation, such description must be sufficiently detailed for a
- recipient of ordinary skill to be able to understand it.
- .
- 5. Termination
- --------------
- .
- 5.1. The rights granted under this License will terminate automatically
- if You fail to comply with any of its terms. However, if You become
- compliant, then the rights granted under this License from a particular
- Contributor are reinstated (a) provisionally, unless and until such
- Contributor explicitly and finally terminates Your grants, and (b) on an
- ongoing basis, if such Contributor fails to notify You of the
- non-compliance by some reasonable means prior to 60 days after You have
- come back into compliance. Moreover, Your grants from a particular
- Contributor are reinstated on an ongoing basis if such Contributor
- notifies You of the non-compliance by some reasonable means, this is the
- first time You have received notice of non-compliance with this License
- from such Contributor, and You become compliant prior to 30 days after
- Your receipt of the notice.
- .
- 5.2. If You initiate litigation against any entity by asserting a patent
- infringement claim (excluding declaratory judgment actions,
- counter-claims, and cross-claims) alleging that a Contributor Version
- directly or indirectly infringes any patent, then the rights granted to
- You by any and all Contributors for the Covered Software under Section
- 2.1 of this License shall terminate.
- .
- 5.3. In the event of termination under Sections 5.1 or 5.2 above, all
- end user license agreements (excluding distributors and resellers) which
- have been validly granted by You or Your distributors under this License
- prior to termination shall survive termination.
- .
- ************************************************************************
- *                                                                      *
- *  6. Disclaimer of Warranty                                           *
- *  -------------------------                                           *
- *                                                                      *
- *  Covered Software is provided under this License on an "as is"       *
- *  basis, without warranty of any kind, either expressed, implied, or  *
- *  statutory, including, without limitation, warranties that the       *
- *  Covered Software is free of defects, merchantable, fit for a        *
- *  particular purpose or non-infringing. The entire risk as to the     *
- *  quality and performance of the Covered Software is with You.        *
- *  Should any Covered Software prove defective in any respect, You     *
- *  (not any Contributor) assume the cost of any necessary servicing,   *
- *  repair, or correction. This disclaimer of warranty constitutes an   *
- *  essential part of this License. No use of any Covered Software is   *
- *  authorized under this License except under this disclaimer.         *
- *                                                                      *
- ************************************************************************
- .
- ************************************************************************
- *                                                                      *
- *  7. Limitation of Liability                                          *
- *  --------------------------                                          *
- *                                                                      *
- *  Under no circumstances and under no legal theory, whether tort      *
- *  (including negligence), contract, or otherwise, shall any           *
- *  Contributor, or anyone who distributes Covered Software as          *
- *  permitted above, be liable to You for any direct, indirect,         *
- *  special, incidental, or consequential damages of any character      *
- *  including, without limitation, damages for lost profits, loss of    *
- *  goodwill, work stoppage, computer failure or malfunction, or any    *
- *  and all other commercial damages or losses, even if such party      *
- *  shall have been informed of the possibility of such damages. This   *
- *  limitation of liability shall not apply to liability for death or   *
- *  personal injury resulting from such party's negligence to the       *
- *  extent applicable law prohibits such limitation. Some               *
- *  jurisdictions do not allow the exclusion or limitation of           *
- *  incidental or consequential damages, so this exclusion and          *
- *  limitation may not apply to You.                                    *
- *                                                                      *
- ************************************************************************
- .
- 8. Litigation
- -------------
- .
- Any litigation relating to this License may be brought only in the
- courts of a jurisdiction where the defendant maintains its principal
- place of business and such litigation shall be governed by laws of that
- jurisdiction, without reference to its conflict-of-law provisions.
- Nothing in this Section shall prevent a party's ability to bring
- cross-claims or counter-claims.
- .
- 9. Miscellaneous
- ----------------
- .
- This License represents the complete agreement concerning the subject
- matter hereof. If any provision of this License is held to be
- unenforceable, such provision shall be reformed only to the extent
- necessary to make it enforceable. Any law or regulation which provides
- that the language of a contract shall be construed against the drafter
- shall not be used to construe this License against a Contributor.
- .
- 10. Versions of the License
- ---------------------------
- .
- 10.1. New Versions
- .
- Mozilla Foundation is the license steward. Except as provided in Section
- 10.3, no one other than the license steward has the right to modify or
- publish new versions of this License. Each version will be given a
- distinguishing version number.
- .
- 10.2. Effect of New Versions
- .
- You may distribute the Covered Software under the terms of the version
- of the License under which You originally received the Covered Software,
- or under the terms of any subsequent version published by the license
- steward.
- .
- 10.3. Modified Versions
- .
- If you create software not governed by this License, and you want to
- create a new license for such software, you may create and use a
- modified version of this License if you rename the license and remove
- any references to the name of the license steward (except to note that
- such modified license differs from this License).
- .
- 10.4. Distributing Source Code Form that is Incompatible With Secondary
- Licenses
- .
- If You choose to distribute Source Code Form that is Incompatible With
- Secondary Licenses under the terms of this version of the License, the
- notice described in Exhibit B of this License must be attached.
- .
- Exhibit A - Source Code Form License Notice
- -------------------------------------------
- .
-   This Source Code Form is subject to the terms of the Mozilla Public
-   License, v. 2.0. If a copy of the MPL was not distributed with this
-   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- .
- If it is not possible or desirable to put the notice in a particular
- file, then You may include the notice in a location (such as a LICENSE
- file in a relevant directory) where a recipient would be likely to look
- for such a notice.
- .
- You may add additional accurate notices of copyright ownership.
- .
- Exhibit B - "Incompatible With Secondary Licenses" Notice
- ---------------------------------------------------------
- .
-   This Source Code Form is "Incompatible With Secondary Licenses", as
-   defined by the Mozilla Public License, v. 2.0.
 
-===========================================================================
+====================================================================
 Notices for dropbear/LICENSE
 ---------------------------------------------------------------------------
 
@@ -5489,7 +4568,7 @@ views of the National Science Foundation."
 This work was supported by the Netherlands Organisation for Scientific
 Research (NWO) under grant 639.073.005 and Veni 2013 project 13114.
 
-===========================================================================
+====================================================================
 Notices for glib-2.0/COPYING.1
 ---------------------------------------------------------------------------
 
@@ -5524,7 +4603,7 @@ CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
 WORK, EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE 
 POSSIBILITY OF SUCH DAMAGES.
 
-===========================================================================
+====================================================================
 Notices for glibc/COPYRIGHT
 ---------------------------------------------------------------------------
 
@@ -5549,7 +4628,7 @@ to the following restrictions:
 
 4. This notice may not be removed or altered.
 
-===========================================================================
+====================================================================
 Notices for libxcrypt/LICENSING
 ---------------------------------------------------------------------------
 
@@ -5702,7 +4781,7 @@ source tree.  For specific licensing terms consult the files themselves.
    These were meant to apply to the library as a whole rather than
    specific files or portions of files.
 
-===========================================================================
+====================================================================
 Notices for netbase/copyright
 ---------------------------------------------------------------------------
 
@@ -5735,7 +4814,7 @@ License: GPL-2
  On Debian systems, the complete text of the GNU General Public License
  version 2 can be found in '/usr/share/common-licenses/GPL-2'.
 
-===========================================================================
+====================================================================
 Notices for openldap/COPYRIGHT
 ---------------------------------------------------------------------------
 
@@ -5804,7 +4883,7 @@ from this software without specific prior written permission.  This
 software is provided ``as is'' without express or implied warranty.
 
 
-===========================================================================
+====================================================================
 Notices for sqlite3/sqlite3.h
 ---------------------------------------------------------------------------
 
@@ -5820,7 +4899,7 @@ Notices for sqlite3/sqlite3.h
 **
 *************************************************************************
 
-===========================================================================
+====================================================================
 Notices for tcp-wrappers/DISCLAIMER
 ---------------------------------------------------------------------------
 
@@ -5841,7 +4920,7 @@ Notices for tcp-wrappers/DISCLAIMER
 * merchantibility and fitness for any particular purpose.
 ************************************************************************/
 
-===========================================================================
+====================================================================
 Notices for xz/getopt.c
 ---------------------------------------------------------------------------
 
@@ -5869,7 +4948,7 @@ Notices for xz/getopt.c
 
 #ifndef _LIBC
 
-===========================================================================
+====================================================================
 Notices for xz/COPYING
 ---------------------------------------------------------------------------
 
@@ -5948,39 +5027,11 @@ XZ Utils Licensing
 
     If you have questions, don't hesitate to ask the author(s) for more
     information.
-
-
-===========================================================================
-End of Copyrights and Notices
-===========================================================================
-
-@@@@@@@@@@@@
-===========================================================================
-Source Code Offer Information
-===========================================================================
-
-Source code to any of the eligible GPL or LGPL packages listed above that are
-distributed with the firmware is available.
-
-For copies of the source code for this software, send an email to
-askibm@vnet.ibm.com identifying the IBM product and the GPL-licensed program
-for which you are requesting the source code.  Or send the request using
-http://www.ibm.com/support or http://www.ibm.com/contact.  Or send the
-request to the following postal address:
-  IBM Corporation
-  Attn: Linux Technology Center, Dept. 7UDA
-  11501 Burnet Road
-  Austin, TX 78758
-
-===========================================================================
-End of Source Code Offer Information
-===========================================================================
-
-===========================================================================
-END OF TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE for
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
-===========================================================================
   </pre>
 </template>
+
+<script>
+export default {
+  name: 'NoticesText',
+};
+</script>
