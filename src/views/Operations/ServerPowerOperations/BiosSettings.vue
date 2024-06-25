@@ -953,9 +953,15 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped>
 .error-text {
   color: red;
   font-size: 12px;
+}
+.btn.collapsed {
+  svg {
+    transform: rotate(180deg);
+  }
 }
 </style>
