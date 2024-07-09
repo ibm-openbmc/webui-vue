@@ -1,15 +1,12 @@
+import { defineStore } from 'pinia';
 import api from '@/store/api';
 
-const SensorsStore = {
-  namespaced: true,
-  state: {
+export const SensorsStore = defineStore('sensors', {
+  state: () => ({
     sensors: [],
-  },
+  }),
   getters: {
-    sensors: (state) => state.sensors,
-  },
-  mutations: {
-    setSensors: (state, sensors) => (state.sensors = sensors),
+    sensorsGetter: (state) => state.sensors,
   },
   actions: {
     async getChassisCollection() {
@@ -21,28 +18,29 @@ const SensorsStore = {
         )
         .catch((error) => console.log(error));
     },
-    async getAllSensors({ commit, dispatch }) {
-      commit('setSensors', []);
-      const collection = await dispatch('getChassisCollection');
+    async getAllSensors() {
+      this.sensors = [];
+      const collection = await this.getChassisCollection();
       if (!collection) return;
       return await api
-        .all(collection.map((chassis) => dispatch('getSensors', chassis)))
+        .all(collection.map((chassis) => this.getSensors(chassis)))
         .catch((error) => console.log(error));
     },
-    async getSensors({ commit }, id) {
+    async getSensors(id) {
       await api
         .get(`${id}/Sensors?$expand=.($levels=1)`)
         .then((response) => {
           let sensorData = [];
           response.data.Members.map((sensor) => {
             const oneSensordata = {
+              isSelected: false,
               name: sensor.Name,
               status: sensor.Status.Health,
               currentValue: sensor.Reading,
               units: sensor.ReadingUnits,
             };
             sensorData.push(oneSensordata);
-            commit('setSensors', sensorData);
+            this.sensors = sensorData;
           });
         })
         .then(() => {
@@ -50,60 +48,5 @@ const SensorsStore = {
         })
         .catch((error) => console.log(error));
     },
-    async getThermalSensors({ commit }, id) {
-      return await api
-        .get(`${id}/Thermal`)
-        .then(({ data: { Fans = [], Temperatures = [] } }) => {
-          const sensorData = [];
-          Fans.forEach((sensor) => {
-            sensorData.push({
-              name: sensor.Name,
-              status: sensor.Status.Health,
-              currentValue: sensor.Reading,
-              lowerCaution: sensor.LowerThresholdNonCritical,
-              upperCaution: sensor.UpperThresholdNonCritical,
-              lowerCritical: sensor.LowerThresholdCritical,
-              upperCritical: sensor.UpperThresholdCritical,
-              units: sensor.ReadingUnits,
-            });
-          });
-          Temperatures.forEach((sensor) => {
-            sensorData.push({
-              name: sensor.Name,
-              status: sensor.Status.Health,
-              currentValue: sensor.ReadingCelsius,
-              lowerCaution: sensor.LowerThresholdNonCritical,
-              upperCaution: sensor.UpperThresholdNonCritical,
-              lowerCritical: sensor.LowerThresholdCritical,
-              upperCritical: sensor.UpperThresholdCritical,
-              units: '℃',
-            });
-          });
-          commit('setSensors', sensorData);
-        })
-        .catch((error) => console.log(error));
-    },
-    async getPowerSensors({ commit }, id) {
-      return await api
-        .get(`${id}/Power`)
-        .then(({ data: { Voltages = [] } }) => {
-          const sensorData = Voltages.map((sensor) => {
-            return {
-              name: sensor.Name,
-              status: sensor.Status.Health,
-              currentValue: sensor.ReadingVolts,
-              lowerCaution: sensor.LowerThresholdNonCritical,
-              upperCaution: sensor.UpperThresholdNonCritical,
-              lowerCritical: sensor.LowerThresholdCritical,
-              upperCritical: sensor.UpperThresholdCritical,
-              units: 'V',
-            };
-          });
-          commit('setSensors', sensorData);
-        })
-        .catch((error) => console.log(error));
-    },
   },
-};
-
-export default SensorsStore;
+});

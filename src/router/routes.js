@@ -7,6 +7,7 @@ import Overview from '@/views/Overview/Overview.vue';
 import VirtualMedia from '@/views/Operations/VirtualMedia/VirtualMedia.vue';
 import Kvm from '@/views/Operations/Kvm';
 import Policies from '@/views/SecurityAndAccess/Policies';
+import Sensors from '@/views/HardwareStatus/Sensors';
 import PageNotFound from '@/views/PageNotFound/PageNotFound.vue';
 import KeyClear from '@/views/Operations/KeyClear/KeyClear.vue';
 import RebootBmc from '@/views/Operations/RebootBmc';
@@ -50,6 +51,14 @@ export const routes = [
         meta: {
           title: i18n.global.t('appPageTitle.virtualMedia'),
           exclusiveToRoles: [roles.administrator],
+        },
+      },
+      {
+        path: '/hardware-status/sensors',
+        name: 'sensors',
+        component: Sensors,
+        meta: {
+          title: i18n.global.t('appPageTitle.sensors'),
         },
       },
       {

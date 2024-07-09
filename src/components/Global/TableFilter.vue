@@ -1,16 +1,16 @@
 <template>
   <div class="table-filter d-inline-block">
     <p class="d-inline-block mb-0">
-      <b-badge v-for="(tag, index) in tags" :key="index" pill>
+      <BBadge v-for="(tag, index) in tags" :key="index" pill>
         {{ tag }}
-        <b-button-close
+        <BCloseButton
           :disabled="dropdownVisible"
           :aria-hidden="true"
           @click="removeTag(tag)"
         />
-      </b-badge>
+      </BBadge>
     </p>
-    <b-dropdown
+    <BDropdown
       variant="link"
       no-caret
       right
@@ -23,34 +23,34 @@
         <icon-filter />
         {{ $t('global.action.filter') }}
       </template>
-      <b-dropdown-form>
-        <b-form-group
+      <BDropdownForm>
+        <BFormGroup
           v-for="(filter, index) of filters"
           :key="index"
           :label="filter.label"
         >
-          <b-form-checkbox-group v-model="tags">
-            <b-form-checkbox
+          <BFormCheckboxGroup v-model="tags">
+            <BFormCheckbox
               v-for="value in filter.values"
               :key="value"
               :value="value"
               :data-test-id="`tableFilter-checkbox-${value}`"
             >
-              <b-dropdown-item>
+              <BDropdownItem>
                 {{ value }}
-              </b-dropdown-item>
-            </b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-      </b-dropdown-form>
-      <b-dropdown-item-button
+              </BDropdownItem>
+            </BFormCheckbox>
+          </BFormCheckboxGroup>
+        </BFormGroup>
+      </BDropdownForm>
+      <BDropdownItemButton
         variant="primary"
         data-test-id="tableFilter-button-clearAll"
         @click="clearAllTags"
       >
         {{ $t('global.action.clearAll') }}
-      </b-dropdown-item-button>
-    </b-dropdown>
+      </BDropdownItemButton>
+    </BDropdown>
   </div>
 </template>
 
@@ -115,6 +115,6 @@ export default {
 
 <style lang="scss" scoped>
 .badge {
-  margin-right: $spacer / 2;
+  margin-right: calc($spacer / 2);
 }
 </style>
