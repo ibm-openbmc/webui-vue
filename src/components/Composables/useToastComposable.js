@@ -25,7 +25,7 @@ const useToastComposable = () => {
   const successToast = (
     message,
     {
-      title: t = i18n.global.t('global.status.Success'),
+      title: t = i18n.global.t('global.status.success'),
       timestamp,
       refreshAction,
     } = {},
@@ -35,7 +35,7 @@ const useToastComposable = () => {
   const errorToast = (
     message,
     {
-      title: t = i18n.global.t('global.status.Error'),
+      title: t = i18n.global.t('global.status.error'),
       timestamp,
       refreshAction,
     } = {},

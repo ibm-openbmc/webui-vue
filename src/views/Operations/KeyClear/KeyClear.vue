@@ -1,112 +1,150 @@
 <template>
-  <b-container fluid="xl">
-    <page-title
-      :title="$t('appPageTitle.keyClear')"
-      :description="$t('pageKeyClear.description')"
-    />
-    <b-row>
-      <b-col md="8" xl="6">
-        <alert variant="info" class="mb-4">
-          <div class="font-weight-bold">
-            {{ $t('pageKeyClear.alert.title') }}
-          </div>
-          <div>
-            {{ $t('pageKeyClear.alert.description') }}
-          </div>
-        </alert>
-      </b-col>
-    </b-row>
-    <!-- Reset Form -->
-    <b-form id="key-clear" @submit.prevent="onKeyClearSubmit(keyOption)">
-      <b-row>
-        <b-col md="8">
-          <b-form-group :label="$t('pageKeyClear.form.keyClearOptionsLabel')">
-            <b-form-radio-group
-              id="key-clear-options"
-              v-model="keyOption"
-              stacked
+  <div>
+    <BContainer fluid="xl">
+      <page-title
+        :title="$t('appPageTitle.keyClear')"
+        :description="$t('pageKeyClear.description')"
+      />
+      <BRow>
+        <BCol md="8" xl="6">
+          <alert variant="info" class="mb-4">
+            <div class="title">
+              {{ $t('pageKeyClear.alert.title') }}
+            </div>
+            <div>
+              {{ $t('pageKeyClear.alert.description') }}
+            </div>
+          </alert>
+        </BCol>
+      </BRow>
+      <!-- Reset Form -->
+      <BForm id="key-clear" @submit.prevent="onKeyClearSubmit(keyOption)">
+        <BRow>
+          <BCol md="8">
+            <BFormGroup
+              class="fieldset"
+              :label="$t('pageKeyClear.form.keyClearOptionsLabel')"
             >
-              <b-form-radio class="mb-1" value="NONE">
-                {{ $t('pageKeyClear.form.none') }}
-              </b-form-radio>
-              <b-form-text id="key-clear-not-requested" class="ml-4 mb-3">
-                {{ $t('pageKeyClear.form.keyClearNotRequested') }}
-              </b-form-text>
-              <b-form-radio class="mb-1" value="ALL">
-                {{ $t('pageKeyClear.form.clearAllLabel') }}
-              </b-form-radio>
-              <b-form-text id="clear-all" class="ml-4 mb-3">
-                {{ $t('pageKeyClear.form.clearAllHelperText') }}
-              </b-form-text>
-              <b-form-radio class="mb-1" value="POWERVM_SYSKEY">
-                {{ $t('pageKeyClear.form.clearHypervisorSystemKeyLabel') }}
-              </b-form-radio>
-              <b-form-text id="clear-hypervisor-key" class="ml-4 mb-3">
-                {{ $t('pageKeyClear.form.clearHypervisorSystemKeyHelperText') }}
-              </b-form-text>
-              <template v-if="username == 'service'">
-                <b-form-radio class="mb-1" value="MFG_ALL">
-                  {{ $t('pageKeyClear.form.clearAllSetGenesisIPL') }}
-                </b-form-radio>
-                <b-form-radio class="mb-1" value="MFG">
-                  {{ $t('pageKeyClear.form.setFactoryDefault') }}
-                </b-form-radio>
-              </template>
-            </b-form-radio-group>
-          </b-form-group>
-          <b-button
-            type="submit"
-            variant="primary"
-            data-test-id="keyClear-button-submit"
-          >
-            {{ $t('pageKeyClear.form.clear') }}
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-form>
-  </b-container>
+              <BFormRadioGroup
+                id="key-clear-options"
+                v-model="keyOption"
+                stacked
+              >
+                <BFormRadio class="radioButton" value="NONE">
+                  {{ $t('pageKeyClear.form.none') }}
+                </BFormRadio>
+                <BFormText
+                  id="key-clear-not-requested"
+                  class="ms-4 mb-3 formText"
+                >
+                  {{ $t('pageKeyClear.form.keyClearNotRequested') }}
+                </BFormText>
+                <BFormRadio class="radioButton" value="ALL">
+                  {{ $t('pageKeyClear.form.clearAllLabel') }}
+                </BFormRadio>
+                <BFormText id="clear-all" class="ms-4 mb-3 formText">
+                  {{ $t('pageKeyClear.form.clearAllHelperText') }}
+                </BFormText>
+                <BFormRadio class="radioButton" value="POWERVM_SYSKEY">
+                  {{ $t('pageKeyClear.form.clearHypervisorSystemKeyLabel') }}
+                </BFormRadio>
+                <BFormText id="clear-hypervisor-key" class="ms-4 mb-3 formText">
+                  {{
+                    $t('pageKeyClear.form.clearHypervisorSystemKeyHelperText')
+                  }}
+                </BFormText>
+                <template v-if="username == 'service'">
+                  <BFormRadio class="radioButton" value="MFG_ALL">
+                    {{ $t('pageKeyClear.form.clearAllSetGenesisIPL') }}
+                  </BFormRadio>
+                  <BFormRadio class="radioButton" value="MFG">
+                    {{ $t('pageKeyClear.form.setFactoryDefault') }}
+                  </BFormRadio>
+                </template>
+              </BFormRadioGroup>
+            </BFormGroup>
+            <BButton
+              type="submit"
+              variant="primary"
+              data-test-id="keyClear-button-submit"
+            >
+              {{ $t('pageKeyClear.form.clear') }}
+            </BButton>
+          </BCol>
+        </BRow>
+      </BForm>
+    </BContainer>
+    <BModal
+      v-model="openModal"
+      :title="$t('pageKeyClear.modal.clearAllTitle')"
+      :ok-title="$t('pageKeyClear.modal.clear')"
+      ok-variant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOK"
+    >
+      <p>{{ $t('pageKeyClear.modal.clearAllMessage') }}</p>
+    </BModal>
+  </div>
 </template>
 
-<script>
-import PageTitle from '@/components/Global/PageTitle';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import Alert from '@/components/Global/Alert';
+<script setup>
+import { ref, onMounted, onBeforeMount } from 'vue';
+import { useI18n } from 'vue-i18n';
+import eventBus from '../../../eventBus';
+import { GlobalStore, KeyClearStore } from '@/store';
+import Alert from '../../../components/Global/Alert.vue';
+import PageTitle from '../../../components/Global/PageTitle.vue';
+import useToast from '../../../components/Composables/useToastComposable';
+import useLoadingBarComposable from '../../../components/Composables/useLoadingBarComposable';
 
-export default {
-  name: 'KeyClear',
-  components: { PageTitle, Alert },
-  mixins: [LoadingBarMixin, BVToastMixin],
-  data() {
-    return {
-      keyOption: 'NONE',
-      username: this.$store.getters['global/username'],
-    };
-  },
-  created() {
-    this.hideLoader();
-  },
-  mounted() {
-    this.$root.$emit('loading-bar-status', true);
-  },
-  methods: {
-    onKeyClearSubmit(valueSelected) {
-      this.$bvModal
-        .msgBoxConfirm(this.$t('pageKeyClear.modal.clearAllMessage'), {
-          title: this.$t('pageKeyClear.modal.clearAllTitle'),
-          okTitle: this.$t('pageKeyClear.modal.clear'),
-          okVariant: 'danger',
-          cancelTitle: this.$t('global.action.cancel'),
-        })
-        .then((clearConfirmed) => {
-          if (clearConfirmed) {
-            this.$store
-              .dispatch('keyClear/clearEncryptionKeys', valueSelected)
-              .then((message) => this.successToast(message))
-              .catch(({ message }) => this.errorToast(message));
-          }
-        });
-    },
-  },
+const { t } = useI18n();
+const { hideLoader } = useLoadingBarComposable();
+const keyOption = ref('NONE');
+const username = ref(GlobalStore.username);
+const openModal = ref(false);
+const selectedKey = ref('');
+
+const keyClear = KeyClearStore();
+const { successToast, errorToast } = useToast();
+
+onBeforeMount(() => {
+  hideLoader();
+});
+
+onMounted(() => {
+  eventBus.emit('loading-bar-status', true);
+});
+
+function onKeyClearSubmit(valueSelected) {
+  console.log('valueSelected', valueSelected);
+  openModal.value = true;
+  selectedKey.value = valueSelected;
+}
+const handleOK = (event) => {
+  console.log('ok event', event);
+  keyClear
+    .clearEncryptionKeys(selectedKey.value)
+    .then(({ message }) => {
+      openModal.value = false;
+      console.log(message);
+      successToast(t('pageKeyClear.toast.selectedKeyClearedSuccess'));
+    })
+    .catch(({ message }) => {
+      console.log(message);
+      openModal.value = false;
+      errorToast(t('pageKeyClear.toast.selectedKeyClearedError'));
+    });
 };
 </script>
+
+<style lang="scss" scoped>
+.title {
+  font-weight: bold;
+}
+.formText {
+  display: inline-block;
+}
+.fieldset {
+  margin-bottom: 1rem;
+}
+</style>

@@ -6,6 +6,7 @@ import FirmwareStore from './modules/Operations/FirmwareStore';
 import SystemStore from './modules/HardwareStatus/SystemStore';
 import NetworkStore from './modules/Settings/NetworkStore';
 import PowerControlStore from './modules/ResourceManagement/PowerControlStore';
+import KeyClearStore from './modules/Operations/KeyClearStore';
 
 // ... (export use other stores)
 export {
@@ -16,4 +17,5 @@ export {
   SystemStore,
   NetworkStore,
   PowerControlStore,
+  KeyClearStore,
 };

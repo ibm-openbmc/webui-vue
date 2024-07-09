@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <span :class="['status-icon', status]">
     <icon-info v-if="status === 'info'" />
@@ -16,7 +15,12 @@ import IconWarning from '@carbon/icons-vue/es/warning--filled/20';
 import IconSecondary from '@carbon/icons-vue/es/error--filled/20';
 import IconDanger from '@carbon/icons-vue/es/misuse/20';
 
-// const props = defineProps(['status']);
+defineProps({
+  status: {
+    type: String,
+    default: '',
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -24,20 +28,20 @@ import IconDanger from '@carbon/icons-vue/es/misuse/20';
   vertical-align: text-bottom;
 
   &.info {
-    color: #2d60e5; // theme-color('info');
+    color: $info;
   }
   &.success {
-    color: #0a7d06; // theme-color('success');
+    color: $success;
   }
   &.danger {
-    color: #da1416; //theme-color('danger');
+    color: $danger;
   }
   &.secondary {
-    color: #999999; //gray('600');
+    color: gray('600');
     transform: rotate(-45deg);
   }
   &.warning {
-    color: #efc100; //theme-color('warning');
+    color: $warning;
   }
 
   svg {
