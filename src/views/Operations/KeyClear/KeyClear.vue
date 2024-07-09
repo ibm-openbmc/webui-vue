@@ -116,12 +116,10 @@ onMounted(() => {
 });
 
 function onKeyClearSubmit(valueSelected) {
-  console.log('valueSelected', valueSelected);
   openModal.value = true;
   selectedKey.value = valueSelected;
 }
-const handleOK = (event) => {
-  console.log('ok event', event);
+const handleOK = () => {
   keyClear
     .clearEncryptionKeys(selectedKey.value)
     .then(({ message }) => {
