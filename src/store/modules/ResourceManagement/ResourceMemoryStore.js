@@ -13,6 +13,7 @@ const ResourceMemoryStore = {
     numHugePages: null,
     hmcManaged: null,
     memoryMirroringMode: null,
+    predictiveMemoryGuard: null,
   },
   getters: {
     logicalMemorySizeOptions: (state) => state.logicalMemorySizeOptions,
@@ -25,6 +26,7 @@ const ResourceMemoryStore = {
     numHugePages: (state) => state.numHugePages,
     hmcManaged: (state) => state.hmcManaged,
     memoryMirroringMode: (state) => state.memoryMirroringMode,
+    predictiveMemoryGuard: (state) => state.predictiveMemoryGuard,
   },
   mutations: {
     setLogicalMemorySizeOptions: (state, logicalMemorySizeOptions) =>
@@ -47,6 +49,8 @@ const ResourceMemoryStore = {
     setHmcManaged: (state, hmcManaged) => (state.hmcManaged = hmcManaged),
     setMemoryMirroringMode: (state, memoryMirroringMode) =>
       (state.memoryMirroringMode = memoryMirroringMode),
+    setPredictiveMemoryGuard: (state, predictiveMemoryGuard) =>
+      (state.predictiveMemoryGuard = predictiveMemoryGuard),
   },
   actions: {
     async getMemorySizeOptions({ commit }) {
@@ -201,6 +205,52 @@ const ResourceMemoryStore = {
           commit('setMemoryMirroringMode', !activeMemoryMirroringModeValue);
           throw new Error(
             i18n.t('pageMemory.toast.errorSavingActiveMemoryMirroringMode')
+          );
+        });
+    },
+    async getPredictiveMemoryGuard({ commit }) {
+      return await api
+        .get(
+          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry'
+        )
+        .then(({ data: { RegistryEntries } }) => {
+          const predictiveMemoryGuard = RegistryEntries.Attributes.filter(
+            (Attribute) => Attribute.AttributeName == 'hb_predictive_mem_guard'
+          );
+          if (predictiveMemoryGuard.length > 0) {
+            let predictiveMemoryGuardValue =
+              predictiveMemoryGuard[0].CurrentValue;
+            let predictiveMemValue =
+              predictiveMemoryGuardValue == 'Enabled' ? true : false;
+            commit('setPredictiveMemoryGuard', predictiveMemValue);
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+    async savePredictiveMemoryGuard(
+      { commit },
+      activePredictiveMemoryGuardValue
+    ) {
+      let updatedMirroringModeValue = activePredictiveMemoryGuardValue
+        ? 'Enabled'
+        : 'Disabled';
+      commit('setPredictiveMemoryGuard', activePredictiveMemoryGuardValue);
+      const updatedPredictiveMemoryGuard = {
+        Attributes: { hb_predictive_mem_guard: updatedMirroringModeValue },
+      };
+      return api
+        .patch(
+          '/redfish/v1/Systems/system/Bios/Settings',
+          updatedPredictiveMemoryGuard
+        )
+        .then(() => {
+          return i18n.t('pageMemory.toast.successSavingPredictiveMemoryGuard');
+        })
+        .catch((error) => {
+          console.log(error);
+          commit('setPredictiveMemoryGuard', !activePredictiveMemoryGuardValue);
+          throw new Error(
+            i18n.t('pageMemory.toast.errorSavingPredictiveMemoryGuard')
           );
         });
     },
