@@ -88,32 +88,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import eventBus from '../../../eventBus';
 import { GlobalStore, KeyClearStore } from '@/store';
 import Alert from '../../../components/Global/Alert.vue';
 import PageTitle from '../../../components/Global/PageTitle.vue';
 import useToast from '../../../components/Composables/useToastComposable';
-import useLoadingBarComposable from '../../../components/Composables/useLoadingBarComposable';
 
 const { t } = useI18n();
-const { hideLoader } = useLoadingBarComposable();
+const globalStore = GlobalStore();
 const keyOption = ref('NONE');
-const username = ref(GlobalStore.username);
+const username = ref(globalStore.username);
 const openModal = ref(false);
 const selectedKey = ref('');
 
 const keyClear = KeyClearStore();
 const { successToast, errorToast } = useToast();
-
-onBeforeMount(() => {
-  hideLoader();
-});
-
-onMounted(() => {
-  eventBus.emit('loading-bar-status', true);
-});
 
 function onKeyClearSubmit(valueSelected) {
   openModal.value = true;
