@@ -9,11 +9,9 @@ const FirmwareStore = {
     bmcActiveFirmwareId: null,
     hostActiveFirmwareId: null,
     applyTime: null,
-    tftpAvailable: false,
     firmwareBootSide: null,
   },
   getters: {
-    isTftpUploadAvailable: (state) => state.tftpAvailable,
     isSingleFileUploadEnabled: (state) => state.hostFirmware.length === 0,
     activeBmcFirmware: (state) => {
       return state.bmcFirmware.find(
@@ -45,8 +43,6 @@ const FirmwareStore = {
     setBmcFirmware: (state, firmware) => (state.bmcFirmware = firmware),
     setHostFirmware: (state, firmware) => (state.hostFirmware = firmware),
     setApplyTime: (state, applyTime) => (state.applyTime = applyTime),
-    setTftpUploadAvailable: (state, tftpAvailable) =>
-      (state.tftpAvailable = tftpAvailable),
     setFirmwareBootSide: (state, firmwareBootSide) =>
       (state.firmwareBootSide = firmwareBootSide),
   },
@@ -124,15 +120,7 @@ const FirmwareStore = {
         .then(({ data }) => {
           const applyTime =
             data.HttpPushUriOptions.HttpPushUriApplyTime.ApplyTime;
-          const allowableActions =
-            data?.Actions?.['#UpdateService.SimpleUpdate']?.[
-              'TransferProtocol@Redfish.AllowableValues'
-            ];
-
           commit('setApplyTime', applyTime);
-          if (allowableActions?.includes('TFTP')) {
-            commit('setTftpUploadAvailable', true);
-          }
         })
         .catch((error) => console.log(error));
     },
@@ -162,26 +150,6 @@ const FirmwareStore = {
         .catch((error) => {
           console.log(error);
           throw new Error(i18n.t('pageFirmware.toast.errorUploadFirmware'));
-        });
-    },
-    async uploadFirmwareTFTP({ state, dispatch }, fileAddress) {
-      const data = {
-        TransferProtocol: 'TFTP',
-        ImageURI: fileAddress,
-      };
-      if (state.applyTime !== 'Immediate') {
-        // ApplyTime must be set to Immediate before making
-        // request to update firmware
-        await dispatch('setApplyTimeImmediate');
-      }
-      return await api
-        .post(
-          '/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate',
-          data
-        )
-        .catch((error) => {
-          console.log(error);
-          throw new Error(i18n.t('pageFirmware.toast.errorUpdateFirmware'));
         });
     },
     async switchBmcFirmwareAndReboot({ getters }) {

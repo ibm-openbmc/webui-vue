@@ -2,68 +2,26 @@
   <div>
     <div class="form-background p-3">
       <b-form @submit.prevent="onSubmitUpload">
-        <b-form-group
-          v-if="isTftpUploadAvailable && tftpServer"
-          :label="$t('pageFirmware.form.updateFirmware.fileSource')"
-          :disabled="isPageDisabled"
-        >
-          <b-form-radio v-model="isWorkstationSelected" :value="true">
-            {{ $t('pageFirmware.form.updateFirmware.workstation') }}
-          </b-form-radio>
-          <b-form-radio v-model="isWorkstationSelected" :value="false">
-            {{ $t('pageFirmware.form.updateFirmware.tftpServer') }}
-            <span
-              ><info-tooltip
-                class="info-icon"
-                :title="$t('pageFirmware.form.updateFirmware.tftpServerInfo')"
-            /></span>
-          </b-form-radio>
-        </b-form-group>
-
         <!-- Workstation Upload -->
-        <template v-if="isWorkstationSelected">
-          <b-form-group
-            :label="$t('pageFirmware.form.updateFirmware.imageFile')"
-            label-for="image-file"
+        <b-form-group
+          :label="$t('pageFirmware.form.updateFirmware.imageFile')"
+          label-for="image-file"
+        >
+          <form-file
+            id="image-file"
+            :disabled="isPageDisabled"
+            accept=".tar"
+            :state="getValidationState($v.file)"
+            aria-describedby="image-file-help-block"
+            @input="onFileUpload($event)"
           >
-            <form-file
-              id="image-file"
-              :disabled="isPageDisabled"
-              accept=".tar"
-              :state="getValidationState($v.file)"
-              aria-describedby="image-file-help-block"
-              @input="onFileUpload($event)"
-            >
-              <template #invalid>
-                <b-form-invalid-feedback role="alert">
-                  {{ $t('global.form.required') }}
-                </b-form-invalid-feedback>
-              </template>
-            </form-file>
-          </b-form-group>
-        </template>
-
-        <!-- TFTP Server Upload -->
-        <template v-if="tftpServer">
-          <b-form-group
-            :label="$t('pageFirmware.form.updateFirmware.fileAddress')"
-            label-for="tftp-address"
-          >
-            <b-form-input
-              id="tftp-address"
-              v-model="tftpFileAddress"
-              type="text"
-              :state="getValidationState($v.tftpFileAddress)"
-              :disabled="isPageDisabled"
-              @input="$v.tftpFileAddress.$touch()"
-            />
-            <b-form-invalid-feedback role="alert">
-              <template v-if="!$v.tftpFileAddress.required">
-                {{ $t('global.form.fieldRequired') }}
-              </template>
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </template>
+            <template #invalid>
+              <b-form-invalid-feedback role="alert">
+                {{ $t('global.form.required') }}
+              </b-form-invalid-feedback>
+            </template>
+          </form-file>
+        </b-form-group>
         <b-btn
           data-test-id="firmware-button-startUpdate"
           type="submit"
@@ -81,18 +39,16 @@
 </template>
 
 <script>
-import { requiredIf } from 'vuelidate/lib/validators';
+import { required } from 'vuelidate/lib/validators';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import InfoTooltip from '@/components/Global/InfoTooltip';
 import FormFile from '@/components/Global/FormFile';
 import ModalUpdateFirmware from './FirmwareModalUpdateFirmware';
 
 export default {
   name: 'FormUpdate',
   components: {
-    InfoTooltip,
     FormFile,
     ModalUpdateFirmware,
   },
@@ -107,12 +63,9 @@ export default {
   data() {
     return {
       loading,
-      isWorkstationSelected: true,
       file: null,
-      tftpFileAddress: null,
       isServerPowerOffRequired:
         process.env.VUE_APP_SERVER_OFF_REQUIRED === 'true',
-      tftpServer: process.env.VUE_APP_TFTP_SERVER === 'true',
     };
   },
   computed: {
@@ -122,16 +75,8 @@ export default {
     bootProgress() {
       return this.$store.getters['global/bootProgress'];
     },
-    isTftpUploadAvailable() {
-      return this.$store.getters['firmware/isTftpUploadAvailable'];
-    },
   },
   watch: {
-    isWorkstationSelected: function () {
-      this.$v.$reset();
-      this.file = null;
-      this.tftpFileAddress = null;
-    },
     loading: function (value) {
       this.$emit('loadingStatus', value);
     },
@@ -139,14 +84,7 @@ export default {
   validations() {
     return {
       file: {
-        required: requiredIf(function () {
-          return this.isWorkstationSelected;
-        }),
-      },
-      tftpFileAddress: {
-        required: requiredIf(function () {
-          return !this.isWorkstationSelected;
-        }),
+        required: required,
       },
     };
   },
@@ -168,11 +106,7 @@ export default {
             timestamp: true,
           }
         );
-        if (this.isWorkstationSelected) {
-          this.dispatchWorkstationUpload(activateFirmware);
-        } else {
-          this.dispatchTftpUpload(activateFirmware);
-        }
+        this.dispatchWorkstationUpload(activateFirmware);
       };
 
       // Step 2 - Activation
@@ -294,17 +228,6 @@ export default {
       this.$store
         .dispatch('firmware/uploadFirmware', this.file)
         .then(async ({ data }) => {
-          activateFirmware(data);
-        })
-        .catch(({ message }) => {
-          this.endLoader();
-          this.errorToast(message);
-        });
-    },
-    dispatchTftpUpload(activateFirmware) {
-      this.$store
-        .dispatch('firmware/uploadFirmwareTFTP', this.tftpFileAddress)
-        .then(({ data }) => {
           activateFirmware(data);
         })
         .catch(({ message }) => {

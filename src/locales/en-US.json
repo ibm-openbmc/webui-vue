@@ -766,8 +766,6 @@
         "imageFile": "Image file",
         "manageAccessKeys": "Manage access keys",
         "startUpdate": "Start update",
-        "tftpServer": "TFTP server",
-        "tftpServerInfo": "<server_ip>/<file_name>.tar",
         "workstation": "Workstation"
       }
     },
