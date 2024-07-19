@@ -89,13 +89,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { GlobalStore, KeyClearStore } from '@/store';
-import Alert from '../../../components/Global/Alert.vue';
-import PageTitle from '../../../components/Global/PageTitle.vue';
-import useToast from '../../../components/Composables/useToastComposable';
+import Alert from '@/components/Global/Alert.vue';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import useToast from '@/components/Composables/useToastComposable';
 
-const { t } = useI18n();
 const globalStore = GlobalStore();
 const keyOption = ref('NONE');
 const username = ref(globalStore.username);
@@ -112,15 +110,13 @@ function onKeyClearSubmit(valueSelected) {
 const handleOK = () => {
   keyClear
     .clearEncryptionKeys(selectedKey.value)
-    .then(({ message }) => {
+    .then((message) => {
       openModal.value = false;
-      console.log(message);
-      successToast(t('pageKeyClear.toast.selectedKeyClearedSuccess'));
+      successToast(message);
     })
     .catch(({ message }) => {
-      console.log(message);
       openModal.value = false;
-      errorToast(t('pageKeyClear.toast.selectedKeyClearedError'));
+      errorToast(message);
     });
 };
 </script>
