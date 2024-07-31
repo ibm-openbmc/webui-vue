@@ -9,6 +9,7 @@ import Kvm from '@/views/Operations/Kvm';
 import Policies from '@/views/SecurityAndAccess/Policies';
 import PageNotFound from '@/views/PageNotFound/PageNotFound.vue';
 import KeyClear from '@/views/Operations/KeyClear/KeyClear.vue';
+import RebootBmc from '@/views/Operations/RebootBmc';
 const roles = {
   administrator: 'Administrator',
   operator: 'Operator',
@@ -68,6 +69,14 @@ export const routes = [
         },
       },
       { path: '/operations/key-clear', name: 'key-clear', component: KeyClear },
+      {
+        path: '/operations/reboot-bmc',
+        name: 'reboot-bmc',
+        component: RebootBmc,
+        meta: {
+          title: i18n.global.t('appPageTitle.rebootBmc'),
+        },
+      },
       {
         path: '/:pathMatch(.*)*',
         name: 'page-not-found',

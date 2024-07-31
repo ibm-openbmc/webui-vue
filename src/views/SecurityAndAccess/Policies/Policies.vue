@@ -1,5 +1,6 @@
+<!-- TODO: Work Requird -->
 <template>
-  <div class="container" fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.policies')" />
     <BRow>
       <BCol md="8">
@@ -79,9 +80,9 @@
             <dl class="mt-3 mr-3 w-75">
               <dt>
                 {{ $t('pagePolicies.vtpm') }}
-                <span v-b-tooltip="$t('global.status.nextReboot')">
-                  <status-icon status="time" />
-                </span>
+                <info-tooltip :title="$t('global.status.nextReboot')">
+                  <icon-time />
+                </info-tooltip>
               </dt>
 
               <dd>
@@ -110,9 +111,9 @@
             <dl class="mt-3 mr-3 w-75">
               <dt>
                 {{ $t('pagePolicies.rtad') }}
-                <span v-b-tooltip="$t('pagePolicies.rtadInfoIcon')">
-                  <status-icon status="time" />
-                </span>
+                <info-tooltip :title="$t('pagePolicies.rtadInfoIcon')">
+                  <icon-time />
+                </info-tooltip>
               </dt>
               <dd>
                 {{ $t('pagePolicies.rtadDescription') }}
@@ -147,6 +148,7 @@
               id="usbFirmwareUpdatePolicySwitch"
               v-model="Policies.usbFirmwareUpdatePolicyEnabled"
               data-test-id="policies-toggle-usbFirmwareUpdatePolicy"
+              :disabled="!(username === 'admin' || username === 'service')"
               switch
               @update:modelValue="changeUsbFirmwareUpdatePolicyState"
             >
@@ -190,9 +192,9 @@
             <dl class="mt-3 mr-3 w-75">
               <dt>
                 {{ $t('pagePolicies.hostUsb') }}
-                <span v-b-tooltip="$t('global.status.nextReboot')">
-                  <status-icon status="time" />
-                </span>
+                <info-tooltip :title="$t('global.status.nextReboot')">
+                  <icon-time />
+                </info-tooltip>
               </dt>
               <dd>
                 {{ $t('pagePolicies.hostUsbDescription') }}
@@ -215,7 +217,10 @@
             </BFormCheckbox>
           </BCol>
         </BRow>
-        <BRow class="section-divider">
+        <BRow
+          v-if="username === 'admin' || username === 'service'"
+          class="section-divider"
+        >
           <BCol class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
               <dt>{{ $t('pagePolicies.acfUploadEnablement') }}</dt>
@@ -243,16 +248,18 @@
       </BCol>
     </BRow>
     <BModal
+      ref="myModalRef"
       v-model="modal"
-      title="Unauthenticated ACF upload enablement"
-      cancel-title="cancel"
-      ok-title="confirm"
+      :title="$t('pagePolicies.acfUploadEnablement')"
+      :cancel-title="$t('global.action.cancel')"
+      :ok-title="$t('global.action.confirm')"
       @cancel="onModalCancel"
       @ok="onModalOk"
+      @hide="onModalHide"
     >
       {{ ModalContent }}
     </BModal>
-  </div>
+  </BContainer>
 </template>
 
 <script setup>
@@ -262,17 +269,28 @@ import { UserManagementStore } from '@/store/modules/SecurityAndAccess/UserManag
 import { GlobalStore } from '@/store/modules/GlobalStore';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { onBeforeRouteLeave } from 'vue-router';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import IconTime from '@carbon/icons-vue/es/time/16';
 
 const Policies = PoliciesStore();
 const UserManagement = UserManagementStore();
 const Global = GlobalStore();
+const username = ref(Global.username);
 const Toast = useToastComposable();
 const modal = ref(false);
 const ModalContent = i18n.global.t(
   'pagePolicies.acfUploadEnablementConfirmText',
 );
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const myModalRef = ref(null);
 
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
 onMounted(() => {
+  startLoader();
   Promise.all([
     Policies.getBiosStatus(),
     setTimeout(() => {
@@ -286,6 +304,9 @@ onMounted(() => {
   ]).finally(() => {
     Policies.unAuthenticatedACFUploadEnablementState =
       Policies.acfUploadEnablement;
+    setTimeout(() => {
+      endLoader();
+    }, 30000);
   });
 });
 
@@ -323,6 +344,10 @@ const changeHostUsbState = (state) => {
 const changeIpmiProtocolState = (state) => {
   Policies.saveIpmiProtocolState(state)
     .then((message) => {
+      startLoader();
+      setTimeout(() => {
+        endLoader();
+      }, 30000);
       Toast.successToast(message);
     })
     .catch(({ message }) => {
@@ -370,7 +395,7 @@ const changeTpmPolicyState = (state) => {
 
 const changeUnauthenticatedACFUploadEnablement = (state) => {
   if (state) {
-    modal.value = true;
+    modal.value = state;
   } else {
     Policies.unAuthenticatedACFUploadEnablementState = !state;
     uploadApi(state);
@@ -384,6 +409,14 @@ const onModalCancel = () => {
   const stateCancel = modal.value;
   Policies.unAuthenticatedACFUploadEnablementState = !stateCancel;
 };
+
+const onModalHide = (event) => {
+  if (event.trigger === 'backdrop' || event.trigger === 'close') {
+    const stateCancel = modal.value;
+    Policies.unAuthenticatedACFUploadEnablementState = !stateCancel;
+  }
+};
+
 const uploadApi = (state) => {
   Policies.saveUnauthenticatedACFUploadEnablement(state)
     .then((message) => Toast.successToast(message))
@@ -405,7 +438,7 @@ const checkForUserData = () => {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .mr-3 {
   margin-right: 1rem !important;
 }

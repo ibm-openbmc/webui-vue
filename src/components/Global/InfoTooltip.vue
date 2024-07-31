@@ -1,5 +1,5 @@
 <template>
-  <b-button
+  <BButton
     v-b-tooltip
     variant="link"
     class="btn-tooltip btn-icon-only"
@@ -8,22 +8,19 @@
     <slot>
       <icon-tooltip />
     </slot>
-    <span class="sr-only">{{ $t('global.ariaLabel.tooltip') }}</span>
-  </b-button>
+    <span class="visually-hidden">{{ $t('global.ariaLabel.tooltip') }}</span>
+  </BButton>
 </template>
 
-<script>
+<script setup>
 import IconTooltip from '@carbon/icons-vue/es/information/16';
-
-export default {
-  components: { IconTooltip },
-  props: {
-    title: {
-      type: String,
-      default: '',
-    },
+import { defineProps } from 'vue';
+defineProps({
+  status: {
+    type: String,
+    default: '',
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

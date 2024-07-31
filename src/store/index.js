@@ -7,6 +7,8 @@ import SystemStore from './modules/HardwareStatus/SystemStore';
 import NetworkStore from './modules/Settings/NetworkStore';
 import PowerControlStore from './modules/ResourceManagement/PowerControlStore';
 import KeyClearStore from './modules/Operations/KeyClearStore';
+import ControlStore from './modules/Operations/ControlStore';
+import BootSettingsStore from './modules/Operations/BootSettingsStore';
 
 // ... (export use other stores)
 export {
@@ -18,4 +20,6 @@ export {
   NetworkStore,
   PowerControlStore,
   KeyClearStore,
+  ControlStore,
+  BootSettingsStore,
 };

@@ -106,7 +106,7 @@
         </BNavbarNav>
       </BNavbar>
     </header>
-    <!-- <LoadingBar @checkLoadingStatus="checkLoadingStatus" /> -->
+    <loading-bar />
   </div>
 </template>
 
@@ -118,7 +118,7 @@ import IconClose from '@carbon/icons-vue/es/close/20';
 import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '../Global/StatusIcon.vue';
-// import LoadingBar from '../Global/LoadingBar.vue';
+import LoadingBar from '../Global/LoadingBar.vue';
 import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
