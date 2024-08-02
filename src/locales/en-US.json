@@ -1123,7 +1123,9 @@
     },
     "modal": {
       "addNewServiceLoginCertificate": "Add new service login certificate",
-      "certificateFile": "Certificate File"
+      "certificateFile": "Certificate File",
+      "login": "Log In",
+      "register": "Register"
     }
   },
   "pageMemory": {
@@ -1856,6 +1858,9 @@
     "addUser": "Add user",
     "deleteUser": "Delete user | Delete users",
     "editUser": "Edit user",
+    "mfaBypassWarning": "MFA bypass must be disabled to be able to enable MFA TOTP authentication.",
+    "mfaTimeMatch": "Before enabling MFA TOTP authentication, please make sure that BMC date and time matches UTC time.",
+    "mfaTotpAuthentication": "MFA TOTP authentication",
     "viewPrivilegeRoleDescriptions": "View privilege role descriptions",
     "modal": {
       "accountLocked": "Account locked",
@@ -1866,21 +1871,28 @@
       "clickSaveToUnlockAccount": "Click \"Save\" to unlock account",
       "confirmUserPassword": "Confirm user password",
       "deleteConfirmMessage": "Are you sure you want to delete user '%{user}'? This action cannot be undone.",
+      "enableMfa": "Enable MFA",
+      "hmcWarning": "Please use bypassed MFA user as HMC admin.",
       "manual": "Manual",
       "maxFailedLoginAttempts": "Max failed login attempts",
+      "mfaInfoAlert": "Enable/Disable MFA at system level will affect all local users of the system.",
       "noSpecialCharactersExceptUnderscore": "No special characters except underscore",
+      "otp": "OTP",
       "passwordMustBeBetween": "Password must be between %{min} – %{max} characters",
       "passwordsDoNotMatch": "Passwords do not match",
       "privilege": "Privilege",
+      "secretKey": "Secret key",
       "timeoutDurationSeconds": "Timeout duration (seconds)",
       "unlock": "Unlock",
       "username": "Username",
       "userPassword": "User password",
       "userUnlockMethod": "User unlock method",
+      "validate": "Validate",
       "zeroLoginAttempts": "If `0`, then account shall never be locked."
     },
     "table": {
       "administrator": "Administrator",
+      "mfaByPass": "MFA bypass",
       "privilege": "Privilege",
       "readOnly": "Read only",
       "serviceAgent": "Service agent",
@@ -1905,8 +1917,13 @@
       "errorCreateUserMaxUsers": "Error creating user '%{username}' because this system has reached the maximum amount of allowable users.",
       "errorCreateUserPasswordNotAccepted": "Error creating user '%{username}' because the password was not accepted.",
       "errorDeleteUser": "Error deleting user '%{username}'.",
+      "errorDisableMfa": "Error disabling Multi factor authentication.",
+      "errorDisableMfaBypass": "Error disabling MFA bypass.",
+      "errorEnableMfa": "Error enabling Multi factor authentication.",
+      "errorEnableMfaBypass": "Error enabling MFA bypass.",
       "errorLoadAccountSettings": "Error loading account settings",
       "errorLoadUsers": "Error loading users.",
+      "errorOtp": "Invalid OTP",
       "errorSaveSettings": "Error saving account settings.",
       "errorUpdateUser": "Error updating user '%{username}'.",
       "errorUpdateUserPasswordNotAccepted": "Error updating user '%{username}' because the password was not accepted.",
@@ -1915,6 +1932,10 @@
       "successBatchEnable": "Successfully enabled %{count} user. | Successfully enabled %{count} users.",
       "successCreateUser": "Created user '%{username}'.",
       "successDeleteUser": "Deleted user '%{username}'.",
+      "successDisableMfa": "Successfully disabled Multi factor authentication.",
+      "successDisableMfaBypass": "Successfully disabled MFA bypass.",
+      "successEnableMfa": "Successfully enabled Multi factor authentication.",
+      "successEnableMfaBypass": "Successfully enabled MFA bypass.",
       "successSaveSettings": "Successfully saved account settings.",
       "successUpdateUser": "Updated user '%{username}'."
     }

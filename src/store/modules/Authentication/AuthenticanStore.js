@@ -8,27 +8,45 @@ const AuthenticationStore = {
     loginPageDetails: {},
     authError: false,
     unauthError: false,
-    xsrfCookie: Cookies.get('XSRF-TOKEN'),
+    xsrfCookie: localStorage.getItem('xAuthToken'),
+    sessionURI: localStorage.getItem('sessionURI'),
     isAuthenticatedCookie: Cookies.get('IsAuthenticated'),
+    isGenerateOtpRequired: false,
+    isGlobalMfaEnabled: false,
+    xAuthToken: null,
   },
   getters: {
     loginPageDetails: (state) => state.loginPageDetails,
     authError: (state) => state.authError,
     unauthError: (state) => state.unauthError,
+    isGenerateOtpRequired: (state) => state.isGenerateOtpRequired,
+    isGlobalMfaEnabled: (state) => state.isGlobalMfaEnabled,
     isLoggedIn: (state) => {
       return (
-        state.xsrfCookie !== undefined || state.isAuthenticatedCookie == 'true'
+        state.xsrfCookie !== undefined ||
+        state.isAuthenticatedCookie == 'true' ||
+        state.xAuthToken !== null
       );
     },
     token: (state) => state.xsrfCookie,
   },
   mutations: {
+    setIsGlobalMfaEnabled: (state, isGlobalMfaEnabled) =>
+      (state.isGlobalMfaEnabled = isGlobalMfaEnabled),
+    setIsGenerateOtpRequired: (state, isGenerateOtpRequired) =>
+      (state.isGenerateOtpRequired = isGenerateOtpRequired),
     setLoginPageDetails: (state, loginPageDetails) =>
       (state.loginPageDetails = loginPageDetails),
-    authSuccess(state) {
+    authSuccess(state, { session, token }) {
       state.authError = false;
       state.unauthError = false;
-      state.xsrfCookie = Cookies.get('XSRF-TOKEN');
+      localStorage.setItem('sessionURI', session);
+      state.sessionURI = session;
+      if (state.xsrfCookie === undefined) {
+        localStorage.setItem('xAuthToken', token);
+        api.set_auth_token(token);
+        state.xAuthToken = token;
+      }
     },
     authError(state, authError = true) {
       state.authError = authError;
@@ -37,24 +55,54 @@ const AuthenticationStore = {
       state.unauthError = unauthError;
     },
     logout(state) {
-      Cookies.remove('XSRF-TOKEN');
+      localStorage.removeItem('xAuthToken');
+      api.set_auth_token(undefined);
+      localStorage.removeItem('sessionURI');
+      state.sessionURI = null;
+      state.xsrfCookie = undefined;
       Cookies.remove('IsAuthenticated');
+      state.xAuthToken = null;
       localStorage.removeItem('storedModelType');
       localStorage.removeItem('storedUsername');
       localStorage.removeItem('storedCurrentUser');
       localStorage.removeItem('storedHmcManagedValue');
       localStorage.removeItem('storedLanguage');
-      state.xsrfCookie = undefined;
       state.isAuthenticatedCookie = undefined;
     },
   },
   actions: {
-    login({ commit }, { username, password }) {
+    login({ state, commit }, { username, password, otpInfo }) {
+      commit('setIsGenerateOtpRequired', false);
       commit('authError', false);
       commit('unauthError', false);
+      let requestBody = {};
+      if (otpInfo === '') {
+        requestBody = { UserName: username, Password: password };
+      } else {
+        requestBody = {
+          UserName: username,
+          Password: password,
+          Token: otpInfo,
+        };
+      }
       return api
-        .post('/login', { data: [username, password] })
-        .then(() => commit('authSuccess'))
+        .post('/redfish/v1/SessionService/Sessions', requestBody)
+        .then((response) => {
+          state.xAuthToken = response.headers['x-auth-token'];
+          if (
+            response.data['@Message.ExtendedInfo'] &&
+            response.data['@Message.ExtendedInfo'][0].MessageId.endsWith(
+              'GenerateSecretKeyRequired'
+            )
+          ) {
+            commit('setIsGenerateOtpRequired', true);
+          }
+          api.set_auth_token(response.headers['x-auth-token']);
+          commit('authSuccess', {
+            session: response.headers['location'],
+            token: response.headers['x-auth-token'],
+          });
+        })
         .catch((error) => {
           commit('authError');
           throw new Error(error);
@@ -92,13 +140,14 @@ const AuthenticationStore = {
             acfWindowActive: data.ACFWindowActive,
           };
           commit('setLoginPageDetails', loginPageDetails);
+          commit('setIsGlobalMfaEnabled', data.MultiFactorAuthEnabled);
         })
         .catch((error) => console.log(error));
     },
     resetStoreState({ state }) {
       state.authError = false;
       state.unauthError = false;
-      state.xsrfCookie = Cookies.get('XSRF-TOKEN');
+      state.xsrfCookie = undefined;
       state.isAuthenticatedCookie = Cookies.get('IsAuthenticated');
     },
   },

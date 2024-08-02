@@ -6,9 +6,7 @@
       @submit.prevent="login"
     >
       <alert class="login-error mb-4" :show="authError" variant="danger">
-        <p id="login-error-alert">
-          {{ $t('pageLogin.alert.message') }}
-        </p>
+        <p id="login-error-alert">Invalid credentials</p>
       </alert>
       <alert class="login-error mb-4" :show="unauthError" variant="danger">
         <p id="unauth-login-error-alert">
@@ -63,6 +61,12 @@
           </template>
         </b-form-invalid-feedback>
       </div>
+      <div v-if="isGlobalMfaEnabled" class="login-form__section mb-3">
+        <label>OTP</label>
+        <b-form-group>
+          <b-form-input v-model="otpValue"> </b-form-input>
+        </b-form-group>
+      </div>
       <b-button
         class="mt-4 w-100"
         type="submit"
@@ -105,6 +109,7 @@
 
     <!-- Modals -->
     <modal-upload-certificate @ok="onModalOk" />
+    <modal-otp-generate />
   </div>
 </template>
 
@@ -115,6 +120,7 @@ import i18n from '@/i18n';
 import Alert from '@/components/Global/Alert';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
 import ModalUploadCertificate from './ModalUploadCertificate';
+import ModalOtpGenerate from './ModalOtpGenerate';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import IconUpload from '@carbon/icons-vue/es/upload/20';
@@ -125,11 +131,13 @@ export default {
     Alert,
     InputPasswordToggle,
     ModalUploadCertificate,
+    ModalOtpGenerate,
     IconUpload,
   },
   mixins: [VuelidateMixin, BVToastMixin, LoadingBarMixin, DataFormatterMixin],
   data() {
     return {
+      otpValue: '',
       acfUploadButton: process.env.VUE_APP_ACF_UPLOAD_REQUIRED === 'true',
       isBusy: true,
       userInfo: {
@@ -146,6 +154,9 @@ export default {
     };
   },
   computed: {
+    isGlobalMfaEnabled() {
+      return this.$store.getters['authentication/isGlobalMfaEnabled'];
+    },
     authError() {
       return this.$store.getters['authentication/authError'];
     },
@@ -180,8 +191,9 @@ export default {
       this.disableSubmitButton = true;
       const username = this.userInfo.username;
       const password = this.userInfo.password;
+      const otpInfo = this.otpValue;
       this.$store
-        .dispatch('authentication/login', { username, password })
+        .dispatch('authentication/login', { username, password, otpInfo })
         .then(() => {
           localStorage.setItem('storedLanguage', i18n.locale);
           localStorage.setItem('storedUsername', username);
@@ -196,19 +208,30 @@ export default {
           if (passwordChangeRequired) {
             this.$router.push('/change-password');
           } else {
-            Promise.all([
-              this.$store.dispatch('global/getCurrentUser', username),
-              this.$store.dispatch('global/getSystemInfo'),
-            ])
-              .then(() => {
-                this.$router.push('/');
-              })
-              .catch(() => {
-                Promise.all([
-                  this.$store.dispatch('authentication/unauthlogin'),
-                  this.$store.dispatch('authentication/logout'),
-                ]);
-              });
+            let otpGenerateRequired = this.$store.getters[
+              'authentication/isGenerateOtpRequired'
+            ];
+            if (otpGenerateRequired) {
+              this.$store
+                .dispatch('userManagement/generateSecretKey')
+                .then(() => {
+                  this.$bvModal.show('modal-otp-generate');
+                });
+            } else {
+              Promise.all([
+                this.$store.dispatch('global/getCurrentUser', username),
+                this.$store.dispatch('global/getSystemInfo'),
+              ])
+                .then(() => {
+                  this.$router.push('/');
+                })
+                .catch(() => {
+                  Promise.all([
+                    this.$store.dispatch('authentication/unauthlogin'),
+                    this.$store.dispatch('authentication/logout'),
+                  ]);
+                });
+            }
           }
         })
         .catch((error) => console.log(error))
@@ -233,3 +256,14 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.error-text {
+  color: red;
+  font-size: 12px;
+}
+.btn.collapsed {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+</style>

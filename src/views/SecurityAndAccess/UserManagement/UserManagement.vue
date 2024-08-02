@@ -1,6 +1,46 @@
 <template>
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.userManagement')" />
+    <b-row v-if="isAdminUser">
+      <b-col>
+        <span>{{ $t('pageUserManagement.mfaTotpAuthentication') }}</span>
+        <b-form-checkbox
+          id="switch"
+          v-model="globalMfaValue"
+          :disabled="isBusy || (currentMfaBypassed && !globalMfaValue)"
+          switch
+          class="mt-1"
+          @change="updateGlobalMfa"
+        >
+          <!-- @change="changeSshProtocolState" -->
+          <span v-if="globalMfaValue">
+            {{ $t('global.status.enabled') }}
+          </span>
+          <span v-else>{{ $t('global.status.disabled') }}</span>
+        </b-form-checkbox>
+      </b-col>
+    </b-row>
+    <b-row
+      v-if="isAdminUser && currentMfaBypassed && !globalMfaValue"
+      class="mt-4"
+    >
+      <b-col xl="9">
+        <alert variant="warning" class="mb-4">
+          <div>
+            {{ $t('pageUserManagement.mfaBypassWarning') }}
+          </div>
+        </alert>
+      </b-col>
+    </b-row>
+    <b-row v-else-if="isAdminUser && !globalMfaValue" class="mt-4">
+      <b-col xl="9">
+        <alert variant="warning" class="mb-4">
+          <div>
+            {{ $t('pageUserManagement.mfaTimeMatch') }}
+          </div>
+        </alert>
+      </b-col>
+    </b-row>
     <b-row>
       <b-col xl="9" class="text-right">
         <b-button variant="link" :disabled="isBusy" @click="initModalSettings">
@@ -60,6 +100,20 @@
               <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </b-form-checkbox>
           </template>
+          <template v-if="isAdminUser" #cell(mfa)="row">
+            <b-form-checkbox
+              v-if="row.item.privilege !== 'Service agent'"
+              v-model="row.item.mfa"
+              b-form-checkbox
+              switch
+              :disabled="
+                !globalMfaValue &&
+                (!currentMfaBypassed || row.item.Id !== currentUser.Id)
+              "
+              @change="updateMfaBypassVal(row.item)"
+            >
+            </b-form-checkbox>
+          </template>
 
           <!-- table actions column -->
           <template #cell(actions)="{ item }">
@@ -110,6 +164,7 @@
       @ok="saveUser"
       @hidden="activeUser = null"
     />
+    <register-otp-modal />
   </b-container>
 </template>
 
@@ -134,6 +189,8 @@ import BVTableSelectableMixin, {
 } from '@/components/Mixins/BVTableSelectableMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
+import RegisterOtpModal from './RegisterOtpModal';
+import Alert from '../../../components/Global/Alert.vue';
 
 export default {
   name: 'UserManagement',
@@ -149,6 +206,8 @@ export default {
     TableRoles,
     TableRowAction,
     TableToolbar,
+    RegisterOtpModal,
+    Alert,
   },
   mixins: [BVTableSelectableMixin, BVToastMixin, LoadingBarMixin],
   beforeRouteLeave(to, from, next) {
@@ -201,6 +260,20 @@ export default {
     };
   },
   computed: {
+    currentMfaBypassed() {
+      return this.$store.getters['userManagement/isCurrentUserMfaBypassed'];
+    },
+    isAdminUser() {
+      return this.$store.getters['global/isAdminUser'];
+    },
+    globalMfaValue: {
+      get() {
+        return this.$store.getters['userManagement/isGlobalMfaEnabled'];
+      },
+      set(newValue) {
+        return newValue;
+      },
+    },
     accountRoles() {
       return this.$store.getters['userManagement/accountRoles'];
     },
@@ -237,6 +310,9 @@ export default {
             : user.Enabled
             ? this.$t('global.status.enabled')
             : this.$t('global.status.disabled'),
+          mfa: user?.MFABypass?.BypassTypes.includes('GoogleAuthenticator')
+            ? true
+            : false,
           actions: [
             {
               value: 'edit',
@@ -274,14 +350,38 @@ export default {
     Promise.all([
       this.$store.dispatch('userManagement/getAccountRoles'),
       this.$store.dispatch('userManagement/getUsers'),
+      this.$store.dispatch('userManagement/checkCurrentUserMfaBypassed', {
+        uri: this.currentUser['@odata.id'],
+      }),
     ]).finally(() => {
       this.endLoader();
       this.isBusy = false;
     });
     this.$store.dispatch('userManagement/getAccountSettings');
     this.$store.dispatch('userManagement/getAccountRoles');
+    this.addMfaBypass();
   },
   methods: {
+    addMfaBypass() {
+      if (this.isAdminUser) {
+        this.fields.splice(4, 0, {
+          key: 'mfa',
+          label: this.$t('pageUserManagement.table.mfaByPass'),
+          class: 'text-center',
+        });
+      }
+    },
+    updateMfaBypassVal(value) {
+      this.$store
+        .dispatch('userManagement/updateMfaBypass', value)
+        .then((message) => {
+          this.successToast(message);
+          this.$store.dispatch('userManagement/checkCurrentUserMfaBypassed', {
+            uri: this.currentUser['@odata.id'],
+          });
+        })
+        .catch(({ message }) => this.errorToast(message));
+    },
     initModalUser(user) {
       this.activeUser = user;
       this.$bvModal.show('modal-user');
@@ -307,20 +407,38 @@ export default {
     initModalSettings() {
       this.$bvModal.show('modal-settings');
     },
-    saveUser({ isNewUser, userData }) {
+    saveUser({ isNewUser, userData, mfaBypass }) {
       this.startLoader();
+      this.isBusy = true;
       if (isNewUser) {
         this.$store
           .dispatch('userManagement/createUser', userData)
-          .then((success) => this.successToast(success))
+          .then(async (success) => {
+            this.successToast(success);
+            if (mfaBypass) {
+              await this.$store.dispatch(
+                'userManagement/updateMfaBypassNewUser',
+                {
+                  userData,
+                  mfaBypass,
+                }
+              );
+            }
+          })
           .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .finally(() => {
+            this.isBusy = false;
+            this.endLoader();
+          });
       } else {
         this.$store
           .dispatch('userManagement/updateUserfromUserManagement', userData)
           .then((success) => this.successToast(success))
           .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          .finally(() => {
+            this.isBusy = false;
+            this.endLoader();
+          });
       }
     },
     deleteUser({ username }) {
@@ -416,6 +534,30 @@ export default {
           this.endLoader();
           this.isBusy = false;
         });
+    },
+    updateGlobalMfa(state) {
+      this.$store
+        .dispatch('userManagement/updateGlobalMfa', {
+          globalMfa: state,
+        })
+        .then(async (message) => {
+          await this.$store.dispatch(
+            'userManagement/checkCurrentUserMfaBypassed',
+            {
+              uri: this.currentUser['@odata.id'],
+            }
+          );
+          if (this.globalMfaValue && !this.currentMfaBypassed) {
+            this.$store
+              .dispatch('userManagement/generateSecretKey')
+              .then(() => {
+                this.$bvModal.show('register-otp-modal');
+              });
+          } else {
+            this.successToast(message);
+          }
+        })
+        .catch(({ message }) => this.errorToast(message));
     },
   },
 };
