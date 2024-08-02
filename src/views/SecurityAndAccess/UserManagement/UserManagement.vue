@@ -2,6 +2,23 @@
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.userManagement')" />
     <b-row>
+      <b-col>
+        <span>MFA TOTP authentication</span>
+        <b-form-checkbox
+          id="switch"
+          v-model="gaValue"
+          switch
+          @change="openModal"
+        >
+          <!-- @change="changeSshProtocolState" -->
+          <!-- <span v-if="gaValue">
+            {{ $t('global.status.enabled') }}
+          </span>
+          <span v-else>{{ $t('global.status.disabled') }}</span> -->
+        </b-form-checkbox>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col xl="9" class="text-right">
         <b-button variant="link" :disabled="isBusy" @click="initModalSettings">
           <icon-settings />
@@ -60,6 +77,19 @@
               <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </b-form-checkbox>
           </template>
+          <template #cell(mfa)="row">
+            <!-- {{ row.item.privilege }} -->
+            <!-- v-model="row.selectedRows" -->
+            <!-- id="switch-bypass" -->
+            <b-form-checkbox
+              v-if="row.item.privilege !== 'Service agent'"
+              v-model="mfaBypassVal"
+              b-form-checkbox
+              switch
+              :disabled="!gaValue"
+            >
+            </b-form-checkbox>
+          </template>
 
           <!-- table actions column -->
           <template #cell(actions)="{ item }">
@@ -110,6 +140,7 @@
       @ok="saveUser"
       @hidden="activeUser = null"
     />
+    <register-otp-modal />
   </b-container>
 </template>
 
@@ -134,6 +165,7 @@ import BVTableSelectableMixin, {
 } from '@/components/Mixins/BVTableSelectableMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
+import RegisterOtpModal from './RegisterOtpModal';
 
 export default {
   name: 'UserManagement',
@@ -149,6 +181,7 @@ export default {
     TableRoles,
     TableRowAction,
     TableToolbar,
+    RegisterOtpModal,
   },
   mixins: [BVTableSelectableMixin, BVToastMixin, LoadingBarMixin],
   beforeRouteLeave(to, from, next) {
@@ -158,6 +191,7 @@ export default {
   data() {
     return {
       isBusy: true,
+      gaValue: false,
       activeUser: null,
       fields: [
         {
@@ -174,6 +208,11 @@ export default {
         {
           key: 'status',
           label: this.$t('pageUserManagement.table.status'),
+        },
+        {
+          key: 'mfa',
+          label: 'MFA bypass',
+          class: 'text-center',
         },
         {
           key: 'actions',
@@ -201,6 +240,9 @@ export default {
     };
   },
   computed: {
+    mfaBypassVal() {
+      return false;
+    },
     accountRoles() {
       return this.$store.getters['userManagement/accountRoles'];
     },
@@ -416,6 +458,9 @@ export default {
           this.endLoader();
           this.isBusy = false;
         });
+    },
+    openModal() {
+      this.$bvModal.show('register-otp-modal');
     },
   },
 };
