@@ -102,16 +102,19 @@ export default {
                 this.isAtleastPhypInStandby)
             ) {
               if (this.isInPhypStandby) {
-                this.infoToast(
-                  this.$t(
-                    'pageServerPowerOperations.toast.successSaveIBMiStandby'
-                  )
-                ),
-                  this.successToast(
+                let hmcManaged = this.$store.getters[
+                  'resourceMemory/hmcManaged'
+                ];
+                if (hmcManaged != 'Enabled') {
+                  this.infoToast(
                     this.$t(
-                      'pageServerPowerOperations.toast.successSaveSettings'
+                      'pageServerPowerOperations.toast.successSaveIBMiStandby'
                     )
                   );
+                }
+                this.successToast(
+                  this.$t('pageServerPowerOperations.toast.successSaveSettings')
+                );
               } else {
                 this.infoToast(
                   this.$t(
