@@ -125,6 +125,15 @@ export default {
       this.$store.dispatch('global/getServiceLogin'),
       this.$store.dispatch('serverBootSettings/getBiosAttributes'),
       this.$store.dispatch('system/getSystem'),
+      this.$store.dispatch('global/getServiceLogin'),
+      this.$store.dispatch('serverBootSettings/getBiosAttributes'),
+      this.$store.dispatch('system/getSystem'),
+      this.$store.dispatch('global/getServiceLogin'),
+      this.$store.dispatch('serverBootSettings/getBiosAttributes'),
+      this.$store.dispatch('system/getSystem'),
+      this.$store.dispatch('global/getServiceLogin'),
+      this.$store.dispatch('serverBootSettings/getBiosAttributes'),
+      this.$store.dispatch('system/getSystem'),
     ]).finally(() => {
       this.$root.$emit('overview-server-complete');
     });

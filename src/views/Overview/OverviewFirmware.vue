@@ -57,6 +57,12 @@ export default {
     Promise.all([
       this.$store.dispatch('licenses/getLicenses'),
       this.$store.dispatch('firmware/getFirmwareInformation'),
+      this.$store.dispatch('licenses/getLicenses'),
+      this.$store.dispatch('firmware/getFirmwareInformation'),
+      this.$store.dispatch('licenses/getLicenses'),
+      this.$store.dispatch('firmware/getFirmwareInformation'),
+      this.$store.dispatch('licenses/getLicenses'),
+      this.$store.dispatch('firmware/getFirmwareInformation'),
     ]).finally(() => {
       this.$root.$emit('overview-firmware-complete');
     });

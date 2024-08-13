@@ -44,6 +44,9 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch('system/getSystem');
+    this.$store.dispatch('system/getSystem');
+    this.$store.dispatch('system/getSystem');
     this.$store.dispatch('system/getSystem').finally(() => {
       this.$root.$emit('overview-inventory-complete');
     });
