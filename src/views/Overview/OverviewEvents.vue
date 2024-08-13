@@ -62,6 +62,15 @@ export default {
     this.$store.dispatch('eventLog/getEventLogData');
     this.$store.dispatch('eventLog/getEventLogData');
     this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
+    this.$store.dispatch('eventLog/getEventLogData');
     this.$store.dispatch('eventLog/getEventLogData').finally(() => {
       this.$root.$emit('overview-events-complete');
     });
