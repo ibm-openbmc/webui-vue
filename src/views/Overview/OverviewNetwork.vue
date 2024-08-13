@@ -58,6 +58,12 @@ export default {
     this.$store.dispatch('network/getEthernetData');
     this.$store.dispatch('network/getEthernetData');
     this.$store.dispatch('network/getEthernetData');
+    this.$store.dispatch('network/getEthernetData');
+    this.$store.dispatch('network/getEthernetData');
+    this.$store.dispatch('network/getEthernetData');
+    this.$store.dispatch('network/getEthernetData');
+    this.$store.dispatch('network/getEthernetData');
+    this.$store.dispatch('network/getEthernetData');
     this.$store.dispatch('network/getEthernetData').finally(() => {
       this.$root.$emit('overview-network-complete');
     });
