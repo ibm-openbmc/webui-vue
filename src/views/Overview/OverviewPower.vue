@@ -90,6 +90,18 @@ export default {
       this.$store.dispatch('powerControl/getPowerControl'),
       this.$store.dispatch('powerControl/getPowerPerformanceMode'),
       this.$store.dispatch('powerControl/getIdlePowerSaverData'),
+      this.$store.dispatch('powerControl/getPowerControl'),
+      this.$store.dispatch('powerControl/getPowerPerformanceMode'),
+      this.$store.dispatch('powerControl/getIdlePowerSaverData'),
+      this.$store.dispatch('powerControl/getPowerControl'),
+      this.$store.dispatch('powerControl/getPowerPerformanceMode'),
+      this.$store.dispatch('powerControl/getIdlePowerSaverData'),
+      this.$store.dispatch('powerControl/getPowerControl'),
+      this.$store.dispatch('powerControl/getPowerPerformanceMode'),
+      this.$store.dispatch('powerControl/getIdlePowerSaverData'),
+      this.$store.dispatch('powerControl/getPowerControl'),
+      this.$store.dispatch('powerControl/getPowerPerformanceMode'),
+      this.$store.dispatch('powerControl/getIdlePowerSaverData'),
     ]).finally(() => {
       this.$root.$emit('overview-power-complete');
     });
