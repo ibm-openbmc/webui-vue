@@ -53,6 +53,12 @@ export default {
     this.$store.dispatch('global/getBmcTime');
     this.$store.dispatch('global/getBmcTime');
     this.$store.dispatch('global/getBmcTime');
+    this.$store.dispatch('global/getBmcTime');
+    this.$store.dispatch('global/getBmcTime');
+    this.$store.dispatch('global/getBmcTime');
+    this.$store.dispatch('global/getBmcTime');
+    this.$store.dispatch('global/getBmcTime');
+    this.$store.dispatch('global/getBmcTime');
     Promise.all([this.$store.dispatch('global/getBmcTime')]).finally(() => {
       this.$root.$emit('overview-quicklinks-complete');
     });
