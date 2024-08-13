@@ -35,6 +35,15 @@ export default {
     this.$store.dispatch('dumps/getAllDumps');
     this.$store.dispatch('dumps/getAllDumps');
     this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
+    this.$store.dispatch('dumps/getAllDumps');
     this.$store.dispatch('dumps/getAllDumps').finally(() => {
       this.$root.$emit('overview-dumps-complete');
     });
