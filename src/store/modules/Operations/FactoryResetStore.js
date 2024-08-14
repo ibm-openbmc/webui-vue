@@ -1,7 +1,8 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const FactoryResetStore = {
+export const FactoryResetStore = defineStore('factoryReset', {
   namespaced: true,
   actions: {
     async resetToDefaults() {
@@ -10,25 +11,27 @@ const FactoryResetStore = {
           ResetToDefaultsType: 'ResetAll',
         })
         .then(() => {
-          return i18n.t('pageFactoryReset.toast.resetToDefaultsSuccess');
+          return i18n.global.t('pageFactoryReset.toast.resetToDefaultsSuccess');
         })
         .catch((error) => {
           console.log('Factory Reset: ', error);
           throw new Error(
-            i18n.t('pageFactoryReset.toast.resetToDefaultsError'),
+            i18n.global.t('pageFactoryReset.toast.resetToDefaultsError'),
           );
         });
     },
     async resetBios() {
       return await api
         .post('/redfish/v1/Systems/system/Bios/Actions/Bios.ResetBios')
-        .then(() => i18n.t('pageFactoryReset.toast.resetBiosSuccess'))
+        .then(() => i18n.global.t('pageFactoryReset.toast.resetBiosSuccess'))
         .catch((error) => {
           console.log('Factory Reset: ', error);
-          throw new Error(i18n.t('pageFactoryReset.toast.resetBiosError'));
+          throw new Error(
+            i18n.globalt('pageFactoryReset.toast.resetBiosError'),
+          );
         });
     },
   },
-};
+});
 
 export default FactoryResetStore;

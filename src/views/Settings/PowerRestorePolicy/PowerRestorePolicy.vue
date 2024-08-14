@@ -1,131 +1,122 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title
       :title="$t('appPageTitle.powerRestorePolicy')"
       :description="$t('pagePowerRestorePolicy.description')"
     />
-
-    <b-row>
-      <b-col>
+    <BRow>
+      <BCol>
         <alert v-if="isOperatingModeManual" variant="warning" class="mb-5">
-          <b-row align-v="center">
-            <b-col>
+          <BRow align-v="center">
+            <BCol>
               <p class="mb-0">
                 {{ $t('pagePowerRestorePolicy.alert.manualOperatingMode') }}
               </p>
-            </b-col>
-            <b-col>
+            </BCol>
+            <BCol>
               <div>
-                <b-link to="/operations/server-power-operations">
+                <BLink to="/operations/server-power-operations">
                   {{ $t('pagePowerRestorePolicy.alert.changeServerOpMode') }}
-                </b-link>
+                </BLink>
               </div>
-            </b-col>
-          </b-row>
+            </BCol>
+          </BRow>
         </alert>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col sm="8" md="6" xl="12">
-        <b-form-group :label="$t('pagePowerRestorePolicy.powerPoliciesLabel')">
-          <b-form-radio-group
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol sm="8" md="6" xl="12" class="mb-4">
+        <BFormGroup :label="$t('pagePowerRestorePolicy.powerPoliciesLabel')">
+          <BFormRadioGroup
             v-model="currentPowerRestorePolicy"
             :disabled="isOperatingModeManual"
             :options="options"
             name="power-restore-policy"
             stacked
-          ></b-form-radio-group>
-        </b-form-group>
-      </b-col>
-    </b-row>
+          ></BFormRadioGroup>
+        </BFormGroup>
+      </BCol>
+    </BRow>
 
-    <b-button
+    <BButton
       variant="primary"
       :disabled="isOperatingModeManual"
       type="submit"
       @click="submitForm"
     >
       {{ $t('global.action.save') }}
-    </b-button>
-  </b-container>
+    </BButton>
+  </BContainer>
 </template>
 
-<script>
-import PageTitle from '@/components/Global/PageTitle';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import Alert from '@/components/Global/Alert';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import { onBeforeRouteLeave } from 'vue-router';
+import Alert from '@/components/Global/Alert.vue';
+import { PowerPolicyStore, BootSettingsStore } from '@/store';
+import i18n from '@/i18n';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useToastComposable from '@/components/Composables/useToastComposable';
 
-export default {
-  name: 'PowerRestorePolicy',
-  components: { PageTitle, Alert },
-  mixins: [VuelidateMixin, BVToastMixin, LoadingBarMixin],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
+const powerPolicy = PowerPolicyStore();
+const bootSettings = BootSettingsStore();
+const Toast = useToastComposable();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const policyValue = ref(null);
+const options = ref([]);
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+const powerRestorePolicies = computed(() => {
+  return powerPolicy.powerRestorePolicies;
+});
+const currentPowerRestorePolicy = computed({
+  get() {
+    return powerPolicy.powerRestoreCurrentPolicy;
   },
-  data() {
-    return {
-      policyValue: null,
-      options: [],
-    };
+  set(policy) {
+    policyValue.value = policy;
   },
-  computed: {
-    powerRestorePolicies() {
-      return this.$store.getters['powerPolicy/powerRestorePolicies'];
-    },
-    currentPowerRestorePolicy: {
-      get() {
-        return this.$store.getters['powerPolicy/powerRestoreCurrentPolicy'];
-      },
-      set(policy) {
-        this.policyValue = policy;
-      },
-    },
-    isOperatingModeManual() {
-      return (
-        !this.$store.getters['serverBootSettings/biosAttributes']
-          ?.pvm_system_operating_mode ||
-        this.$store.getters['serverBootSettings/biosAttributes']
-          ?.pvm_system_operating_mode === 'Manual'
-      );
-    },
-  },
-  created() {
-    this.startLoader();
-    this.renderPowerRestoreSettings();
-  },
-  methods: {
-    renderPowerRestoreSettings() {
-      Promise.all([
-        this.$store.dispatch('serverBootSettings/getBiosAttributes'),
-        this.$store.dispatch('powerPolicy/getPowerRestorePolicies'),
-        this.$store.dispatch('powerPolicy/getPowerRestoreCurrentPolicy'),
-      ]).finally(() => {
-        this.options.length = 0;
-        this.powerRestorePolicies.map((item) => {
-          this.options.push({
-            text: this.$t(`pagePowerRestorePolicy.policiesDesc.${item.state}`),
-            value: `${item.state}`,
-          });
-        });
-        this.endLoader();
+});
+const isOperatingModeManual = computed(() => {
+  return (
+    !bootSettings.biosAttributes?.pvm_system_operating_mode ||
+    bootSettings.biosAttributes?.pvm_system_operating_mode === 'Manual'
+  );
+});
+
+onMounted(() => {
+  startLoader();
+  renderPowerRestoreSettings();
+});
+
+const renderPowerRestoreSettings = () => {
+  Promise.all([
+    bootSettings.fetchBiosAttributes(),
+    powerPolicy.getPowerRestorePolicies(),
+    powerPolicy.getPowerRestoreCurrentPolicy(),
+  ]).finally(() => {
+    options.value.length = 0;
+    powerRestorePolicies.value.map((item) => {
+      options.value.push({
+        text: i18n.global.t(
+          `pagePowerRestorePolicy.policiesDesc.${item.state}`,
+        ),
+        value: `${item.state}`,
       });
-    },
-    submitForm() {
-      this.startLoader();
-      this.$store
-        .dispatch(
-          'powerPolicy/setPowerRestorePolicy',
-          this.policyValue || this.currentPowerRestorePolicy,
-        )
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => {
-          this.renderPowerRestoreSettings();
-        });
-    },
-  },
+    }),
+      endLoader();
+  });
+};
+const submitForm = () => {
+  startLoader();
+  powerPolicy
+    .setPowerRestorePolicy(policyValue.value || currentPowerRestorePolicy.value)
+    .then((message) => Toast.successToast(message))
+    .catch(({ message }) => Toast.errorToast(message))
+    .finally(() => {
+      renderPowerRestoreSettings();
+    });
 };
 </script>

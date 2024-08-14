@@ -1,9 +1,11 @@
 <template>
-  <b-modal
+  <BModal
     id="modal-reset"
     ref="modal"
     :title="$t(`pageFactoryReset.modal.${resetType}Title`)"
     title-tag="h2"
+    :ok-title="$t(`pageFactoryReset.modal.${resetType}SubmitText`)"
+    @ok="handleConfirm"
     @hidden="resetConfirm"
   >
     <p class="mb-2">
@@ -11,13 +13,13 @@
     </p>
     <ul class="pl-3 mb-4">
       <li
-        v-for="(item, index) in $t(
-          `pageFactoryReset.modal.${resetType}SettingsList`,
+        v-for="(item, index) in Object.keys(
+          factoryResetMessage[`${resetType}SettingsList`],
         )"
         :key="index"
         class="mt-1 mb-1"
       >
-        {{ $t(item) }}
+        {{ $t(`pageFactoryReset.modal.${resetType}SettingsList.${item}`) }}
       </li>
     </ul>
 
@@ -29,85 +31,66 @@
           {{ $t(`pageFactoryReset.modal.resetWarningMessage`) }}
         </span>
       </p>
-      <b-form-checkbox
+      <BFormCheckbox
         v-model="confirm"
         aria-describedby="reset-to-default-warning"
         @input="$v.confirm.$touch()"
       >
         {{ $t(`pageFactoryReset.modal.resetWarningCheckLabel`) }}
-      </b-form-checkbox>
-      <b-form-invalid-feedback
+      </BFormCheckbox>
+      <BFormInvalidFeedback
         role="alert"
-        :state="getValidationState($v.confirm)"
+        :state="getValidationState(v$.confirm)"
       >
         {{ $t('global.form.fieldRequired') }}
-      </b-form-invalid-feedback>
+      </BFormInvalidFeedback>
     </template>
-
-    <template #modal-footer="{ cancel }">
-      <b-button
-        variant="secondary"
-        data-test-id="factoryReset-button-cancel"
-        @click="cancel()"
-      >
-        {{ $t('global.action.cancel') }}
-      </b-button>
-      <b-button
-        type="sumbit"
-        variant="primary"
-        data-test-id="factoryReset-button-confirm"
-        @click="handleConfirm"
-      >
-        {{ $t(`pageFactoryReset.modal.${resetType}SubmitText`) }}
-      </b-button>
-    </template>
-  </b-modal>
+  </BModal>
 </template>
-<script>
-import StatusIcon from '@/components/Global/StatusIcon';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin';
 
-export default {
-  components: { StatusIcon },
-  mixins: [VuelidateMixin],
-  props: {
-    resetType: {
-      type: String,
-      default: null,
-    },
+<script setup>
+import { computed, defineProps, ref, defineEmits } from 'vue';
+import { GlobalStore } from '@/store';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+import i18n from '@/i18n';
+import eventBus from '@/eventBus';
+
+const messagesEn = i18n.global.getLocaleMessage('en-US');
+const factoryResetMessage = messagesEn?.pageFactoryReset?.modal;
+const { getValidationState } = useVuelidateComposable();
+const Global = GlobalStore();
+defineProps({
+  resetType: {
+    type: String,
+    default: null,
   },
-  data() {
-    return {
-      confirm: false,
-    };
-  },
-  computed: {
-    serverStatus() {
-      return this.$store.getters['global/serverStatus'];
-    },
-    isServerOff() {
-      return this.serverStatus === 'off' ? true : false;
-    },
-  },
-  validations: {
-    confirm: {
-      mustBeTrue: function (value) {
-        return this.isServerOff || value === true;
-      },
-    },
-  },
-  methods: {
-    handleConfirm() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$emit('okConfirm');
-      this.$nextTick(() => this.$refs.modal.hide());
-      this.resetConfirm();
-    },
-    resetConfirm() {
-      this.confirm = false;
-      this.$v.$reset();
-    },
+});
+const modal = ref(null);
+eventBus.on('modal-reset', () => {
+  modal.value.show();
+});
+const confirm = ref(false);
+const serverStatus = computed(() => Global.serverStatus);
+const isServerOff = computed(() =>
+  serverStatus.value === 'off' ? true : false,
+);
+const rules = {
+  confirm: {
+    mustBeTrue: (value) => isServerOff.value || value === true,
   },
 };
+const v$ = useVuelidate(rules, { confirm });
+const emit = defineEmits(['okConfirm']);
+
+const handleConfirm = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('okConfirm');
+  resetConfirm();
+};
+function resetConfirm() {
+  confirm.value = false;
+  v$.value.$reset();
+}
 </script>

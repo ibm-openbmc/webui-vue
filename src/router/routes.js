@@ -11,6 +11,8 @@ import Sensors from '@/views/HardwareStatus/Sensors';
 import PageNotFound from '@/views/PageNotFound/PageNotFound.vue';
 import KeyClear from '@/views/Operations/KeyClear/KeyClear.vue';
 import RebootBmc from '@/views/Operations/RebootBmc';
+import FactoryReset from '@/views/Operations/FactoryReset';
+import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy';
 const roles = {
   administrator: 'Administrator',
   operator: 'Operator',
@@ -84,6 +86,23 @@ export const routes = [
         component: RebootBmc,
         meta: {
           title: i18n.global.t('appPageTitle.rebootBmc'),
+        },
+      },
+
+      {
+        path: '/operations/factory-reset',
+        name: 'factory-reset',
+        component: FactoryReset,
+        meta: {
+          title: i18n.global.t('appPageTitle.factoryReset'),
+        },
+      },
+      {
+        path: '/settings/power-restore-policy',
+        name: 'power-restore-policy',
+        component: PowerRestorePolicy,
+        meta: {
+          title: i18n.global.t('appPageTitle.powerRestorePolicy'),
         },
       },
       {

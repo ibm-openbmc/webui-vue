@@ -1,24 +1,19 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const PowerPolicyStore = {
+export const PowerPolicyStore = defineStore('powerPolicy', {
   namespaced: true,
-  state: {
+  state: () => ({
     powerRestoreCurrentPolicy: null,
     powerRestorePolicies: [],
-  },
+  }),
   getters: {
-    powerRestoreCurrentPolicy: (state) => state.powerRestoreCurrentPolicy,
-    powerRestorePolicies: (state) => state.powerRestorePolicies,
-  },
-  mutations: {
-    setPowerRestoreCurrentPolicy: (state, powerRestoreCurrentPolicy) =>
-      (state.powerRestoreCurrentPolicy = powerRestoreCurrentPolicy),
-    setPowerRestorePolicies: (state, powerRestorePolicies) =>
-      (state.powerRestorePolicies = powerRestorePolicies),
+    getPowerRestoreCurrentPolicies: (state) => state.powerRestoreCurrentPolicy,
+    getPowerRestorePolicy: (state) => state.powerRestorePolicies,
   },
   actions: {
-    async getPowerRestorePolicies({ commit }) {
+    async getPowerRestorePolicies() {
       return await api
         .get('/redfish/v1/JsonSchemas/ComputerSystem/ComputerSystem.json')
         .then(
@@ -29,7 +24,7 @@ const PowerPolicyStore = {
           }) => {
             let powerPoliciesData = PowerRestorePolicyTypes.enum.map(
               (powerState) => {
-                let desc = `${i18n.t(
+                let desc = `${i18n.global.t(
                   `pagePowerRestorePolicy.policies.${powerState}`,
                 )} - ${PowerRestorePolicyTypes.enumDescriptions[powerState]}`;
                 return {
@@ -38,35 +33,36 @@ const PowerPolicyStore = {
                 };
               },
             );
-            commit('setPowerRestorePolicies', powerPoliciesData);
+            this.powerRestorePolicies = powerPoliciesData;
           },
         );
     },
-    async getPowerRestoreCurrentPolicy({ commit }) {
+    async getPowerRestoreCurrentPolicy() {
       return await api
         .get('/redfish/v1/Systems/system')
         .then(({ data: { PowerRestorePolicy } }) => {
-          commit('setPowerRestoreCurrentPolicy', PowerRestorePolicy);
+          this.powerRestoreCurrentPolicy = PowerRestorePolicy;
         })
         .catch((error) => console.log(error));
     },
-    async setPowerRestorePolicy({ dispatch }, powerPolicy) {
+    async setPowerRestorePolicy(powerPolicy) {
       const data = { PowerRestorePolicy: powerPolicy };
-
       return await api
         .patch('/redfish/v1/Systems/system', data)
         .then(() => {
-          dispatch('getPowerRestoreCurrentPolicy');
-          return i18n.t('pagePowerRestorePolicy.toast.successSaveSettings');
+          this.getPowerRestoreCurrentPolicy();
+          return i18n.global.t(
+            'pagePowerRestorePolicy.toast.successSaveSettings',
+          );
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t('pagePowerRestorePolicy.toast.errorSaveSettings'),
+            i18n.global.t('pagePowerRestorePolicy.toast.errorSaveSettings'),
           );
         });
     },
   },
-};
+});
 
 export default PowerPolicyStore;
