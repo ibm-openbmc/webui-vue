@@ -144,3 +144,11 @@ div[role=group] {
     background-position: right 3rem bottom 50%;
   }
 }
+.form-switch .form-check-input {
+  width: 1.75em;
+  border-radius: 25rem;
+}
+.form-check-input:checked {
+  background-color: #161616;
+  border-color: #161616;
+}

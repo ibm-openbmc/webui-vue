@@ -1,274 +1,284 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.sensors')" />
-    <b-row class="align-items-end">
-      <b-col sm="6" md="5" xl="4">
+    <BRow class="align-items-end">
+      <BCol sm="6" md="5" xl="4" class="searchStyle">
         <search
           :placeholder="$t('pageSensors.searchForSensors')"
           data-test-id="sensors-input-searchForSensors"
-          @change-search="onChangeSearchInput"
-          @clear-search="onClearSearchInput"
+          @change-search="onChangeSearch"
+          @clear-search="onClearSearch"
         />
-      </b-col>
-      <b-col sm="3" md="3" xl="2">
+      </BCol>
+      <BCol sm="3" md="3" xl="2">
         <table-cell-count
           :filtered-items-count="filteredRows"
-          :total-number-of-cells="allSensors.length"
+          :total-number-of-cells="filteredSensors.length"
         ></table-cell-count>
-      </b-col>
-      <b-col sm="3" md="4" xl="6" class="text-right">
+      </BCol>
+      <BCol sm="3" md="4" xl="6" class="text-right">
         <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col xl="12">
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol xl="12">
         <table-toolbar
           ref="toolbar"
-          :selected-items-count="selectedRows.length"
-          @clear-selected="clearSelectedRows($refs.table)"
+          :selected-items-count="selectedRowsList.length"
+          @clear-selected="clearSelectedRows(tableRef)"
         >
           <template #toolbar-buttons>
             <table-toolbar-export
-              :data="selectedRows"
+              :data="selectedRowsList"
               :file-name="exportFileNameByDate()"
             />
           </template>
         </table-toolbar>
-        <b-table
-          ref="table"
+        <BTable
+          id="table-sensors"
+          ref="tableRef"
           responsive="md"
           selectable
           no-select-on-click
-          sort-icon-left
           hover
-          no-sort-reset
           sticky-header="75vh"
-          sort-by="status"
+          :sort-by="[{ key: 'status', order: 'asc' }]"
+          :busy="isBusy"
           show-empty
           :no-border-collapse="true"
           :items="filteredSensors"
           :fields="fields"
-          :per-page="perPage"
-          :current-page="currentPage"
-          :sort-desc="true"
-          :sort-compare="sortCompare"
-          :filter="searchFilter"
+          :per-page="itemPerPage"
+          :current-page="currentPageNo"
+          :filter="searchFilterInput"
           :empty-text="$t('global.table.emptyMessage')"
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
-          :busy="isBusy"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredSensors.length)"
         >
           <!-- Checkbox column -->
           <template #head(checkbox)>
-            <b-form-checkbox
-              v-model="tableHeaderCheckboxModel"
-              :indeterminate="tableHeaderCheckboxIndeterminate"
-              @change="onChangeHeaderCheckbox($refs.table)"
+            <BFormCheckbox
+              v-model="tableHeaderCheckbox"
+              :indeterminate="tableHeaderCheckboxIndeterminated"
+              @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckbox)"
+              @update:modelValue="toggleAll"
             >
-              <span class="sr-only">{{ $t('global.table.selectAll') }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
-            <b-form-checkbox
-              v-model="row.rowSelected"
-              @change="toggleSelectRow($refs.table, row.index)"
+            <BFormCheckbox
+              v-model="row.item.isSelected"
+              @change="
+                toggleSelectRow(
+                  tableRef,
+                  row.index,
+                  row.item.isSelected,
+                  row.item,
+                )
+              "
             >
-              <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
 
           <template #cell(status)="{ value }">
-            <status-icon :status="statusIcon(value)" /> {{ value }}
+            <status-icon :status="statusIconValue(value)" /> {{ value }}
           </template>
           <template #cell(currentValue)="data">
-            {{ data.value }} {{ data.item.units }}
+            {{ dataFormatter(data.value) }} {{ data.item.units }}
           </template>
-          <template #cell(lowerCaution)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-          <template #cell(upperCaution)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-          <template #cell(lowerCritical)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-          <template #cell(upperCritical)="data">
-            {{ data.value }} {{ data.item.units }}
-          </template>
-        </b-table>
-      </b-col>
-    </b-row>
+        </BTable>
+      </BCol>
+    </BRow>
     <!-- Table pagination -->
-    <b-row>
-      <b-col sm="6">
-        <b-form-group
+    <BRow>
+      <BCol sm="6">
+        <BFormGroup
           class="table-pagination-select"
           :label="$t('global.table.itemsPerPage')"
           label-for="pagination-items-per-page"
         >
-          <b-form-select
+          <BFormSelect
             id="pagination-items-per-page"
-            v-model="perPage"
+            v-model="itemPerPage"
             :options="itemsPerPageOptions"
           />
-        </b-form-group>
-      </b-col>
-      <b-col sm="6">
-        <b-pagination
-          v-model="currentPage"
+        </BFormGroup>
+      </BCol>
+      <BCol sm="6">
+        <BPagination
+          v-model="currentPageNo"
+          class="b-pagination"
           first-number
           last-number
-          :per-page="perPage"
+          :per-page="itemPerPage"
           :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-sensors"
         />
-      </b-col>
-    </b-row>
-  </b-container>
+      </BCol>
+    </BRow>
+  </BContainer>
 </template>
 
-<script>
-import PageTitle from '@/components/Global/PageTitle';
-import Search from '@/components/Global/Search';
-import StatusIcon from '@/components/Global/StatusIcon';
-import TableFilter from '@/components/Global/TableFilter';
-import TableToolbar from '@/components/Global/TableToolbar';
-import TableToolbarExport from '@/components/Global/TableToolbarExport';
-import TableCellCount from '@/components/Global/TableCellCount';
-import BVPaginationMixin, {
-  currentPage,
-  perPage,
-  itemsPerPageOptions,
-} from '@/components/Mixins/BVPaginationMixin';
-import BVTableSelectableMixin, {
-  selectedRows,
+<script setup>
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import i18n from '@/i18n';
+import { onBeforeRouteLeave } from 'vue-router';
+import { SensorsStore } from '@/store/modules/HardwareStatus/SensorsStore';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import Search from '@/components/Global/Search.vue';
+import StatusIcon from '@/components/Global/StatusIcon.vue';
+import TableFilter from '@/components/Global/TableFilter.vue';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import TableToolbarExport from '@/components/Global/TableToolbarExport.vue';
+import TableCellCount from '@/components/Global/TableCellCount.vue';
+import usePaginationComposable from '@/components/Composables/usePaginationComposable';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
+import eventBus from '@/eventBus';
+const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
+  usePaginationComposable();
+const {
+  clearSelectedRows,
+  toggleSelectRow,
+  onRowSelected,
+  onChangeHeaderCheckbox,
+  selectedRowsList,
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
-import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
-export default {
-  name: 'Sensors',
-  components: {
-    PageTitle,
-    Search,
-    StatusIcon,
-    TableCellCount,
-    TableFilter,
-    TableToolbar,
-    TableToolbarExport,
+} = useTableSelectableComposable();
+const { dataFormatter } = useDataFormatterGlobal();
+const { getFilteredTableData } = useTableFilterComposable();
+const currentPageNo = ref(currentPage);
+const itemPerPage = ref(perPage);
+const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
+const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
+const tableRef = ref(null);
+const searchTotalFilteredRows = ref(0);
+const activeFiltersRows = ref([]);
+const isBusy = ref(true);
+const isAllSelected = ref(false);
+const searchFilterInput = ref('');
+const sensorsStore = SensorsStore();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const fields = ref([
+  {
+    key: 'checkbox',
+    sortable: false,
+    label: '',
   },
-  mixins: [
-    BVPaginationMixin,
-    TableFilterMixin,
-    BVTableSelectableMixin,
-    LoadingBarMixin,
-    DataFormatterMixin,
-    TableSortMixin,
-    SearchFilterMixin,
-  ],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
+  {
+    key: 'name',
+    sortable: true,
+    label: i18n.global.t('pageSensors.table.name'),
   },
-  data() {
-    return {
-      isBusy: true,
-      fields: [
-        {
-          key: 'checkbox',
-          sortable: false,
-          label: '',
-        },
-        {
-          key: 'name',
-          sortable: true,
-          label: this.$t('pageSensors.table.name'),
-        },
-        {
-          key: 'status',
-          sortable: true,
-          label: this.$t('pageSensors.table.status'),
-          tdClass: 'text-nowrap',
-        },
-        {
-          key: 'currentValue',
-          formatter: this.dataFormatter,
-          label: this.$t('pageSensors.table.currentValue'),
-        },
-      ],
-      tableFilters: [
-        {
-          key: 'status',
-          label: this.$t('pageSensors.table.status'),
-          values: [
-            this.$t('pageSensors.table.filter.ok'),
-            this.$t('pageSensors.table.filter.warning'),
-            this.$t('pageSensors.table.filter.critical'),
-          ],
-        },
-      ],
-      activeFilters: [],
-      currentPage: currentPage,
-      itemsPerPageOptions: itemsPerPageOptions,
-      perPage: perPage,
-      searchFilter: searchFilter,
-      searchTotalFilteredRows: 0,
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
-    };
+  {
+    key: 'status',
+    sortable: true,
+    label: i18n.global.t('pageSensors.table.status'),
+    tdClass: 'text-nowrap',
   },
-  computed: {
-    allSensors() {
-      return this.$store.getters['sensors/sensors'];
-    },
-    filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.filteredSensors.length;
-    },
-    filteredSensors() {
-      return this.getFilteredTableData(this.allSensors, this.activeFilters);
-    },
+  {
+    key: 'currentValue',
+    label: i18n.global.t('pageSensors.table.currentValue'),
   },
-  created() {
-    this.startLoader();
-    this.$store.dispatch('sensors/getAllSensors').finally(() => {
-      this.endLoader();
-      this.isBusy = false;
+]);
+const tableFilters = ref([
+  {
+    key: 'status',
+    label: i18n.global.t('pageSensors.table.status'),
+    values: [
+      i18n.global.t('pageSensors.table.filter.ok'),
+      i18n.global.t('pageSensors.table.filter.warning'),
+      i18n.global.t('pageSensors.table.filter.critical'),
+    ],
+  },
+]);
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    sensorsStore?.sensors?.map((singleSensor) => {
+      singleSensor.isSelected = false;
     });
-  },
-  methods: {
-    sortCompare(a, b, key) {
-      if (key === 'status') {
-        return this.sortStatus(a, b, key);
-      }
-    },
-    onFilterChange({ activeFilters }) {
-      this.activeFilters = activeFilters;
-    },
-    onFiltered(filteredItems) {
-      this.searchTotalFilteredRows = filteredItems.length;
-    },
-    onChangeSearchInput(event) {
-      this.searchFilter = event;
-    },
-    exportFileNameByDate() {
-      // Create export file name based on date
-      let date = new Date();
-      date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
-      return this.$t('pageSensors.exportFilePrefix') + date;
-    },
-  },
+    clearSelectedRows(tableRef);
+  });
+});
+onMounted(() => {
+  startLoader();
+  sensorsStore.getAllSensors().finally(() => {
+    isBusy.value = false;
+    endLoader();
+  });
+});
+const statusIconValue = (val) => {
+  if (val) {
+    if (val === 'OK') {
+      return 'success';
+    } else if (val === 'Warning') {
+      return 'warning';
+    } else if (val === 'Critical') {
+      return 'danger';
+    } else {
+      return 'unavailable';
+    }
+  }
 };
+const filteredRows = computed(() => {
+  return searchFilterInput.value
+    ? searchTotalFilteredRows.value
+    : filteredSensors.value.length;
+});
+const filteredSensors = computed(() => {
+  if (sensorsStore.sensorsGetter) {
+    return getFilteredTableData(
+      sensorsStore.sensorsGetter,
+      activeFiltersRows.value,
+    );
+  }
+  return [];
+});
+function toggleAll(checked) {
+  sensorsStore?.sensors?.map((singleSensor) => {
+    singleSensor.isSelected = checked;
+  });
+  isAllSelected.value = checked;
+}
+function onFilterChange({ activeFilters }) {
+  activeFiltersRows.value = activeFilters;
+}
+function onFiltered(filteredItems) {
+  searchTotalFilteredRows.value = filteredItems.length;
+}
+function onChangeSearch(event) {
+  searchFilterInput.value = event;
+}
+const onClearSearch = () => {
+  searchFilterInput.value = '';
+};
+function exportFileNameByDate() {
+  // Create export file name based on date
+  let date = new Date();
+  date =
+    date.toISOString().slice(0, 10) +
+    '_' +
+    date.toString().split(':').join('-').split(' ')[4];
+  return i18n.global.t('pageSensors.exportFilePrefix') + date;
+}
 </script>
+<style lang="scss" scoped>
+#table-sensors {
+  td .btn-link {
+    width: auto !important;
+  }
+}
+.text-right {
+  text-align: right;
+}
+.searchStyle {
+  height: 74px;
+}
+</style>

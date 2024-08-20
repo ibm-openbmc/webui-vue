@@ -1,12 +1,12 @@
 <template>
-  <b-button
+  <BButton
     class="d-flex align-items-center"
     variant="primary"
     :download="download"
     :href="href"
   >
     {{ $t('global.action.export') }}
-  </b-button>
+  </BButton>
 </template>
 
 <script>

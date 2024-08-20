@@ -30,6 +30,9 @@ const usePaginationComposable = () => {
 
   return {
     getTotalRowCount,
+    currentPage,
+    perPage,
+    itemsPerPageOptions,
   };
 };
 

@@ -116,7 +116,7 @@ const login = () => {
     .catch((error) => console.log(error));
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .login-form {
   @include media-breakpoint-up('md') {
     max-width: 360px;

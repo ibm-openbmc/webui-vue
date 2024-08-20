@@ -25,7 +25,7 @@
       </BCol>
     </BRow>
     <BRow>
-      <BCol sm="8" md="6" xl="12">
+      <BCol sm="8" md="6" xl="12" class="mb-4">
         <BFormGroup :label="$t('pagePowerRestorePolicy.powerPoliciesLabel')">
           <BFormRadioGroup
             v-model="currentPowerRestorePolicy"
@@ -54,8 +54,7 @@ import { ref, onMounted, computed } from 'vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
-import PowerPolicyStore from '@/store/modules/Settings/PowerPolicyStore';
-import BootSettingsStore from '@/store/modules/Operations/BootSettingsStore';
+import { PowerPolicyStore, BootSettingsStore } from '@/store';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
