@@ -306,6 +306,59 @@
         </b-col>
       </b-row>
     </page-section>
+    <div class="section-divider mb-3"></div>
+    <page-section
+      id="togglePredictiveMemoryGuard"
+      ref="togglePredictiveMemoryGuard"
+      :section-title="$t('pageMemory.predictiveMemoryGuardTitle')"
+      class="mb-1"
+    >
+      <b-row>
+        <b-col md="8" xl="6">
+          <p>{{ $t('pageMemory.predictiveMemoryGuardDescription') }}</p>
+        </b-col>
+      </b-row>
+      <b-row class="mt-3 mb-3">
+        <b-col
+          md="8"
+          xl="6"
+          class="mb-3 d-flex align-items-center justify-content-between"
+        >
+          <dl class="mr-3 w-75">
+            <dt>
+              {{ $t('pageMemory.predictiveMemoryGuardHeader') }}
+            </dt>
+            <dd v-if="!isSectionEditable()">
+              <span v-if="predictiveMemoryGuardState === null">
+                {{ '--' }}
+              </span>
+              <span v-else-if="predictiveMemoryGuardState">
+                {{ $t('global.status.enabled') }}
+              </span>
+              <span v-else>{{ $t('global.status.disabled') }}</span>
+            </dd>
+            <dd v-else>
+              <span v-if="predictiveMemoryGuardState === null">
+                {{ '--' }}
+              </span>
+              <b-form-checkbox
+                v-else
+                id="predictiveMemoryGuardSwitch"
+                v-model="predictiveMemoryGuardState"
+                switch
+                :disabled="!isSectionEditable()"
+                @change="changePredictiveMemoryGuardState"
+              >
+                <span v-if="predictiveMemoryGuardState">
+                  {{ $t('global.status.enabled') }}
+                </span>
+                <span v-else>{{ $t('global.status.disabled') }}</span>
+              </b-form-checkbox>
+            </dd>
+          </dl>
+        </b-col>
+      </b-row>
+    </page-section>
   </b-container>
 </template>
 
@@ -363,6 +416,12 @@ export default {
           href: '#toggleActiveMemoryMirroring',
           linkText: this.$t('pageMemory.activeMemoryMirroringTitle'),
         },
+        {
+          id: 'togglePredictiveMemoryGuard',
+          dataRef: 'togglePredictiveMemoryGuard',
+          href: '#togglePredictiveMemoryGuard',
+          linkText: this.$t('pageMemory.predictiveMemoryGuardTitle'),
+        },
       ],
     };
   },
@@ -374,6 +433,14 @@ export default {
     activeMemoryMirroringState: {
       get() {
         return this.$store.getters['resourceMemory/memoryMirroringMode'];
+      },
+      set(newValue) {
+        return newValue;
+      },
+    },
+    predictiveMemoryGuardState: {
+      get() {
+        return this.$store.getters['resourceMemory/predictiveMemoryGuard'];
       },
       set(newValue) {
         return newValue;
@@ -456,6 +523,7 @@ export default {
       this.$store.dispatch('resourceMemory/getMaxNumHugePages'),
       this.$store.dispatch('resourceMemory/getHmcManaged'),
       this.$store.dispatch('resourceMemory/getActiveMemoryMirroring'),
+      this.$store.dispatch('resourceMemory/getPredictiveMemoryGuard'),
     ]).finally(() => this.endLoader());
   },
   methods: {
@@ -514,6 +582,12 @@ export default {
     changeActiveMemoryMirroringState(state) {
       this.$store
         .dispatch('resourceMemory/saveActiveMemoryMirroringMode', state)
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message));
+    },
+    changePredictiveMemoryGuardState(state) {
+      this.$store
+        .dispatch('resourceMemory/savePredictiveMemoryGuard', state)
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },
