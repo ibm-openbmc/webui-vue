@@ -88,6 +88,7 @@ export default {
         { value: 'resource', text: this.$t('pageDumps.form.resourceDump') },
         { value: 'system', text: this.$t('pageDumps.form.systemDump') },
       ],
+      taskProgress: '',
     };
   },
   computed: {
@@ -111,6 +112,46 @@ export default {
     };
   },
   methods: {
+    async checkTask() {
+      //getting list of all tasks and getting the api to the most recent task
+      const data = await this.$store.dispatch('dumps/getTask');
+      this.taskProgress = data.Members[data.Members.length - 1];
+      const taskLink = this.taskProgress['@odata.id'];
+      //going to the most recent task
+      const currentTask = async () => {
+        return await this.$store.dispatch('global/getCurrentTask', taskLink);
+      };
+      const currentTaskProgress = (checkCounter = 0) => {
+        checkCounter++;
+        //if 'TaskState' is in running state for more than 20 mins, error message will be displayed to the user
+        if (checkCounter > 40) {
+          return this.errorToast(this.$t('pageDumps.toast.resourceDumpFailed'));
+        }
+        Promise.all([currentTask()]).then((res) => {
+          //monitor the value of parameter 'TaskState'
+          const taskState = res[0]['TaskState'];
+          //if TaskState is completed
+          if (taskState == 'Completed') {
+            this.successToast(this.$t('pageDumps.toast.resourceDumpSuccess'));
+            //if TaskState is running/in progress
+          } else if (taskState == 'Running') {
+            //reload the api after every 30 seconds till 20 mins to check if the 'TaskState' is changed to Completed or Cancelled
+            setTimeout(() => {
+              currentTaskProgress(checkCounter);
+            }, 30000);
+            //if TaskState is Cancelled
+          } else if (taskState == 'Cancelled') {
+            this.errorToast(this.$t('pageDumps.toast.resourceDumpFailed'));
+          }
+        });
+      };
+      //trigger funtion to check 'TaskState'
+      if (taskLink) {
+        currentTaskProgress(0);
+      } else {
+        return this.errorToast(this.$t('pageDumps.toast.resourceDumpFailed'));
+      }
+    },
     checkForUserData() {
       if (!this.currentUser) {
         this.$store.dispatch('userManagement/getUsers');
@@ -149,12 +190,13 @@ export default {
             // If not logged as service, '' must be used
             resourcePassword: this.resourcePassword || '',
           })
-          .then(() =>
+          .then(() => {
             this.infoToast(this.$t('pageDumps.toast.successStartDump'), {
               title: this.$t('pageDumps.toast.successStartResourceDumpTitle'),
               timestamp: true,
-            })
-          )
+            });
+            this.checkTask();
+          })
           .catch(({ message }) => this.errorToast(message));
       }
       // BMC dump initiation
