@@ -23,6 +23,9 @@ const DumpsStore = {
     },
   },
   actions: {
+    async getTask() {
+      return await api.get('/redfish/v1/TaskService/Tasks');
+    },
     async getBmcDumpEntries() {
       return api
         .get('/redfish/v1/')
