@@ -1,39 +1,39 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.auditLogs')" />
     <div class="section-divider mb-4 mt-4"></div>
-    <b-row class="align-items-start">
-      <b-col sm="8" xl="6" class="d-sm-flex align-items-end mb-4">
+    <BRow class="align-items-start">
+      <BCol sm="8" xl="6" class="d-sm-flex align-items-end mb-4 searchStyle">
         <search
           :placeholder="$t('pageAuditLogs.table.searchLogs')"
-          @change-search="onChangeSearchInput"
-          @clear-search="onClearSearchInput"
+          @change-search="onChangeSearch"
+          @clear-search="onClearSearch"
         />
-        <div class="ml-sm-4">
+        <div class="ml-sm-4 margin-style">
           <table-cell-count
             :filtered-items-count="filteredRows"
             :total-number-of-cells="allLogs.length"
           ></table-cell-count>
         </div>
-      </b-col>
-      <b-col sm="8" md="7" xl="6">
+      </BCol>
+      <BCol sm="8" md="7" xl="6">
         <table-date-filter @change="onChangeDateTimeFilter" />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col class="text-right">
-        <b-button
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol class="text-right">
+        <BButton
           variant="primary"
           :class="{ disabled: allLogs.length === 0 }"
           @click="downloadEventLogs('all')"
         >
           <icon-download /> {{ $t('global.action.downloadAll') }}
-        </b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-table
+        </BButton>
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol>
+        <BTable
           id="table-audit-logs"
           ref="table"
           responsive="md"
@@ -42,6 +42,7 @@
           sort-icon-left
           hover
           no-sort-reset
+          sticky-header="75vh"
           sort-by="date"
           :sort-desc="true"
           show-empty
@@ -49,29 +50,33 @@
           :items="filteredLogs"
           :empty-text="$t('global.table.emptyMessage')"
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
-          :per-page="perPage"
-          :current-page="currentPage"
-          :filter="searchFilter"
+          :per-page="itemPerPage"
+          :current-page="currentPageNo"
+          :filter="searchFilterInput"
           :busy="isBusy"
           @filtered="onFiltered"
         >
           <!-- Expand chevron icon -->
           <template #cell(expandRow)="row">
-            <b-button
+            <BButton
               variant="link"
               :aria-label="expandRowLabel"
               :title="expandRowLabel"
-              class="btn-icon-only"
-              @click="toggleRowDetails(row)"
+              :class="
+                row.item.toggleDetails
+                  ? 'rotateSvg btn-icon-only'
+                  : 'btn-icon-only'
+              "
+              @click="toggleRow(row)"
             >
               <icon-chevron />
-            </b-button>
+            </BButton>
           </template>
 
           <template #row-details="{ item }">
-            <b-container fluid>
-              <b-row>
-                <b-col>
+            <BContainer fluid class="expanded-row">
+              <BRow>
+                <BCol>
                   <dl>
                     <!-- Id -->
                     <dt>{{ $t('pageAuditLogs.table.id') }}:</dt>
@@ -84,239 +89,243 @@
                       {{ dataFormatter(item.message) }}
                     </dd>
                   </dl>
-                </b-col>
-              </b-row>
-            </b-container>
+                </BCol>
+              </BRow>
+            </BContainer>
           </template>
           <!-- Date column -->
           <template #cell(date)="{ value }">
-            <p class="mb-0">{{ value | formatDate }}</p>
-            <p class="mb-0">{{ value | formatTime }}</p>
+            <p class="mb-0">{{ $filters.formatDate(value) }}</p>
+            <p class="mb-0">{{ $filters.formatTime(value) }}</p>
           </template>
-        </b-table>
-      </b-col>
-    </b-row>
+        </BTable>
+      </BCol>
+    </BRow>
 
     <!-- Table pagination -->
-    <b-row>
-      <b-col sm="6">
-        <b-form-group
+    <BRow>
+      <BCol sm="6">
+        <BFormGroup
           class="table-pagination-select"
           :label="$t('global.table.itemsPerPage')"
           label-for="pagination-items-per-page"
         >
-          <b-form-select
+          <BFormSelect
             id="pagination-items-per-page"
-            v-model="perPage"
+            v-model="itemPerPage"
             :options="itemsPerPageOptions"
           />
-        </b-form-group>
-      </b-col>
-      <b-col sm="6">
-        <b-pagination
-          v-model="currentPage"
+        </BFormGroup>
+      </BCol>
+      <BCol sm="6">
+        <BPagination
+          v-model="currentPageNo"
+          class="b-pagination"
           first-number
           last-number
-          :per-page="perPage"
+          :per-page="itemPerPage"
           :total-rows="getTotalRowCount(filteredRows)"
-          aria-controls="table-post-code-logs"
+          aria-controls="table-audit-logs"
         />
-      </b-col>
-    </b-row>
-  </b-container>
+      </BCol>
+    </BRow>
+  </BContainer>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import i18n from '@/i18n';
 import IconDownload from '@carbon/icons-vue/es/download/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
-import PageTitle from '@/components/Global/PageTitle';
-import Search from '@/components/Global/Search';
-import i18n from '@/i18n';
-import TableCellCount from '@/components/Global/TableCellCount';
-import TableDateFilter from '@/components/Global/TableDateFilter';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
-import BVPaginationMixin, {
-  currentPage,
-  perPage,
-  itemsPerPageOptions,
-} from '@/components/Mixins/BVPaginationMixin';
-import BVTableSelectableMixin, {
-  selectedRows,
-  tableHeaderCheckboxModel,
-  tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import { AuditLogsStore } from '@/store/index.js';
+import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
+import Search from '@/components/Global/Search.vue';
+import usePaginationComposable from '@/components/Composables/usePaginationComposable';
+import useToast from '@/components/Composables/useToastComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
+import TableDateFilter from '@/components/Global/TableDateFilter.vue';
+import useTableRowExpandComposable from '@/components/Composables/useTableRowExpandComposable';
+import eventBus from '@/eventBus';
 
-import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
+const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
+  usePaginationComposable();
+const auditLogsStore = AuditLogsStore();
+const { successToast, infoToast, errorToast } = useToast();
+const { startLoader, endLoader } = useLoadingBar();
+const { dataFormatter } = useDataFormatterGlobal();
+const currentPageNo = ref(currentPage);
+const itemPerPage = ref(perPage);
+const isBusy = ref(true);
+const fields = ref([
+  {
+    key: 'expandRow',
+    label: '',
+    tdClass: 'table-row-expand',
+  },
+  {
+    key: 'date',
+    label: i18n.global.t('pageAuditLogs.table.eventTimeStamp'),
+  },
+  {
+    key: 'operation',
+    label: i18n.global.t('pageAuditLogs.table.op'),
+  },
+  {
+    key: 'account',
+    label: i18n.global.t('pageAuditLogs.table.acct'),
+  },
+  {
+    key: 'addr',
+    label: i18n.global.t('pageAuditLogs.table.addr'),
+  },
+  {
+    key: 'res',
+    label: i18n.global.t('pageAuditLogs.table.res'),
+  },
+]);
+const { expandRowLabel } = useTableRowExpandComposable();
+const { toggleRowDetails } = useTableRowExpandComposable();
+const { getFilteredTableData, getFilteredTableDataByDate } =
+  useTableFilterComposable();
+const searchTotalFilteredRows = ref(0);
+const searchFilterInput = ref('');
+const activeFilters = ref([]);
+const filterStartDate = ref(null);
+const filterEndDate = ref(null);
 
-export default {
-  components: {
-    IconDownload,
-    IconChevron,
-    PageTitle,
-    Search,
-    TableCellCount,
-    TableDateFilter,
-  },
-  mixins: [
-    BVPaginationMixin,
-    BVTableSelectableMixin,
-    BVToastMixin,
-    DataFormatterMixin,
-    LoadingBarMixin,
-    TableFilterMixin,
-    TableSortMixin,
-    TableRowExpandMixin,
-    SearchFilterMixin,
-  ],
-  beforeRouteLeave(to, from, next) {
-    // Hide loader if the user navigates to another page
-    // before request is fulfilled.
-    this.hideLoader();
-    next();
-  },
-  data() {
+onMounted(() => {
+  startLoader();
+  auditLogsStore.getAuditLogData().finally(() => {
+    isBusy.value = false;
+    endLoader();
+  });
+});
+
+onBeforeMount(() => {
+  eventBus.on('change', ({ fromDate, toDate }) => {
+    filterStartDate.value = fromDate;
+    filterEndDate.value = toDate;
+  });
+});
+
+const filteredRows = computed(() => {
+  return searchFilterInput.value
+    ? searchTotalFilteredRows.value
+    : filteredLogs.value.length;
+});
+const filteredLogsByDate = computed(() => {
+  return getFilteredTableDataByDate(
+    auditLogsStore.allAuditLogsGetter,
+    filterStartDate.value,
+    filterEndDate.value,
+  );
+});
+const filteredLogs = computed(() => {
+  if (auditLogsStore.allAuditLogsGetter) {
+    return getFilteredTableData(filteredLogsByDate.value, activeFilters.value);
+  }
+  return [];
+});
+
+const allLogs = computed(() => {
+  return auditLogsStore.allAuditLogsGetter.map((auditLogs) => {
     return {
-      isBusy: true,
-      fields: [
-        {
-          key: 'expandRow',
-          label: '',
-          tdClass: 'table-row-expand',
-        },
-        {
-          key: 'date',
-          label: this.$t('pageAuditLogs.table.eventTimeStamp'),
-        },
-        {
-          key: 'operation',
-          label: this.$t('pageAuditLogs.table.op'),
-        },
-        {
-          key: 'account',
-          label: this.$t('pageAuditLogs.table.acct'),
-        },
-        {
-          key: 'addr',
-          label: this.$t('pageAuditLogs.table.addr'),
-        },
-        {
-          key: 'res',
-          label: this.$t('pageAuditLogs.table.res'),
-        },
-      ],
-      expandRowLabel,
-      activeFilters: [],
-      currentPage: currentPage,
-      filterStartDate: null,
-      filterEndDate: null,
-      itemsPerPageOptions: itemsPerPageOptions,
-      perPage: perPage,
-      searchFilter: searchFilter,
-      searchTotalFilteredRows: 0,
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
+      ...auditLogs,
     };
-  },
-  computed: {
-    filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.filteredLogs.length;
-    },
-    allLogs() {
-      return this.$store.getters['auditLogs/allAuditLogs'].map((auditLogs) => {
-        return {
-          ...auditLogs,
-        };
+  });
+});
+
+const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
+  filterStartDate.value = fromDate;
+  filterEndDate.value = toDate;
+};
+function onChangeSearch(event) {
+  searchFilterInput.value = event;
+}
+const onClearSearch = () => {
+  searchFilterInput.value = '';
+};
+
+const toggleRow = (row) => {
+  row.item.toggleDetails = !row.item.toggleDetails;
+  toggleRowDetails(row);
+};
+
+function onFiltered(filteredItems) {
+  searchTotalFilteredRows.value = filteredItems.length;
+}
+
+const downloadFile = (data) => {
+  const decodedData = atob(data);
+  let date = new Date();
+  date =
+    date.toISOString().slice(0, 10) +
+    '_' +
+    date.toString().split(':').join('-').split(' ')[4];
+  let fileName;
+  fileName = 'audit_logs_' + date;
+  var element = document.createElement('a');
+  element.setAttribute(
+    'href',
+    'data:text/plain;charset=utf-8,' + encodeURIComponent(decodedData),
+  );
+  element.setAttribute('download', fileName);
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
+
+const downloadEventLogs = async (value) => {
+  const auditLogsData = [];
+  infoToast(i18n.global.t('pageAuditLogs.toast.infoStartDownload'));
+  if (value === 'all') {
+    startLoader();
+    await auditLogsStore
+      .downloadLogData(allLogs.value[0].additionalDataUri)
+      .then((response) => {
+        auditLogsData.push(response.data);
+      })
+      .then(() => {
+        downloadFile(auditLogsData);
+        successToast(i18n.global.t('pageAuditLogs.toast.successStartDownload'));
+      })
+      .catch((error) => {
+        console.log(error);
+        errorToast(i18n.global.t('pageAuditLogs.toast.errorStartDownload'));
+      })
+      .finally(() => {
+        endLoader();
       });
-    },
-    filteredLogsByDate() {
-      return this.getFilteredTableDataByDate(
-        this.allLogs,
-        this.filterStartDate,
-        this.filterEndDate,
-      );
-    },
-    filteredLogs() {
-      return this.getFilteredTableData(
-        this.filteredLogsByDate,
-        this.activeFilters,
-      );
-    },
-  },
-  created() {
-    this.startLoader();
-    this.$store.dispatch('auditLogs/getAuditLogData').finally(() => {
-      this.endLoader();
-      this.isBusy = false;
-    });
-  },
-  methods: {
-    onChangeDateTimeFilter({ fromDate, toDate }) {
-      this.filterStartDate = fromDate;
-      this.filterEndDate = toDate;
-    },
-    onFiltered(filteredItems) {
-      this.searchTotalFilteredRows = filteredItems.length;
-    },
-    downloadFile(data) {
-      const decodedData = atob(data);
-      let date = new Date();
-      date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
-      let fileName;
-      fileName = 'audit_logs_' + date;
-      var element = document.createElement('a');
-      element.setAttribute(
-        'href',
-        'data:text/plain;charset=utf-8,' + encodeURIComponent(decodedData),
-      );
-      element.setAttribute('download', fileName);
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    },
-    async downloadEventLogs(value) {
-      const auditLogsData = [];
-      this.infoToast(this.$t('pageAuditLogs.toast.infoStartDownload'));
-      if (value === 'all') {
-        this.startLoader();
-        await this.$store
-          .dispatch(
-            'auditLogs/downloadLogData',
-            this.allLogs[0].additionalDataUri,
-          )
-          .then((response) => {
-            auditLogsData.push(response.data);
-          })
-          .then(() => {
-            this.downloadFile(auditLogsData);
-            this.successToast(
-              i18n.t('pageAuditLogs.toast.successStartDownload'),
-            );
-          })
-          .catch((error) => {
-            console.log(error);
-            this.errorToast(i18n.t('pageAuditLogs.toast.errorStartDownload'));
-          })
-          .finally(() => {
-            this.endLoader();
-          });
-      }
-    },
-  },
+  }
 };
 </script>
+<style lang="scss" scoped>
+#table-audit-logs {
+  td .btn-link {
+    width: auto !important;
+  }
+}
+.text-right {
+  text-align: right;
+}
+.searchStyle {
+  height: 74px;
+  top: 22px;
+  position: relative;
+}
+.margin-style {
+  margin-bottom: 23px;
+  margin-left: 10px;
+}
+.container-fluid {
+  width: calc(100% - 90px);
+}
+.rotateSvg {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+</style>

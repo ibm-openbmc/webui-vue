@@ -8,6 +8,7 @@ import VirtualMedia from '@/views/Operations/VirtualMedia/VirtualMedia.vue';
 import Kvm from '@/views/Operations/Kvm';
 import Policies from '@/views/SecurityAndAccess/Policies';
 import Sensors from '@/views/HardwareStatus/Sensors';
+import AuditLogs from '@/views/Logs/AuditLogs';
 import PageNotFound from '@/views/PageNotFound/PageNotFound.vue';
 import KeyClear from '@/views/Operations/KeyClear/KeyClear.vue';
 import RebootBmc from '@/views/Operations/RebootBmc';
@@ -73,6 +74,14 @@ export const routes = [
         component: IBMiServiceFunctions,
         meta: {
           title: i18n.global.t('appPageTitle.ibmiServiceFunctions'),
+        },
+      },
+      {
+        path: '/logs/audit-logs',
+        name: 'audit-logs',
+        component: AuditLogs,
+        meta: {
+          title: i18n.global.t('appPageTitle.auditLogs'),
         },
       },
       {

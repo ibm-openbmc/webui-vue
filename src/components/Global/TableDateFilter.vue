@@ -1,165 +1,113 @@
 <template>
-  <b-row class="mb-2">
-    <b-col class="d-sm-flex">
-      <b-form-group
+  <BRow class="mb-2">
+    <BCol class="d-sm-flex">
+      <BFormGroup
         :label="$t('global.table.fromDate')"
         label-for="input-from-date"
         class="mr-3 my-0 w-100"
       >
-        <b-input-group>
-          <b-form-input
+        <BInputGroup>
+          <BFormInput
             id="input-from-date"
             v-model="fromDate"
-            :placeholder="$t('global.calendar.dateFormat')"
-            :state="getValidationState($v.fromDate)"
-            class="form-control-with-button mb-3 mb-md-0"
-            @blur="$v.fromDate.$touch()"
-          />
-          <b-form-invalid-feedback role="alert">
-            <template v-if="!$v.fromDate.pattern">
-              {{ $t('global.form.invalidFormat') }}
-            </template>
-            <template v-if="!$v.fromDate.maxDate">
-              {{ $t('global.form.dateMustBeBefore', { date: toDate }) }}
-            </template>
-          </b-form-invalid-feedback>
-          <b-form-datepicker
-            v-model="fromDate"
-            class="btn-datepicker btn-icon-only"
-            button-only
-            right
+            type="date"
             :max="toDate"
-            :hide-header="true"
-            :locale="locale"
-            :label-help="
-              $t('global.calendar.useCursorKeysToNavigateCalendarDates')
-            "
-            :title="$t('global.calendar.selectDate')"
-            button-variant="link"
-            aria-controls="input-from-date"
-          >
-            <template #button-content>
-              <icon-calendar />
-              <span class="sr-only">
-                {{ $t('global.calendar.selectDate') }}
-              </span>
-            </template>
-          </b-form-datepicker>
-        </b-input-group>
-      </b-form-group>
-      <b-form-group
+            class="form-control-with-button mb-3 mb-md-0 carbon-date"
+            :state="getValidationState(v$.fromDate)"
+            @update:model-value="v$.fromDate.$touch()"
+          />
+          <BFormInvalidFeedback role="alert">
+            {{ $t('global.form.dateMustBeBefore', { date: toDate }) }}
+          </BFormInvalidFeedback>
+        </BInputGroup>
+      </BFormGroup>
+      <BFormGroup
         :label="$t('global.table.toDate')"
         label-for="input-to-date"
         class="my-0 w-100"
       >
-        <b-input-group>
-          <b-form-input
+        <BInputGroup>
+          <BFormInput
             id="input-to-date"
             v-model="toDate"
-            :placeholder="$t('global.calendar.dateFormat')"
-            :state="getValidationState($v.toDate)"
-            class="form-control-with-button"
-            @blur="$v.toDate.$touch()"
-          />
-          <b-form-invalid-feedback role="alert">
-            <template v-if="!$v.toDate.pattern">
-              {{ $t('global.form.invalidFormat') }}
-            </template>
-            <template v-if="!$v.toDate.minDate">
-              {{ $t('global.form.dateMustBeAfter', { date: fromDate }) }}
-            </template>
-          </b-form-invalid-feedback>
-          <b-form-datepicker
-            v-model="toDate"
-            class="btn-datepicker btn-icon-only"
-            button-only
-            right
+            type="date"
             :min="fromDate"
-            :hide-header="true"
-            :locale="locale"
-            :label-help="
-              $t('global.calendar.useCursorKeysToNavigateCalendarDates')
-            "
-            :title="$t('global.calendar.selectDate')"
-            button-variant="link"
-            aria-controls="input-to-date"
-          >
-            <template #button-content>
-              <icon-calendar />
-              <span class="sr-only">
-                {{ $t('global.calendar.selectDate') }}
-              </span>
-            </template>
-          </b-form-datepicker>
-        </b-input-group>
-      </b-form-group>
-    </b-col>
-  </b-row>
+            class="form-control-with-button carbon-date"
+            :state="getValidationState(v$.toDate)"
+            @update:model-value="v$.toDate.$touch()"
+          />
+          <BFormInvalidFeedback role="alert">
+            {{ $t('global.form.dateMustBeAfter', { date: fromDate }) }}
+          </BFormInvalidFeedback>
+        </BInputGroup>
+      </BFormGroup>
+    </BCol>
+  </BRow>
 </template>
 
-<script>
-import IconCalendar from '@carbon/icons-vue/es/calendar/20';
-import { helpers } from 'vuelidate/lib/validators';
+<script setup>
+import { ref, watch, computed } from 'vue';
+import event from '../../eventBus';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+const fromDate = ref('');
+const toDate = ref('');
+const { getValidationState } = useVuelidateComposable();
+const offsetToDate = ref('');
 
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-
-const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
-
-export default {
-  components: { IconCalendar },
-  mixins: [VuelidateMixin],
-  data() {
-    return {
-      fromDate: '',
-      toDate: '',
-      offsetToDate: '',
-      locale: this.$store.getters['global/languagePreference'],
-    };
-  },
-  validations() {
-    return {
-      fromDate: {
-        pattern: helpers.regex('pattern', isoDateRegex),
-        maxDate: (value) => {
-          if (!this.toDate) return true;
-          const date = new Date(value);
-          const maxDate = new Date(this.toDate);
-          if (date.getTime() > maxDate.getTime()) return false;
-          return true;
-        },
-      },
-      toDate: {
-        pattern: helpers.regex('pattern', isoDateRegex),
-        minDate: (value) => {
-          if (!this.fromDate) return true;
-          const date = new Date(value);
-          const minDate = new Date(this.fromDate);
-          if (date.getTime() < minDate.getTime()) return false;
-          return true;
-        },
-      },
-    };
-  },
-  watch: {
-    fromDate() {
-      this.emitChange();
-    },
-    toDate(newVal) {
-      // Offset the end date to end of day to make sure all
-      // entries from selected end date are included in filter
-      this.offsetToDate = new Date(newVal).setUTCHours(23, 59, 59, 999);
-      this.emitChange();
+const rules = computed(() => ({
+  fromDate: {
+    maxDate: (value) => {
+      if (!toDate.value) return true;
+      const date = new Date(value);
+      const maxDate = new Date(toDate.value);
+      if (date.getTime() > maxDate.getTime()) return false;
+      return true;
     },
   },
-  methods: {
-    emitChange() {
-      if (this.$v.$invalid) return;
-      this.$v.$reset(); //reset to re-validate on blur
-      this.$emit('change', {
-        fromDate: this.fromDate ? new Date(this.fromDate) : null,
-        toDate: this.toDate ? new Date(this.offsetToDate) : null,
-      });
+  toDate: {
+    minDate: (value) => {
+      if (!fromDate.value) return true;
+      const date = new Date(value);
+      const minDate = new Date(fromDate.value);
+      if (date.getTime() < minDate.getTime()) return false;
+      return true;
     },
   },
+}));
+
+const v$ = useVuelidate(rules, { fromDate, toDate });
+watch(fromDate, () => {
+  emitChange();
+});
+
+watch(toDate, (newVal) => {
+  // Offset the end date to end of day to make sure all
+  // entries from selected end date are included in filter
+  offsetToDate.value = new Date(newVal).setUTCHours(23, 59, 59, 999);
+  emitChange();
+});
+
+const emitChange = () => {
+  event.emit('change', {
+    fromDate: fromDate.value ? new Date(fromDate.value) : null,
+    toDate: toDate.value ? new Date(offsetToDate.value) : null,
+  });
 };
 </script>
+<style scoped>
+.carbon-date {
+  border-bottom: 1px solid;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.form-control.is-invalid {
+  padding-right: 12px;
+}
+.form-control.is-valid {
+  padding-right: 12px;
+}
+</style>

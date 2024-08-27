@@ -1,19 +1,15 @@
+import { defineStore } from 'pinia';
 import api from '@/store/api';
 
-const AuditLogsStore = {
-  namespaced: true,
-  state: {
+export const AuditLogsStore = defineStore('auditLogs', {
+  state: () => ({
     allAuditLogs: [],
-  },
+  }),
   getters: {
-    allAuditLogs: (state) => state.allAuditLogs,
-  },
-  mutations: {
-    setAllAuditLogs: (state, allAuditLogs) =>
-      (state.allAuditLogs = allAuditLogs),
+    allAuditLogsGetter: (state) => state.allAuditLogs,
   },
   actions: {
-    async getAuditLogData({ commit }) {
+    async getAuditLogData() {
       return await api
         .get('/redfish/v1/Systems/system/LogServices/AuditLog/Entries')
         .then(({ data: { Members = [] } = {} }) => {
@@ -21,6 +17,7 @@ const AuditLogsStore = {
             const { EventTimestamp, Id, Message, MessageArgs, Oem } = log;
             const [, operation, account, , , address, , result] = MessageArgs;
             return {
+              toggleDetails: false,
               auditId: Id,
               operation: operation,
               message: Message,
@@ -32,18 +29,18 @@ const AuditLogsStore = {
               additionalDataUri: Oem.IBM.AdditionalDataFullAuditLogURI,
             };
           });
-          commit('setAllAuditLogs', auditLogs);
+          this.allAuditLogs = auditLogs;
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    async downloadLogData(_, uri) {
+    async downloadLogData(uri) {
       return await api.get(uri).then((response) => {
         return response;
       });
     },
   },
-};
+});
 
 export default AuditLogsStore;

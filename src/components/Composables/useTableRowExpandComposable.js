@@ -1,19 +1,17 @@
 import i18n from '@/i18n';
+const useTableRowExpandComposable = () => {
+  let expandRowLabel = i18n.global.t('global.table.expandTableRow');
+  const toggleRowDetails = (row) => {
+    row.toggleDetails();
+    expandRowLabel = row.detailsShowing
+      ? i18n.global.t('global.table.collapseTableRow')
+      : i18n.global.t('global.table.expandTableRow');
+  };
 
-export const tableRowExpandMixin = {
-  data() {
-    return {
-      expandRowLabel: i18n.global.t('global.table.expandTableRow'),
-    };
-  },
-  methods: {
-    toggleRowDetails(row) {
-      row.toggleDetails();
-      this.expandRowLabel = row.detailsShowing
-        ? i18n.global.t('global.table.collapseTableRow')
-        : i18n.global.t('global.table.expandTableRow');
-    },
-  },
+  return {
+    expandRowLabel,
+    toggleRowDetails,
+  };
 };
 
-export default tableRowExpandMixin;
+export default useTableRowExpandComposable;
