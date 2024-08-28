@@ -113,11 +113,7 @@ export default {
     },
   },
   created() {
-    Promise.all([
-      this.$store.dispatch('global/getSystemInfo'),
-      this.$store.dispatch('global/getBootProgress'),
-      this.$store.dispatch('licenses/getLicenses'),
-    ]);
+    this.fetchInfo();
   },
   methods: {
     submitForm() {
@@ -126,10 +122,20 @@ export default {
         this.startLoader();
         this.$store
           .dispatch('licenses/activateLicense', this.licenseKey)
-          .then((success) => this.successToast(success))
+          .then((success) => {
+            this.successToast(success);
+            this.fetchInfo();
+          })
           .catch(({ message }) => this.errorToast(message))
           .finally(() => this.endLoader());
       }
+    },
+    fetchInfo() {
+      Promise.all([
+        this.$store.dispatch('global/getSystemInfo'),
+        this.$store.dispatch('global/getBootProgress'),
+        this.$store.dispatch('licenses/getLicenses'),
+      ]);
     },
   },
 };
