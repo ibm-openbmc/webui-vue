@@ -102,6 +102,7 @@ export default {
         .dispatch('serverBootSettings/saveSettings', settings)
         .then((message) => {
           this.componentKey += 1;
+          let hmcManaged = this.$store.getters['resourceMemory/hmcManaged'];
           if (!this.isUpdated) {
             if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
               this.successToast(
@@ -116,27 +117,27 @@ export default {
                 this.isAtleastPhypInStandby)
             ) {
               if (this.isInPhypStandby) {
-                this.infoToast(
-                  this.$t(
-                    'pageServerPowerOperations.toast.successSaveIBMiStandby'
-                  )
-                ),
-                  this.successToast(
+                if (hmcManaged != 'Enabled') {
+                  this.infoToast(
                     this.$t(
-                      'pageServerPowerOperations.toast.successSaveSettings'
+                      'pageServerPowerOperations.toast.successSaveIBMiStandby'
                     )
                   );
+                }
+                this.successToast(
+                  this.$t('pageServerPowerOperations.toast.successSaveSettings')
+                );
               } else {
-                this.infoToast(
-                  this.$t(
-                    'pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo'
-                  )
-                ),
-                  this.successToast(
+                if (hmcManaged != 'Enabled') {
+                  this.infoToast(
                     this.$t(
-                      'pageServerPowerOperations.toast.successSaveSettings'
+                      'pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo'
                     )
                   );
+                }
+                this.successToast(
+                  this.$t('pageServerPowerOperations.toast.successSaveSettings')
+                );
               }
             } else {
               this.successToast(message);
