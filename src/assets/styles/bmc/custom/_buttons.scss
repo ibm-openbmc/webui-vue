@@ -10,7 +10,7 @@
     margin-right: math.div($spacer, 4);
   }
   &:disabled {
-    color: $gray-600;
+    color: $gray-600 !important;
     fill: currentColor;
     box-shadow: none !important;
     &:not(.btn-link) {

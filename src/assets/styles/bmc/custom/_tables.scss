@@ -38,8 +38,8 @@
     }
     tbody {
       tr.selected.table-primary {
-        --bs-table-bg: rgba(0,0,0,0.15);
-        --bs-table-hover-bg: rgba(0,0,0,0.12);
+        --bs-table-bg: rgba(0, 0, 0, 0.15);
+        --bs-table-hover-bg: rgba(0, 0, 0, 0.12);
       }
 
       tr.b-table-empty-slot {
@@ -63,6 +63,7 @@
       border-right: 1px solid $gray-300;
     }
     vertical-align: middle;
+    padding: 0.75rem;
 
     // Table action buttons
     .btn-link {
@@ -75,8 +76,13 @@
     }
   }
 
+  th {
+    padding: 0.75rem;
+  }
+
   // thead-light added for specificity
-  .thead th {
+  .thead-light th {
+    background-color: $gray-200;
     vertical-align: middle;
     border-top: 1px solid $gray-300;
     border-bottom: 1px solid $gray-300;

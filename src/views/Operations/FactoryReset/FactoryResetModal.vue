@@ -59,7 +59,7 @@ import eventBus from '@/eventBus';
 const messagesEn = i18n.global.getLocaleMessage('en-US');
 const factoryResetMessage = messagesEn?.pageFactoryReset?.modal;
 const { getValidationState } = useVuelidateComposable();
-const Global = GlobalStore();
+const global = GlobalStore();
 defineProps({
   resetType: {
     type: String,
@@ -71,7 +71,7 @@ eventBus.on('modal-reset', () => {
   modal.value.show();
 });
 const confirm = ref(false);
-const serverStatus = computed(() => Global.serverStatus);
+const serverStatus = computed(() => global.serverStatus);
 const isServerOff = computed(() =>
   serverStatus.value === 'off' ? true : false,
 );

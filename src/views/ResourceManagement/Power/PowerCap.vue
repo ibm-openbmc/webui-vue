@@ -1,8 +1,8 @@
 <template>
   <div>
     <page-section>
-      <b-row>
-        <b-col sm="8" md="6" xl="12">
+      <BRow>
+        <BCol sm="8" md="6" xl="12">
           <dl>
             <dt>
               {{ $t('pagePower.powerConsumption') }}
@@ -16,160 +16,174 @@
               }}
             </dd>
           </dl>
-        </b-col>
-      </b-row>
+        </BCol>
+      </BRow>
 
-      <b-form @submit.prevent="submitForm">
-        <b-form-group :disabled="loading || safeMode || powerCapMin === 0">
-          <b-row>
-            <b-col sm="8" md="6" xl="12">
-              <b-form-group :label="$t('pagePower.powerCapSettingLabel')">
-                <b-form-checkbox
+      <BForm @submit.prevent="submitForm">
+        <BFormGroup
+          :disabled="loading || safeMode || powerCapMin === 0"
+          class="form-group"
+        >
+          <BRow>
+            <BCol sm="8" md="6" xl="12">
+              <BFormGroup
+                :label="$t('pagePower.powerCapSettingLabel')"
+                class="form-group"
+              >
+                <BFormCheckbox
                   v-model="isPowerCapEnabled"
                   data-test-id="power-checkbox-togglePowerCapField"
                   name="power-control-mode"
                 >
                   {{ $t('pagePower.powerCapSettingData') }}
-                </b-form-checkbox>
-              </b-form-group>
-            </b-col>
-          </b-row>
+                </BFormCheckbox>
+              </BFormGroup>
+            </BCol>
+          </BRow>
 
-          <b-row>
-            <b-col sm="8" md="6" xl="3">
-              <b-form-group
+          <BRow>
+            <BCol sm="8" md="6" xl="3">
+              <BFormGroup
                 id="input-group-1"
                 :label="$t('pagePower.powerCapLabel')"
                 label-for="input-1"
+                class="form-group"
               >
-                <b-form-text id="power-help-text">
+                <BFormText id="power-help-text">
                   {{
                     $t('pagePower.powerCapLabelTextInfo', {
                       min: dataFormatter(powerCapMin),
                       max: dataFormatter(powerCapMax),
                     })
                   }}
-                </b-form-text>
+                </BFormText>
 
-                <b-form-input
+                <BFormInput
                   id="input-1"
                   v-model="powerCap"
                   data-test-id="power-input-powerCap"
                   type="number"
                   aria-describedby="power-help-text"
                   :number="true"
-                  :state="getValidationState($v.powerCap)"
-                  @blur="$v.powerCap.$touch()"
-                ></b-form-input>
+                  :state="getValidationState(v$.powerCap)"
+                  @update:model-value="v$.powerCap.$touch()"
+                ></BFormInput>
 
-                <b-form-invalid-feedback id="input-live-feedback" role="alert">
+                <BFormInvalidFeedback id="input-live-feedback" role="alert">
                   {{
                     $t('global.form.valueMustBeBetween', {
                       min: powerCapMin,
                       max: powerCapMax,
                     })
                   }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>
-          </b-row>
+                </BFormInvalidFeedback>
+              </BFormGroup>
+            </BCol>
+          </BRow>
 
-          <b-button
+          <BButton
             variant="primary"
             type="submit"
             data-test-id="power-button-savePowerCapValue"
           >
             {{ $t('global.action.save') }}
-          </b-button>
-        </b-form-group>
-      </b-form>
+          </BButton>
+        </BFormGroup>
+      </BForm>
     </page-section>
   </div>
 </template>
 
-<script>
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
-import InfoTooltip from '@/components/Global/InfoTooltip';
-import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import { required, between, numeric } from 'vuelidate/lib/validators';
-import PageSection from '../../../components/Global/PageSection.vue';
+<script setup>
+import { computed, onBeforeMount } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required, between, numeric } from '@vuelidate/validators';
+import useLoadingBar, {
+  loading,
+} from '@/components/Composables/useLoadingBarComposable';
+import useToast from '@/components/Composables/useToastComposable';
+import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import PageSection from '@/components/Global/PageSection.vue';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import { PowerControlStore } from '@/store';
 
-export default {
-  components: { InfoTooltip, PageSection },
-  mixins: [BVToastMixin, DataFormatterMixin, LoadingBarMixin, VuelidateMixin],
-  props: {
-    safeMode: {
-      type: Boolean,
-      default: null,
-    },
+const { startLoader, endLoader } = useLoadingBar();
+const { successToast, errorToast } = useToast();
+const { dataFormatter } = useDataFormatterGlobal();
+const { getValidationState } = useVuelidateComposable();
+
+const powerControlStore = PowerControlStore();
+
+defineProps({
+  safeMode: {
+    type: Boolean,
+    default: null,
   },
-  data() {
-    return {
-      loading,
-    };
+});
+
+const powerConsumption = computed(() => {
+  return powerControlStore.powerConsumptionGetter;
+});
+
+const powerControlMode = computed(() => {
+  return powerControlStore.powerControlModeGetter;
+});
+
+const isPowerCapEnabled = computed({
+  get() {
+    return powerControlStore.isPowerCapEnabled;
   },
-  computed: {
-    powerConsumption() {
-      return this.$store.getters['powerControl/powerConsumption'];
-    },
-    powerControlMode() {
-      return this.$store.getters['powerControl/powerControlMode'];
-    },
-    isPowerCapEnabled: {
-      get() {
-        return this.$store.getters['powerControl/isPowerCapEnabled'];
-      },
-      set(value) {
-        const newValue = value === true ? 'Automatic' : 'Disabled';
-        this.$store.commit('powerControl/setPowerControlMode', newValue);
-      },
-    },
-    powerCap: {
-      get() {
-        return this.$store.getters['powerControl/powerCap'];
-      },
-      set(value) {
-        return this.$store.commit('powerControl/setPowerCap', value);
-      },
-    },
-    powerCapMin() {
-      return this.$store.getters['powerControl/powerCapMin'];
-    },
-    powerCapMax() {
-      return this.$store.getters['powerControl/powerCapMax'];
-    },
+  set(value) {
+    const newValue = value === true ? 'Automatic' : 'Disabled';
+    powerControlStore.powerControlMode = newValue;
   },
-  created() {
-    this.startLoader();
-    this.$store
-      .dispatch('powerControl/getPowerControl')
-      .finally(() => this.endLoader());
+});
+
+const powerCap = computed({
+  get() {
+    return powerControlStore.powerCapGetter;
   },
-  validations() {
-    return {
-      powerCap: {
-        required,
-        numeric,
-        between: between(this.powerCapMin, this.powerCapMax),
-      },
-    };
+  set(value) {
+    powerControlStore.powerCap = value;
   },
-  methods: {
-    submitForm() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.startLoader();
-      this.$store
-        .dispatch('powerControl/setPowerControlAndCap', {
-          powerControlMode: this.powerControlMode,
-          powerCap: this.powerCap,
-        })
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => this.endLoader());
-    },
+});
+
+const powerCapMin = computed(() => {
+  return powerControlStore.powerCapMinGetter;
+});
+
+const powerCapMax = computed(() => {
+  return powerControlStore.powerCapMaxGetter;
+});
+
+const rules = computed(() => ({
+  powerCap: {
+    required,
+    numeric,
+    betweenValue: between(powerCapMin.value, powerCapMax.value),
   },
-};
+}));
+
+const v$ = useVuelidate(rules, { powerCap });
+
+function submitForm() {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  startLoader();
+
+  powerControlStore
+    .setPowerControlAndCap({
+      powerControlMode: powerControlMode.value,
+      powerCap: powerCap.value,
+    })
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message))
+    .finally(() => endLoader());
+}
+
+onBeforeMount(() => {
+  startLoader();
+  powerControlStore.getPowerControl().finally(() => endLoader());
+});
 </script>

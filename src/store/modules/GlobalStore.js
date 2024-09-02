@@ -36,6 +36,7 @@ export const GlobalStore = defineStore('global', {
     expirationDate: null,
     modelType: localStorage.getItem('storedModelType') || '--',
     serialNumber: null,
+    safeMode: null,
     serverStatus: 'unreachable',
     languagePreference: localStorage.getItem('storedLanguage') || 'en-US',
     isUtcDisplay: localStorage.getItem('storedUtcDisplay')
@@ -47,6 +48,7 @@ export const GlobalStore = defineStore('global', {
   }),
   getters: {
     getIsUtcDisplay: (state) => state.isUtcDisplay,
+    safeModeGetter: (state) => state.safeMode,
   },
   actions: {
     async getBmcTime() {
@@ -70,12 +72,17 @@ export const GlobalStore = defineStore('global', {
               Model,
               PowerState,
               SerialNumber,
+              Oem: {
+                IBM: { SafeMode },
+              },
               Status: { State } = {},
             },
           } = {}) => {
             this.assetTag = AssetTag;
             this.serialNumber = SerialNumber;
             this.modelType = Model;
+            localStorage.setItem('storedModelType', Model);
+            this.safeMode = SafeMode;
             if (State === 'Quiesced' || State === 'InTest') {
               // OpenBMC's host state interface is mapped to 2 Redfish
               // properties "Status""State" and "PowerState". Look first
@@ -87,7 +94,10 @@ export const GlobalStore = defineStore('global', {
             }
           },
         )
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          return Promise.reject();
+        });
     },
     setUnauthorized() {
       this.isAuthorized = false;

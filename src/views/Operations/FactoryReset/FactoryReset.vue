@@ -83,14 +83,14 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import { FactoryResetStore, AuthenticationStore, GlobalStore } from '@/store';
 import eventBus from '@/eventBus';
 
-const Global = GlobalStore();
-const Authentication = AuthenticationStore();
-const FactoryReset = FactoryResetStore();
-const Toast = useToastComposable();
+const global = GlobalStore();
+const authentication = AuthenticationStore();
+const factoryReset = FactoryResetStore();
+const toast = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const resetOption = ref('resetBios');
 const serverStatus = computed(() => {
-  return Global.serverStatus;
+  return global.serverStatus;
 });
 onMounted(() => {
   hideLoader();
@@ -107,29 +107,31 @@ const onOkConfirm = () => {
   }
 };
 const onResetBiosConfirm = () => {
-  FactoryReset.resetBios()
+  factoryReset
+    .resetBios()
     .then((message) => {
-      Toast.successToast(message);
+      toast.successToast(message);
     })
     .catch(({ message }) => {
-      Toast.errorToast('', {
+      toast.errorToast('', {
         title: message,
       });
     });
 };
 const onResetToDefaultsConfirm = () => {
   startLoader();
-  FactoryReset.resetBios()
+  factoryReset
+    .resetBios()
     .then(() => {
-      return FactoryReset.resetToDefaults();
+      return factoryReset.resetToDefaults();
     })
     .then((message) => {
-      Toast.successToast(message);
+      toast.successToast(message);
       setTimeout(() => {
-        Authentication.logout;
+        authentication.logout;
       }, 3000);
     })
-    .catch(({ message }) => Toast.errorToast(message))
+    .catch(({ message }) => toast.errorToast(message))
     .finally(() => endLoader());
 };
 </script>

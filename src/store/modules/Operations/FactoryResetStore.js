@@ -3,7 +3,6 @@ import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
 export const FactoryResetStore = defineStore('factoryReset', {
-  namespaced: true,
   actions: {
     async resetToDefaults() {
       return await api
@@ -27,7 +26,7 @@ export const FactoryResetStore = defineStore('factoryReset', {
         .catch((error) => {
           console.log('Factory Reset: ', error);
           throw new Error(
-            i18n.globalt('pageFactoryReset.toast.resetBiosError'),
+            i18n.global.t('pageFactoryReset.toast.resetBiosError'),
           );
         });
     },

@@ -1,45 +1,48 @@
 <template>
   <div>
     <page-section :section-title="$t('pagePower.powerPerformanceModesTitle')">
-      <b-row class="mb-3">
-        <b-col xl="10">
-          <b-button v-b-toggle.collapse-role-table variant="link">
+      <BRow class="mb-3">
+        <BCol xl="10">
+          <BButton v-b-toggle.collapse-role-table variant="link">
             <icon-chevron />
             {{ $t('pagePower.powerPerformanceModesDropdownLabel') }}
-          </b-button>
-          <b-collapse id="collapse-role-table" class="mt-3">
+          </BButton>
+          <BCollapse id="collapse-role-table" class="mt-3">
             <table-power-performance-modes
               :power-performance-mode-values="powerPerformanceModeValues"
             />
-          </b-collapse>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-form
+          </BCollapse>
+        </BCol>
+      </BRow>
+      <BRow>
+        <BCol>
+          <BForm
             id="form-power-saver"
             @submit.prevent="handlePowerPerformanceSubmit"
           >
-            <b-form-group :disabled="loading || safeMode">
-              <b-row>
-                <b-col>
-                  <b-form-group :label="$t('pagePower.selectModeLabel')">
-                    <b-form-radio-group
+            <BFormGroup class="form-group" :disabled="loading || safeMode">
+              <BRow>
+                <BCol>
+                  <BFormGroup
+                    class="form-group"
+                    :label="$t('pagePower.selectModeLabel')"
+                  >
+                    <BFormRadioGroup
                       id="power-save-modes"
                       v-model="powerPerformanceMode"
                       :options="powerPerformanceModeOptions"
                       stacked
-                    ></b-form-radio-group>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-              <b-button variant="primary" type="submit" form="form-power-saver">
+                    ></BFormRadioGroup>
+                  </BFormGroup>
+                </BCol>
+              </BRow>
+              <BButton variant="primary" type="submit" form="form-power-saver">
                 {{ $t('pagePower.submitButton') }}
-              </b-button>
-            </b-form-group>
-          </b-form>
-        </b-col>
-      </b-row>
+              </BButton>
+            </BFormGroup>
+          </BForm>
+        </BCol>
+      </BRow>
 
       <modal-power-performance-modes
         :title="powerPerformanceMode"
@@ -49,85 +52,88 @@
   </div>
 </template>
 
-<script>
-import PageSection from '@/components/Global/PageSection';
-import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
+<script setup>
+import { ref, computed, onBeforeMount } from 'vue';
+import i18n from '@/i18n';
+import eventBus from '@/eventBus';
+import useLoadingBar, {
+  loading,
+} from '@/components/Composables/useLoadingBarComposable';
+import useToast from '@/components/Composables/useToastComposable';
+import PageSection from '@/components/Global/PageSection.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
-import ModalPowerPerformanceModes from './ModalPowerPerformanceModes';
-import TablePowerPerformanceModes from './TablePowerPerformanceModes';
+import ModalPowerPerformanceModes from './ModalPowerPerformanceModes.vue';
+import TablePowerPerformanceModes from './TablePowerPerformanceModes.vue';
+import { PowerControlStore } from '@/store';
 
-export default {
-  components: {
-    PageSection,
-    IconChevron,
-    ModalPowerPerformanceModes,
-    TablePowerPerformanceModes,
+const { startLoader, endLoader } = useLoadingBar();
+const { successToast, errorToast } = useToast();
+
+const powerControlStore = PowerControlStore();
+
+defineProps({
+  safeMode: {
+    type: Boolean,
+    default: null,
   },
-  mixins: [BVToastMixin, LoadingBarMixin],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
+});
+
+const powerPerformanceMode = ref(null);
+
+const powerPerformanceModeOptions = ref([
+  { text: i18n.global.t('pagePower.selectMode.static'), value: 'Static' },
+  {
+    text: i18n.global.t('pagePower.selectMode.powerSaving'),
+    value: 'PowerSaving',
   },
-  props: {
-    safeMode: {
-      type: Boolean,
-      default: null,
-    },
+  {
+    text: i18n.global.t('pagePower.selectMode.maximumPerformance'),
+    value: 'MaximumPerformance',
   },
-  data() {
-    return {
-      loading,
-      powerPerformanceMode: null,
-      powerPerformanceModeOptions: [
-        { text: this.$t('pagePower.selectMode.static'), value: 'Static' },
-        {
-          text: this.$t('pagePower.selectMode.powerSaving'),
-          value: 'PowerSaving',
-        },
-        {
-          text: this.$t('pagePower.selectMode.maximumPerformance'),
-          value: 'MaximumPerformance',
-        },
-      ],
-    };
-  },
-  computed: {
-    powerPerformanceModeData() {
-      return this.$store.getters['powerControl/powerPerformanceMode'];
-    },
-    powerPerformanceModeValues() {
-      return this.$store.getters['powerControl/powerPerformanceModeValues'];
-    },
-  },
-  created() {
-    this.startLoader();
-    this.$store.dispatch('powerControl/getPowerPerformanceMode').finally(() => {
-      this.setPowerPerformanceValue(this.powerPerformanceModeData);
-      this.endLoader();
-    });
-  },
-  methods: {
-    setPowerPerformanceValue(data) {
-      this.powerPerformanceMode = data;
-    },
-    handlePowerPerformanceSubmit() {
-      if (this.powerPerformanceMode) {
-        this.showConfirmationModal();
-      }
-    },
-    showConfirmationModal() {
-      this.$bvModal.show('modal-power-performance-modes');
-    },
-    savePowerPerformanceMode() {
-      this.$store
-        .dispatch(
-          'powerControl/setPowerPerformanceMode',
-          this.powerPerformanceMode,
-        )
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
-    },
-  },
-};
+]);
+
+const powerPerformanceModeData = computed(() => {
+  return powerControlStore.powerPerformanceModeGetter;
+});
+
+const powerPerformanceModeValues = computed(() => {
+  return powerControlStore.powerPerformanceModeValuesGetter;
+});
+
+function setPowerPerformanceValue(data) {
+  powerPerformanceMode.value = data;
+}
+
+function savePowerPerformanceMode() {
+  powerControlStore
+    .setPowerPerformanceMode(powerPerformanceMode.value)
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message));
+}
+
+function handlePowerPerformanceSubmit() {
+  if (powerPerformanceMode.value) {
+    showConfirmationModal();
+  }
+}
+
+function showConfirmationModal() {
+  eventBus.emit('modal-power-performance-modes');
+}
+
+onBeforeMount(() => {
+  startLoader();
+  powerControlStore.getPowerPerformanceMode().finally(() => {
+    setPowerPerformanceValue(powerPerformanceModeData.value);
+    endLoader();
+  });
+});
 </script>
+
+<style lang="scss" scoped>
+.btn.collapsed {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+</style>
