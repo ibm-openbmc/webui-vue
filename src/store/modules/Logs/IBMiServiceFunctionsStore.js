@@ -1,26 +1,24 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const IBMiServiceFunctionsStore = {
-  namespaced: true,
-  state: {
-    serviceFunctions: [],
+export const IBMiServiceFunctionsStore = defineStore('ibmiServiceFunctions', {
+  state: () => {
+    return {
+      serviceFunctions: [],
+    };
   },
   getters: {
-    serviceFunctions: (state) => state.serviceFunctions,
-  },
-  mutations: {
-    setServiceFunctions: (state, serviceFunctions) =>
-      (state.serviceFunctions = serviceFunctions),
+    serviceFunctionsGetter: (state) => state.serviceFunctions,
   },
   actions: {
-    async getAvailableServiceFunctions({ commit }) {
+    async getAvailableServiceFunctions() {
       return await api.get('/redfish/v1/Systems/system').then(({ data }) => {
         let availableFunctions = data?.Oem?.IBM?.EnabledPanelFunctions;
-        commit('setServiceFunctions', availableFunctions);
+        this.serviceFunctions = availableFunctions;
       });
     },
-    async executeServiceFunction({ dispatch }, value) {
+    async executeServiceFunction(value) {
       return await api
         .post(
           '/redfish/v1/Systems/system/Actions/Oem/OemComputerSystem.ExecutePanelFunction',
@@ -29,20 +27,22 @@ const IBMiServiceFunctionsStore = {
           },
         )
         .then(() => {
-          dispatch('getAvailableServiceFunctions');
-          return i18n.tc(
+          this.getAvailableServiceFunctions();
+          return i18n.global.t(
             'pageIbmiServiceFunctions.toast.successExecuteFunction',
           );
         })
         .catch((error) => {
           console.log(error);
-          dispatch('getAvailableServiceFunctions');
+          this.getAvailableServiceFunctions();
           throw new Error(
-            i18n.tc('pageIbmiServiceFunctions.toast.errorExecuteFunction'),
+            i18n.global.t(
+              'pageIbmiServiceFunctions.toast.errorExecuteFunction',
+            ),
           );
         });
     },
   },
-};
+});
 
 export default IBMiServiceFunctionsStore;

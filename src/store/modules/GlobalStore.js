@@ -32,6 +32,7 @@ export const GlobalStore = defineStore('global', {
   state: () => ({
     assetTag: null,
     bmcTime: null,
+    bootProgress: null,
     acfInstalled: false,
     expirationDate: null,
     modelType: localStorage.getItem('storedModelType') || '--',
@@ -47,6 +48,8 @@ export const GlobalStore = defineStore('global', {
     userPrivilege: null,
   }),
   getters: {
+    bootProgressGetter: (state) => state.bootProgress,
+    isOSRunningGetter: (state) => state.bootProgress === 'OSRunning',
     getIsUtcDisplay: (state) => state.isUtcDisplay,
     safeModeGetter: (state) => state.safeMode,
     serverStatusGetter: (state) => state.serverStatus,
@@ -98,6 +101,18 @@ export const GlobalStore = defineStore('global', {
         .catch((error) => {
           console.log(error);
           return Promise.reject();
+        });
+    },
+    async getBootProgress() {
+      api
+        .get('/redfish/v1/Systems/system')
+        .then(({ data }) => {
+          const bootProgress = data.BootProgress.LastState;
+          this.bootProgress = bootProgress;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.bootProgress = null;
         });
     },
     setUnauthorized() {

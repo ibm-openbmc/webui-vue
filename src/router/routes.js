@@ -15,6 +15,8 @@ import FactoryReset from '@/views/Operations/FactoryReset';
 import Memory from '@/views/ResourceManagement/Memory';
 import Power from '@/views/ResourceManagement/Power';
 import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy';
+import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
+
 const roles = {
   administrator: 'Administrator',
   operator: 'Operator',
@@ -63,6 +65,14 @@ export const routes = [
         component: Sensors,
         meta: {
           title: i18n.global.t('appPageTitle.sensors'),
+        },
+      },
+      {
+        path: '/logs/ibmi-service-functions',
+        name: 'ibmiServiceFunctions',
+        component: IBMiServiceFunctions,
+        meta: {
+          title: i18n.global.t('appPageTitle.ibmiServiceFunctions'),
         },
       },
       {
