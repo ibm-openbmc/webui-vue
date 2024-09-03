@@ -67,16 +67,25 @@ const DumpsStore = {
         )
         .catch((error) => {
           console.log(error);
-          const messageId =
+          const errorMsg =
             error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
 
-          const message = REGEX_MAPPINGS.resourceInStandby.test(messageId)
-            ? i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
-                dump: dumpType,
-              })
-            : i18n.t('pageDumps.toast.errorStartBmcDump');
-
-          throw new Error(message);
+          switch (true) {
+            case REGEX_MAPPINGS.resourceInUse.test(errorMsg):
+              throw new Error(
+                i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
+                  dump: dumpType,
+                })
+              );
+            case REGEX_MAPPINGS.resourceInStandby.test(errorMsg):
+              throw new Error(
+                i18n.t('pageDumps.toast.errorStartDumpResourceInStandby', {
+                  dump: dumpType,
+                })
+              );
+            default:
+              throw new Error(i18n.t('pageDumps.toast.errorStartSystemDump'));
+          }
         });
     },
     async createResourceDump(_, { resourceSelector, resourcePassword }) {
