@@ -4,10 +4,10 @@ const useJumpLinkComposable = () => {
     element.focus();
     element.removeAttribute('tabindex');
   };
-  const scrollToOffset = (event) => {
+  const scrollToOffset = (refs, event) => {
     // Select element to scroll to
     const ref = event.target.getAttribute('data-ref');
-    const element = this.$refs[ref].$el;
+    const element = refs[ref].value.$el;
     // Set focus and tabindex on selected element
     setFocus(element);
     // Set scroll offset below header

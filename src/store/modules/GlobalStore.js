@@ -49,6 +49,7 @@ export const GlobalStore = defineStore('global', {
   getters: {
     getIsUtcDisplay: (state) => state.isUtcDisplay,
     safeModeGetter: (state) => state.safeMode,
+    serverStatusGetter: (state) => state.serverStatus,
   },
   actions: {
     async getBmcTime() {

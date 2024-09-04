@@ -1,8 +1,8 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.memory')" />
-    <b-row>
-      <b-col md="8" xl="6">
+    <BRow>
+      <BCol md="8" xl="6">
         <alert v-if="!isSectionEditable()" variant="warning" class="mb-4">
           <div class="font-weight-bold">
             {{ $t('pageMemory.alert.heading') }}
@@ -11,18 +11,18 @@
             {{ $t('pageMemory.alert.message') }}
           </div>
         </alert>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
     <!-- Quicklinks section -->
     <page-section :section-title="$t('pageCapacityOnDemand.quickLinks')">
       <div v-for="item in quickLinks" :key="item.id">
-        <b-link
+        <BLink
           :href="item.href"
           :data-ref="item.dataRef"
-          @click.prevent="scrollToOffset"
+          @click.prevent="scrollToOffset(refs, $event)"
         >
           <icon-jump-link /> {{ item.linkText }}
-        </b-link>
+        </BLink>
       </div>
     </page-section>
     <page-section
@@ -31,38 +31,39 @@
       :section-title="$t('pageMemory.logicalMemorySize')"
       class="mb-4"
     >
-      <b-row>
-        <b-col md="8" xl="6">
+      <BRow>
+        <BCol md="8" xl="6">
           <p>{{ $t('pageMemory.logicalMemorySizeHeading') }}</p>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="8" xl="6">
-          <b-form novalidate @submit.prevent="handleSubmit">
-            <b-form-group
+        </BCol>
+      </BRow>
+      <BRow>
+        <BCol md="8" xl="6">
+          <BForm novalidate @submit.prevent="handleSubmit">
+            <BFormGroup
               :label="$t('pageMemory.memoryBlockSize')"
               label-for="logical-memory-size-option"
               class="mb-3"
             >
-              <b-form-select
+              <BFormSelect
                 id="logical-memory-size-option"
                 v-model="form.logicalMemorySizeOption"
+                class="custom-select"
                 :options="logicalMemorySizeOptions"
                 :disabled="!isSectionEditable()"
               >
-              </b-form-select>
-            </b-form-group>
-            <b-button
+              </BFormSelect>
+            </BFormGroup>
+            <BButton
               variant="primary"
               type="submit"
               class="mt-3 mb-3"
               :disabled="!isSectionEditable()"
             >
               {{ $t('pageMemory.updateLogicalMemorySize') }}
-            </b-button>
-          </b-form>
-        </b-col>
-      </b-row>
+            </BButton>
+          </BForm>
+        </BCol>
+      </BRow>
     </page-section>
     <div class="section-divider mb-3 mt-3"></div>
     <page-section
@@ -71,44 +72,44 @@
       :section-title="$t('pageMemory.systemMemoryPageSetupTitle')"
       class="mb-1"
     >
-      <b-row>
-        <b-col md="8" xl="6">
+      <BRow>
+        <BCol md="8" xl="6">
           <p>{{ $t('pageMemory.systemMemoryPageSetup') }}</p>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="8" xl="6">
-          <b-form @submit.prevent="updatePageSetup()">
-            <b-form-group
+        </BCol>
+      </BRow>
+      <BRow>
+        <BCol md="8" xl="6">
+          <BForm @submit.prevent="updatePageSetup()">
+            <BFormGroup
               :label="$t('pageMemory.maxNumHugePages')"
               label-for="system-memory-page-setup"
               class="mb-3"
             >
-              <b-form-input
+              <BFormInput
                 id="max-huge page-memory"
                 v-model.number="maxHugePageLimit"
                 data-test-id="max-huge page-memory"
                 :disabled="true"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group
+              ></BFormInput>
+            </BFormGroup>
+            <BFormGroup
               :label="$t('pageMemory.requestedHugePageMemory')"
               label-for="system-memory-page-setup"
               class="mb-3"
             >
-              <b-form-input
+              <BFormInput
                 id="input-system-memory-page-setup"
                 v-model.number="systemMemoryPageSetup"
                 data-test-id="system-memory-page-setup"
                 type="number"
                 :disabled="!isSectionEditable()"
-                :state="getValidationState($v.systemMemoryPageSetup)"
-              ></b-form-input>
-              <b-form-invalid-feedback role="alert">
+                :state="getValidationState(v$.systemMemoryPageSetup)"
+              ></BFormInput>
+              <BFormInvalidFeedback role="alert">
                 <template
                   v-if="
-                    !$v.systemMemoryPageSetup.minLength ||
-                    !$v.systemMemoryPageSetup.maxLength
+                    !v$.systemMemoryPageSetup.minLength ||
+                    !v$.systemMemoryPageSetup.maxLength
                   "
                 >
                   {{
@@ -118,19 +119,19 @@
                     })
                   }}
                 </template>
-              </b-form-invalid-feedback>
-              <b-button
+              </BFormInvalidFeedback>
+              <BButton
                 variant="primary"
                 type="submit"
                 class="mt-3 mb-3"
                 :disabled="!isSectionEditable()"
               >
                 {{ $t('pageMemory.updatePageSetup') }}
-              </b-button>
-            </b-form-group>
-          </b-form>
-        </b-col>
-      </b-row>
+              </BButton>
+            </BFormGroup>
+          </BForm>
+        </BCol>
+      </BRow>
     </page-section>
     <div class="section-divider mb-3 mt-3"></div>
     <page-section
@@ -138,34 +139,34 @@
       ref="inputIoAdapterCapacity"
       :section-title="$t('pageMemory.ioAdapterEnlargedCapacityTitle')"
     >
-      <b-row>
-        <b-col md="8" xl="6">
+      <BRow>
+        <BCol md="8" xl="6">
           <p>{{ $t('pageMemory.ioAdapterEnlargedCapacity') }}</p>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="8" xl="6">
-          <b-form @submit.prevent="updateAdapterCapacity()">
-            <b-form-group
+        </BCol>
+      </BRow>
+      <BRow>
+        <BCol md="8" xl="6">
+          <BForm @submit.prevent="updateAdapterCapacity()">
+            <BFormGroup
               :label="$t('pageMemory.slotCountForNode0')"
               label-for="io-adapter-enlarged-capacity"
               class="mb-3"
             >
-              <b-form-input
+              <BFormInput
                 id="input-io-adapter-capacity"
                 v-model.number="ioAdapterCapacity"
                 data-test-id="io-adapter-capacity"
                 type="number"
                 :min="0"
                 :max="21"
-                :state="getValidationState($v.ioAdapterCapacity)"
+                :state="getValidationState(v$.ioAdapterCapacity)"
                 :disabled="!isSectionEditable()"
-              ></b-form-input>
-              <b-form-invalid-feedback role="alert">
+              ></BFormInput>
+              <BFormInvalidFeedback role="alert">
                 <template
                   v-if="
-                    !$v.ioAdapterCapacity.minLength ||
-                    !$v.ioAdapterCapacity.maxLength
+                    !v$.ioAdapterCapacity.minLength ||
+                    !v$.ioAdapterCapacity.maxLength
                   "
                 >
                   {{
@@ -175,19 +176,19 @@
                     })
                   }}
                 </template>
-              </b-form-invalid-feedback>
-            </b-form-group>
-            <b-button
+              </BFormInvalidFeedback>
+            </BFormGroup>
+            <BButton
               variant="primary"
               type="submit"
               class="mt-3"
               :disabled="!isSectionEditable()"
             >
               {{ $t('pageMemory.updateIoAdapterEnlargedCapacity') }}
-            </b-button>
-          </b-form>
-        </b-col>
-      </b-row>
+            </BButton>
+          </BForm>
+        </BCol>
+      </BRow>
     </page-section>
     <div class="section-divider mb-3 mt-3"></div>
     <page-section
@@ -195,38 +196,38 @@
       ref="inputDynamicIoDrawerAttachmentCapacity"
       :section-title="$t('pageMemory.dynamicIoDrawerAttachmentTitle')"
     >
-      <b-row>
-        <b-col md="8" xl="6">
+      <BRow>
+        <BCol md="8" xl="6">
           <p>{{ $t('pageMemory.dynamicIoDrawerAttachment') }}</p>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="8" xl="6">
-          <b-form @submit.prevent="updateDynamicAdapterCapacity()">
+        </BCol>
+      </BRow>
+      <BRow>
+        <BCol md="8" xl="6">
+          <BForm @submit.prevent="updateDynamicAdapterCapacity()">
             <span v-if="dynamicIoDrawerCapacity === null">
               {{ '--' }}
             </span>
             <span v-else>
-              <b-form-group
+              <BFormGroup
                 :label="$t('pageMemory.slotCountForNode0')"
                 label-for="dynamic-io-drawer-capacity"
                 class="mb-3"
               >
-                <b-form-input
+                <BFormInput
                   id="input-dynamic-io-adapter-drawer-capacity"
                   v-model.number="dynamicIoDrawerCapacity"
                   data-test-id="dynamic-io-adapter-drawer-attachment"
                   type="number"
                   :min="0"
                   :max="dynamicIoDrawerDefaultCapacity"
-                  :state="getValidationState($v.dynamicIoDrawerCapacity)"
+                  :state="getValidationState(v$.dynamicIoDrawerCapacity)"
                   :disabled="!isSectionEditable()"
-                ></b-form-input>
-                <b-form-invalid-feedback role="alert">
+                ></BFormInput>
+                <BFormInvalidFeedback role="alert">
                   <template
                     v-if="
-                      !$v.dynamicIoDrawerCapacity.minLength ||
-                      !$v.dynamicIoDrawerCapacity.maxLength
+                      !v$.dynamicIoDrawerCapacity.minLength ||
+                      !v$.dynamicIoDrawerCapacity.maxLength
                     "
                   >
                     {{
@@ -236,22 +237,22 @@
                       })
                     }}
                   </template>
-                </b-form-invalid-feedback>
-              </b-form-group>
+                </BFormInvalidFeedback>
+              </BFormGroup>
             </span>
             <span v-if="dynamicIoDrawerCapacity !== null">
-              <b-button
+              <BButton
                 variant="primary"
                 type="submit"
                 class="mt-3"
                 :disabled="!isSectionEditable()"
               >
                 {{ $t('pageMemory.updateDynamicIoDrawerAttachment') }}
-              </b-button>
+              </BButton>
             </span>
-          </b-form>
-        </b-col>
-      </b-row>
+          </BForm>
+        </BCol>
+      </BRow>
     </page-section>
     <div class="section-divider mb-3"></div>
     <page-section
@@ -260,13 +261,13 @@
       :section-title="$t('pageMemory.activeMemoryMirroringTitle')"
       class="mb-1"
     >
-      <b-row>
-        <b-col md="8" xl="6">
+      <BRow>
+        <BCol md="8" xl="6">
           <p>{{ $t('pageMemory.activeMemoryMirroringDescription') }}</p>
-        </b-col>
-      </b-row>
-      <b-row class="mt-3 mb-3">
-        <b-col
+        </BCol>
+      </BRow>
+      <BRow class="mt-3 mb-3">
+        <BCol
           md="8"
           xl="6"
           class="mb-3 d-flex align-items-center justify-content-between"
@@ -288,234 +289,347 @@
               <span v-if="activeMemoryMirroringState === null">
                 {{ '--' }}
               </span>
-              <b-form-checkbox
+              <BFormCheckbox
                 v-else
                 id="activeMemoryMirroringSwitch"
                 v-model="activeMemoryMirroringState"
                 switch
                 :disabled="!isSectionEditable()"
-                @change="changeActiveMemoryMirroringState"
+                @update:model-value="changeActiveMemoryMirroringState"
               >
                 <span v-if="activeMemoryMirroringState">
                   {{ $t('global.status.enabled') }}
                 </span>
                 <span v-else>{{ $t('global.status.disabled') }}</span>
-              </b-form-checkbox>
+              </BFormCheckbox>
             </dd>
           </dl>
-        </b-col>
-      </b-row>
+        </BCol>
+      </BRow>
     </page-section>
-  </b-container>
+    <div class="section-divider mb-3"></div>
+    <page-section
+      id="togglePredictiveMemoryGuard"
+      ref="togglePredictiveMemoryGuard"
+      :section-title="$t('pageMemory.predictiveMemoryGuardTitle')"
+      class="mb-1"
+    >
+      <BRow>
+        <BCol md="8" xl="6">
+          <p>{{ $t('pageMemory.predictiveMemoryGuardDescription') }}</p>
+        </BCol>
+      </BRow>
+      <BRow class="mt-3 mb-3">
+        <BCol
+          md="8"
+          xl="6"
+          class="mb-3 d-flex align-items-center justify-content-between"
+        >
+          <dl class="mr-3 w-75">
+            <dt>
+              {{ $t('pageMemory.predictiveMemoryGuardHeader') }}
+            </dt>
+            <dd v-if="!isSectionEditable()">
+              <span v-if="predictiveMemoryGuardState === null">
+                {{ '--' }}
+              </span>
+              <span v-else-if="predictiveMemoryGuardState">
+                {{ $t('global.status.enabled') }}
+              </span>
+              <span v-else>{{ $t('global.status.disabled') }}</span>
+            </dd>
+            <dd v-else>
+              <span v-if="predictiveMemoryGuardState === null">
+                {{ '--' }}
+              </span>
+              <BFormCheckbox
+                v-else
+                id="predictiveMemoryGuardSwitch"
+                v-model="predictiveMemoryGuardState"
+                switch
+                :disabled="!isSectionEditable()"
+                @update:model-value="changePredictiveMemoryGuardState"
+              >
+                <span v-if="predictiveMemoryGuardState">
+                  {{ $t('global.status.enabled') }}
+                </span>
+                <span v-else>{{ $t('global.status.disabled') }}</span>
+              </BFormCheckbox>
+            </dd>
+          </dl>
+        </BCol>
+      </BRow>
+    </page-section>
+  </BContainer>
 </template>
 
-<script>
-import JumpLink16 from '@carbon/icons-vue/es/jump-link/16';
-import { mapState } from 'vuex';
-import Alert from '@/components/Global/Alert';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import JumpLinkMixin from '@/components/Mixins/JumpLinkMixin';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import PageTitle from '@/components/Global/PageTitle';
-import PageSection from '@/components/Global/PageSection';
-import { minValue, maxValue } from 'vuelidate/lib/validators';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+<script setup>
+import { ref, computed, watch, onBeforeMount } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { minValue, maxValue } from '@vuelidate/validators';
+import { storeToRefs } from 'pinia';
+import i18n from '@/i18n';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
+import useToast from '@/components/Composables/useToastComposable';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import Alert from '@/components/Global/Alert.vue';
+import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import { GlobalStore, ResourceMemoryStore } from '@/store';
 
-export default {
-  name: 'Memory',
-  components: { Alert, PageSection, PageTitle, IconJumpLink: JumpLink16 },
-  mixins: [VuelidateMixin, BVToastMixin, LoadingBarMixin, JumpLinkMixin],
-  data() {
-    return {
-      form: {
-        logicalMemorySizeOption:
-          this.$store.getters['resourceMemory/logicalMemorySize'],
-      },
-      quickLinks: [
-        {
-          id: 'logicalMemorySizeOption',
-          dataRef: 'logicalMemorySizeOption',
-          href: '#logicalMemorySizeOption',
-          linkText: this.$t('pageMemory.logicalMemorySize'),
-        },
-        {
-          id: 'inputSystemMemoryPageSetup',
-          dataRef: 'inputSystemMemoryPageSetup',
-          href: '#inputSystemMemoryPageSetup',
-          linkText: this.$t('pageMemory.systemMemoryPageSetupTitle'),
-        },
-        {
-          id: 'inputIoAdapterCapacity',
-          dataRef: 'inputIoAdapterCapacity',
-          href: '#inputIoAdapterCapacity',
-          linkText: this.$t('pageMemory.ioAdapterEnlargedCapacityTitle'),
-        },
-        {
-          id: 'inputDynamicIoDrawerAttachmentCapacity',
-          dataRef: 'inputDynamicIoDrawerAttachmentCapacity',
-          href: '#inputDynamicIoDrawerAttachmentCapacity',
-          linkText: this.$t('pageMemory.dynamicIoDrawerAttachmentTitle'),
-        },
-        {
-          id: 'toggleActiveMemoryMirroring',
-          dataRef: 'toggleActiveMemoryMirroring',
-          href: '#toggleActiveMemoryMirroring',
-          linkText: this.$t('pageMemory.activeMemoryMirroringTitle'),
-        },
-      ],
-    };
-  },
-  computed: {
-    ...mapState('resourceMemory', [
-      'logicalMemorySizeOptions',
-      'logicalMemorySize',
-    ]),
-    activeMemoryMirroringState: {
-      get() {
-        return this.$store.getters['resourceMemory/memoryMirroringMode'];
-      },
-      set(newValue) {
-        return newValue;
-      },
-    },
-    maxHugePageLimit() {
-      return this.$store.getters['resourceMemory/maxNumHugePages'];
-    },
-    dynamicIoDrawerDefaultCapacity: {
-      get() {
-        return this.$store.getters[
-          'resourceMemory/dynamicIoDrawerDefaultCapacity'
-        ];
-      },
-    },
-    ioAdapterCapacity: {
-      get() {
-        return this.$store.getters['resourceMemory/ioAdapterCapacity'];
-      },
-      set(value) {
-        this.$v.$touch();
-        this.$store.commit('resourceMemory/setIoAdapterCapacity', value);
-      },
-    },
-    dynamicIoDrawerCapacity: {
-      get() {
-        return this.$store.getters['resourceMemory/dynamicIoDrawerCapacity'];
-      },
-      set(value) {
-        this.$v.$touch();
-        this.$store.commit('resourceMemory/setDynamicIoDrawerCapacity', value);
-      },
-    },
-    systemMemoryPageSetup: {
-      get() {
-        return this.$store.getters['resourceMemory/numHugePages'];
-      },
-      set(value) {
-        this.$v.$touch();
-        this.$store.commit('resourceMemory/setNumHugePages', value);
-      },
-    },
-    serverStatus() {
-      return this.$store.getters['global/serverStatus'];
-    },
-  },
-  watch: {
-    logicalMemorySize: function (value) {
-      this.form.logicalMemorySizeOption = value;
-    },
-  },
-  validations() {
-    // Empty validations to leverage vuelidate form states
-    // to check for changed values
-    return {
-      form: {
-        logicalMemorySizeOption: {},
-      },
-      ioAdapterCapacity: {
-        minValue: minValue(0),
-        maxValue: maxValue(21),
-      },
-      dynamicIoDrawerCapacity: {
-        minValue: minValue(0),
-        maxValue: maxValue(this.dynamicIoDrawerDefaultCapacity),
-      },
-      systemMemoryPageSetup: {
-        minValue: minValue(0),
-        maxValue: maxValue(this.maxHugePageLimit),
-      },
-    };
-  },
-  created() {
-    this.startLoader();
-    Promise.all([
-      this.$store.dispatch('resourceMemory/getMemorySizeOptions'),
-      this.$store.dispatch('resourceMemory/getLogicalMemorySize'),
-      this.$store.dispatch('resourceMemory/getIoAdapterCapacity'),
-      this.$store.dispatch('resourceMemory/getNumHugePages'),
-      this.$store.dispatch('resourceMemory/getMaxNumHugePages'),
-      this.$store.dispatch('resourceMemory/getHmcManaged'),
-      this.$store.dispatch('resourceMemory/getActiveMemoryMirroring'),
-    ]).finally(() => this.endLoader());
-  },
-  methods: {
-    isServerOff() {
-      return this.serverStatus === 'off' ? true : false;
-    },
-    isSectionEditable() {
-      return this.isServerOff();
-    },
-    handleSubmit() {
-      this.startLoader();
-      let logicalMemorySize = this.form.logicalMemorySizeOption;
-      this.$store
-        .dispatch('resourceMemory/saveSettings', logicalMemorySize)
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => {
-          this.$v.form.$reset();
-          this.endLoader();
-        });
-    },
-    updatePageSetup() {
-      if (this.$v.$invalid) return;
-      this.startLoader();
-      this.$store
-        .dispatch('resourceMemory/savePageSetup')
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => {
-          this.$v.form.$reset();
-          this.endLoader();
-        });
-    },
-    updateAdapterCapacity() {
-      this.startLoader();
-      this.$store
-        .dispatch('resourceMemory/saveEnlargedCapacity')
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => {
-          this.$v.form.$reset();
-          this.endLoader();
-        });
-    },
-    updateDynamicAdapterCapacity() {
-      this.startLoader();
-      this.$store
-        .dispatch('resourceMemory/saveDynamicCapacity')
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => {
-          this.$v.form.$reset();
-          this.endLoader();
-        });
-    },
-    changeActiveMemoryMirroringState(state) {
-      this.$store
-        .dispatch('resourceMemory/saveActiveMemoryMirroringMode', state)
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message));
-    },
-  },
+const { startLoader, endLoader } = useLoadingBar();
+const { scrollToOffset } = useJumpLinkComposable();
+const { successToast, errorToast } = useToast();
+const { getValidationState } = useVuelidateComposable();
+
+const globalStore = GlobalStore();
+const resourceMemoryStore = ResourceMemoryStore();
+
+const logicalMemorySizeOption = ref(null);
+const inputSystemMemoryPageSetup = ref(null);
+const inputIoAdapterCapacity = ref(null);
+const inputDynamicIoDrawerAttachmentCapacity = ref(null);
+const toggleActiveMemoryMirroring = ref(null);
+const togglePredictiveMemoryGuard = ref(null);
+
+const refs = {
+  logicalMemorySizeOption,
+  inputSystemMemoryPageSetup,
+  inputIoAdapterCapacity,
+  inputDynamicIoDrawerAttachmentCapacity,
+  toggleActiveMemoryMirroring,
+  togglePredictiveMemoryGuard,
 };
+
+const form = ref({
+  logicalMemorySizeOption: resourceMemoryStore.logicalMemorySizeGetter,
+});
+
+const quickLinks = ref([
+  {
+    id: 'logicalMemorySizeOption',
+    dataRef: 'logicalMemorySizeOption',
+    href: '#logicalMemorySizeOption',
+    linkText: i18n.global.t('pageMemory.logicalMemorySize'),
+  },
+  {
+    id: 'inputSystemMemoryPageSetup',
+    dataRef: 'inputSystemMemoryPageSetup',
+    href: '#inputSystemMemoryPageSetup',
+    linkText: i18n.global.t('pageMemory.systemMemoryPageSetupTitle'),
+  },
+  {
+    id: 'inputIoAdapterCapacity',
+    dataRef: 'inputIoAdapterCapacity',
+    href: '#inputIoAdapterCapacity',
+    linkText: i18n.global.t('pageMemory.ioAdapterEnlargedCapacityTitle'),
+  },
+  {
+    id: 'inputDynamicIoDrawerAttachmentCapacity',
+    dataRef: 'inputDynamicIoDrawerAttachmentCapacity',
+    href: '#inputDynamicIoDrawerAttachmentCapacity',
+    linkText: i18n.global.t('pageMemory.dynamicIoDrawerAttachmentTitle'),
+  },
+  {
+    id: 'toggleActiveMemoryMirroring',
+    dataRef: 'toggleActiveMemoryMirroring',
+    href: '#toggleActiveMemoryMirroring',
+    linkText: i18n.global.t('pageMemory.activeMemoryMirroringTitle'),
+  },
+  {
+    id: 'togglePredictiveMemoryGuard',
+    dataRef: 'togglePredictiveMemoryGuard',
+    href: '#togglePredictiveMemoryGuard',
+    linkText: i18n.global.t('pageMemory.predictiveMemoryGuardTitle'),
+  },
+]);
+
+const { logicalMemorySizeOptions, logicalMemorySize } =
+  storeToRefs(resourceMemoryStore);
+
+const activeMemoryMirroringState = computed({
+  get() {
+    return resourceMemoryStore.memoryMirroringModeGetter;
+  },
+  set(newValue) {
+    return newValue;
+  },
+});
+
+const predictiveMemoryGuardState = computed({
+  get() {
+    return resourceMemoryStore.predictiveMemoryGuardGetter;
+  },
+  set(newValue) {
+    return newValue;
+  },
+});
+
+const maxHugePageLimit = computed(() => {
+  return resourceMemoryStore.maxNumHugePagesGetter;
+});
+
+const dynamicIoDrawerDefaultCapacity = computed(() => {
+  return resourceMemoryStore.dynamicIoDrawerDefaultCapacityGetter;
+});
+
+const ioAdapterCapacity = computed({
+  get() {
+    return resourceMemoryStore.ioAdapterCapacityGetter;
+  },
+  set(value) {
+    v$.value.$touch();
+    resourceMemoryStore.ioAdapterCapacity = value;
+  },
+});
+
+const dynamicIoDrawerCapacity = computed({
+  get() {
+    return resourceMemoryStore.dynamicIoDrawerCapacityGetter;
+  },
+  set(value) {
+    v$.value.$touch();
+    resourceMemoryStore.dynamicIoDrawerCapacity = value;
+  },
+});
+
+const systemMemoryPageSetup = computed({
+  get() {
+    return resourceMemoryStore.numHugePagesGetter;
+  },
+  set(value) {
+    v$.value.$touch();
+    resourceMemoryStore.numHugePages = value;
+  },
+});
+
+const serverStatus = computed(() => {
+  return globalStore.serverStatusGetter;
+});
+
+watch(logicalMemorySize, (value) => {
+  form.value.logicalMemorySizeOption = value;
+});
+
+const rules = computed(() => ({
+  form: {
+    logicalMemorySizeOption: {},
+  },
+  ioAdapterCapacity: {
+    minValue: minValue(0),
+    maxValue: maxValue(21),
+  },
+  dynamicIoDrawerCapacity: {
+    minValue: minValue(0),
+    maxValue: maxValue(dynamicIoDrawerDefaultCapacity.value),
+  },
+  systemMemoryPageSetup: {
+    minValue: minValue(0),
+    maxValue: maxValue(maxHugePageLimit.value),
+  },
+}));
+
+const v$ = useVuelidate(rules, {
+  form,
+  ioAdapterCapacity,
+  dynamicIoDrawerCapacity,
+  systemMemoryPageSetup,
+});
+
+function isServerOff() {
+  return serverStatus.value === 'off' ? true : false;
+}
+
+function isSectionEditable() {
+  return isServerOff();
+}
+
+function handleSubmit() {
+  startLoader();
+  let logicalMemorySize = form.value.logicalMemorySizeOption;
+  resourceMemoryStore
+    .saveSettings(logicalMemorySize)
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message))
+    .finally(() => {
+      v$.value.form.$reset();
+      endLoader();
+    });
+}
+
+function updatePageSetup() {
+  if (v$.value.$invalid) return;
+  startLoader();
+  resourceMemoryStore
+    .savePageSetup()
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message))
+    .finally(() => {
+      v$.value.form.$reset();
+      endLoader();
+    });
+}
+
+function updateAdapterCapacity() {
+  startLoader();
+  resourceMemoryStore
+    .saveEnlargedCapacity()
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message))
+    .finally(() => {
+      v$.value.form.$reset();
+      endLoader();
+    });
+}
+
+function updateDynamicAdapterCapacity() {
+  startLoader();
+  resourceMemoryStore
+    .saveDynamicCapacity()
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message))
+    .finally(() => {
+      v$.value.form.$reset();
+      endLoader();
+    });
+}
+
+function changeActiveMemoryMirroringState(state) {
+  resourceMemoryStore
+    .saveActiveMemoryMirroringMode(state)
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message));
+}
+
+function changePredictiveMemoryGuardState(state) {
+  resourceMemoryStore
+    .savePredictiveMemoryGuard(state)
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message));
+}
+
+onBeforeMount(() => {
+  startLoader();
+  Promise.all([
+    resourceMemoryStore.getMemorySizeOptions(),
+    resourceMemoryStore.getLogicalMemorySize(),
+    resourceMemoryStore.getIoAdapterCapacity(),
+    resourceMemoryStore.getNumHugePages(),
+    resourceMemoryStore.getMaxNumHugePages(),
+    resourceMemoryStore.getHmcManaged(),
+    resourceMemoryStore.getActiveMemoryMirroring(),
+    resourceMemoryStore.getPredictiveMemoryGuard(),
+  ]).finally(() => endLoader());
+});
 </script>
+
+<style lang="scss" scoped>
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+</style>
