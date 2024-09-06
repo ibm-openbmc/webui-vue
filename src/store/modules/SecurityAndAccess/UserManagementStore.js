@@ -52,7 +52,9 @@ export const UserManagementStore = defineStore('userManagment', {
         })
         .catch((error) => {
           console.log(error);
-          const message = i18n.t('pageUserManagement.toast.errorLoadUsers');
+          const message = i18n.global.t(
+            'pageUserManagement.toast.errorLoadUsers',
+          );
           throw new Error(message);
         });
     },

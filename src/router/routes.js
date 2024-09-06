@@ -15,7 +15,11 @@ import FactoryReset from '@/views/Operations/FactoryReset';
 import Memory from '@/views/ResourceManagement/Memory';
 import Power from '@/views/ResourceManagement/Power';
 import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy';
+<<<<<<< Updated upstream
 import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
+=======
+import Certificates from '@/views/SecurityAndAccess/Certificates';
+>>>>>>> Stashed changes
 
 const roles = {
   administrator: 'Administrator',
@@ -131,6 +135,14 @@ export const routes = [
         component: Memory,
         meta: {
           title: i18n.global.t('appPageTitle.memory'),
+        },
+      },
+      {
+        path: '/security-and-access/certificates',
+        name: 'certificates',
+        component: Certificates,
+        meta: {
+          title: i18n.global.t('appPageTitle.certificates'),
         },
       },
       {
