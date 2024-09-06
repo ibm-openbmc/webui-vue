@@ -62,7 +62,6 @@ export const GlobalStore = defineStore('global', {
           const bmcDateTime = response.data.DateTime;
           const date = new Date(bmcDateTime);
           this.bmcTime = date;
-          this.isAuthorized = false;
         })
         .catch((error) => console.log(error));
     },

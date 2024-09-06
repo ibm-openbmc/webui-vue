@@ -1,16 +1,18 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
+
 export const CERTIFICATE_TYPES = [
   {
     type: 'HTTPS Certificate',
     location: '/redfish/v1/Managers/bmc/NetworkProtocol/HTTPS/Certificates/',
-    label: i18n.t('pageCertificates.httpsCertificate'),
+    label: i18n.global.t('pageCertificates.httpsCertificate'),
     limit: 1,
   },
   {
     type: 'LDAP Certificate',
     location: '/redfish/v1/AccountService/LDAP/Certificates/',
-    label: i18n.t('pageCertificates.ldapCertificate'),
+    label: i18n.global.t('pageCertificates.ldapCertificate'),
     limit: 1,
   },
   {
@@ -19,13 +21,13 @@ export const CERTIFICATE_TYPES = [
     // Web UI will show 'CA Certificate' instead of
     // 'TrustStore Certificate' after user testing revealed
     // the term 'TrustStore Certificate' wasn't recognized/was unfamilar
-    label: i18n.t('pageCertificates.caCertificate'),
+    label: i18n.global.t('pageCertificates.caCertificate'),
     limit: 10,
   },
   {
     type: 'ServiceLogin Certificate',
     location: '/redfish/v1/AccountService/Accounts/service',
-    label: i18n.t('pageCertificates.serviceLoginCertificate'),
+    label: i18n.global.t('pageCertificates.serviceLoginCertificate'),
     limit: 1,
   },
 ];
@@ -42,31 +44,22 @@ const convertFileToBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-const CertificatesStore = {
+export const CertificatesStore = defineStore('certificates', {
   namespaced: true,
-  state: {
-    allCertificates: [],
-    acfCertificate: [],
-    availableUploadTypes: [],
+  state: () => {
+    return {
+      allCertificates: [],
+      acfCertificate: [],
+      availableUploadTypes: [],
+    };
   },
   getters: {
-    allCertificates: (state) => state.allCertificates,
-    acfCertificate: (state) => state.acfCertificate,
-    availableUploadTypes: (state) => state.availableUploadTypes,
-  },
-  mutations: {
-    setCertificates(state, certificates) {
-      state.allCertificates = certificates;
-    },
-    setAcfCertificate(state, certificate) {
-      state.acfCertificate = certificate;
-    },
-    setAvailableUploadTypes(state, availableUploadTypes) {
-      state.availableUploadTypes = availableUploadTypes;
-    },
+    allCertificatesGetter: (state) => state.allCertificates,
+    acfCertificateGetter: (state) => state.acfCertificate,
+    availableUploadTypesGetter: (state) => state.availableUploadTypes,
   },
   actions: {
-    async getAcfCertificate({ commit }) {
+    async getAcfCertificate() {
       return await api
         .get('/redfish/v1/AccountService/Accounts/service')
         .then(
@@ -87,15 +80,15 @@ const CertificatesStore = {
                 validFrom: '',
                 validUntil: new Date(ACF.ExpirationDate),
               };
-              commit('setAcfCertificate', [acfCertificate]);
+              this.acfCertificate = [acfCertificate];
             } else {
-              commit('setAcfCertificate', []);
+              this.acfCertificate = [];
             }
           },
         )
         .catch((error) => console.log(error));
     },
-    async getCertificates({ commit, dispatch }) {
+    async getCertificates() {
       return await api
         .get('/redfish/v1/CertificateService/CertificateLocations')
         .then(
@@ -129,18 +122,15 @@ const CertificatesStore = {
                   validUntil: new Date(ValidNotAfter),
                 };
               });
-              commit('setCertificates', certificates);
-              dispatch('getAvailableCertificates');
+              this.allCertificates = certificates;
+              this.getAvailableCertificates();
             }),
           );
         });
     },
-    async getAvailableCertificates({ commit, state }) {
+    async getAvailableCertificates() {
       const availableUploadTypes = [];
-      const allCertificates = [
-        ...state.acfCertificate,
-        ...state.allCertificates,
-      ];
+      const allCertificates = [...this.acfCertificate, ...this.allCertificates];
       CERTIFICATE_TYPES.map((certificateType) => {
         const certificateCount = allCertificates.filter((certificate) => {
           return (
@@ -154,7 +144,7 @@ const CertificatesStore = {
           availableUploadTypes.push(certificateType);
         }
       });
-      commit('setAvailableUploadTypes', availableUploadTypes);
+      this.availableUploadTypes = availableUploadTypes;
     },
     async addNewACFCertificate({ dispatch }, { file, type }) {
       const base64File = await convertFileToBase64(file);
@@ -176,13 +166,15 @@ const CertificatesStore = {
           dispatch('getCertificates');
         })
         .then(() => {
-          return i18n.t('pageCertificates.toast.successAddCertificate', {
+          return i18n.global.t('pageCertificates.toast.successAddCertificate', {
             certificate: getCertificateProp(type, 'label'),
           });
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageCertificates.toast.errorAddCertificate'));
+          throw new Error(
+            i18n.global.t('pageCertificates.toast.errorAddCertificate'),
+          );
         });
     },
     async addNewACFCertificateOnLoginPage(_, { file, type }) {
@@ -201,13 +193,15 @@ const CertificatesStore = {
           headers: { 'Content-Type': 'application/octet-stream' },
         })
         .then(() =>
-          i18n.t('pageCertificates.toast.successAddCertificate', {
+          i18n.global.t('pageCertificates.toast.successAddCertificate', {
             certificate: getCertificateProp(type, 'label'),
           }),
         )
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageCertificates.toast.errorAddCertificate'));
+          throw new Error(
+            i18n.global.t('pageCertificates.toast.errorAddCertificate'),
+          );
         });
     },
     async addNewCertificate({ dispatch }, { file, type }) {
@@ -219,21 +213,26 @@ const CertificatesStore = {
         .then(() => dispatch('getCertificates'))
         .then(() => {
           if (typeOfCertificate === 'HTTPS Certificate') {
-            return i18n.t(
+            return i18n.global.t(
               'pageCertificates.toast.successAddedHTTPCertificate',
               {
                 certificate: getCertificateProp(type, 'label'),
               },
             );
           } else {
-            return i18n.t('pageCertificates.toast.successAddCertificate', {
-              certificate: getCertificateProp(type, 'label'),
-            });
+            return i18n.global.t(
+              'pageCertificates.toast.successAddCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              },
+            );
           }
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageCertificates.toast.errorAddCertificate'));
+          throw new Error(
+            i18n.global.t('pageCertificates.toast.errorAddCertificate'),
+          );
         });
     },
     async replaceACFCertificate({ dispatch }, { file, type, location }) {
@@ -256,14 +255,14 @@ const CertificatesStore = {
           dispatch('getCertificates');
         })
         .then(() =>
-          i18n.t('pageCertificates.toast.successReplaceCertificate', {
+          i18n.global.t('pageCertificates.toast.successReplaceCertificate', {
             certificate: getCertificateProp(type, 'label'),
           }),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t('pageCertificates.toast.errorReplaceCertificate'),
+            i18n.global.t('pageCertificates.toast.errorReplaceCertificate'),
           );
         });
     },
@@ -287,22 +286,25 @@ const CertificatesStore = {
         })
         .then(() => {
           if (typeOfCertificate === 'HTTPS Certificate') {
-            return i18n.t(
+            return i18n.global.t(
               'pageCertificates.toast.successReplacedHTTPCertificate',
               {
                 certificate: getCertificateProp(type, 'label'),
               },
             );
           } else {
-            return i18n.t('pageCertificates.toast.successReplaceCertificate', {
-              certificate: getCertificateProp(type, 'label'),
-            });
+            return i18n.global.t(
+              'pageCertificates.toast.successReplaceCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              },
+            );
           }
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t('pageCertificates.toast.errorReplaceCertificate'),
+            i18n.global.t('pageCertificates.toast.errorReplaceCertificate'),
           );
         });
     },
@@ -320,14 +322,14 @@ const CertificatesStore = {
         .patch(location, data)
         .then(() => dispatch('getCertificates'))
         .then(() =>
-          i18n.t('pageCertificates.toast.successDeleteCertificate', {
+          i18n.global.t('pageCertificates.toast.successDeleteCertificate', {
             certificate: getCertificateProp(type, 'label'),
           }),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t('pageCertificates.toast.errorDeleteCertificate'),
+            i18n.global.t('pageCertificates.toast.errorDeleteCertificate'),
           );
         });
     },
@@ -336,18 +338,18 @@ const CertificatesStore = {
         .delete(location)
         .then(() => dispatch('getCertificates'))
         .then(() =>
-          i18n.t('pageCertificates.toast.successDeleteCertificate', {
+          i18n.global.t('pageCertificates.toast.successDeleteCertificate', {
             certificate: getCertificateProp(type, 'label'),
           }),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t('pageCertificates.toast.errorDeleteCertificate'),
+            i18n.global.t('pageCertificates.toast.errorDeleteCertificate'),
           );
         });
     },
-    async generateCsr(_, userData) {
+    async generateCsr(userData) {
       const {
         certificateType,
         country,
@@ -376,7 +378,7 @@ const CertificatesStore = {
       data.KeyPairAlgorithm = keyPairAlgorithm;
       data.AlternativeNames = alternateName;
       if (keyCurveId) data.KeyCurveId = keyCurveId;
-      if (keyBitLength) data.KeyBitLength = keyBitLength;
+      if (keyBitLength) data.KeyBitLength = parseInt(keyBitLength);
       if (contactPerson) data.ContactPerson = contactPerson;
       if (emailAddress) data.Email = emailAddress;
       return await api
@@ -389,5 +391,5 @@ const CertificatesStore = {
         .catch((error) => console.log(error));
     },
   },
-};
+});
 export default CertificatesStore;

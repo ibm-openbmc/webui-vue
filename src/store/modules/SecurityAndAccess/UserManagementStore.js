@@ -16,7 +16,7 @@ export const UserManagementStore = defineStore('userManagment', {
     };
   },
   getters: {
-    allUsers(state) {
+    allUsersGetter(state) {
       return state.allUsers;
     },
     // accountRoles(state) {
@@ -45,14 +45,25 @@ export const UserManagementStore = defineStore('userManagment', {
         .then((response) =>
           response.data.Members.map((user) => user['@odata.id']),
         )
-        .then((userIds) => api.all(userIds.map((user) => api.get(user))))
-        .then((users) => {
-          const userData = users.map((user) => user.data);
-          this.allUsers = userData;
+        .then((userIds) => {
+          api.all(userIds.map((user) => api.get(user)))
+          .then((users) => {
+            const userData = users.map((user) => user.data);
+            this.allUsers = userData;
+          })
+          .catch((error) => {
+            console.log(error);
+            const message = i18n.global.t(
+              'pageUserManagement.toast.errorLoadUsers',
+            );
+            throw new Error(message);
+          });
         })
         .catch((error) => {
           console.log(error);
-          const message = i18n.t('pageUserManagement.toast.errorLoadUsers');
+          const message = i18n.global.t(
+            'pageUserManagement.toast.errorLoadUsers',
+          );
           throw new Error(message);
         });
     },
