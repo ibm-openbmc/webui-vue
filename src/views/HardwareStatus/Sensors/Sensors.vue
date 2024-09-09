@@ -150,6 +150,7 @@ const {
   tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
 const { dataFormatter } = useDataFormatterGlobal();
+const { statusIconValue } = useDataFormatterGlobal();
 const { getFilteredTableData } = useTableFilterComposable();
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
@@ -214,19 +215,6 @@ onMounted(() => {
     endLoader();
   });
 });
-const statusIconValue = (val) => {
-  if (val) {
-    if (val === 'OK') {
-      return 'success';
-    } else if (val === 'Warning') {
-      return 'warning';
-    } else if (val === 'Critical') {
-      return 'danger';
-    } else {
-      return 'unavailable';
-    }
-  }
-};
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value

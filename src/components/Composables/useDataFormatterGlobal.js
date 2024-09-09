@@ -8,7 +8,7 @@ const useDataFormatterGlobal = () => {
       return value;
     }
   };
-  const statusIcon = (status) => {
+  const statusIconValue = (status) => {
     switch (status) {
       case 'OK':
         return 'success';
@@ -17,7 +17,7 @@ const useDataFormatterGlobal = () => {
       case 'Critical':
         return 'danger';
       default:
-        return '';
+        return 'unavailable';
     }
   };
   const dataFormatterArray = (value) => {
@@ -26,7 +26,7 @@ const useDataFormatterGlobal = () => {
 
   return {
     dataFormatter,
-    statusIcon,
+    statusIconValue,
     dataFormatterArray,
   };
 };
