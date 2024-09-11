@@ -239,7 +239,9 @@ const resetForm = () => {
   form.certificateType = certificateOptions.value.length
     ? certificateOptions.value[0].value
     : null;
-  form.value.file = null;
+  console.log('form.certificateType: ', certificateOptions);
+
+  form.file = null;
   // this.$v.$reset();
 };
 const onOk = (bvModalEvt) => {

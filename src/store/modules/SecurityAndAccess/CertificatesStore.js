@@ -130,7 +130,7 @@ export const CertificatesStore = defineStore('certificates', {
         });
     },
     async getAvailableCertificates() {
-      const availableUploadTypes = [];
+      const availableUploadType = [];
       const allCertificates = [...this.acfCertificate, ...this.allCertificates];
       CERTIFICATE_TYPES.map((certificateType) => {
         const certificateCount = allCertificates.filter((certificate) => {
@@ -142,10 +142,12 @@ export const CertificatesStore = defineStore('certificates', {
         if (certificateType.limit === certificateCount) {
           return;
         } else {
-          availableUploadTypes.push(certificateType);
+          availableUploadType.push(certificateType);
         }
       });
-      this.availableUploadTypes = availableUploadTypes;
+      console.log('availableUploadType:', availableUploadType);
+
+      this.availableUploadTypes = availableUploadType;
     },
     async addNewACFCertificate({ dispatch }, { file, type }) {
       const base64File = await convertFileToBase64(file);

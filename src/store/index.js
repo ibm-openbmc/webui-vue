@@ -12,13 +12,10 @@ import BootSettingsStore from './modules/Operations/BootSettingsStore';
 import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import ResourceMemoryStore from './modules/ResourceManagement/ResourceMemoryStore';
 import PowerPolicyStore from './modules/Settings/PowerPolicyStore';
-<<<<<<< Updated upstream
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
-
-=======
+import AuditLogsStore from './modules/Logs/AuditLogsStore';
 import CertificatesStore from './modules/SecurityAndAccess/CertificatesStore';
 import UserManagementStore from './modules/SecurityAndAccess/UserManagementStore';
->>>>>>> Stashed changes
 // ... (export use other stores)
 export {
   EventLogStore,
@@ -34,10 +31,8 @@ export {
   FactoryResetStore,
   ResourceMemoryStore,
   PowerPolicyStore,
-<<<<<<< Updated upstream
   IBMiServiceFunctionsStore,
-=======
   CertificatesStore,
   UserManagementStore,
->>>>>>> Stashed changes
+  AuditLogsStore,
 };
