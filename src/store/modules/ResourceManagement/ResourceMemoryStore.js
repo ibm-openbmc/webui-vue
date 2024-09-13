@@ -13,7 +13,7 @@ const ResourceMemoryStore = {
     numHugePages: null,
     hmcManaged: null,
     memoryMirroringMode: null,
-    predictiveMemoryGuard: null,
+    predictiveDynamicMemoryDeallocation: null,
   },
   getters: {
     logicalMemorySizeOptions: (state) => state.logicalMemorySizeOptions,
@@ -26,7 +26,8 @@ const ResourceMemoryStore = {
     numHugePages: (state) => state.numHugePages,
     hmcManaged: (state) => state.hmcManaged,
     memoryMirroringMode: (state) => state.memoryMirroringMode,
-    predictiveMemoryGuard: (state) => state.predictiveMemoryGuard,
+    predictiveDynamicMemoryDeallocation: (state) =>
+      state.predictiveDynamicMemoryDeallocation,
   },
   mutations: {
     setLogicalMemorySizeOptions: (state, logicalMemorySizeOptions) =>
@@ -49,8 +50,11 @@ const ResourceMemoryStore = {
     setHmcManaged: (state, hmcManaged) => (state.hmcManaged = hmcManaged),
     setMemoryMirroringMode: (state, memoryMirroringMode) =>
       (state.memoryMirroringMode = memoryMirroringMode),
-    setPredictiveMemoryGuard: (state, predictiveMemoryGuard) =>
-      (state.predictiveMemoryGuard = predictiveMemoryGuard),
+    setPredictiveDynamicMemoryDeallocation: (
+      state,
+      predictiveDynamicMemoryDeallocation
+    ) =>
+      (state.predictiveDynamicMemoryDeallocation = predictiveDynamicMemoryDeallocation),
   },
   actions: {
     async getMemorySizeOptions({ commit }) {
@@ -208,49 +212,64 @@ const ResourceMemoryStore = {
           );
         });
     },
-    async getPredictiveMemoryGuard({ commit }) {
+    async getPredictiveDynamicMemoryDeallocation({ commit }) {
       return await api
         .get(
           '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry'
         )
         .then(({ data: { RegistryEntries } }) => {
-          const predictiveMemoryGuard = RegistryEntries.Attributes.filter(
+          const predictiveDynamicMemoryDeallocation = RegistryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'hb_predictive_mem_guard'
           );
-          if (predictiveMemoryGuard.length > 0) {
-            let predictiveMemoryGuardValue =
-              predictiveMemoryGuard[0].CurrentValue;
+          if (predictiveDynamicMemoryDeallocation.length > 0) {
+            let predictiveDynamicMemoryDeallocationValue =
+              predictiveDynamicMemoryDeallocation[0].CurrentValue;
             let predictiveMemValue =
-              predictiveMemoryGuardValue == 'Enabled' ? true : false;
-            commit('setPredictiveMemoryGuard', predictiveMemValue);
+              predictiveDynamicMemoryDeallocationValue == 'Enabled'
+                ? true
+                : false;
+            commit(
+              'setPredictiveDynamicMemoryDeallocation',
+              predictiveMemValue
+            );
           }
         })
         .catch((error) => console.log(error));
     },
-    async savePredictiveMemoryGuard(
+    async savePredictiveDynamicMemoryDeallocation(
       { commit },
-      activePredictiveMemoryGuardValue
+      activePredictiveDynamicMemoryDeallocationValue
     ) {
-      let updatedMirroringModeValue = activePredictiveMemoryGuardValue
+      let updatedMirroringModeValue = activePredictiveDynamicMemoryDeallocationValue
         ? 'Enabled'
         : 'Disabled';
-      commit('setPredictiveMemoryGuard', activePredictiveMemoryGuardValue);
-      const updatedPredictiveMemoryGuard = {
+      commit(
+        'setPredictiveDynamicMemoryDeallocation',
+        activePredictiveDynamicMemoryDeallocationValue
+      );
+      const updatedPredictiveDynamicMemoryDeallocation = {
         Attributes: { hb_predictive_mem_guard: updatedMirroringModeValue },
       };
       return api
         .patch(
           '/redfish/v1/Systems/system/Bios/Settings',
-          updatedPredictiveMemoryGuard
+          updatedPredictiveDynamicMemoryDeallocation
         )
         .then(() => {
-          return i18n.t('pageMemory.toast.successSavingPredictiveMemoryGuard');
+          return i18n.t(
+            'pageMemory.toast.successSavingPredictiveDynamicMemoryDeallocation'
+          );
         })
         .catch((error) => {
           console.log(error);
-          commit('setPredictiveMemoryGuard', !activePredictiveMemoryGuardValue);
+          commit(
+            'setPredictiveDynamicMemoryDeallocation',
+            !activePredictiveDynamicMemoryDeallocationValue
+          );
           throw new Error(
-            i18n.t('pageMemory.toast.errorSavingPredictiveMemoryGuard')
+            i18n.t(
+              'pageMemory.toast.errorSavingPredictiveDynamicMemoryDeallocation'
+            )
           );
         });
     },
