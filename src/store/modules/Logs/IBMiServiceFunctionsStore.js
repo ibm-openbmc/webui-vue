@@ -23,7 +23,7 @@ const IBMiServiceFunctionsStore = {
     async executeServiceFunction({ dispatch }, value) {
       return await api
         .post(
-          '/redfish/v1/Systems/system/Actions/Oem/OemComputerSystem.ExecutePanelFunction',
+          '/redfish/v1/Systems/system/Actions/Oem/IBM/IBMComputerSystem.ExecutePanelFunction',
           { FuncNo: value }
         )
         .then(() => {
