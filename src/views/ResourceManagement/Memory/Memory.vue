@@ -308,14 +308,18 @@
     </page-section>
     <div class="section-divider mb-3"></div>
     <page-section
-      id="togglePredictiveMemoryGuard"
-      ref="togglePredictiveMemoryGuard"
-      :section-title="$t('pageMemory.predictiveMemoryGuardTitle')"
+      id="togglePredictiveDynamicMemoryDeallocation"
+      ref="togglePredictiveDynamicMemoryDeallocation"
+      :section-title="$t('pageMemory.predictiveDynamicMemoryDeallocationTitle')"
       class="mb-1"
     >
       <b-row>
         <b-col md="8" xl="6">
-          <p>{{ $t('pageMemory.predictiveMemoryGuardDescription') }}</p>
+          <p>
+            {{
+              $t('pageMemory.predictiveDynamicMemoryDeallocationDescription')
+            }}
+          </p>
         </b-col>
       </b-row>
       <b-row class="mt-3 mb-3">
@@ -326,30 +330,30 @@
         >
           <dl class="mr-3 w-75">
             <dt>
-              {{ $t('pageMemory.predictiveMemoryGuardHeader') }}
+              {{ $t('pageMemory.predictiveDynamicMemoryDeallocationTitle') }}
             </dt>
             <dd v-if="!isSectionEditable()">
-              <span v-if="predictiveMemoryGuardState === null">
+              <span v-if="predictiveDynamicMemoryDeallocationState === null">
                 {{ '--' }}
               </span>
-              <span v-else-if="predictiveMemoryGuardState">
+              <span v-else-if="predictiveDynamicMemoryDeallocationState">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
             </dd>
             <dd v-else>
-              <span v-if="predictiveMemoryGuardState === null">
+              <span v-if="predictiveDynamicMemoryDeallocationState === null">
                 {{ '--' }}
               </span>
               <b-form-checkbox
                 v-else
-                id="predictiveMemoryGuardSwitch"
-                v-model="predictiveMemoryGuardState"
+                id="predictiveDynamicMemoryDeallocationSwitch"
+                v-model="predictiveDynamicMemoryDeallocationState"
                 switch
                 :disabled="!isSectionEditable()"
-                @change="changePredictiveMemoryGuardState"
+                @change="changePredictiveDynamicMemoryDeallocationState"
               >
-                <span v-if="predictiveMemoryGuardState">
+                <span v-if="predictiveDynamicMemoryDeallocationState">
                   {{ $t('global.status.enabled') }}
                 </span>
                 <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -417,10 +421,12 @@ export default {
           linkText: this.$t('pageMemory.activeMemoryMirroringTitle'),
         },
         {
-          id: 'togglePredictiveMemoryGuard',
-          dataRef: 'togglePredictiveMemoryGuard',
-          href: '#togglePredictiveMemoryGuard',
-          linkText: this.$t('pageMemory.predictiveMemoryGuardTitle'),
+          id: 'togglePredictiveDynamicMemoryDeallocation',
+          dataRef: 'togglePredictiveDynamicMemoryDeallocation',
+          href: '#togglePredictiveDynamicMemoryDeallocation',
+          linkText: this.$t(
+            'pageMemory.predictiveDynamicMemoryDeallocationTitle'
+          ),
         },
       ],
     };
@@ -438,9 +444,11 @@ export default {
         return newValue;
       },
     },
-    predictiveMemoryGuardState: {
+    predictiveDynamicMemoryDeallocationState: {
       get() {
-        return this.$store.getters['resourceMemory/predictiveMemoryGuard'];
+        return this.$store.getters[
+          'resourceMemory/predictiveDynamicMemoryDeallocation'
+        ];
       },
       set(newValue) {
         return newValue;
@@ -523,7 +531,9 @@ export default {
       this.$store.dispatch('resourceMemory/getMaxNumHugePages'),
       this.$store.dispatch('resourceMemory/getHmcManaged'),
       this.$store.dispatch('resourceMemory/getActiveMemoryMirroring'),
-      this.$store.dispatch('resourceMemory/getPredictiveMemoryGuard'),
+      this.$store.dispatch(
+        'resourceMemory/getPredictiveDynamicMemoryDeallocation'
+      ),
     ]).finally(() => this.endLoader());
   },
   methods: {
@@ -585,9 +595,12 @@ export default {
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },
-    changePredictiveMemoryGuardState(state) {
+    changePredictiveDynamicMemoryDeallocationState(state) {
       this.$store
-        .dispatch('resourceMemory/savePredictiveMemoryGuard', state)
+        .dispatch(
+          'resourceMemory/savePredictiveDynamicMemoryDeallocation',
+          state
+        )
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
     },
