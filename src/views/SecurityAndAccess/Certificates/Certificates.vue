@@ -209,7 +209,7 @@ export default {
     expiredCertificateTypes() {
       return this.certificates.reduce((acc, val) => {
         const daysUntilExpired = this.getDaysUntilExpired(val.validUntil);
-        if (daysUntilExpired < 1) {
+        if (daysUntilExpired < 0) {
           acc.push(val.certificate);
         }
         return acc;
@@ -218,7 +218,7 @@ export default {
     expiringCertificateTypes() {
       return this.certificates.reduce((acc, val) => {
         const daysUntilExpired = this.getDaysUntilExpired(val.validUntil);
-        if (daysUntilExpired < 31 && daysUntilExpired > 0) {
+        if (daysUntilExpired < 31 && daysUntilExpired >= 0) {
           acc.push(val.certificate);
         }
         return acc;
@@ -364,7 +364,7 @@ export default {
     },
     getIconStatus(date) {
       const daysUntilExpired = this.getDaysUntilExpired(date);
-      if (daysUntilExpired < 1) {
+      if (daysUntilExpired < 0) {
         return 'danger';
       } else if (daysUntilExpired < 31) {
         return 'warning';
