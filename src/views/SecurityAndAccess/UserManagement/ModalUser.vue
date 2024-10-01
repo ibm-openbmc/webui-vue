@@ -195,6 +195,12 @@
                 </b-form-invalid-feedback>
               </input-password-toggle>
             </b-form-group>
+            <b-form-checkbox>
+              MFA bypass
+              <!-- <b-dropdown-item>
+            {{ value }}
+          </b-dropdown-item> -->
+            </b-form-checkbox>
           </b-col>
         </b-row>
       </b-container>
