@@ -239,7 +239,7 @@ export const PoliciesStore = defineStore('policies', {
         });
     },
     async saveRtadState(updatedRtad) {
-      this.setRtadEnabled = updatedRtad;
+      this.rtadEnabled = updatedRtad;
       return await api
         .patch('/redfish/v1/Systems/system/Bios/Settings', {
           Attributes: {
@@ -253,7 +253,7 @@ export const PoliciesStore = defineStore('policies', {
         })
         .catch((error) => {
           console.log(error);
-          this.setRtadEnabled = !updatedRtad;
+          this.rtadEnabled = !updatedRtad;
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.rtad'),
@@ -315,7 +315,7 @@ export const PoliciesStore = defineStore('policies', {
         });
     },
     async saveHostUsbEnabled(updatedHostUsb) {
-      this.setHostUsbEnabled = updatedHostUsb;
+      this.hostUsbEnabled = updatedHostUsb;
       return await api
         .patch('/redfish/v1/Systems/system/Bios/Settings', {
           Attributes: {
@@ -330,7 +330,7 @@ export const PoliciesStore = defineStore('policies', {
         })
         .catch((error) => {
           console.log(error);
-          this.setHostUsbEnabled = !updatedHostUsb;
+          this.hostUsbEnabled = !updatedHostUsb;
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.hostUsb'),
