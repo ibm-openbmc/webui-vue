@@ -148,7 +148,6 @@
               id="usbFirmwareUpdatePolicySwitch"
               v-model="Policies.usbFirmwareUpdatePolicyEnabled"
               data-test-id="policies-toggle-usbFirmwareUpdatePolicy"
-              :disabled="!(username === 'admin' || username === 'service')"
               switch
               @update:modelValue="changeUsbFirmwareUpdatePolicyState"
             >
