@@ -146,7 +146,6 @@
             <b-form-checkbox
               id="usbFirmwareUpdatePolicySwitch"
               v-model="usbFirmwareUpdatePolicyState"
-              :disabled="!(isAdminUser || isServiceUser)"
               data-test-id="policies-toggle-usbFirmwareUpdatePolicy"
               switch
               @change="changeUsbFirmwareUpdatePolicyState"
