@@ -126,7 +126,7 @@
           first-number
           last-number
           :per-page="itemPerPage"
-          :total-rows="getTotalRowCount(filteredRows)"
+          :total-rows="getTotalRowCount(filteredRows, itemPerPage)"
           aria-controls="table-session-logs"
         />
       </BCol>
