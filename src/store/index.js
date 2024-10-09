@@ -18,6 +18,8 @@ import AuditLogsStore from './modules/Logs/AuditLogsStore';
 import SessionsStore from './modules/SecurityAndAccess/SessionsStore.js';
 import LicenseStore from './modules/ResourceManagement/LicenseStore';
 import BmcStore from './modules/HardwareStatus/BmcStore';
+import CertificatesStore from './modules/SecurityAndAccess/CertificatesStore';
+import UserManagementStore from './modules/SecurityAndAccess/UserManagementStore';
 
 // ... (export use other stores)
 export {
@@ -40,4 +42,6 @@ export {
   SessionsStore,
   LicenseStore,
   BmcStore,
+  CertificatesStore,
+  UserManagementStore,
 };

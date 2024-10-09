@@ -21,6 +21,7 @@ import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
 import Notices from '@/views/Notices/Notices.vue';
 import Sessions from '@/views/SecurityAndAccess/Sessions';
 import Firmware from '@/views/Operations/Firmware';
+import Certificates from '@/views/SecurityAndAccess/Certificates';
 
 const roles = {
   administrator: 'Administrator',
@@ -168,6 +169,14 @@ export const routes = [
         component: Sessions,
         meta: {
           title: i18n.global.t('appPageTitle.sessions'),
+        },
+      },
+      {
+        path: '/security-and-access/certificates',
+        name: 'certificates',
+        component: Certificates,
+        meta: {
+          title: i18n.global.t('appPageTitle.certificates'),
         },
       },
       {

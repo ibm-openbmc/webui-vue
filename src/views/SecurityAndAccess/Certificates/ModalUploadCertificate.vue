@@ -1,14 +1,19 @@
 <template>
-  <b-modal id="upload-certificate" ref="modal" @ok="onOk" @hidden="resetForm">
-    <template #modal-title>
-      <template v-if="certificate">
-        {{ $t('pageCertificates.replaceCertificate') }}
-      </template>
-      <template v-else>
-        {{ $t('pageCertificates.addNewCertificate') }}
-      </template>
-    </template>
-    <b-form>
+  <BModal
+    id="upload-certificate"
+    ref="modal"
+    :title="
+      certificate
+        ? $t('pageCertificates.replaceCertificate')
+        : $t('pageCertificates.addNewCertificate')
+    "
+    :ok-title="
+      certificate ? $t('global.action.replace') : $t('global.action.add')
+    "
+    @ok="onOk"
+    @hidden="resetForm"
+  >
+    <BForm>
       <!-- Replace Certificate type -->
       <template v-if="certificate !== null">
         <dl class="mb-4">
@@ -16,41 +21,40 @@
           <dd>{{ certificate.certificate }}</dd>
         </dl>
       </template>
-
       <!-- Add new Certificate type -->
       <template v-else>
-        <b-form-group
+        <BFormGroup
           :label="$t('pageCertificates.modal.certificateType')"
           label-for="certificate-type"
         >
-          <b-form-select
+          <BFormSelect
             id="certificate-type"
             v-model="form.certificateType"
             :options="certificateOptions"
-            :state="getValidationState($v.form.certificateType)"
-            @input="$v.form.certificateType.$touch()"
+            :state="v$.form.certificateType"
+            @update:model-value="v$.form.certificateType.$touch()"
           >
-          </b-form-select>
-          <b-form-invalid-feedback role="alert">
-            <template v-if="!$v.form.certificateType.required">
+          </BFormSelect>
+          <BFormInvalidFeedback role="alert">
+            <template v-if="!v$.form.certificateType.required">
               {{ $t('global.form.fieldRequired') }}
             </template>
-          </b-form-invalid-feedback>
-        </b-form-group>
+          </BFormInvalidFeedback>
+        </BFormGroup>
       </template>
 
-      <b-form-group :label="$t('pageCertificates.modal.certificateFile')">
+      <BFormGroup :label="$t('pageCertificates.modal.certificateFile')">
         <template v-if="form.certificateType === 'ServiceLogin Certificate'">
           <form-file
             id="certificate-file"
             v-model="form.file"
             :accept="fileFormat"
-            :state="getValidationState($v.form.file)"
+            :state="v$.form.file"
           >
             <template #invalid>
-              <b-form-invalid-feedback role="alert">
+              <BFormInvalidFeedback role="alert">
                 {{ $t('global.form.required') }}
-              </b-form-invalid-feedback>
+              </BFormInvalidFeedback>
             </template>
           </form-file>
         </template>
@@ -59,157 +63,137 @@
             id="certificate-file"
             v-model="form.file"
             :accept="fileFormat"
-            :state="getValidationState($v.form.file)"
+            :state="v$.form.file"
           >
             <template #invalid>
-              <b-form-invalid-feedback role="alert">
+              <BFormInvalidFeedback role="alert">
                 {{ $t('global.form.required') }}
-              </b-form-invalid-feedback>
+              </BFormInvalidFeedback>
             </template>
           </form-file>
         </template>
-      </b-form-group>
-    </b-form>
-    <template #modal-ok>
-      <template v-if="certificate">
-        {{ $t('global.action.replace') }}
-      </template>
-      <template v-else>
-        {{ $t('global.action.add') }}
-      </template>
-    </template>
-    <template #modal-cancel>
-      {{ $t('global.action.cancel') }}
-    </template>
-  </b-modal>
+      </BFormGroup>
+    </BForm>
+  </BModal>
 </template>
 
-<script>
-import { required, requiredIf } from 'vuelidate/lib/validators';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+<script setup>
+import { required, requiredIf } from '@vuelidate/validators';
+import { useVuelidate } from '@vuelidate/core';
+import { computed, defineProps, reactive, ref, watch, defineEmits } from 'vue';
+import { CertificatesStore } from '@/store';
+import FormFile from '@/components/Global/FormFile.vue';
+import eventBus from '@/eventBus';
 
-import FormFile from '@/components/Global/FormFile';
+const uploadCertificate = CertificatesStore();
+const props = defineProps({
+  certificate: {
+    type: Object,
+    default: null,
+    validator: (prop) => {
+      if (prop === null) return true;
+      return (
+        Object.prototype.hasOwnProperty.call(prop, 'type') &&
+        Object.prototype.hasOwnProperty.call(prop, 'certificate')
+      );
+    },
+  },
+  userRoleId: {
+    type: String,
+    default: null,
+  },
+});
+const modal = ref(null);
+eventBus.on('upload-certificate', () => {
+  modal.value.show();
+});
+const form = reactive({
+  certificateType: null,
+  file: null,
+});
+const certificateTypes = computed(() => {
+  return uploadCertificate.availableUploadTypes;
+});
+const certificateOptions = computed(() => {
+  const filteredCertificates = certificateTypes.value
+    .filter((certificate) => {
+      if (certificate.type === 'ServiceLogin Certificate' && isNotAdmin) {
+        return certificate.type !== 'ServiceLogin Certificate';
+      }
+      return certificate === certificate;
+    })
+    .map(({ type, label }) => {
+      return {
+        text: label,
+        value: type,
+      };
+    });
+  if (filteredCertificates.length === 1) {
+    form.certificateType === filteredCertificates?.[0]?.value;
+  }
+  return filteredCertificates;
+});
+const fileFormat = computed(() => {
+  if (
+    props.certificate?.certificate === 'ServiceLogin Certificate' ||
+    form.certificateType === 'ServiceLogin Certificate'
+  ) {
+    return '.acf';
+  } else {
+    return '.pem';
+  }
+});
+const isNotAdmin = computed(() => {
+  return props.userRoleId !== 'Administrator';
+});
 
-export default {
-  components: { FormFile },
-  mixins: [VuelidateMixin],
-  props: {
-    certificate: {
-      type: Object,
-      default: null,
-      validator: (prop) => {
-        if (prop === null) return true;
-        return (
-          Object.prototype.hasOwnProperty.call(prop, 'type') &&
-          Object.prototype.hasOwnProperty.call(prop, 'certificate')
-        );
-      },
+watch(certificateOptions, (options) => {
+  if (options.length) {
+    form.certificateType = options[0].value;
+  }
+});
+
+const rules = computed(() => ({
+  form: {
+    certificateType: {
+      required: requiredIf(function () {
+        return !props.certificate;
+      }),
     },
-    userRoleId: {
-      type: String,
-      default: null,
+    file: {
+      required,
     },
   },
-  data() {
-    return {
-      form: {
-        certificateType: null,
-        file: null,
-      },
-    };
-  },
-  computed: {
-    certificateTypes() {
-      return this.$store.getters['certificates/availableUploadTypes'];
-    },
-    certificateOptions() {
-      const filteredCertificates = this.certificateTypes
-        .filter((certificate) => {
-          if (
-            certificate.type === 'ServiceLogin Certificate' &&
-            this.isNotAdmin
-          ) {
-            return certificate.type !== 'ServiceLogin Certificate';
-          }
-          return certificate === certificate;
-        })
-        .map(({ type, label }) => {
-          return {
-            text: label,
-            value: type,
-          };
-        });
-      if (filteredCertificates.length === 1) {
-        this.form.certificateType === filteredCertificates?.[0]?.value;
-      }
-      return filteredCertificates;
-    },
-    fileFormat() {
-      if (
-        this.certificate?.certificate === 'ServiceLogin Certificate' ||
-        this.form.certificateType === 'ServiceLogin Certificate'
-      ) {
-        return '.acf';
-      } else {
-        return '.pem';
-      }
-    },
-    isNotAdmin() {
-      return this.userRoleId !== 'Administrator';
-    },
-  },
-  watch: {
-    certificateOptions: function (options) {
-      if (options.length) {
-        this.form.certificateType = options[0].value;
-      }
-    },
-  },
-  validations() {
-    return {
-      form: {
-        certificateType: {
-          required: requiredIf(function () {
-            return !this.certificate;
-          }),
-        },
-        file: {
-          required,
-        },
-      },
-    };
-  },
-  methods: {
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$emit('ok', {
-        addNew: !this.certificate,
-        file: this.form.file,
-        location: this.certificate ? this.certificate.location : null,
-        type: this.certificate
-          ? this.certificate.certificate
-          : this.form.certificateType,
-      });
-      this.closeModal();
-    },
-    closeModal() {
-      this.$nextTick(() => {
-        this.$refs.modal.hide();
-      });
-    },
-    resetForm() {
-      this.form.certificateType = this.certificateOptions.length
-        ? this.certificateOptions[0].value
-        : null;
-      this.form.file = null;
-      this.$v.$reset();
-    },
-    onOk(bvModalEvt) {
-      // prevent modal close
-      bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-  },
+}));
+const v$ = useVuelidate(rules, { form });
+const emit = defineEmits(['ok']);
+const handleSubmit = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('ok', {
+    addNew: !props.certificate,
+    file: form.file,
+    location: props.certificate ? props.certificate.location : null,
+    type: props.certificate
+      ? props.certificate.certificate
+      : form.valuecertificateType,
+  });
+  closeModal();
+};
+const closeModal = () => {
+  eventBus.on('upload-certificate', () => {
+    modal.value.hidden();
+  });
+};
+const resetForm = () => {
+  form.certificateType = certificateOptions.value.length
+    ? certificateOptions.value[0].value
+    : null;
+  form.file = null;
+};
+const onOk = (bvModalEvt) => {
+  // prevent modal close
+  bvModalEvt.preventDefault();
+  handleSubmit();
 };
 </script>
