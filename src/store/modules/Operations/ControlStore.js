@@ -34,11 +34,13 @@ const ControlStore = {
     isOperationInProgress: false,
     lastPowerOperationTime: null,
     lastBmcRebootTime: null,
+    displayInfoToast: false,
   },
   getters: {
     isOperationInProgress: (state) => state.isOperationInProgress,
     lastPowerOperationTime: (state) => state.lastPowerOperationTime,
     lastBmcRebootTime: (state) => state.lastBmcRebootTime,
+    displayInfoToast: (state) => state.displayInfoToast,
   },
   mutations: {
     setOperationInProgress: (state, inProgress) =>
@@ -47,6 +49,8 @@ const ControlStore = {
       (state.lastPowerOperationTime = lastPowerOperationTime),
     setLastBmcRebootTime: (state, lastBmcRebootTime) =>
       (state.lastBmcRebootTime = lastBmcRebootTime),
+    setDisplayInfoToast: (state, displayInfoToast) =>
+      (state.displayInfoToast = displayInfoToast),
   },
   actions: {
     async getLastPowerOperationTime({ commit }) {
@@ -82,47 +86,57 @@ const ControlStore = {
           throw new Error(i18n.t('pageRebootBmc.toast.errorRebootStart'));
         });
     },
-    async serverPowerOn({ dispatch, commit }) {
+    async powerOps({ dispatch, commit }, { thisVal, value }) {
+      await checkForServerStatus.bind(thisVal, value)();
+      commit('setOperationInProgress', false);
+      dispatch('getLastPowerOperationTime');
+    },
+    async serverPowerOn({ dispatch }) {
+      const value = 'on';
       const data = { ResetType: 'On' };
-      dispatch('serverPowerChange', data);
-      await checkForServerStatus.bind(this, 'on')();
-      commit('setOperationInProgress', false);
-      dispatch('getLastPowerOperationTime');
+      const displayInfo = await dispatch('serverPowerChange', data);
+      dispatch('powerOps', { thisVal: this, value });
+      return Promise.resolve(displayInfo);
     },
-    async serverSoftReboot({ dispatch, commit }) {
+    async serverSoftReboot({ dispatch }) {
+      const value = 'on';
       const data = { ResetType: 'GracefulRestart' };
-      dispatch('serverPowerChange', data);
-      await checkForServerStatus.bind(this, 'on')();
-      commit('setOperationInProgress', false);
-      dispatch('getLastPowerOperationTime');
+      const displayInfo = await dispatch('serverPowerChange', data);
+      dispatch('powerOps', { thisVal: this, value });
+      return Promise.resolve(displayInfo);
     },
-    async serverHardReboot({ dispatch, commit }) {
+    async serverHardReboot({ dispatch }) {
+      const value = 'on';
       const data = { ResetType: 'ForceRestart' };
-      dispatch('serverPowerChange', data);
-      await checkForServerStatus.bind(this, 'on')();
-      commit('setOperationInProgress', false);
-      dispatch('getLastPowerOperationTime');
+      const displayInfo = await dispatch('serverPowerChange', data);
+      dispatch('powerOps', { thisVal: this, value });
+      return Promise.resolve(displayInfo);
     },
-    async serverSoftPowerOff({ dispatch, commit }) {
+    async serverSoftPowerOff({ dispatch }) {
+      const value = 'off';
       const data = { ResetType: 'GracefulShutdown' };
-      dispatch('serverPowerChange', data);
-      await checkForServerStatus.bind(this, 'off')();
-      commit('setOperationInProgress', false);
-      dispatch('getLastPowerOperationTime');
+      const displayInfo = await dispatch('serverPowerChange', data);
+      dispatch('powerOps', { thisVal: this, value });
+      return Promise.resolve(displayInfo);
     },
-    async serverHardPowerOff({ dispatch, commit }) {
+    async serverHardPowerOff({ dispatch }) {
+      const value = 'off';
       const data = { ResetType: 'ForceOff' };
-      dispatch('serverPowerChange', data);
-      await checkForServerStatus.bind(this, 'off')();
-      commit('setOperationInProgress', false);
-      dispatch('getLastPowerOperationTime');
+      const displayInfo = await dispatch('serverPowerChange', data);
+      dispatch('powerOps', { thisVal: this, value });
+      return Promise.resolve(displayInfo);
     },
-    serverPowerChange({ commit }, data) {
+    serverPowerChange({ commit, state }, data) {
       commit('setOperationInProgress', true);
-      api
+      return api
         .post('/redfish/v1/Systems/system/Actions/ComputerSystem.Reset', data)
+        .then(() => {
+          state.displayInfoToast = true;
+          return state.displayInfoToast;
+        })
         .catch((error) => {
           console.log(error);
+          state.displayInfoToast = false;
           commit('setOperationInProgress', false);
         });
     },
