@@ -213,9 +213,13 @@ export default {
             ];
             if (otpGenerateRequired) {
               this.$store
-                .dispatch('userManagement/generateSecretKey')
-                .then(() => {
-                  this.$bvModal.show('modal-otp-generate');
+                .dispatch('userManagement/clearSecretKey')
+                .finally(() => {
+                  this.$store
+                    .dispatch('userManagement/generateSecretKey')
+                    .then(() => {
+                      this.$bvModal.show('modal-otp-generate');
+                    });
                 });
             } else {
               Promise.all([

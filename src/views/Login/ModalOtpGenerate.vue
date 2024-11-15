@@ -118,7 +118,11 @@ export default {
   },
   watch: {
     secretKey(value) {
-      this.qrValue = `otpauth://totp/${this.issuer}:${this.accountName}?secret=${value}&issuer=${this.issuer}`;
+      if (value === null) {
+        this.qrValue = null;
+      } else {
+        this.qrValue = `otpauth://totp/${this.issuer}:${this.accountName}?secret=${value}&issuer=${this.issuer}`;
+      }
     },
   },
   methods: {

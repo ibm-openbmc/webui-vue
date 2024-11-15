@@ -528,6 +528,10 @@ const UserManagementStore = {
         );
       });
     },
+    async clearSecretKey({ commit }) {
+      commit('setSecretKeyInfo', null);
+      return;
+    },
     async generateSecretKey({ commit }) {
       const currentUsername = localStorage.getItem('storedUsername');
       api
