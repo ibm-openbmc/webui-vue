@@ -196,7 +196,7 @@
               </input-password-toggle>
             </b-form-group>
             <b-form-checkbox
-              v-if="isAdminUser && newUser && globalMfaValue"
+              v-if="(isAdminUser || isServiceUser) && newUser && globalMfaValue"
               v-model="mfaBypass"
             >
               {{ $t('pageUserManagement.table.mfaByPass') }}
@@ -278,6 +278,9 @@ export default {
     },
     isAdminUser() {
       return this.$store.getters['global/isAdminUser'];
+    },
+    isServiceUser() {
+      return this.$store.getters['global/isServiceUser'];
     },
     globalMfaValue() {
       return this.$store.getters['userManagement/isGlobalMfaEnabled'];
@@ -398,6 +401,7 @@ export default {
     },
     closeModal() {
       this.$nextTick(() => {
+        this.mfaBypass = false;
         this.$refs.modal.hide();
       });
     },

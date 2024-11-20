@@ -1,13 +1,17 @@
 <template>
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.userManagement')" />
-    <b-row v-if="isAdminUser">
+    <b-row v-if="isAdminUser || isServiceUser">
       <b-col>
         <span>{{ $t('pageUserManagement.mfaTotpAuthentication') }}</span>
         <b-form-checkbox
           id="switch"
           v-model="globalMfaValue"
-          :disabled="isBusy || (currentMfaBypassed && !globalMfaValue)"
+          :disabled="
+            isServiceUser
+              ? false
+              : isBusy || (currentMfaBypassed && !globalMfaValue)
+          "
           switch
           class="mt-1"
           @change="updateGlobalMfa"
@@ -32,7 +36,10 @@
         </alert>
       </b-col>
     </b-row>
-    <b-row v-else-if="isAdminUser && !globalMfaValue" class="mt-4">
+    <b-row
+      v-else-if="(isAdminUser || isServiceUser) && !globalMfaValue"
+      class="mt-4"
+    >
       <b-col xl="9">
         <alert variant="warning" class="mb-4">
           <div>
@@ -100,7 +107,7 @@
               <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </b-form-checkbox>
           </template>
-          <template v-if="isAdminUser" #cell(mfa)="row">
+          <template v-if="isAdminUser || isServiceUser" #cell(mfa)="row">
             <b-form-checkbox
               v-if="row.item.privilege !== 'Service agent'"
               v-model="row.item.mfa"
@@ -266,6 +273,9 @@ export default {
     isAdminUser() {
       return this.$store.getters['global/isAdminUser'];
     },
+    isServiceUser() {
+      return this.$store.getters['global/isServiceUser'];
+    },
     globalMfaValue: {
       get() {
         return this.$store.getters['userManagement/isGlobalMfaEnabled'];
@@ -363,7 +373,7 @@ export default {
   },
   methods: {
     addMfaBypass() {
-      if (this.isAdminUser) {
+      if (this.isAdminUser || this.isServiceUser) {
         this.fields.splice(4, 0, {
           key: 'mfa',
           label: this.$t('pageUserManagement.table.mfaByPass'),
@@ -547,7 +557,11 @@ export default {
               uri: this.currentUser['@odata.id'],
             }
           );
-          if (this.globalMfaValue && !this.currentMfaBypassed) {
+          if (
+            !this.isServiceUser &&
+            this.globalMfaValue &&
+            !this.currentMfaBypassed
+          ) {
             this.$store
               .dispatch('userManagement/generateSecretKey')
               .then(() => {
