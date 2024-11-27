@@ -138,7 +138,6 @@ const EventLogStore = {
         .post(
           '/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog'
         )
-        .then(() => i18n.tc('pageEventLogs.toast.successDelete', data.length))
         .catch((error) => {
           console.log(error);
           throw new Error(
@@ -147,9 +146,17 @@ const EventLogStore = {
         });
     },
     async deleteEventLogs(_, uris = []) {
+      let guardEntries = [];
       const promises = uris.map((uri) =>
         api.delete(uri).catch((error) => {
           console.log(error);
+          if (
+            error.response.data?.error?.code?.endsWith(
+              'PropertyValueExternalConflict'
+            )
+          ) {
+            guardEntries.push(error.response.data);
+          }
           return error;
         })
       );
@@ -172,6 +179,13 @@ const EventLogStore = {
             }
 
             if (errorCount) {
+              if (guardEntries.length > 0) {
+                const message = i18n.tc(
+                  'pageEventLogs.toast.errorDeleteGuardRecord',
+                  guardEntries.length
+                );
+                toastMessages.push({ type: 'error', message });
+              }
               const message = i18n.tc(
                 'pageEventLogs.toast.errorDelete',
                 errorCount
@@ -184,9 +198,17 @@ const EventLogStore = {
         );
     },
     async resolveEventLogs(_, logs) {
+      let guardEntries = [];
       const promises = logs.map((log) =>
         api.patch(log.uri, { Resolved: true }).catch((error) => {
           console.log(error);
+          if (
+            error.response.data?.error?.code?.endsWith(
+              'PropertyValueExternalConflict'
+            )
+          ) {
+            guardEntries.push(error.response.data);
+          }
           return error;
         })
       );
@@ -207,6 +229,13 @@ const EventLogStore = {
               toastMessages.push({ type: 'success', message });
             }
             if (errorCount) {
+              if (guardEntries.length > 0) {
+                const message = i18n.tc(
+                  'pageEventLogs.toast.errorResolveLogsGuardRecord',
+                  guardEntries.length
+                );
+                toastMessages.push({ type: 'error', message });
+              }
               const message = i18n.tc(
                 'pageEventLogs.toast.errorResolveLogs',
                 errorCount

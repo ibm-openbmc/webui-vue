@@ -676,8 +676,10 @@
     },
     "toast": {
       "errorDelete": "Error deleting %{count} log. | Error deleting %{count} logs.",
+      "errorDeleteGuardRecord": "Log cannot be deleted as it is associated with a guard record. Please manually clear the guard or replace the part. | Logs with guard records were not deleted. Please manually clear the guard or replace the part.",
       "errorLogStatusUpdate": "Error updating log status.",
       "errorResolveLogs": "Error resolving %{count} log. | Error resolving %{count} logs.",
+      "errorResolveLogsGuardRecord": "Log cannot be resolved as it is associated with a guard record. Please manually clear the guard or replace the part. | Logs with guard records were not resolved. Please manually clear the guard or replace the part.",
       "errorUnresolveLogs": "Error unresolving %{count} log. | Error unresolving %{count} logs.",
       "infoStartDownload": "Download might take several minutes to complete.",
       "successDelete": "Successfully deleted %{count} log. | Successfully deleted %{count} logs.",

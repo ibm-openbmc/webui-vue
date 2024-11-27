@@ -548,13 +548,44 @@ export default {
         })
         .then((deleteConfirmed) => {
           if (deleteConfirmed) {
+            let totalEntries = [...this.allLogs];
+            let deletedEntries = 0;
             this.$store
               .dispatch('eventLog/deleteAllEventLogs', this.allLogs)
-              .then((message) => {
+              .then(() => {
+                this.startLoader();
                 this.reloadEventLogData();
-                this.successToast(message);
+                setTimeout(() => {
+                  deletedEntries = totalEntries.length - this.allLogs.length;
+                  if (this.allLogs.length > 0) {
+                    this.errorToast(
+                      this.$tc(
+                        'pageEventLogs.toast.errorDeleteGuardRecord',
+                        this.allLogs.length
+                      )
+                    );
+                    this.errorToast(
+                      this.$tc(
+                        'pageEventLogs.toast.errorDelete',
+                        this.allLogs.length
+                      )
+                    );
+                  }
+                  if (deletedEntries > 0) {
+                    this.successToast(
+                      this.$tc(
+                        'pageEventLogs.toast.successDelete',
+                        deletedEntries
+                      )
+                    );
+                  }
+                  this.endLoader();
+                }, 5000);
               })
-              .catch(({ message }) => this.errorToast(message));
+              .catch(({ message }) => {
+                this.endLoader();
+                this.errorToast(message);
+              });
           }
         });
     },
@@ -627,13 +658,45 @@ export default {
           .then((deleteConfirmed) => {
             if (deleteConfirmed) {
               if (this.selectedRows.length === this.allLogs.length) {
+                let totalEntries = [...this.allLogs];
+                let deletedEntries = 0;
                 this.$store
-                  .dispatch('eventLog/deleteAllEventLogs', this.selectedRows)
-                  .then((message) => {
+                  .dispatch('eventLog/deleteAllEventLogs', this.allLogs)
+                  .then(() => {
+                    this.startLoader();
                     this.reloadEventLogData();
-                    this.successToast(message);
+                    setTimeout(() => {
+                      deletedEntries =
+                        totalEntries.length - this.allLogs.length;
+                      if (this.allLogs.length > 0) {
+                        this.errorToast(
+                          this.$tc(
+                            'pageEventLogs.toast.errorDeleteGuardRecord',
+                            this.allLogs.length
+                          )
+                        );
+                        this.errorToast(
+                          this.$tc(
+                            'pageEventLogs.toast.errorDelete',
+                            this.allLogs.length
+                          )
+                        );
+                      }
+                      if (deletedEntries > 0) {
+                        this.successToast(
+                          this.$tc(
+                            'pageEventLogs.toast.successDelete',
+                            deletedEntries
+                          )
+                        );
+                      }
+                      this.endLoader();
+                    }, 5000);
                   })
-                  .catch(({ message }) => this.errorToast(message));
+                  .catch(({ message }) => {
+                    this.endLoader();
+                    this.errorToast(message);
+                  });
               } else {
                 this.deleteLogs(uris);
               }
