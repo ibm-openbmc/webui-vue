@@ -254,7 +254,10 @@ const PoliciesStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setRtadEnabled', !updatedRtad);
+          commit(
+            'setRtadEnabled',
+            updatedRtad === 'Enabled' ? 'Disabled' : 'Enabled'
+          );
           throw new Error(
             i18n.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.t('pagePolicies.rtad'),
@@ -277,7 +280,10 @@ const PoliciesStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setVtpmEnabled', !updatedVtpm);
+          commit(
+            'setVtpmEnabled',
+            updatedVtpm === 'Enabled' ? 'Disabled' : 'Enabled'
+          );
           throw new Error(
             i18n.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.t('pagePolicies.vtpm'),
@@ -300,7 +306,10 @@ const PoliciesStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setSvleEnabled', !updatedSvle);
+          commit(
+            'setSvleEnabled',
+            updatedSvle === 'Enabled' ? 'Disabled' : 'Enabled'
+          );
           throw new Error(
             i18n.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.t('pagePolicies.secureVersion'),
@@ -323,7 +332,10 @@ const PoliciesStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setHostUsbEnabled', !updatedHostUsb);
+          commit(
+            'setHostUsbEnabled',
+            updatedHostUsb === 'Enabled' ? 'Disabled' : 'Enabled'
+          );
           throw new Error(
             i18n.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.t('pagePolicies.hostUsb'),
