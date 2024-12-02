@@ -449,6 +449,7 @@ const UserManagementStore = {
       return await api
         .patch('/redfish/v1/AccountService', requestBody)
         .then(() => {
+          dispatch('getUsers');
           if (globalMfa) {
             return i18n.t('pageUserManagement.toast.successEnableMfa');
           } else {
@@ -464,6 +465,21 @@ const UserManagementStore = {
           } else {
             throw new Error(i18n.t('pageUserManagement.toast.errorDisableMfa'));
           }
+        });
+    },
+    async clearSetSecretKey({ dispatch }, mfaObject) {
+      return await api
+        .post(mfaObject['@odata.id'] + '/Actions/ManagerAccount.ClearSecretKey')
+        .then(() => {
+          dispatch('getUsers');
+          return i18n.t('pageUserManagement.toast.successClearSecretKey');
+        })
+        .catch((error) => {
+          dispatch('getUsers');
+          console.log('error', error);
+          throw new Error(
+            i18n.t('pageUserManagement.toast.errorClearSecretKey')
+          );
         });
     },
     async updateMfaBypass({ dispatch }, mfaObject) {
@@ -542,7 +558,7 @@ const UserManagementStore = {
           commit('setSecretKeyInfo', data?.SecretKey);
         });
     },
-    async verifyRegisterTotp(_, { otpValue }) {
+    async verifyRegisterTotp({ dispatch }, { otpValue }) {
       const requestBody = {
         TimeBasedOneTimePassword: otpValue,
       };
@@ -553,6 +569,7 @@ const UserManagementStore = {
           requestBody
         )
         .then(() => {
+          dispatch('getUsers');
           return i18n.t('pageUserManagement.toast.successEnableMfa');
         })
         .catch(() => {

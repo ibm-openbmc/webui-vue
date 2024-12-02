@@ -1,18 +1,17 @@
 <template>
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.userManagement')" />
-    <b-row v-if="isAdminUser">
+    <b-row v-if="isAdminUser || isServiceUser">
       <b-col>
         <span>{{ $t('pageUserManagement.mfaTotpAuthentication') }}</span>
         <b-form-checkbox
           id="switch"
           v-model="globalMfaValue"
-          :disabled="isBusy || (currentMfaBypassed && !globalMfaValue)"
+          :disabled="isBusy"
           switch
           class="mt-1"
           @change="updateGlobalMfa"
         >
-          <!-- @change="changeSshProtocolState" -->
           <span v-if="globalMfaValue">
             {{ $t('global.status.enabled') }}
           </span>
@@ -21,22 +20,22 @@
       </b-col>
     </b-row>
     <b-row
-      v-if="isAdminUser && currentMfaBypassed && !globalMfaValue"
-      class="mt-4"
+      v-if="(isAdminUser || isServiceUser) && !globalMfaValue"
+      class="mt-2"
     >
       <b-col xl="9">
-        <alert variant="warning" class="mb-4">
+        <alert variant="warning" class="mb-2">
           <div>
-            {{ $t('pageUserManagement.mfaBypassWarning') }}
+            {{ $t('pageUserManagement.mfaTimeMatch') }}
           </div>
         </alert>
       </b-col>
     </b-row>
-    <b-row v-else-if="isAdminUser && !globalMfaValue" class="mt-4">
+    <b-row v-if="isAdminUser" class="mt-2">
       <b-col xl="9">
         <alert variant="warning" class="mb-4">
           <div>
-            {{ $t('pageUserManagement.mfaTimeMatch') }}
+            {{ $t('pageUserManagement.clearSecretKeyMessage') }}
           </div>
         </alert>
       </b-col>
@@ -100,19 +99,26 @@
               <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </b-form-checkbox>
           </template>
-          <template v-if="isAdminUser" #cell(mfa)="row">
+          <template v-if="isAdminUser || isServiceUser" #cell(mfa)="row">
             <b-form-checkbox
               v-if="row.item.privilege !== 'Service agent'"
               v-model="row.item.mfa"
               b-form-checkbox
               switch
-              :disabled="
-                !globalMfaValue &&
-                (!currentMfaBypassed || row.item.Id !== currentUser.Id)
-              "
+              :disabled="!globalMfaValue"
               @change="updateMfaBypassVal(row.item)"
             >
             </b-form-checkbox>
+          </template>
+          <template v-if="isAdminUser || isServiceUser" #cell(secretKey)="row">
+            <b-button
+              v-if="row.item.privilege !== 'Service agent'"
+              variant="primary"
+              :disabled="!row.item.secretKey"
+              @click="clearSecretKey(row.item)"
+            >
+              {{ $t('pageUserManagement.table.clear') }}
+            </b-button>
           </template>
 
           <!-- table actions column -->
@@ -266,6 +272,9 @@ export default {
     isAdminUser() {
       return this.$store.getters['global/isAdminUser'];
     },
+    isServiceUser() {
+      return this.$store.getters['global/isServiceUser'];
+    },
     globalMfaValue: {
       get() {
         return this.$store.getters['userManagement/isGlobalMfaEnabled'];
@@ -313,6 +322,7 @@ export default {
           mfa: user?.MFABypass?.BypassTypes.includes('GoogleAuthenticator')
             ? true
             : false,
+          secretKey: user?.SecretKeySet,
           actions: [
             {
               value: 'edit',
@@ -363,13 +373,33 @@ export default {
   },
   methods: {
     addMfaBypass() {
-      if (this.isAdminUser) {
+      if (this.isAdminUser || this.isServiceUser) {
         this.fields.splice(4, 0, {
           key: 'mfa',
           label: this.$t('pageUserManagement.table.mfaByPass'),
           class: 'text-center',
         });
+        this.fields.splice(5, 0, {
+          key: 'secretKey',
+          label: this.$t('pageUserManagement.table.secretKey'),
+          class: 'text-center',
+        });
       }
+    },
+    clearSecretKey(value) {
+      this.$store
+        .dispatch('userManagement/clearSetSecretKey', value)
+        .then((message) => {
+          this.successToast(message);
+          setTimeout(() => {
+            if (this.currentUser?.UserName === value.username) {
+              this.$store.dispatch('authentication/logout');
+            } else {
+              this.$store.dispatch('userManagement/getUsers');
+            }
+          }, 2000);
+        })
+        .catch(({ message }) => this.errorToast(message));
     },
     updateMfaBypassVal(value) {
       this.$store
@@ -547,7 +577,11 @@ export default {
               uri: this.currentUser['@odata.id'],
             }
           );
-          if (this.globalMfaValue && !this.currentMfaBypassed) {
+          if (
+            !this.isServiceUser &&
+            this.globalMfaValue &&
+            !this.currentMfaBypassed
+          ) {
             this.$store
               .dispatch('userManagement/generateSecretKey')
               .then(() => {
