@@ -39,6 +39,11 @@
               {{ $t('pageDateTime.alert.messagePowerOff') }}
             </span>
           </alert>
+          <alert v-if="globalMfaValue" variant="info" class="mb-2">
+            <span>
+              {{ $t('pageDateTime.alert.mfaMessage') }}
+            </span>
+          </alert>
           <alert variant="info" class="mb-4">
             <span>
               {{ $t('pageDateTime.alert.messageNtp') }}
@@ -312,6 +317,14 @@ export default {
     bmcTime() {
       return this.$store.getters['global/bmcTime'];
     },
+    globalMfaValue: {
+      get() {
+        return this.$store.getters['userManagement/isGlobalMfaEnabled'];
+      },
+      set(newValue) {
+        return newValue;
+      },
+    },
     ntpOptionSelected() {
       return this.form.configurationSelected === 'ntp';
     },
@@ -352,6 +365,7 @@ export default {
     Promise.all([
       this.$store.dispatch('global/getBmcTime'),
       this.$store.dispatch('dateTime/getNtpData'),
+      this.$store.dispatch('userManagement/getAccountSettings'),
     ]).finally(() => {
       this.setInitialNtpValues();
       this.endLoader();

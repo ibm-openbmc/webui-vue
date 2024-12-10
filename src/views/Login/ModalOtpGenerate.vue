@@ -29,8 +29,13 @@
         </b-row>
         <b-row>
           <b-col>
-            {{ $t('pageUserManagement.modal.secretKey') }}:
-            {{ dataFormatter(secretKey) }}
+            <b-button v-b-toggle.collapse-2 class="m-1 buttonStyle">
+              <icon-chevron />
+              {{ $t('pageUserManagement.modal.secretKey') }}</b-button
+            >
+            <b-collapse id="collapse-2">
+              {{ dataFormatter(secretKey) }}
+            </b-collapse>
           </b-col>
           <b-button @click="copySecretKey">
             <template v-if="secretKeyCopied">
@@ -50,6 +55,17 @@
           @submit.prevent
         >
           <b-container fluid="xl">
+            <div class="login-form__section mb-3">
+              <alert variant="info" class="mb-4">
+                <dt>{{ $t('pageUserManagement.modal.helptext') }}:</dt>
+                <dd>
+                  {{ $t('pageUserManagement.modal.helptextStep1') }}
+                </dd>
+                <dd>
+                  {{ $t('pageUserManagement.modal.helptextStep2') }}
+                </dd>
+              </alert>
+            </div>
             <div class="login-form__section mb-3">
               <label>{{ $t('pageUserManagement.modal.otp') }}</label>
               <b-form-group>
@@ -87,14 +103,17 @@
 </template>
 <script>
 import { required } from 'vuelidate/lib/validators';
+import Alert from '@/components/Global/Alert';
 import IconCopy from '@carbon/icons-vue/es/copy/16';
 import IconCheckmark from '@carbon/icons-vue/es/checkmark/16';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import QrcodeVue from 'qrcode.vue';
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
+
 export default {
-  components: { IconCopy, IconCheckmark, QrcodeVue },
+  components: { Alert, IconCopy, IconCheckmark, IconChevron, QrcodeVue },
   mixins: [DataFormatterMixin, BVToastMixin, VuelidateMixin],
   data() {
     return {
@@ -179,7 +198,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .qrcode-styling {
   margin-left: 15px;
   max-width: 350px;
@@ -191,5 +210,18 @@ export default {
 .emptyQrStyle {
   width: 350px;
   height: 350px;
+}
+.buttonStyle {
+  margin-left: 0px !important;
+}
+.btn {
+  svg {
+    margin-right: 11px;
+  }
+}
+.btn.collapsed {
+  svg {
+    transform: rotate(180deg);
+  }
 }
 </style>

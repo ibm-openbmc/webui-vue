@@ -39,7 +39,7 @@
           </template>
         </b-form-invalid-feedback>
       </b-form-group>
-      <div class="login-form__section mb-3">
+      <div class="login-form__section passwordStyle">
         <label for="password">{{ $t('pageLogin.password') }}</label>
         <input-password-toggle>
           <b-form-input
@@ -62,7 +62,9 @@
         </b-form-invalid-feedback>
       </div>
       <div v-if="isGlobalMfaEnabled" class="login-form__section mb-3">
-        <label>OTP</label>
+        <label>TOTP</label>
+        <info-tooltip class="ml-1" :title="$t('pageLogin.totpTooltip')">
+        </info-tooltip>
         <b-form-group>
           <b-form-input v-model="otpValue"> </b-form-input>
         </b-form-group>
@@ -125,6 +127,7 @@ import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import IconUpload from '@carbon/icons-vue/es/upload/20';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+import InfoTooltip from '@/components/Global/InfoTooltip';
 export default {
   name: 'Login',
   components: {
@@ -133,6 +136,7 @@ export default {
     ModalUploadCertificate,
     ModalOtpGenerate,
     IconUpload,
+    InfoTooltip,
   },
   mixins: [VuelidateMixin, BVToastMixin, LoadingBarMixin, DataFormatterMixin],
   data() {
@@ -269,5 +273,8 @@ export default {
   svg {
     transform: rotate(180deg);
   }
+}
+.passwordStyle {
+  margin-bottom: 2rem;
 }
 </style>

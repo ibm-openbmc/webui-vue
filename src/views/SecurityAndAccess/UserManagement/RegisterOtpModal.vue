@@ -29,8 +29,13 @@
         </b-row>
         <b-row>
           <b-col>
-            {{ $t('pageUserManagement.modal.secretKey') }}:
-            {{ dataFormatter(secretKey) }}
+            <b-button v-b-toggle.collapse-2 class="m-1 buttonStyle">
+              <icon-chevron />
+              {{ $t('pageUserManagement.modal.secretKey') }}</b-button
+            >
+            <b-collapse id="collapse-2">
+              {{ dataFormatter(secretKey) }}
+            </b-collapse>
           </b-col>
           <b-button @click="copySecretKey">
             <template v-if="secretKeyCopied">
@@ -52,8 +57,16 @@
           <b-container fluid="xl">
             <div class="login-form__section mb-3">
               <alert variant="warning" class="mb-4">
+                <dt>
+                  {{ $t('pageOverview.bmcTime') }}:
+                  {{ bmcTime | formatDate }}
+                  {{ bmcTime | formatTime }}
+                </dt>
                 <span>
-                  {{ $t('pageUserManagement.modal.hmcWarning') }}
+                  {{ $t('pageUserManagement.mfaTimeMatch') }}
+                  <b-link to="/settings/date-time">
+                    {{ $t('appPageTitle.dateTime') }}</b-link
+                  >
                 </span>
               </alert>
             </div>
@@ -66,6 +79,8 @@
             </div>
             <div class="login-form__section mb-3">
               <label>{{ $t('pageUserManagement.modal.otp') }}</label>
+              <info-tooltip class="ml-1" :title="formattedTooltip">
+              </info-tooltip>
               <b-form-group>
                 <b-form-input
                   v-model="otpValue"
@@ -108,8 +123,18 @@ import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import QrcodeVue from 'qrcode.vue';
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+import InfoTooltip from '@/components/Global/InfoTooltip';
+import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
+
 export default {
-  components: { IconCopy, Alert, IconCheckmark, QrcodeVue },
+  components: {
+    IconCopy,
+    Alert,
+    IconCheckmark,
+    IconChevron,
+    QrcodeVue,
+    InfoTooltip,
+  },
   mixins: [DataFormatterMixin, BVToastMixin, VuelidateMixin],
   data() {
     return {
@@ -122,12 +147,31 @@ export default {
     };
   },
   computed: {
+    formattedTooltip() {
+      return (
+        this.$t('pageUserManagement.modal.helptext') +
+        '</br>' +
+        this.$t('pageUserManagement.modal.helptextStep1') +
+        '</br>' +
+        this.$t('pageUserManagement.modal.helptextStep2EnableMfa')
+      );
+    },
+    bmcTime() {
+      return this.$store.getters['global/bmcTime'];
+    },
+    currentMfaBypassed() {
+      return this.$store.getters['userManagement/isCurrentUserMfaBypassed'];
+    },
+    isServiceUser() {
+      return this.$store.getters['global/isServiceUser'];
+    },
     secretKey() {
       return this.$store.getters['userManagement/secretKeyInfo'];
     },
   },
   watch: {
     secretKey(value) {
+      this.$store.dispatch('global/getBmcTime');
       if (value === null) {
         this.qrValue = null;
       } else {
@@ -156,9 +200,7 @@ export default {
       this.handleSubmit();
     },
     resetMfa() {
-      this.$store.dispatch('userManagement/updateGlobalMfa', {
-        globalMfa: false,
-      });
+      this.$emit('disable-mfa');
       this.otpValue = null;
       this.$v.$reset();
     },
@@ -173,10 +215,20 @@ export default {
         .dispatch('userManagement/verifyRegisterTotp', {
           otpValue: this.otpValue,
         })
-        .then((message) => {
-          this.successToast(message);
-          this.closeModal();
-          this.resetForm();
+        .then(() => {
+          this.$store
+            .dispatch('userManagement/updateGlobalMfa', {
+              globalMfa: true,
+            })
+            .then((message) => {
+              this.successToast(message);
+              this.closeModal();
+              this.resetForm();
+              if (!this.isServiceUser && !this.currentMfaBypassed) {
+                this.$store.dispatch('authentication/logout');
+              }
+            })
+            .catch(({ message }) => this.errorToast(message));
         })
         .catch(({ message }) => this.errorToast(message));
     },
@@ -188,7 +240,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .qrcode-styling {
   margin-left: 15px;
   max-width: 350px;
@@ -200,5 +252,18 @@ export default {
 .emptyQrStyle {
   width: 350px;
   height: 350px;
+}
+.buttonStyle {
+  margin-left: 0px !important;
+}
+.btn {
+  svg {
+    margin-right: 4px;
+  }
+}
+.btn.collapsed {
+  svg {
+    transform: rotate(180deg);
+  }
 }
 </style>

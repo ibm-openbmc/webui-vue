@@ -1,6 +1,6 @@
 <template>
   <b-button
-    v-b-tooltip
+    v-b-tooltip.hover.html
     variant="link"
     class="btn-tooltip btn-icon-only"
     :title="title"
