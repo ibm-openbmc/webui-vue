@@ -8,12 +8,10 @@ const AuthenticationStore = {
     loginPageDetails: {},
     authError: false,
     unauthError: false,
-    xsrfCookie: localStorage.getItem('xAuthToken'),
-    sessionURI: localStorage.getItem('sessionURI'),
+    xsrfCookie: Cookies.get('XSRF-TOKEN'),
     isAuthenticatedCookie: Cookies.get('IsAuthenticated'),
     isGenerateOtpRequired: false,
     isGlobalMfaEnabled: false,
-    xAuthToken: null,
   },
   getters: {
     loginPageDetails: (state) => state.loginPageDetails,
@@ -23,9 +21,7 @@ const AuthenticationStore = {
     isGlobalMfaEnabled: (state) => state.isGlobalMfaEnabled,
     isLoggedIn: (state) => {
       return (
-        state.xsrfCookie !== undefined ||
-        state.isAuthenticatedCookie == 'true' ||
-        state.xAuthToken !== null
+        state.xsrfCookie !== undefined || state.isAuthenticatedCookie == 'true'
       );
     },
     token: (state) => state.xsrfCookie,
@@ -37,16 +33,10 @@ const AuthenticationStore = {
       (state.isGenerateOtpRequired = isGenerateOtpRequired),
     setLoginPageDetails: (state, loginPageDetails) =>
       (state.loginPageDetails = loginPageDetails),
-    authSuccess(state, { session, token }) {
+    authSuccess(state) {
       state.authError = false;
       state.unauthError = false;
-      localStorage.setItem('sessionURI', session);
-      state.sessionURI = session;
-      if (state.xsrfCookie === undefined) {
-        localStorage.setItem('xAuthToken', token);
-        api.set_auth_token(token);
-        state.xAuthToken = token;
-      }
+      state.xsrfCookie = Cookies.get('XSRF-TOKEN');
     },
     authError(state, authError = true) {
       state.authError = authError;
@@ -55,23 +45,19 @@ const AuthenticationStore = {
       state.unauthError = unauthError;
     },
     logout(state) {
-      localStorage.removeItem('xAuthToken');
-      api.set_auth_token(undefined);
-      localStorage.removeItem('sessionURI');
-      state.sessionURI = null;
-      state.xsrfCookie = undefined;
+      Cookies.remove('XSRF-TOKEN');
       Cookies.remove('IsAuthenticated');
-      state.xAuthToken = null;
       localStorage.removeItem('storedModelType');
       localStorage.removeItem('storedUsername');
       localStorage.removeItem('storedCurrentUser');
       localStorage.removeItem('storedHmcManagedValue');
       localStorage.removeItem('storedLanguage');
+      state.xsrfCookie = undefined;
       state.isAuthenticatedCookie = undefined;
     },
   },
   actions: {
-    login({ state, commit }, { username, password, otpInfo }) {
+    login({ commit }, { username, password, otpInfo }) {
       commit('setIsGenerateOtpRequired', false);
       commit('authError', false);
       commit('unauthError', false);
@@ -88,7 +74,6 @@ const AuthenticationStore = {
       return api
         .post('/redfish/v1/SessionService/Sessions', requestBody)
         .then((response) => {
-          state.xAuthToken = response.headers['x-auth-token'];
           if (
             response.data['@Message.ExtendedInfo'] &&
             response.data['@Message.ExtendedInfo'][0].MessageId.endsWith(
@@ -97,11 +82,7 @@ const AuthenticationStore = {
           ) {
             commit('setIsGenerateOtpRequired', true);
           }
-          api.set_auth_token(response.headers['x-auth-token']);
-          commit('authSuccess', {
-            session: response.headers['location'],
-            token: response.headers['x-auth-token'],
-          });
+          commit('authSuccess');
         })
         .catch((error) => {
           commit('authError');
@@ -147,7 +128,7 @@ const AuthenticationStore = {
     resetStoreState({ state }) {
       state.authError = false;
       state.unauthError = false;
-      state.xsrfCookie = undefined;
+      state.xsrfCookie = Cookies.get('XSRF-TOKEN');
       state.isAuthenticatedCookie = Cookies.get('IsAuthenticated');
     },
   },
