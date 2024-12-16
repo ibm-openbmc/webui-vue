@@ -294,7 +294,19 @@ const EventLogStore = {
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageEventLogs.toast.errorLogStatusUpdate'));
+          if (
+            error.response.data?.error?.code?.endsWith(
+              'PropertyValueExternalConflict'
+            )
+          ) {
+            const message =
+              i18n.tc('pageEventLogs.toast.errorLogStatusUpdate') +
+              '\n' +
+              i18n.tc('pageEventLogs.toast.errorResolveLogsGuardRecord', 1);
+            throw new Error(message);
+          }
+          const message = i18n.tc('pageEventLogs.toast.errorLogStatusUpdate');
+          throw new Error(message);
         });
     },
     async downloadLogData(_, uri) {
