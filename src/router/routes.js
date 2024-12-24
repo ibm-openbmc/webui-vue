@@ -30,6 +30,7 @@ import HardwareDeconfiguration from '../views/Settings/HardwareDeconfiguration/H
 import HostConsole from '@/views/Operations/HostConsole';
 import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsole.vue';
 import CapacityOnDemand from '../views/ResourceManagement/CapacityOnDemand/CapacityOnDemand.vue';
+import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/DeconfigurationRecords.vue';
 
 const roles = {
   administrator: 'Administrator',
@@ -188,6 +189,14 @@ export const routes = [
           title: i18n.global.t('appPageTitle.hostConsole'),
         },
       },
+    {
+        path: '/logs/deconfiguration-records',
+        name: 'deconfiguration-records',
+        component: DeconfigurationRecords,
+        meta: {
+          title: i18n.global.t('appPageTitle.deconfigurationRecords'),
+          },
+        },  
       {
         path: '/settings/power-restore-policy',
         name: 'power-restore-policy',

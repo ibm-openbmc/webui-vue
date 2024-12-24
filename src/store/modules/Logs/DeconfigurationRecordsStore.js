@@ -1,20 +1,16 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const DeconfigurationRecordsStore = {
-  namespaced: true,
-  state: {
+export const DeconfigurationRecordsStore = defineStore('deconfigurationRecordsStore', {
+  state: () => ({
     deconfigRecords: [],
-  },
+  }),
   getters: {
-    deconfigRecords: (state) => state.deconfigRecords,
-  },
-  mutations: {
-    setDeconfigurationRecordInfo: (state, deconfigRecords) =>
-      (state.deconfigRecords = deconfigRecords),
+    deconfigRecordsGetter: (state) => state.deconfigRecords,
   },
   actions: {
-    async getDeconfigurationRecordInfo({ commit }) {
+    async getDeconfigurationRecordInfo() {
       return await api
         .get('/redfish/v1/Systems/system/LogServices/HardwareIsolation/Entries')
         .then(async ({ data: { Members = [] } = {} }) => {
@@ -85,21 +81,23 @@ const DeconfigurationRecordsStore = {
                 severity: Severity,
                 location: LocationCode,
                 eventID: eventId,
+                isSelected: false,
+                toggleDetails: false,
               };
             }),
           );
-          commit('setDeconfigurationRecordInfo', deconfigRecords);
+         this.deconfigRecords = deconfigRecords;
         })
         .catch((error) => console.log(error));
     },
-    async clearAllEntries({ dispatch }, data) {
+    async clearAllEntries(data) {
       return await api
         .post(
           '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Actions/LogService.ClearLog',
         )
-        .then(() => dispatch('getDeconfigurationRecordInfo'))
+        .then(() => this.getDeconfigurationRecordInfo())
         .then(() =>
-          i18n.tc(
+          i18n.global.t(
             'pageDeconfigurationRecords.toast.successDelete',
             data.length,
           ),
@@ -107,7 +105,7 @@ const DeconfigurationRecordsStore = {
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.tc(
+            i18n.global.t(
               'pageDeconfigurationRecords.toast.errorDelete',
               data.length,
             ),
@@ -141,9 +139,9 @@ const DeconfigurationRecordsStore = {
         })
         .then(() => {
           const message = [
-            i18n.t('pageDeconfigurationRecords.toast.successStartDownload'),
+            i18n.global.t('pageDeconfigurationRecords.toast.successStartDownload'),
             {
-              title: i18n.t(
+              title: i18n.global.t(
                 'pageDeconfigurationRecords.toast.successStartDownloadTitle',
               ),
             },
@@ -154,11 +152,11 @@ const DeconfigurationRecordsStore = {
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t('pageDeconfigurationRecords.toast.errorStartDownload'),
+            i18n.global.t('pageDeconfigurationRecords.toast.errorStartDownload'),
           );
         });
     },
   },
-};
+});
 
 export default DeconfigurationRecordsStore;
