@@ -1066,7 +1066,7 @@
     "updatePageSetup": "Update system memory page setup",
     "alert": {
       "heading": "Applying changes",
-      "message": "System has to be powered off and not managed by HMC. Changes made will take effect on next reboot.",
+      "message": "System has to be powered off. Changes made will take effect on next reboot.",
       "serverMustBePoweredOffTo": "Server must be powered off to:",
       "updateActiveMemoryMirroring": "Update active memory mirror mode",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
