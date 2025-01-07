@@ -15,7 +15,22 @@ const DumpsStore = {
       state.allDumps = dumps.map((dump) => ({
         data: dump.AdditionalDataURI,
         dateTime: new Date(dump.Created),
-        dumpType: dump.Name,
+        dumpType:
+          dump.Name === 'System Dump Entry'
+            ? dump.Id.startsWith('0')
+              ? 'Hardware Dump Entry'
+              : dump.Id.startsWith('2')
+              ? 'Hostboot Dump Entry'
+              : dump.Id.startsWith('3')
+              ? 'SBE Dump Entry'
+              : dump.Id.startsWith('4')
+              ? 'OCMB SBE Dump Entry'
+              : dump.Id.startsWith('A')
+              ? 'System Dump Entry'
+              : dump.Id.startsWith('B')
+              ? 'Resource Dump Entry'
+              : dump.Name
+            : dump.Name,
         id: dump.Id,
         location: dump['@odata.id'],
         size: dump.AdditionalDataSizeBytes,
