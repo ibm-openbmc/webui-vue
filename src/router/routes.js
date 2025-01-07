@@ -26,6 +26,7 @@ import Firmware from '@/views/Operations/Firmware';
 import Certificates from '@/views/SecurityAndAccess/Certificates';
 import Inventory from '../views/HardwareStatus/Inventory/Inventory.vue';
 import SystemParameters from '@/views/ResourceManagement/SystemParameters';
+import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 
 const roles = {
   administrator: 'Administrator',
@@ -67,6 +68,14 @@ export const routes = [
         meta: {
           title: i18n.global.t('appPageTitle.virtualMedia'),
           exclusiveToRoles: [roles.administrator],
+        },
+      },
+      {
+        path: '/operations/server-power-operations',
+        name: 'server-power-operations',
+        component: ServerPowerOperations,
+        meta: {
+          title: i18n.global.t('appPageTitle.serverPowerOperations'),
         },
       },
       {

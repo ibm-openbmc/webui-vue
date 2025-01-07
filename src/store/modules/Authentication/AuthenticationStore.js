@@ -6,6 +6,7 @@ import { useCookies } from 'vue3-cookies';
 import Cookies from 'js-cookie';
 const { cookies } = useCookies();
 // const router = useRouter();
+
 export const AuthenticationStore = defineStore('authentication', {
   state: () => ({
     consoleWindow: null,
@@ -51,7 +52,6 @@ export const AuthenticationStore = defineStore('authentication', {
         .then((response) => {
           this.authSuccess();
           this.$state.authError = false;
-          this.xsrfCookie = response.data.token;
         })
         .catch((error) => {
           this.$state.authError = true;
@@ -82,7 +82,6 @@ export const AuthenticationStore = defineStore('authentication', {
           console.log(error);
           this.logoutRemove();
         });
-        
     },
     getUserInfo(username) {
       return api
@@ -96,14 +95,13 @@ export const AuthenticationStore = defineStore('authentication', {
         .then((response) => {
           this.$state.bmcTime = response.data.DateTime;
           const cookie = Cookies.get('XSRF-TOKEN');
-          console.log('cookie', cookie);
         })
         .catch((error) => console.log(error));
     },
     resetStoreState() {
-      this.$state.authError = false;
-      this.$state.xsrfCookie = cookies.get('XSRF-TOKEN');
-      this.$state.isAuthenticatedCookie = cookies.get('IsAuthenticated');
+      this.authError = false;
+      this.xsrfCookie = cookies.get('XSRF-TOKEN');
+      this.isAuthenticatedCookie = cookies.get('IsAuthenticated');
     },
   },
 });

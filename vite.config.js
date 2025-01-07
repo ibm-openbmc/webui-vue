@@ -58,7 +58,7 @@ export default defineConfig({
       // locale messages resource pre-compile option
       include: resolve(
         dirname(fileURLToPath(import.meta.url)),
-        './path/to/src/locales/**',
+        './path/to/src/locales/**'
       ),
     }),
   ],
@@ -98,7 +98,7 @@ export default defineConfig({
             const setCookieHeader = proxyRes.headers['set-cookie'];
             if (setCookieHeader) {
               proxyRes.headers['set-cookie'] = setCookieHeader.map(
-                (cookie) => cookie + '; Path=/',
+                (cookie) => cookie + '; Path=/'
               );
             }
             // Remove the 'strict-transport-security' header
@@ -148,7 +148,7 @@ export default defineConfig({
           // eslint-disable-next-line no-undef
           new CompressionPlugin({
             deleteOriginalAssets: true,
-          }),
+          })
         );
       }
 

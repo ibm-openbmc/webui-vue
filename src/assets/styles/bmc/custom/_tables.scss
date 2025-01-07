@@ -152,6 +152,10 @@
       background-color: theme-color-dark($light);
     }
   }
+
+  caption {
+    color: $gray-600;
+  }
 }
 
 .b-table-sticky-header td {
