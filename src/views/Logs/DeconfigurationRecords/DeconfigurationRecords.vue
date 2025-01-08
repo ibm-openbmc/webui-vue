@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title
       :title="$t('appPageTitle.deconfigurationRecords')"
       :description="
@@ -8,76 +8,85 @@
       :link="$t('pageDeconfigurationRecords.pageDescription.link')"
       to="/settings/hardware-deconfiguration"
     />
-    <b-row>
-      <b-col class="text-right">
+    <alert v-if="!isServerOff()" variant="info" class="mb-4">
+      <p>
+        {{ $t('pageDeconfigurationRecords.alertPowerOff') }}
+      </p>
+    </alert>
+    <BRow>
+      <BCol class="text-right">
         <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
-        <b-button
+        <BButton
           variant="link"
           :disabled="allEntries.length === 0 || !isServerOff()"
           @click="clearAllEntries"
         >
           <icon-delete /> {{ $t('global.action.clearAll') }}
-        </b-button>
-        <b-button
+        </BButton>
+        <BButton
           variant="primary"
           :class="{ disabled: allEntries.length === 0 }"
           :download="exportFileNameByDate()"
           :href="href"
         >
           <icon-export /> {{ $t('global.action.exportAll') }}
-        </b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
+        </BButton>
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol>
         <table-toolbar
           ref="toolbar"
-          :selected-items-count="selectedRows.length"
-          @clear-selected="clearSelectedRows($refs.table)"
+          :selected-items-count="selectedRowsList.length"
+          @clear-selected="clearSelectedRows(tableDeconfigurationRecordsRef)"
         >
           <template #toolbar-buttons>
             <table-toolbar-export
               :data="batchExportData"
               :file-name="exportFileNameByDate()"
             />
+            <BButton variant="primary" :disabled="!isServerOff()" @click="onBatchAction('delete')">
+              <icon-delete /> {{ $t('global.action.delete') }}
+            </BButton>
           </template>
         </table-toolbar>
-        <b-table
+        <BTable
           id="table-deconfiguration-records"
-          ref="table"
+          ref="tableDeconfigurationRecordsRef"
+          class="tableStyle"
           responsive="xl"
           selectable
           no-select-on-click
-          sort-icon-left
           hover
-          no-sort-reset
-          sort-desc
           show-empty
-          sort-by="id"
+          :sort-by="[{ key: 'id', order: 'asc' }]"
           sort-desc.sync="status"
+          sticky-header="75vh"
           :fields="fields"
           :items="filteredLogs"
           :empty-text="$t('global.table.emptyMessage')"
-          :current-page="currentPage"
-          :per-page="perPage"
+          :current-page="currentPageNo"
+          :per-page="itemPerPage"
           @row-selected="onRowSelected($event, filteredLogs.length)"
         >
           <!-- Expand chevron icon -->
           <template #cell(expandRow)="row">
-            <b-button
+            <BButton
               variant="link"
               :aria-label="expandRowLabel"
               :title="expandRowLabel"
-              class="btn-icon-only"
-              @click="toggleRowDetails(row)"
+              :class="
+                row.item.toggleDetails ? 'rotateSvg btn-icon-only' : 'btn-icon-only'
+              "
+              @click="toggleRow(row)"
             >
               <icon-chevron />
-            </b-button>
+            </BButton>
           </template>
           <template #row-details="{ item }">
-            <b-container fluid="xl">
-              <b-row>
-                <b-col cols="4">
+            <BContainer fluid="xl">
+              <BRow>
+                <BCol cols="4">
                   <dl>
                     <!-- Event Id -->
                     <dt>
@@ -86,7 +95,7 @@
                         class="info-icon"
                         :title="
                           $t(
-                            'pageDeconfigurationRecords.table.srcDetailsToolTip',
+                            'pageDeconfigurationRecords.table.srcDetailsToolTip'
                           )
                         "
                       >
@@ -94,64 +103,72 @@
                     </dt>
                     <dd>{{ dataFormatter(item.srcDetails) }}</dd>
                   </dl>
-                </b-col>
-                <b-col cols="4">
+                </BCol>
+                <BCol cols="4" class="mt-2">
                   <dl>
                     <dt>
                       {{ $t('pageDeconfigurationHardware.table.locationCode') }}
                     </dt>
                     <dd>{{ dataFormatter(item.location) }}</dd>
                   </dl>
-                </b-col>
-                <b-col
+                </BCol>
+                <BCol
                   v-if="item.additionalDataUri"
                   cols="4"
-                  class="text-nowrap"
+                  class="text-nowrap mt-2"
                 >
-                  <b-button
+                  <BButton
                     class="btn btn-secondary"
                     target="_blank"
                     @click="downloadLog(item.oemPelAttachment, item.date)"
                   >
                     <icon-download />
                     {{ $t('pageDeconfigurationRecords.additionalDataUri') }}
-                  </b-button>
-                </b-col>
-              </b-row>
-            </b-container>
+                  </BButton>
+                </BCol>
+              </BRow>
+            </BContainer>
           </template>
           <!-- Checkbox column -->
           <template #head(checkbox)>
-            <b-form-checkbox
-              v-model="tableHeaderCheckboxModel"
-              :indeterminate="tableHeaderCheckboxIndeterminate"
-              @change="onChangeHeaderCheckbox($refs.table)"
+            <BFormCheckbox
+              v-model="tableHeaderCheckbox"
+              :indeterminate="tableHeaderCheckboxIndeterminated"
+              @change="onChangeHeaderCheckbox(tableDeconfigurationRecordsRef, tableHeaderCheckbox)"
+              @update:modelValue="toggleAll"
             >
-              <span class="sr-only">{{ $t('global.table.selectAll') }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
-            <b-form-checkbox
-              v-model="row.rowSelected"
-              @change="toggleSelectRow($refs.table, row.index)"
-            >
-              <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
-            </b-form-checkbox>
+            <BFormCheckbox
+              v-model="deconfigurationRecoredsStore.deconfigRecords[row.index].isSelected"
+              @change="
+                toggleSelectRowById(
+                  tableDeconfigurationRecordsRef, 
+                  row.index, 
+                  deconfigurationRecoredsStore.deconfigRecords[row.index].isSelected,
+                  row.item
+                )
+              "
+            ></BFormCheckbox>
           </template>
           <!-- Date column -->
           <template #cell(date)="{ value }">
-            <p class="mb-0">{{ value | formatDate }}</p>
-            <p class="mb-0">{{ value | formatTime }}</p>
+            <p class="mb-0">{{ $filters.formatDate(value) }}</p>
+            <p class="mb-0">{{ $filters.formatTime(value) }}</p>
           </template>
+          <!-- Severity column -->
           <template #cell(severity)="{ value }">
             {{
               value === 'Critical'
                 ? $t('pageDeconfigurationRecords.severityValues.fatal')
+                : value === 'Spare'
+                ? $t('pageDeconfigurationRecords.severityValues.spare')
                 : value === 'Warning'
-                  ? $t('pageDeconfigurationRecords.severityValues.predictive')
-                  : value === 'OK'
-                    ? $t('pageDeconfigurationRecords.severityValues.manual')
-                    : '--'
+                ? $t('pageDeconfigurationRecords.severityValues.predictive')
+                : value === 'Manual'
+                ? $t('pageDeconfigurationRecords.severityValues.manual')
+                : '--'
             }}
           </template>
           <!-- Status column -->
@@ -166,97 +183,143 @@
           <template #cell(filterByStatus)="{ value }">
             {{ value }}
           </template>
-        </b-table>
-      </b-col>
-    </b-row>
+          <!-- Actions column -->
+          <template #cell(actions)="row">
+            <table-row-action
+              v-for="(action, index) in batchActions"
+              :key="index"
+              :value="action.value"
+              :title="action.title"
+              :enabled="isServerOff()"
+              :row-data="row.item"
+              :btn-icon-only="false"
+              @click-table-action="onTableRowAction(action.value, row.item.uri)"
+            >
+              <template #icon>
+                <icon-delete v-if="action.value === 'delete'" />
+              </template>
+            </table-row-action>
+          </template>
+        </BTable>
+      </BCol>
+    </BRow>
     <!-- Table pagination -->
-    <b-row>
-      <b-col sm="6">
-        <b-form-group
+    <BRow>
+      <BCol sm="6">
+        <BFormGroup
           class="table-pagination-select"
           :label="$t('global.table.itemsPerPage')"
           label-for="pagination-items-per-page"
         >
           <b-form-select
             id="pagination-items-per-page"
-            v-model="perPage"
+            v-model="itemPerPage"
             :options="itemsPerPageOptions"
           />
-        </b-form-group>
-      </b-col>
-      <b-col sm="6">
+        </BFormGroup>
+      </BCol>
+      <BCol sm="6">
         <b-pagination
-          v-model="currentPage"
+          v-model="currentPageNo"
+          class="b-pagination"
           first-number
           last-number
-          :per-page="perPage"
-          :total-rows="getTotalRowCount(filteredLogs.length)"
+          :per-page="itemPerPage"
+          :total-rows="getTotalRowCount(filteredLogs.length, itemPerPage)"
           aria-controls="table-event-logs"
         />
-      </b-col>
-    </b-row>
-  </b-container>
+      </BCol>
+    </BRow>
+    <BModal
+      v-model="openModal"
+      :title="$t('pageDeconfigurationRecords.modal.deleteAllTitle')"
+      :ok-title="$t('global.action.delete')"
+      okVariant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk"
+    >
+      <p>
+        {{
+          $t('pageDeconfigurationRecords.modal.deleteAllMessage')
+        }}
+      </p>
+    </BModal>
+    <BModal
+      v-model="openModal2"
+      :title="$t('pageDeconfigurationRecords.modal.deleteTitle', { count: count }, count)"
+      :ok-title="$t('global.action.delete')"
+      okVariant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk2"
+    >
+      <p>
+        {{
+          $t('pageDeconfigurationRecords.modal.deleteMessage', { count: count }, count)
+        }}
+      </p>
+    </BModal>
+  </BContainer>
 </template>
 
-<script>
+<script setup>
 import { omit } from 'lodash';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+import i18n from '@/i18n';
+import { ref, computed, onBeforeMount, onMounted } from 'vue';
+import Alert from '@/components/Global/Alert.vue';
+import useToastComposable from '@/components/Composables/useToastComposable';
+import useTableRowExpandComposable from '@/components/Composables/useTableRowExpandComposable';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import usePaginationComposable from '@/components/Composables/usePaginationComposable';
+import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
+import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import IconDelete from '@carbon/icons-vue/es/trash-can/20';
 import IconDownload from '@carbon/icons-vue/es/download/20';
 import IconExport from '@carbon/icons-vue/es/document--export/20';
-import InfoTooltip from '@/components/Global/InfoTooltip';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import PageTitle from '@/components/Global/PageTitle';
-import TableFilter from '@/components/Global/TableFilter';
-import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
-import TableToolbar from '@/components/Global/TableToolbar';
-import TableToolbarExport from '@/components/Global/TableToolbarExport';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import TableFilter from '@/components/Global/TableFilter.vue';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import TableToolbarExport from '@/components/Global/TableToolbarExport.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
+import { DeconfigurationRecordsStore, GlobalStore } from '@/store';
+import { onBeforeRouteLeave } from 'vue-router';
+import eventBus from '@/eventBus';
 
-import BVTableSelectableMixin, {
-  selectedRows,
+const {
+  onRowSelected,
+  toggleSelectRowById,
+  selectedRowsList,
+  clearSelectedRows,
+  onChangeHeaderCheckbox,
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import BVPaginationMixin, {
+} = useTableSelectableComposable();
+const {
   currentPage,
   perPage,
   itemsPerPageOptions,
-} from '@/components/Mixins/BVPaginationMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
+  getTotalRowCount,
+} = usePaginationComposable();
+const { expandRowLabel, toggleRow} = useTableRowExpandComposable();
+const Toast = useToastComposable();
+const { dataFormatter } = useDataFormatterGlobal();
+const { getFilteredTableData } = useTableFilterComposable();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const deconfigurationRecoredsStore = DeconfigurationRecordsStore();
+const global = GlobalStore();
+const uris = ref();
+const uriValue = ref();
+const isAllSelected = ref(false);
+const selectedRowsNo = ref(0);
+const tableDeconfigurationRecordsRef = ref(null);
 
-export default {
-  components: {
-    IconChevron,
-    IconDelete,
-    IconDownload,
-    IconExport,
-    InfoTooltip,
-    PageTitle,
-    TableFilter,
-    TableToolbar,
-    TableToolbarExport,
-  },
-  mixins: [
-    BVPaginationMixin,
-    BVTableSelectableMixin,
-    BVToastMixin,
-    DataFormatterMixin,
-    LoadingBarMixin,
-    TableFilterMixin,
-    TableRowExpandMixin,
-  ],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
-  },
-  data() {
-    return {
-      expandRowLabel,
-      fields: [
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+const fields = ref([
         {
           key: 'expandRow',
           label: '',
@@ -268,133 +331,133 @@ export default {
         },
         {
           key: 'id',
-          label: this.$t('pageDeconfigurationRecords.table.id'),
+          label: i18n.global.t('pageDeconfigurationRecords.table.id'),
           sortable: true,
         },
         {
           key: 'eventID',
-          label: this.$t('pageDeconfigurationRecords.table.eventId'),
+          label: i18n.global.t('pageDeconfigurationRecords.table.eventId'),
           sortable: true,
         },
         {
           key: 'date',
-          label: this.$t('pageDeconfigurationRecords.table.date'),
+          label: i18n.global.t('pageDeconfigurationRecords.table.date'),
           sortable: true,
         },
         {
           key: 'severity',
-          label: this.$t('pageDeconfigurationRecords.table.severity'),
+          label: i18n.global.t('pageDeconfigurationRecords.table.severity'),
           sortable: true,
         },
         {
           key: 'description',
-          label: this.$t('pageDeconfigurationRecords.table.resource'),
+          label: i18n.global.t('pageDeconfigurationRecords.table.resource'),
           sortable: false,
         },
         {
           key: 'status',
-          label: this.$t('pageDeconfigurationRecords.table.status'),
+          label: i18n.global.t('pageDeconfigurationRecords.table.status'),
           sortable: false,
         },
-      ],
-      tableFilters: [
+        {
+          key: 'actions',
+          sortable: false,
+          label: '',
+          tdClass: 'text-right text-nowrap',
+        },
+      ]);
+const tableFilters = ref([
         {
           key: 'filterByStatus',
-          label: this.$t('pageDeconfigurationRecords.table.status'),
+          label: i18n.global.t('pageDeconfigurationRecords.table.status'),
           values: [
-            this.$t('pageEventLogs.resolved'),
-            this.$t('pageEventLogs.unresolved'),
+            i18n.global.t('pageEventLogs.resolved'),
+            i18n.global.t('pageEventLogs.unresolved'),
           ],
         },
-      ],
-      activeFilters: [],
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
-      currentPage: currentPage,
-      perPage: perPage,
-      itemsPerPageOptions: itemsPerPageOptions,
+      ]);
+const activeFiltersRows = ref([]);
+const selectedRowsLists = ref(selectedRowsList);
+const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
+const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
+const currentPageNo = ref(currentPage);
+const itemPerPage = ref(perPage)
+const openModal = ref(false);
+const openModal2 = ref(false);
+const count = ref(0);
+const batchActions = ref([
+        {
+          value: 'delete',
+          title: i18n.global.t('global.action.delete'),
+        },
+      ]);
+
+const href = computed(() => {
+      return `data:text/json;charset=utf-8,${exportAllRecords()}`;
+    });
+const allEntries = computed(() => {
+      return deconfigurationRecoredsStore.deconfigRecordsGetter
+    });
+const recordItems = computed(() => {
+      return deconfigurationRecoredsStore.deconfigRecordsGetter
+    });
+const batchExportData = computed(() => {
+      return selectedRowsLists.value.map((row) => omit(row, 'actions'));
+    });
+const filteredLogs = computed(() => {
+      return getFilteredTableData(recordItems.value, activeFiltersRows.value);
+    });
+const serverStatus = computed(() => {
+      return global.serverStatus;
+    });
+
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    deconfigurationRecoredsStore?.deconfigRecordsGetter?.map((singleRecord) => {
+    singleRecord.isSelected = false;
+  })
+    clearSelectedRows(tableDeconfigurationRecordsRef);
+  });
+});
+
+onMounted(() => {
+    startLoader();
+    deconfigurationRecoredsStore.getDeconfigurationRecordInfo()
+    .finally(() => endLoader());
+  });
+
+const isServerOff = () => {
+      return serverStatus.value === 'off';
     };
-  },
-  computed: {
-    href() {
-      return `data:text/json;charset=utf-8,${this.exportAllRecords()}`;
-    },
-    allEntries() {
-      return this.$store.getters['deconfigurationRecords/deconfigRecords'];
-    },
-    recordItems() {
-      return this.$store.getters['deconfigurationRecords/deconfigRecords'];
-    },
-    batchExportData() {
-      return this.selectedRows.map((row) => omit(row, 'actions'));
-    },
-    filteredLogs() {
-      return this.getFilteredTableData(this.recordItems, this.activeFilters);
-    },
-    serverStatus() {
-      return this.$store.getters['global/serverStatus'];
-    },
-  },
-  created() {
-    this.startLoader();
-    this.$store
-      .dispatch('deconfigurationRecords/getDeconfigurationRecordInfo')
-      .finally(() => this.endLoader());
-  },
-  methods: {
-    isServerOff() {
-      return this.serverStatus === 'off';
-    },
-    clearAllEntries() {
-      this.$bvModal
-        .msgBoxConfirm(
-          this.$t('pageDeconfigurationRecords.modal.deleteAllMessage'),
-          {
-            title: this.$t('pageDeconfigurationRecords.modal.deleteAllTitle'),
-            okTitle: this.$t('global.action.delete'),
-            okVariant: 'danger',
-            cancelTitle: this.$t('global.action.cancel'),
-          },
-        )
-        .then((deleteConfirmed) => {
-          if (deleteConfirmed) {
-            this.$store
-              .dispatch(
-                'deconfigurationRecords/clearAllEntries',
-                this.allEntries,
-              )
-              .then((message) => this.successToast(message))
-              .catch(({ message }) => this.errorToast(message));
-          }
-        });
-    },
-    deleteRecords(uris) {
-      this.$store
-        .dispatch('deconfigurationRecords/deleteRecords', uris)
-        .then((messages) => {
-          messages.forEach(({ type, message }) => {
-            if (type === 'success') {
-              this.successToast(message);
-            } else if (type === 'error') {
-              this.errorToast(message);
-            }
-          });
-        });
-    },
-    downloadLog(uri, date) {
-      this.startLoader();
-      this.$store
-        .dispatch('deconfigurationRecords/downloadLog', {
+
+const clearAllEntries = () => {
+      openModal.value = true;
+    };
+const handleOk = () => {
+  openModal.value = false;
+  deconfigurationRecoredsStore.clearAllEntries(
+          allEntries.value
+          )
+          .then((message) => Toast.successToast(message))
+          .catch(({ message }) => Toast.errorToast(message));
+    };
+const deleteRecords = async(uri) => {
+  deconfigurationRecoredsStore.deleteRecords(uri)
+        .then((message) => Toast.successToast(message))
+        .catch(({ message }) => Toast.errorToast(message));
+    };
+const downloadLog = (uri, date) => {
+      startLoader();
+      deconfigurationRecoredsStore.downloadLog({
           uri: uri,
           date: date,
         })
-        .then((message) => this.successToast(...message))
-        .catch(({ message }) => this.successToast(message))
-        .finally(() => this.endLoader());
-    },
+        .then((message) => Toast.successToast(...message))
+        .catch(({ message }) => Toast.successToast(message))
+        .finally(() => endLoader());
+    };
     // Create export file name based on date
-    exportFileNameByDate(value) {
+const exportFileNameByDate = (value) => {
       let date = new Date();
       date =
         date.toISOString().slice(0, 10) +
@@ -407,36 +470,69 @@ export default {
         fileName = 'all_deconfig_records_';
       }
       return fileName + date;
-    },
-    exportAllRecords() {
+    };
+const exportAllRecords = () => {
       {
-        return this.$store.getters[
-          'deconfigurationRecords/deconfigRecords'
-        ].map((records) => {
+        return deconfigurationRecoredsStore.deconfigRecords.map((records) => {
           const allDeconfigRecordsString = JSON.stringify(records);
           return allDeconfigRecordsString;
         });
       }
-    },
-    onFilterChange({ activeFilters }) {
-      this.activeFilters = activeFilters;
-    },
-    onTableRowAction(action, { uri }) {
+    };
+const onFilterChange = ({ activeFilters }) => {
+      activeFiltersRows.value = activeFilters;
+    };
+const onTableRowAction = (action, uri) => {
       if (action === 'delete') {
-        this.$bvModal
-          .msgBoxConfirm(
-            this.$tc('pageDeconfigurationRecords.modal.deleteMessage'),
-            {
-              title: this.$tc('pageDeconfigurationRecords.modal.deleteTitle'),
-              okTitle: this.$t('global.action.delete'),
-              cancelTitle: this.$t('global.action.cancel'),
-            },
-          )
-          .then((deleteConfirmed) => {
-            if (deleteConfirmed) this.deleteRecords([uri]);
-          });
+        uriValue.value = uri;
+        count.value = 1;
+        openModal2.value = true;
       }
-    },
-  },
+    };
+const onBatchAction = (action) => {
+      if (action === 'delete') {
+        uris.value = selectedRowsLists.value.map((row) => row.uri);
+        selectedRowsNo.value = selectedRowsLists.value.map((row) => row.uri).length;
+        count.value = selectedRowsNo.value;
+        openModal2.value = true;
+        
+      }
+    }
+;
+const handleOk2 = () => {
+  openModal2.value = false;
+  if (selectedRowsNo.value>1){
+    deleteRecords(uris.value);
+    }
+  else{
+    deleteRecords([uriValue.value])
+    }
+};
+const toggleAll = (checked) => {
+  deconfigurationRecoredsStore?.deconfigRecordsGetter?.map((singleRecord) => {
+    singleRecord.isSelected = checked;
+  });
+  isAllSelected.value = checked;
 };
 </script>
+<style lang="scss" scoped>
+.text-right {
+  text-align: right;
+}
+#table-deconfiguration-records {
+  td .btn-link {
+    width: auto !important;
+  }
+}
+.rotateSvg {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+.container-xl {
+  margin-left: 42px;
+}
+.tableStyle {
+  overflow-x: hidden;
+}
+</style>

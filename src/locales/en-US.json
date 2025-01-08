@@ -496,6 +496,7 @@
   },
   "pageDeconfigurationRecords": {
     "additionalDataUri": "Download additional data",
+    "alertPowerOff": "Deconfiguration records can be deleted only when the system is powered off.",
     "clearAll": "Clear all records",
     "fatal": "Fatal",
     "manual": "Manual",
@@ -517,7 +518,7 @@
       "confirmMessage": "Clearing all deconfiguration records will attempt to reconfigure all hardware in the selected node(s). These changes will take effect on the next boot.",
       "deleteAllMessage": "Are you sure you want to delete all records? This action cannot be undone.",
       "deleteAllTitle": "Delete all records",
-      "deleteMessage": "Are you sure you want to delete %{count} records? This action cannot be undone. | Are you sure you want to delete %{count} records? This action cannot be undone.",
+      "deleteMessage": "Are you sure you want to delete %{count} record? This action cannot be undone. | Are you sure you want to delete %{count} records? This action cannot be undone.",
       "deleteTitle": "Delete record | Delete records",
       "goBack": "Go back",
       "continue": "Continue"

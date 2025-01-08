@@ -30,6 +30,7 @@ import CertificatesStore from './modules/SecurityAndAccess/CertificatesStore';
 import UserManagementStore from './modules/SecurityAndAccess/UserManagementStore';
 import PcieTopologyStore from './modules/HardwareStatus/PcieTopologyStore.js';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
+import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsStore.js';
 // ... (export use other stores)
 export {
   EventLogStore,
@@ -63,4 +64,5 @@ export {
   UserManagementStore,
   PcieTopologyStore,
   HardwareDeconfigurationStore,
+  DeconfigurationRecordsStore
 };
