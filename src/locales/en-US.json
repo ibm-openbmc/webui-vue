@@ -497,6 +497,7 @@
   },
   "pageDeconfigurationRecords": {
     "additionalDataUri": "Download additional data",
+    "alertPowerOff": "Deconfiguration records can be deleted only when the system is powered off.",
     "clearAll": "Clear all records",
     "fatal": "Fatal",
     "manual": "Manual",

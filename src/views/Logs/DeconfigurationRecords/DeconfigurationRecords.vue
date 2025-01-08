@@ -8,6 +8,11 @@
       :link="$t('pageDeconfigurationRecords.pageDescription.link')"
       to="/settings/hardware-deconfiguration"
     />
+    <alert variant="info" class="mb-4">
+      <p v-if="!isServerOff()">
+        {{ $t('pageDeconfigurationRecords.alertPowerOff') }}
+      </p>
+    </alert>
     <b-row>
       <b-col class="text-right">
         <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
@@ -40,7 +45,11 @@
               :data="batchExportData"
               :file-name="exportFileNameByDate()"
             />
-            <b-button variant="primary" @click="onBatchAction('delete')">
+            <b-button
+              variant="primary"
+              :disabled="!isServerOff()"
+              @click="onBatchAction('delete')"
+            >
               <icon-delete /> {{ $t('global.action.delete') }}
             </b-button>
           </template>
@@ -180,6 +189,7 @@
               :key="index"
               :value="action.value"
               :title="action.title"
+              :enabled="isServerOff()"
               :row-data="row.item"
               @click-table-action="onTableRowAction(action.value, row.item.uri)"
             >
@@ -222,6 +232,7 @@
 
 <script>
 import { omit } from 'lodash';
+import Alert from '@/components/Global/Alert';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
@@ -253,6 +264,7 @@ import TableRowExpandMixin, {
 
 export default {
   components: {
+    Alert,
     IconChevron,
     IconDelete,
     IconDownload,
