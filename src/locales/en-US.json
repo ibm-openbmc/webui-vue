@@ -351,6 +351,7 @@
       "errorAddCertificate": "Error adding certificate.",
       "errorDeleteCertificate": "Error deleting certificate.",
       "errorReplaceCertificate": "Error replacing certificate.",
+      "errorGenerateCsr": "Error generating CSR.",
       "successAddCertificate": "Successfully added %{certificate}.",
       "successAddedHTTPCertificate": "Successfully added %{certificate}. Reload the browser page to see the changes.",
       "successDeleteCertificate": "Successfully deleted %{certificate}.",

@@ -382,7 +382,10 @@ const CertificatesStore = {
         )
         //TODO: Success response also throws error so
         // can't accurately show legitimate error in UI
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          throw new Error(i18n.t('pageCertificates.toast.errorGenerateCsr'));
+        });
     },
   },
 };

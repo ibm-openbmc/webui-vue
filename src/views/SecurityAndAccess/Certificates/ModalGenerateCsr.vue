@@ -448,7 +448,8 @@ export default {
           this.csrString = CSRString;
           this.$bvModal.show('csr-string');
           this.$v.$reset();
-        });
+        })
+        .catch(({ message }) => this.errorToast(message));
     },
     resetForm() {
       for (let key of Object.keys(this.form)) {
