@@ -407,20 +407,51 @@ export default {
         )
         .then((deleteConfirmed) => {
           if (deleteConfirmed) {
+            let totalEntries = [...this.allEntries];
+            let deletedEntries = 0;
             this.$store
               .dispatch(
                 'deconfigurationRecords/clearAllEntries',
                 this.allEntries
               )
               .then(() => {
-                this.infoToast(
-                  this.$tc('pageDeconfigurationRecords.toast.clearAllInfo')
-                );
-                this.successToast(
-                  this.$tc('pageDeconfigurationRecords.toast.clearAllSuccess')
-                );
+                this.startLoader();
+                this.$store
+                  .dispatch(
+                    'deconfigurationRecords/getDeconfigurationRecordInfo'
+                  )
+                  .finally(() => {
+                    deletedEntries =
+                      totalEntries.length - this.allEntries.length;
+                    if (this.allEntries.length > 0) {
+                      this.errorToast(
+                        this.$tc(
+                          'pageDeconfigurationRecords.toast.clearAllInfo',
+                          this.allEntries.length
+                        )
+                      );
+                      this.errorToast(
+                        this.$tc(
+                          'pageDeconfigurationRecords.toast.errorDelete',
+                          this.allEntries.length
+                        )
+                      );
+                    }
+                    if (deletedEntries > 0) {
+                      this.successToast(
+                        this.$tc(
+                          'pageDeconfigurationRecords.toast.successDelete',
+                          deletedEntries
+                        )
+                      );
+                    }
+                    this.endLoader();
+                  });
               })
-              .catch(({ message }) => this.errorToast(message));
+              .catch(({ message }) => {
+                this.endLoader();
+                this.errorToast(message);
+              });
           }
         });
     },

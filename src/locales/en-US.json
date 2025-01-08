@@ -554,8 +554,7 @@
       "spare": "Spare"
     },
     "toast": {
-      "clearAllInfo": "Core guard records will be not be deleted as it might be associated with Spare core.",
-      "clearAllSuccess": "Successfully initiated Clear all",
+      "clearAllInfo": "A core guard record was not deleted as it might be associated with Spare core. This record can only be cleared separately. | Core guard records were not deleted as it might be associated with Spare core. Each of these records can only be cleared separately.",
       "errorDelete": "Error deleting %{count} record. | Error deleting %{count} records.",
       "errorResolveEntries": "Error resolving %{count} record. | Error resolving %{count} records.",
       "errorStartDownload": "Error starting download.",

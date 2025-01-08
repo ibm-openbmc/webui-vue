@@ -89,12 +89,11 @@ const DeconfigurationRecordsStore = {
         })
         .catch((error) => console.log(error));
     },
-    async clearAllEntries({ dispatch }, data) {
+    async clearAllEntries(_, data) {
       return await api
         .post(
           '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Actions/LogService.ClearLog'
         )
-        .then(() => dispatch('getDeconfigurationRecordInfo'))
         .then(() =>
           i18n.tc('pageDeconfigurationRecords.toast.successDelete', data.length)
         )
