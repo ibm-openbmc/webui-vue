@@ -8,8 +8,8 @@
       :link="$t('pageDeconfigurationRecords.pageDescription.link')"
       to="/settings/hardware-deconfiguration"
     />
-    <alert variant="info" class="mb-4">
-      <p v-if="!isServerOff()">
+    <alert v-if="!isServerOff()" variant="info" class="mb-4">
+      <p>
         {{ $t('pageDeconfigurationRecords.alertPowerOff') }}
       </p>
     </alert>
