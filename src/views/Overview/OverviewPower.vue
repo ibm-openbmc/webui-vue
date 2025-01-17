@@ -21,7 +21,7 @@
       <b-col sm="6">
         <dl>
           <dt>{{ $t('pagePower.idlePower') }}</dt>
-          <dd v-if="idlePowerSaverData">
+          <dd v-if="idlePowerSaverData && idlePowerSaverData.Enabled">
             {{ $t('global.status.enabled') }}
           </dd>
           <dd v-else>{{ $t('global.status.disabled') }}</dd>
@@ -30,14 +30,14 @@
             <status-icon status="danger" />
             {{ $t('pageOverview.safeMode') }}
           </dd>
-          <dd v-else-if="powerPerformanceMode === 'Static'">
-            {{ $t('pageOverview.powerPerformanceModes.static') }}
-          </dd>
           <dd v-else-if="powerPerformanceMode === 'MaximumPerformance'">
             {{ $t('pageOverview.powerPerformanceModes.maximumPerformance') }}
           </dd>
+          <dd v-else-if="powerPerformanceMode === 'EfficiencyFavorPower'">
+            {{ $t('pagePower.selectMode.energyEfficient.primary') }}
+          </dd>
           <dd v-else-if="powerPerformanceMode === 'PowerSaving'">
-            {{ $t('pageOverview.powerPerformanceModes.powerSaving') }}
+            {{ $t('pagePower.selectMode.maximumEnergySaver.primary') }}
           </dd>
         </dl>
       </b-col>
