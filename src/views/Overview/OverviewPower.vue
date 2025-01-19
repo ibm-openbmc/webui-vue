@@ -21,7 +21,7 @@
       <b-col sm="6">
         <dl>
           <dt>{{ $t('pagePower.idlePower') }}</dt>
-          <dd v-if="idlePowerSaverData">
+          <dd v-if="idlePowerSaverData && idlePowerSaverData.Enabled">
             {{ $t('global.status.enabled') }}
           </dd>
           <dd v-else>{{ $t('global.status.disabled') }}</dd>
