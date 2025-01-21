@@ -453,10 +453,10 @@ const systemParametersStore = {
       } else {
         commit('setFrequencyRequestCurrentToggle', false);
       }
-      return dispatch('newFrequencyCapRequest', frequency);
+      return dispatch('newFrequencyCapRequest', { frequency, state });
     },
 
-    async newFrequencyCapRequest({ commit, dispatch }, frequency) {
+    async newFrequencyCapRequest({ commit, dispatch }, { frequency, state }) {
       const newFrequencyRequest = {
         Attributes: { hb_cap_freq_mhz_request: frequency },
       };
@@ -467,12 +467,8 @@ const systemParametersStore = {
           return i18n.t('pageSystemParameters.toast.successSavingFrequencyCap');
         })
         .catch((error) => {
-          if (frequency == 0) {
-            commit('setFrequencyRequestCurrentToggle', false);
-          } else {
-            commit('setFrequencyRequestCurrentToggle', true);
-          }
           console.log(error);
+          commit('setFrequencyRequestCurrentToggle', !state);
           throw new Error(
             i18n.t('pageSystemParameters.toast.errorSavingFrequencyCap')
           );
