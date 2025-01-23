@@ -439,7 +439,12 @@
     "toast": {
       "deleteReqFailed": "The delete request failed because the resource requested cannot be deleted.",
       "errorDisablingSetting": "Error disabling setting",
-      "errorEnablingSetting": "Error enabling setting"
+      "errorEnablingSetting": "Error enabling setting",
+      "errorConfiguringProcessorCore": "Error Configuring Processor Core",
+      "errorConfiguringDIMM": "Error Configuring Memory DIMM",
+      "errorDeconfiguringProcessorCore": "Error Deconfiguring Processor Core",
+      "errorDeconfiguringDIMM" : "Error Deconfiguring Memory DIMM"
+    
     },
     "table": {
       "deconfigurationType": "Deconfiguration Type",

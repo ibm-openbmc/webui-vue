@@ -211,11 +211,11 @@ const HardwareDeconfigurationStore = {
           );
         } else if (settingsState.settings) {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorEnablingSetting')
+            i18n.t('pageDeconfigurationHardware.toast.errorConfiguringDIMM')
           );
         } else {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorDisablingSetting')
+            i18n.t('pageDeconfigurationHardware.toast.errorDeconfiguringDIMM')
           );
         }
       });
@@ -236,11 +236,15 @@ const HardwareDeconfigurationStore = {
           );
         } else if (settingsState.settings) {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorEnablingSetting')
+            i18n.t(
+              'pageDeconfigurationHardware.toast.errorConfiguringProcessorCore'
+            )
           );
         } else {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorDisablingSetting')
+            i18n.t(
+              'pageDeconfigurationHardware.toast.errorDeconfiguringProcessorCore'
+            )
           );
         }
       });
