@@ -181,8 +181,8 @@ export default {
   methods: {
     async checkTask() {
       //getting list of all tasks and getting the api to the most recent task
-      const data = await this.$store.dispatch('dumps/getTask');
-      this.taskProgress = data.Members[data.Members.length - 1];
+      const taskObj = await this.$store.dispatch('dumps/getTask');
+      this.taskProgress = taskObj.data.Members[taskObj.data.Members.length - 1];
       const taskLink = this.taskProgress['@odata.id'];
       //going to the most recent task
       const currentTask = async () => {

@@ -132,8 +132,8 @@ export default {
 
           Promise.all([currentTask(data)]).then((res) => {
             // Check to see if activation was aborted
-            const activationAborted = res[0].Messages.filter(
-              (message) => message.MessageId === 'TaskEvent.1.0.1.TaskAborted'
+            const activationAborted = res[0].Messages.filter((message) =>
+              message.MessageId.endsWith('TaskAborted')
             )[0];
 
             if (activationAborted) {
