@@ -193,7 +193,8 @@ const UserManagementStore = {
     ) {
       const data = {};
       const notReadOnly =
-        privilege !== 'ReadOnly' && currentUser.RoleId !== 'ReadOnly';
+        privilege !== 'ReadOnly' &&
+        (currentUser ? currentUser.RoleId !== 'ReadOnly' : true);
       if (username) data.UserName = username;
       if (password) data.Password = password;
       if (privilege && notReadOnly) {
@@ -201,7 +202,7 @@ const UserManagementStore = {
       } else if (
         privilege &&
         privilege === 'ReadOnly' &&
-        currentUser.RoleId !== 'ReadOnly'
+        (currentUser ? currentUser.RoleId !== 'ReadOnly' : true)
       ) {
         data.RoleId = privilege;
       }
@@ -550,12 +551,16 @@ const UserManagementStore = {
     },
     async generateSecretKey({ commit }) {
       const currentUsername = localStorage.getItem('storedUsername');
-      api
+      return api
         .post(
           `redfish/v1/AccountService/Accounts/${currentUsername}/Actions/ManagerAccount.GenerateSecretKey`
         )
         .then(({ data }) => {
           commit('setSecretKeyInfo', data?.SecretKey);
+        })
+        .catch((error) => {
+          console.log('error', error);
+          throw new Error(error);
         });
     },
     async verifyRegisterTotp({ dispatch }, { otpValue }) {

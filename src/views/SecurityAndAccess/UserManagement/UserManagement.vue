@@ -1,7 +1,7 @@
 <template>
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.userManagement')" />
-    <b-row v-if="isAdminUser || isServiceUser">
+    <b-row v-if="currentUser && (isAdminUser || isServiceUser)">
       <b-col>
         <span>{{ $t('pageUserManagement.mfaTotpAuthentication') }}</span>
         <info-tooltip
@@ -11,6 +11,7 @@
         >
         </info-tooltip>
         <b-form-checkbox
+          v-if="currentUser"
           id="switch"
           ref="globalMfaRef"
           v-model="globalMfaValue"
@@ -26,7 +27,7 @@
         </b-form-checkbox>
       </b-col>
     </b-row>
-    <b-row v-if="isAdminUser || isServiceUser" class="mt-2">
+    <b-row v-if="currentUser && (isAdminUser || isServiceUser)" class="mt-2">
       <b-col xl="9">
         <alert variant="info" class="mb-2">
           <div>
@@ -36,7 +37,7 @@
       </b-col>
     </b-row>
     <b-row
-      v-if="isAdminUser && globalMfaValue && currentMfaBypassed"
+      v-if="currentUser && isAdminUser && globalMfaValue && currentMfaBypassed"
       class="mt-2"
     >
       <b-col xl="9">
@@ -106,7 +107,10 @@
               <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </b-form-checkbox>
           </template>
-          <template v-if="isAdminUser || isServiceUser" #cell(mfa)="row">
+          <template
+            v-if="currentUser && (isAdminUser || isServiceUser)"
+            #cell(mfa)="row"
+          >
             <b-form-checkbox
               v-if="row.item.privilege !== 'Service agent'"
               v-model="row.item.mfa"
@@ -116,7 +120,7 @@
             >
             </b-form-checkbox>
           </template>
-          <template #head(secretKey)="row">
+          <template v-if="currentUser" #head(secretKey)="row">
             {{ row.label }}
             <info-tooltip
               v-if="isAdminUser || isServiceUser"
@@ -125,7 +129,10 @@
             >
             </info-tooltip>
           </template>
-          <template v-if="isAdminUser || isServiceUser" #cell(secretKey)="row">
+          <template
+            v-if="currentUser && (isAdminUser || isServiceUser)"
+            #cell(secretKey)="row"
+          >
             <b-button
               v-if="
                 row.item.privilege !== 'Service agent' &&
@@ -418,9 +425,11 @@ export default {
     Promise.all([
       this.$store.dispatch('userManagement/getAccountRoles'),
       this.$store.dispatch('userManagement/getUsers'),
-      this.$store.dispatch('userManagement/checkCurrentUserMfaBypassed', {
-        uri: this.currentUser['@odata.id'],
-      }),
+      this.currentUser
+        ? this.$store.dispatch('userManagement/checkCurrentUserMfaBypassed', {
+            uri: this.currentUser['@odata.id'],
+          })
+        : true,
     ]).finally(() => {
       this.endLoader();
       this.isBusy = false;
@@ -435,7 +444,7 @@ export default {
       this.$refs.globalMfaRef.$refs.input.checked = false;
     },
     addMfaBypass() {
-      if (this.isAdminUser || this.isServiceUser) {
+      if (this.currentUser && (this.isAdminUser || this.isServiceUser)) {
         this.fields.splice(4, 0, {
           key: 'mfa',
           label: this.$t('pageUserManagement.table.mfaByPass'),
@@ -466,9 +475,11 @@ export default {
         .dispatch('userManagement/updateMfaBypass', value)
         .then((message) => {
           this.successToast(message);
-          this.$store.dispatch('userManagement/checkCurrentUserMfaBypassed', {
-            uri: this.currentUser['@odata.id'],
-          });
+          if (this.currentUser) {
+            this.$store.dispatch('userManagement/checkCurrentUserMfaBypassed', {
+              uri: this.currentUser['@odata.id'],
+            });
+          }
           this.$store.dispatch('userManagement/getUsers');
           if (
             this.currentUser?.UserName === value.username &&
@@ -645,11 +656,11 @@ export default {
             this.$store
               .dispatch('userManagement/generateSecretKey')
               .catch(() => {
+                this.disableMFA();
                 this.beforeMfa = false;
                 this.errorToast(
-                  this.$t('pageUserManagement.toast.errorEnableMfaAuto')
+                  this.$t('pageUserManagement.toast.errorEnableMfa')
                 );
-                this.$bvModal.show('register-otp-modal');
               });
           })
           .catch(() => {

@@ -138,6 +138,7 @@ const GlobalStore = {
       { commit, dispatch, getters },
       username = localStorage.getItem('storedUsername')
     ) {
+      commit('setCurrentUser', null);
       return api
         .get(`/redfish/v1/AccountService/Accounts/${username}`)
         .then(({ data }) => {

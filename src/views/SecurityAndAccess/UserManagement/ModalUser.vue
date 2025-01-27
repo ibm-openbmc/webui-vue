@@ -293,8 +293,11 @@ export default {
     },
     notReadyOnly() {
       const cUser = this.$store.getters['global/currentUser'];
-      const RoleId = cUser.RoleId;
-      return RoleId !== 'ReadOnly';
+      if (cUser) {
+        const RoleId = cUser.RoleId;
+        return RoleId !== 'ReadOnly';
+      }
+      return true;
     },
     currentUser() {
       return this.$store.getters['global/currentUser'];
@@ -368,7 +371,9 @@ export default {
       } else {
         if (this.$v.$invalid) return;
         userData.originalUsername = this.originalUsername;
-        userData.currentUser = this.currentUser;
+        if (this.currentUser) {
+          userData.currentUser = this.currentUser;
+        }
         if (this.$v.form.status.$dirty) {
           userData.status = this.form.status;
         }
