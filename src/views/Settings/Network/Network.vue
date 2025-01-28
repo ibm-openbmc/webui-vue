@@ -30,6 +30,31 @@
                 <table-ipv6-static-default-gateway :tab-index="tabIndex" />
                 <!-- Static DNS table -->
                 <table-dns :tab-index="tabIndex" />
+                <!-- LLDP -->
+                <page-section :section-title="$t('pageNetwork.lldp')">
+                  <b-row>
+                    <b-col lg="2" md="6">
+                      <dl>
+                        <dd>
+                          <b-form-checkbox
+                            id="useLLDPSwitch"
+                            v-model="lldpState"
+                            data-test-id="networkSettings-switch-useNtp"
+                            switch
+                            @change="changeLLDPState"
+                          >
+                            <span v-if="lldpState">
+                              {{ $t('global.status.enabled') }}
+                            </span>
+                            <span v-else>{{
+                              $t('global.status.disabled')
+                            }}</span>
+                          </b-form-checkbox>
+                        </dd>
+                      </dl>
+                    </b-col>
+                  </b-row>
+                </page-section>
               </b-tab>
               <template #empty>
                 <div class="text-center text-muted">
@@ -125,6 +150,15 @@ export default {
       if (ipv6 === undefined || ipv6 === null || ipv6.length === 0)
         return false;
       else return true;
+    },
+    lldpState: {
+      get() {
+        return this.$store.getters['network/lldpEnabledState'][this.tabIndex]
+          ?.lldpEnabled;
+      },
+      set(newValue) {
+        return newValue;
+      },
     },
   },
   watch: {
@@ -285,6 +319,12 @@ export default {
       setTimeout(() => {
         this.endLoader();
       }, 15000);
+    },
+    changeLLDPState(state) {
+      this.$store
+        .dispatch('network/saveLLDPState', state)
+        .then((message) => this.successToast(message))
+        .catch(({ message }) => this.errorToast(message));
     },
   },
 };
