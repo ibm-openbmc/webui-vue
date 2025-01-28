@@ -475,8 +475,7 @@
       "errorConfiguringProcessorCore": "Error Configuring Processor Core",
       "errorConfiguringDIMM": "Error Configuring Memory DIMM",
       "errorDeconfiguringProcessorCore": "Error Deconfiguring Processor Core",
-      "errorDeconfiguringDIMM" : "Error Deconfiguring Memory DIMM"
-    
+      "errorDeconfiguringDIMM": "Error Deconfiguring Memory DIMM"
     },
     "table": {
       "deconfigurationType": "Deconfiguration Type",
@@ -1448,6 +1447,7 @@
       "message3Link": "server power operations"
     },
     "oemMode": {
+      "primary": "Custom mode",
       "message1": "System is currently in a custom mode.",
       "message2": "Change mode by selecting an option below."
     },

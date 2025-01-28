@@ -39,6 +39,9 @@
           <dd v-else-if="powerPerformanceMode === 'PowerSaving'">
             {{ $t('pagePower.selectMode.maximumEnergySaver.primary') }}
           </dd>
+          <dd v-else-if="powerPerformanceMode === 'OEM'">
+            {{ $t('pagePower.oemMode.primary') }}
+          </dd>
         </dl>
       </b-col>
     </b-row>
