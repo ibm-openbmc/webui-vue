@@ -412,7 +412,14 @@ export default {
                 'deconfigurationRecords/clearAllEntries',
                 this.allEntries
               )
-              .then((message) => this.successToast(message))
+              .then(() => {
+                this.infoToast(
+                  this.$tc('pageDeconfigurationRecords.toast.clearAllInfo')
+                );
+                this.successToast(
+                  this.$tc('pageDeconfigurationRecords.toast.clearAllSuccess')
+                );
+              })
               .catch(({ message }) => this.errorToast(message));
           }
         });
