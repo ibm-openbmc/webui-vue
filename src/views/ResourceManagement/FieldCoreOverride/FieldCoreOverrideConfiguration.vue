@@ -80,10 +80,7 @@ export default {
       systems: 'system/systems',
     }),
     maxConfiguredCores() {
-      return Math.min(
-        this.systems?.[0]?.processorSummaryCoreCount,
-        this.processorInfo?.PermProcs?.MaxAuthorizedDevices
-      );
+      return this.systems?.[0]?.processorSummaryCoreCount;
     },
   },
   watch: {
