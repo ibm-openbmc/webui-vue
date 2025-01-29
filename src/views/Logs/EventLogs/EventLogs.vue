@@ -580,7 +580,7 @@ export default {
                     );
                   }
                   this.endLoader();
-                }, 5000);
+                }, 8000);
               })
               .catch(({ message }) => {
                 this.endLoader();
@@ -691,7 +691,7 @@ export default {
                         );
                       }
                       this.endLoader();
-                    }, 5000);
+                    }, 8000);
                   })
                   .catch(({ message }) => {
                     this.endLoader();
