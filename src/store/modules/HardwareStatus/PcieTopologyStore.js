@@ -110,6 +110,7 @@ const PcieTopologyStore = {
               const singleSlotData = {};
               singleSlotData['data'] = chassisMembers[index].PCIeSlots.Slots[j];
               if (
+                chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice &&
                 chassisMembers[index].PCIeSlots.Slots[j].Links?.PCIeDevice
                   .length > 0
               ) {
@@ -126,6 +127,8 @@ const PcieTopologyStore = {
                       const oneSlot =
                         oneChassis.detailedInfo.pcieSlots.eachSlot[y];
                       if (
+                        chassisMembers[index].PCIeSlots.Slots[j].Links
+                          ?.PCIeDevice &&
                         oneSlot.pcieDeviceLink &&
                         oneSlot.pcieDeviceLink ===
                           chassisMembers[index].PCIeSlots.Slots[j].Links
@@ -149,6 +152,8 @@ const PcieTopologyStore = {
                     const oneSlot =
                       chassisData.detailedInfo.pcieSlots.eachSlot[x];
                     if (
+                      chassisMembers[index].PCIeSlots.Slots[j].Links
+                        ?.PCIeDevice &&
                       oneSlot.pcieDeviceLink &&
                       oneSlot.pcieDeviceLink ===
                         chassisMembers[index].PCIeSlots.Slots[j].Links
@@ -164,9 +169,11 @@ const PcieTopologyStore = {
                 if (!isLinkSet) {
                   pcieDeviceMembers.map((singleDevice) => {
                     if (
-                      singleDevice['@odata.id'] ===
                       chassisMembers[index].PCIeSlots.Slots[j].Links
-                        ?.PCIeDevice[0]['@odata.id']
+                        ?.PCIeDevice &&
+                      singleDevice['@odata.id'] ===
+                        chassisMembers[index].PCIeSlots.Slots[j].Links
+                          ?.PCIeDevice[0]['@odata.id']
                     ) {
                       singleSlotData['pcieDevice'] = singleDevice;
                       singleSlotData['pcieDeviceLink'] =
@@ -701,7 +708,9 @@ const PcieTopologyStore = {
           if (slot.data.Oem?.IBM?.LinkId !== 0) {
             let row = {};
             row.linkId = slot.data.Oem?.IBM?.LinkId;
-            row.resetLinkUri = slot.data.Links?.PCIeDevice[0]['@odata.id'];
+            if (slot.data.Links?.PCIeDevice) {
+              row.resetLinkUri = slot.data.Links?.PCIeDevice[0]['@odata.id'];
+            }
             if (chassisInfo.length > 0) {
               chassisInfo.map((oneChassis) => {
                 oneChassis.detailedInfo.pcieSlots.eachSlot.map((oneSlot) => {
@@ -829,9 +838,10 @@ const PcieTopologyStore = {
                         const expanderSlot =
                           cable.detailedInfo?.grandParentInfo?.expanderSlots[i];
                         if (
+                          expanderSlot.Links?.PCIeDevice &&
                           cable.detailedInfo.grandParentInfo.data?.Links
                             ?.PCIeDevices[0]['@odata.id'] ===
-                          expanderSlot.Links?.PCIeDevice[0]['@odata.id']
+                            expanderSlot.Links?.PCIeDevice[0]['@odata.id']
                         ) {
                           row['linkType'] = 'Secondary';
                           row['parentLinkId'] = expanderSlot.Oem?.IBM?.LinkId;
@@ -846,8 +856,9 @@ const PcieTopologyStore = {
                 const downstream_device =
                   cable.detailedInfo.downstreamPorts[0].grandParent;
                 if (
+                  slot?.data.Links.PCIeDevice &&
                   slot?.data.Links.PCIeDevice[0]['@odata.id'] ===
-                  downstream_device.Links?.PCIeDevices[0]['@odata.id']
+                    downstream_device.Links?.PCIeDevices[0]['@odata.id']
                 ) {
                   for (
                     let i = 0;
@@ -1087,8 +1098,9 @@ const PcieTopologyStore = {
                       chassisValue.detailedInfo.pcieSlots.data.Slots.map(
                         (slot2) => {
                           if (
+                            slot2.Links?.PCIeDevice &&
                             slot2.Links?.PCIeDevice[0]['@odata.id'] ===
-                            pcie_device
+                              pcie_device
                           ) {
                             if (
                               slot.data?.Links?.Oem?.IBM
