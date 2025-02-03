@@ -40,7 +40,7 @@ export const ChassisStore = defineStore('chassisStore', {
       return await api
         .get('/redfish/v1/Chassis')
         .then(({ data: { Members = [] } }) =>
-          Members.map((member) => api.get(member['@odata.id'])),
+          Members.map((member) => api.get(member['@odata.id']))
         )
         .then((promises) => api.all(promises))
         .then((response) => {
@@ -60,11 +60,11 @@ export const ChassisStore = defineStore('chassisStore', {
           this.fetchGetChassisInfo();
           if (led.identifyLed) {
             return i18n.global.t(
-              'pageInventory.toast.successEnableIdentifyLed',
+              'pageInventory.toast.successEnableIdentifyLed'
             );
           } else {
             return i18n.global.t(
-              'pageInventory.toast.successDisableIdentifyLed',
+              'pageInventory.toast.successDisableIdentifyLed'
             );
           }
         })
@@ -73,20 +73,20 @@ export const ChassisStore = defineStore('chassisStore', {
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(
-              i18n.global.t('pageInventory.toast.errorEnableIdentifyLed'),
+              i18n.global.t('pageInventory.toast.errorEnableIdentifyLed')
             );
           } else {
             throw new Error(
-              i18n.global.t('pageInventory.toast.errorDisableIdentifyLed'),
+              i18n.global.t('pageInventory.toast.errorDisableIdentifyLed')
             );
           }
         });
     },
-    async getPowerState({ commit }) {
+    async getPowerState() {
       return await api
         .get('/redfish/v1/Chassis/chassis')
         .then(({ data: { PowerState = null } }) => {
-          commit('setPowerState', PowerState);
+          this.PowerState = PowerState;
         })
         .catch((error) => console.log(error));
     },
