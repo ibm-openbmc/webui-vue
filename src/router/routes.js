@@ -29,6 +29,7 @@ import SystemParameters from '@/views/ResourceManagement/SystemParameters';
 import HardwareDeconfiguration from '../views/Settings/HardwareDeconfiguration/HardwareDeconfiguration.vue';
 import HostConsole from '@/views/Operations/HostConsole';
 import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsole.vue';
+import CapacityOnDemand from '../views/ResourceManagement/CapacityOnDemand/CapacityOnDemand.vue';
 
 const roles = {
   administrator: 'Administrator',
@@ -217,6 +218,14 @@ export const routes = [
         component: SystemParameters,
         meta: {
           title: i18n.global.t('appPageTitle.systemParameters'),
+        },
+      },
+      {
+        path: '/resource-management/capacity-on-demand',
+        name: 'capacity-on-demand',
+        component: CapacityOnDemand,
+        meta: {
+          title: i18n.global.t('appPageTitle.capacityOnDemand'),
         },
       },
       {

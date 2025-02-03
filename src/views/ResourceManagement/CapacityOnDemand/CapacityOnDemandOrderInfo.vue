@@ -1,68 +1,68 @@
 <template>
-  <b-row>
-    <b-col>
+  <BRow>
+    <BCol>
       <page-section :section-title="$t('pageCapacityOnDemand.orderInfo.title')">
         <p>
           {{ $t('pageCapacityOnDemand.orderInfo.description.message') }}
-          <b-link to="/logs/dumps">
+          <BLink to="/logs/dumps">
             {{ $t('pageCapacityOnDemand.orderInfo.description.link') }}
-          </b-link>
+          </BLink>
         </p>
         <b-card bg-variant="light" border-variant="light" class="mb-4">
           <!-- System information -->
-          <b-row class="mb-5">
-            <b-col>
+          <BRow class="mb-5">
+            <BCol>
               <h3 class="h4 mb-3">
                 {{ $t('pageCapacityOnDemand.orderInfo.systemInfo') }}
               </h3>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.systemType') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ systemInfo.model || '--' }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.systemSerialNumber') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ systemInfo.serialNumber || '--' }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.systemAnchor') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ systemAnchor || '--' }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.systemCodUniqueId') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ dataFormatter(apid) }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.systemCodPublicKey') }}:
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ dataFormatter(systemCodPublicKey) }}
                 </span>
               </p>
-            </b-col>
-          </b-row>
+            </BCol>
+          </BRow>
 
           <!-- Processor information -->
-          <b-row class="mb-5">
-            <b-col>
+          <BRow class="mb-5">
+            <BCol>
               <h3 class="h4 mb-3">
                 {{ $t('pageCapacityOnDemand.orderInfo.processorInfo') }}
               </h3>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.previousActivated') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ processorPreviousActivated }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.processorResourceId') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ processorInfo.resourceId }}
                 </span>
               </p>
@@ -71,67 +71,67 @@
                   $t('pageCapacityOnDemand.orderInfo.processorSequenceNumber')
                 }}
 
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ processorInfo.sequenceNumber }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.processorsLicensed') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ dataFormatter(processorLicensed) }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.entryCheck') }}:
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ processorEntryCheck }}
                 </span>
               </p>
-            </b-col>
-          </b-row>
+            </BCol>
+          </BRow>
 
           <!-- Memory information -->
-          <b-row class="mb-5">
-            <b-col>
+          <BRow class="mb-5">
+            <BCol>
               <h3 class="h4 mb-3">
                 {{ $t('pageCapacityOnDemand.orderInfo.memoryInfo') }}
               </h3>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.previousActivated') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ memoryPreviousActivated }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.memoryResourceId') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ memoryInfo.resourceId }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.memorySequenceNumber') }}
 
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ memoryInfo.sequenceNumber }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.memoryLicensed') }}
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ dataFormatter(memoryLicensed) }}
                 </span>
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.entryCheck') }}:
-                <span class="font-weight-bold">
+                <span class="fw-bold">
                   {{ memoryEntryCheck }}
                 </span>
               </p>
-            </b-col>
-          </b-row>
+            </BCol>
+          </BRow>
 
-          <b-row class="mb-5">
-            <b-col>
+          <BRow class="mb-5">
+            <BCol>
               <h3 class="h4 mb-3">
                 {{ $t('pageCapacityOnDemand.orderInfo.accessKeyInfo') }}
               </h3>
@@ -141,11 +141,10 @@
                     'pageCapacityOnDemand.orderInfo.firmwareAccessKeyExpiration',
                   )
                 }}
-                <span v-if="hasLicenses" class="font-weight-bold">--</span>
-                <span v-else class="font-weight-bold">
+                <span v-if="hasLicenses" class="fw-bold">--</span>
+                <span v-else class="fw-bold">
                   {{
-                    dataFormatter(firmwareAccessKeyInfo.expirationDate)
-                      | formatDate
+                    $filters.formatDate(firmwareAccessKeyInfo.expirationDate)
                   }}
                 </span>
               </p>
@@ -153,81 +152,84 @@
                 {{
                   $t('pageCapacityOnDemand.orderInfo.aixAccessKeyExpiration')
                 }}
-                <span v-if="hasLicenses" class="font-weight-bold">--</span>
-                <span v-else class="font-weight-bold">
+                <span v-if="hasLicenses" class="fw-bold">--</span>
+                <span v-else class="fw-bold">
                   {{
-                    dataFormatter(aixAccessKeyInfo.expirationDate) | formatDate
+                    $filters.formatDate(aixAccessKeyInfo.expirationDate)
                   }}
                 </span>
               </p>
-            </b-col>
-          </b-row>
+            </BCol>
+          </BRow>
         </b-card>
       </page-section>
-    </b-col>
-  </b-row>
+    </BCol>
+  </BRow>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
-import PageSection from '@/components/Global/PageSection';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+<script setup>
+import { computed } from 'vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
+import { LicenseStore, SystemStore } from '@/store';
 
-export default {
-  name: 'CapacityOnDemandOrderInfo',
-  components: { PageSection },
-  mixins: [DataFormatterMixin],
-  computed: {
-    ...mapGetters('licenses', [
-      'licenses',
-      'processorInfo',
-      'memoryInfo',
-      'firmwareAccessKeyInfo',
-      'aixAccessKeyInfo',
-    ]),
-    hasLicenses() {
+const licenseStore = LicenseStore();
+const systemStore = SystemStore();
+const { dataFormatter } = useDataFormatterGlobal();
+
+const processorInfo = computed(() => {
+  return licenseStore.processorInfo;
+})
+const memoryInfo = computed(() => {
+  return licenseStore.memoryInfo;
+})
+const firmwareAccessKeyInfo = computed(() => {
+  return licenseStore.firmwareAccessKeyInfo;
+})
+const aixAccessKeyInfo = computed(() => {
+  return licenseStore.aixAccessKeyInfo;
+})
+const hasLicenses = computed(() => {
       // This logic checks to see if there are any licences in the store.
       // If there are none, the result is true, otherwise false.
-      return !Object.keys(this.$store.getters['licenses/licenses']).length;
-    },
-    memoryPreviousActivated() {
-      return this.licenses?.PermMem?.AuthDeviceNumber
-        ? this.licenses?.PermMem?.AuthDeviceNumber
+      return !Object.keys(licenseStore.licensesGetter).length;
+    });
+const memoryPreviousActivated = computed(() => {
+      return licenseStore.licensesGetter?.PermMem?.AuthDeviceNumber
+        ? licenseStore.licensesGetter?.PermMem?.AuthDeviceNumber
         : '0000';
-    },
-    processorPreviousActivated() {
-      return this.licenses?.PermProcs?.AuthDeviceNumber
-        ? this.licenses?.PermProcs?.AuthDeviceNumber
+    });
+const processorPreviousActivated = computed(() => {
+      return licenseStore.licensesGetter?.PermProcs?.AuthDeviceNumber
+        ? licenseStore.licensesGetter?.PermProcs?.AuthDeviceNumber
         : '0000';
-    },
-    processorEntryCheck() {
-      return this.licenses?.PermProcs?.EntryCheck
-        ? this.licenses?.PermProcs?.EntryCheck
+    });
+const processorEntryCheck = computed(() => {
+      return licenseStore.licensesGetter?.PermProcs?.EntryCheck
+        ? licenseStore.licensesGetter?.PermProcs?.EntryCheck
         : 'XX';
-    },
-    memoryEntryCheck() {
-      return this.licenses?.PermMem?.EntryCheck
-        ? this.licenses?.PermMem?.EntryCheck
+    });
+const memoryEntryCheck = computed(() => {
+      return licenseStore.licensesGetter?.PermMem?.EntryCheck
+        ? licenseStore.licensesGetter.PermMem?.EntryCheck
         : 'XX';
-    },
-    processorLicensed() {
-      return this.licenses?.PermProcs?.MaxAuthorizedDevices;
-    },
-    apid() {
-      return this.licenses?.APID?.SerialNumber;
-    },
-    systemCodPublicKey() {
-      return this.licenses?.APPublicKey?.SerialNumber;
-    },
-    memoryLicensed() {
-      return this.licenses?.PermMem?.MaxAuthorizedDevices;
-    },
-    systemInfo() {
-      return this.$store.getters['system/systems']?.[0] || {};
-    },
-    systemAnchor() {
-      return this.licenses?.SystemAnchor?.SerialNumber;
-    },
-  },
-};
+    });
+const processorLicensed = computed(() => {
+      return licenseStore.licensesGetter?.PermProcs?.MaxAuthorizedDevices;
+    });
+const apid = computed(() => {
+      return licenseStore.licensesGetter?.APID?.SerialNumber;
+    });
+const systemCodPublicKey = computed(() => {
+      return licenseStore.licensesGetter?.APPublicKey?.SerialNumber;
+    });
+const memoryLicensed = computed(() => {
+      return licenseStore.licensesGetter?.PermMem?.MaxAuthorizedDevices;
+    });
+const systemInfo = computed(() => {
+      return systemStore.getSystems?.[0] || {};
+    });
+const systemAnchor = computed(() => {
+      return licenseStore.licensesGetter?.SystemAnchor?.SerialNumber;
+    });
 </script>
