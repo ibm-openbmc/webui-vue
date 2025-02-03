@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title
       class="mb-4"
       :title="$t('appPageTitle.hostConsole')"
@@ -9,23 +9,17 @@
     <page-section class="mb-0">
       <host-console-console :is-full-window="false" />
     </page-section>
-  </b-container>
+  </BContainer>
 </template>
 
-<script>
-import PageTitle from '@/components/Global/PageTitle';
-import PageSection from '@/components/Global/PageSection';
-import HostConsoleConsole from './HostConsoleConsole';
+<script setup>
+import { onMounted } from 'vue';
+import eventBus from '@/eventBus';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import HostConsoleConsole from './HostConsoleConsole.vue';
 
-export default {
-  name: 'HostConsole',
-  components: {
-    PageSection,
-    PageTitle,
-    HostConsoleConsole,
-  },
-  mounted() {
-    this.$root.$emit('loading-bar-status', true);
-  },
-};
+onMounted(() => {
+  eventBus.emit('loading-bar-status', true);
+});
 </script>

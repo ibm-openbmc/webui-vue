@@ -27,6 +27,8 @@ import Certificates from '@/views/SecurityAndAccess/Certificates';
 import Inventory from '../views/HardwareStatus/Inventory/Inventory.vue';
 import SystemParameters from '@/views/ResourceManagement/SystemParameters';
 import HardwareDeconfiguration from '../views/Settings/HardwareDeconfiguration/HardwareDeconfiguration.vue';
+import HostConsole from '@/views/Operations/HostConsole';
+import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsole.vue';
 import CapacityOnDemand from '../views/ResourceManagement/CapacityOnDemand/CapacityOnDemand.vue';
 
 const roles = {
@@ -46,6 +48,15 @@ export const routes = [
         component: LoginPage,
       },
     ],
+  },
+  // Needs reimplementation once routes is implemented
+  {
+    path: '/console/host-console-console',
+    meta: {
+      requiresAuth: true,
+      title: i18n.global.t('appPageTitle.hostConsole'),
+    },
+    component: HostConsoleConsole,
   },
   {
     path: '/',
@@ -167,6 +178,14 @@ export const routes = [
         component: Firmware,
         meta: {
           title: i18n.global.t('appPageTitle.firmware'),
+        },
+      },
+      {
+        path: '/operations/host-console',
+        name: 'host-console',
+        component: HostConsole,
+        meta: {
+          title: i18n.global.t('appPageTitle.hostConsole'),
         },
       },
       {
