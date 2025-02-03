@@ -1,138 +1,136 @@
 <template>
-  <b-row>
-    <b-col>
+  <BRow>
+    <BCol>
       <page-section
         :section-title="$t('pageCapacityOnDemand.activation.sectionTitle')"
       >
-        <b-row>
-          <b-col xl="5" md="6" lg="6" sm="7">
+        <BRow>
+          <BCol xl="5" md="6" lg="6" sm="7">
             <alert variant="info" class="mb-4">
               <span>
                 {{ $t('pageCapacityOnDemand.activation.alert') }}
               </span>
             </alert>
-          </b-col>
-        </b-row>
+          </BCol>
+        </BRow>
         <div>
           {{ $t('pageCapacityOnDemand.activation.helperText') }}
-          <b-link
+          <BLink
             target="_blank"
             href="https://www.ibm.com/servers/eserver/ess"
-            >{{ accessKeyLink }}</b-link
+            >{{ accessKeyLink }}</BLink
           >
         </div>
-        <b-row>
-          <b-col sm="12" md="9" lg="9" xl="8">
-            <b-form
+        <BRow>
+          <BCol sm="12" md="9" lg="9" xl="8">
+            <BForm
               class="d-flex align-items-center mt-3"
               @submit.prevent="submitForm"
             >
-              <b-form-group
+              <BFormGroup
                 :label="$t('pageCapacityOnDemand.activation.srLabel')"
                 label-for="input-license-key"
                 :label-sr-only="true"
                 class="mb-0 mr-0 form-group-activation"
               >
-                <b-input-group class="input-group-activation">
-                  <b-form-input
+                <BInputGroup class="input-group-activation">
+                  <BFormInput
                     id="input-license-key"
                     v-model="licenseKey"
                     class="input-form"
                     :maxlength="maxLength"
                     :disabled="isActivationDisabled"
-                    :state="getValidationState($v.licenseKey)"
+                    :state="getValidationState(v$.licenseKey)"
                     :placeholder="
                       $t('pageCapacityOnDemand.activation.placeholder')
                     "
-                    @input="$v.licenseKey.$touch()"
+                    @input="v$.licenseKey.$touch()"
                   />
-                  <b-form-invalid-feedback role="alert">
+                  <BFormInvalidFeedback role="alert">
                     {{ $t('global.form.invalidCharacterLength') }}
-                  </b-form-invalid-feedback>
-                </b-input-group>
-              </b-form-group>
-              <b-col align-self="baseline">
-                <b-button
+                  </BFormInvalidFeedback>
+                </BInputGroup>
+              </BFormGroup>
+              <BCol align-self="baseline" class="ms-3">
+                <BButton
                   variant="primary"
                   type="submit"
                   :disabled="isActivationDisabled"
                 >
                   {{ $t('global.action.activate') }}
-                </b-button>
-              </b-col>
-            </b-form>
-          </b-col>
-        </b-row>
+                </BButton>
+              </BCol>
+            </BForm>
+          </BCol>
+        </BRow>
       </page-section>
-    </b-col>
-  </b-row>
+    </BCol>
+  </BRow>
 </template>
 
-<script>
-import { maxLength, minLength, required } from 'vuelidate/lib/validators';
-import Alert from '@/components/Global/Alert';
-import PageSection from '@/components/Global/PageSection';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { maxLength, minLength, required } from '@vuelidate/validators';
+import Alert from '@/components/Global/Alert.vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import useToast from '@/components/Composables/useToastComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { useVuelidate } from '@vuelidate/core';
+import { LicenseStore, GlobalStore } from '@/store';
 
-export default {
-  name: 'CapacityOnDemandAcvitation',
-  components: { Alert, PageSection },
-  mixins: [VuelidateMixin, BVToastMixin, LoadingBarMixin],
-  data() {
-    return {
-      licenseKey: '',
-      maxLength: 34,
-      accessKeyLink: 'www.ibm.com/servers/eserver/ess',
-    };
-  },
-  validations() {
-    return {
+const { getValidationState } = useVuelidateComposable();
+const { successToast, errorToast } = useToast();
+const { startLoader, endLoader } = useLoadingBar();
+const global = GlobalStore();
+const licenseStore = LicenseStore();
+
+const licenseKey = ref('');
+const maxLengthVal = ref(34);
+const accessKeyLink = ref('www.ibm.com/servers/eserver/ess');
+
+const rules = computed(() => ({
       licenseKey: {
         required,
-        minLength: minLength(this.maxLength),
-        maxLength: maxLength(this.maxLength),
+        minLength: minLength(maxLengthVal.value),
+        maxLength: maxLength(maxLengthVal.value),
       },
-    };
-  },
-  computed: {
-    isInPhypStandby() {
-      return this.$store.getters['global/isInPhypStandby'];
-    },
-    isActivationDisabled() {
+    }));
+const v$ = useVuelidate(rules, { licenseKey });
+
+const isInPhypStandby = computed(() => {
+      return global.isInPhypStandby();
+    });
+const isActivationDisabled = computed(() => {
       if (
-        this.$store.getters['licenses/licenses']?.UAK?.Status?.State ===
+        licenseStore.licensesGetter?.UAK?.Status?.State ===
           'Enabled' &&
-        this.isInPhypStandby
+        isInPhypStandby
       ) {
         return false;
       } else {
         return true;
       }
-    },
-  },
-  created() {
+    });
+
+onMounted(() => {
     Promise.all([
-      this.$store.dispatch('global/getSystemInfo'),
-      this.$store.dispatch('global/getBootProgress'),
-      this.$store.dispatch('licenses/getLicenses'),
+      global.getSystemInfo(),
+      global.getBootProgress(),
+      licenseStore.getLicenses(),
     ]);
-  },
-  methods: {
-    submitForm() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        this.startLoader();
-        this.$store
-          .dispatch('licenses/activateLicense', this.licenseKey)
-          .then((success) => this.successToast(success))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+  });
+
+const submitForm = () => {
+      v$.value.$touch();
+      if (!v$.value.$invalid) {
+        startLoader();
+        licenseStore.activateLicense(licenseKey.value)
+          .then((success) => successToast(success))
+          .catch(({ message }) => errorToast(message))
+          .finally(() => endLoader());
       }
-    },
-  },
-};
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -145,6 +143,12 @@ export default {
   width: 100%;
 }
 .input-form {
-  height: 41px;
+  height: 42px;
+}
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>

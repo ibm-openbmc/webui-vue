@@ -1,29 +1,29 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.capacityOnDemand')" />
-    <b-row v-if="serverStatus === 'off'">
-      <b-col md="8" xl="6">
+    <BRow v-if="serverStatus === 'off'">
+      <BCol md="8" xl="6">
         <alert variant="info" class="mb-5">
-          <p class="mb-0 font-weight-bold">
+          <p class="mb-0 fw-bold">
             {{ $t('pageCapacityOnDemand.alert.title') }}
           </p>
           <p>
             {{ $t('pageCapacityOnDemand.alert.description') }}
           </p>
         </alert>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
 
     <!-- Quick links -->
     <page-section :section-title="$t('pageCapacityOnDemand.quickLinks')">
       <div v-for="item in quickLinks" :key="item.id">
-        <b-link
+        <BLink
           :href="item.href"
           :data-ref="item.dataRef"
-          @click.prevent="scrollToOffset"
+          @click.prevent="scrollToOffset(refs, $event)"
         >
           <icon-jump-link /> {{ item.linkText }}
-        </b-link>
+        </BLink>
       </div>
     </page-section>
 
@@ -35,75 +35,81 @@
 
     <!-- VET capabilities section -->
     <capacity-on-demand-table ref="vetCapabilities" />
-  </b-container>
+  </BContainer>
 </template>
 
-<script>
-import JumpLink16 from '@carbon/icons-vue/es/jump-link/16';
-
-import PageTitle from '@/components/Global/PageTitle';
-import PageSection from '@/components/Global/PageSection';
-import Alert from '@/components/Global/Alert';
-
-import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
-import JumpLinkMixin from '@/components/Mixins/JumpLinkMixin';
-
+<script setup>
+import { ref, computed, onMounted, reactive } from 'vue';
+import i18n from '@/i18n';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import Alert from '@/components/Global/Alert.vue';
+import useLoadingBar, { loading } from '@/components/Composables/useLoadingBarComposable';
+import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
+import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
+import { onBeforeRouteLeave } from 'vue-router';
 import CapacityOnDemandOrderInfo from './CapacityOnDemandOrderInfo.vue';
 import CapacityOnDemandAcvitation from './CapacityOnDemandActivation.vue';
 import CapacityOnDemandTable from './CapacityOnDemandTable.vue';
+import { LicenseStore, GlobalStore, SystemStore } from '@/store';
 
-export default {
-  name: 'CapacityOnDemand',
-  components: {
-    PageTitle,
-    Alert,
-    CapacityOnDemandOrderInfo,
-    CapacityOnDemandAcvitation,
-    CapacityOnDemandTable,
-    PageSection,
-    IconJumpLink: JumpLink16,
-  },
-  mixins: [LoadingBarMixin, JumpLinkMixin],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
-  },
-  data() {
-    return {
-      loading,
-      quickLinks: [
+const { scrollToOffset } = useJumpLinkComposable();
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
+const global = GlobalStore();
+const licenseStore = LicenseStore();
+const systemStore = SystemStore();
+
+const activation = ref(null);
+const orderInfo = ref(null);
+const vetCapabilities = ref(null);
+const refs = {
+  activation,
+  orderInfo,
+  vetCapabilities,
+};
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+const quickLinks = reactive([
         {
           id: 'activation',
           dataRef: 'activation',
           href: '#activation',
-          linkText: this.$t('pageCapacityOnDemand.activation.sectionTitle'),
+          linkText:  i18n.global.t('pageCapacityOnDemand.activation.sectionTitle'),
         },
         {
           id: 'orderInfo',
           dataRef: 'orderInfo',
           href: '#orderInfo',
-          linkText: this.$t('pageCapacityOnDemand.orderInfo.title'),
+          linkText:  i18n.global.t('pageCapacityOnDemand.orderInfo.title'),
         },
         {
           id: 'vetCapabilities',
           dataRef: 'vetCapabilities',
           href: '#vetCapabilities',
-          linkText: this.$t('pageCapacityOnDemand.vetCapabilities'),
+          linkText:  i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
         },
-      ],
-    };
-  },
-  computed: {
-    serverStatus() {
-      return this.$store.getters['global/serverStatus'];
-    },
-  },
-  created() {
-    this.startLoader();
+      ]);
+
+const serverStatus = computed(() => {
+      return global.serverStatusGetter;
+    });
+
+onMounted(() => {
+    startLoader();
     Promise.all([
-      this.$store.dispatch('licenses/getLicenses'),
-      this.$store.dispatch('system/getSystem'),
-    ]).finally(() => this.endLoader());
-  },
-};
+      licenseStore.getLicenses(),
+      systemStore.getSystem(),
+    ]).finally(() => endLoader());
+  });
 </script>
+<style lang="scss" scoped>
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+</style>
