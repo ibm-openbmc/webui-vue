@@ -1,29 +1,23 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const DeconfigurationRecordsStore = {
-  namespaced: true,
-  state: {
+export const DeconfigurationRecordsStore = defineStore('deconfigurationRecordsStore', {
+  state: () => ({
     deconfigRecords: [],
-  },
+  }),
   getters: {
-    deconfigRecords: (state) => state.deconfigRecords,
-  },
-  mutations: {
-    setDeconfigurationRecordInfo: (state, deconfigRecords) =>
-      (state.deconfigRecords = deconfigRecords),
+    deconfigRecordsGetter: (state) => state.deconfigRecords,
   },
   actions: {
-    async getDeconfigurationRecordInfo({ commit }) {
+    async getDeconfigurationRecordInfo() {
       return await api
         .get('/redfish/v1/Systems/system/LogServices/HardwareIsolation/Entries')
         .then(async ({ data: { Members = [] } = {} }) => {
           const allMembers = await api.all(
             Members.map(async (member) => {
               const arrayNumber = Number(
-                member?.Links?.OriginOfCondition?.['@odata.id']
-                  .split('/')
-                  .pop(),
+                member?.Links?.OriginOfCondition?.['@odata.id'].split('/').pop()
               );
               const uri = member?.Links?.OriginOfCondition?.['@odata.id']
                 .split('/SubProcessors')
@@ -44,16 +38,15 @@ const DeconfigurationRecordsStore = {
                 }
               });
               return member;
-            }),
+            })
           );
 
           const deconfigRecords = await api.all(
             allMembers.map(async (log) => {
               const {
                 Id,
-                Severity,
+                MessageArgs,
                 Created,
-                Message,
                 Name,
                 AdditionalDataURI,
                 AdditionalData = AdditionalDataURI
@@ -72,7 +65,7 @@ const DeconfigurationRecordsStore = {
               return {
                 additionalDataUri: AdditionalDataURI,
                 date: new Date(Created),
-                description: Message,
+                description: MessageArgs[1],
                 filterByStatus: AdditionalData?.Resolved
                   ? 'Resolved'
                   : 'Unresolved',
@@ -82,35 +75,31 @@ const DeconfigurationRecordsStore = {
                 srcDetails: AdditionalData?.EventId,
                 status: AdditionalData?.Resolved, //true or false
                 uri: log['@odata.id'],
-                severity: Severity,
+                severity: MessageArgs[0],
                 location: LocationCode,
                 eventID: eventId,
+                isSelected: false,
+                toggleDetails: false,
               };
-            }),
+            })
           );
-          commit('setDeconfigurationRecordInfo', deconfigRecords);
+          this.deconfigRecords = deconfigRecords;
         })
         .catch((error) => console.log(error));
     },
-    async clearAllEntries({ dispatch }, data) {
+    async clearAllEntries(data) {
       return await api
         .post(
-          '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Actions/LogService.ClearLog',
+          '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Actions/LogService.ClearLog'
         )
-        .then(() => dispatch('getDeconfigurationRecordInfo'))
+        .then(() => this.getDeconfigurationRecordInfo())
         .then(() =>
-          i18n.tc(
-            'pageDeconfigurationRecords.toast.successDelete',
-            data.length,
-          ),
+          i18n.tc('pageDeconfigurationRecords.toast.successDelete', data.length)
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.tc(
-              'pageDeconfigurationRecords.toast.errorDelete',
-              data.length,
-            ),
+            i18n.global.t('pageDeconfigurationRecords.toast.errorDelete', data.length)
           );
         });
     },
@@ -131,7 +120,7 @@ const DeconfigurationRecordsStore = {
           const element = document.createElement('a');
           element.setAttribute(
             'href',
-            `data:text/plain;charset=utf-8,${encodeURIComponent(pelJsonInfo)}`,
+            `data:text/plain;charset=utf-8,${encodeURIComponent(pelJsonInfo)}`
           );
           element.setAttribute('download', fileName);
           element.style.display = 'none';
@@ -141,10 +130,10 @@ const DeconfigurationRecordsStore = {
         })
         .then(() => {
           const message = [
-            i18n.t('pageDeconfigurationRecords.toast.successStartDownload'),
+            i18n.global.t('pageDeconfigurationRecords.toast.successStartDownload'),
             {
-              title: i18n.t(
-                'pageDeconfigurationRecords.toast.successStartDownloadTitle',
+              title: i18n.global.t(
+                'pageDeconfigurationRecords.toast.successStartDownloadTitle'
               ),
             },
           ];
@@ -154,11 +143,26 @@ const DeconfigurationRecordsStore = {
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.t('pageDeconfigurationRecords.toast.errorStartDownload'),
+            i18n.global.t('pageDeconfigurationRecords.toast.errorStartDownload')
+          );
+        });
+    },
+    async deleteRecords(uris = []) {
+      const promises = uris.map((uri) => api.delete(uri));
+      return await api
+        .all(promises)
+        .then(() => this.getDeconfigurationRecordInfo())
+        .then(() =>
+          i18n.global.t('pageDeconfigurationRecords.toast.successDelete', uris.length)
+        )
+        .catch((error) => {
+          console.log(error);
+          throw new Error(
+            i18n.global.t('pageDeconfigurationRecords.toast.errorDelete', uris.length)
           );
         });
     },
   },
-};
+});
 
 export default DeconfigurationRecordsStore;
