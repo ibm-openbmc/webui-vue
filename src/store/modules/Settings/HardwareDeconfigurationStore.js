@@ -1,20 +1,16 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
 import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
+import { defineStore } from 'pinia';
 
-const HardwareDeconfigurationStore = {
-  namespaced: true,
-  state: {
+export const HardwareDeconfigurationStore = defineStore('hardwareDeconfiguration', {
+  state: () => ({
     dimms: [],
     cores: [],
-  },
+  }),
   getters: {
-    dimms: (state) => state.dimms,
-    cores: (state) => state.cores,
-  },
-  mutations: {
-    setDimms: (state, dimms) => (state.dimms = dimms),
-    setCores: (state, cores) => (state.cores = cores),
+    dimmsGetter: (state) => state.dimms,
+    coresGetter: (state) => state.cores,
   },
   actions: {
     async getProcessorsCollection() {
@@ -25,18 +21,18 @@ const HardwareDeconfigurationStore = {
         )
         .catch((error) => console.log(error));
     },
-    async getProcessors({ commit, dispatch }) {
-      const collection = await dispatch('getProcessorsCollection');
+    async getProcessors() {
+      const collection = await this.getProcessorsCollection();
       if (!collection) return;
       await api
-        .all(collection.map((processor) => dispatch('getCores', processor)))
+        .all(collection.map((processor) => this.getCores(processor)))
         .then((response) => {
           var totalCores = [].concat.apply([], response);
-          commit('setCores', totalCores);
+          this.cores = totalCores;
         });
     },
 
-    async getCores(_, id) {
+    async getCores(id) {
       const locationCode = await api
         .get(`${id}`)
         .then((response) => response.data.Location.PartLocation.ServiceLabel)
@@ -84,39 +80,39 @@ const HardwareDeconfigurationStore = {
               uri: data['@odata.id'],
               deconfigurationType:
                 msgArgs === 'By Association'
-                  ? i18n.t(
+                  ? i18n.global.t(
                       'pageDeconfigurationHardware.table.filter.byAssociation',
                     )
                   : msgArgs === 'Error'
-                    ? i18n.t('pageDeconfigurationHardware.table.filter.error')
+                    ? i18n.global.t('pageDeconfigurationHardware.table.filter.error')
                     : msgArgs === 'Fatal'
-                      ? i18n.t('pageDeconfigurationHardware.table.filter.fatal')
+                      ? i18n.global.t('pageDeconfigurationHardware.table.filter.fatal')
                       : msgArgs === 'FCO-Deconfigured'
-                        ? i18n.t(
+                        ? i18n.global.t(
                             'pageDeconfigurationHardware.table.filter.fcoDeconfigured',
                           )
                         : msgArgs === 'Invalid'
-                          ? i18n.t(
+                          ? i18n.global.t(
                               'pageDeconfigurationHardware.table.filter.invalid',
                             )
                           : msgArgs === 'Manual'
-                            ? i18n.t(
+                            ? i18n.global.t(
                                 'pageDeconfigurationHardware.table.filter.manual',
                               )
                             : msgArgs === 'None'
-                              ? i18n.t(
+                              ? i18n.global.t(
                                   'pageDeconfigurationHardware.table.filter.none',
                                 )
                               : msgArgs === 'Predictive'
-                                ? i18n.t(
+                                ? i18n.global.t(
                                     'pageDeconfigurationHardware.table.filter.predictive',
                                   )
                                 : msgArgs === 'Recovered'
-                                  ? i18n.t(
+                                  ? i18n.global.t(
                                       'pageDeconfigurationHardware.table.filter.recovered',
                                     )
                                   : msgArgs === 'Unknown'
-                                    ? i18n.t(
+                                    ? i18n.global.t(
                                         'pageDeconfigurationHardware.table.filter.unknown',
                                       )
                                     : msgArgs,
@@ -129,7 +125,7 @@ const HardwareDeconfigurationStore = {
       );
     },
 
-    async getDimms({ commit }) {
+    async getDimms() {
       const dimms = await api
         .get('/redfish/v1/Systems/system/Memory')
         .then((response) => response.data.Members)
@@ -167,39 +163,39 @@ const HardwareDeconfigurationStore = {
               locationCode: data.Location?.PartLocation?.ServiceLabel,
               deconfigurationType:
                 msgArgs === 'By Association'
-                  ? i18n.t(
+                  ? i18n.global.t(
                       'pageDeconfigurationHardware.table.filter.byAssociation',
                     )
                   : msgArgs === 'Error'
-                    ? i18n.t('pageDeconfigurationHardware.table.filter.error')
+                    ? i18n.global.t('pageDeconfigurationHardware.table.filter.error')
                     : msgArgs === 'Fatal'
-                      ? i18n.t('pageDeconfigurationHardware.table.filter.fatal')
+                      ? i18n.global.t('pageDeconfigurationHardware.table.filter.fatal')
                       : msgArgs === 'FCO-Deconfigured'
-                        ? i18n.t(
+                        ? i18n.global.t(
                             'pageDeconfigurationHardware.table.filter.fcoDeconfigured',
                           )
                         : msgArgs === 'Invalid'
-                          ? i18n.t(
+                          ? i18n.global.t(
                               'pageDeconfigurationHardware.table.filter.invalid',
                             )
                           : msgArgs === 'Manual'
-                            ? i18n.t(
+                            ? i18n.global.t(
                                 'pageDeconfigurationHardware.table.filter.manual',
                               )
                             : msgArgs === 'None'
-                              ? i18n.t(
+                              ? i18n.global.t(
                                   'pageDeconfigurationHardware.table.filter.none',
                                 )
                               : msgArgs === 'Predictive'
-                                ? i18n.t(
+                                ? i18n.global.t(
                                     'pageDeconfigurationHardware.table.filter.predictive',
                                   )
                                 : msgArgs === 'Recovered'
-                                  ? i18n.t(
+                                  ? i18n.global.t(
                                       'pageDeconfigurationHardware.table.filter.recovered',
                                     )
                                   : msgArgs === 'Unknown'
-                                    ? i18n.t(
+                                    ? i18n.global.t(
                                         'pageDeconfigurationHardware.table.filter.unknown',
                                       )
                                     : msgArgs,
@@ -212,11 +208,11 @@ const HardwareDeconfigurationStore = {
           const dimmsDataFiltered = dimmsData.filter(
             (item) => item.available !== 'Absent',
           );
-          commit('setDimms', dimmsDataFiltered);
+          this.dimms = dimmsDataFiltered;
         }),
       );
     },
-    async updateSettingsState(_, settingsState) {
+    async updateSettingsState(settingsState) {
       const uri = settingsState.uri;
       const updatedSettingsValue = {
         Enabled: settingsState.settings,
@@ -228,20 +224,20 @@ const HardwareDeconfigurationStore = {
 
         if (REGEX_MAPPINGS.resourceCannotBeDeleted.test(messageId)) {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.deleteReqFailed'),
+            i18n.global.t('pageDeconfigurationHardware.toast.deleteReqFailed'),
           );
         } else if (settingsState.settings) {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorEnablingSetting'),
+            i18n.global.t('pageDeconfigurationHardware.toast.errorEnablingSetting'),
           );
         } else {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorDisablingSetting'),
+            i18n.global.t('pageDeconfigurationHardware.toast.errorDisablingSetting'),
           );
         }
       });
     },
-    async updateCoresSettingsState(_, settingsState) {
+    async updateCoresSettingsState(settingsState) {
       const uri = settingsState.uri;
       const updatedSettingsValue = {
         Enabled: settingsState.settings,
@@ -253,20 +249,20 @@ const HardwareDeconfigurationStore = {
 
         if (REGEX_MAPPINGS.resourceCannotBeDeleted.test(messageId)) {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.deleteReqFailed'),
+            i18n.global.t('pageDeconfigurationHardware.toast.deleteReqFailed'),
           );
         } else if (settingsState.settings) {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorEnablingSetting'),
+            i18n.global.t('pageDeconfigurationHardware.toast.errorEnablingSetting'),
           );
         } else {
           throw new Error(
-            i18n.t('pageDeconfigurationHardware.toast.errorDisablingSetting'),
+            i18n.global.t('pageDeconfigurationHardware.toast.errorDisablingSetting'),
           );
         }
       });
     },
   },
-};
+});
 
 export default HardwareDeconfigurationStore;

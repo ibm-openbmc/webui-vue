@@ -355,10 +355,13 @@ import { CertificatesStore } from '@/store';
 
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 
+import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
 import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import eventBus from '@/eventBus';
+
+const { errorToast } = useToast();
 
 const { getValidationState } = useVuelidateComposable();
 const openCsrModal = ref(false);
@@ -432,12 +435,15 @@ const modal = ref(false);
 const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
-  uploadCertificate.generateCsr(form.value).then(({ data: { CSRString } }) => {
-    csrString.value = CSRString;
-    modal.value = false;
-    openCsrModal.value = true;
-    v$.value.form.$reset();
-  });
+  uploadCertificate
+    .generateCsr(form.value)
+    .then(({ data: { CSRString } }) => {
+      csrString.value = CSRString;
+      modal.value = false;
+      openCsrModal.value = true;
+      v$.value.form.$reset();
+    })
+    .catch(({ message }) => errorToast(message));
 };
 
 const resetCsr = () => {

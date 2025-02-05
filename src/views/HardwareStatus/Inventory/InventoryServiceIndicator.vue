@@ -150,7 +150,7 @@ function toggleIdentifyLedSwitch(ledState) {
 
 function toggleSystemAttentionLedSwitch(systemLedState) {
   systemStore
-    .changeIdentifyLedState(systemLedState)
+    .changeSystemAttentionLedState(systemLedState)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

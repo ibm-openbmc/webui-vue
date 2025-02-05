@@ -1,10 +1,12 @@
 <template>
-  <b-row>
-    <b-col>
+  <BRow>
+    <BCol>
       <page-section :section-title="$t('pageCapacityOnDemand.vetCapabilities')">
-        <b-table
-          show-empty
+        <BTable
+          responsive="xl"
+          show-empty  
           hover
+          sticky-header="75vh"
           :no-border-collapse="true"
           :items="items"
           :fields="fields"
@@ -110,7 +112,7 @@
           </template>
           <!-- Status column -->
           <template #cell(status)="{ value }">
-            <status-icon v-if="value" :status="statusIcon(value)" /><span
+            <status-icon v-if="value" :status="statusIconValue(value)" /><span
               v-if="value == 'Enabled'"
               >{{ $t('pageCapacityOnDemand.enabled') }}</span
             >
@@ -148,37 +150,34 @@
               $t('pageCapacityOnDemand.qualified')
             }}</span>
           </template>
-        </b-table>
+        </BTable>
       </page-section>
-    </b-col>
-  </b-row>
+    </BCol>
+  </BRow>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue';
+import i18n from '@/i18n';
 import { forOwn } from 'lodash';
-import PageSection from '@/components/Global/PageSection';
-import StatusIcon from '@/components/Global/StatusIcon';
+import PageSection from '@/components/Global/PageSection.vue';
+import StatusIcon from '@/components/Global/StatusIcon.vue';
+import { LicenseStore } from '@/store';
+const licenseStore = LicenseStore();
 
-export default {
-  name: 'CapacityOnDemandTable',
-  components: { PageSection, StatusIcon },
-  data() {
-    return {
-      fields: [
+const fields = ref([
         {
           key: 'settings',
-          label: this.$t('pageCapacityOnDemand.table.setting'),
+          label: i18n.global.t('pageCapacityOnDemand.table.setting'),
         },
         {
           key: 'status',
-          label: this.$t('pageCapacityOnDemand.table.bitCapabilityStatus'),
+          label: i18n.global.t('pageCapacityOnDemand.table.bitCapabilityStatus'),
         },
-      ],
-    };
-  },
-  computed: {
-    items() {
-      const vetCapabilities = this.$store.getters['licenses/vetCapabilities'];
+      ]);
+
+const items = computed(() => {
+      const vetCapabilities = licenseStore.vetCapabilities;
 
       const items = [];
 
@@ -190,10 +189,9 @@ export default {
       });
 
       return items;
-    },
-  },
-  methods: {
-    statusIcon(value) {
+    });
+
+const statusIconValue = (value) => {
       if (value === 'Enabled') {
         return 'success';
       } else if (value === 'Disabled') {
@@ -201,7 +199,5 @@ export default {
       } else {
         return 'secondary';
       }
-    },
-  },
-};
+    };
 </script>

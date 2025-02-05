@@ -158,7 +158,7 @@ export const CertificatesStore = defineStore('certificates', {
       };
       return await api
         .patch(getCertificateProp(type, 'location'), fileObj, {
-          headers: { 'Content-Type': 'application/octet-stream' },
+          headers: { 'Content-Type': 'application/json' },
         })
         .then(() => {
           this.getAcfCertificate();
@@ -189,7 +189,7 @@ export const CertificatesStore = defineStore('certificates', {
       };
       return await api
         .patch(getCertificateProp(type, 'location'), fileObj, {
-          headers: { 'Content-Type': 'application/octet-stream' },
+          headers: { 'Content-Type': 'application/json' },
         })
         .then(() =>
           i18n.global.t('pageCertificates.toast.successAddCertificate', {
@@ -211,21 +211,9 @@ export const CertificatesStore = defineStore('certificates', {
         })
         .then(() => this.getCertificates())
         .then(() => {
-          if (typeOfCertificate === 'HTTPS Certificate') {
-            return i18n.global.t(
-              'pageCertificates.toast.successAddedHTTPCertificate',
-              {
-                certificate: getCertificateProp(type, 'label'),
-              }
-            );
-          } else {
-            return i18n.global.t(
-              'pageCertificates.toast.successAddCertificate',
-              {
-                certificate: getCertificateProp(type, 'label'),
-              }
-            );
-          }
+          return i18n.global.t('pageCertificates.toast.successAddCertificate', {
+            certificate: getCertificateProp(type, 'label'),
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -247,7 +235,7 @@ export const CertificatesStore = defineStore('certificates', {
       };
       return await api
         .patch(location, fileObj, {
-          headers: { 'Content-Type': 'application/octet-stream' },
+          headers: { 'Content-Type': 'application/json' },
         })
         .then(() => {
           this.getAcfCertificate();
@@ -281,21 +269,12 @@ export const CertificatesStore = defineStore('certificates', {
           this.getCertificates();
         })
         .then(() => {
-          if (typeOfCertificate === 'HTTPS Certificate') {
-            return i18n.global.t(
-              'pageCertificates.toast.successReplacedHTTPCertificate',
-              {
-                certificate: getCertificateProp(type, 'label'),
-              }
-            );
-          } else {
-            return i18n.global.t(
-              'pageCertificates.toast.successReplaceCertificate',
-              {
-                certificate: getCertificateProp(type, 'label'),
-              }
-            );
-          }
+          return i18n.global.t(
+            'pageCertificates.toast.successReplaceCertificate',
+            {
+              certificate: getCertificateProp(type, 'label'),
+            }
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -384,7 +363,12 @@ export const CertificatesStore = defineStore('certificates', {
         )
         //TODO: Success response also throws error so
         // can't accurately show legitimate error in UI
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          throw new Error(
+            i18n.global.t('pageCertificates.toast.errorGenerateCsr')
+          );
+        });
     },
   },
 });

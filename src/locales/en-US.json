@@ -382,11 +382,10 @@
       "errorAddCertificate": "Error adding certificate.",
       "errorDeleteCertificate": "Error deleting certificate.",
       "errorReplaceCertificate": "Error replacing certificate.",
+      "errorGenerateCsr": "Error generating CSR.",
       "successAddCertificate": "Successfully added %{certificate}.",
-      "successAddedHTTPCertificate": "Successfully added %{certificate}. Reload the browser page to see the changes.",
       "successDeleteCertificate": "Successfully deleted %{certificate}.",
-      "successReplaceCertificate": "Successfully replaced %{certificate}.",
-      "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to see the changes."
+      "successReplaceCertificate": "Successfully replaced %{certificate}."
     }
   },
   "pageChangePassword": {
@@ -1152,7 +1151,7 @@
     "updateDynamicIoDrawerAttachment": "Update dynamic I/O drawer attachment",
     "alert": {
       "heading": "Applying changes",
-      "message": "System has to be powered off and not managed by HMC. Changes made will take effect on next reboot.",
+      "message": "System has to be powered off. Changes made will take effect on next reboot.",
       "serverMustBePoweredOffTo": "Server must be powered off to:",
       "updateActiveMemoryMirroring": "Update active memory mirror mode",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",

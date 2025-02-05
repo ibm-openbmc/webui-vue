@@ -127,7 +127,7 @@ div[role='group'] {
   .form-check-input[disabled='disabled'],
   .form-check-input:disabled {
     background-color: $gray-200;
-    opacity: 1;
+    opacity: 0.5;
     & + .form-check-label {
       // Disabled label for checkbox, radio,
       // switch bootstrap form components

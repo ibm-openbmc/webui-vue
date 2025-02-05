@@ -121,7 +121,7 @@ function handleSubmit() {
           (settings.biosSettings.pvm_default_os_type == 'Default' &&
             isAtleastPhypInStandby.value)
         ) {
-          if (isInPhypStandby) {
+          if (props.isInPhypStandby) {
             if (hmcManaged != 'Enabled') {
               infoToast(
                 i18n.global.t(

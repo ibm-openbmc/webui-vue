@@ -1,39 +1,40 @@
 <template>
-  <b-container fluid="xl">
-    <b-row class="align-items-end">
-      <b-col sm="12" class="text-right">
+  <BContainer fluid="xl">
+    <BRow class="align-items-end">
+      <BCol sm="12" class="text-right">
         <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col xl="12">
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol xl="12">
         <table-toolbar
           ref="toolbar"
-          :selected-items-count="selectedRows.length"
-          @clear-selected="clearSelectedRows($refs.table)"
+          :selected-items-count="selectedRowsLists.length"
+          @clear-selected="clearSelectedRows(tableHardwareDeconfigurationRef)"
         >
           <template #toolbar-buttons>
             <table-toolbar-export
-              :data="selectedRows"
+              :data="selectedRowsLists"
               :file-name="exportFileNameByDate()"
             />
           </template>
         </table-toolbar>
         <b-table
-          ref="table"
+          ref="tableHardwareDeconfigurationRef"
           responsive="md"
           no-select-on-click
           sort-icon-left
           hover
           no-sort-reset
-          sort-by="status"
+          :sort-by="[{ key: 'status', order: 'asc' }]"
           show-empty
+          sticky-header="75vh"
           :no-border-collapse="true"
           :items="filteredCores"
           :fields="fields"
-          :per-page="perPage"
-          :current-page="currentPage"
-          :filter="searchFilter"
+          :per-page="itemPerPage"
+          :current-page="currentPageNo"
+          :filter="searchFilterInput"
           :empty-text="$t('global.table.emptyMessage')"
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
           :busy="isBusy"
@@ -49,7 +50,7 @@
             </div>
           </template>
           <template #cell(settings)="row">
-            <b-form-checkbox
+            <BFormCheckbox
               v-model="row.item.settings"
               name="switch"
               switch
@@ -62,217 +63,195 @@
               <span v-else>{{
                 $t('pageDeconfigurationHardware.deconfigure')
               }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
         </b-table>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
     <!-- Table pagination -->
-    <b-row>
-      <b-col sm="6">
-        <b-form-group
+    <BRow>
+      <BCol sm="6">
+        <BFormGroup
           class="table-pagination-select"
           :label="$t('global.table.itemsPerPage')"
           label-for="pagination-items-per-page"
         >
           <b-form-select
             id="pagination-items-per-page"
-            v-model="perPage"
+            v-model="itemPerPage"
             :options="itemsPerPageOptions"
           />
-        </b-form-group>
-      </b-col>
-      <b-col sm="6">
+        </BFormGroup>
+      </BCol>
+      <BCol sm="6">
         <b-pagination
-          v-model="currentPage"
+          v-model="currentPageNo"
+          class="b-pagination"
           first-number
           last-number
-          :per-page="perPage"
-          :total-rows="getTotalRowCount(filteredRows)"
+          :per-page="itemPerPage"
+          :total-rows="getTotalRowCount(filteredRows, itemPerPage)"
           aria-controls="table-sensors"
         />
-      </b-col>
-    </b-row>
-  </b-container>
+      </BCol>
+    </BRow>
+  </BContainer>
 </template>
 
-<script>
-import TableFilter from '@/components/Global/TableFilter';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import TableToolbar from '@/components/Global/TableToolbar';
-import TableToolbarExport from '@/components/Global/TableToolbarExport';
-import BVPaginationMixin, {
-  currentPage,
-  perPage,
-  itemsPerPageOptions,
-} from '@/components/Mixins/BVPaginationMixin';
-import BVTableSelectableMixin, {
-  selectedRows,
-  tableHeaderCheckboxModel,
-  tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
-import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
-export default {
-  name: 'ProcessorCores',
-  components: {
-    TableFilter,
-    TableToolbar,
-    TableToolbarExport,
-  },
-  mixins: [
-    BVPaginationMixin,
-    BVToastMixin,
-    TableFilterMixin,
-    BVTableSelectableMixin,
-    LoadingBarMixin,
-    DataFormatterMixin,
-    TableSortMixin,
-    SearchFilterMixin,
-  ],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
-  },
-  data() {
-    return {
-      isBusy: true,
-      fields: [
+<script setup>
+import { ref, computed, onBeforeMount } from 'vue';
+import i18n from '@/i18n';
+import { onBeforeRouteLeave } from 'vue-router';
+import TableFilter from '@/components/Global/TableFilter.vue';
+import useToastComposable from '@/components/Composables/useToastComposable';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import TableToolbarExport from '@/components/Global/TableToolbarExport.vue';
+import usePaginationComposable from '@/components/Composables/usePaginationComposable';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
+import { HardwareDeconfigurationStore, GlobalStore } from '@/store';
+
+const Toast = useToastComposable();
+const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
+  usePaginationComposable();
+const {
+  selectedRowsList,
+  clearSelectedRows,
+  onRowSelected
+  } = useTableSelectableComposable();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const { getFilteredTableData } = useTableFilterComposable();
+const hardwareDeconfigurationStore = HardwareDeconfigurationStore();
+const global = GlobalStore();
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+const isBusy = ref(true);
+const tableHardwareDeconfigurationRef = ref(null);
+const selectedRowsLists = ref(selectedRowsList);
+const activeFiltersRows = ref([]);
+const currentPageNo = ref(currentPage);
+const itemPerPage = ref(perPage);
+const searchFilterInput = ref('');
+const searchTotalFilteredRows = ref(0);
+const fields = ref([
         {
           key: 'processorId',
           sortable: true,
-          label: this.$t('pageDeconfigurationHardware.table.id'),
+          label: i18n.global.t('pageDeconfigurationHardware.table.id'),
         },
         {
           key: 'id',
           sortable: true,
-          label: this.$t('pageDeconfigurationHardware.table.name'),
+          label:i18n.global.t('pageDeconfigurationHardware.table.name'),
         },
         {
           key: 'location',
           sortable: true,
-          formatter: this.dataFormatter,
-          label: this.$t('pageDeconfigurationHardware.table.locationCode'),
+          label: i18n.global.t('pageDeconfigurationHardware.table.locationCode'),
         },
         {
           key: 'functionalState',
           sortable: true,
-          label: this.$t('pageDeconfigurationHardware.table.functionalState'),
+          label: i18n.global.t('pageDeconfigurationHardware.table.functionalState'),
           tdClass: 'text-nowrap',
         },
         {
           key: 'eventID',
           sortable: true,
-          formatter: this.dataFormatter,
-          label: this.$t('pageDeconfigurationHardware.table.eventId'),
+          label: i18n.global.t('pageDeconfigurationHardware.table.eventId'),
           tdClass: 'text-nowrap',
         },
         {
           key: 'deconfigurationType',
           sortable: true,
-          formatter: this.dataFormatter,
-          label: this.$t(
+          label: i18n.global.t(
             'pageDeconfigurationHardware.table.deconfigurationType',
           ),
         },
         {
           key: 'settings',
           sortable: true,
-          formatter: this.dataFormatter,
-          label: this.$t('pageDeconfigurationHardware.table.settings'),
+          label: i18n.global.t('pageDeconfigurationHardware.table.settings'),
         },
-      ],
-      tableFilters: [
+      ]);
+const tableFilters = ref([
         {
           key: 'deconfigurationType',
-          label: this.$t(
+          label: i18n.global.t(
             'pageDeconfigurationHardware.table.deconfigurationType',
           ),
           values: [
-            this.$t('pageDeconfigurationHardware.table.filter.byAssociation'),
-            this.$t('pageDeconfigurationHardware.table.filter.error'),
-            this.$t('pageDeconfigurationHardware.table.filter.fatal'),
-            this.$t('pageDeconfigurationHardware.table.filter.fcoDeconfigured'),
-            this.$t('pageDeconfigurationHardware.table.filter.invalid'),
-            this.$t('pageDeconfigurationHardware.table.filter.manual'),
-            this.$t('pageDeconfigurationHardware.table.filter.none'),
-            this.$t('pageDeconfigurationHardware.table.filter.predictive'),
-            this.$t('pageDeconfigurationHardware.table.filter.recovered'),
-            this.$t('pageDeconfigurationHardware.table.filter.unknown'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.byAssociation'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.error'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.fatal'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.fcoDeconfigured'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.invalid'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.manual'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.none'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.predictive'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.recovered'),
+          i18n.global.t('pageDeconfigurationHardware.table.filter.unknown'),
           ],
         },
-      ],
-      activeFilters: [],
-      currentPage: currentPage,
-      itemsPerPageOptions: itemsPerPageOptions,
-      perPage: perPage,
-      searchFilter: searchFilter,
-      searchTotalFilteredRows: 0,
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
-    };
-  },
-  computed: {
-    allCores() {
-      return this.$store.getters['hardwareDeconfiguration/cores'];
-    },
-    filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.filteredCores.length;
-    },
-    filteredCores() {
-      return this.getFilteredTableData(this.allCores, this.activeFilters);
-    },
-    serverStatus() {
-      return this.$store.getters['global/serverStatus'];
-    },
-    isServerOff() {
-      return this.serverStatus === 'off' ? true : false;
-    },
-    isReadOnlyUser() {
-      return this.$store.getters['global/isReadOnlyUser'];
-    },
-  },
-  created() {
-    this.startLoader();
-    this.$store
-      .dispatch('hardwareDeconfiguration/getProcessors')
-      .finally(() => {
-        this.endLoader();
-        this.isBusy = false;
+      ]);
+
+const allCores = computed(() => {
+      return hardwareDeconfigurationStore.coresGetter;
+});
+const filteredRows = computed(() =>  {
+      return searchFilterInput.value
+        ? searchTotalFilteredRows.value
+        : filteredCores.value.length;
+});
+const filteredCores = computed(() => {
+      return getFilteredTableData(allCores.value, activeFiltersRows.value);
+});
+const serverStatus = computed(() =>  {
+      return global.serverStatusGetter;
+});
+const isServerOff = computed(() =>  {
+      return serverStatus.value === 'off' ? true : false;
+});
+const isReadOnlyUser = computed(() =>  {
+      return global.isReadOnlyUserGetter;
+});
+
+onBeforeMount(() =>{
+    startLoader();
+    hardwareDeconfigurationStore.getProcessors()
+    .finally(() => {
+        endLoader();
+        isBusy.value = false;
       });
-  },
-  methods: {
-    onFilterChange({ activeFilters }) {
-      this.activeFilters = activeFilters;
-    },
-    onFiltered(filteredItems) {
-      this.searchTotalFilteredRows = filteredItems.length;
-    },
-    toggleSettingsSwitch(row) {
-      this.startLoader();
-      this.isBusy = true;
-      this.$store
-        .dispatch('hardwareDeconfiguration/updateCoresSettingsState', {
+});
+
+const onFilterChange = ({ activeFilters }) => {
+      activeFiltersRows.value = activeFilters;
+};
+const onFiltered = (filteredItems) => {
+      searchTotalFilteredRows.value = filteredItems.length;
+};
+const toggleSettingsSwitch = (row) => {
+      startLoader();
+      hardwareDeconfigurationStore.updateCoresSettingsState({
           uri: row.item.uri,
           settings: row.item.settings,
         })
         .catch(({ message }) => {
           row.item.settings = !row.item.settings;
-          this.errorToast(message);
+          Toast.errorToast(message);
         })
         .finally(() => {
-          this.endLoader();
-          this.isBusy = false;
+          endLoader();
         });
-    },
-  },
 };
 </script>
+<style lang="scss" scoped>
+.text-right {
+  text-align: right;
+}
+</style>

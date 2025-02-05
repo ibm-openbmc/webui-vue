@@ -29,6 +29,7 @@ import SystemParametersStore from './modules/ResourceManagement/SystemParameters
 import CertificatesStore from './modules/SecurityAndAccess/CertificatesStore';
 import UserManagementStore from './modules/SecurityAndAccess/UserManagementStore';
 import PcieTopologyStore from './modules/HardwareStatus/PcieTopologyStore.js';
+import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore.js';
 // ... (export use other stores)
 export {
@@ -62,5 +63,6 @@ export {
   CertificatesStore,
   UserManagementStore,
   PcieTopologyStore,
+  HardwareDeconfigurationStore,
   NetworkSettingsStore,
 };

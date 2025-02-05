@@ -1,7 +1,7 @@
 <template>
   <div :class="isFullWindow ? 'full-window-container' : 'terminal-container'">
-    <b-row class="d-flex">
-      <b-col class="d-flex flex-column justify-content-end">
+    <BRow class="d-flex">
+      <BCol class="d-flex flex-column justify-content-end">
         <dl class="mb-2" sm="6" md="6">
           <dt class="d-inline font-weight-bold mr-1">
             {{ $t('pageHostConsole.status') }}:
@@ -10,158 +10,161 @@
             <status-icon :status="serverStatusIcon" /> {{ connectionStatus }}
           </dd>
         </dl>
-      </b-col>
+      </BCol>
 
-      <b-col v-if="!isFullWindow" class="d-flex justify-content-end">
-        <b-button variant="link" type="button" @click="openConsoleWindow()">
+      <BCol v-if="!isFullWindow" class="d-flex justify-content-end">
+        <BButton variant="link" type="button" @click="openConsoleWindow()">
           <icon-launch />
           {{ $t('global.action.openNewTab') }}
-        </b-button>
-      </b-col>
-    </b-row>
+        </BButton>
+      </BCol>
+    </BRow>
     <div id="terminal" ref="panel"></div>
   </div>
 </template>
 
-<script>
+<script setup>
+import {
+  ref,
+  computed,
+  watch,
+  onBeforeMount,
+  onMounted,
+  onBeforeUnmount,
+  useTemplateRef,
+} from 'vue';
+import i18n from '@/i18n';
 import { AttachAddon } from 'xterm-addon-attach';
 import { FitAddon } from 'xterm-addon-fit';
 import { Terminal } from 'xterm';
 import { throttle } from 'lodash';
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
-import StatusIcon from '@/components/Global/StatusIcon';
+import StatusIcon from '@/components/Global/StatusIcon.vue';
+import { ChassisStore, AuthenticationStore } from '@/store';
 
-export default {
-  name: 'HostConsoleConsole',
-  components: {
-    IconLaunch,
-    StatusIcon,
+defineProps({
+  isFullWindow: {
+    type: Boolean,
+    default: true,
   },
-  props: {
-    isFullWindow: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      checkingServerStatus: null, // used to prevent extra api calls
-      resizeConsoleWindow: null,
-      ws: null, // websocket object
-      wsConnection: null, // websocket connection status
-    };
-  },
-  computed: {
-    serverStatus() {
-      return (
-        this.$store.getters['chassis/powerState'] !== 'Off' && this.wsConnection
-      );
-    },
-    serverStatusIcon() {
-      return this.serverStatus ? 'success' : 'danger';
-    },
-    connectionStatus() {
-      return this.serverStatus
-        ? this.$t('global.status.connected')
-        : this.$t('global.status.disconnected');
-    },
-  },
-  watch: {
-    async checkingServerStatus(value) {
-      if (value) {
-        setTimeout(async () => {
-          await this.$store.dispatch('chassis/getPowerState').finally(() => {
-            this.checkingServerStatus = false;
-          });
-        }, 5000); // 5 seconds
-      }
-    },
-  },
-  created() {
-    this.$store.dispatch('chassis/getPowerState');
-  },
-  mounted() {
-    this.openTerminal();
-  },
-  beforeDestroy() {
-    this.ws.close();
-    window.removeEventListener('resize', this.resizeConsoleWindow);
-  },
-  methods: {
-    openTerminal() {
-      const token = this.$store.getters['authentication/token'];
-      const host = `${window.location.origin.replace(
-        'https://',
-        '',
-      )}${window.location.pathname.replace(/\/$/, '')}`;
-      this.ws = new WebSocket(`wss://${host}/console0`, [token]);
+});
 
-      // Refer https://github.com/xtermjs/xterm.js/ for xterm implementation and addons.
+const panel = useTemplateRef('panel');
 
-      const term = new Terminal({
-        fontSize: 15,
-        fontFamily:
-          'SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace',
+const chassisStore = ChassisStore();
+const authenticationStore = AuthenticationStore();
+
+const checkingServerStatus = ref(null); // used to prevent extra api calls
+const resizeConsoleWindow = ref(null);
+const ws = ref(null); // websocket object
+const wsConnection = ref(null); // websocket connection status
+
+const serverStatus = computed(() => {
+  return chassisStore.powerStateGetter !== 'Off' && wsConnection.value;
+});
+
+const serverStatusIcon = computed(() => {
+  return serverStatus.value ? 'success' : 'danger';
+});
+
+const connectionStatus = computed(() => {
+  return serverStatus.value
+    ? i18n.global.t('global.status.connected')
+    : i18n.global.t('global.status.disconnected');
+});
+
+watch(checkingServerStatus, async (value) => {
+  if (value) {
+    setTimeout(async () => {
+      await chassisStore.getPowerState().finally(() => {
+        checkingServerStatus.value = false;
       });
+    }, 5000); // 5 seconds
+  }
+});
 
-      const attachAddon = new AttachAddon(this.ws);
-      term.loadAddon(attachAddon);
+function openTerminal() {
+  const token = authenticationStore.token;
+  let host = window.location.origin.replace('https://', '');
+  host = host.replace(/\/$/, '');
+  ws.value = new WebSocket(`wss://${host}/console0`, [token]);
 
-      const fitAddon = new FitAddon();
-      term.loadAddon(fitAddon);
+  // Refer https://github.com/xtermjs/xterm.js/ for xterm implementation and addons.
 
-      const SOL_THEME = {
-        background: '#19273c',
-        cursor: 'rgba(83, 146, 255, .5)',
-        scrollbar: 'rgba(83, 146, 255, .5)',
-      };
-      term.setOption('theme', SOL_THEME);
+  const term = new Terminal({
+    fontSize: 15,
+    fontFamily:
+      'SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace',
+  });
 
-      term.open(this.$refs.panel);
-      fitAddon.fit();
+  const attachAddon = new AttachAddon(ws.value);
+  term.loadAddon(attachAddon);
 
-      this.resizeConsoleWindow = throttle(() => {
-        fitAddon.fit();
-      }, 1000);
-      window.addEventListener('resize', this.resizeConsoleWindow);
+  const fitAddon = new FitAddon();
+  term.loadAddon(fitAddon);
 
-      try {
-        this.ws.onopen = () => {
-          this.wsConnection = true;
-          console.log('websocket console0/ opened');
-        };
-        this.ws.onclose = (event) => {
-          this.wsConnection = false;
-          console.log(
-            `websocket console0/ closed.
+  const SOL_THEME = {
+    background: '#19273c',
+    cursor: 'rgba(83, 146, 255, .5)',
+    scrollbar: 'rgba(83, 146, 255, .5)',
+  };
+  term.setOption('theme', SOL_THEME);
+
+  term.open(panel.value);
+  fitAddon.fit();
+
+  resizeConsoleWindow.value = throttle(() => {
+    fitAddon.fit();
+  }, 1000);
+  window.addEventListener('resize', resizeConsoleWindow.value);
+
+  try {
+    ws.value.onopen = () => {
+      wsConnection.value = true;
+      console.log('websocket console0/ opened');
+    };
+    ws.value.onclose = (event) => {
+      wsConnection.value = false;
+      console.log(
+        `websocket console0/ closed.
             code: ${event.code}
-            reason: ${event.reason}`,
-          );
-        };
-        this.ws.onmessage = () => {
-          if (!this.checkingServerStatus) {
-            this.checkingServerStatus = true;
-            this.$store.dispatch('chassis/getPowerState');
-          }
-        };
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    openConsoleWindow() {
-      window.open(
-        '#/console/host-console-console',
-        '_blank',
-        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550',
+            reason: ${event.reason}`
       );
-    },
-  },
-};
+    };
+    ws.value.onmessage = () => {
+      if (!checkingServerStatus.value) {
+        checkingServerStatus.value = true;
+        chassisStore.getPowerState();
+      }
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function openConsoleWindow() {
+  window.open(
+    `${window.location.origin}/console/host-console-console`,
+    '_blank',
+    'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550'
+  );
+}
+
+onBeforeMount(() => {
+  chassisStore.getPowerState();
+});
+
+onMounted(() => {
+  openTerminal();
+});
+
+onBeforeUnmount(() => {
+  ws.value.close();
+  window.removeEventListener('resize', resizeConsoleWindow.value);
+});
 </script>
 
 <style lang="scss" scoped>
-@import '~xterm/css/xterm.css';
-
 #terminal {
   overflow: auto;
 }

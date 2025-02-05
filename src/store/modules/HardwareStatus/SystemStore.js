@@ -57,7 +57,7 @@ export const SystemStore = defineStore('system', {
           }
         })
         .catch((error) => {
-          this.setSystemInfo(this.systems[0]);
+          this.getSystem();
           console.log('error', error);
           if (ledState) {
             throw new Error(
@@ -72,7 +72,7 @@ export const SystemStore = defineStore('system', {
     },
     async changeSystemAttentionLedState(ledState) {
       return await api
-        .patch('/api/redfish/v1/Systems/system', {
+        .patch('/redfish/v1/Systems/system', {
           Oem: {
             IBM: {
               PartitionSystemAttentionIndicator: ledState,
@@ -88,7 +88,7 @@ export const SystemStore = defineStore('system', {
           }
         })
         .catch((error) => {
-          this.setSystemInfo(this.systems[0]);
+          this.getSystem();
           console.log('error', error);
           if (!ledState) {
             throw new Error(
@@ -114,7 +114,7 @@ export const SystemStore = defineStore('system', {
           }
         })
         .catch((error) => {
-          this.setSystemInfo(this.systems[0]);
+          this.getSystem();
           console.log('error', error);
           if (lampTestState) {
             throw new Error(
