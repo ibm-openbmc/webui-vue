@@ -1777,7 +1777,7 @@
           "invalidVlanTagId": "VLAN ID must be in range %{min} to %{max}",
           "invalidIsciTargetPort": "The port value should be a positive integer between %{min} and %{max}",
           "chapNameRequired": "CHAP name is required when CHAP secret is specified",
-          "chapSecretRequired": "CHAP secret is required when CHAP secret is specified",
+          "chapSecretRequired": "CHAP secret is required when CHAP name is specified",
           "invalidFieldLength": "%{field} should not exceed %{max} characters",
           "invalidChapSecretLength": "CHAP secret length must be between %{min} and %{max} characters"
         }

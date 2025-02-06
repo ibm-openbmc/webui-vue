@@ -22,7 +22,9 @@ import AppHeader from '@/components/AppHeader/AppHeader.vue';
 import { ref, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import eventBus from '@/eventBus';
+import { GlobalStore } from '@/store';
 
+const globalStore = GlobalStore();
 // const { setFocus } = useJumpLinkComposable();
 const routerKey = ref(0);
 const route = useRoute();
@@ -33,7 +35,7 @@ onMounted(() => {
 });
 
 watch(
-  () => route,
+  () => route
   // () => {
   //   nextTick(() => {
   //     setFocus(focusTarget.value);
@@ -41,6 +43,7 @@ watch(
   // },
 );
 const refreshPage = async () => {
+  globalStore.getSystemInfo();
   console.log('Refresh called');
   routerKey.value += 1;
 };

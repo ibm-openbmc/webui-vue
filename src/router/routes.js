@@ -31,6 +31,7 @@ import HostConsole from '@/views/Operations/HostConsole';
 import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsole.vue';
 import CapacityOnDemand from '../views/ResourceManagement/CapacityOnDemand/CapacityOnDemand.vue';
 import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/DeconfigurationRecords.vue';
+import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 
 const roles = {
   administrator: 'Administrator',
@@ -81,6 +82,14 @@ export const routes = [
         meta: {
           title: i18n.global.t('appPageTitle.virtualMedia'),
           exclusiveToRoles: [roles.administrator],
+        },
+      },
+      {
+        path: '/operations/server-power-operations',
+        name: 'server-power-operations',
+        component: ServerPowerOperations,
+        meta: {
+          title: i18n.global.t('appPageTitle.serverPowerOperations'),
         },
       },
       {
@@ -195,8 +204,8 @@ export const routes = [
         component: DeconfigurationRecords,
         meta: {
           title: i18n.global.t('appPageTitle.deconfigurationRecords'),
-          },
-        },  
+        },
+      },
       {
         path: '/settings/power-restore-policy',
         name: 'power-restore-policy',

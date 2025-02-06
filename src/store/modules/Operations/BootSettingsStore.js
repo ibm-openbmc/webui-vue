@@ -69,19 +69,19 @@ export const BootSettingsStore = defineStore('bootSettings', {
       return await api.all(promises).then(
         api.spread((...responses) => {
           let message = i18n.global.t(
-            'pageServerPowerOperations.toast.successSaveSettings',
+            'pageServerPowerOperations.toast.successSaveSettings'
           );
           responses.forEach((response) => {
             if (response instanceof Error) {
               throw new Error(
                 i18n.global.t(
-                  'pageServerPowerOperations.toast.errorSaveSettings',
-                ),
+                  'pageServerPowerOperations.toast.errorSaveSettings'
+                )
               );
             }
           });
           return message;
-        }),
+        })
       );
     },
     async fetchBiosAttributes() {
@@ -108,7 +108,7 @@ export const BootSettingsStore = defineStore('bootSettings', {
       // Action not tested. Remove this comment once the action is tested and verified.
       return await api
         .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
+          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry'
         )
         .then(
           ({
@@ -117,22 +117,22 @@ export const BootSettingsStore = defineStore('bootSettings', {
             },
           }) => {
             let linuxPercentObj = Attributes.find(
-              (itm) => itm.AttributeName === 'pvm_linux_kvm_percentage',
+              (itm) => itm.AttributeName === 'pvm_linux_kvm_percentage'
             );
             let linuxPercentCurrentObj = Attributes.find(
-              (itm) => itm.AttributeName === 'pvm_linux_kvm_percentage_current',
+              (itm) => itm.AttributeName === 'pvm_linux_kvm_percentage_current'
             );
             let linuxValue = linuxPercentObj?.CurrentValue / 10;
             let ibmi_load_source = Attributes.find(
-              (itm) => itm.AttributeName === 'pvm_ibmi_load_source',
+              (itm) => itm.AttributeName === 'pvm_ibmi_load_source'
             );
             let ibmi_load_source_value = ibmi_load_source?.CurrentValue;
             let ibmi_alt_load_source = Attributes.find(
-              (itm) => itm.AttributeName === 'pvm_ibmi_alt_load_source',
+              (itm) => itm.AttributeName === 'pvm_ibmi_alt_load_source'
             );
             let ibmi_alt_load_source_value = ibmi_alt_load_source?.CurrentValue;
             let ibmi_console = Attributes.find(
-              (itm) => itm.AttributeName === 'pvm_ibmi_console',
+              (itm) => itm.AttributeName === 'pvm_ibmi_console'
             );
             let ibmi_console_value = ibmi_console?.CurrentValue;
             let linuxPercentCurrentValue =
@@ -180,16 +180,16 @@ export const BootSettingsStore = defineStore('bootSettings', {
                             'pvm_linux_kvm_memory',
                           ].indexOf(attributeObj.AttributeName) >= 0
                             ? i18n.global.t(
-                                `pageServerPowerOperations.biosSettings.attributeValues.${attributeObj.AttributeName}.${item.ValueName}`,
+                                `pageServerPowerOperations.biosSettings.attributeValues.${attributeObj.AttributeName}.${item.ValueName}`
                               )
                             : item.ValueName,
                       };
-                    },
+                    }
                   ),
                 };
               }, {});
             this.attributeValues = filteredAttributeValues;
-          },
+          }
         )
         .catch((error) => console.log(error));
     },
@@ -207,7 +207,7 @@ export const BootSettingsStore = defineStore('bootSettings', {
                 pcieSlot?.Location?.PartLocation?.ServiceLabel
               ) {
                 locationCodes.push(
-                  pcieSlot?.Location?.PartLocation?.ServiceLabel,
+                  pcieSlot?.Location?.PartLocation?.ServiceLabel
                 );
               }
             });
@@ -239,14 +239,14 @@ export const BootSettingsStore = defineStore('bootSettings', {
           ResetType: 'On',
         })
         .then(() => {
-          return i18n.global.tc(
-            'pageServerPowerOperations.toast.successSaveSettings',
+          return i18n.global.t(
+            'pageServerPowerOperations.toast.successSaveSettings'
           );
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.tc('pageServerPowerOperations.toast.errorSaveSettings'),
+            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings')
           );
         });
     },

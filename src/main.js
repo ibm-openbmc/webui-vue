@@ -3,7 +3,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import { createBootstrap } from 'bootstrap-vue-next';
-import { GlobalStore } from './store';
+import { GlobalStore, AuthenticationStore } from './store';
 import { format } from 'date-fns-tz';
 // Add the necessary CSSs
 // import 'bootstrap/dist/css/bootstrap.css';
@@ -11,6 +11,9 @@ import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 import i18n from './i18n';
 import ArrowRight16 from '@carbon/icons-vue/es/arrow--right/16';
+import WebSocketPlugin, {
+  initWebSocket,
+} from '@/store/plugins/WebSocketPlugin.js';
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -20,7 +23,12 @@ app.component('IconArrowRight', ArrowRight16);
 app.use(createBootstrap({ components: true, directives: true })); // Change this line
 app.use(i18n);
 
+pinia.use(WebSocketPlugin);
+
 const globalStore = GlobalStore();
+const authenticationStore = AuthenticationStore();
+
+if (authenticationStore.isLoggedIn) initWebSocket();
 
 app.config.globalProperties.$filters = {
   shortTimeZone(value) {

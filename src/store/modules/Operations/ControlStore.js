@@ -8,6 +8,7 @@ export const ControlStore = defineStore('control', {
     isOperationInProgress: false,
     lastPowerOperationTime: null,
     lastBmcRebootTime: null,
+    displayInfoToast: false,
   }),
   getters: {
     getIsOperationInProgress: (state) => state.isOperationInProgress,
@@ -24,7 +25,6 @@ export const ControlStore = defineStore('control', {
      * @returns {Promise}
      */
     async checkForServerStatus(serverStatus) {
-      // Action not tested. Remove this comment once the action is tested and verified.
       const global = GlobalStore();
       return new Promise((resolve) => {
         const timer = setTimeout(() => {
@@ -42,12 +42,11 @@ export const ControlStore = defineStore('control', {
               clearTimeout(timer);
             }
           },
-          { detached: true },
+          { detached: true }
         );
       });
     },
     async fetchLastPowerOperationTime() {
-      // Action not tested. Remove this comment once the action is tested and verified.
       return await api
         .get('/redfish/v1/Systems/system')
         .then((response) => {
@@ -78,57 +77,61 @@ export const ControlStore = defineStore('control', {
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageRebootBmc.toast.errorRebootStart'),
+            i18n.global.t('pageRebootBmc.toast.errorRebootStart')
           );
         });
     },
-    async serverPowerOn() {
-      // Action not tested. Remove this comment once the action is tested and verified.
-      const data = { ResetType: 'On' };
-      this.serverPowerChange(data);
-      await this.checkForServerStatus('on');
+    async powerOps(value) {
+      await this.checkForServerStatus(value);
       this.isOperationInProgress = false;
       this.fetchLastPowerOperationTime();
+    },
+    async serverPowerOn() {
+      const value = 'on';
+      const data = { ResetType: 'On' };
+      const displayInfo = await this.serverPowerChange(data);
+      this.powerOps(value);
+      return Promise.resolve(displayInfo);
     },
     async serverSoftReboot() {
-      // Action not tested. Remove this comment once the action is tested and verified.
+      const value = 'on';
       const data = { ResetType: 'GracefulRestart' };
-      this.serverPowerChange(data);
-      await this.checkForServerStatus('on');
-      this.isOperationInProgress = false;
-      this.fetchLastPowerOperationTime();
+      const displayInfo = await this.serverPowerChange(data);
+      this.powerOps(value);
+      return Promise.resolve(displayInfo);
     },
     async serverHardReboot() {
-      // Action not tested. Remove this comment once the action is tested and verified.
+      const value = 'on';
       const data = { ResetType: 'ForceRestart' };
-      this.serverPowerChange(data);
-      await this.checkForServerStatus('on');
-      this.isOperationInProgress = false;
-      this.fetchLastPowerOperationTime();
+      const displayInfo = await this.serverPowerChange(data);
+      this.powerOps(value);
+      return Promise.resolve(displayInfo);
     },
     async serverSoftPowerOff() {
-      // Action not tested. Remove this comment once the action is tested and verified.
+      const value = 'off';
       const data = { ResetType: 'GracefulShutdown' };
-      this.serverPowerChange(data);
-      await this.checkForServerStatus('off');
-      this.isOperationInProgress = false;
-      this.fetchLastPowerOperationTime();
+      const displayInfo = await this.serverPowerChange(data);
+      this.powerOps(value);
+      return Promise.resolve(displayInfo);
     },
     async serverHardPowerOff() {
-      // Action not tested. Remove this comment once the action is tested and verified.
+      const value = 'off';
       const data = { ResetType: 'ForceOff' };
-      this.serverPowerChange(data);
-      await this.checkForServerStatus('off');
-      this.isOperationInProgress = false;
-      this.fetchLastPowerOperationTime();
+      const displayInfo = await this.serverPowerChange(data);
+      this.powerOps(value);
+      return Promise.resolve(displayInfo);
     },
     serverPowerChange(data) {
-      // Action not tested. Remove this comment once the action is tested and verified.
       this.isOperationInProgress = true;
-      api
+      return api
         .post('/redfish/v1/Systems/system/Actions/ComputerSystem.Reset', data)
+        .then(() => {
+          this.displayInfoToast = true;
+          return this.displayInfoToast;
+        })
         .catch((error) => {
           console.log(error);
+          this.displayInfoToast = false;
           this.isOperationInProgress = false;
         });
     },
