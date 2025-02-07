@@ -9,6 +9,7 @@ const { cookies } = useCookies();
 
 export const AuthenticationStore = defineStore('authentication', {
   state: () => ({
+    loginPageDetails: {},
     consoleWindow: null,
     authError: null,
     xsrfCookie: cookies.get('XSRF-TOKEN'),
@@ -16,6 +17,7 @@ export const AuthenticationStore = defineStore('authentication', {
     bmcTime: '',
   }),
   getters: {
+    loginPageDetailsGetter: (state) => state.loginPageDetails,
     getConsoleWindow: (state) => state.consoleWindow,
     getAuthError: (state) => state.authError,
     isLoggedIn: (state) => {
@@ -28,6 +30,9 @@ export const AuthenticationStore = defineStore('authentication', {
     authSuccess() {
       this.authError = false;
       this.xsrfCookie = Cookies.get('XSRF-TOKEN');
+    },
+    setLoginPageDetails(loginPageDetails) {
+      this.loginPageDetails = loginPageDetails;
     },
     setauthError(authError = true) {
       this.authError = authError;
@@ -95,6 +100,21 @@ export const AuthenticationStore = defineStore('authentication', {
         .then((response) => {
           this.$state.bmcTime = response.data.DateTime;
           const cookie = Cookies.get('XSRF-TOKEN');
+        })
+        .catch((error) => console.log(error));
+    },
+    async dateAndTime() {
+      return api
+        .get(`/redfish/v1/`)
+        .then((response) => response.data.Oem.IBM)
+        .then((data) => {
+          const loginPageDetails = {
+            dateTime: new Date(data.DateTime),
+            model: data.Model,
+            serial: data.SerialNumber,
+            acfWindowActive: data.ACFWindowActive,
+          };
+          this.setLoginPageDetails(loginPageDetails);
         })
         .catch((error) => console.log(error));
     },

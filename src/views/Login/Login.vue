@@ -53,28 +53,75 @@
       {{ $t('pageLogin.logIn') }}
     </BButton>
   </BForm>
+  <!-- Service login -->
+  <b-row class="mt-3">
+    <b-col>
+      <dl>
+        <dt>{{ $t('pageLogin.dateAndTime') }}</dt>
+        <dd v-if="loginPageDetails.dateTime">
+          {{ $filters.formatDate(loginPageDetails.dateTime) }}
+          {{ $filters.formatTime(loginPageDetails.dateTime)}}
+        </dd>
+        <dd v-else>--</dd>
+      </dl>
+      <dl>
+        <dt>{{ $t('pageLogin.serialNumber') }}</dt>
+        <dd>{{ dataFormatter(loginPageDetails.serial) }}</dd>
+      </dl>
+      <dl>
+        <dt>{{ $t('pageLogin.model') }}</dt>
+        <dd>{{ dataFormatter(loginPageDetails.model) }}</dd>
+      </dl>
+    </b-col>
+  </b-row>
+  <b-button
+    v-if="loginPageDetails.acfWindowActive"
+    class="mt-3 p-0 block"
+    variant="link"
+    @click="initModalUploadCertificate"
+  >
+    <icon-upload />
+    {{ $t('pageLogin.uploadServiceLoginCertificate') }}
+  </b-button>
+
+  <!-- Modals -->
+  <modal-upload-certificate @ok="onModalOk" />
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed, onBeforeMount } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { AuthenticationStore } from '@/store';
+import { AuthenticationStore, CertificatesStore } from '@/store';
 import i18n from '@/i18n';
 import { useRouter } from 'vue-router';
+import eventBus from '@/eventBus';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
+import IconUpload from '@carbon/icons-vue/es/upload/20';
 // import GlobalStore from '../../store/modules/GlobalStore';
 import { GlobalStore } from '@/store';
+import useDataFormatterGlobal from '../../components/Composables/useDataFormatterGlobal';
+import useToast from '@/components/Composables/useToastComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import ModalUploadCertificate from './ModalUploadCertificate.vue';
 
 const router = useRouter();
 const globalStore = GlobalStore();
 const { getValidationState } = useVuelidateComposable();
 const Authentication = AuthenticationStore();
+const certificatesStore = CertificatesStore();
+const { dataFormatter } = useDataFormatterGlobal();
+const { successToast, errorToast } = useToast();
 const { t } = useI18n();
 const userInfo = reactive({ username: null, password: null });
 const rules = { username: { required }, password: { required } };
+const acfUploadButton = ref(
+  import.meta.env.VITE_APP_ACF_UPLOAD_REQUIRED === 'true'
+);
 const v$ = useVuelidate(rules, userInfo);
+const isBusy = ref(true);
+const { startLoader, endLoader } = useLoadingBar();
 const languages = ref([
   {
     value: 'en-US',
@@ -89,6 +136,18 @@ const languages = ref([
     text: 'Русский',
   },
 ]);
+
+const loginPageDetails = computed(() => {
+  return Authentication.loginPageDetailsGetter;
+});
+
+onBeforeMount(() => {
+  startLoader();
+  Authentication.dateAndTime().finally(() => {
+    endLoader();
+    isBusy.value = false;
+  });
+});
 
 const login = () => {
   v$.value.$touch();
@@ -107,19 +166,18 @@ const login = () => {
         router.push('/change-password');
       } else {
         Promise.all([
-              globalStore.getCurrentUser(userInfo.username),
-              globalStore.getSystemInfo()
-            ])
-              .then(() => {
-                router.push('/');
-              })
-              .catch(() => {
-                Promise.all([
-                Authentication.unauthlogin(),
-                Authentication.logout()
-                ]);
-              });
-          
+          globalStore.getCurrentUser(userInfo.username),
+          globalStore.getSystemInfo(),
+        ])
+          .then(() => {
+            router.push('/');
+          })
+          .catch(() => {
+            Promise.all([
+              Authentication.unauthlogin(),
+              Authentication.logout(),
+            ]);
+          });
       }
       if (RoleId) {
         globalStore.userPrivilege = RoleId;
@@ -127,6 +185,23 @@ const login = () => {
     })
     .catch((error) => console.log(error));
 };
+function initModalUploadCertificate() {
+  eventBus.emit('upload-login-certificate');
+}
+function onModalOk({ file }) {
+  addNewCertificate(file);
+}
+
+function addNewCertificate(file) {
+  const type = 'ServiceLogin Certificate';
+  certificatesStore
+    .addNewACFCertificateOnLoginPage({
+      file,
+      type,
+    })
+    .then((success) => successToast(success))
+    .catch(({ message }) => errorToast(message));
+}
 </script>
 <style lang="scss" scoped>
 .login-form {
