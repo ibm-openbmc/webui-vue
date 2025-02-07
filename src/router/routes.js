@@ -32,6 +32,7 @@ import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsol
 import CapacityOnDemand from '../views/ResourceManagement/CapacityOnDemand/CapacityOnDemand.vue';
 import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/DeconfigurationRecords.vue';
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
+import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
 
 const roles = {
   administrator: 'Administrator',
@@ -278,6 +279,14 @@ export const routes = [
           title: i18n.global.t('appPageTitle.pageNotFound'),
         },
       },
+        {
+          path: '/security-and-access/ldap',
+          name: 'ldap',
+          component: Ldap,
+          meta: {
+            title: i18n.global.t('appPageTitle.ldap'),
+          },
+        },
       {
         path: '/notices',
         name: 'notices',

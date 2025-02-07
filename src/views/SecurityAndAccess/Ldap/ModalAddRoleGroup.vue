@@ -1,13 +1,15 @@
 <template>
-  <b-modal id="modal-role-group" ref="modal" @ok="onOk" @hidden="resetForm">
-    <template #modal-title>
-      <template v-if="roleGroup">
-        {{ $t('pageLdap.modal.editRoleGroup') }}
-      </template>
-      <template v-else>
-        {{ $t('pageLdap.modal.addNewRoleGroup') }}
-      </template>
-    </template>
+  <b-modal
+    id="modal-role-group"
+    v-model="modal"
+    @ok="onOk"
+    @hidden="resetForm"
+    :title="
+      roleGroup
+        ? $t('pageLdap.modal.editRoleGroup')
+        : $t('pageLdap.modal.addNewRoleGroup')
+    "
+  >
     <b-container>
       <b-row>
         <b-col sm="8">
@@ -19,8 +21,8 @@
               <b-form-input
                 id="role-group-name"
                 v-model="form.groupName"
-                :state="getValidationState($v.form.groupName)"
-                @input="$v.form.groupName.$touch()"
+                :state="getValidationState(vv$.form.groupName)"
+                @input="vv$.form.groupName.$touch()"
               />
               <b-form-invalid-feedback role="alert">
                 {{ $t('global.form.fieldRequired') }}
@@ -35,8 +37,8 @@
                 id="privilege"
                 v-model="form.groupPrivilege"
                 :options="accountRoles"
-                :state="getValidationState($v.form.groupPrivilege)"
-                @input="$v.form.groupPrivilege.$touch()"
+                :state="getValidationState(vv$.form.groupPrivilege)"
+                @input="vv$.form.groupPrivilege.$touch()"
               >
                 <template v-if="!roleGroup" #first>
                   <b-form-select-option :value="null" disabled>
@@ -52,7 +54,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <template #modal-footer="{ cancel }">
+    <template #footer="{ cancel }">
       <b-button variant="secondary" @click="cancel()">
         {{ $t('global.action.cancel') }}
       </b-button>
@@ -68,91 +70,96 @@
   </b-modal>
 </template>
 
-<script>
-import { required, requiredIf } from 'vuelidate/lib/validators';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+<script setup>
+import { computed, ref, reactive, watch,nextTick } from 'vue';
+import { required, requiredIf } from '@vuelidate/validators';
+import { UserManagementStore } from '../../../store';
+import useVuelidate from '@vuelidate/core';
+import eventBus from '@/eventBus';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
+// import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
 
-export default {
-  mixins: [VuelidateMixin],
-  props: {
-    roleGroup: {
-      type: Object,
-      default: null,
-      validator: (prop) => {
-        if (prop === null) return true;
-        return (
-          Object.prototype.hasOwnProperty.call(prop, 'groupName') &&
-          Object.prototype.hasOwnProperty.call(prop, 'groupPrivilege')
-        );
-      },
-    },
-  },
-  data() {
-    return {
-      form: {
-        groupName: null,
-        groupPrivilege: null,
-      },
-    };
-  },
-  computed: {
-    accountRoles() {
-      return this.$store?.getters['userManagement/filteredAccountRoles'].filter(
-        (role) => role !== 'ServiceAgent' && role !== 'Operator',
+const userManagementStore = UserManagementStore();
+const { getValidationState } = useVuelidateComposable();
+const { hideLoader, startLoader, endLoader, loading } = useLoadingBar();
+const modal = ref(false);
+eventBus.on('modal-role-group', () => {
+  modal.value = true;
+});
+const props = defineProps({
+  roleGroup: {
+    type: Object,
+    default: null,
+    validator: (prop) => {
+      if (prop === null) return true;
+      return (
+        Object.prototype.hasOwnProperty.call(prop, 'groupName') &&
+        Object.prototype.hasOwnProperty.call(prop, 'groupPrivilege')
       );
     },
   },
-  watch: {
-    roleGroup: function (value) {
-      if (value === null) return;
-      this.form.groupName = value.groupName;
-      this.form.groupPrivilege = value.groupPrivilege;
-    },
+});
+
+const form = reactive({
+  groupName: null,
+  groupPrivilege: null,
+});
+const accountRoles = computed(() => {
+  return userManagementStore.filteredAccountRoles.filter(
+    (role) => role !== 'ServiceAgent' && role !== 'Operator'
+  );
+});
+watch(
+  () => props.roleGroup,
+  (value) => {
+    if (value === null) return;
+    form.groupName = value.groupName;
+    form.groupPrivilege = value.groupPrivilege;
+  }
+);
+
+
+
+const ruless = computed(() => ({
+  form: {
+    groupName: modal.value
+      ? { required: requiredIf(() => !props.roleGroup) }
+      : {},
+    groupPrivilege: modal.value ? { required } : {},
   },
-  validations() {
-    return {
-      form: {
-        groupName: {
-          required: requiredIf(function () {
-            return !this.roleGroup;
-          }),
-        },
-        groupPrivilege: {
-          required,
-        },
-      },
-    };
-  },
-  methods: {
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$emit('ok', {
-        addNew: !this.roleGroup,
-        groupNamePreviously: this.roleGroup?.groupName
-          ? this.roleGroup?.groupName
-          : null,
-        groupName: this.form.groupName,
-        groupPrivilege: this.form.groupPrivilege,
-      });
-      this.closeModal();
-    },
-    closeModal() {
-      this.$nextTick(() => {
-        this.$refs.modal.hide();
-      });
-    },
-    resetForm() {
-      this.form.groupName = null;
-      this.form.groupPrivilege = null;
-      this.$v.$reset();
-      this.$emit('hidden');
-    },
-    onOk(bvModalEvt) {
-      // prevent modal close
-      bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-  },
-};
+}));
+const vv$ = useVuelidate(ruless, {form});
+const emit = defineEmits(['ok']);
+function handleSubmit() {
+  vv$.value.$touch();
+  if (vv$.value.$invalid) return;
+  emit('ok', {
+    addNew: !props.roleGroup,
+    groupNamePreviously: props.roleGroup?.groupName
+      ? props.roleGroup?.groupName
+      : null,
+    groupName: form.groupName,
+    groupPrivilege: form.groupPrivilege,
+  });
+  closeModal();
+}
+
+function closeModal() {
+  nextTick(() => {
+    modal.value=false
+  });
+}
+
+function resetForm() {
+  form.groupName = null;
+  form.groupPrivilege = null;
+  vv$.value.$reset();
+  eventBus.emit('hidden');
+}
+function onOk(bvModalEvt) {
+  // prevent modal close
+  bvModalEvt.preventDefault();
+  handleSubmit();
+}
 </script>

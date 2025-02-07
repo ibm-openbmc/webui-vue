@@ -9,30 +9,31 @@
     </b-row>
     <b-row>
       <b-col class="text-right" md="9">
-        <b-btn
+        <b-button
           variant="primary"
           :disabled="!isServiceEnabled"
           @click="initRoleGroupModal(null)"
         >
           <icon-add />
           {{ $t('pageLdap.addRoleGroup') }}
-        </b-btn>
+        </b-button>
       </b-col>
     </b-row>
     <b-row>
       <b-col md="9">
         <table-toolbar
           ref="toolbar"
-          :selected-items-count="selectedRows.length"
+          :selected-items-count="selectedRowsList.length"
           :actions="batchActions"
-          @clear-selected="clearSelectedRows($refs.table)"
+          @clear-selected="clearSelectedRows(tableRef)"
           @batch-action="onBatchAction"
         />
         <b-table
-          ref="table"
+          ref="tableRef"
           responsive
           selectable
           show-empty
+          sticky-header="75vh"
           no-select-on-click
           hover
           no-sort-reset
@@ -49,18 +50,19 @@
               v-model="tableHeaderCheckboxModel"
               :indeterminate="tableHeaderCheckboxIndeterminate"
               :disabled="!isServiceEnabled"
-              @change="onChangeHeaderCheckbox($refs.table)"
+              @change="
+                onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)
+              "
+              @update:modelValue="toggleAll"
             >
-              <span class="sr-only">{{ $t('global.table.selectAll') }}</span>
             </b-form-checkbox>
           </template>
           <template #cell(checkbox)="row">
             <b-form-checkbox
-              v-model="row.rowSelected"
+              v-model="ldapStore.enabledRoleGroups[row.index].isSelected"
               :disabled="!isServiceEnabled"
-              @change="toggleSelectRow($refs.table, row.index)"
+              @change="toggleSelectRowByGroupName(tableRef, row.index,ldapStore.enabledRoleGroups[row.index].isSelected,row.item)"
             >
-              <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </b-form-checkbox>
           </template>
 
@@ -75,8 +77,14 @@
               @click-table-action="onTableRowAction($event, item)"
             >
               <template #icon>
-                <icon-edit v-if="action.value === 'edit'" />
-                <icon-trashcan v-if="action.value === 'delete'" />
+                <icon-edit
+                  v-if="action.value === 'edit'"
+                  :title="$t('pageLdap.modal.editRoleGroup')"
+                />
+                <icon-trashcan
+                  v-if="action.value === 'delete'"
+                  :title="$t('pageLdap.modal.deleteRoleGroup')"
+                />
               </template>
             </table-row-action>
           </template>
@@ -89,182 +97,242 @@
       @hidden="activeRoleGroup = null"
     />
   </div>
+  <BModal
+    ref="myModalRef"
+    v-model="deleteModal"
+    :title="$t('pageLdap.modal.deleteRoleGroup')"
+    :cancel-title="$t('global.action.cancel')"
+    :ok-title="$t('global.action.delete')"
+    @cancel="onModalCancel"
+    @ok="onModalDelete"
+    @hide="onModalHide"
+  >
+    {{
+      $t('pageLdap.modal.deleteRoleGroupConfirmMessage', {
+        groupName: deleteModalContent,
+      })
+    }}
+  </BModal>
+  <BModal
+    v-model="batchModal"
+    :title="$t('pageLdap.modal.deleteRoleGroup', { count: count }, count)"
+    :ok-title="$t('global.action.delete')"
+    :cancel-title="$t('global.action.cancel')"
+    @ok="onModalDeleteBatch"
+  >
+    <p>
+      {{
+        $t(
+          'pageLdap.modal.deleteRoleGroupBatchConfirmMessage',
+          { count: count },
+          count
+        )
+      }}
+    </p>
+  </BModal>
 </template>
 
-<script>
+<script setup>
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
-import { mapGetters } from 'vuex';
 
-import Alert from '@/components/Global/Alert';
-import TableToolbar from '@/components/Global/TableToolbar';
-import TableRowAction from '@/components/Global/TableRowAction';
-import BVTableSelectableMixin, {
-  selectedRows,
+import Alert from '@/components/Global/Alert.vue';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
+import ModalAddRoleGroup from './ModalAddRoleGroup.vue';
+import { onBeforeMount, onMounted, reactive } from 'vue';
+import useTableSelectableComposable from '../../../components/Composables/useTableSelectableComposable';
+import { LdapStore } from '../../../store';
+import { computed, ref } from 'vue';
+import i18n from '@/i18n';
+import { UserManagementStore } from '../../../store';
+import eventBus from '@/eventBus';
+import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
+import useToast from '@/components/Composables/useToastComposable';
+
+const { startLoader, endLoader } = useLoadingBar();
+const { successToast, errorToast } = useToast();
+const modal = ref(false);
+const deleteModal = ref(false);
+const deleteModalContent = ref('');
+const batchModal = ref(false);
+const ldapStore = LdapStore();
+const tableRef = ref(null);
+const isAllSelected = ref(false);
+const userManagementStore = UserManagementStore();
+const selectedRowsNo = ref(0);
+const count = ref(0);
+const {
+  clearSelectedRows,
+  selectedRowsList,
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import ModalAddRoleGroup from './ModalAddRoleGroup';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
+  onChangeHeaderCheckbox,
+  toggleSelectRowByGroupName,
+  onRowSelected,
+} = useTableSelectableComposable();
+const isBusy = ref(true);
+const activeRoleGroup = ref(null);
 
-export default {
-  components: {
-    Alert,
-    IconAdd,
-    IconEdit,
-    IconTrashcan,
-    ModalAddRoleGroup,
-    TableRowAction,
-    TableToolbar,
+const fields = reactive([
+  {
+    key: 'checkbox',
+    sortable: false,
   },
-  mixins: [BVTableSelectableMixin, BVToastMixin, LoadingBarMixin],
-  data() {
+  {
+    key: 'groupName',
+    sortable: true,
+    label: i18n.global.t('pageLdap.tableRoleGroups.groupName'),
+  },
+  {
+    key: 'groupPrivilege',
+    sortable: true,
+    label: i18n.global.t('pageLdap.tableRoleGroups.groupPrivilege'),
+  },
+  {
+    key: 'actions',
+    sortable: false,
+    label: '',
+    tdClass: 'text-right',
+  },
+]);
+const batchActions = reactive([
+  {
+    value: 'delete',
+    label: i18n.global.t('global.action.delete'),
+  },
+]);
+
+const isServiceEnabled = computed(() => {
+  return ldapStore.isServiceEnabledGetter;
+});
+const enabledRoleGroups = computed(() => {
+  return ldapStore.enabledRoleGroups;
+});
+
+const tableItems = computed(() => {
+  return enabledRoleGroups.value.map(({ LocalRole, RemoteGroup }) => {
     return {
-      isBusy: true,
-      activeRoleGroup: null,
-      fields: [
+      groupName: RemoteGroup,
+      groupPrivilege: LocalRole,
+      actions: [
         {
-          key: 'checkbox',
-          sortable: false,
+          value: 'edit',
+          enabled: isServiceEnabled.value,
         },
-        {
-          key: 'groupName',
-          sortable: true,
-          label: this.$t('pageLdap.tableRoleGroups.groupName'),
-        },
-        {
-          key: 'groupPrivilege',
-          sortable: true,
-          label: this.$t('pageLdap.tableRoleGroups.groupPrivilege'),
-        },
-        {
-          key: 'actions',
-          sortable: false,
-          label: '',
-          tdClass: 'text-right',
-        },
-      ],
-      batchActions: [
         {
           value: 'delete',
-          label: this.$t('global.action.delete'),
+          enabled: isServiceEnabled.value,
         },
       ],
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
     };
-  },
-  computed: {
-    ...mapGetters('ldap', ['isServiceEnabled', 'enabledRoleGroups']),
-    tableItems() {
-      return this.enabledRoleGroups.map(({ LocalRole, RemoteGroup }) => {
-        return {
-          groupName: RemoteGroup,
-          groupPrivilege: LocalRole,
-          actions: [
-            {
-              value: 'edit',
-              title: this.$t('global.action.edit'),
-              enabled: this.isServiceEnabled,
-            },
-            {
-              value: 'delete',
-              title: this.$t('global.action.delete'),
-              enabled: this.isServiceEnabled,
-            },
-          ],
-        };
-      });
-    },
-  },
-  created() {
-    this.$store.dispatch('userManagement/getAccountRoles').finally(() => {
-      this.isBusy = false;
+  });
+});
+const deleteRoleGroupBatchConfirmMessage = computed(() =>
+  i18n.global.t(
+    'pageLdap.modal.deleteRoleGroupBatchConfirmMessage',
+    selectedRowsList.value.length
+  )
+);
+
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    ldapStore?.enabledRoleGroups?.map((enabledRoleGroup) => {
+      enabledRoleGroup.isSelected = false;
     });
-  },
-  methods: {
-    onBatchAction() {
-      this.$bvModal
-        .msgBoxConfirm(
-          this.$tc(
-            'pageLdap.modal.deleteRoleGroupBatchConfirmMessage',
-            this.selectedRows.length,
-          ),
-          {
-            title: this.$t('pageLdap.modal.deleteRoleGroup'),
-            okTitle: this.$t('global.action.delete'),
-            cancelTitle: this.$t('global.action.cancel'),
-          },
-        )
-        .then((deleteConfirmed) => {
-          if (deleteConfirmed) {
-            this.startLoader();
-            this.$store
-              .dispatch('ldap/deleteRoleGroup', {
-                roleGroups: this.selectedRows,
-              })
-              .then((success) => this.successToast(success))
-              .catch(({ message }) => this.errorToast(message))
-              .finally(() => this.endLoader());
-          }
-        });
-    },
-    onTableRowAction(action, row) {
-      switch (action) {
-        case 'edit':
-          this.initRoleGroupModal(row);
-          break;
-        case 'delete':
-          this.$bvModal
-            .msgBoxConfirm(
-              this.$t('pageLdap.modal.deleteRoleGroupConfirmMessage', {
-                groupName: row.groupName,
-              }),
-              {
-                title: this.$t('pageLdap.modal.deleteRoleGroup'),
-                okTitle: this.$t('global.action.delete'),
-                cancelTitle: this.$t('global.action.cancel'),
-              },
-            )
-            .then((deleteConfirmed) => {
-              if (deleteConfirmed) {
-                this.startLoader();
-                this.$store
-                  .dispatch('ldap/deleteRoleGroup', { roleGroups: [row] })
-                  .then((success) => this.successToast(success))
-                  .catch(({ message }) => this.errorToast(message))
-                  .finally(() => this.endLoader());
-              }
-            });
-          break;
-      }
-    },
-    initRoleGroupModal(roleGroup) {
-      this.activeRoleGroup = roleGroup;
-      this.$bvModal.show('modal-role-group');
-    },
-    saveRoleGroup({ addNew, groupNamePreviously, groupName, groupPrivilege }) {
-      this.activeRoleGroup = null;
-      const data = { groupName, groupPrivilege };
-      const saveData = { groupNamePreviously, groupName, groupPrivilege };
-      this.startLoader();
-      if (addNew) {
-        this.$store
-          .dispatch('ldap/addNewRoleGroup', data)
-          .then((success) => this.successToast(success))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
-      } else {
-        this.$store
-          .dispatch('ldap/saveRoleGroup', saveData)
-          .then((success) => this.successToast(success))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
-      }
-    },
-  },
+    clearSelectedRows(tableRef);
+  });
+});
+
+onMounted(() => {
+  userManagementStore.getAccountRoles().finally(() => {
+    isBusy.value = false;
+  });
+});
+
+function onBatchAction() {
+  selectedRowsNo.value = selectedRowsList.value.map((row) => row.uri).length;
+  count.value = selectedRowsNo.value;
+  batchModal.value = true;
+}
+function toggleAll(checked) {
+  ldapStore?.enabledRoleGroups?.map((enabledRoleGroup) => {
+    enabledRoleGroup.isSelected = checked;
+  });
+  isAllSelected.value = checked;
+}
+function onModalDeleteBatch(deleteConfirmed) {
+  if (deleteConfirmed) {
+    startLoader();
+
+    ldapStore
+      .deleteRoleGroup({
+        roleGroups: selectedRowsList.value,
+      })
+      .then((success) => successToast(success))
+      .catch(({ message }) => errorToast(message))
+      .finally(() => endLoader());
+  }
+}
+function onTableRowAction(action, row) {
+  switch (action) {
+    case 'edit':
+      initRoleGroupModal(row);
+      break;
+    case 'delete':
+      initModalDeleteRole(row);
+      break;
+  }
+}
+function initModalDeleteRole(roleGroup) {
+  deleteModal.value = true;
+  activeRoleGroup.value = roleGroup;
+  deleteModalContent.value = roleGroup.groupName;
+}
+const onModalDelete = (deleteConfirmed) => {
+  if (deleteConfirmed) {
+    startLoader();
+    ldapStore
+      .deleteRoleGroup({ roleGroups: [activeRoleGroup.value] })
+      .then((success) => successToast(success))
+      .catch(({ message }) => errorToast(message))
+      .finally(() => endLoader());
+  }
 };
+function initRoleGroupModal(roleGroup) {
+  activeRoleGroup.value = roleGroup;
+  modal.value = true;
+  eventBus.emit('modal-role-group');
+}
+function saveRoleGroup({
+  addNew,
+  groupNamePreviously,
+  groupName,
+  groupPrivilege,
+}) {
+  activeRoleGroup.value = null;
+  const data = { groupName, groupPrivilege };
+  const saveData = { groupNamePreviously, groupName, groupPrivilege };
+  startLoader();
+  if (addNew) {
+    ldapStore
+      .addNewRoleGroup(data)
+      .then((success) => successToast(success))
+      .catch(({ message }) => errorToast(message))
+      .finally(() => endLoader());
+  } else {
+    ldapStore
+      .saveRoleGroup(saveData)
+      .then((success) => successToast(success))
+      .catch(({ message }) => errorToast(message))
+      .finally(() => endLoader());
+  }
+}
+
 </script>
+<style scoped>
+.text-right {
+  text-align: right !important;
+}
+</style>

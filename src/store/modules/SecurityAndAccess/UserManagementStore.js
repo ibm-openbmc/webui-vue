@@ -5,26 +5,25 @@ import { defineStore } from 'pinia';
 
 export const UserManagementStore = defineStore('userManagment', {
   namespaced: true,
-  state: () => {
-    return {
+  state: () => ({
       allUsers: [],
-      // accountRoles: [],
+      accountRoles: [],
       // accountLockoutDuration: null,
       // accountLockoutThreshold: null,
       // accountMinPasswordLength: null,
       // accountMaxPasswordLength: null,
-    };
-  },
+    
+  }),
   getters: {
     allUsersGetter(state) {
       return state.allUsers;
     },
-    // accountRoles(state) {
-    //   return state.accountRoles;
-    // },
-    // filteredAccountRoles(state) {
-    //   return state.accountRoles.filter((role) => role !== 'OemIBMServiceAgent');
-    // },
+    accountRolesGetter(state) {
+      return state.accountRoles;
+    },
+    filteredAccountRoles(state) {
+      return state.accountRoles.filter((role) => role !== 'OemIBMServiceAgent');
+    },
     // accountSettings(state) {
     //   return {
     //     lockoutDuration: state.accountLockoutDuration,
@@ -85,25 +84,25 @@ export const UserManagementStore = defineStore('userManagment', {
     //       throw new Error(message);
     //     });
     // },
-    // getAccountRoles() {
-    //   api
-    //     .get('/redfish/v1/AccountService/Roles')
-    //     .then(async ({ data: { Members = [] } = {} }) => {
-    //       return await api.all(
-    //         Members.map(async (member) => {
-    //           return await api
-    //             .get(member['@odata.id'])
-    //             .then(async ({ data }) => {
-    //               return await data.Description;
-    //             });
-    //         }),
-    //       );
-    //     })
-    //     .then((res) => {
-    //       this.accountRoles = res;
-    //     })
-    //     .catch((error) => console.log(error));
-    // },
+    getAccountRoles() {
+      return api
+        .get('/redfish/v1/AccountService/Roles')
+        .then(async ({ data: { Members = [] } = {} }) => {
+          return await api.all(
+            Members.map(async (member) => {
+              return await api
+                .get(member['@odata.id'])
+                .then(async ({ data }) => {
+                  return await data.Description;
+                });
+            }),
+          );
+        })
+        .then((res) => {
+          this.accountRoles = res;
+        })
+        .catch((error) => console.log(error));
+    },
     // async createUser({ dispatch }, { username, password, privilege, status }) {
     //   const data = {
     //     UserName: username,

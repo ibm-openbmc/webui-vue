@@ -10,41 +10,28 @@
     >
       <icon-view-off v-if="isVisible" />
       <icon-view v-else />
-      <span class="sr-only">{{ togglePasswordLabel }}</span>
     </b-button>
   </div>
 </template>
 
-<script>
+
+<script setup>
 import IconView from '@carbon/icons-vue/es/view/20';
 import IconViewOff from '@carbon/icons-vue/es/view--off/20';
-
-export default {
-  name: 'InputPasswordToggle',
-  components: { IconView, IconViewOff },
-  data() {
-    return {
-      isVisible: false,
-      togglePasswordLabel: this.$t('global.ariaLabel.showPassword'),
-    };
-  },
-  methods: {
-    toggleVisibility() {
-      const firstChild = this.$children[0];
-      const inputEl = firstChild ? firstChild.$el : null;
-
-      this.isVisible = !this.isVisible;
-
-      if (inputEl && inputEl.nodeName === 'INPUT') {
-        inputEl.type = this.isVisible ? 'text' : 'password';
-      }
-
-      this.isVisible
-        ? (this.togglePasswordLabel = this.$t('global.ariaLabel.hidePassword'))
-        : (this.togglePasswordLabel = this.$t('global.ariaLabel.showPassword'));
-    },
-  },
-};
+import i18n from '@/i18n';
+import { ref } from 'vue';
+const isVisible = ref(false);
+const togglePasswordLabel = ref(i18n.global.t('global.ariaLabel.showPassword'));
+const emit = defineEmits(['updatePassView']);
+const toggleVisibility = () => {
+  isVisible.value = !isVisible.value;
+  emit('updatePassView',
+    isVisible.value ? 'text' : 'password'
+  )
+  togglePasswordLabel.value = isVisible.value
+    ? i18n.global.t('global.ariaLabel.hidePassword')
+    : i18n.global.t('global.ariaLabel.showPassword')
+}
 </script>
 
 <style lang="scss" scoped>
