@@ -33,6 +33,7 @@ import CapacityOnDemand from '../views/ResourceManagement/CapacityOnDemand/Capac
 import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/DeconfigurationRecords.vue';
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
+import EventLogs from '@/views/Logs/EventLogs';
 
 const roles = {
   administrator: 'Administrator',
@@ -139,6 +140,14 @@ export const routes = [
         component: IBMiServiceFunctions,
         meta: {
           title: i18n.global.t('appPageTitle.ibmiServiceFunctions'),
+        },
+      },
+      {
+        path: '/logs/event-logs',
+        name: 'event-logs',
+        component: EventLogs,
+        meta: {
+          title: i18n.global.t('appPageTitle.eventLogs'),
         },
       },
       {

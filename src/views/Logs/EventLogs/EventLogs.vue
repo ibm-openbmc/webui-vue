@@ -2,14 +2,14 @@
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.eventLogs')" />
     <b-row class="align-items-start">
-      <b-col sm="8" xl="6" class="d-sm-flex align-items-end mb-4">
+      <b-col sm="8" xl="6" class="d-sm-flex align-items-end mb-4 searchStyle">
         <search
           :placeholder="$t('pageEventLogs.table.searchLogs')"
           data-test-id="eventLogs-input-searchLogs"
           @change-search="onChangeSearchInput"
           @clear-search="onClearSearchInput"
         />
-        <div class="ml-sm-4">
+        <div class="ml-sm-4 margin-style">
           <table-cell-count
             :filtered-items-count="filteredRows"
             :total-number-of-cells="allLogs.length"
@@ -68,10 +68,9 @@
           no-select-on-click
           sort-icon-left
           hover
-          no-sort-reset
-          sort-desc
+          sticky-header="75vh"
           show-empty
-          sort-by="id"
+          :sort-by="[{ key: 'id', order: 'asc' }]"
           :fields="fields"
           :items="filteredLogs"
           :sort-compare="onSortCompare"
@@ -90,18 +89,17 @@
               v-model="tableHeaderCheckboxModel"
               data-test-id="eventLogs-checkbox-selectAll"
               :indeterminate="tableHeaderCheckboxIndeterminate"
-              @change="onChangeHeaderCheckbox($refs.table)"
+              @change="onChangeHeaderCheckbox($refs.table, tableHeaderCheckboxModel)"
+              @update:modelValue="toggleAll"
             >
-              <span class="sr-only">{{ $t('global.table.selectAll') }}</span>
             </b-form-checkbox>
           </template>
           <template #cell(checkbox)="row">
             <b-form-checkbox
-              v-model="row.rowSelected"
+              v-model="row.item.rowSelected"
               :data-test-id="`eventLogs-checkbox-selectRow-${row.index}`"
-              @change="toggleSelectRow($refs.table, row.index)"
+              @change="toggleSelectRow($refs.table, row.index, row.item.rowSelected, row.item)"
             >
-              <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </b-form-checkbox>
           </template>
 
@@ -111,8 +109,12 @@
               variant="link"
               :aria-label="expandRowLabel"
               :title="expandRowLabel"
-              class="btn-icon-only"
-              @click="toggleRowDetails(row)"
+              :class="
+                row.item.toggleDetails
+                  ? 'rotateSvg btn-icon-only'
+                  : 'btn-icon-only'
+              "
+              @click="toggleRow(row)"
             >
               <icon-chevron />
             </b-button>
@@ -178,8 +180,8 @@
                     <!-- Modified date -->
                     <dt>{{ $t('pageEventLogs.table.modifiedDate') }}:</dt>
                     <dd v-if="item.modifiedDate">
-                      {{ item.modifiedDate | formatDate }}
-                      {{ item.modifiedDate | formatTime }}
+                      {{ $filters.formatDate(item.modifiedDate) }}
+                      {{ $filters.formatTime(item.modifiedDate) }}
                     </dd>
                     <dd v-else>--</dd>
                   </dl>
@@ -201,8 +203,8 @@
           </template>
           <!-- Date column -->
           <template #cell(date)="{ value }">
-            <p class="mb-0">{{ value | formatDate }}</p>
-            <p class="mb-0">{{ value | formatTime }}</p>
+            <p class="mb-0">{{ $filters.formatDate(value) }}</p>
+            <p class="mb-0">{{ $filters.formatTime(value) }}</p>
           </template>
 
           <!-- Status column -->
@@ -262,14 +264,29 @@
       <b-col sm="6">
         <b-pagination
           v-model="currentPage"
+          class="b-pagination"
           first-number
           last-number
           :per-page="perPage"
-          :total-rows="getTotalRowCount(filteredRows)"
+          :total-rows="getTotalRowCount(filteredRows, perPage)"
           aria-controls="table-event-logs"
         />
       </b-col>
     </b-row>
+    <BModal
+      v-model="openModal"
+      :title="deleteTitle"
+      :ok-title="$t('global.action.delete')"
+      okVariant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk(deleteType)"
+    >
+      <p>
+        {{
+          deleteMessage
+        }}
+      </p>
+    </BModal>
   </b-container>
 </template>
 
@@ -279,37 +296,28 @@ import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import IconDownload from '@carbon/icons-vue/es/download/20';
 
-import PageTitle from '@/components/Global/PageTitle';
-import StatusIcon from '@/components/Global/StatusIcon';
-import Search from '@/components/Global/Search';
-import TableCellCount from '@/components/Global/TableCellCount';
-import TableDateFilter from '@/components/Global/TableDateFilter';
-import TableFilter from '@/components/Global/TableFilter';
-import TableRowAction from '@/components/Global/TableRowAction';
-import TableToolbar from '@/components/Global/TableToolbar';
-import InfoTooltip from '@/components/Global/InfoTooltip';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import StatusIcon from '@/components/Global/StatusIcon.vue';
+import Search from '@/components/Global/Search.vue';
+import TableCellCount from '@/components/Global/TableCellCount.vue';
+import TableDateFilter from '@/components/Global/TableDateFilter.vue';
+import TableFilter from '@/components/Global/TableFilter.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
-import BVPaginationMixin, {
-  currentPage,
-  perPage,
-  itemsPerPageOptions,
-} from '@/components/Mixins/BVPaginationMixin';
-import BVTableSelectableMixin, {
-  selectedRows,
-  tableHeaderCheckboxModel,
-  tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
-import TableSortMixin from '@/components/Mixins/TableSortMixin';
-import TableRowExpandMixin, {
-  expandRowLabel,
-} from '@/components/Mixins/TableRowExpandMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
+import useLoadingBar from "@/components/Composables/useLoadingBarComposable";
+import useTableFilter from "../../../components/Composables/useTableFilterComposable";
+import usePaginationComposable from "../../../components/Composables/usePaginationComposable";
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import useToastComposable from "@/components/Composables/useToastComposable";
+import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
+import useTableSortComposable from '../../../components/Composables/useTableSortComposable';
+import useTableRowExpandComposable from "../../../components/Composables/useTableRowExpandComposable";
+import useSearchFilterComposable from "../../../components/Composables/useSearchFilterComposable";
+import eventBus from '@/eventBus';
+
+import { GlobalStore, EventLogStore } from "../../../store";
 
 export default {
   components: {
@@ -327,25 +335,20 @@ export default {
     TableToolbar,
     TableDateFilter,
   },
-  mixins: [
-    BVPaginationMixin,
-    BVTableSelectableMixin,
-    BVToastMixin,
-    LoadingBarMixin,
-    TableFilterMixin,
-    DataFormatterMixin,
-    TableSortMixin,
-    TableRowExpandMixin,
-    SearchFilterMixin,
-  ],
   beforeRouteLeave(to, from, next) {
     // Hide loader if the user navigates to another page
     // before request is fulfilled.
-    this.hideLoader();
+    useLoadingBar().hideLoader();
     next();
   },
   data() {
     return {
+      toast: useToastComposable(),
+      openModal: false,
+      deleteMessage: '',
+      deleteTitle: '',
+      deleteType: '',
+      uris: [],
       isBusy: true,
       fields: [
         {
@@ -409,7 +412,7 @@ export default {
           ],
         },
       ],
-      expandRowLabel,
+      expandRowLabel: useTableRowExpandComposable().expandRowLabel,
       activeFilters: [],
       batchActions: [
         {
@@ -417,24 +420,24 @@ export default {
           label: this.$t('global.action.delete'),
         },
       ],
-      currentPage: currentPage,
+      currentPage: usePaginationComposable().currentPage,
       filterStartDate: null,
       filterEndDate: null,
-      itemsPerPageOptions: itemsPerPageOptions,
-      perPage: perPage,
-      searchFilter: searchFilter,
+      itemsPerPageOptions: usePaginationComposable().itemsPerPageOptions,
+      perPage: usePaginationComposable().perPage,
+      searchFilter: useSearchFilterComposable().searchFilterInput,
       searchTotalFilteredRows: 0,
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
+      selectedRows: useTableSelectableComposable().selectedRowsList,
+      tableHeaderCheckboxModel: useTableSelectableComposable().tableHeaderCheckboxModel,
+      tableHeaderCheckboxIndeterminate: useTableSelectableComposable().tableHeaderCheckboxIndeterminate,
     };
   },
   computed: {
     currentUser() {
-      return this.$store.getters['global/currentUser'];
+      return GlobalStore().currentUserGetter;
     },
     isServiceUser() {
-      return this.$store.getters['global/isServiceUser'];
+      return GlobalStore().isServiceUser;
     },
     filteredRows() {
       return this.searchFilter
@@ -442,50 +445,52 @@ export default {
         : this.filteredLogs.length;
     },
     allLogs() {
-      return this.$store.getters['eventLog/eventlogs'].map((event) => {
-        return {
-          ...event,
-          actions: [
-            {
-              value: 'download',
-              title: this.$t('global.action.download'),
-            },
-            {
-              value: 'delete',
-              title: this.$t('global.action.delete'),
-            },
-          ],
-        };
-      });
+      return EventLogStore().eventlogsGetter;
     },
     filteredLogsByDate() {
-      return this.getFilteredTableDataByDate(
+      return useTableFilter().getFilteredTableDataByDate(
         this.allLogs,
         this.filterStartDate,
         this.filterEndDate,
       );
     },
     filteredLogs() {
-      return this.getFilteredTableData(
+      return useTableFilter().getFilteredTableData(
         this.filteredLogsByDate,
         this.activeFilters,
       );
     },
   },
   created() {
-    this.startLoader();
-    this.$store.dispatch('eventLog/initializeLogs').then(() => {
-      this.$store.dispatch('eventLog/getEventLogData').finally(() => {
+    eventBus.on('clear-selected', () => {
+      EventLogStore().eventlogsGetter?.map((singleLog) => {
+        singleLog.rowSelected = false;
+      });
+      useTableSelectableComposable().clearSelectedRowsOptions(this.$refs.table);
+    }),
+    useLoadingBar().startLoader();
+    EventLogStore().initializeLogs().then(() => {
+      EventLogStore().getEventLogData().finally(() => {
         this.checkForUserData();
         if (this.isServiceUser) {
-          this.$store.dispatch('eventLog/getCELogData');
+          EventLogStore().getCELogData();
         }
       });
-      this.endLoader();
+      useLoadingBar().endLoader();
       this.isBusy = false;
     });
   },
   methods: {
+    onChangeSearchInput(event) {
+      this.searchFilter = event;
+    },
+    onClearSearchInput() {
+      this.searchFilter = '';
+    },
+    toggleRow (row) {
+      row.item.toggleDetails = !row.item.toggleDetails;
+      useTableRowExpandComposable().toggleRowDetails(row);
+    },
     downloadFile(pelJsonInfo) {
       let date = new Date();
       date =
@@ -507,27 +512,26 @@ export default {
     },
     checkForUserData() {
       if (!this.currentUser) {
-        this.$store.dispatch('userManagement/getUsers');
-        this.$store.dispatch('global/getCurrentUser');
+        // this.$store.dispatch('userManagement/getUsers');
+        GlobalStore().getCurrentUser();
       }
     },
     reloadEventLogData() {
       if (this.isServiceUser) {
-        this.$store.dispatch('eventLog/getCELogData');
+        EventLogStore().getCELogData();
       }
-      this.$store.dispatch('eventLog/getEventLogData');
+      EventLogStore().getEventLogData();
     },
     changelogStatus(row) {
-      this.$store
-        .dispatch('eventLog/updateEventLogStatus', {
+      EventLogStore().updateEventLogStatus({
           uri: row.uri,
           status: row.status,
         })
         .then((success) => {
           this.reloadEventLogData();
-          this.successToast(success);
+          this.toast.successToast(success);
         })
-        .catch(({ message }) => this.errorToast(message));
+        .catch(({ message }) => this.toast.errorToast(message));
     },
     resolutionValue(item) {
       let value = item?.resolution?.split('\n');
@@ -539,106 +543,90 @@ export default {
       return value;
     },
     deleteAllLogs() {
-      this.$bvModal
-        .msgBoxConfirm(this.$t('pageEventLogs.modal.deleteAllMessage'), {
-          title: this.$t('pageEventLogs.modal.deleteAllTitle'),
-          okTitle: this.$t('global.action.delete'),
-          okVariant: 'danger',
-          cancelTitle: this.$t('global.action.cancel'),
-        })
-        .then((deleteConfirmed) => {
-          if (deleteConfirmed) {
-            this.$store
-              .dispatch('eventLog/deleteAllEventLogs', this.allLogs)
+      this.openModal = true;
+      this.deleteMessage = this.$t('pageEventLogs.modal.deleteAllMessage');
+      this.deleteTitle = this.$t('pageEventLogs.modal.deleteAllTitle');
+      this.deleteType = 'all'; 
+    },
+    handleOk(value) {
+          if (value === 'all') {
+            EventLogStore().deleteAllEventLogs(this.allLogs)
               .then((message) => {
                 this.reloadEventLogData();
-                this.successToast(message);
+                this.toast.successToast(message);
               })
-              .catch(({ message }) => this.errorToast(message));
-          }
-        });
+              .catch(({ message }) => this.toast.errorToast(message))
+              .finally(() => this.openModal = false)
+          } else {
+              if (this.selectedRows.length === this.allLogs.length) {
+                EventLogStore().deleteAllEventLogs(this.selectedRows)
+                  .then((message) => {
+                    this.reloadEventLogData();
+                    this.toast.successToast(message);
+                  })
+                  .catch(({ message }) => this.toast.errorToast(message))
+                  .finally(() => this.openModal = false)
+              } else {
+                this.deleteLogs(this.uris);
+              }
+            }
     },
     deleteLogs(uris) {
-      this.$store
-        .dispatch('eventLog/deleteEventLogs', uris)
+      EventLogStore().deleteEventLogs(uris)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             this.reloadEventLogData();
             if (type === 'success') {
-              this.successToast(message);
+              this.toast.successToast(message);
             } else if (type === 'error') {
-              this.errorToast(message);
+              this.toast.errorToast(message);
             }
           });
-        });
+        })
+        .finally(() => this.openModal = false);
     },
     onFilterChange({ activeFilters }) {
       this.activeFilters = activeFilters;
     },
     onSortCompare(a, b, key) {
       if (key === 'severity') {
-        return this.sortStatus(a, b, key);
+        return useTableSortComposable().sortStatus(a, b, key);
       }
     },
     onTableRowAction(action, { uri }) {
       if (action === 'delete') {
-        this.$bvModal
-          .msgBoxConfirm(this.$tc('pageEventLogs.modal.deleteMessage'), {
-            title: this.$tc('pageEventLogs.modal.deleteTitle'),
-            okTitle: this.$t('global.action.delete'),
-            cancelTitle: this.$t('global.action.cancel'),
-          })
-          .then((deleteConfirmed) => {
-            if (deleteConfirmed) this.deleteLogs([uri]);
-          });
+        this.uris = [uri];
+        this.openModal = true;
+        this.deleteMessage = this.$t('pageEventLogs.modal.deleteMessage');
+        this.deleteTitle = this.$t('pageEventLogs.modal.deleteTitle');
+        this.deleteType = 'selected';
       } else if (action === 'download') {
         //  download single log
         const pelJsonInfo = [];
-        this.startLoader();
-        this.$store
-          .dispatch('eventLog/downloadLogData', uri)
+        useLoadingBar().startLoader();
+        EventLogStore().downloadLogData(uri)
           .then((returned) => {
             pelJsonInfo.push(returned);
           })
           .finally(() => {
             this.downloadFile(pelJsonInfo);
-            this.endLoader();
+            useLoadingBar().endLoader();
           });
       }
     },
     onBatchAction(action) {
       if (action === 'delete') {
-        const uris = this.selectedRows.map((row) => row.uri);
-        this.$bvModal
-          .msgBoxConfirm(
-            this.$tc(
+        this.uris = this.selectedRows.map((row) => row.uri);
+        this.openModal = true;
+        this.deleteMessage = this.$t(
               'pageEventLogs.modal.deleteMessage',
               this.selectedRows.length,
-            ),
-            {
-              title: this.$tc(
+            );
+        this.deleteTitle = this.$t(
                 'pageEventLogs.modal.deleteTitle',
                 this.selectedRows.length,
-              ),
-              okTitle: this.$t('global.action.delete'),
-              cancelTitle: this.$t('global.action.cancel'),
-            },
-          )
-          .then((deleteConfirmed) => {
-            if (deleteConfirmed) {
-              if (this.selectedRows.length === this.allLogs.length) {
-                this.$store
-                  .dispatch('eventLog/deleteAllEventLogs', this.selectedRows)
-                  .then((message) => {
-                    this.reloadEventLogData();
-                    this.successToast(message);
-                  })
-                  .catch(({ message }) => this.errorToast(message));
-              } else {
-                this.deleteLogs(uris);
-              }
-            }
-          });
+              );
+        this.deleteType = 'selected';
       }
     },
     onChangeDateTimeFilter({ fromDate, toDate }) {
@@ -649,43 +637,42 @@ export default {
       this.searchTotalFilteredRows = filteredItems.length;
     },
     resolveLogs() {
-      this.$store
-        .dispatch('eventLog/resolveEventLogs', this.selectedRows)
+      EventLogStore().resolveEventLogs(this.selectedRows)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             if (type === 'success') {
               this.reloadEventLogData();
-              this.successToast(message);
+              this.toast.successToast(message);
             } else if (type === 'error') {
-              this.errorToast(message);
+              this.toast.errorToast(message);
             }
           });
+          eventBus.emit('clear-selected');
         });
     },
     unresolveLogs() {
-      this.$store
-        .dispatch('eventLog/unresolveEventLogs', this.selectedRows)
+      EventLogStore().unresolveEventLogs(this.selectedRows)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             if (type === 'success') {
               this.reloadEventLogData();
-              this.successToast(message);
+              this.toast.successToast(message);
             } else if (type === 'error') {
-              this.errorToast(message);
+              this.toast.errorToast(message);
             }
           });
+          eventBus.emit('clear-selected');
         });
     },
     async downloadEventLogs(value) {
       const pelJsonInfo = [];
-      this.infoToast(this.$t('pageEventLogs.toast.infoStartDownload'));
+      this.toast.infoToast(this.$t('pageEventLogs.toast.infoStartDownload'));
       if (value === 'all') {
         //  download all logs
         let counter = 1;
         while (counter <= this.allLogs.length) {
-          this.startLoader();
-          await this.$store
-            .dispatch('eventLog/downloadLogData', this.allLogs[counter - 1].uri)
+          useLoadingBar().startLoader();
+          await EventLogStore().downloadLogData(this.allLogs[counter - 1].uri)
             .then((returned) => {
               pelJsonInfo.push(returned);
               counter = counter + 1;
@@ -693,7 +680,7 @@ export default {
             .finally(() => {
               if (pelJsonInfo.length === this.allLogs.length) {
                 this.downloadFile(pelJsonInfo);
-                this.endLoader();
+                useLoadingBar().endLoader();
               }
             });
         }
@@ -701,12 +688,8 @@ export default {
         // several logs
         let counter = 1;
         while (counter <= this.selectedRows.length) {
-          this.startLoader();
-          await this.$store
-            .dispatch(
-              'eventLog/downloadLogData',
-              this.selectedRows[counter - 1].uri,
-            )
+          useLoadingBar().startLoader();
+          await EventLogStore().downloadLogData(this.selectedRows[counter - 1].uri)
             .then((returned) => {
               pelJsonInfo.push(returned);
               counter = counter + 1;
@@ -714,12 +697,57 @@ export default {
             .finally(() => {
               if (pelJsonInfo.length === this.selectedRows.length) {
                 this.downloadFile(pelJsonInfo);
-                this.endLoader();
+                useLoadingBar().endLoader();
               }
             });
         }
       }
     },
+    getTotalRowCount(rows, perPage) {
+      return usePaginationComposable().getTotalRowCount(rows, perPage);
+    },
+    dataFormatter(value) {
+      return useDataFormatterGlobal().dataFormatter(value);
+    },
+    toggleAll(checked) {
+      EventLogStore().eventlogsGetter?.map((singleLog) => {
+        singleLog.rowSelected = checked;
+      });
+    },
+    statusIcon(value) {
+      return useDataFormatterGlobal().statusIconValue(value);
+    },
+    toggleSelectRow(table, rowIndex, rowSelected, row) {
+      return useTableSelectableComposable().toggleSelectRowById(table, rowIndex, rowSelected, row);
+    },
+    onRowSelected(event, logsLength) {
+      return useTableSelectableComposable().onRowSelected(event, logsLength);
+    },
+    onChangeHeaderCheckbox(table, tableHeaderCheckboxModel) {
+      return useTableSelectableComposable().onChangeHeaderCheckbox(table, tableHeaderCheckboxModel);
+    }
   },
 };
 </script>
+<style lang="scss" scoped>
+.text-right {
+  text-align: right;
+}
+.searchStyle {
+  height: 74px;
+  top: 22px;
+  position: relative;
+}
+.margin-style {
+  margin-bottom: 23px;
+  margin-left: 10px;
+}
+.container-fluid {
+  width: calc(100% - 90px);
+}
+.rotateSvg {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+</style>
