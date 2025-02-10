@@ -14,6 +14,15 @@ const useTableSelectableComposable = () => {
     }
   };
 
+  const clearSelectedRowsOptions = (tableRef) => {
+    if (tableRef) {
+      tableRef.selectAllRows();
+      tableRef.clearSelected();
+      selectedRowsList.value = [];
+      tableHeaderCheckboxModel.value = false;
+    }
+  };
+
   const toggleSelectRow = (tableRef, rowIndex, rowSelected, row) => {
     if (tableRef && rowIndex !== undefined) {
       if (!rowSelected) {
@@ -104,6 +113,7 @@ const useTableSelectableComposable = () => {
   };
   return {
     clearSelectedRows,
+    clearSelectedRowsOptions,
     toggleSelectRow,
     toggleSelectRowById,
     toggleSelectRowByGroupName,

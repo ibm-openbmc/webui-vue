@@ -21,49 +21,121 @@ const getHighPriorityEvents = (events) =>
   events.filter(({ severity }) => severity === 'Critical');
 
 export const EventLogStore = defineStore('eventLog', {
+  namespaced: true,
   state: () => ({
     allEvents: [],
+    ceLogs: [],
     loadedEvents: false,
+    eventlogs: [],
   }),
   getters: {
-    getAllEvents: (state) => state.allEvents,
+    allEventsGetter: (state) => state.allEvents.concat(state.ceLogs),
+    ceLogsGetter: (state) => state.ceLogs,
     highPriorityEvents: (state) => getHighPriorityEvents(state.allEvents),
     healthStatus: (state) =>
       getHealthStatus(state.allEvents, state.loadedEvents),
+    eventlogsGetter: (state) => state.allEvents.concat(state.ceLogs),
   },
   actions: {
+    async initializeLogs() {
+      let eventLogs = [];
+      this.eventlogs = eventLogs;
+      this.ceLogs = eventLogs;
+    },
     async getEventLogData() {
       return await api
         .get('/redfish/v1/Systems/system/LogServices/EventLog/Entries')
         .then(({ data: { Members = [] } = {} }) => {
-          const eventLogs = Members.map((log) => {
+          let eventLogs = Members.map((log) => {
             const {
               Id,
+              EventId,
               Severity,
               Created,
               EntryType,
               Message,
               Name,
               Modified,
+              Resolution,
               Resolved,
               AdditionalDataURI,
             } = log;
             return {
               id: Id,
+              eventId: EventId,
               severity: Severity,
               date: new Date(Created),
               type: EntryType,
               description: Message,
               name: Name,
               modifiedDate: new Date(Modified),
+              resolution: Resolution,
+              toggleDetails: false,
+              rowSelected: false,
               uri: log['@odata.id'],
               filterByStatus: Resolved ? 'Resolved' : 'Unresolved',
               status: Resolved, //true or false
               additionalDataUri: AdditionalDataURI,
+              actions: [
+                {
+                  value: 'download',
+                },
+                {
+                  value: 'delete',
+                },
+              ],
             };
           });
+          this.eventlogs = eventLogs;
           this.allEvents = eventLogs;
-          this.loadedEvents = true;
+        })
+        .catch((error) => {
+          console.log('Event Log Data:', error);
+        });
+    },
+    async getCELogData() {
+      return await api
+        .get('/redfish/v1/Systems/system/LogServices/CELog/Entries')
+        .then(({ data: { Members = [] } = {} }) => {
+          const eventLogs = Members.map((log) => {
+            const {
+              Id,
+              EventId,
+              Severity,
+              Created,
+              EntryType,
+              Message,
+              Name,
+              Modified,
+              Resolution,
+              Resolved,
+              AdditionalDataURI,
+            } = log;
+            return {
+              id: Id,
+              eventId: EventId,
+              severity: Severity,
+              date: new Date(Created),
+              type: EntryType,
+              description: Message,
+              name: Name,
+              modifiedDate: new Date(Modified),
+              resolution: Resolution,
+              uri: log['@odata.id'],
+              filterByStatus: Resolved ? 'Resolved' : 'Unresolved',
+              status: Resolved, //true or false
+              additionalDataUri: AdditionalDataURI,
+              actions: [
+                {
+                  value: 'download',
+                },
+                {
+                  value: 'delete',
+                },
+              ],
+            };
+          });
+          this.ceLogs = eventLogs;
         })
         .catch((error) => {
           console.log('Event Log Data:', error);
@@ -72,12 +144,11 @@ export const EventLogStore = defineStore('eventLog', {
     async deleteAllEventLogs(data) {
       return await api
         .post(
-          '/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog',
+          '/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog'
         )
-        .then(() => this.getEventLogData())
-        .then(() =>
-          i18n.global.t('pageEventLogs.toast.successDelete', data.length),
-        )
+        .then(() => {
+          return i18n.global.t('pageEventLogs.toast.successDelete', data.length);
+        })
         .catch((error) => {
           console.log(error);
           throw new Error(
@@ -95,7 +166,6 @@ export const EventLogStore = defineStore('eventLog', {
       return await api
         .all(promises)
         .then((response) => {
-          this.getEventLogData();
           return response;
         })
         .then(
@@ -123,7 +193,7 @@ export const EventLogStore = defineStore('eventLog', {
           }),
         );
     },
-    async resolveEventLogs({ dispatch }, logs) {
+    async resolveEventLogs(logs) {
       const promises = logs.map((log) =>
         api.patch(log.uri, { Resolved: true }).catch((error) => {
           console.log(error);
@@ -133,7 +203,6 @@ export const EventLogStore = defineStore('eventLog', {
       return await api
         .all(promises)
         .then((response) => {
-          dispatch('getEventLogData');
           return response;
         })
         .then(
@@ -168,7 +237,6 @@ export const EventLogStore = defineStore('eventLog', {
       return await api
         .all(promises)
         .then((response) => {
-          this.getEventLogData();
           return response;
         })
         .then(
@@ -199,9 +267,6 @@ export const EventLogStore = defineStore('eventLog', {
       return await api
         .patch(log.uri, { Resolved: updatedEventLogStatus })
         .then(() => {
-          this.getEventLogData();
-        })
-        .then(() => {
           if (log.status) {
             return i18n.global.t('pageEventLogs.toast.successResolveLogs', 1);
           } else {
@@ -210,8 +275,14 @@ export const EventLogStore = defineStore('eventLog', {
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageEventLogs.toast.errorLogStatusUpdate'));
+          const message = i18n.global.t('pageEventLogs.toast.errorLogStatusUpdate');
+          throw new Error(message);
         });
+    },
+    async downloadLogData(uri) {
+      return await api.get(uri + `/OemPelAttachment`).then((response) => {
+        return response?.data?.Oem?.IBM?.PelJson;
+      });
     },
   },
 });
