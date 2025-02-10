@@ -433,8 +433,9 @@
     "processorChips": "Processor chips",
     "processorCores": "Processor cores",
     "totalCores": "Total cores",
-    "alert":{
-      "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off."
+    "alert": {
+      "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off.",
+      "warning": "If memory event occurred at runtime and server has not yet been rebooted then the memory resource is still in use. Once server is rebooted, the memory resource will become deconfigured and not in use."
     },
     "toast": {
       "deleteReqFailed": "The delete request failed because the resource requested cannot be deleted.",

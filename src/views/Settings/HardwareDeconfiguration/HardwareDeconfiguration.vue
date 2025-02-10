@@ -15,6 +15,15 @@
         </alert>
       </b-col>
     </b-row>
+    <b-row>
+      <b-col md="8" xl="6">
+        <alert variant="info" class="mb-4">
+          <div>
+            {{ $t('pageDeconfigurationHardware.alert.warning') }}
+          </div>
+        </alert>
+      </b-col>
+    </b-row>
     <page-section>
       <b-row>
         <b-col>
