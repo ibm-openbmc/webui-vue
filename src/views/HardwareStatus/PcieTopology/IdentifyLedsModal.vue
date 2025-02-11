@@ -140,7 +140,18 @@ export default {
               }
             });
           });
-          this.ioSlotsLed = returnedObj.ioSlots;
+          this.ioSlotsLed = [];
+          if (this.selectedObj.ioSlots.length > 0) {
+            this.selectedObj.ioSlots.map((selectedSlot) => {
+              returnedObj.ioSlots.map((returnedSlot) => {
+                if (
+                  selectedSlot.locationNumber === returnedSlot.locationNumber
+                ) {
+                  this.ioSlotsLed.push(returnedSlot);
+                }
+              });
+            });
+          }
         });
     },
     async changeLedValue(value, type) {
