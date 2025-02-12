@@ -62,7 +62,7 @@ const PowerSupplyStore = {
         })
         .catch((error) => console.log(error));
     },
-    async updateIdentifyLedValue(_, led) {
+    async updateIdentifyLedValue({ dispatch }, led) {
       const uri = led.uri;
       const updatedIdentifyLedValue = {
         LocationIndicatorActive: led.identifyLed,
@@ -77,6 +77,10 @@ const PowerSupplyStore = {
           }
         })
         .catch((error) => {
+          const chassisUri = uri.split('/PowerSubsystem').shift();
+          dispatch('getAllPowerSupplies', {
+            uri: chassisUri,
+          });
           console.log(error);
           if (led.identifyLed) {
             throw new Error(

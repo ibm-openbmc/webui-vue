@@ -58,7 +58,7 @@ const FanStore = {
         })
         .catch((error) => console.log(error));
     },
-    async updateIdentifyLedValue(_, led) {
+    async updateIdentifyLedValue({ dispatch }, led) {
       const uri = led.uri;
       const updatedIdentifyLedValue = {
         LocationIndicatorActive: led.identifyLed,
@@ -73,6 +73,8 @@ const FanStore = {
           }
         })
         .catch((error) => {
+          const chassisUri = uri.split('/ThermalSubsystem').shift();
+          dispatch('getAllFans', { uri: chassisUri });
           console.log(error);
           if (led.identifyLed) {
             throw new Error(

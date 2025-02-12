@@ -68,7 +68,8 @@ const AssemblyStore = {
           }
         })
         .catch((error) => {
-          dispatch('getAssemblyInfo');
+          const chassisUri = uri.split('/Assembly').shift();
+          dispatch('getAssemblyInfo', { uri: chassisUri });
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(
