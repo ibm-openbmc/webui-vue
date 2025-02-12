@@ -58,7 +58,7 @@ const FanStore = {
         })
         .catch((error) => console.log(error));
     },
-    async updateIdentifyLedValue(_, led) {
+    async updateIdentifyLedValue({ dispatch }, led) {
       const uri = led.uri;
       const updatedIdentifyLedValue = {
         LocationIndicatorActive: led.identifyLed,
@@ -73,6 +73,7 @@ const FanStore = {
           }
         })
         .catch((error) => {
+          dispatch('getAllFans', { uri: '/redfish/v1/Chassis/chassis' });
           console.log(error);
           if (led.identifyLed) {
             throw new Error(

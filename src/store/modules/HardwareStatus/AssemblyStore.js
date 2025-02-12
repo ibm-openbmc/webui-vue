@@ -68,7 +68,7 @@ const AssemblyStore = {
           }
         })
         .catch((error) => {
-          dispatch('getAssemblyInfo');
+          dispatch('getAssemblyInfo', { uri: '/redfish/v1/Chassis/chassis' });
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(

@@ -89,7 +89,9 @@ const FabricAdaptersStore = {
           }
         })
         .catch((error) => {
-          dispatch('getFabricAdaptersInfo');
+          dispatch('getFabricAdaptersInfo', {
+            uri: '/redfish/v1/Chassis/chassis',
+          });
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(
