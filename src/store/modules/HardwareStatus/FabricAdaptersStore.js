@@ -89,7 +89,9 @@ const FabricAdaptersStore = {
           }
         })
         .catch((error) => {
-          dispatch('getFabricAdaptersInfo');
+          dispatch('getFabricAdaptersInfo', {
+            uri: led.chassisUri,
+          });
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(

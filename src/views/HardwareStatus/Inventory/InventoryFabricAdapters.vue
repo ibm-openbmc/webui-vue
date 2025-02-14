@@ -259,6 +259,7 @@ export default {
           uri: row.uri,
           memberId: row.id,
           identifyLed: row.identifyLed,
+          chassisUri: this.chassis,
         })
         .then((message) => this.successToast(message))
         .catch(({ message }) => this.errorToast(message));
