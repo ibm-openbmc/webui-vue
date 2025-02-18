@@ -211,9 +211,21 @@ export const CertificatesStore = defineStore('certificates', {
         })
         .then(() => this.getCertificates())
         .then(() => {
-          return i18n.global.t('pageCertificates.toast.successAddCertificate', {
-            certificate: getCertificateProp(type, 'label'),
-          });
+          if (typeOfCertificate === 'HTTPS Certificate') {
+            return i18n.global.t(
+              'pageCertificates.toast.successAddedHTTPCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              }
+            );
+          } else {
+            return i18n.global.t(
+              'pageCertificates.toast.successAddCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              }
+            );
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -269,12 +281,21 @@ export const CertificatesStore = defineStore('certificates', {
           this.getCertificates();
         })
         .then(() => {
-          return i18n.global.t(
-            'pageCertificates.toast.successReplaceCertificate',
-            {
-              certificate: getCertificateProp(type, 'label'),
-            }
-          );
+          if (typeOfCertificate === 'HTTPS Certificate') {
+            return i18n.global.t(
+              'pageCertificates.toast.successReplacedHTTPCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              }
+            );
+          } else {
+            return i18n.global.t(
+              'pageCertificates.toast.successReplaceCertificate',
+              {
+                certificate: getCertificateProp(type, 'label'),
+              }
+            );
+          }
         })
         .catch((error) => {
           console.log(error);
