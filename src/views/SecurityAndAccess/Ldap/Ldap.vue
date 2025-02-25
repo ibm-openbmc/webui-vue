@@ -248,6 +248,7 @@ import TableRoleGroups from './TableRoleGroups.vue';
 import { LdapStore } from '../../../store';
 import { CertificatesStore } from '../../../store';
 import { onBeforeMount, reactive } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { computed, watch } from 'vue';
@@ -262,10 +263,10 @@ const certificatesStore = CertificatesStore();
 const { getValidationState } = useVuelidateComposable();
 const { hideLoader, startLoader, endLoader, loading } = useLoadingBar();
 const { successToast, errorToast } = useToast();
-function beforeRouteLeave(to, from, next) {
+
+onBeforeRouteLeave(() => {
   hideLoader();
-  next();
-}
+});
 
 const initialFormState = {
   ldapAuthenticationEnabled: ldapStore.isServiceEnabledGetter,
@@ -450,9 +451,7 @@ function handleSubmit() {
 function onChangeServiceType(event) {
   v$.value.formLdap.activeDirectoryEnabled.$touch();
   const isActiveDirectoryEnabled = event.target.value;
-  const serviceType = isActiveDirectoryEnabled
-    ? activeDirectory.value
-    : ldap.value;
+  const serviceType = isActiveDirectoryEnabled==="true" ? activeDirectory.value : ldap.value;
   // Set form values according to user selected
   // service type
   setFormValues(serviceType);
