@@ -1,28 +1,27 @@
-<!-- TODO: Work Requird -->
 <template>
   <overview-card
     :data="eventLogData"
     :disabled="eventLogData.length === 0"
     :export-button="true"
     :file-name="exportFileNameByDate()"
-    :title="t('pageOverview.eventLogs')"
+    :title="$t('pageOverview.eventLogs')"
     :to="`/logs/event-logs`"
   >
     <BRow class="mt-3">
       <BCol sm="6">
         <dl>
-          <dt>{{ t('pageOverview.criticalEvents') }}</dt>
+          <dt>{{ $t('pageOverview.criticalEvents') }}</dt>
           <dd class="h3">
-            {{ dataFormatterGlobal.dataFormatter(criticalEvents.length) }}
+            {{ dataFormatter(criticalEvents.length) }}
             <status-icon status="danger" />
           </dd>
         </dl>
       </BCol>
       <BCol sm="6">
         <dl>
-          <dt>{{ t('pageOverview.warningEvents') }}</dt>
+          <dt>{{ $t('pageOverview.warningEvents') }}</dt>
           <dd class="h3">
-            {{ dataFormatterGlobal.dataFormatter(warningEvents.length) }}
+            {{ dataFormatter(warningEvents.length) }}
             <status-icon status="warning" />
           </dd>
         </dl>
@@ -34,16 +33,21 @@
 <script setup>
 import OverviewCard from './OverviewCard.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
-// import DataFormatterGlobal from '@/components/Mixins/DataFormatterGlobal';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { computed, onBeforeMount } from 'vue';
 import { EventLogStore } from '@/store';
+import eventBus from '@/eventBus';
 
-const { t } = useI18n();
+const { dataFormatter } = useDataFormatterGlobal();
+
 const eventLogStore = EventLogStore();
-const dataFormatterGlobal = useDataFormatterGlobal();
-eventLogStore.getEventLogData();
+
+onBeforeMount(() => {
+  eventLogStore.getEventLogData().finally(() => {
+      eventBus.emit('overview-events-complete');
+    });
+});
+
 const eventLogData = computed(() => {
   return eventLogStore.allEvents;
 });

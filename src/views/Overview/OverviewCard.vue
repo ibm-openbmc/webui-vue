@@ -12,11 +12,11 @@
           class="p-0"
           variant="link"
         >
-          <span v-if="downloadButton">{{ t('global.action.download') }}</span>
-          <span v-if="exportButton">{{ t('global.action.exportAll') }}</span>
+          <span v-if="downloadButton">{{ $t('global.action.download') }}</span>
+          <span v-if="exportButton">{{ $t('global.action.exportAll') }}</span>
         </BButton>
         <span v-if="exportButton || downloadButton" class="pl-2 pr-2">|</span>
-        <BLink :to="to">{{ t('pageOverview.viewMore') }}</BLink>
+        <BLink :to="to">{{ $t('pageOverview.viewMore') }}</BLink>
       </div>
     </div>
     <slot></slot>
@@ -25,9 +25,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
 const props = defineProps({
   data: {
     type: Array,

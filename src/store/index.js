@@ -33,6 +33,7 @@ import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigura
 import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsStore.js';
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore.js';
 import LdapStore from './modules/SecurityAndAccess/LdapStore.js';
+import DumpsStore from './modules/Logs/DumpsStore.js';
 // ... (export use other stores)
 export {
   EventLogStore,
@@ -68,5 +69,6 @@ export {
   HardwareDeconfigurationStore,
   DeconfigurationRecordsStore,
   NetworkSettingsStore,
-  LdapStore
+  LdapStore,
+  DumpsStore
 };

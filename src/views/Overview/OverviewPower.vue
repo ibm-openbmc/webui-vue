@@ -1,42 +1,86 @@
-<!-- TODO: Work Requird -->
 <template>
   <overview-card
-    :title="t('pageOverview.powerInformation')"
+    :title="$t('pageOverview.powerInformation')"
     :to="`/resource-management/power`"
   >
     <BRow class="mt-3">
       <BCol sm="6">
         <dl>
-          <dt>{{ t('pageOverview.powerConsumption') }}</dt>
+          <dt>{{ $t('pageOverview.powerConsumption') }}</dt>
           <dd v-if="!powerConsumptionValue">
-            {{ t('global.status.notAvailable') }}
+            {{ $t('global.status.notAvailable') }}
           </dd>
           <dd v-else>{{ powerConsumptionValue }} W</dd>
-          <dt>{{ t('pageOverview.powerCap') }}</dt>
+          <dt>{{ $t('pageOverview.powerCap') }}</dt>
           <dd v-if="!powerCapValue">
-            {{ t('global.status.disabled') }}
+            {{ $t('global.status.disabled') }}
           </dd>
           <dd v-else>{{ powerCapValue }} W</dd>
         </dl>
       </BCol>
+      <b-col sm="6">
+        <dl>
+          <dt>{{ $t('pagePower.idlePower') }}</dt>
+          <dd v-if="idlePowerSaverData && idlePowerSaverData.Enabled">
+            {{ $t('global.status.enabled') }}
+          </dd>
+          <dd v-else>{{ $t('global.status.disabled') }}</dd>
+          <dt>{{ $t('pageOverview.powerMode') }}</dt>
+          <dd v-if="safeMode">
+            <status-icon status="danger" />
+            {{ $t('pageOverview.safeMode') }}
+          </dd>
+          <dd v-else-if="powerPerformanceMode === 'MaximumPerformance'">
+            {{ $t('pageOverview.powerPerformanceModes.maximumPerformance') }}
+          </dd>
+          <dd v-else-if="powerPerformanceMode === 'EfficiencyFavorPower'">
+            {{ $t('pagePower.selectMode.energyEfficient.primary') }}
+          </dd>
+          <dd v-else-if="powerPerformanceMode === 'PowerSaving'">
+            {{ $t('pagePower.selectMode.maximumEnergySaver.primary') }}
+          </dd>
+          <dd v-else-if="powerPerformanceMode === 'OEM'">
+            {{ $t('pagePower.oemMode.primary') }}
+          </dd>
+        </dl>
+      </b-col>
     </BRow>
   </overview-card>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
-import { PowerControlStore } from '@/store';
+import { PowerControlStore, GlobalStore } from '@/store';
+import eventBus from '@/eventBus';
 
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
 const powerControlStore = PowerControlStore();
-powerControlStore.getPowerControl();
+const global = GlobalStore();
+
+onBeforeMount(() => {
+    Promise.all([
+      powerControlStore.getPowerControl(),
+      powerControlStore.getPowerPerformanceMode(),
+      powerControlStore.getIdlePowerSaverData(),
+    ]).finally(() => {
+      eventBus.emit('overview-power-complete');
+    });
+  });
+
+const idlePowerSaverData = computed(() => {
+  return powerControlStore.idlePowerSaverData;
+});
 const powerCapValue = computed(() => {
-  return powerControlStore.powerCapValue;
+  return powerControlStore.powerCap;
 });
 const powerConsumptionValue = computed(() => {
-  return powerControlStore.powerConsumptionValue;
+  return powerControlStore.powerConsumption;
 });
+const powerPerformanceMode = computed(() => {
+  return powerControlStore.powerPerformanceMode;
+});
+const safeMode = computed(() => {
+  return global.safeMode;
+});
+
 </script>

@@ -1,26 +1,14 @@
 import api, { getResponseCount } from '@/store/api';
 import i18n from '@/i18n';
 import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
+import { defineStore } from 'pinia';
 
-const DumpsStore = {
-  namespaced: true,
-  state: {
+export const DumpsStore = defineStore('dumps', {
+  state: () => ({
     allDumps: [],
-  },
+  }),
   getters: {
-    allDumps: (state) => state.allDumps,
-  },
-  mutations: {
-    setAllDumps: (state, dumps) => {
-      state.allDumps = dumps.map((dump) => ({
-        data: dump.AdditionalDataURI,
-        dateTime: new Date(dump.Created),
-        dumpType: dump.Name,
-        id: dump.Id,
-        location: dump['@odata.id'],
-        size: dump.AdditionalDataSizeBytes,
-      }));
-    },
+    allDumpsGetter: (state) => state.allDumps,
   },
   actions: {
     async getBmcDumpEntries() {
@@ -43,14 +31,21 @@ const DumpsStore = {
         .then((response) => api.get(response.data.Entries['@odata.id']))
         .catch((error) => console.log(error));
     },
-    async getAllDumps({ commit, dispatch }) {
+    async getAllDumps() {
       return await api
-        .all([dispatch('getBmcDumpEntries'), dispatch('getSystemDumpEntries')])
+        .all([this.getBmcDumpEntries(), this.getSystemDumpEntries()])
         .then((response) => {
           const bmcDumpEntries = response[0].data?.Members || [];
           const systemDumpEntries = response[1].data?.Members || [];
           const allDumps = [...bmcDumpEntries, ...systemDumpEntries];
-          commit('setAllDumps', allDumps);
+          this.allDumps = allDumps.map((dump) => ({
+                  data: dump.AdditionalDataURI,
+                  dateTime: new Date(dump.Created),
+                  dumpType: dump.Name,
+                  id: dump.Id,
+                  location: dump['@odata.id'],
+                  size: dump.AdditionalDataSizeBytes,
+                }));
         })
         .catch((error) => console.log(error));
     },
@@ -68,10 +63,10 @@ const DumpsStore = {
             error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
 
           const message = REGEX_MAPPINGS.resourceInStandby.test(messageId)
-            ? i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
+            ? i18n.global.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
                 dump: dumpType,
               })
-            : i18n.t('pageDumps.toast.errorStartBmcDump');
+            : i18n.global.t('pageDumps.toast.errorStartBmcDump');
 
           throw new Error(message);
         });
@@ -115,21 +110,21 @@ const DumpsStore = {
               error.response?.data?.error?.code,
             )
           ) {
-            throw new Error(i18n.t('pageDumps.toast.errorPhypInStandby'));
+            throw new Error(i18n.global.t('pageDumps.toast.errorPhypInStandby'));
           }
           switch (true) {
             case REGEX_MAPPINGS.actionParameterUnknown.test(errorMsg):
               throw new Error(
-                i18n.t('pageDumps.toast.errorStartResourceDumpInvalidSelector'),
+                i18n.global.t('pageDumps.toast.errorStartResourceDumpInvalidSelector'),
               );
             case REGEX_MAPPINGS.resourceAtUriUnauthorized.test(errorMsg):
               throw new Error(
-                i18n.t('pageDumps.toast.errorStartResourceDumpInvalidPassword'),
+                i18n.global.t('pageDumps.toast.errorStartResourceDumpInvalidPassword'),
               );
             case REGEX_MAPPINGS.insufficientPrivilege.test(errorMsg):
-              throw new Error(i18n.t('global.toast.unAuthDescription'));
+              throw new Error(i18n.global.t('global.toast.unAuthDescription'));
             default:
-              throw new Error(i18n.t('pageDumps.toast.errorStartResourceDump'));
+              throw new Error(i18n.global.t('pageDumps.toast.errorStartResourceDump'));
           }
         });
     },
@@ -150,22 +145,22 @@ const DumpsStore = {
           switch (true) {
             case REGEX_MAPPINGS.resourceInUse.test(errorMsg):
               throw new Error(
-                i18n.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
+                i18n.global.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
                   dump: dumpType,
                 }),
               );
             case REGEX_MAPPINGS.resourceInStandby.test(errorMsg):
               throw new Error(
-                i18n.t('pageDumps.toast.errorStartDumpResourceInStandby', {
+                i18n.global.t('pageDumps.toast.errorStartDumpResourceInStandby', {
                   dump: dumpType,
                 }),
               );
             default:
-              throw new Error(i18n.t('pageDumps.toast.errorStartSystemDump'));
+              throw new Error(i18n.global.t('pageDumps.toast.errorStartSystemDump'));
           }
         });
     },
-    async deleteDumps({ dispatch }, dumps) {
+    async deleteDumps(dumps) {
       const promises = dumps.map(({ location }) =>
         api.delete(location).catch((error) => {
           console.log(error);
@@ -175,7 +170,7 @@ const DumpsStore = {
       return await api
         .all(promises)
         .then((response) => {
-          dispatch('getAllDumps');
+          this.getAllDumps();
           return response;
         })
         .then(
@@ -184,7 +179,7 @@ const DumpsStore = {
             const toastMessages = [];
 
             if (successCount) {
-              const message = i18n.tc(
+              const message = i18n.global.t(
                 'pageDumps.toast.successDeleteDump',
                 successCount,
               );
@@ -192,7 +187,7 @@ const DumpsStore = {
             }
 
             if (errorCount) {
-              const message = i18n.tc(
+              const message = i18n.global.t(
                 'pageDumps.toast.errorDeleteDump',
                 errorCount,
               );
@@ -203,24 +198,25 @@ const DumpsStore = {
           }),
         );
     },
-    async deleteAllDumps({ commit, state }) {
-      const totalDumpCount = state.allDumps.length;
+    async deleteAllDumps() {
+      const totalDumpCount = this.allDumps.length;
       return await api
         .post(
           '/redfish/v1/Managers/bmc/LogServices/Dump/Actions/LogService.ClearLog',
         )
         .then(() => {
-          commit('setAllDumps', []);
-          return i18n.tc('pageDumps.toast.successDeleteDump', totalDumpCount);
+          this.allDumps = [];
+          return i18n.global.t('pageDumps.toast.successDeleteDump', totalDumpCount);
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.tc('pageDumps.toast.errorDeleteDump', totalDumpCount),
+            i18n.global.t('pageDumps.toast.errorDeleteDump', totalDumpCount),
           );
         });
     },
   },
-};
+}
+);
 
 export default DumpsStore;

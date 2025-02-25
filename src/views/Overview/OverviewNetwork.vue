@@ -1,41 +1,32 @@
-<!-- TODO: Work Requird -->
 <template>
   <overview-card
     v-if="network"
-    :title="t('pageOverview.networkInformation')"
+    :title="$t('pageOverview.networkInformation')"
     :to="`/settings/network`"
   >
     <BRow class="mt-3">
       <BCol sm="6">
         <dl>
-          <dt>{{ t('pageOverview.hostName') }}</dt>
-          <dd>{{ dataFormatterGlobal.dataFormatter(network.hostname) }}</dd>
-        </dl>
-      </BCol>
-      <BCol sm="6">
-        <dl>
-          <!-- <dt>{{ t('pageOverview.linkStatus') }}</dt> -->
-          <dd>
-            <!-- {{ dataFormatterGlobal.dataFormatter(network.linkStatus) }} -->
-          </dd>
+          <dt>{{ $t('pageOverview.hostName') }}</dt>
+          <dd>{{ dataFormatter(network.hostname) }}</dd>
         </dl>
       </BCol>
     </BRow>
     <BRow>
       <BCol>
         <dl>
-          <dt>{{ t('pageOverview.ipv4') }}</dt>
+          <dt>{{ $t('pageOverview.ipv4') }}</dt>
           <dd>
-            {{ dataFormatterGlobal.dataFormatter(network.staticAddress) }}
+            {{ dataFormatter(network.staticAddress) }}
           </dd>
         </dl>
       </BCol>
       <BCol>
         <dl>
-          <dt>{{ t('pageOverview.dhcp') }}</dt>
+          <dt>{{ $t('pageOverview.dhcp') }}</dt>
           <dd>
             {{
-              dataFormatterGlobal.dataFormatter(
+              dataFormatter(
                 network.dhcpAddress.length !== 0
                   ? network.dhcpAddress[0].Address
                   : null
@@ -49,18 +40,23 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import { NetworkStore } from '@/store';
+import eventBus from '@/eventBus';
 
-const { t } = useI18n();
-const dataFormatterGlobal = useDataFormatterGlobal();
+const { dataFormatter } = useDataFormatterGlobal();
+
 const networkStore = NetworkStore();
-networkStore.getEthernetData();
+
+onBeforeMount(() => {
+    networkStore?.getEthernetData().finally(() => {
+    eventBus.emit('overview-network-complete');
+    });
+  });
+
 const network = computed(() => {
-  // Commenting this line out. Will be implemented once overview page is completed
-  // return networkStore.globalNetworkSettings[0];
+  return networkStore.networkSettings[0];
 });
 </script>

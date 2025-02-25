@@ -1,22 +1,22 @@
 <!-- TODO: Work Requird -->
 <template>
   <overview-card
-    :title="t('pageOverview.firmwareInformation')"
+    :title="$t('pageOverview.firmwareInformation')"
     :to="`/operations/firmware`"
   >
     <BRow class="mt-3">
-      <BCol sm="6">
+      <BCol sm="5">
         <dl>
-          <dt>{{ t('pageOverview.runningVersion') }}</dt>
-          <dd>{{ dataFormatterGlobal.dataFormatter(runningVersion) }}</dd>
-          <dt>{{ t('pageOverview.backupVersion') }}</dt>
-          <dd>{{ dataFormatterGlobal.dataFormatter(backupVersion) }}</dd>
+          <dt>{{ $t('pageOverview.runningVersion') }}</dt>
+          <dd>{{ dataFormatter(runningVersion) }}</dd>
+          <dt>{{ $t('pageOverview.backupVersion') }}</dt>
+          <dd>{{ dataFormatter(backupVersion) }}</dd>
         </dl>
       </BCol>
-      <BCol sm="6">
+      <BCol sm="7">
         <dl>
-          <dt>{{ t('pageOverview.accessKeyExpiration') }}</dt>
-          <dd>{{ dataFormatterGlobal.dataFormatter(firmwareVersion) }}</dd>
+          <dt>{{ $t('pageOverview.accessKeyExpiration') }}</dt>
+          <dd>{{ $filters.formatDate(firmwareAccessKeyInfo.expirationDate) }}</dd>
         </dl>
       </BCol>
     </BRow>
@@ -24,35 +24,38 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
-// import DataFormatterGlobal from '@/components/Mixins/DataFormatterGlobal';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import { FirmwareStore, SystemStore } from '@/store';
+import { FirmwareStore, LicenseStore } from '@/store';
+import eventBus from '@/eventBus';
 
-const { t } = useI18n();
+const { dataFormatter } = useDataFormatterGlobal();
+
 const firmwareStore = FirmwareStore();
-const systemStore = SystemStore();
-const dataFormatterGlobal = useDataFormatterGlobal();
-firmwareStore.getFirmwareInformation();
-const systems = computed(() => {
-  return systemStore.systems[0];
-});
+const licenseStore = LicenseStore();
+
+onBeforeMount(() => {
+    Promise.all([
+      licenseStore.getLicenses(),
+      firmwareStore.getFirmwareInformation(),
+    ]).finally(() => {
+      eventBus.emit('overview-firmware-complete');
+    });
+  });
+
 const backupBmcFirmware = computed(() => {
   return firmwareStore.backupBmcFirmware;
 });
-
 const backupVersion = computed(() => {
   return backupBmcFirmware.value?.version;
 });
 const activeBmcFirmware = computed(() => {
   return firmwareStore.activeBmcFirmware;
 });
-const firmwareVersion = computed(() => {
-  return systems.value?.firmwareVersion;
+const firmwareAccessKeyInfo = computed(() => {
+      return licenseStore.firmwareAccessKeyInfo;
 });
-
 const runningVersion = computed(() => {
   return activeBmcFirmware.value?.version;
 });
