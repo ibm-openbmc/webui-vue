@@ -180,7 +180,7 @@ const GlobalStore = {
         })
         .catch((error) => console.log(error));
     },
-    getSystemInfo({ commit }) {
+    getSystemInfo({ dispatch, commit }) {
       api
         .get('/redfish/v1/Systems/system')
         .then(
@@ -190,9 +190,6 @@ const GlobalStore = {
               Model,
               PowerState,
               SerialNumber,
-              Oem: {
-                IBM: { SafeMode },
-              },
               Status: { State } = {},
             },
           } = {}) => {
@@ -200,7 +197,6 @@ const GlobalStore = {
             commit('setSerialNumber', SerialNumber);
             commit('setModelType', Model);
             localStorage.setItem('storedModelType', Model);
-            commit('setSafeMode', SafeMode);
             if (State === 'Quiesced' || State === 'InTest') {
               // OpenBMC's host state interface is mapped to 2 Redfish
               // properties "Status""State" and "PowerState". Look first
@@ -209,6 +205,7 @@ const GlobalStore = {
             } else {
               commit('setServerStatus', PowerState);
             }
+            dispatch('getSafeMode');
           }
         )
         .catch((error) => {
@@ -232,6 +229,26 @@ const GlobalStore = {
       return await api.get(task).then(({ data }) => {
         return data;
       });
+    },
+    async getSafeMode({ commit }) {
+      return api
+        .get('/redfish/v1/Systems/system/Processors?$expand=.($levels=2)')
+        .then(({ data }) => {
+          commit('setSafeMode', false);
+          for (let member of data.Members) {
+            if (
+              member?.Throttled &&
+              member?.ThrottleCauses.includes('ManagementDetectedFault')
+            ) {
+              commit('setSafeMode', true);
+              break;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return Promise.reject(error);
+        });
     },
   },
 };
