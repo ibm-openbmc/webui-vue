@@ -1,10 +1,10 @@
 <template>
-  <b-row>
-    <b-col xl="8">
+  <BRow>
+    <BCol xl="8">
       <page-section
         :section-title="$t('pageFieldCoreOverride.currentConfiguration')"
       >
-        <b-card bg-variant="light" border-variant="light" class="mb-4">
+        <BCard bg-variant="light" border-variant="light" class="mb-4">
           <p>
             {{ $t('pageFieldCoreOverride.totalInstalledCores') }}:
             {{ isUndefined(totalInstalledCores) ? '--' : totalInstalledCores }}
@@ -23,38 +23,49 @@
               <icon-time />
             </info-tooltip>
           </p>
-        </b-card>
+        </BCard>
       </page-section>
-    </b-col>
-  </b-row>
+    </BCol>
+  </BRow>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
 import { isUndefined } from 'lodash';
 import IconTime from '@carbon/icons-vue/es/time/16';
+import PageSection from '@/components/Global/PageSection.vue';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import { SystemStore, FieldCoreOverrideStore, LicenseStore } from '@/store';
 
-import PageSection from '@/components/Global/PageSection';
-import InfoTooltip from '@/components/Global/InfoTooltip';
+const systemStore = SystemStore();
+const fieldCoreOverrideStore = FieldCoreOverrideStore();
+const licenseStore = LicenseStore();
 
-export default {
-  name: 'FieldCoreOverrideInfo',
-  components: { PageSection, IconTime, InfoTooltip },
-  computed: {
-    ...mapGetters({
-      systems: 'system/systems',
-      processorInfo: 'licenses/licenses',
-      configuredCores: 'fieldCoreOverride/configuredCores',
-      isFieldCoreOverrideEnabled: 'fieldCoreOverride/isEnabled',
-      isFieldCoreOverridePending: 'fieldCoreOverride/isPending',
-    }),
-    totalInstalledCores() {
-      return this.systems?.[0]?.processorSummaryCoreCount;
-    },
-    licensedCores() {
-      return this.processorInfo?.PermProcs?.MaxAuthorizedDevices;
-    },
-  },
-  methods: { isUndefined },
-};
+const systems = computed(() => {
+  return systemStore.getSystems;
+});
+
+const processorInfo = computed(() => {
+  return licenseStore.licensesGetter;
+});
+
+const configuredCores = computed(() => {
+  return fieldCoreOverrideStore.configuredCoresGetter;
+});
+
+const isFieldCoreOverrideEnabled = computed(() => {
+  return fieldCoreOverrideStore.isEnabledGetter;
+});
+
+const isFieldCoreOverridePending = computed(() => {
+  return fieldCoreOverrideStore.isPendingGetter;
+});
+
+const totalInstalledCores = computed(() => {
+  return systems.value?.[0]?.processorSummaryCoreCount;
+});
+
+const licensedCores = computed(() => {
+  return processorInfo.value?.PermProcs?.MaxAuthorizedDevices;
+});
 </script>
