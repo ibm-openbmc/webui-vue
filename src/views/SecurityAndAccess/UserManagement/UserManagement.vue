@@ -1,13 +1,13 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.userManagement')" />
-    <b-row>
-      <b-col xl="9" class="text-right">
-        <b-button variant="link" :disabled="isBusy" @click="initModalSettings">
+    <BRow>
+      <BCol xl="9" class="text-right">
+        <BButton variant="link" @click="initModalSettings()" :disabled="isBusy">
           <icon-settings />
           {{ $t('pageUserManagement.accountPolicySettings') }}
-        </b-button>
-        <b-button
+        </BButton>
+        <BButton
           variant="primary"
           :disabled="isBusy"
           data-test-id="userManagement-button-addUser"
@@ -15,24 +15,25 @@
         >
           <icon-add />
           {{ $t('pageUserManagement.addUser') }}
-        </b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col xl="9">
+        </BButton>
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol xl="9">
         <table-toolbar
           ref="toolbar"
           :selected-items-count="selectedRows.length"
           :actions="tableToolbarActions"
-          @clear-selected="clearSelectedRows($refs.table)"
+          @clear-selected="clearSelectedRows(tableRef)"
           @batch-action="onBatchAction"
         />
-        <b-table
-          ref="table"
+        <BTable
+          ref="tableRef"
           responsive="md"
           selectable
           show-empty
           no-select-on-click
+          sticky-header="75vh"
           hover
           :busy="isBusy"
           :fields="fields"
@@ -42,23 +43,22 @@
         >
           <!-- Checkbox column -->
           <template #head(checkbox)>
-            <b-form-checkbox
+            <BFormCheckbox
               v-model="tableHeaderCheckboxModel"
               data-test-id="userManagement-checkbox-tableHeaderCheckbox"
               :indeterminate="tableHeaderCheckboxIndeterminate"
-              @change="onChangeHeaderCheckbox($refs.table)"
+              @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)"
+              @update:modelValue="toggleAll"
             >
-              <span class="sr-only">{{ $t('global.table.selectAll') }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
-            <b-form-checkbox
-              v-model="row.rowSelected"
+            <BFormCheckbox
+              v-model="userManagement.allUsers[row.index].isSelected"
               data-test-id="userManagement-checkbox-toggleSelectRow"
-              @change="toggleSelectRow($refs.table, row.index)"
+              @change="toggleSelectRowByUsername(tableRef, row.index, userManagement.allUsers[row.index].isSelected, row.item)"
             >
-              <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
 
           <!-- table actions column -->
@@ -83,12 +83,12 @@
               </template>
             </table-row-action>
           </template>
-        </b-table>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col xl="8">
-        <b-button
+        </BTable>
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol xl="8">
+        <BButton
           v-b-toggle.collapse-role-table
           data-test-id="userManagement-button-viewPrivilegeRoleDescriptions"
           variant="link"
@@ -96,118 +96,143 @@
         >
           <icon-chevron />
           {{ $t('pageUserManagement.viewPrivilegeRoleDescriptions') }}
-        </b-button>
+        </BButton>
         <b-collapse id="collapse-role-table" class="mt-3">
           <table-roles />
         </b-collapse>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
     <!-- Modals -->
     <modal-settings :settings="settings" @ok="saveAccountSettings" />
     <modal-user
       :user="activeUser"
       :password-requirements="passwordRequirements"
-      @ok="saveUser"
       @hidden="activeUser = null"
     />
-  </b-container>
+    <BModal
+      v-model="openModal"
+      :title="deleteTitle"
+      :ok-title="okTitle"
+      okVariant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk(deleteType)"
+    >
+      <p>
+        {{
+          deleteMessage
+        }}
+      </p>
+    </BModal>
+  </BContainer>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import i18n from '@/i18n';
+import { onBeforeRouteLeave } from 'vue-router';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconSettings from '@carbon/icons-vue/es/settings/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
+import eventBus from '@/eventBus';
 
-import ModalUser from './ModalUser';
-import ModalSettings from './ModalSettings';
-import PageTitle from '@/components/Global/PageTitle';
-import TableRoles from './TableRoles';
-import TableToolbar from '@/components/Global/TableToolbar';
-import TableRowAction from '@/components/Global/TableRowAction';
-
-import BVTableSelectableMixin, {
-  selectedRows,
-  tableHeaderCheckboxModel,
-  tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import ModalUser from './ModalUser.vue';
+import ModalSettings from './ModalSettings.vue';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import TableRoles from './TableRoles.vue';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import useToastComposable from '@/components/Composables/useToastComposable';
+import { UserManagementStore, GlobalStore } from '@/store';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 
-export default {
-  name: 'UserManagement',
-  components: {
-    IconAdd,
-    IconChevron,
-    IconEdit,
-    IconSettings,
-    IconTrashcan,
-    ModalSettings,
-    ModalUser,
-    PageTitle,
-    TableRoles,
-    TableRowAction,
-    TableToolbar,
-  },
-  mixins: [BVTableSelectableMixin, BVToastMixin, LoadingBarMixin],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
-  },
-  data() {
-    return {
-      isBusy: true,
-      activeUser: null,
-      fields: [
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+      const {
+        clearSelectedRows,
+        toggleSelectRowByUsername,
+        onRowSelected,
+        onChangeHeaderCheckbox,
+        selectedRowsList,
+        tableHeaderCheckboxModel,
+        tableHeaderCheckboxIndeterminate,
+      } = useTableSelectableComposable();
+
+      const userManagement = UserManagementStore();
+      const global = GlobalStore();
+      const { hideLoader, startLoader, endLoader } = useLoadingBar();
+      const toast = useToastComposable();
+      const isAllSelected = ref(false);
+      const isBusy = ref(true);
+      const activeUser = ref(null);
+      const openModal = ref(false);
+      const okTitle = ref('');
+      const deleteTitle = ref('');
+      const deleteType = ref('');
+      const deleteMessage = ref('');
+      const fields = ref([
         {
           key: 'checkbox',
         },
         {
           key: 'username',
-          label: this.$t('pageUserManagement.table.username'),
+          label: i18n.global.t('pageUserManagement.table.username'),
         },
         {
           key: 'privilege',
-          label: this.$t('pageUserManagement.table.privilege'),
+          label: i18n.global.t('pageUserManagement.table.privilege'),
         },
         {
           key: 'status',
-          label: this.$t('pageUserManagement.table.status'),
+          label: i18n.global.t('pageUserManagement.table.status'),
         },
         {
           key: 'actions',
           label: '',
           tdClass: 'text-right text-nowrap',
         },
-      ],
-      tableToolbarActions: [
+      ]);
+      const tableToolbarActions = ref([
         {
           value: 'delete',
-          label: this.$t('global.action.delete'),
+          label: i18n.global.t('global.action.delete'),
         },
         {
           value: 'enable',
-          label: this.$t('global.action.enable'),
+          label: i18n.global.t('global.action.enable'),
         },
         {
           value: 'disable',
-          label: this.$t('global.action.disable'),
+          label: i18n.global.t('global.action.disable'),
         },
-      ],
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
-    };
-  },
-  computed: {
-    accountRoles() {
-      return this.$store.getters['userManagement/accountRoles'];
-    },
-    allUsers() {
-      return this.$store.getters['userManagement/allUsers'].map((user) => {
+      ]);
+      const selectedRows = ref(selectedRowsList);
+      const tableRef = ref(null);
+      const userToDelete = ref('');
+      onBeforeMount(() => {
+        eventBus.on('clear-selected', () => {
+          userManagement?.allUsersGetter?.map((singleConnection) => {
+            singleConnection.isSelected = false;
+          });
+          clearSelectedRows(tableRef);
+        });
+        eventBus.on('ok', ({isNewUser, userData}) => {
+          saveUser({isNewUser, userData});
+        });
+      });
+  
+  const accountRoles = computed(() => {
+      return userManagement.accountRolesGetter;
+    })
+    const allUsers = computed(() => {
+      return userManagement.allUsersGetter.map((user) => {
         // Changing users' description with redfish role description
-        const userDescription = this.accountRoles.filter((role) =>
+        const userDescription = accountRoles.value.filter((role) =>
           user.RoleId.includes(role),
         )[0];
 
@@ -215,210 +240,208 @@ export default {
 
         return user;
       });
-    },
-    currentUser() {
-      return this.$store.getters['global/currentUser'];
-    },
-    tableItems() {
+    })
+    const currentUser = computed (() => {
+      return userManagement.currentUserGetter;
+    })
+    const tableItems = computed (() => {
       // transform user data to table data
-      return this.allUsers.map((user) => {
+      return allUsers.value.map((user) => {
         return {
           username: user.UserName,
           privilege:
             user.Description === 'Administrator'
-              ? this.$t('pageUserManagement.table.administrator')
+              ? i18n.global.t('pageUserManagement.table.administrator')
               : user.Description === 'ReadOnly'
-                ? this.$t('pageUserManagement.table.readOnly')
+                ? i18n.global.t('pageUserManagement.table.readOnly')
                 : user.Description === 'ServiceAgent'
-                  ? this.$t('pageUserManagement.table.serviceAgent')
+                  ? i18n.global.t('pageUserManagement.table.serviceAgent')
                   : user.Description,
           status: user.Locked
-            ? this.$t('global.status.locked')
+            ? i18n.global.t('global.status.locked')
             : user.Enabled
-              ? this.$t('global.status.enabled')
-              : this.$t('global.status.disabled'),
+              ? i18n.global.t('global.status.enabled')
+              : i18n.global.t('global.status.disabled'),
           actions: [
             {
               value: 'edit',
               enabled: true,
-              title: this.$t('pageUserManagement.editUser'),
             },
             {
               value: 'delete',
               enabled: user.RoleId !== 'OemIBMServiceAgent',
-              title: this.$tc('pageUserManagement.deleteUser'),
             },
           ],
           ...user,
         };
       });
-    },
-    settings() {
-      return this.$store.getters['userManagement/accountSettings'];
-    },
-    passwordRequirements() {
-      if (this.activeUser?.AccountTypes?.includes('IPMI')) {
+    })
+    const settings = computed (()  => {
+      return userManagement.accountSettingsGetter;
+    })
+        const passwordRequirements = computed(() => {
+      if (activeUser.value?.AccountTypes?.includes('IPMI')) {
         return {
           minLength: 8,
           maxLength: 20,
         };
       } else {
-        return this.$store.getters[
-          'userManagement/accountPasswordRequirements'
-        ];
+        return userManagement.accountPasswordRequirementsGetter;
       }
-    },
-  },
-  created() {
-    this.startLoader();
+    })
+
+  onBeforeMount(() => {
+    startLoader();
+    userManagement.getAccountSettings();
     Promise.all([
-      this.$store.dispatch('userManagement/getAccountRoles'),
-      this.$store.dispatch('userManagement/getUsers'),
+      userManagement.getAccountRoles(),
+      userManagement.getUsers(),
     ]).finally(() => {
-      this.endLoader();
-      this.isBusy = false;
+      endLoader();
+      isBusy.value = false;
     });
-    this.$store.dispatch('userManagement/getAccountSettings');
-    this.$store.dispatch('userManagement/getAccountRoles');
-  },
-  methods: {
-    initModalUser(user) {
-      this.activeUser = user;
-      this.$bvModal.show('modal-user');
-    },
-    initModalDelete(user) {
-      this.$bvModal
-        .msgBoxConfirm(
-          this.$t('pageUserManagement.modal.deleteConfirmMessage', {
+  })
+
+    function toggleAll(checked) {
+      userManagement?.allUsers?.map((singleUser) => {
+        singleUser.isSelected = checked;
+      });
+      isAllSelected.value = checked;
+    }
+    function initModalUser(user) {
+      activeUser.value = user;
+      eventBus.emit('modal-user');
+    }
+    function initModalDelete(user) {
+      userToDelete.value = user;
+      openModal.value = true;
+      okTitle.value = i18n.global.t('pageUserManagement.deleteUser');
+      deleteMessage.value = i18n.global.t('pageUserManagement.modal.deleteConfirmMessage', {
             user: user.username,
-          }),
-          {
-            title: this.$tc('pageUserManagement.deleteUser'),
-            okTitle: this.$tc('pageUserManagement.deleteUser'),
-            cancelTitle: this.$t('global.action.cancel'),
-          },
-        )
-        .then((deleteConfirmed) => {
-          if (deleteConfirmed) {
-            this.deleteUser(user);
-          }
-        });
-    },
-    initModalSettings() {
-      this.$bvModal.show('modal-settings');
-    },
-    saveUser({ isNewUser, userData }) {
-      this.startLoader();
-      if (isNewUser) {
-        this.$store
-          .dispatch('userManagement/createUser', userData)
-          .then((success) => this.successToast(success))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+          })
+      deleteTitle.value = i18n.global.t('pageUserManagement.deleteUser');
+      deleteType.value = 'singleEntry'; 
+    }
+    function handleOk(value) {
+      if (value === 'singleEntry') {
+        deleteUser(userToDelete.value);
       } else {
-        this.$store
-          .dispatch('userManagement/updateUserfromUserManagement', userData)
-          .then((success) => this.successToast(success))
-          .catch(({ message }) => this.errorToast(message))
-          .finally(() => this.endLoader());
+        startLoader();
+        userManagement.deleteUsers(selectedRows.value)
+        .then((messages) => {
+          messages.forEach(({ type, message }) => {
+            if (type === 'success') toast.successToast(message);
+            if (type === 'error') toast.errorToast(message);
+          });
+        })
+        .finally(() => {
+          endLoader();
+          openModal.value = false;
+          eventBus.emit('clear-selected');
+        });
       }
-    },
-    deleteUser({ username }) {
-      this.startLoader();
-      this.$store
-        .dispatch('userManagement/deleteUser', username)
-        .then((success) => this.successToast(success))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => this.endLoader());
-    },
-    onBatchAction(action) {
+    }
+    function initModalSettings() {
+      eventBus.emit('modal-settings');
+    }
+    function saveUser({ isNewUser, userData }) {
+      if (isNewUser !== undefined && userData !== undefined) {
+        startLoader();
+        if (isNewUser) {
+          userManagement.createUser(userData)
+            .then((success) => toast.successToast(success))
+            .catch(({ message }) => toast.errorToast(message))
+            .finally(() => endLoader());
+        } else {
+          userManagement.updateUserfromUserManagement(userData)
+            .then((success) => toast.successToast(success))
+            .catch(({ message }) => toast.errorToast(message))
+            .finally(() => endLoader());
+        }
+      }
+    }
+    function deleteUser({ username }) {
+      startLoader();
+      userManagement.deleteUser(username)
+        .then((success) => toast.successToast(success))
+        .catch(({ message }) => toast.errorToast(message))
+        .finally(() => {
+          endLoader();
+          openModal.value = false;
+          userToDelete.value = '';
+        });
+    }
+    function onBatchAction(action) {
       switch (action) {
         case 'delete':
-          this.$bvModal
-            .msgBoxConfirm(
-              this.$tc(
+          openModal.value = true;
+          okTitle.value = i18n.global.t(
+                  'pageUserManagement.deleteUser',
+                  selectedRows.value.length,
+                );
+          deleteMessage.value = i18n.global.t(
                 'pageUserManagement.modal.batchDeleteConfirmMessage',
-                this.selectedRows.length,
-              ),
-              {
-                title: this.$tc(
+                selectedRows.value.length,
+              )
+          deleteTitle.value =  i18n.global.t(
                   'pageUserManagement.deleteUser',
-                  this.selectedRows.length,
-                ),
-                okTitle: this.$tc(
-                  'pageUserManagement.deleteUser',
-                  this.selectedRows.length,
-                ),
-                cancelTitle: this.$t('global.action.cancel'),
-              },
-            )
-            .then((deleteConfirmed) => {
-              if (deleteConfirmed) {
-                this.startLoader();
-                this.$store
-                  .dispatch('userManagement/deleteUsers', this.selectedRows)
-                  .then((messages) => {
-                    messages.forEach(({ type, message }) => {
-                      if (type === 'success') this.successToast(message);
-                      if (type === 'error') this.errorToast(message);
-                    });
-                  })
-                  .finally(() => this.endLoader());
-              }
-            });
+                  selectedRows.value.length,
+                );
+          deleteType.value = 'selectedEntries'; 
           break;
         case 'enable':
-          this.startLoader();
-          this.$store
-            .dispatch('userManagement/enableUsers', this.selectedRows)
+          startLoader();
+          userManagement.enableUsers(selectedRows.value)
             .then((messages) => {
               messages.forEach(({ type, message }) => {
-                if (type === 'success') this.successToast(message);
-                if (type === 'error') this.errorToast(message);
+                if (type === 'success') toast.successToast(message);
+                if (type === 'error') toast.errorToast(message);
               });
             })
-            .finally(() => this.endLoader());
+            .finally(() => {
+              endLoader();
+              eventBus.emit('clear-selected');
+            });
           break;
         case 'disable':
-          this.startLoader();
-          this.$store
-            .dispatch('userManagement/disableUsers', this.selectedRows)
+          startLoader();
+          userManagement.disableUsers(selectedRows.value)
             .then((messages) => {
               messages.forEach(({ type, message }) => {
-                if (type === 'success') this.successToast(message);
-                if (type === 'error') this.errorToast(message);
+                if (type === 'success') toast.successToast(message);
+                if (type === 'error') toast.errorToast(message);
               });
             })
-            .finally(() => this.endLoader());
+            .finally(() => {
+              endLoader();
+              eventBus.emit('clear-selected');
+            });
           break;
       }
-    },
-    onTableRowAction(action, row) {
+    }
+    function onTableRowAction(action, row) {
       switch (action) {
         case 'edit':
-          this.initModalUser(row);
+          initModalUser(row);
           break;
         case 'delete':
-          this.initModalDelete(row);
+          initModalDelete(row);
           break;
         default:
           break;
       }
-    },
-    saveAccountSettings(settings) {
-      this.startLoader();
-      this.isBusy = true;
-      this.$store
-        .dispatch('userManagement/saveAccountSettings', settings)
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
+    }
+    function saveAccountSettings(settings) {
+      startLoader();
+      isBusy.value = true;
+      userManagement.saveAccountSettings(settings)
+        .then((message) => toast.successToast(message))
+        .catch(({ message }) => toast.errorToast(message))
         .finally(() => {
-          this.endLoader();
-          this.isBusy = false;
+          endLoader();
+          isBusy.value = false;
         });
-    },
-  },
-};
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -426,5 +449,8 @@ export default {
   svg {
     transform: rotate(180deg);
   }
+}
+.text-right {
+  text-align: right;
 }
 </style>

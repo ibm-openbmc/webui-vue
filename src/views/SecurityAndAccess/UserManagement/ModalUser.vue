@@ -1,73 +1,65 @@
 <template>
-  <b-modal id="modal-user" ref="modal" @hidden="resetForm">
-    <template #modal-title>
-      <template v-if="newUser">
-        {{ $t('pageUserManagement.addUser') }}
-      </template>
-      <template v-else>
-        {{ $t('pageUserManagement.editUser') }}
-      </template>
-    </template>
-    <b-form id="form-user" novalidate @submit.prevent="handleSubmit">
-      <b-container>
+  <BModal id="modal-user" v-model="modal" :title="newUser?$t('pageUserManagement.addUser'): $t('pageUserManagement.editUser')" :ok-title="newUser?$t('pageUserManagement.addUser'):$t('global.action.save')" @ok="onOk" @hidden="resetForm">
+    <BForm id="form-user" novalidate>
+      <BContainer>
         <!-- Manual unlock form control -->
-        <b-row v-if="!newUser && manualUnlockPolicy && user.Locked">
-          <b-col sm="9">
+        <BRow v-if="!newUser && manualUnlockPolicy && user.Locked">
+          <BCol sm="9">
             <alert :show="true" variant="warning" small>
-              <template v-if="!$v.form.manualUnlock.$dirty">
+              <template v-if="!v$.form.manualUnlock.$dirty">
                 {{ $t('pageUserManagement.modal.accountLocked') }}
               </template>
               <template v-else>
                 {{ $t('pageUserManagement.modal.clickSaveToUnlockAccount') }}
               </template>
             </alert>
-          </b-col>
-          <b-col sm="3">
+          </BCol>
+          <BCol sm="3">
             <input
               v-model="form.manualUnlock"
               data-test-id="userManagement-input-manualUnlock"
               type="hidden"
               value="false"
             />
-            <b-button
+            <BButton
               variant="primary"
-              :disabled="$v.form.manualUnlock.$dirty"
+              :disabled="v$.form.manualUnlock.$dirty"
               data-test-id="userManagement-button-manualUnlock"
-              @click="$v.form.manualUnlock.$touch()"
+              @click="v$.form.manualUnlock.$touch()"
             >
               {{ $t('pageUserManagement.modal.unlock') }}
-            </b-button>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <b-form-group :label="$t('pageUserManagement.modal.accountStatus')">
-              <b-form-radio
+            </BButton>
+          </BCol>
+        </BRow>
+        <BRow>
+          <BCol>
+            <BFormGroup :label="$t('pageUserManagement.modal.accountStatus')" class="radioButtonStyle">
+              <BFormRadio
                 v-model="form.status"
                 name="user-status"
                 :value="true"
                 data-test-id="userManagement-radioButton-statusEnabled"
-                @input="$v.form.status.$touch()"
+                @input="v$.form.status.$touch()"
               >
                 {{ $t('global.status.enabled') }}
-              </b-form-radio>
-              <b-form-radio
+              </BFormRadio>
+              <BFormRadio
                 v-model="form.status"
                 name="user-status"
                 data-test-id="userManagement-radioButton-statusDisabled"
                 :value="false"
-                @input="$v.form.status.$touch()"
+                @input="v$.form.status.$touch()"
               >
                 {{ $t('global.status.disabled') }}
-              </b-form-radio>
-            </b-form-group>
+              </BFormRadio>
+            </BFormGroup>
             <!-- Todo - replace editDisabled with computed property notService -->
-            <b-form-group
+            <BFormGroup
               v-if="editDisabled"
               :label="$t('pageUserManagement.modal.username')"
               label-for="username"
             >
-              <b-form-text id="username-help-block">
+              <BFormText id="username-help-block">
                 {{ $t('pageUserManagement.modal.cannotStartWithANumber') }}
                 <br />
                 {{
@@ -75,59 +67,59 @@
                     'pageUserManagement.modal.noSpecialCharactersExceptUnderscore',
                   )
                 }}
-              </b-form-text>
-              <b-form-input
+              </BFormText>
+              <BFormInput
                 id="username"
                 v-model="form.username"
                 type="text"
                 aria-describedby="username-help-block"
                 data-test-id="userManagement-input-username"
-                :state="getValidationState($v.form.username)"
+                :state="getValidationState(v$.form.username)"
                 :disabled="!newUser && originalUsername === 'root'"
-                @input="$v.form.username.$touch()"
+                @input="v$.form.username.$touch()"
               />
-              <b-form-invalid-feedback role="alert">
-                <template v-if="!$v.form.username.required">
+              <BFormInvalidFeedback role="alert">
+                <template v-if="v$.form.username.$errors.length > 0 ? v$.form.username.$errors[0].$validator === 'required' : false">
                   {{ $t('global.form.fieldRequired') }}
                 </template>
-                <template v-else-if="!$v.form.username.maxLength">
+                <template v-else-if="v$.form.username.$errors.length > 0 ? v$.form.username.$errors[0].$validator === 'maxLength' : false">
                   {{
                     $t('global.form.lengthMustBeBetween', { min: 1, max: 16 })
                   }}
                 </template>
-                <template v-else-if="!$v.form.username.pattern">
+                <template v-else-if="v$.form.username.$errors.length > 0 ? v$.form.username.$errors[0].$validator === 'pattern': false">
                   {{ $t('global.form.invalidFormat') }}
                 </template>
-              </b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group
+              </BFormInvalidFeedback>
+            </BFormGroup>
+            <BFormGroup
               v-if="notService && notReadyOnly"
               :label="$t('pageUserManagement.modal.privilege')"
               label-for="privilege"
             >
-              <b-form-select
+              <BFormSelect
                 id="privilege"
                 v-model="form.privilege"
                 :options="privilegeTypes"
                 data-test-id="userManagement-select-privilege"
-                :state="getValidationState($v.form.privilege)"
-                @input="$v.form.privilege.$touch()"
+                :state="getValidationState(v$.form.privilege)"
+                @input="v$.form.privilege.$touch()"
               >
                 <template #first>
-                  <b-form-select-option :value="null" disabled>
+                  <BFormSelectOption :value="null" disabled>
                     {{ $t('global.form.selectAnOption') }}
-                  </b-form-select-option>
+                  </BFormSelectOption>
                 </template>
-              </b-form-select>
-              <b-form-invalid-feedback role="alert">
-                <template v-if="!$v.form.privilege.required">
+              </BFormSelect>
+              <BFormInvalidFeedback role="alert">
+                <template v-if="v$.form.privilege.$errors.length > 0 ? v$.form.privilege.$errors[0].$validator === 'required' : false">
                   {{ $t('global.form.fieldRequired') }}
                 </template>
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group
+              </BFormInvalidFeedback>
+            </BFormGroup>
+          </BCol>
+          <BCol>
+            <BFormGroup
               v-if="notService"
               :label="$t('pageUserManagement.modal.userPassword')"
               label-for="password"
@@ -136,25 +128,24 @@
                 {{ $t('pageUserManagement.modal.userPassword') }}
                 <info-tooltip-password />
               </template>
-              <input-password-toggle>
-                <b-form-input
+              <input-password-toggle @updatePassView="updatePasswordType">
+                <BFormInput
                   id="password"
                   v-model="form.password"
                   autocomplete="off"
-                  type="password"
+                  :type="passwordType"
                   data-test-id="userManagement-input-password"
-                  aria-describedby="password-help-block"
-                  :state="getValidationState($v.form.password)"
+                  :state="getValidationState(v$.form.password)"
                   class="form-control-with-button"
-                  @input="$v.form.password.$touch()"
+                  @input="v$.form.password.$touch()"
                 />
-                <b-form-invalid-feedback role="alert">
-                  <template v-if="!$v.form.password.required">
+                <BFormInvalidFeedback role="alert">
+                  <template v-if="v$.form.password.$errors.length > 0 ? v$.form.password.$errors[0].$validator === 'required' : false">
                     {{ $t('global.form.fieldRequired') }}
                   </template>
                   <template
                     v-if="
-                      !$v.form.password.minLength || !$v.form.password.maxLength
+                      v$.form.password.$errors.length > 0 ? (v$.form.password.$errors[0].$validator === 'minLength' || v$.form.password.$errors[0].$validator === 'maxLength') : false
                     "
                   >
                     {{
@@ -164,55 +155,52 @@
                       })
                     }}
                   </template>
-                </b-form-invalid-feedback>
+                </BFormInvalidFeedback>
               </input-password-toggle>
-            </b-form-group>
-            <b-form-group
+            </BFormGroup>
+            <BFormGroup
               v-if="notService"
               :label="$t('pageUserManagement.modal.confirmUserPassword')"
               label-for="password-confirmation"
             >
-              <input-password-toggle>
-                <b-form-input
+              <input-password-toggle @updatePassView="updateConfirmPasswordType">
+                <BFormInput
                   id="password-confirmation"
                   v-model="form.passwordConfirmation"
                   autocomplete="off"
                   data-test-id="userManagement-input-passwordConfirmation"
-                  type="password"
-                  :state="getValidationState($v.form.passwordConfirmation)"
+                  :type="confirmPasswordType"
+                  :state="getValidationState(v$.form.passwordConfirmation)"
                   class="form-control-with-button"
-                  @input="$v.form.passwordConfirmation.$touch()"
+                  @input="v$.form.passwordConfirmation.$touch()"
                 />
-                <b-form-invalid-feedback role="alert">
-                  <template v-if="!$v.form.passwordConfirmation.required">
+                <BFormInvalidFeedback role="alert">
+                  <template v-if="v$.form.passwordConfirmation.$errors.length > 0 ? v$.form.passwordConfirmation.$errors[0].$validator === 'required' : false">
                     {{ $t('global.form.fieldRequired') }}
                   </template>
                   <template
-                    v-else-if="!$v.form.passwordConfirmation.sameAsPassword"
+                    v-else-if="v$.form.passwordConfirmation.$errors.length > 0 ? v$.form.passwordConfirmation.$errors[0].$validator === 'sameAsPassword' : false"
                   >
                     {{ $t('pageUserManagement.modal.passwordsDoNotMatch') }}
                   </template>
-                </b-form-invalid-feedback>
+                </BFormInvalidFeedback>
               </input-password-toggle>
-            </b-form-group>
-          </b-col>
-        </b-row>
-      </b-container>
-    </b-form>
-    <template #modal-footer="{ cancel }">
-      <b-button
+            </BFormGroup>
+          </BCol>
+        </BRow>
+      </BContainer>
+    </BForm>
+    <template>
+      <BButton
         variant="secondary"
         data-test-id="userManagement-button-cancel"
-        @click="cancel()"
       >
         {{ $t('global.action.cancel') }}
-      </b-button>
-      <b-button
+      </BButton>
+      <BButton
         form="form-user"
         data-test-id="userManagement-button-submit"
-        type="submit"
         variant="primary"
-        @click="onOk"
       >
         <template v-if="newUser">
           {{ $t('pageUserManagement.addUser') }}
@@ -220,29 +208,31 @@
         <template v-else>
           {{ $t('global.action.save') }}
         </template>
-      </b-button>
+      </BButton>
     </template>
-  </b-modal>
+  </BModal>
 </template>
 
-<script>
-import {
+<script setup>
+import { ref, defineProps, watch, computed } from 'vue';
+import {   
   required,
   maxLength,
   minLength,
   sameAs,
   helpers,
-  requiredIf,
-} from 'vuelidate/lib/validators';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword';
-import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
-import Alert from '@/components/Global/Alert';
+  requiredIf, 
+  } from '@vuelidate/validators';
+import { useVuelidate } from '@vuelidate/core';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
+import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
+import Alert from '@/components/Global/Alert.vue';
+import { GlobalStore, UserManagementStore } from '@/store';
+import eventBus from '@/eventBus';
 
-export default {
-  components: { Alert, InfoTooltipPassword, InputPasswordToggle },
-  mixins: [VuelidateMixin],
-  props: {
+const { getValidationState } = useVuelidateComposable();
+  const props = defineProps({
     user: {
       type: Object,
       default: null,
@@ -251,64 +241,75 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  data() {
-    return {
-      originalUsername: '',
-      form: {
+});
+
+const globalStore = GlobalStore();
+const userManagementStore = UserManagementStore();
+
+  const modal = ref(false);
+  eventBus.on('modal-user', () => {
+    modal.value = true;
+  });
+  const originalUsername = ref('');
+  const form = ref({
         status: true,
         username: '',
         privilege: null,
         password: '',
         passwordConfirmation: '',
         manualUnlock: false,
-      },
-    };
-  },
-  computed: {
-    editDisabled() {
-      return !this.user?.RoleId; // Todo - erase this. Use computed property notService
-    },
-    newUser() {
-      return this.user ? false : true;
-    },
-    notService() {
-      return this.user?.RoleId !== 'OemIBMServiceAgent';
-    },
-    notReadyOnly() {
-      const cUser = this.$store.getters['global/currentUser'];
+      });
+  const passwordType = ref('password');
+  const confirmPasswordType = ref('password');
+  const certificateTypes = computed(() => {
+  return uploadCertificate.availableUploadTypesGetter;
+});
+
+
+
+  const editDisabled = computed(() => {
+      return !props.user?.RoleId;
+    });
+  const newUser = computed(() => {
+      return props.user ? false : true;
+    });
+    const notService = computed(() => {
+      return props.user?.RoleId !== 'OemIBMServiceAgent';
+    });
+    const notReadyOnly = computed(() =>  {
+      const cUser = globalStore.currentUserGetter;
       const RoleId = cUser.RoleId;
       return RoleId !== 'ReadOnly';
-    },
-    currentUser() {
-      return this.$store.getters['global/currentUser'];
-    },
-    accountSettings() {
-      return this.$store.getters['userManagement/accountSettings'];
-    },
-    manualUnlockPolicy() {
-      return !this.accountSettings.accountLockoutDuration;
-    },
-    privilegeTypes() {
-      return this.$store.getters['userManagement/accountRoles'].filter(
+    });
+    const currentUser = computed(() =>  {
+      return globalStore.currentUserGetter;
+    });
+    const accountSettings = computed(() =>  {
+      return userManagementStore.accountSettingsGetter;
+    });
+    const manualUnlockPolicy = computed(() =>  {
+      return !accountSettings.value.accountLockoutDuration;
+    });
+    const privilegeTypes = computed(() =>  {
+      return userManagementStore.accountRolesGetter.filter(
         (privilege) =>
           privilege !== 'OemIBMServiceAgent' &&
           privilege !== 'ServiceAgent' &&
           privilege !== 'Operator',
       );
-    },
-  },
-  watch: {
-    user: function (value) {
-      if (value === null) return;
-      this.originalUsername = value.username;
-      this.form.username = value.username;
-      this.form.status = value.Enabled;
-      this.form.privilege = value.privilege;
-    },
-  },
-  validations() {
-    return {
+    });
+
+  watch(props.user, (value) => {
+  if (options.length) {
+    if (value === null) return;
+      originalUsername.value = value.username;
+      form.value.username = value.username;
+      form.value.status = value.Enabled;
+      form.value.privilege = value.privilege;
+    }
+  });
+
+  const rules = computed(() => ({
       form: {
         status: {
           required,
@@ -316,95 +317,103 @@ export default {
         username: {
           required,
           maxLength: maxLength(16),
-          pattern: helpers.regex('pattern', /^([a-zA-Z_][a-zA-Z0-9_]*)/),
+          pattern: helpers.regex(/^([a-zA-Z_][a-zA-Z0-9_]*)/),
         },
         privilege: {
           required,
         },
         password: {
           required: requiredIf(function () {
-            return this.requirePassword();
+            return requirePassword();
           }),
-          minLength: minLength(this.passwordRequirements.minLength),
-          maxLength: maxLength(this.passwordRequirements.maxLength),
+          minLength: minLength(props.passwordRequirements.minLength),
+          maxLength: maxLength(props.passwordRequirements.maxLength),
         },
         passwordConfirmation: {
           required: requiredIf(function () {
-            return this.requirePassword();
+            return requirePassword();
           }),
-          sameAsPassword: sameAs('password'),
+          sameAsPassword: sameAs(form.value.password),
         },
         manualUnlock: {},
       },
-    };
-  },
-  methods: {
-    handleSubmit() {
+  }));
+  const v$ = useVuelidate(rules, { form });
+
+  function handleSubmit() {
       let userData = {};
 
-      if (this.newUser) {
-        this.$v.$touch();
-        if (this.$v.$invalid) return;
-        userData.username = this.form.username;
-        userData.status = this.form.status;
-        userData.privilege = this.form.privilege;
-        userData.password = this.form.password;
+      if (newUser.value) {
+        v$.value.$touch();
+        if (v$.value.$invalid) return;
+        userData.username = form.value.username;
+        userData.status = form.value.status;
+        userData.privilege = form.value.privilege;
+        userData.password = form.value.password;
       } else {
-        if (this.$v.$invalid) return;
-        userData.originalUsername = this.originalUsername;
-        userData.currentUser = this.currentUser;
-        if (this.$v.form.status.$dirty) {
-          userData.status = this.form.status;
+        form.value.username = props.user.username;
+        v$.value.$touch();
+        if (v$.value.$invalid) return;
+        userData.originalUsername = form.value.username;
+        userData.currentUser = currentUser.value;
+        if (v$.value.form.status.$dirty) {
+          userData.status = form.value.status;
         }
-        if (this.$v.form.username.$dirty) {
-          userData.username = this.form.username;
+        if (v$.value.form.username.$dirty) {
+          userData.username = form.value.username;
         }
-        if (this.$v.form.privilege.$dirty) {
-          userData.privilege = this.form.privilege;
+        if (v$.value.form.privilege.$dirty) {
+          userData.privilege = form.value.privilege;
         }
-        if (this.$v.form.password.$dirty) {
-          userData.password = this.form.password;
+        if (v$.value.form.password.$dirty) {
+          userData.password = form.value.password;
         }
-        if (this.$v.form.manualUnlock.$dirty) {
+        if (v$.value.form.manualUnlock.$dirty) {
           // If form manualUnlock control $dirty then
           // set user Locked property to false
           userData.locked = false;
         }
         if (Object.entries(userData).length === 1) {
-          this.closeModal();
+          closeModal();
           return;
         }
       }
 
-      this.$emit('ok', { isNewUser: this.newUser, userData });
-      this.closeModal();
-    },
-    closeModal() {
-      this.$nextTick(() => {
-        this.$refs.modal.hide();
-      });
-    },
-    resetForm() {
-      this.form.originalUsername = '';
-      this.form.status = true;
-      this.form.username = '';
-      this.form.privilege = null;
-      this.form.password = '';
-      this.form.passwordConfirmation = '';
-      this.$v.$reset();
-      this.$emit('hidden');
-    },
-    requirePassword() {
-      if (this.newUser) return true;
-      if (this.$v.form.password.$dirty) return true;
-      if (this.$v.form.passwordConfirmation.$dirty) return true;
+      eventBus.emit('ok', { isNewUser: newUser.value, userData });
+      closeModal();
+    };
+    function closeModal() {
+      modal.value = false;
+    };
+    function resetForm() {
+      form.value.originalUsername = '';
+      form.value.status = true;
+      form.value.username = '';
+      form.value.privilege = null;
+      form.value.password = '';
+      form.value.passwordConfirmation = '';
+      v$.value.$reset();
+      eventBus.emit('hidden');
+    }
+    function requirePassword() {
+      if (newUser.value) return true;
+      if (v$.value.form.password.$dirty) return true;
+      if (v$.value.form.passwordConfirmation.$dirty) return true;
       return false;
-    },
-    onOk(bvModalEvt) {
-      // prevent modal close
+    }
+    function onOk(bvModalEvt) {
       bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-  },
-};
+      handleSubmit();
+    }
+    function updatePasswordType(type) {
+      passwordType.value = type;
+    }
+    function updateConfirmPasswordType(type) {
+      confirmPasswordType.value = type;
+    }
 </script>
+<style lang="scss" scoped>
+.radioButtonStyle {
+  margin-bottom: 1rem;
+}
+</style>

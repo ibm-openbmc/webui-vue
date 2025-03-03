@@ -63,6 +63,26 @@ const useTableSelectableComposable = () => {
     }
   };
 
+  const toggleSelectRowByUsername = (tableRef, rowIndex, rowSelected, row) => {
+    if (tableRef && rowIndex !== undefined) {
+      if (!rowSelected) {
+        // Find the index of the object to remove
+        const indexToRemove = selectedRowsList.value.findIndex(
+          (item) => item.username === row.username,
+        );
+
+        // Check if the object exists in the array
+        if (indexToRemove !== -1) {
+          tableRef.unselectRow(rowIndex);
+          // Remove the object from the array
+          selectedRowsList.value.splice(indexToRemove, 1);
+        }
+      } else {
+        tableRef.selectRow(rowIndex);
+      }
+    }
+  };
+
   const toggleSelectRowByGroupName = (tableRef, rowIndex, rowSelected, row) => {
     if (tableRef && rowIndex !== undefined) {
       if (!rowSelected) {
@@ -117,6 +137,7 @@ const useTableSelectableComposable = () => {
     toggleSelectRow,
     toggleSelectRowById,
     toggleSelectRowByGroupName,
+    toggleSelectRowByUsername,
     onRowSelected,
     onChangeHeaderCheckbox,
     selectedRowsList,

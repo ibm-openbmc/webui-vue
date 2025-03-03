@@ -107,7 +107,6 @@ export const GlobalStore = defineStore('global', {
         .catch((error) => console.log(error));
     },
     getCurrentUser(username = localStorage.getItem('storedUsername')) {
-      if (localStorage.getItem('storedCurrentUser')) return;
       return api
         .get(`/redfish/v1/AccountService/Accounts/${username}`)
         .then(({ data }) => {
