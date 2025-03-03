@@ -40,6 +40,7 @@ import EventLogs from '@/views/Logs/EventLogs';
 import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
 import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/ServiceLoginConsoles.vue';
 import ServiceLogin from '@/views/Operations/ServiceLoginConsoles';
+import ProfileSettings from '@/views/ProfileSettings';
 
 const roles = {
   administrator: 'Administrator',
@@ -99,6 +100,14 @@ export const routes = [
         component: Overview,
         meta: {
           title: i18n.global.t('appPageTitle.overview'),
+        },
+      },
+      {
+        path: '/profile-settings',
+        name: 'profile-settings',
+        component: ProfileSettings,
+        meta: {
+          title: i18n.global.t('appPageTitle.profileSettings'),
         },
       },
       {

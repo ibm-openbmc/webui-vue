@@ -31,7 +31,6 @@ export const AuditLogsStore = defineStore('auditLogs', {
           });
 
           this.allAuditLogs = auditLogs;
-          console.log('audit logs3', this.allAuditLogs);
         })
         .catch((error) => {
           console.log(error);
