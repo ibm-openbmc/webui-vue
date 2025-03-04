@@ -499,9 +499,23 @@ const PcieTopologyStore = {
               cableMembers[index]?.Links?.UpstreamPorts &&
               cableMembers[index]?.Links?.UpstreamPorts?.length > 0
             ) {
-              const grandparentUrl = cableMembers[
-                index
-              ].Links?.UpstreamPorts[0]['@odata.id']
+              let enabledUpstreamPort = {};
+              if (cableMembers[index]?.Links?.UpstreamPorts?.length === 1) {
+                enabledUpstreamPort =
+                  cableMembers[index].Links?.UpstreamPorts[0];
+              } else {
+                const upstreamPortsPromises = cableMembers[
+                  index
+                ]?.Links?.UpstreamPorts.map(async (usp) => {
+                  await api.get(usp?.['@odata.id']).then(({ data }) => {
+                    if (data?.Status?.State !== 'Absent') {
+                      enabledUpstreamPort = usp;
+                    }
+                  });
+                });
+                await Promise.all(upstreamPortsPromises);
+              }
+              const grandparentUrl = enabledUpstreamPort?.['@odata.id']
                 .split('/Ports')
                 .shift();
               cablesData.detailedInfo.grandparentUri = grandparentUrl;
@@ -515,9 +529,7 @@ const PcieTopologyStore = {
                         const singlePort = element?.portsData[m];
                         if (
                           singlePort['@odata.id'] ===
-                          cableMembers[index]?.Links?.UpstreamPorts[0][
-                            '@odata.id'
-                          ]
+                          enabledUpstreamPort?.['@odata.id']
                         ) {
                           cablesData.detailedInfo.upstreamPorts.push(
                             singlePort
@@ -573,9 +585,7 @@ const PcieTopologyStore = {
                 }
               }
               if (!isAdapterSet) {
-                const gparentUri = cableMembers[index]?.Links?.UpstreamPorts[0][
-                  '@odata.id'
-                ]
+                const gparentUri = enabledUpstreamPort?.['@odata.id']
                   .split('/Ports')
                   .shift();
                 cablesData.detailedInfo.grandparentUri = gparentUri;
@@ -587,9 +597,7 @@ const PcieTopologyStore = {
                       for (let p = 0; p < uspPorts.length; p++) {
                         if (
                           uspPorts[p]['@odata.id'] ===
-                          cableMembers[index]?.Links?.UpstreamPorts[0][
-                            '@odata.id'
-                          ]
+                          enabledUpstreamPort?.['@odata.id']
                         ) {
                           cablesData.detailedInfo['grandParentInfo'] = {};
                           cablesData.detailedInfo.grandParentInfo.data =
@@ -646,16 +654,29 @@ const PcieTopologyStore = {
                 cableMembers[index]?.Links?.UpstreamPorts &&
                 cableMembers[index]?.Links?.UpstreamPorts?.length > 0
               ) {
-                await api
-                  .get(
-                    cableMembers[index]?.Links?.UpstreamPorts[0]['@odata.id']
-                  )
-                  .then((coresponse) => {
-                    correspondingUSP = coresponse.data;
-                  })
-                  .catch((error) => {
-                    console.log('error', error);
+                if (cableMembers[index]?.Links?.UpstreamPorts?.length === 1) {
+                  await api
+                    .get(
+                      cableMembers[index]?.Links?.UpstreamPorts[0]['@odata.id']
+                    )
+                    .then((coresponse) => {
+                      correspondingUSP = coresponse.data;
+                    })
+                    .catch((error) => {
+                      console.log('error', error);
+                    });
+                } else {
+                  const upstreamPortsPromises = cableMembers[
+                    index
+                  ]?.Links?.UpstreamPorts.map(async (usp) => {
+                    await api.get(usp?.['@odata.id']).then(({ data }) => {
+                      if (data?.Status?.State !== 'Absent') {
+                        correspondingUSP = data;
+                      }
+                    });
                   });
+                  await Promise.all(upstreamPortsPromises);
+                }
               }
               const gparentUri = cableMembers[index]?.Links?.DownstreamPorts[0][
                 '@odata.id'
