@@ -35,6 +35,7 @@ import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/Deconfi
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
 import EventLogs from '@/views/Logs/EventLogs';
+import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
 
 const roles = {
   administrator: 'Administrator',
@@ -258,6 +259,14 @@ export const routes = [
         },
       },
       {
+        path: '/resource-management/field-core-override',
+        name: 'field-core-override',
+        component: FieldCoreOverride,
+        meta: {
+          title: i18n.global.t('appPageTitle.fieldCoreOverride'),
+        },
+      },
+      {
         path: '/resource-management/memory',
         name: 'memory',
         component: Memory,
@@ -297,14 +306,14 @@ export const routes = [
           title: i18n.global.t('appPageTitle.pageNotFound'),
         },
       },
-        {
-          path: '/security-and-access/ldap',
-          name: 'ldap',
-          component: Ldap,
-          meta: {
-            title: i18n.global.t('appPageTitle.ldap'),
-          },
+      {
+        path: '/security-and-access/ldap',
+        name: 'ldap',
+        component: Ldap,
+        meta: {
+          title: i18n.global.t('appPageTitle.ldap'),
         },
+      },
       {
         path: '/notices',
         name: 'notices',
