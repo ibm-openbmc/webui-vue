@@ -76,17 +76,17 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
       let fabricAdapterInfo = [];
       let cablesInfo = [];
       await api
-        .get('redfish/v1/Systems/system/PCIeDevices?$expand=.($levels=2)')
+        .get('/redfish/v1/Systems/system/PCIeDevices?$expand=.($levels=2)')
         .then(async (pcieDeviceResponse) => {
           pcieDeviceMembers = pcieDeviceResponse.data.Members;
         });
       await api
-        .get('redfish/v1/Systems/system/Processors/?$expand=.($levels=2)')
+        .get('/redfish/v1/Systems/system/Processors/?$expand=.($levels=2)')
         .then(async (procResponse) => {
           procMembers = procResponse.data.Members;
         });
       await api
-        .get('redfish/v1/Chassis?$expand=.($levels=2)')
+        .get('/redfish/v1/Chassis?$expand=.($levels=2)')
         .then(async (chassisResponse) => {
           chassisMembers = chassisResponse.data.Members;
           let chassisLength = chassisResponse.data.Members.length;
@@ -336,7 +336,7 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
           console.log('error', error);
         });
       await api
-        .get('redfish/v1/Systems/system/FabricAdapters?$expand=.($levels=3)')
+        .get('/redfish/v1/Systems/system/FabricAdapters?$expand=.($levels=3)')
         .then(async ({ data: { Members = [] } }) => {
           let adaptersLength = Members.length;
           let adapterMembers = Members;
@@ -374,7 +374,7 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
         });
 
       await api
-        .get('redfish/v1/Cables?$expand=.($levels=3)')
+        .get('/redfish/v1/Cables?$expand=.($levels=3)')
         .then(async ({ data: { Members = [] } }) => {
           let cableMembers = Members;
           let cablesLength = Members.length;
