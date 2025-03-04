@@ -149,7 +149,7 @@ export const GlobalStore = defineStore('global', {
         })
         .catch((error) => console.log(error));
     },
-    getSystemInfo() {
+    async getSystemInfo() {
       api
         .get('/redfish/v1/Systems/system')
         .then(

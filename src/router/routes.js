@@ -34,6 +34,8 @@ import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/Deconfi
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
 import EventLogs from '@/views/Logs/EventLogs';
+import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/ServiceLoginConsoles.vue';
+import ServiceLogin from '@/views/Operations/ServiceLoginConsoles';
 
 const roles = {
   administrator: 'Administrator',
@@ -61,6 +63,15 @@ export const routes = [
       title: i18n.global.t('appPageTitle.hostConsole'),
     },
     component: HostConsoleConsole,
+  },
+  // Needs reimplementation once routes is implemented
+  {
+    path: '/console/service-login-consoles',
+    meta: {
+      requiresAuth: true,
+      title: i18n.global.t('appPageTitle.serviceLogin'),
+    },
+    component: ServiceLoginConsoles,
   },
   {
     path: '/',
@@ -92,6 +103,14 @@ export const routes = [
         component: ServerPowerOperations,
         meta: {
           title: i18n.global.t('appPageTitle.serverPowerOperations'),
+        },
+      },
+      {
+        path: '/operations/service-login',
+        name: 'service-login',
+        component: ServiceLogin,
+        meta: {
+          title: i18n.global.t('appPageTitle.serviceLogin'),
         },
       },
       {
@@ -288,14 +307,14 @@ export const routes = [
           title: i18n.global.t('appPageTitle.pageNotFound'),
         },
       },
-        {
-          path: '/security-and-access/ldap',
-          name: 'ldap',
-          component: Ldap,
-          meta: {
-            title: i18n.global.t('appPageTitle.ldap'),
-          },
+      {
+        path: '/security-and-access/ldap',
+        name: 'ldap',
+        component: Ldap,
+        meta: {
+          title: i18n.global.t('appPageTitle.ldap'),
         },
+      },
       {
         path: '/notices',
         name: 'notices',
