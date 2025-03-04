@@ -22,6 +22,7 @@ import PcieTopology from '../views/HardwareStatus/PcieTopology/PcieTopology.vue'
 import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
 import Notices from '@/views/Notices/Notices.vue';
 import Sessions from '@/views/SecurityAndAccess/Sessions';
+import UserManagement from '@/views/SecurityAndAccess/UserManagement';
 import Firmware from '@/views/Operations/Firmware';
 import Certificates from '@/views/SecurityAndAccess/Certificates';
 import Inventory from '../views/HardwareStatus/Inventory/Inventory.vue';
@@ -289,6 +290,14 @@ export const routes = [
         component: Sessions,
         meta: {
           title: i18n.global.t('appPageTitle.sessions'),
+        },
+      },
+      {
+        path: '/security-and-access/user-management',
+        name: 'local-users',
+        component: UserManagement,
+        meta: {
+          title: i18n.global.t('appPageTitle.userManagement'),
         },
       },
       {

@@ -57,16 +57,30 @@ const props = defineProps({
   },
 });
 
-const panel = useTemplateRef('panel');
-
 const chassisStore = ChassisStore();
 const authenticationStore = AuthenticationStore();
 const globalStore = GlobalStore();
+
+const panel = useTemplateRef('panel');
 
 const checkingServerStatus = ref(null); // used to prevent extra api calls
 const resizeConsoleWindow = ref(null);
 const ws = ref(null); // websocket object
 const wsConnection = ref(null); // websocket connection status
+
+onBeforeMount(() => {
+  Promise.all([globalStore.getSystemInfo(), chassisStore.getPowerState()]);
+});
+
+onMounted(() => {
+  openTerminal();
+  eventBus.emit('loading-bar-status', true);
+});
+
+onBeforeUnmount(() => {
+  ws.value.close();
+  window.removeEventListener('resize', resizeConsoleWindow.value);
+});
 
 const serverStatus = computed(() => {
   let status = false;
@@ -168,20 +182,6 @@ const openConsoleWindow = () => {
     'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550'
   );
 };
-
-onBeforeMount(() => {
-  Promise.all([globalStore.getSystemInfo(), chassisStore.getPowerState()]);
-});
-
-onMounted(() => {
-  openTerminal();
-  eventBus.emit('loading-bar-status', true);
-});
-
-onBeforeUnmount(() => {
-  ws.value.close();
-  window.removeEventListener('resize', resizeConsoleWindow.value);
-});
 </script>
 
 <style lang="scss" scoped>
