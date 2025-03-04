@@ -1,19 +1,15 @@
+import { defineStore } from 'pinia';
 import api from '@/store/api';
 
-const PostCodeLogsStore = {
-  namespaced: true,
-  state: {
+export const PostCodeLogsStore = defineStore('postCodeLogs', {
+  state: () => ({
     allPostCodes: [],
-  },
+  }),
   getters: {
-    allPostCodes: (state) => state.allPostCodes,
-  },
-  mutations: {
-    setAllPostCodes: (state, allPostCodes) =>
-      (state.allPostCodes = allPostCodes),
+    allPostCodesGetter: (state) => state.allPostCodes,
   },
   actions: {
-    async getPostCodesLogData({ commit }) {
+    async getPostCodesLogData() {
       return await api
         .get('/redfish/v1/Systems/system/LogServices/PostCodes/Entries')
         .then(({ data: { Members = [] } = {} }) => {
@@ -21,6 +17,7 @@ const PostCodeLogsStore = {
           const postCodeLogs = Members.map((log) => {
             const { Created, MessageArgs, AdditionalDataURI } = log;
             return {
+              toggleDetails: false,
               date: new Date(Created),
               bootCount: MessageArgs[0],
               timeStampOffset: MessageArgs[1],
@@ -28,13 +25,13 @@ const PostCodeLogsStore = {
               uri: AdditionalDataURI,
             };
           });
-          commit('setAllPostCodes', postCodeLogs);
+          this.allPostCodes = postCodeLogs;
         })
         .catch((error) => {
           console.log('POST Codes Log Data:', error);
         });
     },
   },
-};
+});
 
 export default PostCodeLogsStore;

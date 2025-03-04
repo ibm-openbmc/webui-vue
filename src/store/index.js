@@ -34,6 +34,7 @@ import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsSt
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore.js';
 import LdapStore from './modules/SecurityAndAccess/LdapStore.js';
 import FieldCoreOverrideStore from './modules/ResourceManagement/FieldCoreOverrideStore.js';
+import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore.js'
 // ... (export use other stores)
 export {
   EventLogStore,
@@ -57,6 +58,7 @@ export {
   ChassisStore,
   PowerSupplyStore,
   PcieSlotsStore,
+  PostCodeLogsStore,
   FanStore,
   MemoryStore,
   BmcStore,

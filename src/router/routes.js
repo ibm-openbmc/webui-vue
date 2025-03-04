@@ -15,6 +15,8 @@ import KeyClear from '@/views/Operations/KeyClear/KeyClear.vue';
 import RebootBmc from '@/views/Operations/RebootBmc';
 import FactoryReset from '@/views/Operations/FactoryReset';
 import Memory from '@/views/ResourceManagement/Memory';
+import PostCodes from '@/views/Logs/PostCodeLogs/PostCodes.vue';
+import PostCodeLogs from '@/views/Logs/PostCodeLogs/PostCodeLogs.vue';
 import Power from '@/views/ResourceManagement/Power';
 import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy';
 import ConcurrentMaintenance from '../views/HardwareStatus/ConcurrentMaintenance/ConcurrentMaintenance.vue';
@@ -74,6 +76,15 @@ export const routes = [
       title: i18n.global.t('appPageTitle.serviceLogin'),
     },
     component: ServiceLoginConsoles,
+  },
+  // Needs reimplementation once routes is implemented
+  {
+    path: '/console/post-codes',
+    name: 'post-codes',
+    component: PostCodes,
+    meta: {
+      title: i18n.global.t('appPageTitle.postCodes'),
+    },
   },
   {
     path: '/',
@@ -177,6 +188,14 @@ export const routes = [
         component: AuditLogs,
         meta: {
           title: i18n.global.t('appPageTitle.auditLogs'),
+        },
+      },
+      {
+        path: '/logs/post-code-logs',
+        name: 'post-code-logs',
+        component: PostCodeLogs,
+        meta: {
+          title: i18n.global.t('appPageTitle.postCodeLogs'),
         },
       },
       {
