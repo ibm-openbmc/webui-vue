@@ -1,32 +1,32 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.serviceLogin')" />
 
     <page-section class="mb-0">
-      <b-row class="d-flex">
-        <b-col
+      <BRow class="d-flex">
+        <BCol
           sm="6"
           lg="5"
           xl="4"
           class="d-flex flex-column justify-content-end"
         >
-          <b-form id="form-new-dump">
-            <b-form-group
+          <BForm id="form-new-dump">
+            <BFormGroup
               :label="$t('pageServiceLoginConsoles.selectConsoleType')"
               label-for="selectConsoleType"
             >
-              <b-form-select
+              <BFormSelect
                 id="selectConsoleType"
                 v-model="selectConsoleType"
                 :options="consoleTypeOptions"
                 value-field="value"
                 text-field="text"
               >
-              </b-form-select>
-            </b-form-group>
-          </b-form>
-        </b-col>
-      </b-row>
+              </BFormSelect>
+            </BFormGroup>
+          </BForm>
+        </BCol>
+      </BRow>
     </page-section>
 
     <page-section class="mb-0">
@@ -41,35 +41,25 @@
         :console-type="'console1'"
       />
     </page-section>
-  </b-container>
+  </BContainer>
 </template>
 
-<script>
-import PageTitle from '@/components/Global/PageTitle';
-import PageSection from '@/components/Global/PageSection';
-import ServiceLoginConsoles from './ServiceLoginConsoles';
+<script setup>
+import { ref } from 'vue';
+import i18n from '@/i18n';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import ServiceLoginConsoles from './ServiceLoginConsoles.vue';
 
-export default {
-  name: 'ServiceLogin',
-  components: {
-    PageSection,
-    PageTitle,
-    ServiceLoginConsoles,
+const selectConsoleType = ref('bmc-console');
+const consoleTypeOptions = ref([
+  {
+    value: 'bmc-console',
+    text: i18n.global.t('pageServiceLoginConsoles.bmcConsole'),
   },
-  data() {
-    return {
-      selectConsoleType: 'bmc-console',
-      consoleTypeOptions: [
-        {
-          value: 'bmc-console',
-          text: this.$t('pageServiceLoginConsoles.bmcConsole'),
-        },
-        {
-          value: 'hypervisor-console',
-          text: this.$t('pageServiceLoginConsoles.hypervisorConsole'),
-        },
-      ],
-    };
+  {
+    value: 'hypervisor-console',
+    text: i18n.global.t('pageServiceLoginConsoles.hypervisorConsole'),
   },
-};
+]);
 </script>

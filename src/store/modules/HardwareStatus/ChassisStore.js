@@ -86,7 +86,7 @@ export const ChassisStore = defineStore('chassisStore', {
       return await api
         .get('/redfish/v1/Chassis/chassis')
         .then(({ data: { PowerState = null } }) => {
-          this.PowerState = PowerState;
+          this.powerState = PowerState;
         })
         .catch((error) => console.log(error));
     },

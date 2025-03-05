@@ -36,6 +36,8 @@ import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
 import EventLogs from '@/views/Logs/EventLogs';
 import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
+import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/ServiceLoginConsoles.vue';
+import ServiceLogin from '@/views/Operations/ServiceLoginConsoles';
 
 const roles = {
   administrator: 'Administrator',
@@ -63,6 +65,15 @@ export const routes = [
       title: i18n.global.t('appPageTitle.hostConsole'),
     },
     component: HostConsoleConsole,
+  },
+  // Needs reimplementation once routes is implemented
+  {
+    path: '/console/service-login-consoles',
+    meta: {
+      requiresAuth: true,
+      title: i18n.global.t('appPageTitle.serviceLogin'),
+    },
+    component: ServiceLoginConsoles,
   },
   {
     path: '/',
@@ -94,6 +105,14 @@ export const routes = [
         component: ServerPowerOperations,
         meta: {
           title: i18n.global.t('appPageTitle.serverPowerOperations'),
+        },
+      },
+      {
+        path: '/operations/service-login',
+        name: 'service-login',
+        component: ServiceLogin,
+        meta: {
+          title: i18n.global.t('appPageTitle.serviceLogin'),
         },
       },
       {
