@@ -35,6 +35,7 @@ import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/Deconfi
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
 import EventLogs from '@/views/Logs/EventLogs';
+import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
 import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/ServiceLoginConsoles.vue';
 import ServiceLogin from '@/views/Operations/ServiceLoginConsoles';
 
@@ -274,6 +275,14 @@ export const routes = [
         component: CapacityOnDemand,
         meta: {
           title: i18n.global.t('appPageTitle.capacityOnDemand'),
+        },
+      },
+      {
+        path: '/resource-management/field-core-override',
+        name: 'field-core-override',
+        component: FieldCoreOverride,
+        meta: {
+          title: i18n.global.t('appPageTitle.fieldCoreOverride'),
         },
       },
       {
