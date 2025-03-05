@@ -60,10 +60,7 @@ const props = defineProps({
 });
 const filter = ref('');
 const onChangeInput = (event) => {
-  var filterValue = filter.value;
-  if (event.data != null) filterValue = filterValue.concat(event.data);
-  else filterValue = filterValue.slice(0, -1);
-  emit('change-search', filterValue);
+  emit('change-search', event.target.value);
 };
 const onClearSearch = () => {
   filter.value = '';
