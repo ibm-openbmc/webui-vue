@@ -8,7 +8,6 @@
       <slot>
         <icon-tooltip />
       </slot>
-      <span class="sr-only">{{ $t('global.ariaLabel.tooltip') }}</span>
     </b-button>
     <b-tooltip target="tooltip-password" triggers="hover">
       <p class="text-left">

@@ -22,6 +22,7 @@ import PcieTopology from '../views/HardwareStatus/PcieTopology/PcieTopology.vue'
 import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
 import Notices from '@/views/Notices/Notices.vue';
 import Sessions from '@/views/SecurityAndAccess/Sessions';
+import UserManagement from '@/views/SecurityAndAccess/UserManagement';
 import Firmware from '@/views/Operations/Firmware';
 import Certificates from '@/views/SecurityAndAccess/Certificates';
 import Inventory from '../views/HardwareStatus/Inventory/Inventory.vue';
@@ -34,6 +35,9 @@ import DeconfigurationRecords from '../views/Logs/DeconfigurationRecords/Deconfi
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
 import EventLogs from '@/views/Logs/EventLogs';
+import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
+import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/ServiceLoginConsoles.vue';
+import ServiceLogin from '@/views/Operations/ServiceLoginConsoles';
 
 const roles = {
   administrator: 'Administrator',
@@ -61,6 +65,15 @@ export const routes = [
       title: i18n.global.t('appPageTitle.hostConsole'),
     },
     component: HostConsoleConsole,
+  },
+  // Needs reimplementation once routes is implemented
+  {
+    path: '/console/service-login-consoles',
+    meta: {
+      requiresAuth: true,
+      title: i18n.global.t('appPageTitle.serviceLogin'),
+    },
+    component: ServiceLoginConsoles,
   },
   {
     path: '/',
@@ -92,6 +105,14 @@ export const routes = [
         component: ServerPowerOperations,
         meta: {
           title: i18n.global.t('appPageTitle.serverPowerOperations'),
+        },
+      },
+      {
+        path: '/operations/service-login',
+        name: 'service-login',
+        component: ServiceLogin,
+        meta: {
+          title: i18n.global.t('appPageTitle.serviceLogin'),
         },
       },
       {
@@ -257,6 +278,14 @@ export const routes = [
         },
       },
       {
+        path: '/resource-management/field-core-override',
+        name: 'field-core-override',
+        component: FieldCoreOverride,
+        meta: {
+          title: i18n.global.t('appPageTitle.fieldCoreOverride'),
+        },
+      },
+      {
         path: '/resource-management/memory',
         name: 'memory',
         component: Memory,
@@ -270,6 +299,14 @@ export const routes = [
         component: Sessions,
         meta: {
           title: i18n.global.t('appPageTitle.sessions'),
+        },
+      },
+      {
+        path: '/security-and-access/user-management',
+        name: 'local-users',
+        component: UserManagement,
+        meta: {
+          title: i18n.global.t('appPageTitle.userManagement'),
         },
       },
       {
@@ -288,14 +325,14 @@ export const routes = [
           title: i18n.global.t('appPageTitle.pageNotFound'),
         },
       },
-        {
-          path: '/security-and-access/ldap',
-          name: 'ldap',
-          component: Ldap,
-          meta: {
-            title: i18n.global.t('appPageTitle.ldap'),
-          },
+      {
+        path: '/security-and-access/ldap',
+        name: 'ldap',
+        component: Ldap,
+        meta: {
+          title: i18n.global.t('appPageTitle.ldap'),
         },
+      },
       {
         path: '/notices',
         name: 'notices',

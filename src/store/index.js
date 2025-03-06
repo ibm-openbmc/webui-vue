@@ -34,6 +34,7 @@ import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsSt
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore.js';
 import LdapStore from './modules/SecurityAndAccess/LdapStore.js';
 import DumpsStore from './modules/Logs/DumpsStore.js';
+import FieldCoreOverrideStore from './modules/ResourceManagement/FieldCoreOverrideStore.js';
 // ... (export use other stores)
 export {
   EventLogStore,
@@ -70,5 +71,6 @@ export {
   DeconfigurationRecordsStore,
   NetworkSettingsStore,
   LdapStore,
-  DumpsStore
+  DumpsStore,
+  FieldCoreOverrideStore,
 };

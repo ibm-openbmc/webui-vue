@@ -1,5 +1,5 @@
 <template>
-  <b-table stacked="sm" hover small :items="items" :fields="fields">
+  <BTable thead-class="thead-light" hover small :items="items" :fields="fields">
     <template #cell(administrator)="data">
       <template v-if="data.value">
         <checkmark20 />
@@ -20,72 +20,65 @@
         <checkmark20 />
       </template>
     </template>
-  </b-table>
+  </BTable>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
+import i18n from '@/i18n';
 import Checkmark20 from '@carbon/icons-vue/es/checkmark/20';
 
-export default {
-  components: {
-    Checkmark20,
-  },
-  data() {
-    return {
-      items: [
+      const items = ref([
         {
-          description: this.$t(
+          description: i18n.global.t(
             'pageUserManagement.tableRoles.configureComponentsManagedByThisService',
           ),
           administrator: true,
           readonly: false,
         },
         {
-          description: this.$t(
+          description: i18n.global.t(
             'pageUserManagement.tableRoles.configureManagerResources',
           ),
           administrator: true,
           readonly: false,
         },
         {
-          description: this.$t(
+          description: i18n.global.t(
             'pageUserManagement.tableRoles.updatePasswordForCurrentUserAccount',
           ),
           administrator: true,
           readonly: true,
         },
         {
-          description: this.$t(
+          description: i18n.global.t(
             'pageUserManagement.tableRoles.configureUsersAndTheirAccounts',
           ),
           administrator: true,
           readonly: false,
         },
         {
-          description: this.$t(
+          description: i18n.global.t(
             'pageUserManagement.tableRoles.logInToTheServiceAndReadResources',
           ),
           administrator: true,
           readonly: true,
         },
-      ],
-      fields: [
+      ])
+      const fields = ref([
         {
           key: 'description',
-          label: this.$t('pageUserManagement.tableRoles.privilege'),
+          label: i18n.global.t('pageUserManagement.tableRoles.privilege'),
         },
         {
           key: 'administrator',
-          label: this.$t('pageUserManagement.tableRoles.administrator'),
+          label: i18n.global.t('pageUserManagement.tableRoles.administrator'),
           class: 'text-center',
         },
         {
           key: 'readonly',
-          label: this.$t('pageUserManagement.tableRoles.readOnly'),
+          label: i18n.global.t('pageUserManagement.tableRoles.readOnly'),
           class: 'text-center',
         },
-      ],
-    };
-  },
-};
+      ])
 </script>
