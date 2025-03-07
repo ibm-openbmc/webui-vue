@@ -1,10 +1,11 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     {{ postCodes }}
-  </b-container>
+  </BContainer>
 </template>
 
 <script>
+import { GlobalStore } from "../../../store";
 export default {
   name: 'PostCodes',
   data() {
@@ -14,7 +15,7 @@ export default {
   },
   computed: {
     postCodeValue() {
-      return this.$store.getters['global/postCodeValue'];
+      return GlobalStore().postCodeValueGetter;
     },
     postCodes: {
       get() {
