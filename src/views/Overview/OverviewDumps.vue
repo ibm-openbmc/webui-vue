@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <overview-card
     :data="dumps"
@@ -17,28 +16,28 @@
   </overview-card>
 </template>
 
-<script>
-import OverviewCard from './OverviewCard';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+<script setup>
+import { computed, onBeforeMount } from 'vue';
+import OverviewCard from './OverviewCard.vue';
+import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
+import { DumpsStore } from '@/store';
+import eventBus from '@/eventBus';
 
-export default {
-  name: 'OverviewDumps',
-  components: {
-    OverviewCard,
-  },
-  mixins: [DataFormatterMixin],
-  computed: {
-    dumps() {
-      return this.$store.getters['dumps/allDumps'];
-    },
-  },
-  created() {
-    this.$store.dispatch('dumps/getAllDumps').finally(() => {
-      this.$root.$emit('overview-dumps-complete');
+const { dataFormatter } = useDataFormatterGlobal();
+
+const dumpsStore = DumpsStore();
+
+onBeforeMount(() => {
+      dumpsStore.getAllDumps().finally(() => {
+      eventBus.emit('overview-dumps-complete');
     });
-  },
-  methods: {
-    exportFileNameByDate() {
+  });
+
+const dumps = computed(() => {
+    return dumpsStore.allDumpsGetter;
+    });
+
+const exportFileNameByDate = () => {
       // Create export file name based on date
       let date = new Date();
       date =
@@ -47,7 +46,5 @@ export default {
         date.toString().split(':').join('-').split(' ')[4];
       let fileName = 'all_dumps_';
       return fileName + date;
-    },
-  },
-};
+    };
 </script>

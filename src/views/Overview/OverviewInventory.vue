@@ -1,25 +1,24 @@
-<!-- TODO: Work Requird -->
 <template>
   <overview-card
-    :title="t('pageOverview.inventory')"
+    :title="$t('pageOverview.inventory')"
     :to="`/hardware-status/inventory`"
   >
     <BRow class="mt-3">
       <BCol sm="6">
         <dl sm="6">
-          <dt>{{ t('pageOverview.systemIdentifyLed') }}</dt>
+          <dt>{{ $t('pageOverview.systemIdentifyLed') }}</dt>
           <dd>
             <BFormCheckbox
               id="identifyLedSwitch"
               v-model="systems.locationIndicatorActive"
               data-test-id="overviewInventory-checkbox-identifyLed"
               switch
-              @change="toggleIdentifyLedSwitch"
+              @change="toggleIdentifyLedSwitch(systems.locationIndicatorActive)"
             >
               <span v-if="systems.locationIndicatorActive">
-                {{ t('global.status.on') }}
+                {{ $t('global.status.on') }}
               </span>
-              <span v-else>{{ t('global.status.off') }}</span>
+              <span v-else>{{ $t('global.status.off') }}</span>
             </BFormCheckbox>
           </dd>
         </dl>
@@ -29,22 +28,33 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
+import useToast from '@/components/Composables/useToastComposable';
 import { SystemStore } from '@/store';
-import { useI18n } from 'vue-i18n';
+import eventBus from '@/eventBus';
 
-const { t } = useI18n();
+const { successToast, errorToast } = useToast();
+
 const systemStore = SystemStore();
-systemStore.getSystem();
+
+onBeforeMount(() => {
+  systemStore.getSystem().finally(() => {
+      eventBus.emit('overview-inventory-complete');
+    });
+});
+
 const systems = computed(() => {
   let systemData = systemStore.systems[0];
   return systemData ? systemData : {};
 });
+
 const toggleIdentifyLedSwitch = (state) => {
-  systemStore.changeIdentifyLedState(state).catch(({ message }) => {
+  systemStore.changeIdentifyLedState(state)
+  .then((message) => successToast(message))
+  .catch(({ message }) => {
     console.log(message);
-    // this.errorToast(message);
+    errorToast(message);
   });
 };
 </script>

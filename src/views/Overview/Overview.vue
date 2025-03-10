@@ -1,10 +1,9 @@
-<!-- TODO: Work Requird -->
 <template>
   <BContainer fluid="xl">
-    <page-title />
+    <page-title :title="$t('appPageTitle.overview')"/>
     <overview-quick-links class="mb-4" />
     <page-section
-      :section-title="t('pageOverview.systemInformation')"
+      :section-title="$t('pageOverview.systemInformation')"
       class="mb-1"
     >
       <BCardGroup deck>
@@ -16,7 +15,7 @@
         <overview-power />
       </BCardGroup>
     </page-section>
-    <page-section :section-title="t('pageOverview.statusInformation')">
+    <page-section :section-title="$t('pageOverview.statusInformation')">
       <BCardGroup deck>
         <overview-events />
         <overview-inventory />
@@ -27,6 +26,8 @@
 </template>
 
 <script setup>
+import { ref, onBeforeMount } from 'vue';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import OverviewQuickLinks from './OverviewQuickLinks.vue';
@@ -36,15 +37,55 @@ import OverviewNetwork from './OverviewNetwork.vue';
 import OverviewPower from './OverviewPower.vue';
 import OverviewEvents from './OverviewEvents.vue';
 import OverviewInventory from './OverviewInventory.vue';
-import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import OverviewDumps from './OverviewDumps.vue';
+import { UserManagementStore } from '@/store';
+import eventBus from '@/eventBus';
 
-const { t } = useI18n();
-console.log(
-  'import.meta.env.VITE_APP_ENV_NAME',
-  import.meta.env.VITE_APP_ENV_NAME,
-);
-console.log('import.meta.env', import.meta.env);
+const { startLoader, endLoader } = useLoadingBar();
+
+const userManagementStore = UserManagementStore();
 
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
+
+onBeforeMount(() => {
+    startLoader();
+    const dumpsPromise = new Promise((resolve) => {
+      eventBus.on('overview-dumps-complete', () => resolve());
+    });
+    const eventsPromise = new Promise((resolve) => {
+      eventBus.on('overview-events-complete', () => resolve());
+    });
+    const firmwarePromise = new Promise((resolve) => {
+      eventBus.on('overview-firmware-complete', () => resolve());
+    });
+    const inventoryPromise = new Promise((resolve) => {
+      eventBus.on('overview-inventory-complete', () => resolve());
+    });
+    const networkPromise = new Promise((resolve) => {
+      eventBus.on('overview-network-complete', () => resolve());
+    });
+    const powerPromise = new Promise((resolve) => {
+      eventBus.on('overview-power-complete', () => resolve());
+    });
+    const quicklinksPromise = new Promise((resolve) => {
+      eventBus.on('overview-quicklinks-complete', () => resolve());
+    });
+    const serverPromise = new Promise((resolve) => {
+      eventBus.on('overview-server-complete', () => resolve());
+    });
+
+    Promise.all([
+      dumpsPromise,
+      eventsPromise,
+      firmwarePromise,
+      inventoryPromise,
+      networkPromise,
+      powerPromise,
+      quicklinksPromise,
+      serverPromise,
+      userManagementStore.getUsers(),
+    ]).finally(() => endLoader());
+
+  });
+
 </script>

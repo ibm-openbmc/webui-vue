@@ -24,7 +24,7 @@ export const NetworkStore = defineStore('network', {
     isTableBusyGetter: (state) => state.isTableBusy,
   },
   actions: {
-    setNetworkSettings: (data) => {
+    async setNetworkSettings(data) {
       this.networkSettings = data.map(({ data }) => {
         const {
           DHCPv4,
@@ -89,7 +89,6 @@ export const NetworkStore = defineStore('network', {
           const ethernetData = ethernetInterfaces.map(
             (ethernetInterface) => ethernetInterface.data
           );
-
           this.setNetworkSettings(ethernetInterfaces);
           let currentInterfaceIndex = 0;
           if (this.selectedInterfaceIndex) {
