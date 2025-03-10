@@ -73,6 +73,8 @@
           </b-button>
         </div>
       </b-form>
+      <!-- Modals -->
+      <modal-otp-generate />
     </div>
   </div>
 </template>
@@ -80,6 +82,7 @@
 <script>
 import { required, sameAs } from 'vuelidate/lib/validators';
 import Alert from '@/components/Global/Alert';
+import ModalOtpGenerate from '@/views/Login/ModalOtpGenerate';
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin';
 import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
@@ -87,7 +90,12 @@ import BVToastMixin from '@/components/Mixins/BVToastMixin';
 
 export default {
   name: 'ChangePassword',
-  components: { Alert, InfoTooltipPassword, InputPasswordToggle },
+  components: {
+    Alert,
+    InfoTooltipPassword,
+    InputPasswordToggle,
+    ModalOtpGenerate,
+  },
   mixins: [VuelidateMixin, BVToastMixin],
   data() {
     return {
@@ -130,9 +138,22 @@ export default {
             this.$store.dispatch('userManagement/getUsers'),
             this.$store.dispatch('global/getCurrentUser', this.username),
             this.$store.dispatch('global/getSystemInfo'),
-          ]);
+          ])
+            .then(() => this.$router.push('/'))
+            .catch((error) => {
+              if (error?.message?.endsWith('otpRequired')) {
+                this.$store
+                  .dispatch('userManagement/clearSecretKey')
+                  .finally(() => {
+                    this.$store
+                      .dispatch('userManagement/generateSecretKey')
+                      .then(() => {
+                        this.$bvModal.show('modal-otp-generate');
+                      });
+                  });
+              }
+            });
         })
-        .then(() => this.$router.push('/'))
         .catch(() => (this.changePasswordError = true));
     },
   },

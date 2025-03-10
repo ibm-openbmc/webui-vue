@@ -90,7 +90,17 @@ const UserManagementStore = {
         })
         .catch((error) => {
           console.log(error);
-          const message = i18n.t('pageUserManagement.toast.errorLoadUsers');
+          let message = '';
+          if (
+            error.response.data['@Message.ExtendedInfo'] &&
+            error.response.data['@Message.ExtendedInfo'][0].MessageId.endsWith(
+              'GenerateSecretKeyRequired'
+            )
+          ) {
+            message = 'otpRequired';
+          } else {
+            message = i18n.t('pageUserManagement.toast.errorLoadUsers');
+          }
           throw new Error(message);
         });
     },
@@ -234,7 +244,7 @@ const UserManagementStore = {
         });
     },
     async updateUser(
-      { dispatch },
+      _,
       { originalUsername, username, password, privilege, status, locked }
     ) {
       const data = {};
@@ -245,7 +255,6 @@ const UserManagementStore = {
       if (locked !== undefined) data.Locked = locked;
       return await api
         .patch(`/redfish/v1/AccountService/Accounts/${originalUsername}`, data)
-        .then(() => dispatch('getUsers'))
         .then(() =>
           i18n.t('pageUserManagement.toast.successUpdateUser', {
             username: originalUsername,

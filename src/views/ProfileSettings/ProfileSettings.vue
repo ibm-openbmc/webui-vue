@@ -236,7 +236,8 @@ export default {
 
       this.$store
         .dispatch('userManagement/updateUser', userData)
-        .then((message) => {
+        .then(async (message) => {
+          await this.$store.dispatch('userManagement/getUsers');
           (this.form.newPassword = ''), (this.form.confirmPassword = '');
           this.$v.$reset();
           this.successToast(message);
