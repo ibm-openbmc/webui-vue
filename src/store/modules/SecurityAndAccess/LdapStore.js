@@ -164,13 +164,11 @@ const LdapStore = {
         LDAPService: {
           SearchSettings: {
             BaseDistinguishedNames: [baseDn],
+            GroupsAttribute: groupIdAttribute,
+            UsernameAttribute: userIdAttribute,
           },
         },
       };
-      if (groupIdAttribute)
-        data.LDAPService.SearchSettings.GroupsAttribute = groupIdAttribute;
-      if (userIdAttribute)
-        data.LDAPService.SearchSettings.UsernameAttribute = userIdAttribute;
 
       if (activeDirectoryEnabled) {
         return await dispatch('saveActiveDirectorySettings', data);
