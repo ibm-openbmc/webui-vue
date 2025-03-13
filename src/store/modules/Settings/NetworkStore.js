@@ -25,16 +25,32 @@ const NetworkStore = {
     isTableBusy: (state) => state.isTableBusy,
   },
   mutations: {
-    setDchpEnabledState: (state, dchpEnabledState) =>
-      (state.dchpEnabledState = dchpEnabledState),
+    setDchpEnabledState: (state, dchpEnabledState) => {
+      state.networkSettings[
+        state.selectedInterfaceIndex
+      ].dhcpEnabled = dchpEnabledState;
+    },
     setIpv6DchpEnabledState: (state, ipv6DchpEnabledState) =>
-      (state.ipv6DchpEnabledState = ipv6DchpEnabledState),
+      (state.networkSettings[
+        state.selectedInterfaceIndex
+      ].ipv6OperatingMode = ipv6DchpEnabledState),
     setIpv6AutoConfigEnabled: (state, ipv6AutoConfigEnabled) =>
-      (state.ipv6AutoConfigEnabled = ipv6AutoConfigEnabled),
+      (state.networkSettings[
+        state.selectedInterfaceIndex
+      ].ipv6AutoConfigEnabled = ipv6AutoConfigEnabled),
     setDomainNameState: (state, domainState) =>
-      (state.domainState = domainState),
-    setDnsState: (state, dnsState) => (state.dnsState = dnsState),
-    setNtpState: (state, ntpState) => (state.ntpState = ntpState),
+      (state.networkSettings[
+        state.selectedInterfaceIndex
+      ].useDomainNameEnabled = domainState),
+    setDnsState: (state, dnsState) =>
+      (state.networkSettings[
+        state.selectedInterfaceIndex
+      ].useDnsEnabled = dnsState),
+    setNtpState: (state, ntpState) => {
+      state.networkSettings[
+        state.selectedInterfaceIndex
+      ].useNtpEnabled = ntpState;
+    },
     setDomainNameStateIpv6: (state, domainStateIpv6) =>
       (state.domainStateIpv6 = domainStateIpv6),
     setDnsStateIpv6: (state, dnsState) => (state.dnsState = dnsState),
@@ -177,7 +193,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           data
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.domainName'),
@@ -205,7 +226,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           data
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.dns'),
@@ -233,7 +259,12 @@ const NetworkStore = {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${state.selectedInterfaceId}`,
           data
         )
-        .then(dispatch('getEthernetData'))
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          dispatch('getEthernetData');
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          dispatch('getEthernetDataAfterDelay');
+        })
         .then(() => {
           return i18n.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.t('pageNetwork.ntp'),
@@ -250,7 +281,7 @@ const NetworkStore = {
         });
     },
     async saveDhcpEnabledState({ commit, state, dispatch }, dhcpState) {
-      commit('setDhcpEnabled', dhcpState);
+      commit('setDchpEnabledState', dhcpState);
       const data = {
         DHCPv4: {
           DHCPEnabled: dhcpState,
@@ -274,7 +305,7 @@ const NetworkStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setDhcpEnabled', !dhcpState);
+          commit('setDchpEnabledState', !dhcpState);
           throw new Error(
             i18n.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.t('pageNetwork.dhcp'),
@@ -284,7 +315,7 @@ const NetworkStore = {
     },
     async saveLLDPState({ commit, state, dispatch }, lldpState) {
       const lldpData = state.lldpEnabledState.map((item, idx) => {
-        if (idx === state.selectedInterfaceId) {
+        if (idx === state.selectedInterfaceIndex) {
           return {
             ...item,
             LLDPEnabled: lldpState,
@@ -357,7 +388,10 @@ const NetworkStore = {
         })
         .catch((error) => {
           console.log(error);
-          commit('setIpv6DchpEnabledState', !dhcpState);
+          commit(
+            'setIpv6DchpEnabledState',
+            !dhcpState ? 'Enabled' : 'Disabled'
+          );
           throw new Error(
             i18n.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.t('pageNetwork.dhcp'),

@@ -23,7 +23,7 @@
                 v-model="useDomainNameState"
                 data-test-id="networkSettings-switch-useDomainName"
                 switch
-                :disabled="!dhcpState"
+                :disabled="!dhcpState || isDisabled"
                 @change="changeDomainNameState"
               >
                 <span v-if="useDomainNameState">
@@ -43,7 +43,7 @@
                 v-model="useDnsState"
                 data-test-id="networkSettings-switch-useDns"
                 switch
-                :disabled="!dhcpState"
+                :disabled="!dhcpState || isDisabled"
                 @change="changeDnsState"
               >
                 <span v-if="useDnsState">
@@ -63,7 +63,7 @@
                 v-model="useNtpState"
                 data-test-id="networkSettings-switch-useNtp"
                 switch
-                :disabled="!dhcpState"
+                :disabled="!dhcpState || isDisabled"
                 @change="changeNtpState"
               >
                 <span v-if="useNtpState">
@@ -82,12 +82,14 @@
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import PageSection from '@/components/Global/PageSection';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
+import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
+
 export default {
   name: 'Ipv4Table',
   components: {
     PageSection,
   },
-  mixins: [BVToastMixin, DataFormatterMixin],
+  mixins: [BVToastMixin, DataFormatterMixin, LoadingBarMixin],
   props: {
     tabIndex: {
       type: Number,
@@ -101,6 +103,9 @@ export default {
     };
   },
   computed: {
+    isDisabled() {
+      return this.$store.getters['network/isTableBusy'];
+    },
     network() {
       return this.$store.getters['network/networkSettings'];
     },
@@ -163,21 +168,37 @@ export default {
     changeDomainNameState(state) {
       this.$store
         .dispatch('network/saveDomainNameState', state)
-        .then((success) => {
-          this.successToast(success);
+        .then((message) => {
+          this.successToast(message);
+          this.startLoader();
+          setTimeout(() => {
+            this.endLoader();
+          }, 15000);
         })
         .catch(({ message }) => this.errorToast(message));
     },
     changeDnsState(state) {
       this.$store
         .dispatch('network/saveDnsState', state)
-        .then((message) => this.successToast(message))
+        .then((message) => {
+          this.successToast(message);
+          this.startLoader();
+          setTimeout(() => {
+            this.endLoader();
+          }, 15000);
+        })
         .catch(({ message }) => this.errorToast(message));
     },
     changeNtpState(state) {
       this.$store
         .dispatch('network/saveNtpState', state)
-        .then((message) => this.successToast(message))
+        .then((message) => {
+          this.successToast(message);
+          this.startLoader();
+          setTimeout(() => {
+            this.endLoader();
+          }, 15000);
+        })
         .catch(({ message }) => this.errorToast(message));
     },
   },
