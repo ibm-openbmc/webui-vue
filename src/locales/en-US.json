@@ -1393,7 +1393,7 @@
       "successIpmiNetworkPolicyUpdate": "Successfully updated %{policy}. The BMC normally takes about 30 seconds to change the state.",
       "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
     },
-    "acfUploadEnablementConfirmText": "Caution: Enabling this setting allows unauthenticated users to upload Access Control Files (ACFs) without logging in and without pressing Function 74 on the Operator Panel. Do you want to proceed?",
+    "acfUploadEnablementConfirmText": "Caution: Enabling this setting removes the physical system access requirement from the process to upload an Access Control File (ACF).  This would allow anyone who is authorized to request an ACF and has network access to ASMI to gain access to the admin account.  Do you want to proceed?",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system."
   },
