@@ -31,6 +31,41 @@
         </b-col>
       </b-row>
     </page-section>
+    <page-section v-show="showDhcpNtpServers">
+      <b-button v-b-toggle.collapse-dhcp-ntp variant="link" class="mt-3">
+        <icon-chevron />
+        {{ $t('pageDateTime.viewDynamicNtp') }}
+        <info-tooltip :title="$t('pageDateTime.dhcpNtpInfoTooltip')" />
+      </b-button>
+
+      <b-collapse id="collapse-dhcp-ntp">
+        <b-row
+          v-for="(group, rowIndex) in chunkedDhcpNtp"
+          :key="rowIndex"
+          class="mt-3 ml-3"
+        >
+          <b-col
+            v-for="(item, colIndex) in group"
+            :key="colIndex"
+            sm="6"
+            lg="4"
+            xl="3"
+          >
+            <b-form-group
+              :label="`Server ${rowIndex * 3 + colIndex + 1}`"
+              :label-for="`${colIndex + 1}`"
+            >
+              <b-form-input
+                :id="`${colIndex + 1}`"
+                class="custom-form-group"
+                :disabled="true"
+                :placeholder="item"
+              />
+            </b-form-group>
+          </b-col>
+        </b-row>
+      </b-collapse>
+    </page-section>
     <page-section :section-title="$t('pageDateTime.configureSettings')">
       <b-row>
         <b-col md="8" xl="6">
@@ -148,7 +183,7 @@
             value="ntp"
             data-test-id="dateTime-radio-configureNTP"
           >
-            NTP
+            {{ $t('pageDateTime.staticNtp') }}
           </b-form-radio>
           <b-row class="mt-3 ml-3">
             <b-col sm="6" lg="4" xl="3">
@@ -237,9 +272,10 @@
 <script>
 import Alert from '@/components/Global/Alert';
 import IconCalendar from '@carbon/icons-vue/es/calendar/20';
+import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import PageTitle from '@/components/Global/PageTitle';
 import PageSection from '@/components/Global/PageSection';
-
+import InfoTooltip from '@/components/Global/InfoTooltip';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
 import LocalTimezoneLabelMixin from '@/components/Mixins/LocalTimezoneLabelMixin';
@@ -253,7 +289,14 @@ const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 export default {
   name: 'DateTime',
-  components: { Alert, IconCalendar, PageTitle, PageSection },
+  components: {
+    Alert,
+    IconCalendar,
+    IconChevron,
+    PageTitle,
+    PageSection,
+    InfoTooltip,
+  },
   mixins: [
     BVToastMixin,
     LoadingBarMixin,
@@ -276,6 +319,8 @@ export default {
         ntp: { firstAddress: '', secondAddress: '', thirdAddress: '' },
       },
       loading,
+      showDhcpNtpServers: false,
+      dhcpNtp: [],
     };
   },
   validations() {
@@ -313,7 +358,11 @@ export default {
     };
   },
   computed: {
-    ...mapState('dateTime', ['ntpServers', 'isNtpProtocolEnabled']),
+    ...mapState('dateTime', [
+      'ntpServers',
+      'isNtpProtocolEnabled',
+      'networkSuppliedServers',
+    ]),
     bmcTime() {
       return this.$store.getters['global/bmcTime'];
     },
@@ -343,6 +392,20 @@ export default {
     serverStatus() {
       return this.$store.getters['global/serverStatus'];
     },
+    networkSuppliedServers() {
+      this.$store.getters['dateTime/networkSuppliedServers'].map((server) =>
+        this.dhcpNtp.push(server)
+      );
+      return this.dhcpNtp;
+    },
+    chunkedDhcpNtp() {
+      const chunkSize = 3;
+      const result = [];
+      for (let i = 0; i < this.dhcpNtp.length; i += chunkSize) {
+        result.push(this.dhcpNtp.slice(i, i + chunkSize));
+      }
+      return result;
+    },
   },
   watch: {
     ntpServers() {
@@ -367,6 +430,7 @@ export default {
       this.$store.dispatch('dateTime/getNtpData'),
       this.$store.dispatch('userManagement/getAccountSettings'),
     ]).finally(() => {
+      this.showCollapse();
       this.setInitialNtpValues();
       this.endLoader();
     });
@@ -486,6 +550,23 @@ export default {
       );
       return new Date(utcDate);
     },
+    showCollapse() {
+      if (this.networkSuppliedServers.length == 0) {
+        this.showDhcpNtpServers = false;
+      } else {
+        this.showDhcpNtpServers = true;
+      }
+    },
   },
 };
 </script>
+<style lang="scss" scoped>
+.btn.collapsed {
+  svg {
+    transform: rotate(180deg);
+  }
+}
+.custom-form-group::placeholder {
+  color: black !important;
+}
+</style>

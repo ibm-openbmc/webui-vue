@@ -409,6 +409,9 @@
       "mfaMessage": "Changing date and time will affect MFA users."
     },
     "configureSettings": "Configure settings",
+    "viewDynamicNtp": "View Dynamic NTP servers",
+    "dhcpNtpInfoTooltip": "This section captures the DHCP supplied NTP server details",
+    "staticNtp":"Static NTP servers",
     "form": {
       "date": "Date",
       "manual": "Manual",
