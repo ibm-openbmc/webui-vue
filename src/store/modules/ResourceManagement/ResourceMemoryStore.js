@@ -129,7 +129,7 @@ const ResourceMemoryStore = {
           );
           if (dynamicIoDrawerDefaultCapacity.length > 0) {
             let dynamicIoDrawerAttachmentDefaultCapacity =
-              dynamicIoDrawerDefaultCapacity[0].DefaultValue;
+              dynamicIoDrawerDefaultCapacity[0].UpperBound;
             commit(
               'setDynamicIoDrawerDefaultCapacity',
               dynamicIoDrawerAttachmentDefaultCapacity
