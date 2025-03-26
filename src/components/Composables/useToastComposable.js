@@ -7,16 +7,14 @@ const useToastComposable = () => {
   const initToast = (title, body, statusPassed, timestamp, refreshAction) => {
     show?.({
       props: () => ({
-        // value: true,
-        interval: 60000,
+        //Success toast autoHideDelay - 10 seconds, Error/Info toast autohidedelay - 30 minutes
+        interval: statusPassed==="success" ? 10000 : 1800000, 
       }),
       component: h(Toast, {
         title: title,
         body: body,
         statusPassed: statusPassed,
         pos: 'top-right',
-        // autoHideDelay: 10000,
-        // autoHide: false,
         timestamp: timestamp,
         refreshAction: refreshAction,
       }),
