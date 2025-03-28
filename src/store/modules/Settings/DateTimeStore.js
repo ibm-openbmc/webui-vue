@@ -6,15 +6,19 @@ const DateTimeStore = {
   state: {
     ntpServers: [],
     isNtpProtocolEnabled: null,
+    networkSuppliedServers: [],
   },
   getters: {
     ntpServers: (state) => state.ntpServers,
     isNtpProtocolEnabled: (state) => state.isNtpProtocolEnabled,
+    networkSuppliedServers: (state) => state.networkSuppliedServers,
   },
   mutations: {
     setNtpServers: (state, ntpServers) => (state.ntpServers = ntpServers),
     setIsNtpProtocolEnabled: (state, isNtpProtocolEnabled) =>
       (state.isNtpProtocolEnabled = isNtpProtocolEnabled),
+    setNetworkSuppliedServers: (state, networkSuppliedServers) =>
+      (state.networkSuppliedServers = networkSuppliedServers),
   },
   actions: {
     async getNtpData({ commit }) {
@@ -23,8 +27,11 @@ const DateTimeStore = {
         .then((response) => {
           const ntpServers = response.data.NTP.NTPServers;
           const isNtpProtocolEnabled = response.data.NTP.ProtocolEnabled;
+          const networkSuppliedServers =
+            response?.data?.NTP?.NetworkSuppliedServers;
           commit('setNtpServers', ntpServers);
           commit('setIsNtpProtocolEnabled', isNtpProtocolEnabled);
+          commit('setNetworkSuppliedServers', networkSuppliedServers);
         })
         .catch((error) => {
           console.log(error);

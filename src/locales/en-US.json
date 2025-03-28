@@ -408,6 +408,9 @@
       "messagePowerOff": "The server must be powered off to change date and time to manual or NTP."
     },
     "configureSettings": "Configure settings",
+    "viewDynamicNtp": "View Dynamic NTP servers",
+    "dhcpNtpInfoTooltip": "This section captures the DHCP supplied NTP server details",
+    "staticNtp":"Static NTP servers",
     "form": {
       "date": "Date",
       "manual": "Manual",
