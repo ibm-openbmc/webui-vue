@@ -35,7 +35,10 @@
       <b-button v-b-toggle.collapse-dhcp-ntp variant="link" class="mt-3">
         <icon-chevron />
         {{ $t('pageDateTime.viewDynamicNtp') }}
-        <info-tooltip :title="$t('pageDateTime.dhcpNtpInfoTooltip')" />
+        <info-tooltip
+          :title="$t('pageDateTime.dhcpNtpInfoTooltip')"
+          class="infoToolTipClass"
+        />
       </b-button>
 
       <b-collapse id="collapse-dhcp-ntp">
@@ -565,6 +568,10 @@ export default {
   svg {
     transform: rotate(180deg);
   }
+}
+.infoToolTipClass {
+  margin-left: 2px !important;
+  margin-top: 2px !important;
 }
 .custom-form-group::placeholder {
   color: black !important;
