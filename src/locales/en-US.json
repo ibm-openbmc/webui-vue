@@ -1076,7 +1076,8 @@
     "updatePageSetup": "Update system memory page setup",
     "alert": {
       "heading": "Applying changes",
-      "message": "System has to be powered off. Changes made will take effect on next reboot.",
+      "message1": "System has to be powered off.",
+      "message2":  "Changes made will take effect on next reboot.",
       "serverMustBePoweredOffTo": "Server must be powered off to:",
       "updateActiveMemoryMirroring": "Update active memory mirror mode",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
