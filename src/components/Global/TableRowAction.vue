@@ -10,7 +10,7 @@
       <slot name="icon">
         {{ $t('global.action.export') }}
       </slot>
-      <span v-if="btnIconOnly" class="sr-only">{{ title }}</span>
+      <span v-if="btnIconOnly" class="visually-hidden">{{ title }}</span>
     </b-link>
     <b-link
       v-else-if="
@@ -22,7 +22,7 @@
       :title="title"
     >
       <slot name="icon" />
-      <span class="sr-only">
+      <span class="visually-hidden">
         {{ $t('global.action.download') }}
       </span>
     </b-link>
@@ -34,7 +34,7 @@
       :title="title"
     >
       <slot name="icon" />
-      <span class="sr-only">
+      <span class="visually-hidden">
         {{ $t('global.action.download') }}
       </span>
     </b-link>
@@ -49,7 +49,7 @@
       <slot name="icon">
         {{ title }}
       </slot>
-      <span v-if="btnIconOnly" class="sr-only">{{ title }}</span>
+      <span v-if="btnIconOnly" class="visually-hidden">{{ title }}</span>
     </b-button>
   </span>
 </template>

@@ -1,92 +1,94 @@
 <template>
-  <b-modal
+  <BModal
+    v-model="modal"
     id="modal-dns"
-    ref="modal"
     :title="$t('pageNetwork.table.addDnsAddress')"
+    :ok-title="$t('global.action.add')"
+    @ok="onOk"
     @hidden="resetForm"
   >
-    <b-form id="form-dns" @submit.prevent="handleSubmit">
-      <b-row>
-        <b-col sm="6">
-          <b-form-group
+    <BForm id="form-dns" @submit.prevent="handleSubmit">
+      <BRow>
+        <BCol sm="6">
+          <BFormGroup
             :label="$t('pageNetwork.modal.staticDns')"
             label-for="staticDns"
           >
-            <b-form-input
+            <BFormInput
               id="staticDns"
               v-model="form.staticDns"
               type="text"
-              :state="getValidationState($v.form.staticDns)"
-              @input="$v.form.staticDns.$touch()"
+              :state="getValidationState(v$.form.staticDns)"
+              @input="v$.form.staticDns.$touch()"
             />
-            <b-form-invalid-feedback role="alert">
-              <template v-if="!$v.form.staticDns.required">
+            <BFormInvalidFeedback role="alert">
+              <template v-if="v$.form.staticDns.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
-              <template v-if="!$v.form.staticDns.ipAddress">
+              <template v-if="v$.form.staticDns.ipAddress.$invalid">
                 {{ $t('global.form.invalidFormat') }}
               </template>
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </b-form>
-    <template #modal-footer="{ cancel }">
-      <b-button variant="secondary" @click="cancel()">
-        {{ $t('global.action.cancel') }}
-      </b-button>
-      <b-button form="form-dns" type="submit" variant="primary" @click="onOk">
-        {{ $t('global.action.add') }}
-      </b-button>
-    </template>
-  </b-modal>
+            </BFormInvalidFeedback>
+          </BFormGroup>
+        </BCol>
+      </BRow>
+    </BForm>
+  </BModal>
 </template>
 
-<script>
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import { ipAddress, required } from 'vuelidate/lib/validators';
+<script setup>
+import { ref, computed } from 'vue';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+import { required, ipAddress } from '@vuelidate/validators';
+import eventBus from '@/eventBus';
 
-export default {
-  mixins: [VuelidateMixin],
-  data() {
-    return {
-      form: {
-        staticDns: null,
-      },
-    };
-  },
-  validations() {
-    return {
-      form: {
-        staticDns: {
-          required,
-          ipAddress,
-        },
-      },
-    };
-  },
-  methods: {
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$emit('ok', [this.form.staticDns]);
-      this.closeModal();
-    },
-    closeModal() {
-      this.$nextTick(() => {
-        this.$refs.modal.hide();
-      });
-    },
-    resetForm() {
-      this.form.staticDns = null;
-      this.$v.$reset();
-      this.$emit('hidden');
-    },
-    onOk(bvModalEvt) {
-      // prevent modal close
-      bvModalEvt.preventDefault();
-      this.handleSubmit();
+const { getValidationState } = useVuelidateComposable();
+
+const emit = defineEmits(['ok', 'hidden']);
+
+const modal = ref(false);
+eventBus.on('modal-dns', () => {
+  modal.value = true;
+});
+
+const form = ref({
+  staticDns: null,
+});
+
+const rules = computed(() => ({
+  form: {
+    staticDns: {
+      required,
+      ipAddress,
     },
   },
+}));
+
+const v$ = useVuelidate(rules, {
+  form,
+});
+
+const handleSubmit = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('ok', [form.value.staticDns]);
+  closeModal();
+};
+
+const closeModal = () => {
+  modal.value = false;
+};
+
+const resetForm = () => {
+  form.value.staticDns = null;
+  v$.value.$reset();
+  emit('hidden');
+};
+
+const onOk = (bvModalEvt) => {
+  // prevent modal close
+  bvModalEvt.preventDefault();
+  handleSubmit();
 };
 </script>
