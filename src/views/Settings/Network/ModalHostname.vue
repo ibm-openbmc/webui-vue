@@ -1,123 +1,117 @@
 <template>
-  <b-modal
+  <BModal
+    v-model="modal"
     id="modal-hostname"
-    ref="modal"
     :title="$t('pageNetwork.modal.editHostnameTitle')"
+    :ok-title="$t('global.action.save')"
+    @ok="onOk"
     @hidden="resetForm"
   >
-    <b-form id="hostname-settings" @submit.prevent="handleSubmit">
-      <b-row>
-        <b-col>
+    <BForm id="hostname-settings" @submit.prevent="handleSubmit">
+      <BRow>
+        <BCol>
           <alert variant="warning" class="mb-4">
             <span>
               {{ $t('pageNetwork.hostnameAlert') }}
             </span>
           </alert>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col sm="6">
-          <b-form-group
-            :label="$t('pageNetwork.hostname')"
-            label-for="hostname"
-          >
-            <b-form-input
+        </BCol>
+      </BRow>
+      <BRow>
+        <BCol sm="6">
+          <BFormGroup :label="$t('pageNetwork.hostname')" label-for="hostname">
+            <BFormInput
               id="hostname"
               v-model="form.hostname"
               type="text"
-              :state="getValidationState($v.form.hostname)"
-              @input="$v.form.hostname.$touch()"
+              :state="getValidationState(v$.form.hostname)"
+              @input="v$.form.hostname.$touch()"
             />
-            <b-form-invalid-feedback role="alert">
-              <template v-if="!$v.form.hostname.required">
+            <BFormInvalidFeedback role="alert">
+              <template v-if="v$.form.hostname.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
-              <template v-if="!$v.form.hostname.validateHostname">
+              <template v-if="v$.form.hostname.validateHostname.$invalid">
                 {{ $t('global.form.lengthMustBeBetween', { min: 1, max: 64 }) }}
               </template>
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </b-form>
-    <template #modal-footer="{ cancel }">
-      <b-button variant="secondary" @click="cancel()">
-        {{ $t('global.action.cancel') }}
-      </b-button>
-      <b-button
-        form="hostname-settings"
-        type="submit"
-        variant="primary"
-        @click="onOk"
-      >
-        {{ $t('global.action.save') }}
-      </b-button>
-    </template>
-  </b-modal>
+            </BFormInvalidFeedback>
+          </BFormGroup>
+        </BCol>
+      </BRow>
+    </BForm>
+  </BModal>
 </template>
 
-<script>
-import Alert from '@/components/Global/Alert';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-import { required, helpers } from 'vuelidate/lib/validators';
+<script setup>
+import { ref, computed, watch } from 'vue';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+import { required, helpers } from '@vuelidate/validators';
+import eventBus from '@/eventBus';
+import Alert from '@/components/Global/Alert.vue';
 
-const validateHostname = helpers.regex('validateHostname', /^\S{0,64}$/);
+const validateHostname = helpers.regex(/^\S{0,64}$/);
 
-export default {
-  components: {
-    Alert,
+const { getValidationState } = useVuelidateComposable();
+
+const emit = defineEmits(['ok', 'hidden']);
+
+const modal = ref(false);
+eventBus.on('modal-hostname', () => {
+  modal.value = true;
+});
+
+const props = defineProps({
+  hostname: {
+    type: String,
+    default: '',
   },
-  mixins: [VuelidateMixin],
-  props: {
+});
+
+const form = ref({
+  hostname: '',
+});
+
+const rules = computed(() => ({
+  form: {
     hostname: {
-      type: String,
-      default: '',
+      required,
+      validateHostname,
     },
   },
-  data() {
-    return {
-      form: {
-        hostname: '',
-      },
-    };
-  },
-  watch: {
-    hostname() {
-      this.form.hostname = this.hostname;
-    },
-  },
-  validations() {
-    return {
-      form: {
-        hostname: {
-          required,
-          validateHostname,
-        },
-      },
-    };
-  },
-  methods: {
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$emit('ok', { HostName: this.form.hostname });
-      this.closeModal();
-    },
-    closeModal() {
-      this.$nextTick(() => {
-        this.$refs.modal.hide();
-      });
-    },
-    resetForm() {
-      this.form.hostname = this.hostname;
-      this.$v.$reset();
-      this.$emit('hidden');
-    },
-    onOk(bvModalEvt) {
-      // prevent modal close
-      bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-  },
+}));
+
+const v$ = useVuelidate(rules, {
+  form,
+});
+
+watch(
+  () => props.hostname,
+  () => {
+    form.value.hostname = props.hostname;
+  }
+);
+
+const handleSubmit = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('ok', { HostName: form.value.hostname });
+  closeModal();
+};
+
+const closeModal = () => {
+  modal.value = false;
+};
+
+const resetForm = () => {
+  form.value.hostname = props.hostname;
+  v$.value.$reset();
+  emit('hidden');
+};
+
+const onOk = (bvModalEvt) => {
+  // prevent modal close
+  bvModalEvt.preventDefault();
+  handleSubmit();
 };
 </script>
