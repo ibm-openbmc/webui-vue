@@ -4,6 +4,7 @@ import Axios from 'axios';
 //Exact match alias set to support
 //dotenv customizations.
 import { GlobalStore, AuthenticationStore } from '@/store';
+import { useRouter } from 'vue-router';
 
 Axios.defaults.headers.common['Accept'] = [
   'application/octet-stream',
@@ -11,6 +12,7 @@ Axios.defaults.headers.common['Accept'] = [
 ];
 Axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+const router = useRouter();
 const api = Axios.create({
   withCredentials: true,
 });
@@ -22,7 +24,7 @@ api.interceptors.response.use(undefined, (error) => {
   // TODO: Provide user with a notification and way to keep system active
   if (response.status == 401) {
     if (response.config.url != 'api/login') {
-      window.location = '/login';
+      router.replace('/login');
       // Commit logout to remove XSRF-TOKEN cookie
       authenticationStore.logoutRemove();
     }
