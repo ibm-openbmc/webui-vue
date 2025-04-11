@@ -79,7 +79,6 @@ export const AuthenticationStore = defineStore('authentication', {
       return api
         .post('/logout', { data: [] }, { headers: headers })
         .then(() => {
-          this.setConsoleWindow(false);
           this.logoutRemove();
         })
         .catch((error) => {

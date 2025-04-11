@@ -43,14 +43,14 @@
       </BFormGroup>
       <div class="login-form__section mb-3">
         <label for="password">{{ t('pageLogin.password') }}</label>
-        <input-password-toggle>
+        <input-password-toggle @updatePassView="updatePasswordType">
           <BFormInput
             id="password"
             v-model="userInfo.password"
             autocomplete="off"
             aria-describedby="login-error-alert password-required"
             :state="getValidationState(v$.password)"
-            type="password"
+            :type="passwordType"
             data-test-id="login-input-password"
             class="form-control-with-button"
             @input="v$.password.$touch()"
@@ -128,6 +128,7 @@ import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import ModalUploadCertificate from './ModalUploadCertificate.vue';
 
+const passwordType = ref('password');
 const router = useRouter();
 const globalStore = GlobalStore();
 const { getValidationState } = useVuelidateComposable();
@@ -212,7 +213,9 @@ const initModalUploadCertificate = () => {
 const onModalOk = ({ file }) => {
   addNewCertificate(file);
 }
-
+const updatePasswordType = (type) => {
+  passwordType.value = type;
+}
 const addNewCertificate = (file) => {
   const type = 'ServiceLogin Certificate';
   certificatesStore
