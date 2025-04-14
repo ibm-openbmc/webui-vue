@@ -17,6 +17,7 @@
           v-model="globalMfaValue"
           :disabled="isBusy"
           switch
+          data-test-id="global-mfa"
           class="mt-1"
           @change="updateGlobalMfa"
         >
@@ -116,6 +117,7 @@
               v-model="row.item.mfa"
               b-form-checkbox
               switch
+              :data-test-id="`${row.item.username}-mfa-bypass`"
               @change="updateMfaBypassVal(row.item)"
             >
             </b-form-checkbox>

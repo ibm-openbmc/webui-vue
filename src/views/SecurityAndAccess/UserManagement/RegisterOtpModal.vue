@@ -29,11 +29,15 @@
         </b-row>
         <b-row>
           <b-col>
-            <b-button v-b-toggle.collapse-2 class="m-1 buttonStyle">
+            <b-button
+              v-b-toggle.collapse-2
+              class="m-1 buttonStyle"
+              data-test-id="register-secret-key"
+            >
               <icon-chevron />
               {{ $t('pageUserManagement.modal.secretKey') }}</b-button
             >
-            <b-collapse id="collapse-2">
+            <b-collapse id="collapse-2" data-test-id="secret-key-value">
               {{ dataFormatter(secretKey) }}
             </b-collapse>
           </b-col>
@@ -85,6 +89,7 @@
                 <b-form-input
                   v-model="otpValue"
                   :state="getValidationState($v.otpValue)"
+                  data-test-id="register-totp-value"
                   @input="$v.otpValue.$touch()"
                 />
                 <b-form-invalid-feedback role="alert">
