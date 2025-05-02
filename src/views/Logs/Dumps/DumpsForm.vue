@@ -1,7 +1,7 @@
 <template>
   <div class="form-background p-3">
-    <b-form id="form-new-dump" novalidate @submit.prevent="handleSubmit">
-      <b-form-group
+    <BForm id="form-new-dump" novalidate @submit.prevent="handleSubmit">
+      <BFormGroup
         :label="$t('pageDumps.form.selectDumpType')"
         label-for="selectDumpType"
       >
@@ -9,25 +9,25 @@
           {{ $t('pageDumps.form.selectDumpType') }}
           <info-tooltip :title="$t('pageDumps.form.selectDumpTypeTooltip')" />
         </template>
-        <b-form-select
+        <BFormSelect
           id="selectDumpType"
           v-model="selectedDumpType"
           :options="updatedDumpTypeOptions"
-          :state="getValidationState($v.selectedDumpType)"
+          :state="getValidationState(v$.selectedDumpType)"
           @change="updateDumpInfo"
         >
           <template #first>
-            <b-form-select-option :value="''" disabled>
+            <BFormSelectOption :value="''" disabled>
               {{ $t('global.form.selectAnOption') }}
-            </b-form-select-option>
+            </BFormSelectOption>
           </template>
-        </b-form-select>
-        <b-form-invalid-feedback role="alert">
+        </BFormSelect>
+        <BFormInvalidFeedback role="alert">
           {{ $t('global.form.required') }}
-        </b-form-invalid-feedback>
-      </b-form-group>
+        </BFormInvalidFeedback>
+      </BFormGroup>
       <template v-if="selectedDumpType === 'resource'">
-        <b-form-group label-for="resourceSelector">
+        <BFormGroup label-for="resourceSelector">
           <template #label>
             {{ $t('pageDumps.form.resourceSelector') }}
             <info-tooltip
@@ -35,28 +35,27 @@
             />
           </template>
 
-          <b-form-input id="resourceSelector" v-model="resourceSelectorValue">
-          </b-form-input>
-        </b-form-group>
+          <BForm-input id="resourceSelector" v-model="resourceSelectorValue">
+          </BForm-input>
+        </BFormGroup>
         <template v-if="isServiceUser">
-          <b-form-group label-for="password">
+          <BFormGroup label-for="password">
             <template #label>
               {{ $t('pageDumps.form.password') }}
               <info-tooltip :title="$t('pageDumps.form.passwordTooltip')" />
             </template>
             <input-password-toggle>
-              <b-form-input
+              <BForm-input
                 id="password"
-                v-model="resourcePassword"
+                v-model="resourcePasswordValue"
                 autocomplete="off"
                 type="password"
               >
-              </b-form-input>
+              </BForm-input>
             </input-password-toggle>
-          </b-form-group>
+          </BFormGroup>
         </template>
       </template>
-
       <b-button
         :disabled="isButtonDisabled"
         variant="primary"
@@ -65,11 +64,13 @@
       >
         {{ $t('pageDumps.form.initiateDump') }}
       </b-button>
-    </b-form>
+    </BForm>
     <modal-confirmation
+      v-modal="modalConfirmation"
       @ok="createSystemDump($t(`pageDumps.form.${selectedDumpType}Dump`))"
     />
     <modal-partition-dump-confirmation
+      v-modal="modalPartition"
       :selected="selectedDumpType"
       @ok="
         selectedDumpType === 'partition'
@@ -80,230 +81,274 @@
   </div>
 </template>
 
-<script>
-import { required } from 'vuelidate/lib/validators';
-import ModalConfirmation from './DumpsModalConfirmation';
-import ModalPartitionDumpConfirmation from './DumpsPartitionModalConfirmation';
-import InfoTooltip from '@/components/Global/InfoTooltip';
-import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+<script setup>
+import i18n from '@/i18n';
+import { computed, ref, onBeforeMount, watch, nextTick } from 'vue';
+import { required } from '@vuelidate/validators';
+import ModalConfirmation from './DumpsModalConfirmation.vue';
+import ModalPartitionDumpConfirmation from './DumpsPartitionModalConfirmation.vue';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import useToast from '@/components/Composables/useToastComposable';
+import { useVuelidate } from '@vuelidate/core';
+import { GlobalStore, IBMiServiceFunctionsStore, BootSettingsStore, UserManagementStore, DumpsStore } from '@/store/index.js';
+import eventBus from '@/eventBus';
 
-export default {
-  components: {
-    InfoTooltip,
-    InputPasswordToggle,
-    ModalConfirmation,
-    ModalPartitionDumpConfirmation,
-  },
-  mixins: [BVToastMixin, VuelidateMixin],
-  data() {
-    return {
-      selectedDumpType: '',
-      resourceSelectorValue: null,
-      resourcePassword: null,
-      dumpTypeOptions: [],
-    };
-  },
-  computed: {
-    isOSRunning() {
-      return this.$store.getters['global/isOSRunning'];
-    },
-    availableFunctions() {
-      return this.$store.getters['ibmiServiceFunctions/serviceFunctions'];
-    },
-    isIBMi() {
+const { getValidationState } = useVuelidateComposable();
+const { successToast, errorToast, infoToast } = useToast();
+
+const global = GlobalStore();
+const ibmiServiceFunctions = IBMiServiceFunctionsStore();
+const serverBootSettings = BootSettingsStore();
+const userManagement = UserManagementStore();
+const dumps = DumpsStore()
+
+const selectedDumpType =  ref('');
+const resourceSelectorValue = ref(null);
+const resourcePasswordValue = ref(null);
+const dumpTypeOptions = ref([]);
+const taskProgress = ref('');
+const modalConfirmation = ref('false')
+const modalPartition = ref('false')
+
+onBeforeMount(() => {
+    checkForUserData();
+    checkIfInPhypStandby();
+    Promise.all([
+      global.getHmcManaged(),
+      global.getBootProgress(),
+      ibmiServiceFunctions.getAvailableServiceFunctions(),
+      serverBootSettings.getBiosAttributes,
+    ]);
+  });
+
+const rules = computed(() => ({
+      selectedDumpType: { required },
+    }
+  ));
+const v$ = useVuelidate(rules, { selectedDumpType });
+
+const isOSRunning = computed(() => {
+      return global.isOSRunningGetter;
+    });
+const availableFunctions = computed(() => {
+      return ibmiServiceFunctions.serviceFunctionsGetter;
+    });
+const isIBMi = computed(() => {
       if (
-        this.attributeKeys?.pvm_default_os_type === 'Default' ||
-        this.attributeKeys?.pvm_default_os_type === 'IBM I'
+        attributeKeys.value?.pvm_default_os_type === 'Default' ||
+        attributeKeys.value?.pvm_default_os_type === 'IBM I'
       ) {
         return true;
       } else {
         return false;
       }
-    },
-    attributeKeys() {
-      return this.$store.getters['serverBootSettings/biosAttributes'];
-    },
-    currentUser() {
-      return this.$store.getters['global/currentUser'];
-    },
-    isServiceUser() {
-      return this.$store.getters['global/isServiceUser'];
-    },
-    isInPhypStandby() {
-      return this.$store.getters['global/isInPhypStandby'];
-    },
-    updatedDumpTypeOptions() {
-      return this.setDumpTypeOptions();
-    },
-    hmcInfo() {
-      return this.$store?.getters['global/hmcManaged'];
-    },
-    isButtonDisabled() {
+    });
+const attributeKeys = computed(() => {
+      return serverBootSettings.getBiosAttributes;
+    });
+const currentUser = computed(() => {
+      return global.currentUserGetter;
+    });
+const isServiceUser = computed(() => {
+      return global.isServiceUser;
+    });
+const isInPhypStandby = computed(() => {
+      return global.isInPhypStandby;
+    });
+const updatedDumpTypeOptions = computed(() => {
+      return setDumpTypeOptions();
+    });
+const hmcInfo = computed(() => {
+      return global.hmcManagedGetter;
+    });
+const isButtonDisabled = computed(() => {
       if (
-        !this.isOSRunning &&
-        (this.selectedDumpType === 'partition' ||
-          this.selectedDumpType === 'retryPartition')
+        !isOSRunning.value &&
+        (selectedDumpType.value === 'partition' ||
+          selectedDumpType.value === 'retryPartition')
       ) {
         return true;
       } else if (
-        this.isOSRunning &&
-        (this.selectedDumpType === 'partition' ||
-          this.selectedDumpType === 'retryPartition')
+        isOSRunning.value &&
+        (selectedDumpType.value === 'partition' ||
+          selectedDumpType.value === 'retryPartition')
       ) {
-        if (this.selectedDumpType === 'partition') {
-          return this.isFunctionDisabled(22);
+        if (selectedDumpType.value === 'partition') {
+          return isFunctionDisabled(22);
         } else {
-          return this.isFunctionDisabled(34);
+          return isFunctionDisabled(34);
         }
       } else {
         return false;
       }
-    },
-  },
-  created() {
-    this.checkForUserData();
-    this.checkIfInPhypStandby();
-    Promise.all([
-      this.$store.dispatch('global/getHmcManaged'),
-      this.$store.dispatch('global/getBootProgress'),
-      this.$store.dispatch('ibmiServiceFunctions/getAvailableServiceFunctions'),
-      this.$store.dispatch('serverBootSettings/getBiosAttributes'),
-    ]);
-  },
-  validations() {
-    return {
-      selectedDumpType: { required },
-    };
-  },
-  methods: {
-    checkForUserData() {
-      if (!this.currentUser) {
-        this.$store.dispatch('userManagement/getUsers');
-        this.$store.dispatch('global/getCurrentUser');
+    });
+    
+const checkTask = async() => {
+      //getting list of all tasks and getting the api to the most recent task
+      const taskObj = await dumps.getTask();
+      taskProgress.value = taskObj.data.Members[taskObj.data.Members.length - 1];
+      const taskLink = taskProgress.value['@odata.id'];
+      //going to the most recent task
+      const currentTask = async () => {
+        return await global.getCurrentTask(taskLink);
+      };
+      const currentTaskProgress = (checkCounter = 0) => {
+        checkCounter++;
+        //if 'TaskState' is in running state for more than 20 mins, error message will be displayed to the user
+        if (checkCounter > 40) {
+          return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
+        }
+        Promise.all([currentTask()]).then((res) => {
+          //monitor the value of parameter 'TaskState'
+          const taskState = res[0]['TaskState'];
+          //if TaskState is completed
+          if (taskState == 'Completed') {
+            successToast(i18n.global.t('pageDumps.toast.resourceDumpSuccess'));
+            //if TaskState is running/in progress
+          } else if (taskState == 'Running') {
+            //reload the api after every 30 seconds till 20 mins to check if the 'TaskState' is changed to Completed or Cancelled
+            setTimeout(() => {
+              currentTaskProgress(checkCounter);
+            }, 30000);
+            //if TaskState is Cancelled
+          } else if (taskState == 'Cancelled') {
+            errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
+          }
+        });
+      };
+      //trigger funtion to check 'TaskState'
+      if (taskLink) {
+        currentTaskProgress(0);
+      } else {
+        return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
       }
-    },
-    checkIfInPhypStandby(checkCounter = 0) {
+    };
+const checkForUserData = () => {
+      if (!currentUser.value) {
+        userManagement.getUsers();
+        global.getCurrentUser();
+      }
+    };
+const checkIfInPhypStandby = (checkCounter = 0) => {
       checkCounter++;
       if (checkCounter > 15) return;
-      if (!this.isInPhypStandby) {
-        this.$store.dispatch('global/getBootProgress');
+      if (!isInPhypStandby.value) {
+        global.getBootProgress();
         setTimeout(() => {
-          this.checkIfInPhypStandby(checkCounter);
+          checkIfInPhypStandby(checkCounter);
         }, 60000);
       }
-    },
-    updateDumpInfo() {
-      this.$emit('updateDumpInfo', this.selectedDumpType);
-    },
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
+    };
+const updateDumpInfo = () => {
+  nextTick(() => {
+    eventBus.emit('updateDumpInfo', selectedDumpType.value);
+  });
+    };
+const handleSubmit = () => {
+      v$.value.$touch();
+      // if (v$.value.$invalid) return;
 
-      const dumpType = this.$t(`pageDumps.form.${this.selectedDumpType}Dump`);
+      const dumpType = i18n.global.t(`pageDumps.form.${selectedDumpType.value}Dump`);
 
-      if (this.selectedDumpType === 'system') {
+      if (selectedDumpType.value === 'system') {
         // System dump initiation
-        this.showConfirmationModal();
+        showConfirmationModal();
       }
       // Resource dump initiation
-      else if (this.selectedDumpType === 'resource') {
-        this.$store
-          .dispatch('dumps/createResourceDump', {
-            dumpType: dumpType,
-            resourceSelector: this.resourceSelectorValue,
+      else if (selectedDumpType.value === 'resource') {
+        dumps.createResourceDump({
+            resourceSelector: resourceSelectorValue.value,
             // If not logged as service, '' must be used
-            resourcePassword: this.resourcePassword || '',
+            resourcePassword: resourcePasswordValue.value || '',
           })
-          .then(() =>
-            this.infoToast(this.$t('pageDumps.toast.successStartDump'), {
-              title: this.$t('pageDumps.toast.successStartResourceDumpTitle'),
+          .then(() => {
+            infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
+              title: i18n.global.t('pageDumps.toast.successStartResourceDumpTitle'),
               timestamp: true,
-            }),
-          )
-          .catch(({ message }) => this.errorToast(message));
+            });
+            checkTask();
+          })
+          .catch(({ message }) => errorToast(message));
       }
       // BMC dump initiation
-      else if (this.selectedDumpType === 'bmc') {
-        this.$store
-          .dispatch('dumps/createBmcDump', dumpType)
+      else if (selectedDumpType.value === 'bmc') {
+        dumps.createBmcDump(dumpType)
           .then(() =>
-            this.infoToast(this.$t('pageDumps.toast.successStartDump'), {
-              title: this.$t('pageDumps.toast.successStartBmcDumpTitle'),
+            infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
+              title: i18n.global.t('pageDumps.toast.successStartBmcDumpTitle'),
               timestamp: true,
-            }),
+            })
           )
-          .catch(({ message }) => this.errorToast(message));
-      } else if (this.selectedDumpType === 'partition') {
+          .catch(({ message }) => errorToast(message));
+      } else if (selectedDumpType.value === 'partition') {
         // Partition dump initiation
-        this.showPartitionDumpConfirmationModal();
-      } else if (this.selectedDumpType === 'retryPartition') {
+        showPartitionDumpConfirmationModal();
+      } else if (selectedDumpType.value === 'retryPartition') {
         // Retry partition dump
-        this.showPartitionDumpConfirmationModal();
+        showPartitionDumpConfirmationModal();
       }
-    },
-    setDumpTypeOptions() {
+    };
+const setDumpTypeOptions = () => {
       let minimumOptions = [
-        { value: 'bmc', text: this.$t('pageDumps.form.bmcDump') },
-        { value: 'resource', text: this.$t('pageDumps.form.resourceDump') },
-        { value: 'system', text: this.$t('pageDumps.form.systemDump') },
+        { value: 'bmc', text: i18n.global.t('pageDumps.form.bmcDump') },
+        { value: 'resource', text: i18n.global.t('pageDumps.form.resourceDump') },
+        { value: 'system', text: i18n.global.t('pageDumps.form.systemDump') },
       ];
-      this.dumpTypeOptions = [];
-      if (this.hmcInfo === 'Enabled') {
-        return (this.dumpTypeOptions = minimumOptions);
-      } else if (this.isIBMi) {
-        return (this.dumpTypeOptions = [
+      dumpTypeOptions.value = [];
+      if (hmcInfo.value === 'Enabled') {
+        return (dumpTypeOptions.value = minimumOptions);
+      } else if (isIBMi.value) {
+        return (dumpTypeOptions.value = [
           ...minimumOptions,
           {
             value: 'partition',
-            text: this.$t('pageDumps.form.partitionDump'),
+            text: i18n.global.t('pageDumps.form.partitionDump'),
           },
           {
             value: 'retryPartition',
-            text: this.$t('pageDumps.form.retryPartitionDump'),
+            text: i18n.global.t('pageDumps.form.retryPartitionDump'),
           },
         ]);
       } else {
-        return (this.dumpTypeOptions = minimumOptions);
+        return (dumpTypeOptions.value = minimumOptions);
       }
-    },
-    exceuteFunction(value) {
-      this.$store
-        .dispatch('ibmiServiceFunctions/executeServiceFunction', value)
+    };
+const exceuteFunction = (value) => {
+      ibmiServiceFunctions.executeServiceFunction(value)
         .then((message) => {
-          this.infoToast(
-            this.$t('pageDumps.toast.successSavePartitionDumpInfo'),
+          infoToast(
+            i18n.global.t('pageDumps.toast.successSavePartitionDumpInfo')
           );
-          this.successToast(message);
+          successToast(message);
         })
-        .catch(({ message }) => this.errorToast(message));
-    },
-    isFunctionDisabled(value) {
+        .catch(({ message }) => errorToast(message));
+    };
+const isFunctionDisabled = (value) => {
       // This condition is to check if the function is available to execute
-      if (this.availableFunctions.includes(value)) {
+      if (availableFunctions.value.includes(value)) {
         return false;
       } else {
         return true;
       }
-    },
-    showConfirmationModal() {
-      this.$bvModal.show('modal-confirmation');
-    },
-    showPartitionDumpConfirmationModal() {
-      this.$bvModal.show('modal-partition-dump-confirmation');
-    },
-    createSystemDump(dumpType) {
-      this.$store
-        .dispatch('dumps/createSystemDump', dumpType)
+    };
+const showConfirmationModal = () => {
+      modalConfirmation=True
+      // this.$bvModal.show('modal-confirmation');
+    };
+const showPartitionDumpConfirmationModal = () => {
+      modalPartition=True
+      // this.$bvModal.show('modal-partition-dump-confirmation');
+    };
+const createSystemDump = (dumpType) => {
+      dumps.createSystemDump(dumpType)
         .then(() =>
-          this.infoToast(this.$t('pageDumps.toast.successStartDump'), {
-            title: this.$t('pageDumps.toast.successStartSystemDumpTitle'),
+          infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
+            title: i18n.global.t('pageDumps.toast.successStartSystemDumpTitle'),
             timestamp: true,
-          }),
+          })
         )
-        .catch(({ message }) => this.errorToast(message));
-    },
-  },
-};
+        .catch(({ message }) => errorToast(message));
+    };
 </script>

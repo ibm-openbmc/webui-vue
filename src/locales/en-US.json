@@ -33,7 +33,7 @@
       "tooltip": "Tooltip"
     },
     "calendar": {
-      "dateFormat": "YYYY-MM-DD",
+      "dateFormat": "DD/MM/YYYY",
       "selectDate": "Select date",
       "useCursorKeysToNavigateCalendarDates": "Use cursor keys to navigate calendar dates"
     },
@@ -408,6 +408,9 @@
       "messagePowerOff": "The server must be powered off to change date and time to manual or NTP."
     },
     "configureSettings": "Configure settings",
+    "viewDynamicNtp": "View Dynamic NTP servers",
+    "dhcpNtpInfoTooltip": "This section captures the DHCP supplied NTP server details",
+    "staticNtp":"Static NTP servers",
     "form": {
       "date": "Date",
       "manual": "Manual",
@@ -465,12 +468,17 @@
     "processorCores": "Processor cores",
     "totalCores": "Total cores",
     "alert": {
-      "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off."
+      "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off.",
+      "warning": "If memory event occurred at runtime and server has not yet been rebooted then the memory resource is still in use. Once server is rebooted, the memory resource will become deconfigured and not in use."
     },
     "toast": {
       "deleteReqFailed": "The delete request failed because the resource requested cannot be deleted.",
       "errorDisablingSetting": "Error disabling setting",
-      "errorEnablingSetting": "Error enabling setting"
+      "errorEnablingSetting": "Error enabling setting",
+      "errorConfiguringProcessorCore": "Error Configuring Processor Core",
+      "errorConfiguringDIMM": "Error Configuring Memory DIMM",
+      "errorDeconfiguringProcessorCore": "Error Deconfiguring Processor Core",
+      "errorDeconfiguringDIMM" : "Error Deconfiguring Memory DIMM"
     },
     "table": {
       "deconfigurationType": "Deconfiguration Type",
@@ -625,6 +633,8 @@
       "errorStartResourceDumpInvalidSelector": "Error initiating dump. Invalid resource selector.",
       "errorStartResourceDumpInvalidPassword": "Error initiating dump. Invalid password.",
       "errorStartSystemDump": "Error starting new System dump.",
+      "resourceDumpSuccess": "Resource Dump created successfully.",
+      "resourceDumpFailed": "Resource Dump creation failed.",
       "successDeleteDump": "Successfully deleted %{count} dump. | Successfully deleted %{count} dumps.",
       "successStartBmcDumpTitle": "BMC dump started",
       "successStartDump": "The dump will take some time to complete.",
@@ -823,12 +833,10 @@
     "concurrentMaintenancePowerOffDesc": "Use this function to power off the power domain that includes resources that are currently in a disk unit attention state.",
     "concurrentMaintenancePowerOn": "Concurrent Maintenance Power On Domain (Function 69)",
     "concurrentMaintenancePowerOnDesc": "Use this function to power on the power domain that was powered off by using function 68.",
-    "disableRemoteService": "Disable Remote Service (Function 65)",
-    "disableRemoteServiceDesc": "Use this function to deactivate a remote service session.",
+    "consoleServiceFunction": "Console Service Function (Function 65)",
+    "consoleServiceFunctionDesc": "Use this function to initiate console recovery (IBM i 7.5, or later).",
     "diskUnitIOP": "Disk Unit IOP Reset/Reload (Function 67)",
     "diskUnitIOPDesc": "Use this function to initiate an I/O processor dump and reset/reload of an IOP that controls resources that are currently in a disk unit attention state.",
-    "enableRemoteService": "Enable Remote Service (Function 66)",
-    "enableRemoteServiceDesc": "Use this function to activate a remote service session.",
     "execute": "Execute",
     "iopControlStorageDump": "IOP Control Storage Dump (Function 70)",
     "iopControlStorageDumpDesc": "Use this function to initiate an I/O processor dump and reset/reload of the IOP that was designated to control the load source device when the logical partition was activated.",
@@ -1153,7 +1161,8 @@
     "updateDynamicIoDrawerAttachment": "Update dynamic I/O drawer attachment",
     "alert": {
       "heading": "Applying changes",
-      "message": "System has to be powered off. Changes made will take effect on next reboot.",
+      "message1": "System has to be powered off.",
+      "message2":  "Changes made will take effect on next reboot.",
       "serverMustBePoweredOffTo": "Server must be powered off to:",
       "updateActiveMemoryMirroring": "Update active memory mirror mode",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1379,7 +1388,7 @@
       "successIpmiNetworkPolicyUpdate": "Successfully updated %{policy}. The BMC normally takes about 30 seconds to change the state.",
       "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
     },
-    "acfUploadEnablementConfirmText": "Caution: Enabling this setting allows unauthenticated users to upload Access Control Files (ACFs) without logging in and without pressing Function 74 on the Operator Panel. Do you want to proceed?",
+    "acfUploadEnablementConfirmText": "Caution: Enabling this setting removes the physical system access requirement from the process to upload an Access Control File (ACF).  This would allow anyone who is authorized to request an ACF and has network access to ASMI to gain access to the admin account.  Do you want to proceed?",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system."
   },
@@ -1780,7 +1789,7 @@
           "invalidVlanTagId": "VLAN ID must be in range %{min} to %{max}",
           "invalidIsciTargetPort": "The port value should be a positive integer between %{min} and %{max}",
           "chapNameRequired": "CHAP name is required when CHAP secret is specified",
-          "chapSecretRequired": "CHAP secret is required when CHAP name is specified",
+          "chapSecretRequired": "CHAP secret is required when CHAP secret is specified",
           "invalidFieldLength": "%{field} should not exceed %{max} characters",
           "invalidChapSecretLength": "CHAP secret length must be between %{min} and %{max} characters"
         }

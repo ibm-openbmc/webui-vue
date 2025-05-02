@@ -42,6 +42,8 @@ import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/Servic
 import ServiceLogin from '@/views/Operations/ServiceLoginConsoles';
 import ProfileSettings from '@/views/ProfileSettings';
 import Network from '@/views/Settings/Network';
+import Dumps from '@/views/Logs/Dumps';
+import DateTime from '@/views/Settings/DateTime/DateTime.vue'
 
 const roles = {
   administrator: 'Administrator',
@@ -201,6 +203,14 @@ export const routes = [
         },
       },
       {
+        path: '/logs/dumps',
+        name: 'dumps',
+        component: Dumps,
+        meta: {
+          title: i18n.global.t('appPageTitle.dumps'),
+        },
+      },
+      {
         path: '/logs/post-code-logs',
         name: 'post-code-logs',
         component: PostCodeLogs,
@@ -272,6 +282,14 @@ export const routes = [
         component: PowerRestorePolicy,
         meta: {
           title: i18n.global.t('appPageTitle.powerRestorePolicy'),
+        },
+      },
+      {
+        path: '/settings/date-time',
+        name: 'date-time',
+        component: DateTime,
+        meta: {
+          title: i18n.global.t('appPageTitle.dateTime'),
         },
       },
       {

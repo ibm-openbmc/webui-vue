@@ -1,5 +1,6 @@
 <template>
-  <b-modal
+  <BModal
+    v-model="modal"
     id="modal-confirmation"
     ref="modal"
     :title="$t('pageDumps.modal.initiateSystemDump')"
@@ -17,59 +18,63 @@
       <status-icon status="danger" />
       {{ $t('pageDumps.modal.initiateSystemDumpMessage3') }}
     </p>
-    <b-form-checkbox v-model="confirmed" @input="$v.confirmed.$touch()">
+    <BFormCheckbox v-model="confirmed" @input="v$.confirmed.$touch()">
       {{ $t('pageDumps.modal.initiateSystemDumpMessage4') }}
-    </b-form-checkbox>
-    <b-form-invalid-feedback
-      :state="getValidationState($v.confirmed)"
+    </BFormCheckbox>
+    <BFormInvalidFeedback
+      :state="getValidationState(v$.confirmed)"
       role="alert"
     >
       {{ $t('global.form.required') }}
-    </b-form-invalid-feedback>
+    </BFormInvalidFeedback>
     <template #modal-footer="{ cancel }">
-      <b-button variant="secondary" @click="cancel()">
+      <BButton variant="secondary" @click="cancel()">
         {{ $t('global.action.cancel') }}
-      </b-button>
-      <b-button variant="danger" @click="handleSubmit">
+      </BButton>
+      <BButton variant="danger" @click="handleSubmit">
         {{ $t('pageDumps.form.initiateDump') }}
-      </b-button>
+      </BButton>
     </template>
-  </b-modal>
+  </BModal>
 </template>
 
-<script>
-import StatusIcon from '@/components/Global/StatusIcon';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+<script setup>
+import { ref, computed, nextTick } from 'vue';
+import StatusIcon from '@/components/Global/StatusIcon.vue';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+import eventBus from '@/eventBus';
 
-export default {
-  components: { StatusIcon },
-  mixins: [VuelidateMixin],
-  data() {
-    return {
-      confirmed: false,
-    };
-  },
-  validations: {
+const { getValidationState } = useVuelidateComposable();
+
+const confirmed = ref(false);
+const modal = ref(false);
+
+const mustBeTrue = (value) => {
+  return value === true;
+}
+
+const rules = computed(() => ({
     confirmed: {
-      mustBeTrue: (value) => value === true,
+      mustBeTrue
     },
-  },
-  methods: {
-    closeModal() {
-      this.$nextTick(() => {
-        this.$refs.modal.hide();
+  }));
+const v$ = useVuelidate(rules, { confirmed });
+
+const closeModal = () => {
+      nextTick(() => {
+        modal.value=false
       });
-    },
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$emit('ok');
-      this.closeModal();
-    },
-    resetForm() {
-      this.confirmed = false;
-      this.$v.$reset();
-    },
-  },
+    };
+const handleSubmit = () => {
+      v$.value.$touch();
+      if ( v$.value.$invalid) return;
+      eventBus.emit('ok');
+      closeModal();
+    };
+const resetForm = () => {
+      confirmed.value = false;
+      v$.value.$reset();
 };
+
 </script>

@@ -11,6 +11,9 @@ export const DumpsStore = defineStore('dumps', {
     allDumpsGetter: (state) => state.allDumps,
   },
   actions: {
+    async getTask() {
+      return await api.get('/redfish/v1/TaskService/Tasks');
+    },
     async getBmcDumpEntries() {
       return api
         .get('/redfish/v1/')
@@ -45,6 +48,14 @@ export const DumpsStore = defineStore('dumps', {
                   id: dump.Id,
                   location: dump['@odata.id'],
                   size: dump.AdditionalDataSizeBytes,
+                  actions: [
+                    {
+                      value: 'download',
+                    },
+                    {
+                      value: 'delete',
+                    },
+                  ],
                 }));
         })
         .catch((error) => console.log(error));
@@ -59,19 +70,27 @@ export const DumpsStore = defineStore('dumps', {
         )
         .catch((error) => {
           console.log(error);
-          const messageId =
+          const errorMsg =
             error.response.data.error?.['@Message.ExtendedInfo'][0].MessageId;
-
-          const message = REGEX_MAPPINGS.resourceInStandby.test(messageId)
-            ? i18n.global.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
-                dump: dumpType,
-              })
-            : i18n.global.t('pageDumps.toast.errorStartBmcDump');
-
-          throw new Error(message);
+          switch (true) {
+            case REGEX_MAPPINGS.resourceInUse.test(errorMsg):
+              throw new Error(
+                i18n.global.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
+                  dump: dumpType,
+                })
+              );
+            case REGEX_MAPPINGS.resourceInStandby.test(errorMsg):
+              throw new Error(
+                i18n.global.t('pageDumps.toast.errorStartDumpResourceInStandby', {
+                  dump: dumpType,
+                })
+              );
+            default:
+              throw new Error(i18n.global.t('pageDumps.toast.errorStartBmcDump'));
+          }
         });
     },
-    async createResourceDump(_, { resourceSelector, resourcePassword }) {
+    async createResourceDump({ resourceSelector, resourcePassword }) {
       const delay = (time) =>
         new Promise((resolve) => setTimeout(resolve, time));
 

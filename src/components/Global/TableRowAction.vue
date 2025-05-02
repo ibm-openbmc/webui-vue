@@ -29,12 +29,12 @@
     <b-link
       v-else-if="value === 'download' && downloadLocation !== ''"
       class="align-bottom btn-icon-only py-0 btn-link"
-      :download="exportName"
-      :href="downloadLocation"
+      :download="`${exportName}.txt`"
+      :href="`/api/${downloadLocation}`"
       :title="title"
     >
       <slot name="icon" />
-      <span class="visually-hidden">
+      <span class="visually-hidden">3999
         {{ $t('global.action.download') }}
       </span>
     </b-link>
@@ -54,12 +54,11 @@
   </span>
 </template>
 
-<script>
+<script setup>
+import { defineProps, computed } from 'vue';
 import { omit } from 'lodash';
 
-export default {
-  name: 'TableRowAction',
-  props: {
+const props = defineProps({
     value: {
       type: String,
       required: true,
@@ -96,17 +95,15 @@ export default {
       type: Boolean,
       default: true,
     },
-  },
-  computed: {
-    dataForExport() {
-      return JSON.stringify(omit(this.rowData, 'actions'));
-    },
-    download() {
-      return `${this.exportName}.json`;
-    },
-    href() {
-      return `data:text/json;charset=utf-8,${this.dataForExport}`;
-    },
-  },
-};
+  });
+
+const dataForExport = computed(() => {
+      return JSON.stringify(omit(props.rowData, 'actions'));
+    });
+const download = computed(() => {
+      return `${props.exportName}.json`;
+    });
+const href = computed(() => {
+      return `data:text/json;charset=utf-8,${dataForExport.value}`;
+});
 </script>

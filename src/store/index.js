@@ -35,7 +35,8 @@ import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore.js';
 import LdapStore from './modules/SecurityAndAccess/LdapStore.js';
 import DumpsStore from './modules/Logs/DumpsStore.js';
 import FieldCoreOverrideStore from './modules/ResourceManagement/FieldCoreOverrideStore.js';
-import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore.js'
+import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore.js';
+import DateTimeStore from './modules/Settings/DateTimeStore';
 // ... (export use other stores)
 export {
   EventLogStore,
@@ -75,4 +76,5 @@ export {
   LdapStore,
   DumpsStore,
   FieldCoreOverrideStore,
+  DateTimeStore,
 };
