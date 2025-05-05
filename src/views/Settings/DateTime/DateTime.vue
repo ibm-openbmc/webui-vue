@@ -6,8 +6,8 @@
         <alert variant="info" class="mb-4">
           <span>
             {{ $t('pageDateTime.alert.message') }}
-            <b-link to="/profile-settings">
-              {{ $t('pageDateTime.alert.link') }}</b-link
+            <BLink to="/profile-settings">
+              {{ $t('pageDateTime.alert.link') }}</BLink
             >
           </span>
         </alert>
@@ -61,7 +61,7 @@
               <BFormInput
                 :id="`${colIndex + 1}`"
                 class="custom-form-group"
-                :disabled="true"
+                disabled="true"
                 :placeholder="item"
               />
             </BFormGroup>
@@ -110,35 +110,27 @@
                   <BFormInput
                     id="input-manual-date"
                     v-model="form.manual.date"
-                    :state="getValidationState($v.form.manual.date)"
+                    type="date"
+                    :state="getValidationState(v$.form.manual.date)"
                     :disabled="ntpOptionSelected"
                     data-test-id="dateTime-input-manualDate"
                     class="form-control-with-button"
-                    @blur="$v.form.manual.date.$touch()"
+                    @blur="v$.form.manual.date.$touch()"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!$v.form.manual.date.pattern">
+                    <div v-if="!v$.form.manual.date.pattern">
                       {{ $t('global.form.invalidFormat') }}
                     </div>
-                    <div v-if="!$v.form.manual.date.required">
+                    <div v-if="!v$.form.manual.date.required">
                       {{ $t('global.form.fieldRequired') }}
                     </div>
                   </BFormInvalidFeedback>
-                  <BFormGroup
+                  <!-- <BFormGroup
                     :label="$t('global.calendar.selectDate')"
                     label-for="input-date"
                     class="mr-3 my-0 w-100"
                   >
-                    <BInputGroup>
-                      <BFormInput
-                        id="input-date"
-                        v-model="form.manual.date"
-                        type="date"
-                        :disabled="ntpOptionSelected"
-                        class="form-control-with-button mb-3 mb-md-0 carbon-date"
-                      />
-                    </BInputGroup>
-                  </BFormGroup>
+                  </BFormGroup> -->
                   <!-- <b-form-datepicker
                     v-model="form.manual.date"
                     class="btn-datepicker btn-icon-only"
@@ -174,16 +166,16 @@
                   <BFormInput
                     id="input-manual-time"
                     v-model="form.manual.time"
-                    :state="getValidationState($v.form.manual.time)"
+                    :state="getValidationState(v$.form.manual.time)"
                     :disabled="ntpOptionSelected"
                     data-test-id="dateTime-input-manualTime"
-                    @blur="$v.form.manual.time.$touch()"
+                    @blur="v$.form.manual.time.$touch()"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!$v.form.manual.time.pattern">
+                    <div v-if="!v$.form.manual.time.pattern">
                       {{ $t('global.form.invalidFormat') }}
                     </div>
-                    <div v-if="!$v.form.manual.time.required">
+                    <div v-if="!v$.form.manual.time.required">
                       {{ $t('global.form.fieldRequired') }}
                     </div>
                   </BFormInvalidFeedback>
@@ -208,13 +200,13 @@
                   <BFormInput
                     id="input-ntp-1"
                     v-model="form.ntp.firstAddress"
-                    :state="getValidationState($v.form.ntp.firstAddress)"
+                    :state="getValidationState(v$.form.ntp.firstAddress)"
                     :disabled="manualOptionSelected"
                     data-test-id="dateTime-input-ntpServer1"
-                    @blur="$v.form.ntp.firstAddress.$touch()"
+                    @blur="v$.form.ntp.firstAddress.$touch()"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!$v.form.ntp.firstAddress.required">
+                    <div v-if="!v$.form.ntp.firstAddress.required">
                       {{ $t('global.form.fieldRequired') }}
                     </div>
                   </BFormInvalidFeedback>
@@ -230,12 +222,12 @@
                   <BFormInput
                     id="input-ntp-2"
                     v-model="form.ntp.secondAddress"
-                    :state="getValidationState($v.form.ntp.secondAddress)"
+                    :state="getValidationState(v$.form.ntp.secondAddress)"
                     :disabled="manualOptionSelected"
                     data-test-id="dateTime-input-ntpServer2"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!$v.form.ntp.secondAddress.isSameAsFirstAddress">
+                    <div v-if="!v$.form.ntp.secondAddress.isSameAsFirstAddress">
                       {{ $t('pageDateTime.form.validators.serverExists') }}
                     </div>
                   </BFormInvalidFeedback>
@@ -251,15 +243,15 @@
                   <BFormInput
                     id="input-ntp-3"
                     v-model="form.ntp.thirdAddress"
-                    :state="getValidationState($v.form.ntp.thirdAddress)"
+                    :state="getValidationState(v$.form.ntp.thirdAddress)"
                     :disabled="manualOptionSelected"
                     data-test-id="dateTime-input-ntpServer3"
                   />
                   <BFormInvalidFeedback role="alert">
                     <div
                       v-if="
-                        !$v.form.ntp.thirdAddress.isSameAsFirstAddress ||
-                        !$v.form.ntp.thirdAddress.isSameAsSecondAddress
+                        !v$.form.ntp.thirdAddress.isSameAsFirstAddress ||
+                        !v$.form.ntp.thirdAddress.isSameAsSecondAddress
                       "
                     >
                       {{ $t('pageDateTime.form.validators.serverExists') }}
@@ -283,22 +275,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, onMounted, watch, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
-import PageTitle from '@/components/Global/PageTitle';
-import PageSection from '@/components/Global/PageSection';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import PageSection from '@/components/Global/PageSection.vue';
 
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useLocalTimezoneLabelComposable from '@/components/Composables/useLocalTimezoneLabelComposable'
 import LocalTimezoneLabelMixin from '@/components/Mixins/LocalTimezoneLabelMixin';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
-import InfoTooltip from '@/components/Global/InfoTooltip';
-
-import { requiredIf, helpers, sameAs, not } from 'vuelidate/lib/validators';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import { DateTimeStore, GlobalStore } from '@/store';
+import eventBus from '@/eventBus';
+import { required, helpers, requiredIf, sameAs, not } from '@vuelidate/validators';
+import { formatDate, formatTime } from '@/components/utilities/dateFilter';
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -306,13 +301,18 @@ onBeforeRouteLeave(() => {
 
 const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+const manualDate = ref('');
 
-const Toast = useToastComposable();
+const toast = useToastComposable();
 const { startLoader, hideLoader, endLoader } = useLoadingBar();
 const { getValidationState } = useVuelidateComposable();
+const { localOffset } = useLocalTimezoneLabelComposable();
+
+const dateTimeStore = DateTimeStore();
+const globalStore = GlobalStore();
 
 
-const locale = ref(this.$store.getters['global/languagePreference']);
+const locale = ref(globalStore.languagePreferenceGetter);
 const form = ref({
   configurationSelected: '',
     manual: {
@@ -325,162 +325,150 @@ const loading = ref('');
 const showDhcpNtpServers = ref(false);
 const dhcpNtp = ref([]);
 
-  // validations() {
-  //   return {
-  //     form: {
-  //       manual: {
-  //         date: {
-  //           required: requiredIf(function () {
-  //             return this.form.configurationSelected === 'manual';
-  //           }),
-  //           pattern: helpers.regex('pattern', isoDateRegex),
-  //         },
-  //         time: {
-  //           required: requiredIf(function () {
-  //             return this.form.configurationSelected === 'manual';
-  //           }),
-  //           pattern: helpers.regex('pattern', isoTimeRegex),
-  //         },
-  //       },
-  //       ntp: {
-  //         firstAddress: {
-  //           required: requiredIf(function () {
-  //             return this.form.configurationSelected === 'ntp';
-  //           }),
-  //         },
-  //         secondAddress: {
-  //           isSameAsFirstAddress: not(sameAs('firstAddress')),
-  //         },
-  //         thirdAddress: {
-  //           isSameAsFirstAddress: not(sameAs('firstAddress')),
-  //           isSameAsSecondAddress: not(sameAs('secondAddress')),
-  //         },
-  //       },
-  //     },
-  //   };
-  // }
+const rules = computed(() => ({
+  form: {
+    manual: {
+      date: {
+        required: requiredIf(function () {
+          return form.value.configurationSelected === 'manual';
+        }),
+        pattern: helpers.regex('pattern', isoDateRegex),
+      },
+      time: {
+        required: requiredIf(function () {
+          return form.value.configurationSelected === 'manual';
+        }),
+        pattern: helpers.regex('pattern', isoTimeRegex),
+      },
+    },
+    ntp: {
+      firstAddress: {
+        required: requiredIf(function () {
+          return form.value.configurationSelected === 'ntp';
+        }),
+      },
+      secondAddress: {
+        isSameAsFirstAddress: not(sameAs('firstAddress')),
+      },
+      thirdAddress: {
+        isSameAsFirstAddress: not(sameAs('firstAddress')),
+        isSameAsSecondAddress: not(sameAs('secondAddress')),
+      },
+    }
+  }
+}));
+const v$ = useVuelidate(rules, { form });
 
-
-  // computed: {
-  //   ...mapState('dateTime', [
-  //     'ntpServers',
-  //     'isNtpProtocolEnabled',
-  //     'networkSuppliedServers',
-  //   ]),
-const dateTime = computed(() => {
-  return ;
-});
 const ntpServers = computed(() => {
-  return ;
+  return dateTimeStore.ntpServersGetter;
 });
 const isNtpProtocolEnabled = computed(() => {
-  return ;
+  return dateTimeStore.isNtpProtocolEnabledGetter;
 });
 const networkSuppliedServers = computed(() => {
-    this.$store.getters['dateTime/networkSuppliedServers'].map((server) =>
-    this.dhcpNtp.push(server)
+    dateTimeStore.networkSuppliedServersGetter.map((server) =>
+    dhcpNtp.value.push(server)
   );
-  return this.dhcpNtp;
+  return dhcpNtp.value;
 });
 const bmcTime = computed(() => {
-  return this.$store.getters['global/bmcTime'];
+  return globalStore.bmcTimeGetter;
 });
 const ntpOptionSelected = computed(() => {
-  return this.form.configurationSelected === 'ntp';
+  return form.value.configurationSelected === 'ntp';
 });
 const manualOptionSelected = computed(() => {
-  return this.form.configurationSelected === 'manual';
+  return form.value.configurationSelected === 'manual';
 });
 const isUtcDisplay = computed(() => {
-  return this.$store.getters['global/isUtcDisplay'];
+  return globalStore.isUtcDisplayGetter;
 });
 const timezone = computed(() => {
-  if (this.isUtcDisplay) {
+  if (isUtcDisplay) {
     return 'UTC';
   }
-  return this.localOffset();
+  return localOffset();
 });
 const serverStatus = computed(() => {
-  return this.$store.getters['global/serverStatus'];
+  return globalStore.serverStatusGetter;
 });
 const chunkedDhcpNtp = computed(() => {
   const chunkSize = 3;
   const result = [];
-  for (let i = 0; i < this.dhcpNtp.length; i += chunkSize) {
-    result.push(this.dhcpNtp.slice(i, i + chunkSize));
+  for (let i = 0; i < dhcpNtp.value.length; i += chunkSize) {
+    result.push(dhcpNtp.value.slice(i, i + chunkSize));
   }
   return result;
 });
 
   watch(ntpServers, () => {
-    this.setInitialNtpValues();
+    setInitialNtpValues();
   })
   watch(manualDate, () => {
-    this.emitChange();
+    emitChange();
   })
   watch(bmcTime, () => {
-      this.form.manual.date = this.$options.filters.formatDate(
-        this.$store.getters['global/bmcTime']
+      form.value.manual.date = formatDate(
+        globalStore.bmcTimeGetter
       );
-      this.form.manual.time = this.$options.filters
-        .formatTime(this.$store.getters['global/bmcTime'])
+      form.value.manual.time = formatTime(globalStore.bmcTimeGetter)
         .slice(0, 5);    
   })
   
   onMounted(() => {
-    this.startLoader();
+    startLoader();
     Promise.all([
-      this.$store.dispatch('global/getBmcTime'),
-      this.$store.dispatch('dateTime/getNtpData'),
+      globalStore.getBmcTime(),
+      dateTimeStore.getNtpData(),
     ]).finally(() => {
-      this.showCollapse();
-      this.setInitialNtpValues();
-      this.endLoader();
+      showCollapse();
+      setInitialNtpValues();
+      endLoader();
     });
   })
     const isServerOff = () => {
-      return this.serverStatus === 'off' ? true : false;
+      return serverStatus === 'off' ? true : false;
     }
     const emitChange = () => {
-      if (this.$v.$invalid) return;
-      this.$v.$reset(); //reset to re-validate on blur
-      this.$emit('change', {
-        manualDate: this.manualDate ? new Date(this.manualDate) : null,
+      if (v$.value.$invalid) return;
+      v$.value.$reset(); //reset to re-validate on blur
+      eventBus.emit('change', {
+        manualDate: manualDate ? new Date(manualDate) : null,
       });
     }
     const setInitialNtpValues = () => {
-      this.form.configurationSelected = this.isNtpProtocolEnabled
+      form.value.configurationSelected = isNtpProtocolEnabled
         ? 'ntp'
         : 'manual';
-      this.setNtpValues();
+      setNtpValues();
     }
     const setNtpValues = () => {
       [
-        this.form.ntp.firstAddress = '',
-        this.form.ntp.secondAddress = '',
-        this.form.ntp.thirdAddress = '',
-      ] = [this.ntpServers[0], this.ntpServers[1], this.ntpServers[2]];
+        form.value.ntp.firstAddress = '',
+        form.value.ntp.secondAddress = '',
+        form.value.ntp.thirdAddress = '',
+      ] = [ntpServers.value[0], ntpServers.value[1], ntpServers.value[2]];
     }
     const submitForm = () => {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.startLoader();
+      v$.value.$touch();
+      if (v$.value.$invalid) return;
+      startLoader();
 
       let dateTimeForm = {};
-      let isNTPEnabled = this.form.configurationSelected === 'ntp';
+      let isNTPEnabled = form.value.configurationSelected === 'ntp';
 
       if (!isNTPEnabled) {
-        const isUtcDisplay = this.$store.getters['global/isUtcDisplay'];
+        const isUtcDisplay = globalStore.isUtcDisplayGetter;
         let date;
 
         dateTimeForm.ntpProtocolEnabled = false;
 
         if (isUtcDisplay) {
           // Create UTC Date
-          date = this.getUtcDate(this.form.manual.date, this.form.manual.time);
+          date = getUtcDate(form.value.manual.date, form.value.manual.time);
         } else {
           // Create local Date
-          date = new Date(`${this.form.manual.date} ${this.form.manual.time}`);
+          date = new Date(`${form.value.manual.date} ${form.value.manual.time}`);
         }
 
         dateTimeForm.updatedDateTime = date.toISOString();
@@ -488,9 +476,9 @@ const chunkedDhcpNtp = computed(() => {
         dateTimeForm.ntpProtocolEnabled = true;
 
         const ntpArray = [
-          this.form.ntp.firstAddress,
-          this.form.ntp.secondAddress,
-          this.form.ntp.thirdAddress,
+          form.value.ntp.firstAddress,
+          form.value.ntp.secondAddress,
+          form.value.ntp.thirdAddress,
         ];
 
         // Filter the ntpArray to remove empty strings,
@@ -499,41 +487,40 @@ const chunkedDhcpNtp = computed(() => {
 
         dateTimeForm.ntpServersArray = [...ntpArrayFiltered];
 
-        [this.ntpServers[0], this.ntpServers[1], this.ntpServers[2]] = [
+        [ntpServers.value[0], ntpServers.value[1], ntpServers.value[2]] = [
           ...dateTimeForm.ntpServersArray,
         ];
-        this.setNtpValues();
+        setNtpValues();
       }
 
-      this.$store
-        .dispatch('dateTime/updateDateTime', dateTimeForm)
+      dateTimeStore.updateDateTime(dateTimeForm)
         .then((success) => {
-          this.successToast(success);
+          toast.successToast(success);
           if (!isNTPEnabled) return;
           // Shift address up if second address is empty
           // to avoid refreshing after delay when updating NTP
-          if (!this.form.ntp.secondAddress && this.form.ntp.thirdAddres) {
-            this.form.ntp.secondAddress = this.form.ntp.thirdAddres;
-            this.form.ntp.thirdAddress = '';
+          if (!form.value.ntp.secondAddress && form.value.ntp.thirdAddres) {
+            form.value.ntp.secondAddress = form.value.ntp.thirdAddres;
+            form.value.ntp.thirdAddress = '';
           }
         })
         .then(() => {
           if (!isNTPEnabled) {
-            this.$store.dispatch('global/getBmcTime');
-            this.$v.form.$reset();
-            this.endLoader();
+            globalStore.getBmcTime();
+            v$.value.form.$reset();
+            endLoader();
           } else {
-            this.startLoader();
+            startLoader();
             setTimeout(() => {
-              this.$store.dispatch('global/getBmcTime');
-              this.endLoader();
+              globalStore.getBmcTime();
+              endLoader();
             }, 20000);
           }
         })
         .catch(({ message }) => {
-          this.errorToast(message);
-          this.$v.form.$reset();
-          this.endLoader();
+          toast.errorToast(message);
+          v$.value.form.$reset();
+          endLoader();
         });
     }
     const getUtcDate = (date, time) => {
@@ -553,10 +540,10 @@ const chunkedDhcpNtp = computed(() => {
       return new Date(utcDate);
     }
     const showCollapse = () => {
-      if (this.networkSuppliedServers.length == 0) {
-        this.showDhcpNtpServers = false;
+      if (networkSuppliedServers.length == 0) {
+        showDhcpNtpServers.value = false;
       } else {
-        this.showDhcpNtpServers = true;
+        showDhcpNtpServers.value = true;
       }
     }
 </script>

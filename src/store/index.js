@@ -2,6 +2,7 @@
 import EventLogStore from './modules/Logs/EventLogStore';
 import GlobalStore from './modules/GlobalStore';
 import AuthenticationStore from './modules/Authentication/AuthenticationStore';
+import DateTimeStore from './modules/Settings/DateTimeStore'
 import FirmwareStore from './modules/Operations/FirmwareStore';
 import SystemStore from './modules/HardwareStatus/SystemStore';
 import NetworkStore from './modules/Settings/NetworkStore';
@@ -41,6 +42,7 @@ export {
   EventLogStore,
   GlobalStore,
   AuthenticationStore,
+  DateTimeStore,
   FirmwareStore,
   SystemStore,
   NetworkStore,
