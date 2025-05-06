@@ -1,8 +1,7 @@
 <template>
   <pre>
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
+9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
 
 Terms and Conditions for Other Internal Licensed Code
 Base Licenses and Attributions
@@ -22,9 +21,8 @@ Preamble and List of Other Internal Licensed Code
 
 TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE
 
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
+9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
 
 This file details terms and conditions applicable to
 code included in the products listed above.
@@ -36,235 +34,250 @@ terms of the associated license agreements provided or
 referenced in this file and not the terms of the IBM
 license agreement.
 
-The following are Other Internal Licensed Code:
+The Program includes the following licensed Separately as Other Internal Licensed Code:
 
-audit
-avahi
-base-files
-base-passwd
-bash
-biosconfig-manager
-bmcweb
-boost
-busybox
-bzip2
-ca-certificates
-cjson
-clear-once
-cracklib
-croserver
-curl
-dbus
-dbus-broker
-dbus-perms
-dbus-sensors
-debug-trigger
-dropbear
-e2fsprogs
-ecmd-pdbg
-entity-manager
-expat
-fan-watchdog
-ffdc
-fmt
-fuse
-gcc-runtime
-gdb
-gdbm
-glib-2.0
-glibc
-gpioplus
-gptfdisk
-guard
-gzip
-hostboot-pel-parsers
-i2c-tools
-ibm-acf
-ibmtpm2tss
-ipl
-jsmn
-jsnbd
-json-c
-kmod
-krb5
-libarchive
-libcap
-libcap-ng
-libdaemon
-libekb
-libestr
-libevdev
-libfastjson
-libffi
-libgcc
-libgpiod
-libidn2
-libmctp
-libnl
-libnsl2
-libnss-mdns
-libpam
-libpcap
-libpcre2
-libpldm
-libpwquality
-libseccomp
-libtinyxml2
-libtirpc
-libunistring
-liburing
-libxcrypt
-libyaml
-license-manager
-linux-aspeed
-logrotate
-lrzsz
-lz4
-lzo
-mboxd
-mux-workarounds
-nbd
-ncurses
-netbase
-net-snmp
-npm-axios
-npm-bootstrap
-npm-bootstrap-vue
-npm-carbon
-npm-core-js
-npm-date-fns
-npm-date-fns-tz
-npm-js-cookie
-npm-json-bigint
-npm-lodash
-npm-n64
-npm-novnc
-npm-vue
-npm-vue-i18n
-npm-vuelidate
-npm-vue-router
-npm-vuex
-npm-xterm
-npm-xterm-addon-attach
-npm-xterm-addon-fit
-nss-pam-ldapd
-obmc-console
-obmc-host-failure-reboots
-obmc-libobmc-intf
-obmc-phosphor-buttons
-obmc-phosphor-power
-openldap
-openpower-debug-collector
-openpower-fru-vpd
-openpower-host-ipmi-flash
-openpower-hw-diags
-openpower-hw-diags-pel-parser-data
-openpower-hw-isolation
-openpower-ipmi-oem
-openpower-libhei
-openpower-occ-control
-openpower-pel-parsers
-openpower-software-manager
-openssh
-openssl
-op-fsi
-opkg
-opkg-arch-config
-opkg-utils
-op-proc-control
-op-proc-control-systemd-links
-os-release
-p9-host-start
-packagegroup-base
-packagegroup-core-boot
-packagegroup-core-ssh-dropbear
-packagegroup-obmc-apps
-packagegroup-obmc-ipmid-providers
-packagegroup-op-apps
-pam-ipmi
-panel
-parted
-pdata
-pdbg
-phal-devtree
-phosphor-boot-indicator
-phosphor-certificate-manager
-phosphor-dbus-interfaces
-phosphor-dbus-monitor
-phosphor-debug-collector
-phosphor-fan
-phosphor-gpio-monitor
-phosphor-health-monitor
-phosphor-hostfw-image
-phosphor-host-postd
-phosphor-hwmon
-phosphor-image-signing
-phosphor-inventory-manager
-phosphor-ipmi-bt
-phosphor-ipmi-config
-phosphor-ipmi-fru
-phosphor-ipmi-host
-phosphor-ipmi-net
-phosphor-led-manager
-phosphor-led-sysfs
-phosphor-logging
-phosphor-mmc-init
-phosphor-network
-phosphor-objmgr
-phosphor-post-code-manager
-phosphor-power
-phosphor-power-systemd-links-regulators
-phosphor-settings-manager
-phosphor-skeleton-control-power
-phosphor-snmp
-phosphor-software-manager
-phosphor-state-manager
-phosphor-systemd-policy
-phosphor-time-manager
-phosphor-user-manager
-phosphor-virtual-sensor
-phosphor-watchdog
-platform-fru-detect
-pldm
-popt
-powervm-handler
-python3
-python3-sbe-log-parsers
-readline
-rng-tools
-rsync
-rsyslog
-run-postinsts
-sdbusplus
-sdeventplus
-shadow
-shadow-securetty
-slpd-lite
-sqlite3
-squashfs-tools
-srvcfg-manager
-stdplus
-strace
-sudo
-systemd
-systemd-compat-units
-systemd-conf
-systemd-serialgetty
-tcp-wrappers
-telemetry
-trace-enable
-u-boot-aspeed-sdk
-u-boot-fw-utils-aspeed-sdk
-udev-aspeed-mtd-partitions
-udev-aspeed-vuart
-update-rc.d
-util-linux
-util-linux-libuuid
-volatile-binds
-webui-vue
-xz
-zlib
-zstd
+<table class="notice-table">
+<tbody>
+<tr><td><p>Package</p></td><td><p>Licenses</p></td></tr>
+<tr><td><p>audit</p></td><td><p>GPL-2.0-or-later, LGPL-2.0-or-later</p></td></tr>
+<tr><td><p>avahi</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>base-files</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>base-passwd</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>bash</p></td><td><p>GPL-3.0-or-later</p></td></tr>
+<tr><td><p>biosconfig-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>bmcweb</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>boost</p></td><td><p>BSL-1.0, MIT, Python-2.0</p></td></tr>
+<tr><td><p>busybox</p></td><td><p>GPL-2.0-only, bzip2-1.0.4</p></td></tr>
+<tr><td><p>bzip2</p></td><td><p>bzip2-1.0.6</p></td></tr>
+<tr><td><p>ca-certificates</p></td><td><p>GPL-2.0-or-later, MPL-2.0</p></td></tr>
+<tr><td><p>cjson</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>clear-once</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>cracklib</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>croserver</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>curl</p></td><td><p>curl</p></td></tr>
+<tr><td><p>dbus</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>dbus-broker</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>dbus-perms</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>dbus-sensors</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>debug-trigger</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>e2fsprogs</p></td><td><p>GPL-2.0-only, LGPL-2.0-only, BSD-3-Clause, MIT</p></td></tr>
+<tr><td><p>ecmd-pdbg</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>entity-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>expat</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>fan-watchdog</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>ffdc</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>fmt</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>fuse</p></td><td><p>GPL-2.0-only, LGPL-2.0-only</p></td></tr>
+<tr><td><p>gcc-runtime</p></td><td><p>GPL-3.0-with-GCC-exception</p></td></tr>
+<tr><td><p>gdb</p></td><td><p>GPL-2.0-only, GPL-3.0-only, LGPL-2.0-only, LGPL-3.0-only</p></td></tr>
+<tr><td><p>gdbm</p></td><td><p>GPL-3.0-only</p></td></tr>
+<tr><td><p>glib-2.0</p></td><td><p>LGPL-2.1-or-later, BSD-3-Clause, PD</p></td></tr>
+<tr><td><p>glibc</p></td><td><p>GPL-2.0-only, LGPL-2.1-only</p></td></tr>
+<tr><td><p>google-authenticator-libpam</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>gpioplus</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>gptfdisk</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>guard</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>hostboot-pel-parsers</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>i2c-tools</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>ibm-acf</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>ibm-private-data</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>ibm-ups</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>iniparser</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>ipl</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>jsmn</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>jsnbd</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>json-c</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>kmod</p></td><td><p>GPL-2.0-or-later, LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>krb5</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>libarchive</p></td><td><p>BSD-2-Clause</p></td></tr>
+<tr><td><p>libbsd</p></td><td><p>BSD-3-Clause, ISC, PD</p></td></tr>
+<tr><td><p>libcap</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>libcap-ng</p></td><td><p>GPL-2.0-or-later, LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>libdaemon</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>libedit</p></td><td><p>BSD-3-Clause</p></td></tr>
+<tr><td><p>libekb</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>libestr</p></td><td><p>LGPL-2.1-only</p></td></tr>
+<tr><td><p>libevdev</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>libevent</p></td><td><p>BSD-3-Clause, MIT</p></td></tr>
+<tr><td><p>libfastjson</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>libffi</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>libgcc</p></td><td><p>GPL-3.0-with-GCC-exception</p></td></tr>
+<tr><td><p>libgpiod</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>libidn2</p></td><td><p>GPL-2.0-or-later, Unicode-DFS-2016</p></td></tr>
+<tr><td><p>libmctp</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>libmd</p></td><td><p>BSD-3-Clause, BSD-2-Clause</p></td></tr>
+<tr><td><p>libnl</p></td><td><p>LGPL-2.1-only</p></td></tr>
+<tr><td><p>libnsl2</p></td><td><p>LGPL-2.1-only</p></td></tr>
+<tr><td><p>libnss-mdns</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>libpam</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>libpcap</p></td><td><p>BSD-3-Clause</p></td></tr>
+<tr><td><p>libpcre2</p></td><td><p>BSD-3-Clause</p></td></tr>
+<tr><td><p>libpldm</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>libpwquality</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>libseccomp</p></td><td><p>LGPL-2.1-only</p></td></tr>
+<tr><td><p>libtinyxml2</p></td><td><p>Zlib</p></td></tr>
+<tr><td><p>libtirpc</p></td><td><p>BSD-3-Clause</p></td></tr>
+<tr><td><p>libunistring</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>liburing</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>libxcrypt</p></td><td><p>LGPL-2.1-only</p></td></tr>
+<tr><td><p>libyaml</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>license-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>linux-aspeed</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>lldpd</p></td><td><p>ISC</p></td></tr>
+<tr><td><p>logrotate</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>lrzsz</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>lz4</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>lzo</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>mboxd</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>mctp</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>mux-workarounds</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>nbd</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>ncurses</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>netbase</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>net-snmp</p></td><td><p>BSD-3-Clause, MIT</p></td></tr>
+<tr><td><p>npm-axios</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-bootstrap</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-bootstrap-vue</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-carbon</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-core-js</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-date-fns</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-date-fns-tz</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-js-cookie</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-json-bigint</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-lodash</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-n64</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-novnc</p></td><td><p>MPL-2.0</p></td></tr>
+<tr><td><p>npm-qrcode</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-totp-generator</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vue</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vue-i18n</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vuelidate</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vue-router</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vuex</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-xterm</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-xterm-addon-attach</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-xterm-addon-fit</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>nss-pam-ldapd</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>obmc-console</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>obmc-host-failure-reboots</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>obmc-libobmc-intf</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>obmc-phosphor-buttons</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>obmc-phosphor-power</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openldap</p></td><td><p>OpenLDAP</p></td></tr>
+<tr><td><p>openpower-debug-collector</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-fru-vpd</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-host-ipmi-flash</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-hw-diags</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-hw-diags-pel-parser-data</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-hw-isolation</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-ipmi-oem</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-libhei</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-occ-control</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-pel-parsers</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openpower-software-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>openssh</p></td><td><p>BSD-2-Clause, BSD-3-Clause, ISC, MIT</p></td></tr>
+<tr><td><p>openssl</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-fsi</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>opkg</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>opkg-arch-config</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>opkg-utils</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>op-proc-control</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-proc-control-systemd-links</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>os-release</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>p9-host-start</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>packagegroup-base</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>packagegroup-core-boot</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>packagegroup-core-ssh-openssh</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>packagegroup-obmc-apps</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>packagegroup-obmc-ipmid-providers</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>packagegroup-op-apps</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>pam-ipmi</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>panel</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>parted</p></td><td><p>GPL-3.0-or-later</p></td></tr>
+<tr><td><p>pdata</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>pdbg</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phal-devtree</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-boot-indicator</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-certificate-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-dbus-interfaces</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-dbus-monitor</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-debug-collector</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-ecc</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-fan</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-gpio-monitor</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-health-monitor</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-hostfw-image</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-host-postd</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-hwmon</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-image-signing</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-inventory-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-ipmi-bt</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-ipmi-config</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-ipmi-fru</p></td><td><p>GPL-3.0-or-later</p></td></tr>
+<tr><td><p>phosphor-ipmi-host</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-ipmi-net</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-led-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-led-sysfs</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-logging</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-mmc-init</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-network</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-objmgr</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-post-code-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-power</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-power-systemd-links-regulators</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-psu-code-images</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-psu-software-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-sel-logger</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-settings-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-skeleton-control-power</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-snmp</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-software-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-state-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-systemd-policy</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-time-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-user-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-virtual-sensor</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-watchdog</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>platform-fru-detect</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>pldm</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>popt</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>powervm-handler</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>python3</p></td><td><p>PSF-2.0</p></td></tr>
+<tr><td><p>python3-sbe-log-parsers</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>readline</p></td><td><p>GPL-3.0-or-later</p></td></tr>
+<tr><td><p>rsync</p></td><td><p>GPL-3.0-or-later</p></td></tr>
+<tr><td><p>rsyslog</p></td><td><p>GPL-3.0-only, LGPL-3.0-only, Apache-2.0</p></td></tr>
+<tr><td><p>run-postinsts</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>sdbusplus</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>sdeventplus</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>shadow</p></td><td><p>BSD-3-Clause</p></td></tr>
+<tr><td><p>shadow-securetty</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>slpd-lite</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>sqlite3</p></td><td><p>PD</p></td></tr>
+<tr><td><p>squashfs-tools</p></td><td><p>GPL-2.0-only</p></td></tr>
+<tr><td><p>srvcfg-manager</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>stdplus</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>strace</p></td><td><p>LGPL-2.1-or-later, GPL-2.0-or-later</p></td></tr>
+<tr><td><p>sudo</p></td><td><p>ISC, BSD-3-Clause, BSD-2-Clause, Zlib</p></td></tr>
+<tr><td><p>systemd</p></td><td><p>GPL-2.0-only, LGPL-2.1-or-later</p></td></tr>
+<tr><td><p>systemd-conf</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>systemd-serialgetty</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>tcp-wrappers</p></td><td><p>BSD-1-Clause</p></td></tr>
+<tr><td><p>telemetry</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>trace-enable</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>u-boot-aspeed-sdk</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>u-boot-fw-utils-aspeed-sdk</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>udev-aspeed-mtd-partitions</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>udev-aspeed-vuart</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>util-linux</p></td><td><p>GPL-1.0-or-later, GPL-2.0-or-later, LGPL-2.1-or-later, BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, MIT</p></td></tr>
+<tr><td><p>util-linux-libuuid</p></td><td><p>BSD-3-Clause</p></td></tr>
+<tr><td><p>volatile-binds</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>webui-vue</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>xz</p></td><td><p>GPL-2.0-or-later, PD</p></td></tr>
+<tr><td><p>zlib</p></td><td><p>Zlib</p></td></tr>
+<tr><td><p>zstd</p></td><td><p>GPL-2.0-only</p></td></tr>
+</tbody>
+</table>
 
 ===========================================================================
 Other Internal Licensed Code information
@@ -273,110 +286,6 @@ Other Internal Licensed Code information
 @@@@@@@@@@@@
 ===========================================================================
 Apache-2.0: Apache License Version 2.0
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Apache License Version 2.0
-
-biosconfig-manager
-bmcweb
-clear-once
-croserver
-dbus-broker
-dbus-perms
-dbus-sensors
-debug-trigger
-ecmd-pdbg
-entity-manager
-fan-watchdog
-ffdc
-gpioplus
-guard
-hostboot-pel-parsers
-ibm-acf
-ipl
-jsnbd
-libekb
-libmctp
-libpldm
-license-manager
-mboxd
-mux-workarounds
-obmc-console
-obmc-host-failure-reboots
-obmc-libobmc-intf
-obmc-phosphor-buttons
-obmc-phosphor-power
-openpower-debug-collector
-openpower-fru-vpd
-openpower-host-ipmi-flash
-openpower-hw-diags
-openpower-hw-diags-pel-parser-data
-openpower-hw-isolation
-openpower-ipmi-oem
-openpower-libhei
-openpower-occ-control
-openpower-pel-parsers
-openpower-software-manager
-openssl
-op-fsi
-op-proc-control
-op-proc-control-systemd-links
-p9-host-start
-pam-ipmi
-panel
-pdata
-pdbg
-phal-devtree
-phosphor-boot-indicator
-phosphor-certificate-manager
-phosphor-dbus-interfaces
-phosphor-dbus-monitor
-phosphor-debug-collector
-phosphor-fan
-phosphor-gpio-monitor
-phosphor-health-monitor
-phosphor-hostfw-image
-phosphor-host-postd
-phosphor-hwmon
-phosphor-image-signing
-phosphor-inventory-manager
-phosphor-ipmi-bt
-phosphor-ipmi-config
-phosphor-ipmi-host
-phosphor-ipmi-net
-phosphor-led-manager
-phosphor-led-sysfs
-phosphor-logging
-phosphor-mmc-init
-phosphor-network
-phosphor-objmgr
-phosphor-post-code-manager
-phosphor-power
-phosphor-power-systemd-links-regulators
-phosphor-settings-manager
-phosphor-skeleton-control-power
-phosphor-snmp
-phosphor-software-manager
-phosphor-state-manager
-phosphor-systemd-policy
-phosphor-time-manager
-phosphor-user-manager
-phosphor-virtual-sensor
-phosphor-watchdog
-platform-fru-detect
-pldm
-powervm-handler
-python3-sbe-log-parsers
-rsyslog
-sdbusplus
-sdeventplus
-slpd-lite
-srvcfg-manager
-stdplus
-telemetry
-trace-enable
-udev-aspeed-mtd-partitions
-udev-aspeed-vuart
-webui-vue
 
 ---------------------------------------------------------------------------
 Start of Apache License Version 2.0
@@ -594,17 +503,13 @@ End of Apache License Version 2.0
 @@@@@@@@@@@@
 ===========================================================================
 BSD-1-Clause: BSD license
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license
-
-tcp-wrappers
 
 ---------------------------------------------------------------------------
 Start of BSD license
 ---------------------------------------------------------------------------
 
 
-Copyright (c) &lt;YEAR&gt;, &lt;OWNER&gt;
+Copyright (c)&lt;YEAR&gt;, &lt;OWNER&gt;
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -620,15 +525,6 @@ End of BSD license
 @@@@@@@@@@@@
 ===========================================================================
 BSD-2-Clause: BSD license 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license 2
-
-dropbear
-ibmtpm2tss
-libarchive
-openssh
-sudo
-util-linux
 
 ---------------------------------------------------------------------------
 Start of BSD license 2
@@ -652,22 +548,6 @@ End of BSD license 2
 @@@@@@@@@@@@
 ===========================================================================
 BSD-3-Clause: BSD license 3
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license 3
-
-dropbear
-e2fsprogs
-glib-2.0
-libpcap
-libpcre2
-libtirpc
-net-snmp
-openssh
-shadow
-sudo
-util-linux
-util-linux-libuuid
-zstd
 
 ---------------------------------------------------------------------------
 Start of BSD license 3
@@ -692,10 +572,6 @@ End of BSD license 3
 @@@@@@@@@@@@
 ===========================================================================
 BSD-4-Clause: BSD license 4
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the BSD license 4
-
-util-linux
 
 ---------------------------------------------------------------------------
 Start of BSD license 4
@@ -738,10 +614,6 @@ End of BSD license 4
 @@@@@@@@@@@@
 ===========================================================================
 BSL-1.0: Boost Software License - Version 1.0
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Boost Software License - Version 1.0
-
-boost
 
 ---------------------------------------------------------------------------
 Start of Boost Software License - Version 1.0
@@ -780,10 +652,6 @@ End of Boost Software License - Version 1.0
 @@@@@@@@@@@@
 ===========================================================================
 bzip2-1.0.4: Bzip license 1.0.4
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Bzip license 1.0.4
-
-busybox
 
 ---------------------------------------------------------------------------
 Start of Bzip license 1.0.4
@@ -840,10 +708,6 @@ End of Bzip license 1.0.4
 @@@@@@@@@@@@
 ===========================================================================
 bzip2-1.0.6: Bzip license 1.0.6
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Bzip license 1.0.6
-
-bzip2
 
 ---------------------------------------------------------------------------
 Start of Bzip license 1.0.6
@@ -898,10 +762,6 @@ End of Bzip license 1.0.6
 @@@@@@@@@@@@
 ===========================================================================
 curl: Curl COPYRIGHT AND PERMISSION NOTICE
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Curl COPYRIGHT AND PERMISSION NOTICE
-
-curl
 
 ---------------------------------------------------------------------------
 Start of Curl COPYRIGHT AND PERMISSION NOTICE
@@ -924,29 +784,252 @@ End of Curl COPYRIGHT AND PERMISSION NOTICE
 
 @@@@@@@@@@@@
 ===========================================================================
-GPL-2.0-only: GNU GENERAL PUBLIC LICENSE Version 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 2
+GPL-1.0-or-later: GNU GENERAL PUBLIC LICENSE Version 1 or later
 
-base-files
-base-passwd
-busybox
-e2fsprogs
-fuse
-gdb
-glibc
-gptfdisk
-libcap
-libpwquality
-linux-aspeed
-logrotate
-lz4
-nbd
-netbase
-rng-tools
-squashfs-tools
-systemd
-zstd
+---------------------------------------------------------------------------
+Start of GNU GENERAL PUBLIC LICENSE Version 1 or later
+---------------------------------------------------------------------------
+
+GNU GENERAL PUBLIC LICENSE
+
+Version 1, February 1989
+
+Copyright (C) 1989 Free Software Foundation, Inc. 51 Franklin St, Fifth Floor,
+Boston, MA 02110-1301 USA
+
+Everyone is permitted to copy and distribute verbatim copies of this license
+document, but changing it is not allowed.
+
+Preamble
+
+The license agreements of most software companies try to keep users at the
+mercy of those companies. By contrast, our General Public License is intended
+to guarantee your freedom to share and change free software--to make sure
+the software is free for all its users. The General Public License applies
+to the Free Software Foundation's software and to any other program whose
+authors commit to using it. You can use it for your programs, too.
+
+When we speak of free software, we are referring to freedom, not price. Specifically,
+the General Public License is designed to make sure that you have the freedom
+to give away or sell copies of free software, that you receive source code
+or can get it if you want it, that you can change the software or use pieces
+of it in new free programs; and that you know you can do these things.
+
+To protect your rights, we need to make restrictions that forbid anyone to
+deny you these rights or to ask you to surrender the rights. These restrictions
+translate to certain responsibilities for you if you distribute copies of
+the software, or if you modify it.
+
+For example, if you distribute copies of a such a program, whether gratis
+or for a fee, you must give the recipients all the rights that you have. You
+must make sure that they, too, receive or can get the source code. And you
+must tell them their rights.
+
+We protect your rights with two steps: (1) copyright the software, and (2)
+offer you this license which gives you legal permission to copy, distribute
+and/or modify the software.
+
+Also, for each author's protection and ours, we want to make certain that
+everyone understands that there is no warranty for this free software. If
+the software is modified by someone else and passed on, we want its recipients
+to know that what they have is not the original, so that any problems introduced
+by others will not reflect on the original authors' reputations.
+
+The precise terms and conditions for copying, distribution and modification
+follow.
+
+GNU GENERAL PUBLIC LICENSE TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION
+AND MODIFICATION
+
+0. This License Agreement applies to any program or other work which contains
+a notice placed by the copyright holder saying it may be distributed under
+the terms of this General Public License. The "Program", below, refers to
+any such program or work, and a "work based on the Program" means either the
+Program or any work containing the Program or a portion of it, either verbatim
+or with modifications. Each licensee is addressed as "you".
+
+1. You may copy and distribute verbatim copies of the Program's source code
+as you receive it, in any medium, provided that you conspicuously and appropriately
+publish on each copy an appropriate copyright notice and disclaimer of warranty;
+keep intact all the notices that refer to this General Public License and
+to the absence of any warranty; and give any other recipients of the Program
+a copy of this General Public License along with the Program. You may charge
+a fee for the physical act of transferring a copy.
+
+2. You may modify your copy or copies of the Program or any portion of it,
+and copy and distribute such modifications under the terms of Paragraph 1
+above, provided that you also do the following:
+
+a) cause the modified files to carry prominent notices stating that you changed
+the files and the date of any change; and
+
+b) cause the whole of any work that you distribute or publish, that in whole
+or in part contains the Program or any part thereof, either with or without
+modifications, to be licensed at no charge to all third parties under the
+terms of this General Public License (except that you may choose to grant
+warranty protection to some or all third parties, at your option).
+
+c) If the modified program normally reads commands interactively when run,
+you must cause it, when started running for such interactive use in the simplest
+and most usual way, to print or display an announcement including an appropriate
+copyright notice and a notice that there is no warranty (or else, saying that
+you provide a warranty) and that users may redistribute the program under
+these conditions, and telling the user how to view a copy of this General
+Public License.
+
+d) You may charge a fee for the physical act of transferring a copy, and you
+may at your option offer warranty protection in exchange for a fee.
+
+Mere aggregation of another independent work with the Program (or its derivative)
+on a volume of a storage or distribution medium does not bring the other work
+under the scope of these terms.
+
+3. You may copy and distribute the Program (or a portion or derivative of
+it, under Paragraph 2) in object code or executable form under the terms of
+Paragraphs 1 and 2 above provided that you also do one of the following:
+
+a) accompany it with the complete corresponding machine-readable source code,
+which must be distributed under the terms of Paragraphs 1 and 2 above; or,
+
+b) accompany it with a written offer, valid for at least three years, to give
+any third party free (except for a nominal charge for the cost of distribution)
+a complete machine-readable copy of the corresponding source code, to be distributed
+under the terms of Paragraphs 1 and 2 above; or,
+
+c) accompany it with the information you received as to where the corresponding
+source code may be obtained. (This alternative is allowed only for noncommercial
+distribution and only if you received the program in object code or executable
+form alone.)
+
+Source code for a work means the preferred form of the work for making modifications
+to it. For an executable file, complete source code means all the source code
+for all modules it contains; but, as a special exception, it need not include
+source code for modules which are standard libraries that accompany the operating
+system on which the executable file runs, or for standard header files or
+definitions files that accompany that operating system.
+
+4. You may not copy, modify, sublicense, distribute or transfer the Program
+except as expressly provided under this General Public License. Any attempt
+otherwise to copy, modify, sublicense, distribute or transfer the Program
+is void, and will automatically terminate your rights to use the Program under
+this License. However, parties who have received copies, or rights to use
+copies, from you under this General Public License will not have their licenses
+terminated so long as such parties remain in full compliance.
+
+5. By copying, distributing or modifying the Program (or any work based on
+the Program) you indicate your acceptance of this license to do so, and all
+its terms and conditions.
+
+6. Each time you redistribute the Program (or any work based on the Program),
+the recipient automatically receives a license from the original licensor
+to copy, distribute or modify the Program subject to these terms and conditions.
+You may not impose any further restrictions on the recipients' exercise of
+the rights granted herein.
+
+7. The Free Software Foundation may publish revised and/or new versions of
+the General Public License from time to time. Such new versions will be similar
+in spirit to the present version, but may differ in detail to address new
+problems or concerns.
+
+Each version is given a distinguishing version number. If the Program specifies
+a version number of the license which applies to it and "any later version",
+you have the option of following the terms and conditions either of that version
+or of any later version published by the Free Software Foundation. If the
+Program does not specify a version number of the license, you may choose any
+version ever published by the Free Software Foundation.
+
+8. If you wish to incorporate parts of the Program into other free programs
+whose distribution conditions are different, write to the author to ask for
+permission. For software which is copyrighted by the Free Software Foundation,
+write to the Free Software Foundation; we sometimes make exceptions for this.
+Our decision will be guided by the two goals of preserving the free status
+of all derivatives of our free software and of promoting the sharing and reuse
+of software generally.
+
+   
+
+   NO WARRANTY 9.
+
+BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE
+PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE
+STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM
+"AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE
+OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME
+THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+10. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE
+OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF DATA
+OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES
+OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH
+HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+END OF TERMS AND CONDITIONS
+
+Appendix: How to Apply These Terms to Your New Programs
+
+If you develop a new program, and you want it to be of the greatest possible
+use to humanity, the best way to achieve this is to make it free software
+which everyone can redistribute and change under these terms.
+
+To do so, attach the following notices to the program. It is safest to attach
+them to the start of each source file to most effectively convey the exclusion
+of warranty; and each file should have at least the "copyright" line and a
+pointer to where the full notice is found.
+
+&lt;one line to give the program's name and a brief idea of what it does.&gt;
+
+Copyright (C) 19yy &lt;name of author&gt;
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 1, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 675 Mass
+Ave, Cambridge, MA 02139, USA.
+
+Also add information on how to contact you by electronic and paper mail.
+
+If the program is interactive, make it output a short notice like this when
+it starts in an interactive mode:
+
+Gnomovision version 69, Copyright (C) 19xx name of author Gnomovision comes
+with ABSOLUTELY NO WARRANTY; for details type `show w'. This is free software,
+and you are welcome to redistribute it under certain conditions; type `show
+c' for details.
+
+The hypothetical commands `show w' and `show c' should show the appropriate
+parts of the General Public License. Of course, the commands you use may be
+called something other than `show w' and `show c'; they could even be mouse-clicks
+or menu items--whatever suits your program.
+
+You should also get your employer (if you work as a programmer) or your school,
+if any, to sign a "copyright disclaimer" for the program, if necessary. Here
+a sample; alter the names:
+
+Yoyodyne, Inc., hereby disclaims all copyright interest in the program `Gnomovision'
+(a program to direct compilers to make passes at assemblers) written by James
+Hacker.
+
+&lt;signature of Ty Coon&gt;, 1 April 1989 Ty Coon, President of Vice
+
+That's all there is to it!
+
+---------------------------------------------------------------------------
+End of GNU GENERAL PUBLIC LICENSE Version 1 or later
+---------------------------------------------------------------------------
+
+@@@@@@@@@@@@
+===========================================================================
+GPL-2.0-only: GNU GENERAL PUBLIC LICENSE Version 2
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 2
@@ -1092,29 +1175,6 @@ End of GNU GENERAL PUBLIC LICENSE Version 2
 @@@@@@@@@@@@
 ===========================================================================
 GPL-2.0-or-later: GNU GENERAL PUBLIC LICENSE Version 2 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 2 or later
-
-audit
-ca-certificates
-dbus
-i2c-tools
-kmod
-libcap-ng
-libidn2
-libpam
-libunistring
-lrzsz
-lzo
-opkg
-opkg-utils
-strace
-systemd-serialgetty
-u-boot-aspeed-sdk
-u-boot-fw-utils-aspeed-sdk
-update-rc.d
-util-linux
-xz
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 2 or later
@@ -1447,12 +1507,6 @@ End of GNU GENERAL PUBLIC LICENSE Version 2 or later
 @@@@@@@@@@@@
 ===========================================================================
 GPL-3.0-only: GNU GENERAL PUBLIC LICENSE Version 3
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 3
-
-gdb
-gdbm
-rsyslog
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 3
@@ -1691,15 +1745,6 @@ End of GNU GENERAL PUBLIC LICENSE Version 3
 @@@@@@@@@@@@
 ===========================================================================
 GPL-3.0-or-later: GNU GENERAL PUBLIC LICENSE Version 3 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU GENERAL PUBLIC LICENSE Version 3 or later
-
-bash
-gzip
-parted
-phosphor-ipmi-fru
-readline
-rsync
 
 ---------------------------------------------------------------------------
 Start of GNU GENERAL PUBLIC LICENSE Version 3 or later
@@ -2338,11 +2383,6 @@ End of GNU GENERAL PUBLIC LICENSE Version 3 or later
 @@@@@@@@@@@@
 ===========================================================================
 GPL-3.0-with-GCC-exception: GCC RUNTIME LIBRARY EXCEPTION Version 3.1
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GCC RUNTIME LIBRARY EXCEPTION Version 3.1
-
-gcc-runtime
-libgcc
 
 ---------------------------------------------------------------------------
 Start of GCC RUNTIME LIBRARY EXCEPTION Version 3.1
@@ -2383,11 +2423,6 @@ End of GCC RUNTIME LIBRARY EXCEPTION Version 3.1
 @@@@@@@@@@@@
 ===========================================================================
 ISC: ISC License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the ISC License
-
-openssh
-sudo
 
 ---------------------------------------------------------------------------
 Start of ISC License
@@ -2411,12 +2446,6 @@ End of ISC License
 @@@@@@@@@@@@
 ===========================================================================
 LGPL-2.0-only: GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
-
-e2fsprogs
-fuse
-gdb
 
 ---------------------------------------------------------------------------
 Start of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
@@ -2772,11 +2801,6 @@ End of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2
 @@@@@@@@@@@@
 ===========================================================================
 LGPL-2.0-or-later: GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 
-or later
-
-audit
 
 ---------------------------------------------------------------------------
 Start of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 or later
@@ -3236,15 +3260,6 @@ End of GNU LIBRARY GENERAL PUBLIC LICENSE Version 2 or later
 @@@@@@@@@@@@
 ===========================================================================
 LGPL-2.1-only: GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
-
-glibc
-libestr
-libnl
-libnsl2
-libseccomp
-libxcrypt
 
 ---------------------------------------------------------------------------
 Start of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
@@ -3434,22 +3449,6 @@ End of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
 @@@@@@@@@@@@
 ===========================================================================
 LGPL-2.1-or-later: GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 or later
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LESSER GENERAL PUBLIC LICENSE Version 
-2.1 or later
-
-avahi
-cracklib
-glib-2.0
-kmod
-libcap-ng
-libdaemon
-libgpiod
-libnss-mdns
-nss-pam-ldapd
-strace
-systemd
-util-linux
 
 ---------------------------------------------------------------------------
 Start of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 or later
@@ -3891,6 +3890,7 @@ line and a pointer to where the full notice is found.
 &lt;one line to give the library's name and an idea of what it does.&gt;
 
 Copyright (C) &lt;year&gt; &lt;name of author&gt;
+
 This library is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
 Software Foundation; either version 2.1 of the License, or (at your option)
@@ -3930,11 +3930,6 @@ End of GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 or later
 @@@@@@@@@@@@
 ===========================================================================
 LGPL-3.0-only: GNU LESSER GENERAL PUBLIC LICENSE Version 3
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the GNU LESSER GENERAL PUBLIC LICENSE Version 3
-
-gdb
-rsyslog
 
 ---------------------------------------------------------------------------
 Start of GNU LESSER GENERAL PUBLIC LICENSE Version 3
@@ -4013,59 +4008,6 @@ End of GNU LESSER GENERAL PUBLIC LICENSE Version 3
 @@@@@@@@@@@@
 ===========================================================================
 MIT: MIT License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the MIT License
-
-boost
-cjson
-dropbear
-e2fsprogs
-expat
-fmt
-jsmn
-json-c
-krb5
-libevdev
-libfastjson
-libffi
-liburing
-libyaml
-ncurses
-net-snmp
-npm-axios
-npm-bootstrap
-npm-bootstrap-vue
-npm-carbon
-npm-core-js
-npm-date-fns
-npm-date-fns-tz
-npm-js-cookie
-npm-json-bigint
-npm-lodash
-npm-n64
-npm-vue
-npm-vue-i18n
-npm-vuelidate
-npm-vue-router
-npm-vuex
-npm-xterm
-npm-xterm-addon-attach
-npm-xterm-addon-fit
-openssh
-opkg-arch-config
-os-release
-packagegroup-base
-packagegroup-core-boot
-packagegroup-core-ssh-dropbear
-packagegroup-obmc-apps
-packagegroup-obmc-ipmid-providers
-packagegroup-op-apps
-popt
-run-postinsts
-shadow-securetty
-systemd-compat-units
-systemd-conf
-volatile-binds
 
 ---------------------------------------------------------------------------
 Start of MIT License
@@ -4102,11 +4044,6 @@ End of MIT License
 @@@@@@@@@@@@
 ===========================================================================
 MPL-2.0: Mozilla Public License Version 2.0
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Mozilla Public License Version 2.0
-
-ca-certificates
-npm-novnc
 
 ---------------------------------------------------------------------------
 Start of Mozilla Public License Version 2.0
@@ -4493,10 +4430,6 @@ End of Mozilla Public License Version 2.0
 @@@@@@@@@@@@
 ===========================================================================
 OpenLDAP: OpenLDAP Public License Version 2.8
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the OpenLDAP Public License Version 2.8
-
-openldap
 
 ---------------------------------------------------------------------------
 Start of OpenLDAP Public License Version 2.8
@@ -4557,13 +4490,6 @@ End of OpenLDAP Public License Version 2.8
 @@@@@@@@@@@@
 ===========================================================================
 PD: Public Domain License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the Public Domain License
-
-dropbear
-glib-2.0
-sqlite3
-xz
 
 ---------------------------------------------------------------------------
 Start of Public Domain License
@@ -4578,10 +4504,6 @@ End of Public Domain License
 @@@@@@@@@@@@
 ===========================================================================
 PSF-2.0: PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
-
-python3
 
 ---------------------------------------------------------------------------
 Start of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
@@ -4644,11 +4566,6 @@ End of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 @@@@@@@@@@@@
 ===========================================================================
 Python-2.0: PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 
-& BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
-
-boost
 
 ---------------------------------------------------------------------------
 Start of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI LICENSE & CWI LICENSE
@@ -4854,11 +4771,6 @@ End of PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 & BEOPEN.COM LICENSE & CNRI 
 @@@@@@@@@@@@
 ===========================================================================
 Unicode-DFS-2016: UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the UNICODE, INC. LICENSE AGREEMENT - DATA FILES 
-AND SOFTWARE
-
-libidn2
 
 ---------------------------------------------------------------------------
 Start of UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
@@ -4894,12 +4806,6 @@ End of UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
 @@@@@@@@@@@@
 ===========================================================================
 Zlib: zlib License
-The Program includes some or all of the following licensed to the licensee as 
-Separately Licensed Code under the zlib License
-
-libtinyxml2
-sudo
-zlib
 
 ---------------------------------------------------------------------------
 Start of zlib License
@@ -5359,125 +5265,6 @@ License: MPL-2.0
    defined by the Mozilla Public License, v. 2.0.
 
 ===========================================================================
-Notices for dropbear/LICENSE
----------------------------------------------------------------------------
-
-Dropbear contains a number of components from different sources, hence there
-are a few licenses and authors involved. All licenses are fairly 
-non-restrictive.
-
-
-The majority of code is written by Matt Johnston, under the license below.
-
-Portions of the client-mode work are (c) 2004 Mihnea Stoenescu, under the
-same license:
-
-Copyright (c) 2002-2020 Matt Johnston
-Portions copyright (c) 2004 Mihnea Stoenescu
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-=====
-
-LibTomCrypt and LibTomMath are written by Tom St Denis and others, see
-libtomcrypt/LICENSE and libtommath/LICENSE.
-
-=====
-
-sshpty.c is taken from OpenSSH 3.5p1, 
-  Copyright (c) 1995 Tatu Ylonen &lt;ylo@cs.hut.fi&gt;, Espoo, Finland
-                     All rights reserved
- "As far as I am concerned, the code I have written for this software
-  can be used freely for any purpose.  Any derived versions of this
-  software must be clearly marked as such, and if the derived work is
-  incompatible with the protocol description in the RFC file, it must be
-  called by a name other than "ssh" or "Secure Shell". "
-
-=====
-
-loginrec.c
-loginrec.h
-atomicio.h
-atomicio.c
-and strlcat() (included in util.c) are from OpenSSH 3.6.1p2, and are licensed
-under the 2 point BSD license.
-
-loginrec is written primarily by Andre Lucas, atomicio.c by Theo de Raadt.
-
-strlcat() is (c) Todd C. Miller
-
-=====
-
-Import code in keyimport.c is modified from PuTTY's import.c, licensed as
-follows:
-
-PuTTY is copyright 1997-2003 Simon Tatham.
-
-Portions copyright Robert de Bath, Joris van Rantwijk, Delian
-Delchev, Andreas Schultz, Jeroen Massar, Wez Furlong, Nicolas Barry,
-Justin Bradford, and CORE SDI S.A.
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation files
-(the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of the Software,
-and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT.  IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-=====
-
-curve25519.c:
-
-Modified TweetNaCl version 20140427, a self-contained public-domain C library.
-https://tweetnacl.cr.yp.to/
-
-Contributors (alphabetical order)
-Daniel J. Bernstein, University of Illinois at Chicago and Technische
-Universiteit Eindhoven
-Bernard van Gastel, Radboud Universiteit Nijmegen
-Wesley Janssen, Radboud Universiteit Nijmegen
-Tanja Lange, Technische Universiteit Eindhoven
-Peter Schwabe, Radboud Universiteit Nijmegen
-Sjaak Smetsers, Radboud Universiteit Nijmegen
-
-Acknowledgments
-This work was supported by the U.S. National Science Foundation under grant
-1018836. "Any opinions, findings, and conclusions or recommendations expressed
-in this material are those of the author(s) and do not necessarily reflect the
-views of the National Science Foundation."
-This work was supported by the Netherlands Organisation for Scientific
-Research (NWO) under grant 639.073.005 and Veni 2013 project 13114.
-
-===========================================================================
 Notices for glib-2.0/COPYING.1
 ---------------------------------------------------------------------------
 
@@ -5921,7 +5708,8 @@ XZ Utils Licensing
     naturally it is not legally required. Here is an example of a good
     notice to put into "about box" or into documentation:
 
-        This software includes code from XZ Utils &lt;https://tukaani.org/xz/&gt;.
+        This software includes code from XZ Utils
+        &lt;https://xz.tukaani.org/xz-utils/&gt;.
 
     The following license texts are included in the following files:
       - COPYING.LGPLv2.1: GNU Lesser General Public License version 2.1
@@ -5966,9 +5754,8 @@ End of Source Code Offer Information
 
 ===========================================================================
 END OF TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE for
-IBM Firmware for IBM Power Systems models 9105-22A, 9105-42A, 9105-22B, 
-9105-41B, 9043-MRX, 9786-22H, 9786-42H, and 9028-21B running firmware version 
-FW1060
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
+9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
 ===========================================================================
   </pre>
 </template>
@@ -5978,3 +5765,16 @@ export default {
   name: 'NoticesText',
 };
 </script>
+<style scoped>
+.notice-table,
+td {
+  border: 1px solid black;
+  padding: 5px;
+}
+tr {
+  line-height: 20px;
+}
+p {
+  margin-bottom: 0px;
+}
+</style>
