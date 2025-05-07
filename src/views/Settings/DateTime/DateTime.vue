@@ -384,7 +384,7 @@ const isUtcDisplay = computed(() => {
   return globalStore.isUtcDisplayGetter;
 });
 const timezone = computed(() => {
-  if (isUtcDisplay) {
+  if (isUtcDisplay.value) {
     return 'UTC';
   }
   return localOffset();
@@ -427,7 +427,7 @@ const chunkedDhcpNtp = computed(() => {
     });
   })
     const isServerOff = () => {
-      return serverStatus === 'off' ? true : false;
+      return serverStatus.value === 'off' ? true : false;
     }
     const emitChange = () => {
       if (v$.value.$invalid) return;
@@ -437,7 +437,7 @@ const chunkedDhcpNtp = computed(() => {
       });
     }
     const setInitialNtpValues = () => {
-      form.value.configurationSelected = isNtpProtocolEnabled
+      form.value.configurationSelected = isNtpProtocolEnabled.value
         ? 'ntp'
         : 'manual';
       setNtpValues();
@@ -540,7 +540,7 @@ const chunkedDhcpNtp = computed(() => {
       return new Date(utcDate);
     }
     const showCollapse = () => {
-      if (networkSuppliedServers.length == 0) {
+      if (networkSuppliedServers.value.length == 0) {
         showDhcpNtpServers.value = false;
       } else {
         showDhcpNtpServers.value = true;
