@@ -99,7 +99,7 @@ const DumpsStore = {
                 })
               );
             default:
-              throw new Error(i18n.t('pageDumps.toast.errorStartSystemDump'));
+              throw new Error(i18n.t('pageDumps.toast.errorStartBmcDump'));
           }
         });
     },
