@@ -118,41 +118,13 @@
                     @blur="v$.form.manual.date.$touch()"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!v$.form.manual.date.pattern">
+                    <template v-if="v$.form.manual.date.$errors.length > 0 ? v$.form.manual.date.$errors[0].$validator === 'pattern' : false">
                       {{ $t('global.form.invalidFormat') }}
-                    </div>
-                    <div v-if="!v$.form.manual.date.required">
-                      {{ $t('global.form.fieldRequired') }}
-                    </div>
-                  </BFormInvalidFeedback>
-                  <!-- <BFormGroup
-                    :label="$t('global.calendar.selectDate')"
-                    label-for="input-date"
-                    class="mr-3 my-0 w-100"
-                  >
-                  </BFormGroup> -->
-                  <!-- <b-form-datepicker
-                    v-model="form.manual.date"
-                    class="btn-datepicker btn-icon-only"
-                    button-only
-                    right
-                    :hide-header="true"
-                    :locale="locale"
-                    :label-help="
-                      $t('global.calendar.useCursorKeysToNavigateCalendarDates')
-                    "
-                    :title="$t('global.calendar.selectDate')"
-                    :disabled="ntpOptionSelected"
-                    button-variant="link"
-                    aria-controls="input-manual-date"
-                  >
-                    <template #button-content>
-                      <icon-calendar />
-                      <span class="sr-only">
-                        {{ $t('global.calendar.selectDate') }}
-                      </span>
                     </template>
-                  </b-form-datepicker> -->
+                    <template v-if="v$.form.manual.date.$errors.length > 0 ? v$.form.manual.date.$errors[0].$validator === 'required' : false">
+                      {{ $t('global.form.fieldRequired') }}
+                    </template>
+                  </BFormInvalidFeedback>
                 </BInputGroup>
               </BFormGroup>
             </BCol>
@@ -172,12 +144,12 @@
                     @blur="v$.form.manual.time.$touch()"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!v$.form.manual.time.pattern">
+                    <template v-if="v$.form.manual.time.$errors.length > 0 ? v$.form.manual.time.$errors[0].$validator === 'pattern' : false">
                       {{ $t('global.form.invalidFormat') }}
-                    </div>
-                    <div v-if="!v$.form.manual.time.required">
+                    </template>
+                    <template v-if="v$.form.manual.time.$errors.length > 0 ? v$.form.manual.time.$errors[0].$validator === 'required' : false">
                       {{ $t('global.form.fieldRequired') }}
-                    </div>
+                    </template>
                   </BFormInvalidFeedback>
                 </BInputGroup>
               </BFormGroup>
@@ -206,9 +178,9 @@
                     @blur="v$.form.ntp.firstAddress.$touch()"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!v$.form.ntp.firstAddress.required">
+                    <template v-if="v$.form.ntp.firstAddress.$errors.length > 0 ? v$.form.ntp.firstAddress.$errors[0].$validator === 'required' : false">
                       {{ $t('global.form.fieldRequired') }}
-                    </div>
+                    </template>
                   </BFormInvalidFeedback>
                 </BInputGroup>
               </BFormGroup>
@@ -227,9 +199,9 @@
                     data-test-id="dateTime-input-ntpServer2"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div v-if="!v$.form.ntp.secondAddress.isSameAsFirstAddress">
+                    <template v-if="v$.form.ntp.secondAddress.$errors.length > 0 ? v$.form.ntp.secondAddress.$errors[0].$validator === 'isSameAsFirstAddress' : false">
                       {{ $t('pageDateTime.form.validators.serverExists') }}
-                    </div>
+                    </template>
                   </BFormInvalidFeedback>
                 </BInputGroup>
               </BFormGroup>
@@ -248,14 +220,9 @@
                     data-test-id="dateTime-input-ntpServer3"
                   />
                   <BFormInvalidFeedback role="alert">
-                    <div
-                      v-if="
-                        !v$.form.ntp.thirdAddress.isSameAsFirstAddress ||
-                        !v$.form.ntp.thirdAddress.isSameAsSecondAddress
-                      "
-                    >
+                    <template v-if="v$.form.ntp.thirdAddress.$errors.length > 0 ? v$.form.ntp.thirdAddress.$errors[0].$validator === 'isSameAsFirstAddress' ||  v$.form.ntp.thirdAddress.$errors[0].$validator === 'isSameAsSecondAddress': false">
                       {{ $t('pageDateTime.form.validators.serverExists') }}
-                    </div>
+                    </template>
                   </BFormInvalidFeedback>
                 </BInputGroup>
               </BFormGroup>
@@ -332,13 +299,13 @@ const rules = computed(() => ({
         required: requiredIf(function () {
           return form.value.configurationSelected === 'manual';
         }),
-        pattern: helpers.regex('pattern', isoDateRegex),
+        pattern: helpers.regex(isoDateRegex),
       },
       time: {
         required: requiredIf(function () {
           return form.value.configurationSelected === 'manual';
         }),
-        pattern: helpers.regex('pattern', isoTimeRegex),
+        pattern: helpers.regex(isoTimeRegex),
       },
     },
     ntp: {
