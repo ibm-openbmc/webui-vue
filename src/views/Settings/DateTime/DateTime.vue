@@ -266,6 +266,9 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
+const notSameAs = (value1, value2) => {
+  return value2 ? value1 !== value2 : true;
+}
 const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 const manualDate = ref('');
@@ -315,11 +318,11 @@ const rules = computed(() => ({
         }),
       },
       secondAddress: {
-        isSameAsFirstAddress: not(sameAs('firstAddress')),
+        isSameAsFirstAddress: () => notSameAs(form.value.ntp.firstAddress, form.value.ntp.secondAddress),
       },
       thirdAddress: {
-        isSameAsFirstAddress: not(sameAs('firstAddress')),
-        isSameAsSecondAddress: not(sameAs('secondAddress')),
+        isSameAsFirstAddress: () => notSameAs(form.value.ntp.firstAddress, form.value.ntp.thirdAddress),
+        isSameAsSecondAddress: () => notSameAs(form.value.ntp.secondAddress, form.value.ntp.thirdAddress),
       },
     }
   }
