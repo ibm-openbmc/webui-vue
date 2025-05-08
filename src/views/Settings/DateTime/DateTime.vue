@@ -244,12 +244,10 @@
 <script setup>
 import { ref, onMounted, watch, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
-
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
-
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useLocalTimezoneLabelComposable from '@/components/Composables/useLocalTimezoneLabelComposable'
@@ -262,26 +260,18 @@ import eventBus from '@/eventBus';
 import { required, helpers, requiredIf, sameAs, not } from '@vuelidate/validators';
 import { formatDate, formatTime } from '@/components/utilities/dateFilter';
 
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
 const notSameAs = (value1, value2) => {
   return value2 ? value1 !== value2 : true;
 }
-const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
-const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-const manualDate = ref('');
-
+const dateTimeStore = DateTimeStore();
+const globalStore = GlobalStore();
 const toast = useToastComposable();
 const { startLoader, hideLoader, endLoader } = useLoadingBar();
 const { getValidationState } = useVuelidateComposable();
 const { localOffset } = useLocalTimezoneLabelComposable();
-
-const dateTimeStore = DateTimeStore();
-const globalStore = GlobalStore();
-
-
+const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
+const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+const manualDate = ref('');
 const locale = ref(globalStore.languagePreferenceGetter);
 const form = ref({
   configurationSelected: '',
@@ -295,39 +285,20 @@ const loading = ref('');
 const showDhcpNtpServers = ref(false);
 const dhcpNtp = ref([]);
 
-const rules = computed(() => ({
-  form: {
-    manual: {
-      date: {
-        required: requiredIf(function () {
-          return form.value.configurationSelected === 'manual';
-        }),
-        pattern: helpers.regex(isoDateRegex),
-      },
-      time: {
-        required: requiredIf(function () {
-          return form.value.configurationSelected === 'manual';
-        }),
-        pattern: helpers.regex(isoTimeRegex),
-      },
-    },
-    ntp: {
-      firstAddress: {
-        required: requiredIf(function () {
-          return form.value.configurationSelected === 'ntp';
-        }),
-      },
-      secondAddress: {
-        isSameAsFirstAddress: () => notSameAs(form.value.ntp.firstAddress, form.value.ntp.secondAddress),
-      },
-      thirdAddress: {
-        isSameAsFirstAddress: () => notSameAs(form.value.ntp.firstAddress, form.value.ntp.thirdAddress),
-        isSameAsSecondAddress: () => notSameAs(form.value.ntp.secondAddress, form.value.ntp.thirdAddress),
-      },
-    }
-  }
-}));
-const v$ = useVuelidate(rules, { form });
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+onMounted(() => {
+    startLoader();
+    Promise.all([
+      globalStore.getBmcTime(),
+      dateTimeStore.getNtpData(),
+    ]).finally(() => {
+      showCollapse();
+      setInitialNtpValues();
+      endLoader();
+    });
+  })
 
 const ntpServers = computed(() => {
   return dateTimeStore.ntpServersGetter;
@@ -371,6 +342,40 @@ const chunkedDhcpNtp = computed(() => {
   return result;
 });
 
+const rules = computed(() => ({
+  form: {
+    manual: {
+      date: {
+        required: requiredIf(function () {
+          return form.value.configurationSelected === 'manual';
+        }),
+        pattern: helpers.regex(isoDateRegex),
+      },
+      time: {
+        required: requiredIf(function () {
+          return form.value.configurationSelected === 'manual';
+        }),
+        pattern: helpers.regex(isoTimeRegex),
+      },
+    },
+    ntp: {
+      firstAddress: {
+        required: requiredIf(function () {
+          return form.value.configurationSelected === 'ntp';
+        }),
+      },
+      secondAddress: {
+        isSameAsFirstAddress: () => notSameAs(form.value.ntp.firstAddress, form.value.ntp.secondAddress),
+      },
+      thirdAddress: {
+        isSameAsFirstAddress: () => notSameAs(form.value.ntp.firstAddress, form.value.ntp.thirdAddress),
+        isSameAsSecondAddress: () => notSameAs(form.value.ntp.secondAddress, form.value.ntp.thirdAddress),
+      },
+    }
+  }
+}));
+const v$ = useVuelidate(rules, { form });
+
   watch(ntpServers, () => {
     setInitialNtpValues();
   })
@@ -384,18 +389,7 @@ const chunkedDhcpNtp = computed(() => {
       form.value.manual.time = formatTime(globalStore.bmcTimeGetter)
         .slice(0, 5);    
   })
-  
-  onMounted(() => {
-    startLoader();
-    Promise.all([
-      globalStore.getBmcTime(),
-      dateTimeStore.getNtpData(),
-    ]).finally(() => {
-      showCollapse();
-      setInitialNtpValues();
-      endLoader();
-    });
-  })
+
     const isServerOff = () => {
       return serverStatus.value === 'off' ? true : false;
     }
