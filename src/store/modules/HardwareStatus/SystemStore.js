@@ -41,7 +41,7 @@ const SystemStore = {
         .then(({ data }) => commit('setSystemInfo', data))
         .catch((error) => console.log(error));
     },
-    async changeIdentifyLedState({ commit }, ledState) {
+    async changeIdentifyLedState({ dispatch }, ledState) {
       return await api
         .patch('/redfish/v1/Systems/system', {
           LocationIndicatorActive: ledState,
@@ -54,7 +54,7 @@ const SystemStore = {
           }
         })
         .catch((error) => {
-          commit('setSystemInfo', this.state.system.systems[0]);
+          dispatch('getSystem');
           console.log('error', error);
           if (ledState) {
             throw new Error(
@@ -67,7 +67,7 @@ const SystemStore = {
           }
         });
     },
-    async changeSystemAttentionLedState({ commit }, ledState) {
+    async changeSystemAttentionLedState({ dispatch }, ledState) {
       return await api
         .patch('/redfish/v1/Systems/system', {
           Oem: {
@@ -85,7 +85,7 @@ const SystemStore = {
           }
         })
         .catch((error) => {
-          commit('setSystemInfo', this.state.system.systems[0]);
+          dispatch('getSystem');
           console.log('error', error);
           if (!ledState) {
             throw new Error(
@@ -94,7 +94,7 @@ const SystemStore = {
           }
         });
     },
-    async changeLampTestState({ commit }, lampTestState) {
+    async changeLampTestState({ dispatch }, lampTestState) {
       return await api
         .patch('/redfish/v1/Systems/system', {
           Oem: {
@@ -109,7 +109,7 @@ const SystemStore = {
           }
         })
         .catch((error) => {
-          commit('setSystemInfo', this.state.system.systems[0]);
+          dispatch('getSystem');
           console.log('error', error);
           if (lampTestState) {
             throw new Error(i18n.t('pageInventory.toast.errorEnableLampTest'));
