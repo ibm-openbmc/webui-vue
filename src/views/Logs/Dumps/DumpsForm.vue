@@ -248,7 +248,7 @@ const updateDumpInfo = () => {
     };
 const handleSubmit = () => {
       v$.value.$touch();
-      // if (v$.value.$invalid) return;
+      if (v$.value.selectedDumpType.$invalid) return;
 
       const dumpType = i18n.global.t(`pageDumps.form.${selectedDumpType.value}Dump`);
 
@@ -335,11 +335,9 @@ const isFunctionDisabled = (value) => {
     };
 const showConfirmationModal = () => {
       modalConfirmation=True
-      // this.$bvModal.show('modal-confirmation');
     };
 const showPartitionDumpConfirmationModal = () => {
       modalPartition=True
-      // this.$bvModal.show('modal-partition-dump-confirmation');
     };
 const createSystemDump = (dumpType) => {
       dumps.createSystemDump(dumpType)

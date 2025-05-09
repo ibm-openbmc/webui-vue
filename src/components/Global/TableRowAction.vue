@@ -34,7 +34,7 @@
       :title="title"
     >
       <slot name="icon" />
-      <span class="visually-hidden">3999
+      <span class="visually-hidden">
         {{ $t('global.action.download') }}
       </span>
     </b-link>

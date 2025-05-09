@@ -76,12 +76,6 @@
               />
             </BCol>
           </BRow>
-          <!-- <table-toolbar
-            :selected-items-count="selectedRowsList.length"
-            :actions="batchActions"
-            @clear-selected="clearSelectedRows(tableDumps)"
-            @batch-action="onTableBatchAction"
-          /> -->
           <BTable
             id="table-dumps"
             ref="tableDumps"
@@ -196,8 +190,6 @@ import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-// import TableToolbar from '@/components/Global/TableToolbar.vue';
-// import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
@@ -207,7 +199,6 @@ import eventBus from '@/eventBus';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } = usePaginationComposable();
-// const { selectedRowsList } = useTableSelectableComposable();
 const { getFilteredTableData, getFilteredTableDataByDate } = useTableFilterComposable();
 const { successToast, errorToast } = useToast();
 
@@ -246,23 +237,17 @@ const fields = ref([
           tdClass: 'text-right text-nowrap',
         },
       ]);
-// const batchActions = ref([
-//         {
-//           value: 'delete',
-//           label: i18n.global.t('global.action.delete'),
-//         },
-//       ]);
 const tableFilters = ref([
         {
           key: 'dumpType',
           label: i18n.global.t('pageDumps.table.dumpType'),
           values: [
-          i18n.global.t('pageDumps.table.filter.bmcDumpEntry'),
-          i18n.global.t('pageDumps.table.filter.hostbootDumpEntry'),
-          i18n.global.t('pageDumps.table.filter.resourceDumpEntry'),
-          i18n.global.t('pageDumps.table.filter.systemDumpEntry'),
-          i18n.global.t('pageDumps.table.filter.hardwareDumpEntry'),
-          i18n.global.t('pageDumps.table.filter.sbeDumpEntry'),
+            'BMC Dump Entry',
+            'Hardware Dump Entry',
+            'Hostboot Dump Entry',
+            'SBE Dump Entry',
+            'Resource Dump Entry',
+            'System Dump Entry',
           ],
         },
       ]);
@@ -344,26 +329,6 @@ const onTableRowAction = (action, dump) => {
       if (action === 'delete') {
         openModal.value = true;
         dumpVal.value = dump;
-        // this.$bvModal
-        //   .msgBoxConfirm(i18n.global.t('pageDumps.modal.deleteDumpConfirmation'), {
-        //     title: i18n.global.t('pageDumps.modal.deleteDump'),
-        //     okTitle: i18n.global.t('pageDumps.modal.deleteDump'),
-        //     cancelTitle: i18n.global.t('global.action.cancel'),
-        //   })
-        //   .then((deleteConfrimed) => {
-        //     if (deleteConfrimed) {
-        //       dumps.deleteDumps([dump])
-        //         .then((messages) => {
-        //           messages.forEach(({ type, message }) => {
-        //             if (type === 'success') {
-        //               successToast(message);
-        //             } else if (type === 'error') {
-        //               errorToast(message);
-        //             }
-        //           });
-        //         });
-        //     }
-        //   });
       }
     };
 const handleOk = () => {
@@ -379,50 +344,6 @@ const handleOk = () => {
                   });
                 });
     };
-// const onTableBatchAction = (action) => {
-//       if (action === 'delete') {
-//         this.$bvModal
-//           .msgBoxConfirm(
-//             i18n.global.t(
-//               'pageDumps.modal.deleteDumpConfirmation',
-//               selectedRowsList.length,
-//             ),
-//             {
-//               title: i18n.global.t(
-//                 'pageDumps.modal.deleteDump',
-//                 selectedRowsList.length,
-//               ),
-//               okTitle: i18n.global.t(
-//                 'pageDumps.modal.deleteDump',
-//                 selectedRowsList.length,
-//               ),
-//               cancelTitle: i18n.global.t('global.action.cancel'),
-//             },
-//           )
-//           .then((deleteConfrimed) => {
-//             if (deleteConfrimed) {
-//               if (this.selectedRows.length === this.dumps.length) {
-//                 this.$store
-//                   .dispatch('dumps/deleteAllDumps')
-//                   .then((success) => successToast(success))
-//                   .catch(({ message }) => errorToast(message));
-//               } else {
-//                 this.$store
-//                   .dispatch('dumps/deleteDumps', this.selectedRows)
-//                   .then((messages) => {
-//                     messages.forEach(({ type, message }) => {
-//                       if (type === 'success') {
-//                         successToast(message);
-//                       } else if (type === 'error') {
-//                         errorToast(message);
-//                       }
-//                     });
-//                   });
-//               }
-//             }
-//           });
-//       }
-//     };
 const onChangeSearch = (event) => {
   searchFilterInput.value = event;
 };
