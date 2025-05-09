@@ -42,6 +42,8 @@ import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/Servic
 import ServiceLogin from '@/views/Operations/ServiceLoginConsoles';
 import Dumps from '@/views/Logs/Dumps';
 import DateTime from '@/views/Settings/DateTime/DateTime.vue'
+import ProfileSettings from '@/views/ProfileSettings';
+import Network from '@/views/Settings/Network';
 
 const roles = {
   administrator: 'Administrator',
@@ -101,6 +103,14 @@ export const routes = [
         component: Overview,
         meta: {
           title: i18n.global.t('appPageTitle.overview'),
+        },
+      },
+      {
+        path: '/profile-settings',
+        name: 'profile-settings',
+        component: ProfileSettings,
+        meta: {
+          title: i18n.global.t('appPageTitle.profileSettings'),
         },
       },
       {
@@ -288,6 +298,14 @@ export const routes = [
         component: HardwareDeconfiguration,
         meta: {
           title: i18n.global.t('appPageTitle.deconfigurationHardware'),
+        },
+      },
+      {
+        path: '/settings/network',
+        name: 'network',
+        component: Network,
+        meta: {
+          title: i18n.global.t('appPageTitle.network'),
         },
       },
       {
