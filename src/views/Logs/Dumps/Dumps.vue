@@ -1,8 +1,8 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.dumps')" />
-    <b-row v-if="selectedDumpType">
-      <b-col md="8" xl="6">
+    <BRow v-if="selectedDumpType">
+      <BCol md="8" xl="6">
         <alert variant="info" class="mb-4">
           <div class="font-weight-bold">
             {{ $t(`pageDumps.alert.${selectedDumpType}DumpHeading`) }}
@@ -38,76 +38,72 @@
             {{ $t(`pageDumps.alert.systemDumpMessageHmc${hmcManaged}`) }}
           </p>
         </alert>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col sm="6" lg="5" xl="4">
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol sm="6" lg="5" xl="4">
         <page-section :section-title="$t('pageDumps.initiateDump')">
-          <dumps-form @updateDumpInfo="updateDumpInfo" />
+          <dumps-form @updateDumpInfo="updateDumpInfo"/>
         </page-section>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col xl="10">
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol xl="10">
         <page-section :section-title="$t('pageDumps.dumpsAvailableOnBmc')">
-          <b-row class="align-items-start">
-            <b-col sm="8" xl="6" class="d-sm-flex align-items-end">
+          <BRow class="align-items-start">
+            <BCol sm="8" xl="6" class="d-sm-flex align-items-end mb-4 searchStyle">
               <search
                 :placeholder="$t('pageDumps.table.searchDumps')"
-                @change-search="onChangeSearchInput"
-                @clear-search="onClearSearchInput"
+                @change-search="onChangeSearch"
+                @clear-search="onClearSearch"
               />
-              <div class="ml-sm-4">
+              <div class="ml-sm-4 margin-style">
                 <table-cell-count
                   :filtered-items-count="filteredRows"
                   :total-number-of-cells="allDumps.length"
                 ></table-cell-count>
               </div>
-            </b-col>
-            <b-col sm="8" md="7" xl="6">
+            </BCol>
+            <BCol sm="8" md="7" xl="6">
               <table-date-filter @change="onChangeDateTimeFilter" />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col class="text-right">
+            </BCol>
+          </BRow>
+          <BRow>
+            <BCol class="text-right">
               <table-filter
                 :filters="tableFilters"
                 @filter-change="onFilterChange"
               />
-            </b-col>
-          </b-row>
-          <table-toolbar
-            :selected-items-count="selectedRows.length"
-            :actions="batchActions"
-            @clear-selected="clearSelectedRows($refs.table)"
-            @batch-action="onTableBatchAction"
-          />
-          <b-table
-            ref="table"
+            </BCol>
+          </BRow>
+          <BTable
+            id="table-dumps"
+            ref="tableDumps"
+            class="tableStyle"
             show-empty
             hover
             sort-icon-left
             no-sort-reset
-            sort-desc
             selectable
             no-select-on-click
             responsive="md"
-            sort-by="dateTime"
+            :sort-by="[{ key: 'dateTime', order: 'asc' }]"
+            sticky-header="75vh"
             :fields="fields"
             :items="filteredDumps"
             :empty-text="$t('global.table.emptyMessage')"
             :empty-filtered-text="$t('global.table.emptySearchMessage')"
-            :per-page="perPage"
-            :current-page="currentPage"
-            :filter="searchFilter"
+            :per-page="itemPerPage"
+            :current-page="currentPageNo"
+            :filter="searchFilterInput"
             :busy="isBusy"
             @filtered="onFiltered"
-            @row-selected="onRowSelected($event, filteredTableItems.length)"
+            @row-selected="onRowSelected($event, filteredDumps.length)"
           >
             <!-- Date and Time column -->
             <template #cell(dateTime)="{ value }">
-              <p class="mb-0">{{ value | formatDate }}</p>
-              <p class="mb-0">{{ value | formatTime }}</p>
+              <p class="mb-0">{{ $filters.formatDate(value) }}</p>
+              <p class="mb-0">{{ $filters.formatTime(value) }}</p>
             </template>
 
             <!-- Size column -->
@@ -122,6 +118,7 @@
                 :key="index"
                 :value="action.value"
                 :title="action.title"
+                :row-data="row.item"
                 :download-location="row.item.data"
                 :export-name="exportFileName(row)"
                 @click-table-action="onTableRowAction($event, row.item)"
@@ -132,13 +129,13 @@
                 </template>
               </table-row-action>
             </template>
-          </b-table>
+          </BTable>
         </page-section>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
     <!-- Table pagination -->
-    <b-row>
-      <b-col sm="6" xl="5">
+    <BRow>
+      <BCol sm="6" xl="5">
         <b-form-group
           class="table-pagination-select"
           :label="$t('global.table.itemsPerPage')"
@@ -146,105 +143,92 @@
         >
           <b-form-select
             id="pagination-items-per-page"
-            v-model="perPage"
+            v-model="itemPerPage"
             :options="itemsPerPageOptions"
           />
         </b-form-group>
-      </b-col>
-      <b-col sm="6" xl="5">
+      </BCol>
+      <BCol sm="6" xl="5">
         <b-pagination
-          v-model="currentPage"
+          v-model="currentPageNo"
+          class="b-pagination"
           first-number
           last-number
-          :per-page="perPage"
-          :total-rows="getTotalRowCount(filteredRows)"
+          :per-page="itemPerPage"
+          :total-rows="getTotalRowCount(filteredRows, itemPerPage)"
           aria-controls="table-dump-entries"
         />
-      </b-col>
-    </b-row>
-  </b-container>
+      </BCol>
+    </BRow>
+    <BModal
+      v-model="openModal"
+      :title="$t('pageDumps.modal.deleteDump')"
+      :ok-title="$t('pageDumps.modal.deleteDump')"
+      okVariant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk"
+    >
+      <p>
+        {{
+          $t('pageDumps.modal.deleteDumpConfirmation')
+        }}
+      </p>
+    </BModal>
+  </BContainer>
 </template>
 
-<script>
-import Alert from '@/components/Global/Alert';
+<script setup>
+import { ref, computed, onBeforeMount, onMounted } from 'vue';
+import i18n from '@/i18n';
+import { onBeforeRouteLeave } from 'vue-router';
+import Alert from '@/components/Global/Alert.vue';
 import IconDelete from '@carbon/icons-vue/es/trash-can/20';
 import IconDownload from '@carbon/icons-vue/es/download/20';
-import DumpsForm from './DumpsForm';
-import PageSection from '@/components/Global/PageSection';
-import PageTitle from '@/components/Global/PageTitle';
-import Search from '@/components/Global/Search';
-import TableCellCount from '@/components/Global/TableCellCount';
-import TableDateFilter from '@/components/Global/TableDateFilter';
-import TableRowAction from '@/components/Global/TableRowAction';
-import TableToolbar from '@/components/Global/TableToolbar';
-import BVTableSelectableMixin, {
-  selectedRows,
-} from '@/components/Mixins/BVTableSelectableMixin';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import BVPaginationMixin, {
-  currentPage,
-  perPage,
-  itemsPerPageOptions,
-} from '@/components/Mixins/BVPaginationMixin';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import SearchFilterMixin, {
-  searchFilter,
-} from '@/components/Mixins/SearchFilterMixin';
-import TableFilter from '@/components/Global/TableFilter';
-import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
+import DumpsForm from './DumpsForm.vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import Search from '@/components/Global/Search.vue';
+import TableCellCount from '@/components/Global/TableCellCount.vue';
+import TableDateFilter from '@/components/Global/TableDateFilter.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
+import useToast from '@/components/Composables/useToastComposable';
+import usePaginationComposable from '@/components/Composables/usePaginationComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
+import { DumpsStore, UserManagementStore, ResourceMemoryStore,  GlobalStore } from '@/store';
+import eventBus from '@/eventBus';
 
-export default {
-  components: {
-    Alert,
-    DumpsForm,
-    IconDelete,
-    IconDownload,
-    PageSection,
-    PageTitle,
-    Search,
-    TableCellCount,
-    TableDateFilter,
-    TableRowAction,
-    TableToolbar,
-    TableFilter,
-  },
-  mixins: [
-    BVTableSelectableMixin,
-    BVToastMixin,
-    BVPaginationMixin,
-    LoadingBarMixin,
-    SearchFilterMixin,
-    TableFilterMixin,
-  ],
-  beforeRouteLeave(to, from, next) {
-    // Hide loader if the user navigates to another page
-    // before request is fulfilled.
-    this.hideLoader();
-    next();
-  },
-  data() {
-    return {
-      isBusy: true,
-      selectedDumpType: null,
-      fields: [
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } = usePaginationComposable();
+const { getFilteredTableData, getFilteredTableDataByDate } = useTableFilterComposable();
+const { successToast, errorToast } = useToast();
+
+const dumps = DumpsStore();
+const userManagement = UserManagementStore();
+const resourceMemory = ResourceMemoryStore();
+const global = GlobalStore();
+
+const isBusy = ref(true);
+const selectedDumpType = ref('');
+const fields = ref([
         {
           key: 'id',
-          label: this.$t('pageDumps.table.id'),
+          label: i18n.global.t('pageDumps.table.id'),
           sortable: true,
         },
         {
           key: 'dateTime',
-          label: this.$t('pageDumps.table.dateAndTime'),
+          label: i18n.global.t('pageDumps.table.dateAndTime'),
           sortable: true,
         },
         {
           key: 'dumpType',
-          label: this.$t('pageDumps.table.dumpType'),
+          label: i18n.global.t('pageDumps.table.dumpType'),
           sortable: true,
         },
         {
           key: 'size',
-          label: this.$t('pageDumps.table.size'),
+          label: i18n.global.t('pageDumps.table.size'),
           sortable: true,
         },
         {
@@ -253,183 +237,146 @@ export default {
           label: '',
           tdClass: 'text-right text-nowrap',
         },
-      ],
-      batchActions: [
-        {
-          value: 'delete',
-          label: this.$t('global.action.delete'),
-        },
-      ],
-      tableFilters: [
+      ]);
+const tableFilters = ref([
         {
           key: 'dumpType',
-          label: this.$t('pageDumps.table.dumpType'),
+          label: i18n.global.t('pageDumps.table.dumpType'),
           values: [
-            this.$t('pageDumps.table.filter.bmcDumpEntry'),
-            this.$t('pageDumps.table.filter.hostbootDumpEntry'),
-            this.$t('pageDumps.table.filter.resourceDumpEntry'),
-            this.$t('pageDumps.table.filter.systemDumpEntry'),
+            'BMC Dump Entry',
+            'Hardware Dump Entry',
+            'Hostboot Dump Entry',
+            'SBE Dump Entry',
+            'OCMB SBE Dump Entry',
+            'Resource Dump Entry',
+            'System Dump Entry',
           ],
         },
-      ],
-      activeFilters: [],
-      currentPage: currentPage,
-      filterEndDate: null,
-      filterStartDate: null,
-      itemsPerPageOptions: itemsPerPageOptions,
-      perPage: perPage,
-      searchFilter,
-      searchTotalFilteredRows: 0,
-      selectedRows,
-    };
-  },
-  computed: {
-    filteredRows() {
-      return this.searchFilter
-        ? this.searchTotalFilteredRows
-        : this.filteredDumps.length;
-    },
-    allDumps() {
-      return this.$store.getters['dumps/allDumps'].map((item) => {
-        return {
-          ...item,
-          actions: [
-            {
-              value: 'download',
-              title: this.$t('global.action.download'),
-            },
-            {
-              value: 'delete',
-              title: this.$t('global.action.delete'),
-            },
-          ],
-        };
-      });
-    },
-    filteredDumpsByDate() {
-      return this.getFilteredTableDataByDate(
-        this.allDumps,
-        this.filterStartDate,
-        this.filterEndDate,
-        'dateTime',
-      );
-    },
-    filteredDumps() {
-      return this.getFilteredTableData(
-        this.filteredDumpsByDate,
-        this.activeFilters,
-      );
-    },
-    isInPhypStandby() {
-      return this.$store.getters['global/isInPhypStandby'];
-    },
-    hmcManaged() {
-      return this.$store.getters['resourceMemory/hmcManaged'];
-    },
-  },
-  created() {
-    this.startLoader();
+      ]);
+const activeFiltersRows = ref([]);
+const currentPageNo = ref(currentPage);
+const itemPerPage = ref(perPage);
+const filterEndDate = ref(null);
+const filterStartDate = ref(null);
+const searchFilterInput = ref('');
+const searchTotalFilteredRows = ref(0);
+const openModal = ref(false);
+const dumpVal = ref();
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+onBeforeMount(() => {
+  startLoader();
     Promise.all([
-      this.$store.dispatch('dumps/getAllDumps'),
-      this.$store.dispatch('userManagement/getUsers'),
-      this.$store.dispatch('resourceMemory/getHmcManaged'),
-      this.$store.dispatch('global/getBootProgress'),
+      dumps.getAllDumps(),
+      userManagement.getUsers(),
+      resourceMemory.getHmcManaged(),
+      global.getBootProgress(),
     ]).finally(() => {
-      this.endLoader();
-      this.isBusy = false;
+      endLoader();
+      isBusy.value = false;
     });
-  },
-  methods: {
-    updateDumpInfo(selectedDumpType) {
-      this.selectedDumpType = selectedDumpType;
-    },
-    convertBytesToMegabytes(bytes) {
+});
+onMounted(() => {
+      eventBus.on('updateDumpInfo', updateDumpInfo);
+    });
+const filteredRows = computed(() => {
+      return searchFilterInput.value
+        ? searchTotalFilteredRows.value
+        : filteredDumps.value.length;
+    });
+const allDumps = computed(() => {
+      return dumps.allDumpsGetter;
+    });
+const filteredDumpsByDate = computed(() => {
+      return getFilteredTableDataByDate(
+        allDumps.value,
+        filterStartDate.value,
+        filterEndDate.value,
+        'dateTime'
+      );
+    });
+const filteredDumps = computed(() => {
+      return getFilteredTableData(
+        filteredDumpsByDate.value,
+        activeFiltersRows.value,
+      );
+    });
+const isInPhypStandby = computed(() => {
+      return global.isInPhypStandby;
+    });
+const hmcManaged = computed(() => {
+      return resourceMemory.hmcManagedGetter;
+    });
+
+const updateDumpInfo = (selectedDumpTypeVal) => {
+      selectedDumpType.value = selectedDumpTypeVal.toString();
+    };
+const convertBytesToMegabytes = (bytes) => {
       return parseFloat((bytes / 1000000).toFixed(3));
-    },
-    onFilterChange({ activeFilters }) {
-      this.activeFilters = activeFilters;
-    },
-    onFiltered(filteredItems) {
-      this.searchTotalFilteredRows = filteredItems.length;
-    },
-    onChangeDateTimeFilter({ fromDate, toDate }) {
-      this.filterStartDate = fromDate;
-      this.filterEndDate = toDate;
-    },
-    onTableRowAction(action, dump) {
+    };
+const onFilterChange = ({ activeFilters }) => {
+      activeFiltersRows.value = activeFilters;
+    };
+const onFiltered = (filteredItems) => {
+      searchTotalFilteredRows.value = filteredItems.length;
+    };
+const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
+      filterStartDate.value = fromDate;
+      filterEndDate.value = toDate;
+    };
+const onTableRowAction = (action, dump) => {
       if (action === 'delete') {
-        this.$bvModal
-          .msgBoxConfirm(this.$tc('pageDumps.modal.deleteDumpConfirmation'), {
-            title: this.$tc('pageDumps.modal.deleteDump'),
-            okTitle: this.$tc('pageDumps.modal.deleteDump'),
-            cancelTitle: this.$t('global.action.cancel'),
-          })
-          .then((deleteConfrimed) => {
-            if (deleteConfrimed) {
-              this.$store
-                .dispatch('dumps/deleteDumps', [dump])
+        openModal.value = true;
+        dumpVal.value = dump;
+      }
+    };
+const handleOk = () => {
+  openModal.value = false;
+  dumps.deleteDumps([dumpVal.value])
                 .then((messages) => {
                   messages.forEach(({ type, message }) => {
                     if (type === 'success') {
-                      this.successToast(message);
+                      successToast(message);
                     } else if (type === 'error') {
-                      this.errorToast(message);
+                      errorToast(message);
                     }
                   });
                 });
-            }
-          });
-      }
-    },
-    onTableBatchAction(action) {
-      if (action === 'delete') {
-        this.$bvModal
-          .msgBoxConfirm(
-            this.$tc(
-              'pageDumps.modal.deleteDumpConfirmation',
-              this.selectedRows.length,
-            ),
-            {
-              title: this.$tc(
-                'pageDumps.modal.deleteDump',
-                this.selectedRows.length,
-              ),
-              okTitle: this.$tc(
-                'pageDumps.modal.deleteDump',
-                this.selectedRows.length,
-              ),
-              cancelTitle: this.$t('global.action.cancel'),
-            },
-          )
-          .then((deleteConfrimed) => {
-            if (deleteConfrimed) {
-              if (this.selectedRows.length === this.dumps.length) {
-                this.$store
-                  .dispatch('dumps/deleteAllDumps')
-                  .then((success) => this.successToast(success))
-                  .catch(({ message }) => this.errorToast(message));
-              } else {
-                this.$store
-                  .dispatch('dumps/deleteDumps', this.selectedRows)
-                  .then((messages) => {
-                    messages.forEach(({ type, message }) => {
-                      if (type === 'success') {
-                        this.successToast(message);
-                      } else if (type === 'error') {
-                        this.errorToast(message);
-                      }
-                    });
-                  });
-              }
-            }
-          });
-      }
-    },
-    exportFileName(row) {
+    };
+const onChangeSearch = (event) => {
+  searchFilterInput.value = event;
+};
+const onClearSearch = () => {
+  searchFilterInput.value = '';
+};
+const exportFileName = (row) => {
       let filename = row.item.dumpType + '_' + row.item.id;
       filename = filename.replace(RegExp(' ', 'g'), '_');
       return filename;
-    },
-  },
-};
+    };
 </script>
+<style lang="scss" scoped>
+#table-dumps {
+  td .btn-link {
+    width: auto !important;
+  }
+}
+.searchStyle {
+  height: 74px;
+  top: 22px;
+  position: relative;
+}
+.margin-style {
+  margin-bottom: 23px;
+  margin-left: 10px;
+}
+.text-right {
+  text-align: right;
+}
+.tableStyle {
+  overflow-x: hidden;
+}
+</style>

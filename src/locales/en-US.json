@@ -33,7 +33,7 @@
       "tooltip": "Tooltip"
     },
     "calendar": {
-      "dateFormat": "YYYY-MM-DD",
+      "dateFormat": "DD/MM/YYYY",
       "selectDate": "Select date",
       "useCursorKeysToNavigateCalendarDates": "Use cursor keys to navigate calendar dates"
     },
@@ -405,9 +405,13 @@
       "message": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit ",
       "messageText": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit Profile Settings",
       "messageNtp": "If NTP is selected but an NTP server is not given or the given NTP server is not reachable, then time.google.com will be used.",
-      "messagePowerOff": "The server must be powered off to change date and time to manual or NTP."
+      "messagePowerOff": "The server must be powered off to change date and time to manual or NTP.",
+      "mfaMessage": "Changing date and time will affect MFA users."
     },
     "configureSettings": "Configure settings",
+    "viewDynamicNtp": "View Dynamic NTP servers",
+    "dhcpNtpInfoTooltip": "This section captures the DHCP supplied NTP server details",
+    "staticNtp":"Static NTP servers",
     "form": {
       "date": "Date",
       "manual": "Manual",
@@ -465,12 +469,17 @@
     "processorCores": "Processor cores",
     "totalCores": "Total cores",
     "alert": {
-      "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off."
+      "message": "Memory dimms and processor cores can be configured or deconfigured only when the server is powered off.",
+      "warning": "If memory event occurred at runtime and server has not yet been rebooted then the memory resource is still in use. Once server is rebooted, the memory resource will become deconfigured and not in use."
     },
     "toast": {
       "deleteReqFailed": "The delete request failed because the resource requested cannot be deleted.",
       "errorDisablingSetting": "Error disabling setting",
-      "errorEnablingSetting": "Error enabling setting"
+      "errorEnablingSetting": "Error enabling setting",
+      "errorConfiguringProcessorCore": "Error Configuring Processor Core",
+      "errorConfiguringDIMM": "Error Configuring Memory DIMM",
+      "errorDeconfiguringProcessorCore": "Error Deconfiguring Processor Core",
+      "errorDeconfiguringDIMM": "Error Deconfiguring Memory DIMM"
     },
     "table": {
       "deconfigurationType": "Deconfiguration Type",
@@ -544,9 +553,11 @@
     "severityValues": {
       "fatal": "Fatal",
       "predictive": "Predictive",
-      "manual": "Manual"
+      "manual": "Manual",
+      "spare": "Spare"
     },
     "toast": {
+      "clearAllInfo": "A core guard record was not deleted as it might be associated with Spare core. This record can only be cleared separately. | Core guard records were not deleted as it might be associated with Spare core. Each of these records can only be cleared separately.",
       "errorDelete": "Error deleting %{count} record. | Error deleting %{count} records.",
       "errorResolveEntries": "Error resolving %{count} record. | Error resolving %{count} records.",
       "errorStartDownload": "Error starting download.",
@@ -626,6 +637,8 @@
       "errorStartResourceDumpInvalidSelector": "Error initiating dump. Invalid resource selector.",
       "errorStartResourceDumpInvalidPassword": "Error initiating dump. Invalid password.",
       "errorStartSystemDump": "Error starting new System dump.",
+      "resourceDumpSuccess": "Resource Dump created successfully.",
+      "resourceDumpFailed": "Resource Dump creation failed.",
       "successDeleteDump": "Successfully deleted %{count} dump. | Successfully deleted %{count} dumps.",
       "successStartBmcDumpTitle": "BMC dump started",
       "successStartDump": "The dump will take some time to complete.",
@@ -675,8 +688,10 @@
     },
     "toast": {
       "errorDelete": "Error deleting %{count} log. | Error deleting %{count} logs.",
+      "errorDeleteGuardRecord": "Log cannot be deleted as it is associated with a guard record. Please manually clear the guard or replace the part. | Logs with guard records were not deleted. Please manually clear the guard or replace the part.",
       "errorLogStatusUpdate": "Error updating log status.",
       "errorResolveLogs": "Error resolving %{count} log. | Error resolving %{count} logs.",
+      "errorResolveLogsGuardRecord": "Log cannot be resolved as it is associated with a guard record. Please manually clear the guard or replace the part. | Logs with guard records were not resolved. Please manually clear the guard or replace the part.",
       "errorUnresolveLogs": "Error unresolving %{count} log. | Error unresolving %{count} logs.",
       "infoStartDownload": "Download might take several minutes to complete.",
       "successDelete": "Successfully deleted %{count} log. | Successfully deleted %{count} logs.",
@@ -822,12 +837,10 @@
     "concurrentMaintenancePowerOffDesc": "Use this function to power off the power domain that includes resources that are currently in a disk unit attention state.",
     "concurrentMaintenancePowerOn": "Concurrent Maintenance Power On Domain (Function 69)",
     "concurrentMaintenancePowerOnDesc": "Use this function to power on the power domain that was powered off by using function 68.",
-    "disableRemoteService": "Disable Remote Service (Function 65)",
-    "disableRemoteServiceDesc": "Use this function to deactivate a remote service session.",
+    "consoleServiceFunction": "Console Service Function (Function 65)",
+    "consoleServiceFunctionDesc": "Use this function to initiate console recovery (IBM i 7.5, or later).",
     "diskUnitIOP": "Disk Unit IOP Reset/Reload (Function 67)",
     "diskUnitIOPDesc": "Use this function to initiate an I/O processor dump and reset/reload of an IOP that controls resources that are currently in a disk unit attention state.",
-    "enableRemoteService": "Enable Remote Service (Function 66)",
-    "enableRemoteServiceDesc": "Use this function to activate a remote service session.",
     "execute": "Execute",
     "iopControlStorageDump": "IOP Control Storage Dump (Function 70)",
     "iopControlStorageDumpDesc": "Use this function to initiate an I/O processor dump and reset/reload of the IOP that was designated to control the load source device when the logical partition was activated.",
@@ -1115,6 +1128,7 @@
     "model": "Model",
     "password": "Password",
     "serialNumber": "Serial number",
+    "totpTooltip": "Enter the TOTP when the user is enrolled in MFA and MFA has not been bypassed.",
     "uploadServiceLoginCertificate": "Upload service login certificate",
     "username": "Username",
     "alert": {
@@ -1123,7 +1137,9 @@
     },
     "modal": {
       "addNewServiceLoginCertificate": "Add new service login certificate",
-      "certificateFile": "Certificate File"
+      "certificateFile": "Certificate File",
+      "login": "Log In",
+      "register": "Register"
     }
   },
   "pageMemory": {
@@ -1152,7 +1168,8 @@
     "updateDynamicIoDrawerAttachment": "Update dynamic I/O drawer attachment",
     "alert": {
       "heading": "Applying changes",
-      "message": "System has to be powered off. Changes made will take effect on next reboot.",
+      "message1": "System has to be powered off.",
+      "message2":  "Changes made will take effect on next reboot.",
       "serverMustBePoweredOffTo": "Server must be powered off to:",
       "updateActiveMemoryMirroring": "Update active memory mirror mode",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1198,6 +1215,7 @@
     "useDns": "Use DNS servers",
     "useDomainName": "Use domain name",
     "useNtp": "Use NTP servers",
+    "lldp": "LLDP",
     "modal": {
       "confirmDeleteIpv4": "Are you sure you want to delete '%{address}'?",
       "confirmDeleteIpv6": "Are you sure you want to delete '%{address}'?",
@@ -1378,7 +1396,7 @@
       "successIpmiNetworkPolicyUpdate": "Successfully updated %{policy}. The BMC normally takes about 30 seconds to change the state.",
       "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
     },
-    "acfUploadEnablementConfirmText": "Caution: Enabling this setting allows unauthenticated users to upload Access Control Files (ACFs) without logging in and without pressing Function 74 on the Operator Panel. Do you want to proceed?",
+    "acfUploadEnablementConfirmText": "Caution: Enabling this setting removes the physical system access requirement from the process to upload an Access Control File (ACF).  This would allow anyone who is authorized to request an ACF and has network access to ASMI to gain access to the admin account.  Do you want to proceed?",
     "vtpm": "VirtualTPM",
     "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system."
   },
@@ -1434,6 +1452,12 @@
       "message3": "The system will attempt to exit Safe Mode on the next power on attempt. To reboot the server, visit",
       "message3Link": "server power operations"
     },
+    "oemMode": {
+      "primary": "Custom mode",
+      "message1": "System is currently in a custom mode.",
+      "message2": "Change mode by selecting an option below."
+    },
+    "nonIdlePowerSaverMode": "Idle power saver is not supported in current mode.",
     "delayTimeValidation": {
       "delayTimeRange": "Value must be between %{min} and %{max}.",
       "enterDelayTime": "Value cannot be less than delay time to exit.",
@@ -1444,18 +1468,27 @@
       "content": "Enabling any of the power saver modes will cause changes in processor frequencies, changes in processor utilization, changes in power consumption, and performance to vary.",
       "subTitle": "Are you sure?",
       "titleMaximumPerformance": "Enable maximum performance mode",
-      "titlePowerSaving": "Enable power saving mode",
-      "titleStatic": "Enable static mode"
+      "titleEfficiencyFavorPower": "Enable energy efficient mode",
+      "titlePowerSaving": "Enable maximum energy saver mode"
     },
     "selectMode": {
-      "maximumPerformance": "Maximum performance",
-      "powerSaving": "Power saving",
-      "static": "Static"
+      "maximumPerformance": {
+        "primary": "Maximum performance",
+        "secondary": "Maximum performance"
+      },
+      "energyEfficient": {
+        "primary": "Energy efficient",
+        "secondary": "Efficiency favor power"
+      },
+      "maximumEnergySaver": {
+        "primary": "Maximum energy saver",
+        "secondary": "Power saver"
+      }
     },
     "tableRoles": {
-      "descMaximumPerformance": "Processor frequency will vary. This mode allows the system to reach the maximum frequency by taking advantage of the thermal and power headroom provided by idle cores, lower workloads, and favorable environmental conditions.",
-      "descPowerSaving": "Processor frequency is set to a fixed minimum value, reducing the power consumption of the system while still delivering predictable performance.",
-      "descStatic": "Processor frequency is set to a fixed value that can run normal workloads under normal environmental conditions.",
+      "descMaximumPerformance": "Processor frequency will vary. This mode allows systems to reach the maximum-frequency value by taking advantage of thermal and energy headroom provided by idle cores, lower workloads, and favorable environmental conditions.",
+      "descEnergyEfficient": "Processor frequency will vary. This mode allows systems to reach mid-frequency values by taking advantage of thermal and energy headroom provided by idle cores, lower workloads, and favorable environmental conditions.",
+      "descMaximumEnergySaver": "Processors are set to a fixed low-frequency value regardless of workload and environment temperatures, reducing energy consumption while still delivering predictable performance.",
       "description": "Description",
       "setting": "Setting"
     },
@@ -1779,7 +1812,7 @@
           "invalidVlanTagId": "VLAN ID must be in range %{min} to %{max}",
           "invalidIsciTargetPort": "The port value should be a positive integer between %{min} and %{max}",
           "chapNameRequired": "CHAP name is required when CHAP secret is specified",
-          "chapSecretRequired": "CHAP secret is required when CHAP name is specified",
+          "chapSecretRequired": "CHAP secret is required when CHAP secret is specified",
           "invalidFieldLength": "%{field} should not exceed %{max} characters",
           "invalidChapSecretLength": "CHAP secret length must be between %{min} and %{max} characters"
         }
@@ -1855,7 +1888,12 @@
     "accountPolicySettings": "Account policy settings",
     "addUser": "Add user",
     "deleteUser": "Delete user | Delete users",
+    "disableMfaBypassWarning": "You will be logged out if your MFA bypass value is disabled.",
     "editUser": "Edit user",
+    "enableMfaInfo": "You will be logged out after successfully enabling MFA TOTP Authentication.",
+    "enableMfaWarning": "You need to MFA bypass yourself to enable MFA TOTP Authentication",
+    "mfaTimeMatch": "To update, visit ",
+    "mfaTotpAuthentication": "MFA TOTP authentication",
     "viewPrivilegeRoleDescriptions": "View privilege role descriptions",
     "modal": {
       "accountLocked": "Account locked",
@@ -1866,24 +1904,38 @@
       "clickSaveToUnlockAccount": "Click \"Save\" to unlock account",
       "confirmUserPassword": "Confirm user password",
       "deleteConfirmMessage": "Are you sure you want to delete user '%{user}'? This action cannot be undone.",
+      "enableMfa": "Enable MFA",
+      "helptext": "Steps",
+      "helptextStep1": "1. Scan the QR code or enter the secret key into the authenticator app.",
+      "helptextStep2": "2. Enter the TOTP generated by the app into the TOTP field and Login.",
+      "helptextStep2EnableMfa": "2. Enter the TOTP generated by the app into the TOTP field and Validate.",
+      "hmcWarning": "MFA bypassed user must be used for HMC connection.",
       "manual": "Manual",
       "maxFailedLoginAttempts": "Max failed login attempts",
+      "mfaInfoAlert": "Enable/Disable MFA at system level will affect all local users of the system.",
       "noSpecialCharactersExceptUnderscore": "No special characters except underscore",
+      "otp": "TOTP",
       "passwordMustBeBetween": "Password must be between %{min} – %{max} characters",
       "passwordsDoNotMatch": "Passwords do not match",
       "privilege": "Privilege",
+      "secretKey": "Secret key",
       "timeoutDurationSeconds": "Timeout duration (seconds)",
       "unlock": "Unlock",
       "username": "Username",
       "userPassword": "User password",
       "userUnlockMethod": "User unlock method",
+      "validate": "Validate",
       "zeroLoginAttempts": "If `0`, then account shall never be locked."
     },
     "table": {
       "administrator": "Administrator",
+      "clear": "Clear",
+      "mfaByPass": "MFA bypass",
       "privilege": "Privilege",
       "readOnly": "Read only",
       "serviceAgent": "Service agent",
+      "secretKey": "Secret key",
+      "secretKeyTooltip": "If the secret key is cleared, that user will be prompted to re-register the secret key during the login process.",
       "status": "Status",
       "username": "Username"
     },
@@ -1901,20 +1953,32 @@
       "errorBatchDelete": "Error deleting %{count} user. | Error deleting %{count} users.",
       "errorBatchDisable": "Error disabling %{count} user. | Error disabling %{count} users.",
       "errorBatchEnable": "Error enabling %{count} user. | Error enabling %{count} users.",
+      "errorClearSecretKey": "Error clearing Secret key",
       "errorCreateUser": "Error creating user '%{username}'.",
       "errorCreateUserMaxUsers": "Error creating user '%{username}' because this system has reached the maximum amount of allowable users.",
       "errorCreateUserPasswordNotAccepted": "Error creating user '%{username}' because the password was not accepted.",
       "errorDeleteUser": "Error deleting user '%{username}'.",
+      "errorDisableMfa": "Error disabling Multi factor authentication.",
+      "errorDisableMfaBypass": "Error disabling MFA bypass.",
+      "errorEnableMfa": "Error enabling Multi factor authentication.",
+      "errorEnableMfaAuto": "Error enabling MFA TOTP Authentication. Please verify BMC time and the browser's time to successfully verify TOTP.",
+      "errorEnableMfaBypass": "Error enabling MFA bypass.",
       "errorLoadAccountSettings": "Error loading account settings",
       "errorLoadUsers": "Error loading users.",
+      "errorOtp": "Invalid TOTP",
       "errorSaveSettings": "Error saving account settings.",
       "errorUpdateUser": "Error updating user '%{username}'.",
       "errorUpdateUserPasswordNotAccepted": "Error updating user '%{username}' because the password was not accepted.",
       "successBatchDelete": "Successfully deleted %{count} user. | Successfully deleted %{count} users.",
       "successBatchDisable": "Successfully disabled %{count} user. | Successfully disabled %{count} users.",
       "successBatchEnable": "Successfully enabled %{count} user. | Successfully enabled %{count} users.",
+      "successClearSecretKey": "Successfully cleared Secret key",
       "successCreateUser": "Created user '%{username}'.",
       "successDeleteUser": "Deleted user '%{username}'.",
+      "successDisableMfa": "Successfully disabled Multi factor authentication.",
+      "successDisableMfaBypass": "Successfully disabled MFA bypass.",
+      "successEnableMfa": "Successfully enabled Multi factor authentication.",
+      "successEnableMfaBypass": "Successfully enabled MFA bypass.",
       "successSaveSettings": "Successfully saved account settings.",
       "successUpdateUser": "Updated user '%{username}'."
     }
