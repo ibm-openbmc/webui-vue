@@ -242,7 +242,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed, onBeforeMount } from 'vue';
+import { ref, onMounted, watch, computed, onBeforeMount, getCurrentInstance } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
@@ -258,8 +258,10 @@ import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import { DateTimeStore, GlobalStore } from '@/store';
 import eventBus from '@/eventBus';
 import { required, helpers, requiredIf, sameAs, not } from '@vuelidate/validators';
-import { formatDate, formatTime } from '@/components/utilities/dateFilter';
 
+const { proxy } = getCurrentInstance();
+const formatDate = proxy.$filters.formatDate;
+const formatTime = proxy.$filters.formatTime;
 const notSameAs = (value1, value2) => {
   return value2 ? value1 !== value2 : true;
 }
