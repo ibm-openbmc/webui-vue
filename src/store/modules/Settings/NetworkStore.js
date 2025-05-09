@@ -1,4 +1,3 @@
-//TODO: Work Requird -->
 import api from '@/store/api';
 import i18n from '@/i18n';
 import { defineStore } from 'pinia';
@@ -24,6 +23,30 @@ export const NetworkStore = defineStore('network', {
     isTableBusyGetter: (state) => state.isTableBusy,
   },
   actions: {
+    setDhcpEnabledState(dhcpEnabledState) {
+      this.networkSettings[this.selectedInterfaceIndex].dhcpEnabled =
+        dhcpEnabledState;
+    },
+    setIpv6DhcpEnabledState(ipv6DhcpEnabledState) {
+      this.networkSettings[this.selectedInterfaceIndex].ipv6OperatingMode =
+        ipv6DhcpEnabledState;
+    },
+    setIpv6AutoConfigEnabled(ipv6AutoConfigEnabled) {
+      this.networkSettings[this.selectedInterfaceIndex].ipv6AutoConfigEnabled =
+        ipv6AutoConfigEnabled;
+    },
+    setDomainNameState(domainState) {
+      this.networkSettings[this.selectedInterfaceIndex].useDomainNameEnabled =
+        domainState;
+    },
+    setDnsState(dnsState) {
+      this.networkSettings[this.selectedInterfaceIndex].useDnsEnabled =
+        dnsState;
+    },
+    setNtpState(ntpState) {
+      this.networkSettings[this.selectedInterfaceIndex].useNtpEnabled =
+        ntpState;
+    },
     async setNetworkSettings(data) {
       this.networkSettings = data.map(({ data }) => {
         const {
@@ -110,7 +133,7 @@ export const NetworkStore = defineStore('network', {
       }, 15000);
     },
     async saveDomainNameState(domainState) {
-      this.domainState = domainState;
+      this.setDomainNameState(domainState);
       const data = {
         DHCPv4: {
           UseDomainName: domainState,
@@ -121,7 +144,12 @@ export const NetworkStore = defineStore('network', {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${this.selectedInterfaceId}`,
           data
         )
-        .then(this.getEthernetData())
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          this.getEthernetData();
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          this.getEthernetDataAfterDelay();
+        })
         .then(() => {
           return i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.global.t('pageNetwork.domainName'),
@@ -129,7 +157,7 @@ export const NetworkStore = defineStore('network', {
         })
         .catch((error) => {
           console.log(error);
-          this.domainState = !domainState;
+          this.setDomainNameState(!domainState);
           throw new Error(
             i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.global.t('pageNetwork.domainName'),
@@ -138,7 +166,7 @@ export const NetworkStore = defineStore('network', {
         });
     },
     async saveDnsState(dnsState) {
-      this.dnsState = dnsState;
+      this.setDnsState(dnsState);
       const data = {
         DHCPv4: {
           UseDNSServers: dnsState,
@@ -149,7 +177,12 @@ export const NetworkStore = defineStore('network', {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${this.selectedInterfaceId}`,
           data
         )
-        .then(this.getEthernetData())
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          this.getEthernetData();
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          this.getEthernetDataAfterDelay();
+        })
         .then(() => {
           return i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.global.t('pageNetwork.dns'),
@@ -157,7 +190,7 @@ export const NetworkStore = defineStore('network', {
         })
         .catch((error) => {
           console.log(error);
-          this.dnsState = !dnsState;
+          this.setDnsState(!dnsState);
           throw new Error(
             i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.global.t('pageNetwork.dns'),
@@ -166,7 +199,7 @@ export const NetworkStore = defineStore('network', {
         });
     },
     async saveNtpState(ntpState) {
-      this.ntpState = ntpState;
+      this.setNtpState(ntpState);
       const data = {
         DHCPv4: {
           UseNTPServers: ntpState,
@@ -177,7 +210,12 @@ export const NetworkStore = defineStore('network', {
           `/redfish/v1/Managers/bmc/EthernetInterfaces/${this.selectedInterfaceId}`,
           data
         )
-        .then(this.getEthernetData())
+        .then(() => {
+          // Getting Ethernet data here so that the toggle gets updated
+          this.getEthernetData();
+          // Getting Ethernet data here so that the IPv4 table gets updated
+          this.getEthernetDataAfterDelay();
+        })
         .then(() => {
           return i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.global.t('pageNetwork.ntp'),
@@ -185,7 +223,7 @@ export const NetworkStore = defineStore('network', {
         })
         .catch((error) => {
           console.log(error);
-          this.ntpState = !ntpState;
+          this.setNtpState(!ntpState);
           throw new Error(
             i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.global.t('pageNetwork.ntp'),
@@ -194,7 +232,7 @@ export const NetworkStore = defineStore('network', {
         });
     },
     async saveDhcpEnabledState(dhcpState) {
-      this.dhcpEnabledState = dhcpState;
+      this.setDhcpEnabledState(dhcpState);
       const data = {
         DHCPv4: {
           DHCPEnabled: dhcpState,
@@ -218,7 +256,7 @@ export const NetworkStore = defineStore('network', {
         })
         .catch((error) => {
           console.log(error);
-          this.dhcpEnabledState = !dhcpState;
+          this.setDhcpEnabledState(!dhcpState);
           throw new Error(
             i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.global.t('pageNetwork.dhcp'),
@@ -228,7 +266,7 @@ export const NetworkStore = defineStore('network', {
     },
     async saveIpv6DhcpEnabledState(dhcpState) {
       const updatedDhcpState = dhcpState ? 'Enabled' : 'Disabled';
-      this.ipv6DhcpEnabledState = updatedDhcpState;
+      this.setIpv6DhcpEnabledState(updatedDhcpState);
       const data = {
         DHCPv6: {
           OperatingMode: updatedDhcpState,
@@ -252,7 +290,7 @@ export const NetworkStore = defineStore('network', {
         })
         .catch((error) => {
           console.log(error);
-          this.ipv6DhcpEnabledState = !dhcpState;
+          this.setIpv6DhcpEnabledState(!dhcpState ? 'Enabled' : 'Disabled');
           throw new Error(
             i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.global.t('pageNetwork.dhcp'),
@@ -261,7 +299,7 @@ export const NetworkStore = defineStore('network', {
         });
     },
     async saveIpv6AutoConfigState(ipv6AutoConfigState) {
-      this.ipv6AutoConfigEnabled = ipv6AutoConfigState;
+      this.setIpv6AutoConfigEnabled(ipv6AutoConfigState);
       const data = {
         StatelessAddressAutoConfig: {
           IPv6AutoConfigEnabled: ipv6AutoConfigState,
@@ -285,7 +323,7 @@ export const NetworkStore = defineStore('network', {
         })
         .catch((error) => {
           console.log(error);
-          this.ipv6AutoConfigEnabled = !ipv6AutoConfigState;
+          this.setIpv6AutoConfigEnabled(!ipv6AutoConfigState);
           throw new Error(
             i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.global.t('pageNetwork.ipv6AutoConfig'),

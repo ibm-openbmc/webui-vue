@@ -5,11 +5,7 @@
       <div class="login-main">
         <div>
           <div class="login-brand mb-5">
-            <img
-              :alt="altLogo"
-              src="@/assets/images/login-company-logo.svg"
-              width="90"
-            />
+            <img width="90px" src="@/assets/images/login-company-logo.svg" :alt="altLogo" />
           </div>
           <h1 v-if="customizableGuiName" class="h3 mb-5">
             {{ customizableGuiName }}
@@ -21,14 +17,6 @@
         <div class="login-aside__logo-brand">
           <!-- Add Secondary brand logo if needed -->
         </div>
-        <br />
-        <div class="login-aside__logo-bmc">
-          <img
-            alt="Built on OpenBMC"
-            src="@/assets/images/built-on-openbmc-logo.svg"
-            width="60"
-          />
-        </div>
       </div>
     </div>
   </main>
@@ -36,8 +24,11 @@
 
 <script setup>
 import { ref } from 'vue';
-const altLogo = ref('intel');
-const customizableGuiName = ref('BMC System Management');
+// Need to uncomment the below when env based configuration is implemented
+// const  altLogo = ref(process.env.VUE_APP_COMPANY_NAME || 'OpenBMC');
+// const customizableGuiName = ref(process.env.VUE_APP_GUI_NAME || '');
+const  altLogo = ref('OpenBMC');
+const customizableGuiName = ref('Advanced System Management Interface (ASMI)');
 </script>
 
 <style lang="scss" scoped>

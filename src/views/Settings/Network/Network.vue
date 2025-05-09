@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title
       :title="$t('appPageTitle.network')"
       :description="$t('pageNetwork.pageDescription')"
@@ -8,11 +8,11 @@
     <network-global-settings />
     <!-- Interface tabs -->
     <page-section>
-      <b-row>
-        <b-col>
-          <b-card no-body>
-            <b-tabs content-class="mt-3 p-4">
-              <b-tab
+      <BRow>
+        <BCol>
+          <BCard no-body>
+            <BTabs content-class="mt-3 p-4">
+              <BTab
                 v-for="(data, index) in network"
                 :key="data.id"
                 :title="data.id"
@@ -30,16 +30,16 @@
                 <table-ipv6-static-default-gateway :tab-index="tabIndex" />
                 <!-- Static DNS table -->
                 <table-dns :tab-index="tabIndex" />
-              </b-tab>
+              </BTab>
               <template #empty>
                 <div class="text-center text-muted">
                   {{ $t('global.table.emptyMessage') }}
                 </div>
               </template>
-            </b-tabs>
-          </b-card>
-        </b-col>
-      </b-row>
+            </BTabs>
+          </BCard>
+        </BCol>
+      </BRow>
     </page-section>
     <!-- Modals -->
     <modal-ipv4
@@ -63,13 +63,17 @@
     />
     <modal-dns @ok="saveDnsAddress" />
     <modal-hostname :hostname="currentHostname" @ok="saveHostname" />
-  </b-container>
+  </BContainer>
 </template>
 
-<script>
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
-import LoadingBarMixin, { loading } from '@/components/Mixins/LoadingBarMixin';
+<script setup>
+import { ref, computed, watch, onBeforeMount, onMounted } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
+import eventBus from '@/eventBus';
+import useToast from '@/components/Composables/useToastComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import PageSection from '@/components/Global/PageSection.vue';
+import PageTitle from '@/components/Global/PageTitle.vue';
 import ModalHostname from './ModalHostname.vue';
 import ModalIpv4 from './ModalIpv4.vue';
 import ModalIpv6 from './ModalIpv6.vue';
@@ -77,223 +81,198 @@ import ModalIpv6StaticDefaultGateway from './ModalIpv6StaticDefaultGateway.vue';
 import ModalDns from './ModalDns.vue';
 import NetworkGlobalSettings from './NetworkGlobalSettings.vue';
 import NetworkInterfaceSettings from './NetworkInterfaceSettings.vue';
-import PageSection from '@/components/Global/PageSection';
-import PageTitle from '@/components/Global/PageTitle';
 import TableIpv4 from './TableIpv4.vue';
 import TableDns from './TableDns.vue';
 import TableIpv6 from './TableIpv6.vue';
 import TableIpv6StaticDefaultGateway from './TableIpv6StaticDefaultGateway.vue';
+import { NetworkStore, AuthenticationStore } from '@/store';
 
-export default {
-  name: 'NetworkPage',
-  components: {
-    ModalHostname,
-    ModalIpv4,
-    ModalIpv6,
-    ModalIpv6StaticDefaultGateway,
-    ModalDns,
-    NetworkGlobalSettings,
-    NetworkInterfaceSettings,
-    PageSection,
-    PageTitle,
-    TableDns,
-    TableIpv4,
-    TableIpv6,
-    TableIpv6StaticDefaultGateway,
-  },
-  mixins: [BVToastMixin, DataFormatterMixin, LoadingBarMixin],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
-  },
-  data() {
-    return {
-      currentHostname: '',
-      defaultGateway: '',
-      ipAddress: '',
-      ipAddressIpv6: '',
-      ipAddressIpv6StaticDefaultGateway: '',
-      prefixLengthIpv6StaticDefaultGateway: 0,
-      prefixLength: 0,
-      subnet: '',
-      loading,
-      tabIndex: 0,
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
+const { successToast, errorToast } = useToast();
+
+const networkStore = NetworkStore();
+const authenticationStore = AuthenticationStore();
+
+const currentHostname = ref('');
+const defaultGateway = ref('');
+const ipAddress = ref('');
+const ipAddressIpv6 = ref('');
+const ipAddressIpv6StaticDefaultGateway = ref('');
+const prefixLengthIpv6StaticDefaultGateway = ref(0);
+const prefixLength = ref(0);
+const subnet = ref('');
+const tabIndex = ref(0);
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+onBeforeMount(() => {
+  startLoader();
+  networkStore.getEthernetData().finally(() => endLoader());
+});
+
+onMounted(() => {
+  eventBus.on('edit-address', (item) => {
+    subnet.value = item.SubnetMask;
+    ipAddressIpv6.value = item.Address;
+    ipAddress.value = item.Address;
+    ipAddressIpv6StaticDefaultGateway.value = item.Address;
+    prefixLength.value = item.PrefixLength;
+    prefixLengthIpv6StaticDefaultGateway.value = item.PrefixLength;
+  });
+  networkStore.setSelectedTabIndex(0);
+});
+
+const network = computed(() => {
+  return networkStore.networkSettingsGetter;
+});
+
+const isIpv6Valid = computed(() => {
+  const ipv6 = network.value[tabIndex.value].ipv6;
+  if (ipv6 === undefined || ipv6 === null || ipv6.length === 0) return false;
+  else return true;
+});
+
+watch(network, () => {
+  getModalInfo();
+});
+
+const getModalInfo = () => {
+  defaultGateway.value =
+    networkStore.networkSettingsGetter[tabIndex.value].defaultGateway;
+
+  currentHostname.value =
+    networkStore.networkSettingsGetter[tabIndex.value].hostname;
+};
+
+const getTabIndex = (selectedIndex) => {
+  tabIndex.value = selectedIndex;
+  networkStore.setSelectedTabIndex(tabIndex.value);
+  networkStore.setSelectedTabId(network.value[tabIndex.value].id);
+  getModalInfo();
+};
+
+const saveIpv4Address = (modalFormData) => {
+  const modalData = [modalFormData];
+  startLoader();
+  if (ipAddress.value !== '') {
+    //Edit selected row
+    const selectedRow = { Address: ipAddress.value, Subnet: '' };
+    const editRow = modalData.concat(selectedRow);
+    networkStore
+      .updateIpv4Address(editRow)
+      .then((message) => {
+        successToast(message);
+        setEndLoaderAfterDelay();
+      })
+      .catch(({ message }) => {
+        errorToast(message);
+        endLoader();
+      });
+  } else {
+    // Add new address
+    networkStore
+      .updateIpv4Address(modalData)
+      .then((message) => {
+        successToast(message);
+        setEndLoaderAfterDelay();
+      })
+      .catch(({ message }) => {
+        errorToast(message);
+        endLoader();
+      });
+  }
+};
+
+const saveIpv6Address = (modalFormData) => {
+  const modalData = [modalFormData];
+  startLoader();
+  if (ipAddress.value !== '') {
+    //Edit selected row
+    const selectedRow = { Address: ipAddress, PrefixLength: 0 };
+    const editRow = modalData.concat(selectedRow);
+    networkStore
+      .updateIpv6Address(editRow)
+      .then((message) => {
+        successToast(message);
+        setEndLoaderAfterDelay();
+      })
+      .catch(({ message }) => {
+        errorToast(message);
+        endLoader();
+      });
+  } else {
+    // Add new address
+    networkStore
+      .updateIpv6Address(modalData)
+      .then((message) => {
+        successToast(message);
+        setEndLoaderAfterDelay();
+      })
+      .catch(({ message }) => {
+        errorToast(message);
+        endLoader();
+      });
+  }
+};
+
+const saveIpv6StaticDefaultGatewayAddress = (modalFormData) => {
+  const modalData = [modalFormData];
+  startLoader();
+  if (ipAddressIpv6StaticDefaultGateway.value !== '') {
+    //Edit selected row
+    const selectedRow = {
+      Address: ipAddressIpv6StaticDefaultGateway.value,
+      PrefixLength: 0,
     };
-  },
-  computed: {
-    network() {
-      return this.$store.getters['network/networkSettings'];
-    },
-    isIpv6Valid() {
-      const ipv6 = this.network[this.tabIndex].ipv6;
-      if (ipv6 === undefined || ipv6 === null || ipv6.length === 0)
-        return false;
-      else return true;
-    },
-  },
-  watch: {
-    network() {
-      this.getModalInfo();
-    },
-  },
-  mounted() {
-    this.$root.$on('edit-address', (item) => {
-      this.subnet = item.SubnetMask;
-      this.ipAddressIpv6 = item.Address;
-      this.ipAddress = item.Address;
-      this.ipAddressIpv6StaticDefaultGateway = item.Address;
-      this.prefixLength = item.PrefixLength;
-      this.prefixLengthIpv6StaticDefaultGateway = item.PrefixLength;
-    });
-    this.$store.dispatch('network/setSelectedTabIndex', 0);
-  },
-  created() {
-    this.startLoader();
-    this.$store
-      .dispatch('network/getEthernetData')
-      .finally(() => this.endLoader());
-  },
-  methods: {
-    getModalInfo() {
-      this.defaultGateway =
-        this.$store.getters['network/networkSettings'][
-          this.tabIndex
-        ].defaultGateway;
+    const editRow = modalData.concat(selectedRow);
+    networkStore
+      .updateIpv6StaticDefaultGatewayAddress(editRow)
+      .then((message) => {
+        successToast(message);
+        setEndLoaderAfterDelay();
+      })
+      .catch(({ message }) => {
+        errorToast(message);
+        endLoader();
+      });
+  } else {
+    // Add new address
+    networkStore
+      .updateIpv6StaticDefaultGatewayAddress(modalData)
+      .then((message) => {
+        successToast(message);
+        setEndLoaderAfterDelay();
+      })
+      .catch(({ message }) => {
+        errorToast(message);
+        endLoader();
+      });
+  }
+};
 
-      this.currentHostname =
-        this.$store.getters['network/networkSettings'][this.tabIndex].hostname;
+const saveDnsAddress = (modalFormData) => {
+  startLoader();
+  networkStore
+    .saveDnsAddress(modalFormData)
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message))
+    .finally(() => endLoader());
+};
 
-      this.currentMacAddress =
-        this.$store.getters['network/networkSettings'][
-          this.tabIndex
-        ].macAddress;
-    },
-    getTabIndex(selectedIndex) {
-      this.tabIndex = selectedIndex;
-      this.$store.dispatch('network/setSelectedTabIndex', this.tabIndex);
-      this.$store.dispatch(
-        'network/setSelectedTabId',
-        this.network[this.tabIndex].id,
-      );
-      this.getModalInfo();
-    },
-    saveIpv4Address(modalFormData) {
-      const modalData = [modalFormData];
-      this.startLoader();
-      if (this.ipAddress !== '') {
-        //Edit selected row
-        const selectedRow = { Address: this.ipAddress, Subnet: '' };
-        const editRow = modalData.concat(selectedRow);
-        this.$store
-          .dispatch('network/updateIpv4Address', editRow)
-          .then((message) => {
-            this.successToast(message);
-            this.setEndLoaderAfterDelay();
-          })
-          .catch(({ message }) => {
-            this.errorToast(message);
-            this.endLoader();
-          });
-      } else {
-        // Add new address
-        this.$store
-          .dispatch('network/updateIpv4Address', modalData)
-          .then((message) => {
-            this.successToast(message);
-            this.setEndLoaderAfterDelay();
-          })
-          .catch(({ message }) => {
-            this.errorToast(message);
-            this.endLoader();
-          });
-      }
-    },
-    saveIpv6Address(modalFormData) {
-      const modalData = [modalFormData];
-      this.startLoader();
-      if (this.ipAddress !== '') {
-        //Edit selected row
-        const selectedRow = { Address: this.ipAddress, PrefixLength: 0 };
-        const editRow = modalData.concat(selectedRow);
-        this.$store
-          .dispatch('network/updateIpv6Address', editRow)
-          .then((message) => {
-            this.successToast(message);
-            this.setEndLoaderAfterDelay();
-          })
-          .catch(({ message }) => {
-            this.errorToast(message);
-            this.endLoader();
-          });
-      } else {
-        // Add new address
-        this.$store
-          .dispatch('network/updateIpv6Address', modalData)
-          .then((message) => {
-            this.successToast(message);
-            this.setEndLoaderAfterDelay();
-          })
-          .catch(({ message }) => {
-            this.errorToast(message);
-            this.endLoader();
-          });
-      }
-    },
-    saveIpv6StaticDefaultGatewayAddress(modalFormData) {
-      const modalData = [modalFormData];
-      this.startLoader();
-      if (this.ipAddressIpv6StaticDefaultGateway !== '') {
-        //Edit selected row
-        const selectedRow = {
-          Address: this.ipAddressIpv6StaticDefaultGateway,
-          PrefixLength: 0,
-        };
-        const editRow = modalData.concat(selectedRow);
-        this.$store
-          .dispatch('network/updateIpv6StaticDefaultGatewayAddress', editRow)
-          .then((message) => {
-            this.successToast(message);
-            this.setEndLoaderAfterDelay();
-          })
-          .catch(({ message }) => {
-            this.errorToast(message);
-            this.endLoader();
-          });
-      } else {
-        // Add new address
-        this.$store
-          .dispatch('network/updateIpv6StaticDefaultGatewayAddress', modalData)
-          .then((message) => {
-            this.successToast(message);
-            this.setEndLoaderAfterDelay();
-          })
-          .catch(({ message }) => {
-            this.errorToast(message);
-            this.endLoader();
-          });
-      }
-    },
-    saveDnsAddress(modalFormData) {
-      this.startLoader();
-      this.$store
-        .dispatch('network/saveDnsAddress', modalFormData)
-        .then((message) => this.successToast(message))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => this.endLoader());
-    },
-    saveHostname(modalFormData) {
-      this.startLoader();
-      this.$store
-        .dispatch('network/saveHostname', modalFormData)
-        .then(() => this.$store.dispatch('authentication/logout'))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => this.endLoader());
-    },
-    setEndLoaderAfterDelay() {
-      setTimeout(() => {
-        this.endLoader();
-      }, 15000);
-    },
-  },
+const saveHostname = (modalFormData) => {
+  startLoader();
+  networkStore
+    .saveHostname(modalFormData)
+    .then(() => authenticationStore.logout())
+    .catch(({ message }) => errorToast(message))
+    .finally(() => endLoader());
+};
+
+const setEndLoaderAfterDelay = () => {
+  setTimeout(() => {
+    endLoader();
+  }, 15000);
 };
 </script>

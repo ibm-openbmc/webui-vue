@@ -33,7 +33,6 @@ const { title, body, statusPassed, timestamp, refreshAction } = defineProps({
   body: String,
   // eslint-disable-next-line vue/require-default-prop
   statusPassed: String,
-  autoHide: Boolean,
   timestamp: Boolean,
   refreshAction: Boolean,
 });

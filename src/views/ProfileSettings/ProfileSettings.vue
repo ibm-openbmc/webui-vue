@@ -1,9 +1,9 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.profileSettings')" />
 
-    <b-row>
-      <b-col md="8" lg="8" xl="6">
+    <BRow>
+      <BCol md="8" lg="8" xl="6">
         <page-section
           :section-title="$t('pageProfileSettings.profileInfoTitle')"
         >
@@ -14,17 +14,17 @@
             </dd>
           </dl>
         </page-section>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
 
-    <b-form @submit.prevent="submitForm">
-      <b-row>
-        <b-col sm="8" md="6" xl="3">
+    <BForm @submit.prevent="submitForm">
+      <BRow>
+        <BCol sm="8" md="6" xl="3">
           <page-section
             v-if="!isServiceUser"
             :section-title="$t('pageProfileSettings.changePassword')"
           >
-            <b-form-group
+            <BFormGroup
               id="input-group-1"
               :label="$t('pageProfileSettings.newPassword')"
               label-for="input-1"
@@ -33,34 +33,32 @@
                 {{ $t('pageUserManagement.modal.userPassword') }}
                 <info-tooltip-password />
               </template>
-              <b-form-text id="password-help-block">
+              <BFormText id="password-help-block">
                 {{
                   $t('pageUserManagement.modal.passwordMustBeBetween', {
                     min: passwordRequirements.minLength,
                     max: passwordRequirements.maxLength,
                   })
                 }}
-              </b-form-text>
-              <input-password-toggle>
-                <b-form-input
+              </BFormText>
+              <input-password-toggle @updatePassView="updatePasswordType">
+                <BFormInput
                   id="password"
                   v-model="form.newPassword"
                   autocomplete="off"
-                  type="password"
+                  :type="inputType"
                   aria-describedby="password-help-block"
                   :disabled="isServiceUser"
-                  :state="getValidationState($v.form.newPassword)"
+                  :state="getValidationState(v$.form.newPassword)"
                   data-test-id="profileSettings-input-newPassword"
                   class="form-control-with-button"
-                  @input="$v.form.newPassword.$touch()"
+                  @input="v$.form.newPassword.$touch()"
                 />
-                <b-form-invalid-feedback role="alert">
+                <BFormInvalidFeedback role="alert">
                   <template
                     v-if="
-                      !$v.form.newPassword.minLength ||
-                      !$v.form.newPassword.maxLength
-                    "
-                  >
+                      v$.form.newPassword.$errors.length > 0 ? (v$.form.newPassword.$errors[0].$validator === 'minLength' || v$.form.newPassword.$errors[0].$validator === 'maxLength') : false
+                    ">
                     {{
                       $t('pageProfileSettings.newPassLabelTextInfo', {
                         min: passwordRequirements.minLength,
@@ -68,49 +66,50 @@
                       })
                     }}
                   </template>
-                </b-form-invalid-feedback>
+                </BFormInvalidFeedback>
               </input-password-toggle>
-            </b-form-group>
-            <b-form-group
+            </BFormGroup>
+            <BFormGroup
               id="input-group-2"
               :label="$t('pageProfileSettings.confirmPassword')"
               label-for="input-2"
             >
-              <input-password-toggle>
-                <b-form-input
+              <input-password-toggle @updatePassView="updateConfirmPasswordType">
+                <BFormInput
                   id="password-confirmation"
                   v-model="form.confirmPassword"
                   autocomplete="off"
-                  type="password"
+                  :type="confirmPasswordType"
                   :disabled="isServiceUser"
-                  :state="getValidationState($v.form.confirmPassword)"
+                  :state="getValidationState(v$.form.confirmPassword)"
                   data-test-id="profileSettings-input-confirmPassword"
                   class="form-control-with-button"
-                  @input="$v.form.confirmPassword.$touch()"
+                  @input="v$.form.confirmPassword.$touch()"
                 />
-                <b-form-invalid-feedback role="alert">
-                  <template v-if="!$v.form.confirmPassword.sameAsPassword">
+                
+                <BFormInvalidFeedback role="alert">
+                  <template v-if="v$.form.confirmPassword.$errors.length > 0 ? v$.form.confirmPassword.$errors[0].$validator === 'sameAsPassword' : false">
                     {{ $t('pageProfileSettings.passwordsDoNotMatch') }}
                   </template>
-                </b-form-invalid-feedback>
+                </BFormInvalidFeedback>
               </input-password-toggle>
-            </b-form-group>
+            </BFormGroup>
           </page-section>
-        </b-col>
-      </b-row>
+        </BCol>
+      </BRow>
       <page-section :section-title="$t('pageProfileSettings.timezoneDisplay')">
         <p>{{ $t('pageProfileSettings.timezoneDisplayDesc') }}</p>
-        <b-row>
-          <b-col md="9" lg="8" xl="9">
-            <b-form-group :label="$t('pageProfileSettings.timezone')">
-              <b-form-radio
+        <BRow>
+          <BCol md="9" lg="8" xl="9">
+            <BFormGroup :label="$t('pageProfileSettings.timezone')">
+              <BFormRadio
                 v-model="form.isUtcDisplay"
                 :value="true"
                 data-test-id="profileSettings-radio-defaultUTC"
               >
                 {{ $t('pageProfileSettings.defaultUTC') }}
-              </b-form-radio>
-              <b-form-radio
+              </BFormRadio>
+              <BFormRadio
                 v-model="form.isUtcDisplay"
                 :value="false"
                 data-test-id="profileSettings-radio-browserOffset"
@@ -120,142 +119,142 @@
                     timezone,
                   })
                 }}
-              </b-form-radio>
-            </b-form-group>
-          </b-col>
-        </b-row>
+              </BFormRadio>
+            </BFormGroup>
+          </BCol>
+        </BRow>
       </page-section>
-      <b-button
+      <BButton
         variant="primary"
         type="submit"
         data-test-id="profileSettings-button-saveSettings"
       >
         {{ $t('global.action.save') }}
-      </b-button>
-    </b-form>
-  </b-container>
+      </BButton>
+    </BForm>
+  </BContainer>
 </template>
 
-<script>
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword';
-import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
-import { maxLength, minLength, sameAs } from 'vuelidate/lib/validators';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import LocalTimezoneLabelMixin from '@/components/Mixins/LocalTimezoneLabelMixin';
-import PageTitle from '@/components/Global/PageTitle';
-import PageSection from '@/components/Global/PageSection';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+<script setup>
+import i18n from '@/i18n';
+import { ref, computed, onBeforeMount } from 'vue';
+import useToast from '@/components/Composables/useToastComposable';
+import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
+import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useLocalTimezoneLabelComposable from '../../components/Composables/useLocalTimezoneLabelComposable';
+import PageTitle from '@/components/Global/PageTitle.vue';
+import PageSection from '@/components/Global/PageSection.vue';
+import { UserManagementStore, GlobalStore } from '@/store';
+import {
+  minLength,
+  maxLength,
+  sameAs,
+} from '@vuelidate/validators';
 
-export default {
-  name: 'ProfileSettings',
-  components: {
-    InfoTooltipPassword,
-    InputPasswordToggle,
-    PageSection,
-    PageTitle,
-  },
-  mixins: [
-    BVToastMixin,
-    LocalTimezoneLabelMixin,
-    LoadingBarMixin,
-    VuelidateMixin,
-  ],
-  data() {
-    return {
-      form: {
+const { successToast, errorToast } = useToast();
+const { getValidationState } = useVuelidateComposable();
+const { startLoader, endLoader } = useLoadingBar();
+const { localOffset } = useLocalTimezoneLabelComposable();
+
+const global = GlobalStore();
+const userManagementStore = UserManagementStore()
+
+const form = ref({
         newPassword: '',
         confirmPassword: '',
-        isUtcDisplay: this.$store.getters['global/isUtcDisplay'],
-      },
-    };
-  },
-  computed: {
-    username() {
-      return this.$store.getters['global/username'];
-    },
-    currentUser() {
-      return this.$store.getters['global/currentUser'];
-    },
-    isServiceUser() {
-      return this.$store.getters['global/isServiceUser'];
-    },
-    passwordRequirements() {
-      if (this.currentUser?.AccountTypes?.includes('IPMI')) {
+        isUtcDisplay: global.isUtcDisplayGetter,
+      });
+const inputType = ref('password')
+const confirmPasswordType = ref('password')
+
+onBeforeMount(() => {
+    startLoader();
+    Promise.all([
+      userManagementStore.getAccountSettings(),
+      checkForUserData(),
+    ]).finally(() => {
+      endLoader();
+    });
+  });
+
+const username = computed(() => {
+      return global.usernameGetter;
+    });
+const currentUser = computed(() => {
+      return global.currentUserGetter;
+    });
+const isServiceUser = computed(() => {
+      return global.isServiceUser;
+    });
+const passwordRequirements = computed(() => {
+      if (currentUser.value?.AccountTypes?.includes('IPMI')) {
         return {
           minLength: 8,
           maxLength: 20,
         };
       } else {
-        return this.$store.getters[
-          'userManagement/accountPasswordRequirements'
-        ];
+        return userManagementStore.accountPasswordRequirementsGetter
       }
-    },
-    timezone() {
-      return this.localOffset();
-    },
-  },
-  created() {
-    this.startLoader();
-    Promise.all([
-      this.$store.dispatch('userManagement/getAccountSettings'),
-      this.checkForUserData(),
-    ]).finally(() => {
-      this.endLoader();
     });
-  },
-  validations() {
-    return {
-      form: {
+const timezone = computed(() => {
+      return localOffset();
+    });
+
+const rules = computed(() => ({
+  form: {
         newPassword: {
-          minLength: minLength(this.passwordRequirements.minLength),
-          maxLength: maxLength(this.passwordRequirements.maxLength),
+          minLength: minLength(passwordRequirements.value.minLength),
+          maxLength: maxLength(passwordRequirements.value.maxLength),
         },
         confirmPassword: {
-          sameAsPassword: sameAs('newPassword'),
+          sameAsPassword: sameAs(form.value.newPassword),
         },
       },
-    };
-  },
-  methods: {
-    checkForUserData() {
-      if (!this.currentUser) {
-        this.$store.dispatch('userManagement/getUsers');
-        this.$store.dispatch('global/getCurrentUser');
-      }
-    },
-    saveNewPasswordInputData() {
-      this.$v.form.confirmPassword.$touch();
-      this.$v.form.newPassword.$touch();
-      if (this.$v.$invalid) return;
-      let userData = {
-        originalUsername: this.username,
-        password: this.form.newPassword,
-      };
+    }));
+const v$ = useVuelidate(rules, {form});
 
-      this.$store
-        .dispatch('userManagement/updateUser', userData)
-        .then((message) => {
-          (this.form.newPassword = ''), (this.form.confirmPassword = '');
-          this.$v.$reset();
-          this.successToast(message);
-        })
-        .catch(({ message }) => this.errorToast(message));
-    },
-    saveTimeZonePrefrenceData() {
-      localStorage.setItem('storedUtcDisplay', this.form.isUtcDisplay);
-      this.$store.commit('global/setUtcTime', this.form.isUtcDisplay);
-      this.successToast(
-        this.$t('pageProfileSettings.toast.successUpdatingTimeZone'),
-      );
-    },
-    submitForm() {
-      if (this.form.confirmPassword || this.form.newPassword) {
-        this.saveNewPasswordInputData();
+const checkForUserData = () => {
+      if (!currentUser.value) {
+        userManagementStore.getUsers();
+        global.getCurrentUser();
       }
-      this.saveTimeZonePrefrenceData();
-    },
-  },
+    };
+const saveNewPasswordInputData = () => {
+      v$.value.form.confirmPassword.$touch();
+      v$.value.form.newPassword.$touch();
+      if (v$.value.$invalid) return;
+      let userData = {
+        originalUsername: username.value,
+        password: form.value.newPassword,
+      };
+      userManagementStore.updateUser(userData)
+        .then((message) => {
+          (form.value.newPassword = ''), (form.value.confirmPassword = '');
+          v$.value.$reset();
+          successToast(message);
+        })
+        .catch(({ message }) => errorToast(message));
+    };
+const saveTimeZonePrefrenceData = () => {
+      localStorage.setItem('storedUtcDisplay', form.value.isUtcDisplay);
+      global.setUtcTime(form.value.isUtcDisplay);
+      successToast(
+        i18n.global.t('pageProfileSettings.toast.successUpdatingTimeZone'),
+      );
+    };
+const submitForm = () => {
+      if (form.value.confirmPassword || form.value.newPassword) {
+        saveNewPasswordInputData();
+      }
+      saveTimeZonePrefrenceData();
+    };
+const updatePasswordType = (passwordType) => {
+  inputType.value=passwordType
+};
+const updateConfirmPasswordType = (passwordType) => {
+  confirmPasswordType.value=passwordType
 };
 </script>

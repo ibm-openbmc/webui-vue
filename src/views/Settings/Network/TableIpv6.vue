@@ -1,67 +1,71 @@
 <template>
   <div>
     <page-section :section-title="$t('pageNetwork.ipv6')">
-      <b-row class="mb-4">
-        <b-col lg="2" md="6">
+      <BRow class="mb-4">
+        <BCol lg="2" md="6">
           <dl>
             <dt>{{ $t('pageNetwork.dhcp') }}</dt>
             <dd>
-              <b-form-checkbox
+              <BFormCheckbox
                 id="dhcpIpv6Switch"
                 v-model="dhcpEnabledState"
                 switch
                 :disabled="isTablesDisabled"
-                @change="changeIpv6DhcpEnabledState"
+                @update:model-value="changeIpv6DhcpEnabledState"
               >
                 <span v-if="dhcpEnabledState">
                   {{ $t('global.status.enabled') }}
                 </span>
                 <span v-else>{{ $t('global.status.disabled') }}</span>
-              </b-form-checkbox>
+              </BFormCheckbox>
             </dd>
           </dl>
-        </b-col>
-        <b-col lg="2" md="6">
+        </BCol>
+        <BCol lg="2" md="6">
           <dl>
             <dt>{{ $t('pageNetwork.ipv6AutoConfig') }}</dt>
             <dd>
-              <b-form-checkbox
+              <BFormCheckbox
                 id="ipv6AutoConfigSwitch"
                 v-model="ipv6AutoConfigState"
                 switch
                 :disabled="isTablesDisabled"
-                @change="changeIpv6AutoConfigState"
+                @update:model-value="changeIpv6AutoConfigState"
               >
                 <span v-if="ipv6AutoConfigState">
                   {{ $t('global.status.enabled') }}
                 </span>
                 <span v-else>{{ $t('global.status.disabled') }}</span>
-              </b-form-checkbox>
+              </BFormCheckbox>
             </dd>
           </dl>
-        </b-col>
+        </BCol>
         <b-col lg="2" md="6">
           <dl>
             <dt>{{ $t('pageNetwork.ipv6DefaultGateway') }}</dt>
             <dd>{{ ipv6DefaultGateway }}</dd>
           </dl>
         </b-col>
-      </b-row>
-      <b-row>
-        <b-col class="text-right">
-          <b-button
+      </BRow>
+      <BRow>
+        <BCol class="text-right">
+          <BButton
             variant="primary"
             :disabled="isTablesDisabled"
             @click="initIpv6Modal()"
           >
             <icon-add />
             {{ $t('pageNetwork.table.addIpv6Address') }}
-          </b-button>
-        </b-col>
-      </b-row>
-      <b-table
+          </BButton>
+        </BCol>
+      </BRow>
+      <BTable
         responsive="md"
         hover
+        selectable
+        no-select-on-click
+        sort-icon-left
+        sticky-header="75vh"
         :fields="ipv6TableFields"
         :items="form.ipv6TableItems"
         :empty-text="$t('global.table.emptyMessage')"
@@ -84,224 +88,261 @@
             </template>
           </table-row-action>
         </template>
-      </b-table>
+      </BTable>
     </page-section>
+    <BModal
+      v-model="openModal"
+      hide-header-close
+      :title="modalOptions.title"
+      :ok-title="modalOptions.okTitle"
+      :ok-variant="modalOptions.okVariant"
+      :cancel-title="modalOptions.cancelTitle"
+      @ok="operationConfirm"
+    >
+      <p>
+        {{ modalMessage }}
+      </p>
+    </BModal>
   </div>
 </template>
 
-<script>
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
+<script setup>
+import { ref, computed, watch, onBeforeMount } from 'vue';
+import i18n from '@/i18n';
+import eventBus from '@/eventBus';
+import useToast from '@/components/Composables/useToastComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import PageSection from '@/components/Global/PageSection';
-import TableRowAction from '@/components/Global/TableRowAction';
+import PageSection from '@/components/Global/PageSection.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
+import { NetworkStore } from '@/store';
 
-export default {
-  name: 'Ipv6Table',
-  components: {
-    IconAdd,
-    IconEdit,
-    IconTrashcan,
-    PageSection,
-    TableRowAction,
+const { successToast, errorToast } = useToast();
+const { startLoader, endLoader } = useLoadingBar();
+
+const networkStore = NetworkStore();
+
+const props = defineProps({
+  tabIndex: {
+    type: Number,
+    default: 0,
   },
-  mixins: [BVToastMixin, LoadingBarMixin],
-  props: {
-    tabIndex: {
-      type: Number,
-      default: 0,
-    },
+});
+
+const openModal = ref(false);
+
+const modalMessage = ref('');
+const modalPayload = ref({
+  newIpv6Array: null,
+});
+const modalOptions = ref({
+  title: '',
+  okVariant: '',
+  okTitle: '',
+  cancelTitle: '',
+});
+
+const form = ref({
+  ipv6TableItems: [],
+});
+
+const actions = ref([
+  {
+    value: 'edit',
+    title: i18n.global.t('global.action.edit'),
   },
-  data() {
+  {
+    value: 'delete',
+    title: i18n.global.t('global.action.delete'),
+  },
+]);
+
+const ipv6TableFields = ref([
+  {
+    key: 'Address',
+    label: i18n.global.t('pageNetwork.table.ipAddress'),
+  },
+  {
+    key: 'PrefixLength',
+    label: i18n.global.t('pageNetwork.table.prefixLength'),
+  },
+  {
+    key: 'AddressOrigin',
+    label: i18n.global.t('pageNetwork.table.addressOrigin'),
+  },
+  { key: 'actions', label: '', tdClass: 'text-right' },
+]);
+
+onBeforeMount(() => {
+  getipv6TableItems();
+});
+
+const isTablesDisabled = computed(() => {
+  return networkStore.isTableBusyGetter;
+});
+
+const network = computed(() => {
+  return networkStore.networkSettingsGetter;
+});
+
+const selectedInterface = computed(() => {
+  return networkStore.selectedInterfaceIndexGetter;
+});
+
+const ipv6DefaultGateway = computed(() => {
+  return networkStore.networkSettingsGetter[selectedInterface.value]
+    .ipv6DefaultGateway;
+});
+
+const dhcpEnabledState = computed({
+  get() {
+    return networkStore.networkSettingsGetter[selectedInterface.value]
+      .ipv6OperatingMode === 'Enabled'
+      ? true
+      : false;
+  },
+  set(newValue) {
+    return newValue;
+  },
+});
+
+const ipv6AutoConfigState = computed({
+  get() {
+    return networkStore.networkSettingsGetter[selectedInterface.value]
+      .ipv6AutoConfigEnabled;
+  },
+  set(newValue) {
+    return newValue;
+  },
+});
+
+// Watch for change in tab index
+watch(
+  () => props.tabIndex,
+  () => {
+    getipv6TableItems();
+  }
+);
+
+watch(network, () => {
+  getipv6TableItems();
+});
+
+const getipv6TableItems = () => {
+  const index = props.tabIndex;
+  const addresses = network.value[index].ipv6 || [];
+  form.value.ipv6TableItems = addresses.map((ipv6) => {
     return {
-      form: {
-        ipv6TableItems: [],
-      },
+      Address: ipv6.Address,
+      PrefixLength: ipv6.PrefixLength,
+      AddressOrigin: ipv6.AddressOrigin,
       actions: [
         {
           value: 'edit',
-          title: this.$t('global.action.edit'),
+          enabled:
+            ipv6.AddressOrigin !== 'LinkLocal' &&
+            ipv6.AddressOrigin !== 'DHCPv6' &&
+            ipv6.AddressOrigin !== 'SLAAC',
+          title: i18n.global.t('pageNetwork.table.editIpv6'),
         },
         {
           value: 'delete',
-          title: this.$t('global.action.delete'),
+          enabled:
+            ipv6.AddressOrigin !== 'LinkLocal' &&
+            ipv6.AddressOrigin !== 'DHCPv6' &&
+            ipv6.AddressOrigin !== 'SLAAC',
+          title: i18n.global.t('pageNetwork.table.deleteIpv6'),
         },
-      ],
-      ipv6TableFields: [
-        {
-          key: 'Address',
-          label: this.$t('pageNetwork.table.ipAddress'),
-        },
-        {
-          key: 'PrefixLength',
-          label: this.$t('pageNetwork.table.prefixLength'),
-        },
-        {
-          key: 'AddressOrigin',
-          label: this.$t('pageNetwork.table.addressOrigin'),
-        },
-        { key: 'actions', label: '', tdClass: 'text-right' },
       ],
     };
-  },
-  computed: {
-    isTablesDisabled() {
-      return this.$store.getters['network/isTableBusy'];
-    },
-    network() {
-      return this.$store.getters['network/networkSettings'];
-    },
-    selectedInterface() {
-      return this.$store.getters['network/selectedInterfaceIndex'];
-    },
-    ipv6DefaultGateway() {
-      return this.$store.getters['network/networkSettings'][
-        this.selectedInterface
-      ].ipv6DefaultGateway;
-    },
-    dhcpEnabledState: {
-      get() {
-        return this.$store.getters['network/networkSettings'][
-          this.selectedInterface
-        ].ipv6OperatingMode === 'Enabled'
-          ? true
-          : false;
-      },
-      set(newValue) {
-        return newValue;
-      },
-    },
-    ipv6AutoConfigState: {
-      get() {
-        return this.$store.getters['network/networkSettings'][
-          this.selectedInterface
-        ].ipv6AutoConfigEnabled;
-      },
-      set(newValue) {
-        return newValue;
-      },
-    },
-  },
-  watch: {
-    // Watch for change in tab index
-    tabIndex() {
-      this.getipv6TableItems();
-    },
-    network() {
-      this.getipv6TableItems();
-    },
-  },
-  created() {
-    this.getipv6TableItems();
-  },
-  methods: {
-    getipv6TableItems() {
-      const index = this.tabIndex;
-      const addresses = this.network[index].ipv6 || [];
-      this.form.ipv6TableItems = addresses.map((ipv6) => {
-        return {
-          Address: ipv6.Address,
-          PrefixLength: ipv6.PrefixLength,
-          AddressOrigin: ipv6.AddressOrigin,
-          actions: [
-            {
-              value: 'edit',
-              enabled:
-                ipv6.AddressOrigin !== 'LinkLocal' &&
-                ipv6.AddressOrigin !== 'DHCPv6' &&
-                ipv6.AddressOrigin !== 'SLAAC',
-              title: this.$t('pageNetwork.table.editIpv6'),
-            },
-            {
-              value: 'delete',
-              enabled:
-                ipv6.AddressOrigin !== 'LinkLocal' &&
-                ipv6.AddressOrigin !== 'DHCPv6' &&
-                ipv6.AddressOrigin !== 'SLAAC',
-              title: this.$t('pageNetwork.table.deleteIpv6'),
-            },
-          ],
-        };
-      });
-    },
-    onIpv6TableAction(action, $event, item) {
-      if (!this.isTablesDisabled) {
-        if ($event === 'edit') {
-          this.$root.$emit('edit-address', item);
-          this.initIpv6Modal();
-        }
-        if ($event === 'delete') {
-          this.deleteIpv6TableRow(item);
-        }
-      }
-    },
-    deleteIpv6TableRow(item) {
-      const newIpv6Array = this.form.ipv6TableItems
-        .filter((row) => row.Address !== item.Address)
-        .map((ipv6) => {
-          const { Address, PrefixLength } = ipv6;
-          return {
-            Address,
-            PrefixLength,
-          };
-        });
-      const addressIp = item.Address;
-      this.$bvModal
-        .msgBoxConfirm(
-          this.$t('pageNetwork.modal.confirmDeleteIpv6', {
-            address: addressIp,
-          }),
-          {
-            title: this.$t('pageNetwork.modal.deleteIpv6'),
-            okTitle: this.$t('global.action.delete'),
-            okVariant: 'danger',
-            cancelTitle: this.$t('global.action.cancel'),
-          },
-        )
-        .then((deleteConfirmed) => {
-          if (deleteConfirmed) {
-            this.$store
-              .dispatch('network/deleteIpv6Address', newIpv6Array)
-              .then((message) => {
-                this.successToast(message);
-                this.startLoader();
-                setTimeout(() => {
-                  this.endLoader();
-                }, 15000);
-              })
-              .catch(({ message }) => this.errorToast(message));
-          }
-        });
-    },
-    initIpv6Modal() {
-      this.$bvModal.show('modal-add-ipv6');
-    },
-    changeIpv6DhcpEnabledState(state) {
-      this.$store
-        .dispatch('network/saveIpv6DhcpEnabledState', state)
-        .then((message) => {
-          this.successToast(message);
-          this.startLoader();
-          setTimeout(() => {
-            this.endLoader();
-          }, 15000);
-        })
-        .catch(({ message }) => this.errorToast(message));
-    },
-    changeIpv6AutoConfigState(state) {
-      this.$store
-        .dispatch('network/saveIpv6AutoConfigState', state)
-        .then((success) => {
-          this.startLoader();
-          this.successToast(success);
-          setTimeout(() => {
-            this.endLoader();
-          }, 15000);
-        })
-        .catch(({ message }) => this.errorToast(message));
-    },
-  },
+  });
+};
+
+const onIpv6TableAction = (action, $event, item) => {
+  if (!isTablesDisabled.value) {
+    if ($event === 'edit') {
+      eventBus.emit('edit-address', item);
+      initIpv6Modal();
+    }
+    if ($event === 'delete') {
+      openDeleteIpv6TableRowModal(item);
+    }
+  }
+};
+
+const openDeleteIpv6TableRowModal = (item) => {
+  const newIpv6Array = form.value.ipv6TableItems
+    .filter((row) => row.Address !== item.Address)
+    .map((ipv6) => {
+      const { Address, PrefixLength } = ipv6;
+      return {
+        Address,
+        PrefixLength,
+      };
+    });
+  const addressIp = item.Address;
+
+  modalPayload.value.newIpv6Array = newIpv6Array;
+
+  modalMessage.value = i18n.global.t('pageNetwork.modal.confirmDeleteIpv6', {
+    address: addressIp,
+  });
+
+  modalOptions.value.title = i18n.global.t('pageNetwork.modal.deleteIpv6');
+  modalOptions.value.okVariant = 'danger';
+  modalOptions.value.okTitle = i18n.global.t('global.action.delete');
+  modalOptions.value.cancelTitle = i18n.global.t('global.action.cancel');
+
+  openModal.value = true;
+};
+
+const initIpv6Modal = () => {
+  eventBus.emit('modal-add-ipv6');
+};
+
+const operationConfirm = () => {
+  networkStore
+    .deleteIpv6Address(modalPayload.value.newIpv6Array)
+    .then((message) => {
+      successToast(message);
+      startLoader();
+      setTimeout(() => {
+        endLoader();
+      }, 15000);
+    })
+    .catch(({ message }) => errorToast(message));
+};
+
+const changeIpv6DhcpEnabledState = (state) => {
+  networkStore
+    .saveIpv6DhcpEnabledState(state)
+    .then((message) => {
+      successToast(message);
+      startLoader();
+      setTimeout(() => {
+        endLoader();
+      }, 15000);
+    })
+    .catch(({ message }) => errorToast(message));
+};
+
+const changeIpv6AutoConfigState = (state) => {
+  networkStore
+    .saveIpv6AutoConfigState(state)
+    .then((success) => {
+      startLoader();
+      successToast(success);
+      setTimeout(() => {
+        endLoader();
+      }, 15000);
+    })
+    .catch(({ message }) => errorToast(message));
 };
 </script>
+<style lang="scss" scoped>
+.text-right {
+  text-align: right;
+}
+</style>

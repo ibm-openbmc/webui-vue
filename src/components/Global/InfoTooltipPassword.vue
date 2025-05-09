@@ -1,6 +1,6 @@
 <template>
   <span>
-    <b-button
+    <BButton
       id="tooltip-password"
       variant="link"
       class="btn-tooltip btn-icon-only"
@@ -8,9 +8,9 @@
       <slot>
         <icon-tooltip />
       </slot>
-    </b-button>
-    <b-tooltip target="tooltip-password" triggers="hover">
-      <p class="text-left">
+    </BButton>
+    <BTooltip target="tooltip-password" triggers="hover">
+      <p id="tooltip">
         {{ $t('global.passwordValidation.title') }}
         <br />
         {{ $t('global.passwordValidation.message1') }}
@@ -27,22 +27,20 @@
         <br />
         {{ $t('global.passwordValidation.message7') }}
       </p>
-    </b-tooltip>
+    </BTooltip>
   </span>
 </template>
 
-<script>
+<script setup>
+import { defineProps } from 'vue';
 import IconTooltip from '@carbon/icons-vue/es/information/16';
 
-export default {
-  components: { IconTooltip },
-  props: {
+defineProps({
     title: {
       type: String,
       default: '',
     },
-  },
-};
+  })
 </script>
 
 <style lang="scss" scoped>
@@ -52,5 +50,8 @@ export default {
   svg {
     vertical-align: baseline;
   }
+}
+#tooltip{
+  text-align: left !important;
 }
 </style>

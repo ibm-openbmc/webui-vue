@@ -208,6 +208,9 @@ export const GlobalStore = defineStore('global', {
         return data;
       });
     },
+    setUtcTime(isUtcDisplay) {
+      this.isUtcDisplay = isUtcDisplay
+    }
   },
 });
 
