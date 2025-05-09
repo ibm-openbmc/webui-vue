@@ -18,7 +18,6 @@ import Memory from '@/views/ResourceManagement/Memory';
 import PostCodes from '@/views/Logs/PostCodeLogs/PostCodes.vue';
 import PostCodeLogs from '@/views/Logs/PostCodeLogs/PostCodeLogs.vue';
 import Power from '@/views/ResourceManagement/Power';
-import DateTime from '@/views/Settings/DateTime/DateTime.vue'
 import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy';
 import ConcurrentMaintenance from '../views/HardwareStatus/ConcurrentMaintenance/ConcurrentMaintenance.vue';
 import PcieTopology from '../views/HardwareStatus/PcieTopology/PcieTopology.vue';
@@ -265,14 +264,6 @@ export const routes = [
         component: DeconfigurationRecords,
         meta: {
           title: i18n.global.t('appPageTitle.deconfigurationRecords'),
-        },
-      },
-      {
-        path: '/settings/date-time',
-        name: 'date-time',
-        component: DateTime,
-        meta: {
-          title: i18n.global.t('appPageTitle.dateTime'),
         },
       },
       {
