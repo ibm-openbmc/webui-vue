@@ -1,36 +1,36 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const DateTimeStore = {
-  namespaced: true,
-  state: {
+export const DateTimeStore = defineStore('dateTime', {
+  state: () => ({
     ntpServers: [],
     isNtpProtocolEnabled: null,
-  },
+    networkSuppliedServers: [],
+  }),
   getters: {
-    ntpServers: (state) => state.ntpServers,
-    isNtpProtocolEnabled: (state) => state.isNtpProtocolEnabled,
-  },
-  mutations: {
-    setNtpServers: (state, ntpServers) => (state.ntpServers = ntpServers),
-    setIsNtpProtocolEnabled: (state, isNtpProtocolEnabled) =>
-      (state.isNtpProtocolEnabled = isNtpProtocolEnabled),
+    ntpServersGetter: (state) => state.ntpServers,
+    isNtpProtocolEnabledGetter: (state) => state.isNtpProtocolEnabled,
+    networkSuppliedServersGetter: (state) => state.networkSuppliedServers,
   },
   actions: {
-    async getNtpData({ commit }) {
+    async getNtpData() {
       return await api
         .get('/redfish/v1/Managers/bmc/NetworkProtocol')
         .then((response) => {
           const ntpServers = response.data.NTP.NTPServers;
           const isNtpProtocolEnabled = response.data.NTP.ProtocolEnabled;
-          commit('setNtpServers', ntpServers);
-          commit('setIsNtpProtocolEnabled', isNtpProtocolEnabled);
+          const networkSuppliedServers =
+            response?.data?.NTP?.NetworkSuppliedServers;
+          this.ntpServers = ntpServers;
+          this.isNtpProtocolEnabled = isNtpProtocolEnabled;
+          this.networkSuppliedServers = networkSuppliedServers;
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    async updateDateTime({ state }, dateTimeForm) {
+    async updateDateTime(dateTimeForm) {
       const ntpData = {
         NTP: {
           ProtocolEnabled: dateTimeForm.ntpProtocolEnabled,
@@ -56,7 +56,7 @@ const DateTimeStore = {
              * TODO: remove timeout if backend solves
              * https://github.com/openbmc/openbmc/issues/3459
              */
-            const timeoutVal = state.isNtpProtocolEnabled ? 20000 : 0;
+            const timeoutVal = this.isNtpProtocolEnabled ? 20000 : 0;
             return await new Promise((resolve, reject) => {
               setTimeout(() => {
                 return api
@@ -69,17 +69,17 @@ const DateTimeStore = {
         })
         .then(() => {
           if (dateTimeForm.ntpProtocolEnabled) {
-            return i18n.t('pageDateTime.toast.successSaveDateTimeForNtpServer');
+            return i18n.global.t('pageDateTime.toast.successSaveDateTimeForNtpServer');
           } else {
-            return i18n.t('pageDateTime.toast.successSaveDateTime');
+            return i18n.global.t('pageDateTime.toast.successSaveDateTime');
           }
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageDateTime.toast.errorSaveDateTime'));
+          throw new Error(i18n.global.t('pageDateTime.toast.errorSaveDateTime'));
         });
     },
   },
-};
+});
 
 export default DateTimeStore;
