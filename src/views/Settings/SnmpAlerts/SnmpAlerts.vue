@@ -27,6 +27,7 @@
           selectable
           show-empty
           no-select-on-click
+          sticky-header="75vh"
           hover
           :fields="fields"
           :items="tableItems"
@@ -41,7 +42,6 @@
               :indeterminate="tableHeaderCheckboxIndeterminateValue"
               @change="onChangeHeaderCheckbox($refs.table)"
             >
-              <span class="sr-only">{{ $t('global.table.selectAll') }}</span>
             </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
@@ -73,22 +73,23 @@
       </BCol>
     </BRow>
     <!-- Modals -->
-    <modal-add-destination @ok="onModalOk" />
+    <!-- <modal-add-destination @ok="onModalOk" /> -->
   </BContainer>
 </template>
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
-import ModalAddDestination from './ModalAddDestination';
-import PageTitle from '@/components/Global/PageTitle';
+// import ModalAddDestination from './ModalAddDestination.vue';
+import PageTitle from '@/components/Global/PageTitle.vue';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
-import TableToolbar from '@/components/Global/TableToolbar';
-import TableRowAction from '@/components/Global/TableRowAction';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import { SnmpAlertsStore } from '../../../store';
   
   const { startLoader, endLoader, hideLoader } = useLoadingBar();
   const { successToast, errorToast } = useToastComposable();
@@ -97,10 +98,11 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
     tableHeaderCheckboxModel,
     tableHeaderCheckboxIndeterminate,
   } = useTableSelectableComposable();
+  const snmpAlertsStore = SnmpAlertsStore();
 
-  const onBeforeRouteLeave = () => {
+  onBeforeRouteLeave (() => {
     hideLoader();
-  }
+  });
 
   const fields = ref([
         {
@@ -108,11 +110,11 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
         },
         {
           key: 'ip',
-          label: 18n.global.t('pageSnmpAlerts.table.ipaddress'),
+          label: i18n.global.t('pageSnmpAlerts.table.ipaddress'),
         },
         {
           key: 'port',
-          label: 18n.global.t('pageSnmpAlerts.table.port'),
+          label: i18n.global.t('pageSnmpAlerts.table.port'),
         },
         {
           key: 'actions',
@@ -123,7 +125,7 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
   const tableToolbarActions = ref([
         {
           value: 'delete',
-          label: 18n.global.t('global.action.delete'),
+          label: i18n.global.t('global.action.delete'),
         },
       ]);
   const selectedRowsValue = ref(selectedRowsList);
@@ -131,7 +133,7 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
   const tableHeaderCheckboxIndeterminateValue = ref(tableHeaderCheckboxIndeterminate);
 
   const allSnmpDetails = computed(() => {
-      return this.$store.getters['snmpAlerts/allSnmpDetails'];
+      return snmpAlertsStore.allSnmpDetailsGetter;
     })
   const tableItems = computed(() => {
       // transform destination data to table data
@@ -157,7 +159,7 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
             {
               value: 'delete',
               enabled: true,
-              title: 18n.global.t('pageSnmpAlerts.deleteDestination'),
+              title: i18n.global.t('pageSnmpAlerts.deleteDestination'),
             },
           ],
           ...subscriptions,
@@ -166,9 +168,7 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
     })
   onMounted(() => {
     startLoader();
-    this.$store
-      .dispatch('snmpAlerts/getSnmpDetails')
-      .finally(() => endLoader());
+    snmpAlertsStore.getSnmpDetails().finally(() => endLoader());
   })
   const onModalOk = ({ ipAddress, port }) => {
       const protocolIpAddress = 'snmp://' + ipAddress;
@@ -182,8 +182,7 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
         Protocol: 'SNMPv2c',
       };
       startLoader();
-      this.$store
-        .dispatch('snmpAlerts/addDestination', { data })
+      snmpAlertsStore.addDestination({ data })
         .then((success) => successToast(success))
         .catch(({ message }) => errorToast(message))
         .finally(() => endLoader());
@@ -194,13 +193,13 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
   const initModalDeleteDestination = (destination) => {
       this.$bvModal
         .msgBoxConfirm(
-          18n.global.t('pageSnmpAlerts.modal.deleteConfirmMessage', {
+          i18n.global.t('pageSnmpAlerts.modal.deleteConfirmMessage', {
             destination: destination.id,
           }),
           {
-            title: 18n.global.t('pageSnmpAlerts.modal.deleteSnmpDestinationTitle'),
-            okTitle: 18n.global.t('pageSnmpAlerts.deleteDestination'),
-            cancelTitle: 18n.global.t('global.action.cancel'),
+            title: i18n.global.t('pageSnmpAlerts.modal.deleteSnmpDestinationTitle'),
+            okTitle: i18n.global.t('pageSnmpAlerts.deleteDestination'),
+            cancelTitle: i18n.global.t('global.action.cancel'),
           },
         )
         .then((deleteConfirmed) => {
@@ -211,8 +210,7 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
     }
   const deleteDestination = ({ id }) => {
       startLoader();
-      this.$store
-        .dispatch('snmpAlerts/deleteDestination', id)
+      snmpAlertsStore.deleteDestination(id)
         .then((success) => successToast(success))
         .catch(({ message }) => errorToast(message))
         .finally(() => endLoader());
@@ -221,30 +219,26 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
       if (action === 'delete') {
         this.$bvModal
           .msgBoxConfirm(
-            18n.global.t(
+            i18n.global.t(
               'pageSnmpAlerts.modal.batchDeleteConfirmMessage',
               selectedRowsValue.value.length,
             ),
             {
-              title: 18n.global.t(
+              title: i18n.global.t(
                 'pageSnmpAlerts.modal.deleteSnmpDestinationTitle',
                 selectedRowsValue.value.length,
               ),
-              okTitle: 18n.global.t(
+              okTitle: i18n.global.t(
                 'pageSnmpAlerts.deleteDestination',
                 selectedRowsValue.value.length,
               ),
-              cancelTitle: 18n.global.t('global.action.cancel'),
+              cancelTitle: i18n.global.t('global.action.cancel'),
             },
           )
           .then((deleteConfirmed) => {
             if (deleteConfirmed) {
               startLoader();
-              this.$store
-                .dispatch(
-                  'snmpAlerts/deleteMultipleDestinations',
-                  selectedRowsValue.value,
-                )
+              snmpAlertsStore.deleteMultipleDestinations(selectedRowsValue.value)
                 .then((messages) => {
                   messages.forEach(({ type, message }) => {
                     if (type === 'success') successToast(message);
@@ -262,3 +256,8 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
       }
     }
 </script>
+<style scoped>
+.text-right {
+  text-align: right;
+}
+</style>
