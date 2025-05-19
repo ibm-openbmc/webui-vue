@@ -141,6 +141,7 @@
                 currentUser.UserName !== row.item.username
               "
               variant="primary"
+              :data-test-id="`${row.item.username}-secret-key`"
               :disabled="!row.item.secretKey"
               @click="clearSecretKey(row.item)"
             >
