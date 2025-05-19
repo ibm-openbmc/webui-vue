@@ -62,16 +62,16 @@ export const routes = [
         name: 'LoginPage',
         component: LoginPage,
       },
+      {
+        path: '/change-password',
+        name: 'change-password',
+        component: ChangePassword,
+        meta: {
+          title: i18n.global.t('appPageTitle.changePassword'),
+          requiresAuth: true,
+        },
+      },
     ],
-  },
-  {
-    path: '/change-password',
-    name: 'change-password',
-    component: ChangePassword,
-    meta: {
-      title: i18n.t('appPageTitle.changePassword'),
-      requiresAuth: true,
-    },
   },
   // Needs reimplementation once routes is implemented
   {

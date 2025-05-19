@@ -11,7 +11,7 @@
         <dt>{{ $t('pageChangePassword.username') }}</dt>
         <dd>{{ username }}</dd>
       </dl>
-      <b-form novalidate @submit.prevent="changePassword">
+      <b-form novalidate @submit.prevent="changePassword()">
         <BFormGroup
           label-for="password"
           :label="$t('pageChangePassword.newPassword')"
@@ -20,16 +20,16 @@
             {{ $t('pageUserManagement.modal.userPassword') }}
             <info-tooltip-password />
           </template>
-          <input-password-toggle>
+          <input-password-toggle @updatePassView="updatePasswordType">
             <BFormInput
               id="password"
               v-model="form.password"
               autocomplete="off"
               autofocus="autofocus"
-              type="password"
+              :type="inputType"
               :state="getValidationState(v$.form.password)"
               class="form-control-with-button"
-              @change="v$.form.password.$touch()"
+              @input="v$.form.password.$touch()"
             >
             </BFormInput>
             <BFormInvalidFeedback role="alert">
@@ -43,15 +43,15 @@
           label-for="password-confirm"
           :label="$t('pageChangePassword.confirmNewPassword')"
         >
-          <input-password-toggle>
+          <input-password-toggle @updatePassView="updateConfirmPasswordType">
             <BFormInput
               id="password-confirm"
               v-model="form.passwordConfirm"
               autocomplete="off"
-              type="password"
+              :type="confirmPasswordType"
               :state="getValidationState(v$.form.passwordConfirm)"
               class="form-control-with-button"
-              @change="v$.form.passwordConfirm.$touch()"
+              @input="v$.form.passwordConfirm.$touch()"
             >
             </BFormInput>
             <BFormInvalidFeedback role="alert">
@@ -77,8 +77,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed} from 'vue'
+import i18n from '@/i18n';
 import { UserManagementStore, GlobalStore, AuthenticationStore } from '@/store';
 import { required, sameAs } from '@vuelidate/validators';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
@@ -96,18 +97,20 @@ const router = useRouter();
 const { getValidationState } = useVuelidateComposable();
 
 const form = ref({
-        password: null,
-        passwordConfirm: null,
+        password: '',
+        passwordConfirm: '',
       });
 const username = ref(global.usernameGetter);
 const changePasswordError = ref(false);
+const inputType = ref("password")
+const confirmPasswordType = ref("pasword")
 
 const rules = computed(() => ({
       form: {
         password: { required },
         passwordConfirm: {
           required,
-          sameAsPassword: sameAs('password'),
+          sameAsPassword: sameAs(form.value.passwordConfirm),
         },
       },
     }));
@@ -119,6 +122,7 @@ const goBack = () => {
     };
 const changePassword = () => {
       v$.value.$touch();
+      console.log('v$.value', v$.value);
       if (v$.value.$invalid) return;
       let data = {
         originalUsername: username.value,
@@ -132,10 +136,17 @@ const changePassword = () => {
             global.getCurrentUser(username.value),
             global.getSystemInfo(),
           ])
+          v$.value.$reset();
         })
         .then(() => router.push('/'))
         .catch(() => (changePasswordError.value = true));
       };
+const updatePasswordType = (passwordType) => {
+  inputType.value=passwordType
+};
+const updateConfirmPasswordType = (passwordType) => {
+  confirmPasswordType.value=passwordType
+};
 </script>
 <style lang="scss" scoped>
 .change-password__form-container {
