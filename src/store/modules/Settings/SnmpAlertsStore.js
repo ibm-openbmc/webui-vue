@@ -31,7 +31,11 @@ export const SnmpAlertsStore = defineStore('snmpAlerts', {
           const snmpDetailsDataFiltered = snmpDetailsData.filter(
             (item) => item.SubscriptionType === 'SNMPTrap',
           );
-          this.snmpDetails = snmpDetailsDataFiltered;
+          const finalSNmpData = snmpDetailsDataFiltered.map((singleData) => {
+            singleData.isSelected = false;
+            return singleData;
+          })
+          this.allSnmpDetails = finalSNmpData;
         })
         .catch((error) => {
           console.log(error);

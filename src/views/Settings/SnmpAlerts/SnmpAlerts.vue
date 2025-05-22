@@ -18,11 +18,11 @@
           ref="toolbar"
           :selected-items-count="selectedRowsValue.length"
           :actions="tableToolbarActions"
-          @clear-selected="clearSelectedRows($refs.table)"
+          @clear-selected="clearSelectedRows(tableRef)"
           @batch-action="onBatchAction"
         />
         <BTable
-          ref="table"
+          ref="tableRef"
           responsive="md"
           selectable
           show-empty
@@ -40,17 +40,17 @@
               v-model="tableHeaderCheckboxModelValue"
               data-test-id="snmpAlerts-checkbox-selectAll"
               :indeterminate="tableHeaderCheckboxIndeterminateValue"
-              @change="onChangeHeaderCheckbox($refs.table)"
+              @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)"
+              @update:modelValue="toggleAll"
             >
             </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
-              v-model="row.rowSelected"
+              v-model="snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected"
               :data-test-id="`snmpAlerts-checkbox-selectRow-${row.index}`"
-              @change="toggleSelectRow($refs.table, row.index)"
+              @change="toggleSelectRowByIpAddress(tableRef, row.index, snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected, row.item)"
             >
-              <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
             </BFormCheckbox>
           </template>
           <!-- table actions column -->
@@ -74,10 +74,24 @@
     </BRow>
     <!-- Modals -->
     <!-- <modal-add-destination @ok="onModalOk" /> -->
+    <BModal
+      v-model="openDeleteModal"
+      :title="deleteTitle"
+      :ok-title="okTitle"
+      okVariant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk(deleteType)"
+    >
+      <p>
+        {{
+          deleteMessage
+        }}
+      </p>
+    </BModal>
   </BContainer>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
@@ -90,19 +104,41 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import { SnmpAlertsStore } from '../../../store';
+import eventBus from '@/eventBus';
   
+  const snmpToDelete = ref('');
+  const openDeleteModal = ref(false);
+  const okTitle = ref('');
+  const deleteTitle = ref('');
+  const deleteType = ref('');
+  const deleteMessage = ref('');
+  const tableRef = ref(null);
+  const isAllSelected = ref(false);
   const { startLoader, endLoader, hideLoader } = useLoadingBar();
   const { successToast, errorToast } = useToastComposable();
   const {
-    selectedRowsList,
-    tableHeaderCheckboxModel,
-    tableHeaderCheckboxIndeterminate,
+        clearSelectedRows,
+        toggleSelectRowByIpAddress,
+        onRowSelected,
+        onChangeHeaderCheckbox,
+        selectedRowsList,
+        tableHeaderCheckboxModel,
+        tableHeaderCheckboxIndeterminate,
   } = useTableSelectableComposable();
   const snmpAlertsStore = SnmpAlertsStore();
 
   onBeforeRouteLeave (() => {
     hideLoader();
   });
+
+      onBeforeMount(() => {
+        eventBus.on('clear-selected', () => {
+          snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
+            singleConnection.isSelected = false;
+          });
+          clearSelectedRows(tableRef);
+        });
+      });
 
   const fields = ref([
         {
@@ -191,69 +227,73 @@ import { SnmpAlertsStore } from '../../../store';
       this.$bvModal.show('add-destination');
     }
   const initModalDeleteDestination = (destination) => {
-      this.$bvModal
-        .msgBoxConfirm(
-          i18n.global.t('pageSnmpAlerts.modal.deleteConfirmMessage', {
+      snmpToDelete.value = destination;
+      openDeleteModal.value = true;
+      okTitle.value = i18n.global.t('pageSnmpAlerts.deleteDestination');
+      deleteMessage.value = i18n.global.t('pageSnmpAlerts.modal.deleteConfirmMessage', {
             destination: destination.id,
-          }),
-          {
-            title: i18n.global.t('pageSnmpAlerts.modal.deleteSnmpDestinationTitle'),
-            okTitle: i18n.global.t('pageSnmpAlerts.deleteDestination'),
-            cancelTitle: i18n.global.t('global.action.cancel'),
-          },
-        )
-        .then((deleteConfirmed) => {
-          if (deleteConfirmed) {
-            deleteDestination(destination);
-          }
-        });
+          })
+      deleteTitle.value = i18n.global.t('pageSnmpAlerts.modal.deleteSnmpDestinationTitle');
+      deleteType.value = 'singleEntry'; 
+    }
+  const handleOk = (value) => {
+      if (value === 'singleEntry') {
+        deleteDestination(snmpToDelete.value);
+      } else {
+        startLoader();
+        snmpAlertsStore.deleteMultipleDestinations(selectedRowsValue.value)
+          .then((messages) => {
+            messages.forEach(({ type, message }) => {
+              if (type === 'success') successToast(message);
+              if (type === 'error') errorToast(message);
+            });
+          })
+          .finally(() => {
+            openDeleteModal.value = false;
+            eventBus.emit('clear-selected');
+            endLoader();
+          });
+      }
     }
   const deleteDestination = ({ id }) => {
       startLoader();
       snmpAlertsStore.deleteDestination(id)
         .then((success) => successToast(success))
         .catch(({ message }) => errorToast(message))
-        .finally(() => endLoader());
+        .finally(() => {
+          openDeleteModal.value = false;
+          snmpToDelete.value = '';
+          endLoader();
+        });
     }
   const onBatchAction = (action) => {
       if (action === 'delete') {
-        this.$bvModal
-          .msgBoxConfirm(
-            i18n.global.t(
-              'pageSnmpAlerts.modal.batchDeleteConfirmMessage',
-              selectedRowsValue.value.length,
-            ),
-            {
-              title: i18n.global.t(
-                'pageSnmpAlerts.modal.deleteSnmpDestinationTitle',
-                selectedRowsValue.value.length,
-              ),
-              okTitle: i18n.global.t(
+          openDeleteModal.value = true;
+          okTitle.value = i18n.global.t(
                 'pageSnmpAlerts.deleteDestination',
                 selectedRowsValue.value.length,
-              ),
-              cancelTitle: i18n.global.t('global.action.cancel'),
-            },
-          )
-          .then((deleteConfirmed) => {
-            if (deleteConfirmed) {
-              startLoader();
-              snmpAlertsStore.deleteMultipleDestinations(selectedRowsValue.value)
-                .then((messages) => {
-                  messages.forEach(({ type, message }) => {
-                    if (type === 'success') successToast(message);
-                    if (type === 'error') errorToast(message);
-                  });
-                })
-                .finally(() => endLoader());
-            }
-          });
+              );
+          deleteMessage.value = i18n.global.t(
+              'pageSnmpAlerts.modal.batchDeleteConfirmMessage',
+              selectedRowsValue.value.length,
+            )
+          deleteTitle.value =  i18n.global.t(
+                'pageSnmpAlerts.modal.deleteSnmpDestinationTitle',
+                selectedRowsValue.value.length,
+              );
+          deleteType.value = 'selectedEntries';
       }
     }
   const onTableRowAction = (action, row) => {
       if (action === 'delete') {
         initModalDeleteDestination(row);
       }
+    }
+    const toggleAll = (checked) => {
+      snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
+        singleConnection.isSelected = checked;
+      });
+      isAllSelected.value = checked;
     }
 </script>
 <style scoped>
