@@ -30,10 +30,9 @@
               :state="getValidationState(v$.form.password)"
               class="form-control-with-button"
               @input="v$.form.password.$touch()"
-            >
-            </BFormInput>
+            />
             <BFormInvalidFeedback role="alert">
-              <template v-if="!v$.form.password.required">
+              <template v-if="v$.form.password.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
             </BFormInvalidFeedback>
@@ -52,13 +51,12 @@
               :state="getValidationState(v$.form.passwordConfirm)"
               class="form-control-with-button"
               @input="v$.form.passwordConfirm.$touch()"
-            >
-            </BFormInput>
+            />
             <BFormInvalidFeedback role="alert">
-              <template v-if="!v$.form.passwordConfirm.required">
+              <template v-if="v$.form.passwordConfirm.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
-              <template v-else-if="!v$.form.passwordConfirm.sameAsPassword">
+              <template v-else-if="v$.form.passwordConfirm.$errors.length > 0 ? v$.form.passwordConfirm.$errors[0].$validator === 'sameAsPassword' : false">
                 {{ $t('global.form.passwordsDoNotMatch') }}
               </template>
             </BFormInvalidFeedback>
@@ -102,15 +100,15 @@ const form = ref({
       });
 const username = ref(global.usernameGetter);
 const changePasswordError = ref(false);
-const inputType = ref("password")
-const confirmPasswordType = ref("pasword")
+const inputType = ref('password')
+const confirmPasswordType = ref('password')
 
 const rules = computed(() => ({
       form: {
         password: { required },
         passwordConfirm: {
           required,
-          sameAsPassword: sameAs(form.value.passwordConfirm),
+          sameAsPassword: sameAs(form.value.password),
         },
       },
     }));
@@ -118,7 +116,9 @@ const v$ = useVuelidate(rules, {form});
 
 const goBack = () => {
       // Remove session created if navigating back to the Login page
-      authenticationStore.logout();
+      authenticationStore.logout().then(() => {
+      router.push('/login');
+  });
     };
 const changePassword = () => {
       v$.value.$touch();
