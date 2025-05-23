@@ -5,7 +5,7 @@
       :description="$t('pageSnmpAlerts.pageDescription')"
     />
     <BRow>
-      <BCol xl="9" class="text-right">
+      <BCol xl="9" class="text-end">
         <BButton variant="primary" @click="initModalAddDestination">
           <icon-add />
           {{ $t('pageSnmpAlerts.addDestination') }}
@@ -73,7 +73,7 @@
       </BCol>
     </BRow>
     <!-- Modals -->
-    <!-- <modal-add-destination @ok="onModalOk" /> -->
+    <modal-add-destination @ok="onModalOk" />
     <BModal
       v-model="openDeleteModal"
       :title="deleteTitle"
@@ -95,7 +95,7 @@ import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
-// import ModalAddDestination from './ModalAddDestination.vue';
+import ModalAddDestination from './ModalAddDestination.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
@@ -155,7 +155,7 @@ import eventBus from '@/eventBus';
         {
           key: 'actions',
           label: '',
-          tdClass: 'text-right text-nowrap',
+          tdClass: 'text-end text-nowrap',
         },
       ]);
   const tableToolbarActions = ref([
@@ -214,7 +214,6 @@ import eventBus from '@/eventBus';
       const data = {
         Destination: destination,
         SubscriptionType: 'SNMPTrap',
-        DeliveryRetryPolicy: 'TerminateAfterRetries',
         Protocol: 'SNMPv2c',
       };
       startLoader();
@@ -224,7 +223,7 @@ import eventBus from '@/eventBus';
         .finally(() => endLoader());
     }
   const initModalAddDestination = () => {
-      this.$bvModal.show('add-destination');
+      eventBus.emit('add-destination');
     }
   const initModalDeleteDestination = (destination) => {
       snmpToDelete.value = destination;
@@ -296,8 +295,4 @@ import eventBus from '@/eventBus';
       isAllSelected.value = checked;
     }
 </script>
-<style scoped>
-.text-right {
-  text-align: right;
-}
-</style>
+

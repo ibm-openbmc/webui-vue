@@ -1,5 +1,5 @@
 <template>
-  <BModal id="add-destination" v-model="modal" :title="$t('pageSnmpAlerts.modal.addSnmpDestinationTitle')" @ok="onOk" :ok-title="$t('pageSnmpAlerts.addDestination')" @cancel="cancel()" @hidden="resetForm">
+  <BModal id="add-destination" v-model="modal" :title="$t('pageSnmpAlerts.modal.addSnmpDestinationTitle')" @ok="onOk" :ok-title="$t('pageSnmpAlerts.addDestination')" @hidden="resetForm">
     <BForm id="form-destination">
       <BContainer>
         <BRow>
@@ -64,13 +64,16 @@
   </BModal>
 </template>
 <script setup>
-import { ref, nextTick } from 'vue';
-import { required, minValue, maxValue } from 'vuelidate/validators';
+import { ref, nextTick, computed } from 'vue';
+import { required, minValue, maxValue } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
-import InfoTooltip from '@/components/Global/InfoTooltip';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import eventBus from '@/eventBus';
 
+  eventBus.on('add-destination', () => {
+    modal.value = true;
+  });
   const { getValidationState } = useVuelidateComposable();
   const emit = defineEmits(['ok']);
   const modal = ref(false);
