@@ -136,3 +136,8 @@ const submitForm = () => {
     .catch(({ message }) => errorToast(message));
 };
 </script>
+<style scoped>
+.form-check {
+  margin-bottom: 1rem !important;
+}
+</style>

@@ -14,6 +14,7 @@
       variant="link"
       no-caret
       right
+      auto-close="outside"
       data-test-id="tableFilter-dropdown-options"
       :disabled="isFilterDisabled"
       @hide="dropdownVisible = false"
@@ -29,7 +30,7 @@
           :key="index"
           :label="filter.label"
         >
-          <BFormCheckboxGroup v-model="tags">
+          <BFormCheckboxGroup v-model="tags" class="margin-btm">
             <BFormCheckbox
               v-for="value in filter.values"
               :key="value"
@@ -116,5 +117,8 @@ export default {
 <style lang="scss" scoped>
 .badge {
   margin-right: calc($spacer / 2);
+}
+.margin-btm {
+  margin-bottom: 1rem !important;
 }
 </style>
