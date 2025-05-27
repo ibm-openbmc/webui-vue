@@ -122,7 +122,6 @@ const goBack = () => {
     };
 const changePassword = () => {
       v$.value.$touch();
-      console.log('v$.value', v$.value);
       if (v$.value.$invalid) return;
       let data = {
         originalUsername: username.value,
