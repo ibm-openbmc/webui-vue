@@ -66,7 +66,8 @@
         <info-tooltip class="ml-1" :title="$t('pageLogin.totpTooltip')">
         </info-tooltip>
         <b-form-group>
-          <b-form-input v-model="otpValue"> </b-form-input>
+          <b-form-input v-model="otpValue" data-test-id="login-input-totp">
+          </b-form-input>
         </b-form-group>
       </div>
       <b-button
