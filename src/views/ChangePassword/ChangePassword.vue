@@ -11,8 +11,8 @@
         <dt>{{ $t('pageChangePassword.username') }}</dt>
         <dd>{{ username }}</dd>
       </dl>
-      <b-form novalidate @submit.prevent="changePassword">
-        <b-form-group
+      <b-form novalidate @submit.prevent="changePassword()">
+        <BFormGroup
           label-for="password"
           :label="$t('pageChangePassword.newPassword')"
         >
@@ -20,50 +20,48 @@
             {{ $t('pageUserManagement.modal.userPassword') }}
             <info-tooltip-password />
           </template>
-          <input-password-toggle>
-            <b-form-input
+          <input-password-toggle @updatePassView="updatePasswordType">
+            <BFormInput
               id="password"
               v-model="form.password"
               autocomplete="off"
               autofocus="autofocus"
-              type="password"
-              :state="getValidationState($v.form.password)"
+              :type="inputType"
+              :state="getValidationState(v$.form.password)"
               class="form-control-with-button"
-              @change="$v.form.password.$touch()"
-            >
-            </b-form-input>
-            <b-form-invalid-feedback role="alert">
-              <template v-if="!$v.form.password.required">
+              @input="v$.form.password.$touch()"
+            />
+            <BFormInvalidFeedback role="alert">
+              <template v-if="v$.form.password.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
-            </b-form-invalid-feedback>
+            </BFormInvalidFeedback>
           </input-password-toggle>
-        </b-form-group>
-        <b-form-group
+        </BFormGroup>
+        <BFormGroup
           label-for="password-confirm"
           :label="$t('pageChangePassword.confirmNewPassword')"
         >
-          <input-password-toggle>
-            <b-form-input
+          <input-password-toggle @updatePassView="updateConfirmPasswordType">
+            <BFormInput
               id="password-confirm"
               v-model="form.passwordConfirm"
               autocomplete="off"
-              type="password"
-              :state="getValidationState($v.form.passwordConfirm)"
+              :type="confirmPasswordType"
+              :state="getValidationState(v$.form.passwordConfirm)"
               class="form-control-with-button"
-              @change="$v.form.passwordConfirm.$touch()"
-            >
-            </b-form-input>
-            <b-form-invalid-feedback role="alert">
-              <template v-if="!$v.form.passwordConfirm.required">
+              @input="v$.form.passwordConfirm.$touch()"
+            />
+            <BFormInvalidFeedback role="alert">
+              <template v-if="v$.form.passwordConfirm.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
-              <template v-else-if="!$v.form.passwordConfirm.sameAsPassword">
+              <template v-else-if="v$.form.passwordConfirm.$errors.length > 0 ? v$.form.passwordConfirm.$errors[0].$validator === 'sameAsPassword' : false">
                 {{ $t('global.form.passwordsDoNotMatch') }}
               </template>
-            </b-form-invalid-feedback>
+            </BFormInvalidFeedback>
           </input-password-toggle>
-        </b-form-group>
+        </BFormGroup>
         <div class="text-right">
           <b-button type="button" variant="link" @click="goBack">
             {{ $t('pageChangePassword.goBack') }}
@@ -77,68 +75,78 @@
   </div>
 </template>
 
-<script>
-import { required, sameAs } from 'vuelidate/lib/validators';
-import Alert from '@/components/Global/Alert';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin';
-import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword';
-import InputPasswordToggle from '@/components/Global/InputPasswordToggle';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
+<script setup>
+import { ref, computed} from 'vue'
+import i18n from '@/i18n';
+import { UserManagementStore, GlobalStore, AuthenticationStore } from '@/store';
+import { required, sameAs } from '@vuelidate/validators';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
+import Alert from '@/components/Global/Alert.vue';
+import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
+import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
+import { useRouter } from 'vue-router';
 
-export default {
-  name: 'ChangePassword',
-  components: { Alert, InfoTooltipPassword, InputPasswordToggle },
-  mixins: [VuelidateMixin, BVToastMixin],
-  data() {
-    return {
-      form: {
-        password: null,
-        passwordConfirm: null,
-      },
-      username: this.$store.getters['global/username'],
-      changePasswordError: false,
-    };
-  },
-  validations() {
-    return {
+const global = GlobalStore();
+const userManagementStore = UserManagementStore();
+const authenticationStore = AuthenticationStore();
+
+const router = useRouter();
+const { getValidationState } = useVuelidateComposable();
+
+const form = ref({
+        password: '',
+        passwordConfirm: '',
+      });
+const username = ref(global.usernameGetter);
+const changePasswordError = ref(false);
+const inputType = ref('password')
+const confirmPasswordType = ref('password')
+
+const rules = computed(() => ({
       form: {
         password: { required },
         passwordConfirm: {
           required,
-          sameAsPassword: sameAs('password'),
+          sameAsPassword: sameAs(form.value.password),
         },
       },
-    };
-  },
-  methods: {
-    goBack() {
+    }));
+const v$ = useVuelidate(rules, {form});
+
+const goBack = () => {
       // Remove session created if navigating back to the Login page
-      this.$store.dispatch('authentication/logout');
-    },
-    changePassword() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
+      authenticationStore.logout().then(() => {
+      router.push('/login');
+  });
+    };
+const changePassword = () => {
+      v$.value.$touch();
+      if (v$.value.$invalid) return;
       let data = {
-        originalUsername: this.username,
-        password: this.form.password,
+        originalUsername: username.value,
+        password: form.value.password,
       };
 
-      this.$store
-        .dispatch('userManagement/updateUser', data)
+      userManagementStore.updateUser(data)
         .then(() => {
           Promise.all([
-            this.$store.dispatch('userManagement/getUsers'),
-            this.$store.dispatch('global/getCurrentUser', this.username),
-            this.$store.dispatch('global/getSystemInfo'),
-          ]);
+            userManagementStore.getUsers(),
+            global.getCurrentUser(username.value),
+            global.getSystemInfo(),
+          ])
+          v$.value.$reset();
         })
-        .then(() => this.$router.push('/'))
-        .catch(() => (this.changePasswordError = true));
-    },
-  },
+        .then(() => router.push('/'))
+        .catch(() => (changePasswordError.value = true));
+      };
+const updatePasswordType = (passwordType) => {
+  inputType.value=passwordType
+};
+const updateConfirmPasswordType = (passwordType) => {
+  confirmPasswordType.value=passwordType
 };
 </script>
-
 <style lang="scss" scoped>
 .change-password__form-container {
   @include media-breakpoint-up('md') {

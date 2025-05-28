@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia';
 import api from '@/store/api';
 import { useCookies } from 'vue3-cookies';
-import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 const { cookies } = useCookies();
-const router = useRouter();
 
 export const AuthenticationStore = defineStore('authentication', {
   state: () => ({
@@ -67,17 +65,19 @@ export const AuthenticationStore = defineStore('authentication', {
       const headers = {
         'X-Xsrf-Token': cookies.get('X-XSRF-TOKEN'),
       };
-      Cookies.remove('XSRF-TOKEN');
-      Cookies.remove('IsAuthenticated');
-      localStorage.removeItem('storedModelType');
-      localStorage.removeItem('storedUsername');
-      localStorage.removeItem('storedCurrentUser');
-      localStorage.removeItem('storedHmcManagedValue');
-      localStorage.removeItem('storedLanguage');
-      this.xsrfCookie = undefined;
-      this.isAuthenticatedCookie = undefined;
       return api
         .post('/logout', { data: [] }, { headers: headers })
+        .then(()=>{
+          Cookies.remove('XSRF-TOKEN')
+          Cookies.remove('IsAuthenticated')
+          localStorage.removeItem('storedModelType');
+          localStorage.removeItem('storedUsername');
+          localStorage.removeItem('storedCurrentUser');
+          localStorage.removeItem('storedHmcManagedValue');
+          localStorage.removeItem('storedLanguage');
+          this.xsrfCookie = undefined;
+          this.isAuthenticatedCookie = undefined;
+        })
         .then(() => {
           this.logoutRemove();
         })
