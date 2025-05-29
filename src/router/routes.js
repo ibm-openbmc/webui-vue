@@ -45,6 +45,7 @@ import Network from '@/views/Settings/Network';
 import Dumps from '@/views/Logs/Dumps';
 import DateTime from '@/views/Settings/DateTime/DateTime.vue';
 import ChangePassword from '@/views/ChangePassword';
+import SnmpAlerts from '@/views/Settings/SnmpAlerts';
 
 const roles = {
   administrator: 'Administrator',
@@ -292,6 +293,14 @@ export const routes = [
         component: PowerRestorePolicy,
         meta: {
           title: i18n.global.t('appPageTitle.powerRestorePolicy'),
+        },
+      },
+      {
+        path: '/settings/snmp-alerts',
+        name: 'snmp-alerts',
+        component: SnmpAlerts,
+        meta: {
+          title: i18n.global.t('appPageTitle.snmpAlerts'),
         },
       },
       {

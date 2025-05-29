@@ -1,32 +1,33 @@
 <template>
-  <b-container fluid="xl">
+  <BContainer fluid="xl">
     <page-title
       :title="$t('appPageTitle.snmpAlerts')"
       :description="$t('pageSnmpAlerts.pageDescription')"
     />
-    <b-row>
-      <b-col xl="9" class="text-right">
-        <b-button variant="primary" @click="initModalAddDestination">
+    <BRow>
+      <BCol xl="9" class="text-end">
+        <BButton variant="primary" @click="initModalAddDestination">
           <icon-add />
           {{ $t('pageSnmpAlerts.addDestination') }}
-        </b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col xl="9">
+        </BButton>
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol xl="9">
         <table-toolbar
           ref="toolbar"
-          :selected-items-count="selectedRows.length"
+          :selected-items-count="selectedRowsValue.length"
           :actions="tableToolbarActions"
-          @clear-selected="clearSelectedRows($refs.table)"
+          @clear-selected="clearSelectedRows(tableRef)"
           @batch-action="onBatchAction"
         />
-        <b-table
-          ref="table"
+        <BTable
+          ref="tableRef"
           responsive="md"
           selectable
           show-empty
           no-select-on-click
+          sticky-header="75vh"
           hover
           :fields="fields"
           :items="tableItems"
@@ -35,23 +36,22 @@
         >
           <!-- Checkbox column -->
           <template #head(checkbox)>
-            <b-form-checkbox
-              v-model="tableHeaderCheckboxModel"
+            <BFormCheckbox
+              v-model="tableHeaderCheckboxModelValue"
               data-test-id="snmpAlerts-checkbox-selectAll"
-              :indeterminate="tableHeaderCheckboxIndeterminate"
-              @change="onChangeHeaderCheckbox($refs.table)"
+              :indeterminate="tableHeaderCheckboxIndeterminateValue"
+              @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)"
+              @update:modelValue="toggleAll"
             >
-              <span class="sr-only">{{ $t('global.table.selectAll') }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
-            <b-form-checkbox
-              v-model="row.rowSelected"
+            <BFormCheckbox
+              v-model="snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected"
               :data-test-id="`snmpAlerts-checkbox-selectRow-${row.index}`"
-              @change="toggleSelectRow($refs.table, row.index)"
+              @change="toggleSelectRowByIpAddress(tableRef, row.index, snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected, row.item)"
             >
-              <span class="sr-only">{{ $t('global.table.selectItem') }}</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
           <!-- table actions column -->
           <template #cell(actions)="{ item }">
@@ -69,80 +69,111 @@
               </template>
             </table-row-action>
           </template>
-        </b-table>
-      </b-col>
-    </b-row>
+        </BTable>
+      </BCol>
+    </BRow>
     <!-- Modals -->
     <modal-add-destination @ok="onModalOk" />
-  </b-container>
+    <BModal
+      v-model="openDeleteModal"
+      :title="deleteTitle"
+      :ok-title="okTitle"
+      okVariant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk(deleteType)"
+    >
+      <p>
+        {{
+          deleteMessage
+        }}
+      </p>
+    </BModal>
+  </BContainer>
 </template>
-<script>
+<script setup>
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
+import i18n from '@/i18n';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
-import ModalAddDestination from './ModalAddDestination';
-import PageTitle from '@/components/Global/PageTitle';
+import ModalAddDestination from './ModalAddDestination.vue';
+import PageTitle from '@/components/Global/PageTitle.vue';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
-import TableToolbar from '@/components/Global/TableToolbar';
-import TableRowAction from '@/components/Global/TableRowAction';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
-import BVToastMixin from '@/components/Mixins/BVToastMixin';
-import BVTableSelectableMixin, {
-  selectedRows,
-  tableHeaderCheckboxModel,
-  tableHeaderCheckboxIndeterminate,
-} from '@/components/Mixins/BVTableSelectableMixin';
-export default {
-  name: 'SnmpAlerts',
-  components: {
-    PageTitle,
-    IconAdd,
-    TableToolbar,
-    IconTrashcan,
-    ModalAddDestination,
-    TableRowAction,
-  },
-  mixins: [BVTableSelectableMixin, BVToastMixin, LoadingBarMixin],
-  beforeRouteLeave(to, from, next) {
-    this.hideLoader();
-    next();
-  },
-  data() {
-    return {
-      fields: [
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useToastComposable from '@/components/Composables/useToastComposable';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import { SnmpAlertsStore } from '../../../store';
+import eventBus from '@/eventBus';
+  
+  const snmpToDelete = ref('');
+  const openDeleteModal = ref(false);
+  const okTitle = ref('');
+  const deleteTitle = ref('');
+  const deleteType = ref('');
+  const deleteMessage = ref('');
+  const tableRef = ref(null);
+  const isAllSelected = ref(false);
+  const { startLoader, endLoader, hideLoader } = useLoadingBar();
+  const { successToast, errorToast } = useToastComposable();
+  const {
+        clearSelectedRows,
+        toggleSelectRowByIpAddress,
+        onRowSelected,
+        onChangeHeaderCheckbox,
+        selectedRowsList,
+        tableHeaderCheckboxModel,
+        tableHeaderCheckboxIndeterminate,
+  } = useTableSelectableComposable();
+  const snmpAlertsStore = SnmpAlertsStore();
+
+  onBeforeRouteLeave (() => {
+    hideLoader();
+  });
+
+      onBeforeMount(() => {
+        eventBus.on('clear-selected', () => {
+          snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
+            singleConnection.isSelected = false;
+          });
+          clearSelectedRows(tableRef);
+        });
+      });
+
+  const fields = ref([
         {
           key: 'checkbox',
         },
         {
           key: 'ip',
-          label: this.$t('pageSnmpAlerts.table.ipaddress'),
+          label: i18n.global.t('pageSnmpAlerts.table.ipaddress'),
         },
         {
           key: 'port',
-          label: this.$t('pageSnmpAlerts.table.port'),
+          label: i18n.global.t('pageSnmpAlerts.table.port'),
         },
         {
           key: 'actions',
           label: '',
-          tdClass: 'text-right text-nowrap',
+          tdClass: 'text-end text-nowrap',
         },
-      ],
-      tableToolbarActions: [
+      ]);
+  const tableToolbarActions = ref([
         {
           value: 'delete',
-          label: this.$t('global.action.delete'),
+          label: i18n.global.t('global.action.delete'),
         },
-      ],
-      selectedRows: selectedRows,
-      tableHeaderCheckboxModel: tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
-    };
-  },
-  computed: {
-    allSnmpDetails() {
-      return this.$store.getters['snmpAlerts/allSnmpDetails'];
-    },
-    tableItems() {
+      ]);
+  const selectedRowsValue = ref(selectedRowsList);
+  const tableHeaderCheckboxModelValue = ref(tableHeaderCheckboxModel);
+  const tableHeaderCheckboxIndeterminateValue = ref(tableHeaderCheckboxIndeterminate);
+
+  const allSnmpDetails = computed(() => {
+      return snmpAlertsStore.allSnmpDetailsGetter;
+    })
+  const tableItems = computed(() => {
       // transform destination data to table data
-      return this.allSnmpDetails.map((subscriptions) => {
+      return allSnmpDetails.value.map((subscriptions) => {
         const [destination, dataWithProtocol, dataWithoutProtocol] = [
           subscriptions.Destination,
           subscriptions.Destination.split('/')[2].split(':'),
@@ -164,22 +195,18 @@ export default {
             {
               value: 'delete',
               enabled: true,
-              title: this.$tc('pageSnmpAlerts.deleteDestination'),
+              title: i18n.global.t('pageSnmpAlerts.deleteDestination'),
             },
           ],
           ...subscriptions,
         };
       });
-    },
-  },
-  created() {
-    this.startLoader();
-    this.$store
-      .dispatch('snmpAlerts/getSnmpDetails')
-      .finally(() => this.endLoader());
-  },
-  methods: {
-    onModalOk({ ipAddress, port }) {
+    })
+  onMounted(() => {
+    startLoader();
+    snmpAlertsStore.getSnmpDetails().finally(() => endLoader());
+  })
+  const onModalOk = ({ ipAddress, port }) => {
       const protocolIpAddress = 'snmp://' + ipAddress;
       const destination = port
         ? protocolIpAddress + ':' + port
@@ -187,89 +214,85 @@ export default {
       const data = {
         Destination: destination,
         SubscriptionType: 'SNMPTrap',
-        DeliveryRetryPolicy: 'TerminateAfterRetries',
         Protocol: 'SNMPv2c',
       };
-      this.startLoader();
-      this.$store
-        .dispatch('snmpAlerts/addDestination', { data })
-        .then((success) => this.successToast(success))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => this.endLoader());
-    },
-    initModalAddDestination() {
-      this.$bvModal.show('add-destination');
-    },
-    initModalDeleteDestination(destination) {
-      this.$bvModal
-        .msgBoxConfirm(
-          this.$t('pageSnmpAlerts.modal.deleteConfirmMessage', {
+      startLoader();
+      snmpAlertsStore.addDestination({ data })
+        .then((success) => successToast(success))
+        .catch(({ message }) => errorToast(message))
+        .finally(() => endLoader());
+    }
+  const initModalAddDestination = () => {
+      eventBus.emit('add-destination');
+    }
+  const initModalDeleteDestination = (destination) => {
+      snmpToDelete.value = destination;
+      openDeleteModal.value = true;
+      okTitle.value = i18n.global.t('pageSnmpAlerts.deleteDestination');
+      deleteMessage.value = i18n.global.t('pageSnmpAlerts.modal.deleteConfirmMessage', {
             destination: destination.id,
-          }),
-          {
-            title: this.$tc('pageSnmpAlerts.modal.deleteSnmpDestinationTitle'),
-            okTitle: this.$tc('pageSnmpAlerts.deleteDestination'),
-            cancelTitle: this.$t('global.action.cancel'),
-          },
-        )
-        .then((deleteConfirmed) => {
-          if (deleteConfirmed) {
-            this.deleteDestination(destination);
-          }
-        });
-    },
-    deleteDestination({ id }) {
-      this.startLoader();
-      this.$store
-        .dispatch('snmpAlerts/deleteDestination', id)
-        .then((success) => this.successToast(success))
-        .catch(({ message }) => this.errorToast(message))
-        .finally(() => this.endLoader());
-    },
-    onBatchAction(action) {
-      if (action === 'delete') {
-        this.$bvModal
-          .msgBoxConfirm(
-            this.$tc(
-              'pageSnmpAlerts.modal.batchDeleteConfirmMessage',
-              this.selectedRows.length,
-            ),
-            {
-              title: this.$tc(
-                'pageSnmpAlerts.modal.deleteSnmpDestinationTitle',
-                this.selectedRows.length,
-              ),
-              okTitle: this.$tc(
-                'pageSnmpAlerts.deleteDestination',
-                this.selectedRows.length,
-              ),
-              cancelTitle: this.$t('global.action.cancel'),
-            },
-          )
-          .then((deleteConfirmed) => {
-            if (deleteConfirmed) {
-              this.startLoader();
-              this.$store
-                .dispatch(
-                  'snmpAlerts/deleteMultipleDestinations',
-                  this.selectedRows,
-                )
-                .then((messages) => {
-                  messages.forEach(({ type, message }) => {
-                    if (type === 'success') this.successToast(message);
-                    if (type === 'error') this.errorToast(message);
-                  });
-                })
-                .finally(() => this.endLoader());
-            }
+          })
+      deleteTitle.value = i18n.global.t('pageSnmpAlerts.modal.deleteSnmpDestinationTitle');
+      deleteType.value = 'singleEntry'; 
+    }
+  const handleOk = (value) => {
+      if (value === 'singleEntry') {
+        deleteDestination(snmpToDelete.value);
+      } else {
+        startLoader();
+        snmpAlertsStore.deleteMultipleDestinations(selectedRowsValue.value)
+          .then((messages) => {
+            messages.forEach(({ type, message }) => {
+              if (type === 'success') successToast(message);
+              if (type === 'error') errorToast(message);
+            });
+          })
+          .finally(() => {
+            openDeleteModal.value = false;
+            eventBus.emit('clear-selected');
+            endLoader();
           });
       }
-    },
-    onTableRowAction(action, row) {
+    }
+  const deleteDestination = ({ id }) => {
+      startLoader();
+      snmpAlertsStore.deleteDestination(id)
+        .then((success) => successToast(success))
+        .catch(({ message }) => errorToast(message))
+        .finally(() => {
+          openDeleteModal.value = false;
+          snmpToDelete.value = '';
+          endLoader();
+        });
+    }
+  const onBatchAction = (action) => {
       if (action === 'delete') {
-        this.initModalDeleteDestination(row);
+          openDeleteModal.value = true;
+          okTitle.value = i18n.global.t(
+                'pageSnmpAlerts.deleteDestination',
+                selectedRowsValue.value.length,
+              );
+          deleteMessage.value = i18n.global.t(
+              'pageSnmpAlerts.modal.batchDeleteConfirmMessage',
+              selectedRowsValue.value.length,
+            )
+          deleteTitle.value =  i18n.global.t(
+                'pageSnmpAlerts.modal.deleteSnmpDestinationTitle',
+                selectedRowsValue.value.length,
+              );
+          deleteType.value = 'selectedEntries';
       }
-    },
-  },
-};
+    }
+  const onTableRowAction = (action, row) => {
+      if (action === 'delete') {
+        initModalDeleteDestination(row);
+      }
+    }
+    const toggleAll = (checked) => {
+      snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
+        singleConnection.isSelected = checked;
+      });
+      isAllSelected.value = checked;
+    }
 </script>
+

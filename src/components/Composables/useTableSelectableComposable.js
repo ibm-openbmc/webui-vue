@@ -103,6 +103,26 @@ const useTableSelectableComposable = () => {
     }
   };
 
+  const toggleSelectRowByIpAddress = (tableRef, rowIndex, rowSelected, row) => {
+    if (tableRef && rowIndex !== undefined) {
+      if (!rowSelected) {
+        // Find the index of the object to remove
+        const indexToRemove = selectedRowsList.value.findIndex(
+          (item) => item.ip === row.ip,
+        );
+
+        // Check if the object exists in the array
+        if (indexToRemove !== -1) {
+          tableRef.unselectRow(rowIndex);
+          // Remove the object from the array
+          selectedRowsList.value.splice(indexToRemove, 1);
+        }
+      } else {
+        tableRef.selectRow(rowIndex);
+      }
+    }
+  };
+
   const onRowSelected = (selectedRows, totalRowsCount) => {
     if (selectedRows && totalRowsCount !== undefined) {
       if (selectedRowsList.value.indexOf(selectedRows) === -1) {
@@ -138,6 +158,7 @@ const useTableSelectableComposable = () => {
     toggleSelectRowById,
     toggleSelectRowByGroupName,
     toggleSelectRowByUsername,
+    toggleSelectRowByIpAddress,
     onRowSelected,
     onChangeHeaderCheckbox,
     selectedRowsList,

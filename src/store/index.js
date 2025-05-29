@@ -37,6 +37,7 @@ import DumpsStore from './modules/Logs/DumpsStore.js';
 import FieldCoreOverrideStore from './modules/ResourceManagement/FieldCoreOverrideStore.js';
 import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore.js';
 import DateTimeStore from './modules/Settings/DateTimeStore';
+import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore.js';
 // ... (export use other stores)
 export {
   EventLogStore,
@@ -77,4 +78,5 @@ export {
   DumpsStore,
   FieldCoreOverrideStore,
   DateTimeStore,
+  SnmpAlertsStore,
 };

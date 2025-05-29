@@ -1,14 +1,11 @@
 <template>
-  <b-modal id="add-destination" ref="modal" @ok="onOk" @hidden="resetForm">
-    <template #modal-title>
-      {{ $t('pageSnmpAlerts.modal.addSnmpDestinationTitle') }}
-    </template>
-    <b-form id="form-destination">
-      <b-container>
-        <b-row>
-          <b-col sm="6">
+  <BModal id="add-destination" v-model="modal" :title="$t('pageSnmpAlerts.modal.addSnmpDestinationTitle')" @ok="onOk" :ok-title="$t('pageSnmpAlerts.addDestination')" @hidden="resetForm">
+    <BForm id="form-destination">
+      <BContainer>
+        <BRow>
+          <BCol sm="6">
             <!-- Add new SNMP alert destination type -->
-            <b-form-group label-for="ip-address">
+            <BFormGroup label-for="ip-address">
               <template #label>
                 {{ $t('pageSnmpAlerts.modal.ipaddressFqdn') }}
                 <info-tooltip
@@ -16,40 +13,40 @@
                   :title="$t('pageSnmpAlerts.modal.ipaddressFqdnInfo')"
                 />
               </template>
-              <b-form-input
+              <BFormInput
                 id="ip-Address"
                 v-model="form.ipAddress"
-                :state="getValidationState($v.form.ipAddress)"
+                :state="getValidationState(v$.form.ipAddress)"
                 data-test-id="snmpAlerts-input-ipAddress"
                 type="text"
-                @blur="$v.form.ipAddress.$touch()"
+                @blur="v$.form.ipAddress.$touch()"
               />
-              <b-form-invalid-feedback role="alert">
-                <template v-if="!$v.form.ipAddress.required">
+              <BFormInvalidFeedback role="alert">
+                <template v-if="!v$.form.ipAddress.required">
                   {{ $t('global.form.fieldRequired') }}
                 </template>
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group label-for="port">
+              </BFormInvalidFeedback>
+            </BFormGroup>
+          </BCol>
+          <BCol>
+            <BFormGroup label-for="port">
               <template #label>
                 {{ $t('pageSnmpAlerts.modal.port') }} -
                 <span class="form-text d-inline">
                   {{ $t('global.form.optional') }}
                 </span>
               </template>
-              <b-form-input
+              <BFormInput
                 id="port"
                 v-model="form.port"
                 type="text"
-                :state="getValidationState($v.form.port)"
+                :state="getValidationState(v$.form.port)"
                 data-test-id="snmpAlerts-input-port"
-                @blur="$v.form.port.$touch()"
+                @blur="v$.form.port.$touch()"
               />
-              <b-form-invalid-feedback role="alert">
+              <BFormInvalidFeedback role="alert">
                 <template
-                  v-if="!$v.form.port.minLength || !$v.form.port.maxLength"
+                  v-if="!v$.form.port.minLength || !v$.form.port.maxLength"
                 >
                   {{
                     $t('global.form.valueMustBeBetween', {
@@ -58,47 +55,33 @@
                     })
                   }}
                 </template>
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </b-col>
-        </b-row>
-      </b-container>
-    </b-form>
-    <template #modal-footer="{ cancel }">
-      <b-button variant="secondary" @click="cancel()">
-        {{ $t('global.action.cancel') }}
-      </b-button>
-      <b-button
-        form="form-user"
-        type="submit"
-        variant="primary"
-        data-test-id="snmpAlerts-button-ok"
-        @click="onOk"
-      >
-        {{ $t('pageSnmpAlerts.addDestination') }}
-      </b-button>
-    </template>
-  </b-modal>
+              </BFormInvalidFeedback>
+            </BFormGroup>
+          </BCol>
+        </BRow>
+      </BContainer>
+    </BForm>
+  </BModal>
 </template>
-<script>
-import { required, minValue, maxValue } from 'vuelidate/lib/validators';
-import InfoTooltip from '@/components/Global/InfoTooltip';
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
-export default {
-  components: {
-    InfoTooltip,
-  },
-  mixins: [VuelidateMixin],
-  data() {
-    return {
-      form: {
-        ipaddress: null,
-        port: null,
-      },
-    };
-  },
-  validations() {
-    return {
+<script setup>
+import { ref, nextTick, computed } from 'vue';
+import { required, minValue, maxValue } from '@vuelidate/validators';
+import { useVuelidate } from '@vuelidate/core';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import eventBus from '@/eventBus';
+
+  eventBus.on('add-destination', () => {
+    modal.value = true;
+  });
+  const { getValidationState } = useVuelidateComposable();
+  const emit = defineEmits(['ok']);
+  const modal = ref(false);
+  const form =  ref({
+    ipaddress: null,
+    port: null,
+  });
+  const rules = computed(() => ({
       form: {
         ipAddress: {
           required,
@@ -107,37 +90,35 @@ export default {
           minValue: minValue(0),
           maxValue: maxValue(65535),
         },
-      },
-    };
-  },
-  methods: {
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$emit('ok', {
-        ipAddress: this.form.ipAddress,
-        port: this.form.port,
+  }}));
+
+  const v$ = useVuelidate(rules, { form });
+
+  const handleSubmit = () => {
+      v$.value.$touch();
+      if (v$.value.$invalid) return;
+      emit('ok', {
+        ipAddress: form.value.ipAddress,
+        port: form.value.port,
       });
-      this.closeModal();
-    },
-    closeModal() {
-      this.$nextTick(() => {
-        this.$refs.modal.hide();
+      closeModal();
+    }
+  const closeModal = () => {
+      nextTick(() => {
+        modal.value = false;
       });
-    },
-    resetForm() {
-      this.form.ipAddress = '';
-      this.form.port = '';
-      this.$v.$reset();
-      this.$emit('hidden');
-    },
-    onOk(bvModalEvt) {
+    }
+  const resetForm = () => {
+      form.value.ipAddress = '';
+      form.value.port = '';
+      v$.value.$reset();
+      eventBus.emit('hidden');
+    }
+  const onOk = (bvModalEvt) => {
       // prevent modal close
       bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-  },
-};
+      handleSubmit();
+    }
 </script>
 <style lang="scss" scoped>
 .info-icon {
