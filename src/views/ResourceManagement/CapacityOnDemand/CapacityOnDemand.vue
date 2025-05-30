@@ -44,7 +44,9 @@ import i18n from '@/i18n';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import Alert from '@/components/Global/Alert.vue';
-import useLoadingBar, { loading } from '@/components/Composables/useLoadingBarComposable';
+import useLoadingBar, {
+  loading,
+} from '@/components/Composables/useLoadingBarComposable';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -73,37 +75,36 @@ onBeforeRouteLeave(() => {
 });
 
 const quickLinks = reactive([
-        {
-          id: 'activation',
-          dataRef: 'activation',
-          href: '#activation',
-          linkText:  i18n.global.t('pageCapacityOnDemand.activation.sectionTitle'),
-        },
-        {
-          id: 'orderInfo',
-          dataRef: 'orderInfo',
-          href: '#orderInfo',
-          linkText:  i18n.global.t('pageCapacityOnDemand.orderInfo.title'),
-        },
-        {
-          id: 'vetCapabilities',
-          dataRef: 'vetCapabilities',
-          href: '#vetCapabilities',
-          linkText:  i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
-        },
-      ]);
+  {
+    id: 'activation',
+    dataRef: 'activation',
+    href: '#activation',
+    linkText: i18n.global.t('pageCapacityOnDemand.activation.sectionTitle'),
+  },
+  {
+    id: 'orderInfo',
+    dataRef: 'orderInfo',
+    href: '#orderInfo',
+    linkText: i18n.global.t('pageCapacityOnDemand.orderInfo.title'),
+  },
+  {
+    id: 'vetCapabilities',
+    dataRef: 'vetCapabilities',
+    href: '#vetCapabilities',
+    linkText: i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
+  },
+]);
 
 const serverStatus = computed(() => {
-      return global.serverStatusGetter;
-    });
+  return global.serverStatusGetter;
+});
 
 onMounted(() => {
-    startLoader();
-    Promise.all([
-      licenseStore.getLicenses(),
-      systemStore.getSystem(),
-    ]).finally(() => endLoader());
-  });
+  startLoader();
+  Promise.all([licenseStore.getLicenses(), systemStore.getSystem()]).finally(
+    () => endLoader(),
+  );
+});
 </script>
 <style lang="scss" scoped>
 a {

@@ -144,10 +144,13 @@ export const EventLogStore = defineStore('eventLog', {
     async deleteAllEventLogs(data) {
       return await api
         .post(
-          '/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog'
+          '/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog',
         )
         .then(() => {
-          return i18n.global.t('pageEventLogs.toast.successDelete', data.length);
+          return i18n.global.t(
+            'pageEventLogs.toast.successDelete',
+            data.length,
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -275,7 +278,9 @@ export const EventLogStore = defineStore('eventLog', {
         })
         .catch((error) => {
           console.log(error);
-          const message = i18n.global.t('pageEventLogs.toast.errorLogStatusUpdate');
+          const message = i18n.global.t(
+            'pageEventLogs.toast.errorLogStatusUpdate',
+          );
           throw new Error(message);
         });
     },

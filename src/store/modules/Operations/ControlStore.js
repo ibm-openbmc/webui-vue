@@ -42,7 +42,7 @@ export const ControlStore = defineStore('control', {
               clearTimeout(timer);
             }
           },
-          { detached: true }
+          { detached: true },
         );
       });
     },
@@ -77,7 +77,7 @@ export const ControlStore = defineStore('control', {
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageRebootBmc.toast.errorRebootStart')
+            i18n.global.t('pageRebootBmc.toast.errorRebootStart'),
           );
         });
     },

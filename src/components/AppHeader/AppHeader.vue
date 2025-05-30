@@ -157,7 +157,7 @@ getEvents();
 
 const assetTag = computed(() => globalStore.assetTag);
 const isNavTagPresent = computed(
-  () => assetTag.value || globalStore.modelType || globalStore.serialNumber
+  () => assetTag.value || globalStore.modelType || globalStore.serialNumber,
 );
 const modelType = computed(() => globalStore.modelType);
 const serialNumber = computed(() => globalStore.serialNumber);

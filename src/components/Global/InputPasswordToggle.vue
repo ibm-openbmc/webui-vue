@@ -14,7 +14,6 @@
   </div>
 </template>
 
-
 <script setup>
 import IconView from '@carbon/icons-vue/es/view/20';
 import IconViewOff from '@carbon/icons-vue/es/view--off/20';
@@ -25,13 +24,11 @@ const togglePasswordLabel = ref(i18n.global.t('global.ariaLabel.showPassword'));
 const emit = defineEmits(['updatePassView']);
 const toggleVisibility = () => {
   isVisible.value = !isVisible.value;
-  emit('updatePassView',
-    isVisible.value ? 'text' : 'password'
-  )
+  emit('updatePassView', isVisible.value ? 'text' : 'password');
   togglePasswordLabel.value = isVisible.value
     ? i18n.global.t('global.ariaLabel.hidePassword')
-    : i18n.global.t('global.ariaLabel.showPassword')
-}
+    : i18n.global.t('global.ariaLabel.showPassword');
+};
 </script>
 
 <style lang="scss" scoped>

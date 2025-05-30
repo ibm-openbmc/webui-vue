@@ -44,8 +44,8 @@ const eventLogStore = EventLogStore();
 
 onBeforeMount(() => {
   eventLogStore.getEventLogData().finally(() => {
-      eventBus.emit('overview-events-complete');
-    });
+    eventBus.emit('overview-events-complete');
+  });
 });
 
 const eventLogData = computed(() => {

@@ -112,8 +112,8 @@ function handleSubmit() {
         if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
           successToast(
             i18n.global.t(
-              'pageServerPowerOperations.toast.successSaveLinuxKvmSettings'
-            )
+              'pageServerPowerOperations.toast.successSaveLinuxKvmSettings',
+            ),
           );
         } else if (
           (settings.biosSettings.pvm_default_os_type == 'IBM I' &&
@@ -125,27 +125,27 @@ function handleSubmit() {
             if (hmcManaged != 'Enabled') {
               infoToast(
                 i18n.global.t(
-                  'pageServerPowerOperations.toast.successSaveIBMiStandby'
-                )
+                  'pageServerPowerOperations.toast.successSaveIBMiStandby',
+                ),
               );
             }
             successToast(
               i18n.global.t(
-                'pageServerPowerOperations.toast.successSaveSettings'
-              )
+                'pageServerPowerOperations.toast.successSaveSettings',
+              ),
             );
           } else {
             if (hmcManaged != 'Enabled') {
               infoToast(
                 i18n.global.t(
-                  'pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo'
-                )
+                  'pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo',
+                ),
               );
             }
             successToast(
               i18n.global.t(
-                'pageServerPowerOperations.toast.successSaveSettings'
-              )
+                'pageServerPowerOperations.toast.successSaveSettings',
+              ),
             );
           }
         } else {

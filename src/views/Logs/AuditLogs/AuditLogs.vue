@@ -1,9 +1,9 @@
 <template>
   <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.auditLogs')" />
-   
+
     <div class="section-divider mb-4 mt-4"></div>
-    <BRow class="align-items-start" >
+    <BRow class="align-items-start">
       <BCol sm="8" xl="6" class="d-sm-flex align-items-end mb-4 searchStyle">
         <search
           :placeholder="$t('pageAuditLogs.table.searchLogs')"
@@ -32,7 +32,7 @@
         </BButton>
       </BCol>
     </BRow>
- 
+
     <BRow>
       <BCol>
         <BTable

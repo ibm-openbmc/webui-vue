@@ -161,7 +161,7 @@ const openTerminal = (selectedConsole = props.consoleType) => {
       console.log(
         `websocket ${selectedConsole}/ closed.
             code: ${event.code}
-            reason: ${event.reason}`
+            reason: ${event.reason}`,
       );
     };
     ws.value.onmessage = () => {
@@ -179,7 +179,7 @@ const openConsoleWindow = () => {
   window.open(
     `${window.location.origin}/console/service-login-consoles`,
     '_blank',
-    'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550'
+    'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550',
   );
 };
 </script>

@@ -398,7 +398,7 @@ function rebootServer() {
     } ${i18n.global.t('pageServerPowerOperations.modal.confirmRebootMessage')}`;
 
     modalOptions.value.title = i18n.global.t(
-      'pageServerPowerOperations.modal.confirmRebootTitle'
+      'pageServerPowerOperations.modal.confirmRebootTitle',
     );
     modalOptions.value.okVariant = systemDumpActive.value
       ? 'danger'
@@ -422,7 +422,7 @@ function shutdownServer() {
   } ${i18n.global.t('pageServerPowerOperations.modal.confirmShutdownMessage')}`;
 
   modalOptions.value.title = i18n.global.t(
-    'pageServerPowerOperations.modal.confirmShutdownTitle'
+    'pageServerPowerOperations.modal.confirmShutdownTitle',
   );
   modalOptions.value.okVariant = systemDumpActive.value ? 'danger' : 'primary';
   modalOptions.value.okTitle = systemDumpActive.value
@@ -503,7 +503,7 @@ onBeforeMount(() => {
   startLoader();
   const bootSettingsPromise = new Promise((resolve) => {
     eventBus.on('server-power-operations-boot-settings-complete', () =>
-      resolve()
+      resolve(),
     );
   });
   Promise.all([

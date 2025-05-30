@@ -67,7 +67,11 @@
               variant="link"
               :aria-label="expandRowLabel"
               :title="expandRowLabel"
-              :class="row.item.toggleDetails ? 'rotateSvg btn-icon-only' : 'btn-icon-only'"
+              :class="
+                row.item.toggleDetails
+                  ? 'rotateSvg btn-icon-only'
+                  : 'btn-icon-only'
+              "
               @click="toggleRow(row)"
             >
               <icon-chevron />
@@ -124,7 +128,12 @@
             <BFormCheckbox
               v-model="tableHeaderCheckbox"
               :indeterminate="tableHeaderCheckboxIndeterminated"
-              @change="onChangeHeaderCheckbox(tableDeconfigurationRecordsRef, tableHeaderCheckbox)"
+              @change="
+                onChangeHeaderCheckbox(
+                  tableDeconfigurationRecordsRef,
+                  tableHeaderCheckbox,
+                )
+              "
               @update:modelValue="toggleAll"
             >
             </BFormCheckbox>
@@ -132,13 +141,20 @@
           <template #cell(checkbox)="row">
             <BFormCheckbox
               v-model="row.item.isSelected"
-              @change="toggleSelectRowById(tableDeconfigurationRecordsRef, row.index, row.item.isSelected, row.item)"
+              @change="
+                toggleSelectRowById(
+                  tableDeconfigurationRecordsRef,
+                  row.index,
+                  row.item.isSelected,
+                  row.item,
+                )
+              "
             >
             </BFormCheckbox>
           </template>
           <!-- Date column -->
           <template #cell(date)="{ value }">
-            <p class="mb-0">{{ $filters.formatDate(value)  }}</p>
+            <p class="mb-0">{{ $filters.formatDate(value) }}</p>
             <p class="mb-0">{{ $filters.formatTime(value) }}</p>
           </template>
           <template #cell(severity)="{ value }">
@@ -198,14 +214,12 @@
       v-model="openModal"
       :title="$t('pageDeconfigurationRecords.modal.deleteAllTitle')"
       :ok-title="$t('global.action.delete')"
-      okVariant="danger"
+      ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk"
     >
       <p>
-        {{
-          $t('pageDeconfigurationRecords.modal.deleteAllMessage')
-        }}
+        {{ $t('pageDeconfigurationRecords.modal.deleteAllMessage') }}
       </p>
     </BModal>
   </BContainer>
@@ -244,12 +258,8 @@ const {
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
-const {
-  currentPage,
-  perPage,
-  itemsPerPageOptions,
-  getTotalRowCount,
-} = usePaginationComposable();
+const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
+  usePaginationComposable();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 
 const Toast = useToastComposable();
@@ -264,58 +274,57 @@ onBeforeRouteLeave(() => {
 });
 const tableDeconfigurationRecordsRef = ref(null);
 
-
 const fields = ref([
-        {
-          key: 'expandRow',
-          label: '',
-          tdClass: 'table-row-expand',
-        },
-        {
-          key: 'checkbox',
-          sortable: false,
-        },
-        {
-          key: 'id',
-          label:  i18n.global.t('pageDeconfigurationRecords.table.id'),
-          sortable: true,
-        },
-        {
-          key: 'eventID',
-          label:  i18n.global.t('pageDeconfigurationRecords.table.eventId'),
-          sortable: true,
-        },
-        {
-          key: 'date',
-          label:  i18n.global.t('pageDeconfigurationRecords.table.date'),
-          sortable: true,
-        },
-        {
-          key: 'severity',
-          label:  i18n.global.t('pageDeconfigurationRecords.table.severity'),
-          sortable: true,
-        },
-        {
-          key: 'description',
-          label:  i18n.global.t('pageDeconfigurationRecords.table.resource'),
-          sortable: false,
-        },
-        {
-          key: 'status',
-          label:  i18n.global.t('pageDeconfigurationRecords.table.status'),
-          sortable: false,
-        },
-      ]);
+  {
+    key: 'expandRow',
+    label: '',
+    tdClass: 'table-row-expand',
+  },
+  {
+    key: 'checkbox',
+    sortable: false,
+  },
+  {
+    key: 'id',
+    label: i18n.global.t('pageDeconfigurationRecords.table.id'),
+    sortable: true,
+  },
+  {
+    key: 'eventID',
+    label: i18n.global.t('pageDeconfigurationRecords.table.eventId'),
+    sortable: true,
+  },
+  {
+    key: 'date',
+    label: i18n.global.t('pageDeconfigurationRecords.table.date'),
+    sortable: true,
+  },
+  {
+    key: 'severity',
+    label: i18n.global.t('pageDeconfigurationRecords.table.severity'),
+    sortable: true,
+  },
+  {
+    key: 'description',
+    label: i18n.global.t('pageDeconfigurationRecords.table.resource'),
+    sortable: false,
+  },
+  {
+    key: 'status',
+    label: i18n.global.t('pageDeconfigurationRecords.table.status'),
+    sortable: false,
+  },
+]);
 const tableFilters = ref([
-        {
-          key: 'filterByStatus',
-          label:  i18n.global.t('pageDeconfigurationRecords.table.status'),
-          values: [
-             i18n.global.t('pageEventLogs.resolved'),
-             i18n.global.t('pageEventLogs.unresolved'),
-          ],
-        },
-      ]);
+  {
+    key: 'filterByStatus',
+    label: i18n.global.t('pageDeconfigurationRecords.table.status'),
+    values: [
+      i18n.global.t('pageEventLogs.resolved'),
+      i18n.global.t('pageEventLogs.unresolved'),
+    ],
+  },
+]);
 const activeFiltersRows = ref([]);
 const selectedRowsLists = ref(selectedRowsList);
 const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
@@ -326,87 +335,89 @@ const openModal = ref(false);
 const isAllSelected = ref(false);
 
 const href = computed(() => {
-      return `data:text/json;charset=utf-8,${exportAllRecords()}`;
-    });
+  return `data:text/json;charset=utf-8,${exportAllRecords()}`;
+});
 const allEntries = computed(() => {
-      return deconfigurationRecoredsStore.deconfigRecordsGetter;
-    });
+  return deconfigurationRecoredsStore.deconfigRecordsGetter;
+});
 const recordItems = computed(() => {
-      return deconfigurationRecoredsStore.deconfigRecordsGetter;
-    });
+  return deconfigurationRecoredsStore.deconfigRecordsGetter;
+});
 const batchExportData = computed(() => {
-      return selectedRowsLists.value.map((row) => omit(row, 'actions'));
-    });
+  return selectedRowsLists.value.map((row) => omit(row, 'actions'));
+});
 const filteredLogs = computed(() => {
-      return getFilteredTableData(recordItems.value, activeFiltersRows.value);
-    });
+  return getFilteredTableData(recordItems.value, activeFiltersRows.value);
+});
 const serverStatus = computed(() => {
-      return global.serverStatusGetter;
-    });
+  return global.serverStatusGetter;
+});
 
 onBeforeMount(() => {
-    startLoader();
-    deconfigurationRecoredsStore.getDeconfigurationRecordInfo()
-      .finally(() => endLoader());
-    eventBus.on('clear-selected', () => {
-    deconfigurationRecoredsStore?.deconfigRecordsGetter?.map((singleConnection) => {
-      singleConnection.isSelected = false;
-    });
+  startLoader();
+  deconfigurationRecoredsStore
+    .getDeconfigurationRecordInfo()
+    .finally(() => endLoader());
+  eventBus.on('clear-selected', () => {
+    deconfigurationRecoredsStore?.deconfigRecordsGetter?.map(
+      (singleConnection) => {
+        singleConnection.isSelected = false;
+      },
+    );
     clearSelectedRows(tableDeconfigurationRecordsRef);
   });
 });
 
 const isServerOff = () => {
-      return serverStatus.value === 'off';
-    };
+  return serverStatus.value === 'off';
+};
 const clearAllEntries = () => {
-      openModal.value = true;
-    };
+  openModal.value = true;
+};
 const handleOk = () => {
   openModal.value = false;
-  deconfigurationRecoredsStore.clearAllEntries(
-          allEntries.value
-          )
-          .then((message) => Toast.successToast(message))
-          .catch(({ message }) => Toast.errorToast(message));
-    };
+  deconfigurationRecoredsStore
+    .clearAllEntries(allEntries.value)
+    .then((message) => Toast.successToast(message))
+    .catch(({ message }) => Toast.errorToast(message));
+};
 const downloadLog = (uri, date) => {
-      startLoader();
-      deconfigurationRecoredsStore.downloadLog({
-          uri: uri,
-          date: date,
-        })
-        .then((message) => Toast.successToast(...message))
-        .catch(({ message }) => Toast.successToast(message))
-        .finally(() => endLoader());
-    };
-    // Create export file name based on date
+  startLoader();
+  deconfigurationRecoredsStore
+    .downloadLog({
+      uri: uri,
+      date: date,
+    })
+    .then((message) => Toast.successToast(...message))
+    .catch(({ message }) => Toast.successToast(message))
+    .finally(() => endLoader());
+};
+// Create export file name based on date
 const exportFileNameByDate = (value) => {
-      let date = new Date();
-      date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
-      let fileName;
-      if (value === 'export') {
-        fileName = 'deconfig_record_';
-      } else {
-        fileName = 'all_deconfig_records_';
-      }
-      return fileName + date;
-    };
+  let date = new Date();
+  date =
+    date.toISOString().slice(0, 10) +
+    '_' +
+    date.toString().split(':').join('-').split(' ')[4];
+  let fileName;
+  if (value === 'export') {
+    fileName = 'deconfig_record_';
+  } else {
+    fileName = 'all_deconfig_records_';
+  }
+  return fileName + date;
+};
 const exportAllRecords = () => {
-      {
-        return deconfigurationRecoredsStore.deconfigRecordsGetter
-        .map((records) => {
-          const allDeconfigRecordsString = JSON.stringify(records);
-          return allDeconfigRecordsString;
-        });
-      }
-    };
+  {
+    return deconfigurationRecoredsStore.deconfigRecordsGetter.map((records) => {
+      const allDeconfigRecordsString = JSON.stringify(records);
+      return allDeconfigRecordsString;
+    });
+  }
+};
 const onFilterChange = ({ activeFilters }) => {
-      activeFiltersRows.value = activeFilters;
-    };
+  activeFiltersRows.value = activeFilters;
+};
 const toggleAll = (checked) => {
   deconfigurationRecoredsStore?.deconfigRecordsGetter?.map((singleRecord) => {
     singleRecord.isSelected = checked;

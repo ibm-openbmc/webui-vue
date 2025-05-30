@@ -35,14 +35,15 @@
                       xl="4"
                     >
                       <div v-for="item in column" :key="item.id">
-                        <BLink style="text-decoration: none;"
+                        <BLink
+                          style="text-decoration: none"
                           :href="item.href"
                           :data-ref="item.dataRef"
                           @click.prevent="
                             scrollToOffsetInventory($refs, $event, index)
                           "
                         >
-                          <icon-jump-link  /> {{ item.linkText }}
+                          <icon-jump-link /> {{ item.linkText }}
                         </BLink>
                       </div>
                     </b-col>
@@ -414,7 +415,7 @@ onBeforeMount(() => {
 });
 </script>
 <style scoped>
-.inventory-container{
+.inventory-container {
   min-width: 90%;
 }
 </style>

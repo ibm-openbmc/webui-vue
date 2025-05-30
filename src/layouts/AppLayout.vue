@@ -35,7 +35,7 @@ onMounted(() => {
 });
 
 watch(
-  () => route
+  () => route,
   // () => {
   //   nextTick(() => {
   //     setFocus(focusTarget.value);

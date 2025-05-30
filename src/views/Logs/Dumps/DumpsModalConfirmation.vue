@@ -1,8 +1,8 @@
 <template>
   <BModal
-    v-model="modal"
     id="modal-confirmation"
     ref="modal"
+    v-model="modal"
     :title="$t('pageDumps.modal.initiateSystemDump')"
     @hidden="resetForm"
   >
@@ -52,29 +52,28 @@ const modal = ref(false);
 
 const mustBeTrue = (value) => {
   return value === true;
-}
+};
 
 const rules = computed(() => ({
-    confirmed: {
-      mustBeTrue
-    },
-  }));
+  confirmed: {
+    mustBeTrue,
+  },
+}));
 const v$ = useVuelidate(rules, { confirmed });
 
 const closeModal = () => {
-      nextTick(() => {
-        modal.value=false
-      });
-    };
-const handleSubmit = () => {
-      v$.value.$touch();
-      if ( v$.value.$invalid) return;
-      eventBus.emit('ok');
-      closeModal();
-    };
-const resetForm = () => {
-      confirmed.value = false;
-      v$.value.$reset();
+  nextTick(() => {
+    modal.value = false;
+  });
 };
-
+const handleSubmit = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  eventBus.emit('ok');
+  closeModal();
+};
+const resetForm = () => {
+  confirmed.value = false;
+  v$.value.$reset();
+};
 </script>

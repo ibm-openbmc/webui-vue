@@ -223,7 +223,7 @@ watch(
   () => props.tabIndex,
   () => {
     getipv6TableItems();
-  }
+  },
 );
 
 watch(network, () => {

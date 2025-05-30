@@ -48,8 +48,7 @@ const { startLoader, hideLoader } = useLoadingBar();
 onBeforeRouteLeave(() => {
   hideLoader();
 });
-onBeforeMount(() =>  {
+onBeforeMount(() => {
   startLoader();
 });
-
 </script>

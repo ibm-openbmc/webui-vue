@@ -249,12 +249,12 @@ const isRpdPolicyScheduled = computed(() => {
   return systemParametersStore.pvmRpdPolicy === 'Scheduled';
 });
 const options = computed(() => {
-  if (systemParametersStore.rpdPolicyOptionsGetter){
-  return systemParametersStore.rpdPolicyOptions.map((option) => ({
-    value: option,
-    text: option,
-  }));
- } else return;
+  if (systemParametersStore.rpdPolicyOptionsGetter) {
+    return systemParametersStore.rpdPolicyOptions.map((option) => ({
+      value: option,
+      text: option,
+    }));
+  } else return;
 });
 const rpdFeatOptions = computed(() => {
   if (systemParametersStore.rpdFeatureOptionsGetter) {
@@ -383,7 +383,7 @@ const updateRpdScheduledRun = (startTime, duration) => {
   const [hours, minutes] = startTime.split(':');
   const totalSeconds = (+hours * 60 + +minutes) * 60;
   systemParametersStore
-    .saveRpdScheduledRun({totalSeconds, duration, startTime})
+    .saveRpdScheduledRun({ totalSeconds, duration, startTime })
     .then((message) => Toast.successToast(message))
     .catch(({ message }) => Toast.errorToast(message))
     .finally(() => {

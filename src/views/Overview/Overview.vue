@@ -1,6 +1,6 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.overview')"/>
+    <page-title :title="$t('appPageTitle.overview')" />
     <overview-quick-links class="mb-4" />
     <page-section
       :section-title="$t('pageOverview.systemInformation')"
@@ -48,44 +48,42 @@ const userManagementStore = UserManagementStore();
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 
 onBeforeMount(() => {
-    startLoader();
-    const dumpsPromise = new Promise((resolve) => {
-      eventBus.on('overview-dumps-complete', () => resolve());
-    });
-    const eventsPromise = new Promise((resolve) => {
-      eventBus.on('overview-events-complete', () => resolve());
-    });
-    const firmwarePromise = new Promise((resolve) => {
-      eventBus.on('overview-firmware-complete', () => resolve());
-    });
-    const inventoryPromise = new Promise((resolve) => {
-      eventBus.on('overview-inventory-complete', () => resolve());
-    });
-    const networkPromise = new Promise((resolve) => {
-      eventBus.on('overview-network-complete', () => resolve());
-    });
-    const powerPromise = new Promise((resolve) => {
-      eventBus.on('overview-power-complete', () => resolve());
-    });
-    const quicklinksPromise = new Promise((resolve) => {
-      eventBus.on('overview-quicklinks-complete', () => resolve());
-    });
-    const serverPromise = new Promise((resolve) => {
-      eventBus.on('overview-server-complete', () => resolve());
-    });
-
-    Promise.all([
-      dumpsPromise,
-      eventsPromise,
-      firmwarePromise,
-      inventoryPromise,
-      networkPromise,
-      powerPromise,
-      quicklinksPromise,
-      serverPromise,
-      userManagementStore.getUsers(),
-    ]).finally(() => endLoader());
-
+  startLoader();
+  const dumpsPromise = new Promise((resolve) => {
+    eventBus.on('overview-dumps-complete', () => resolve());
+  });
+  const eventsPromise = new Promise((resolve) => {
+    eventBus.on('overview-events-complete', () => resolve());
+  });
+  const firmwarePromise = new Promise((resolve) => {
+    eventBus.on('overview-firmware-complete', () => resolve());
+  });
+  const inventoryPromise = new Promise((resolve) => {
+    eventBus.on('overview-inventory-complete', () => resolve());
+  });
+  const networkPromise = new Promise((resolve) => {
+    eventBus.on('overview-network-complete', () => resolve());
+  });
+  const powerPromise = new Promise((resolve) => {
+    eventBus.on('overview-power-complete', () => resolve());
+  });
+  const quicklinksPromise = new Promise((resolve) => {
+    eventBus.on('overview-quicklinks-complete', () => resolve());
+  });
+  const serverPromise = new Promise((resolve) => {
+    eventBus.on('overview-server-complete', () => resolve());
   });
 
+  Promise.all([
+    dumpsPromise,
+    eventsPromise,
+    firmwarePromise,
+    inventoryPromise,
+    networkPromise,
+    powerPromise,
+    quicklinksPromise,
+    serverPromise,
+    userManagementStore.getUsers(),
+  ]).finally(() => endLoader());
+});
 </script>

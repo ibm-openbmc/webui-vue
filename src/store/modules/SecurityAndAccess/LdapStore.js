@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 
 export const LdapStore = defineStore('ldapStore', {
   namespaced: true,
-  state:()=>( {
+  state: () => ({
     isServiceEnabled: null,
     ldap: {
       serviceEnabled: null,
@@ -42,25 +42,22 @@ export const LdapStore = defineStore('ldapStore', {
   },
 
   actions: {
-    setServiceEnabled(serviceEnabled){
-      (this.isServiceEnabled = serviceEnabled)
+    setServiceEnabled(serviceEnabled) {
+      this.isServiceEnabled = serviceEnabled;
     },
-    setLdapProperties(
-      {
-        ServiceEnabled,
-        ServiceAddresses = [],
-        Authentication = {},
-        LDAPService: {
-          SearchSettings: {
-            BaseDistinguishedNames = [],
-            UsernameAttribute,
-            GroupsAttribute,
-          } = {},
+    setLdapProperties({
+      ServiceEnabled,
+      ServiceAddresses = [],
+      Authentication = {},
+      LDAPService: {
+        SearchSettings: {
+          BaseDistinguishedNames = [],
+          UsernameAttribute,
+          GroupsAttribute,
         } = {},
-        RemoteRoleMapping = [],
-
-      },
-    ) {
+      } = {},
+      RemoteRoleMapping = [],
+    }) {
       this.ldap.serviceAddress = ServiceAddresses[0];
       this.ldap.serviceEnabled = ServiceEnabled;
       this.ldap.baseDn = BaseDistinguishedNames[0];
@@ -69,21 +66,19 @@ export const LdapStore = defineStore('ldapStore', {
       this.ldap.groupsAttribute = GroupsAttribute;
       this.ldap.roleGroups = RemoteRoleMapping;
     },
-      setActiveDirectoryProperties( 
-      {
-        ServiceEnabled,
-        ServiceAddresses = [],
-        Authentication = {},
-        LDAPService: {
-          SearchSettings: {
-            BaseDistinguishedNames = [],
-            UsernameAttribute,
-            GroupsAttribute,
-          } = {},
+    setActiveDirectoryProperties({
+      ServiceEnabled,
+      ServiceAddresses = [],
+      Authentication = {},
+      LDAPService: {
+        SearchSettings: {
+          BaseDistinguishedNames = [],
+          UsernameAttribute,
+          GroupsAttribute,
         } = {},
-        RemoteRoleMapping = [],
-      },
-    ) {
+      } = {},
+      RemoteRoleMapping = [],
+    }) {
       this.activeDirectory.serviceEnabled = ServiceEnabled;
       this.activeDirectory.serviceAddress = ServiceAddresses[0];
       this.activeDirectory.bindDn = Authentication.Username;
@@ -100,8 +95,8 @@ export const LdapStore = defineStore('ldapStore', {
           const activeDirectoryEnabled = ActiveDirectory.ServiceEnabled;
 
           this.setServiceEnabled(ldapEnabled || activeDirectoryEnabled);
-          this.setLdapProperties(LDAP)
-          this.setActiveDirectoryProperties(ActiveDirectory)
+          this.setLdapProperties(LDAP);
+          this.setActiveDirectoryProperties(ActiveDirectory);
         })
         .catch((error) => console.log(error));
     },
@@ -119,7 +114,9 @@ export const LdapStore = defineStore('ldapStore', {
         .then(() => i18n.global.t('pageLdap.toast.successSaveLdapSettings'))
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.global.t('pageLdap.toast.errorSaveLdapSettings'));
+          throw new Error(
+            i18n.global.t('pageLdap.toast.errorSaveLdapSettings'),
+          );
         });
     },
     async saveActiveDirectorySettings(properties) {
@@ -134,7 +131,9 @@ export const LdapStore = defineStore('ldapStore', {
       return await api
         .patch('/redfish/v1/AccountService', data)
         .then(() => this.getAccountSettings())
-        .then(() => i18n.global.t('pageLdap.toast.successSaveActiveDirectorySettings'))
+        .then(() =>
+          i18n.global.t('pageLdap.toast.successSaveActiveDirectorySettings'),
+        )
         .catch((error) => {
           console.log(error);
           throw new Error(
@@ -142,18 +141,16 @@ export const LdapStore = defineStore('ldapStore', {
           );
         });
     },
-    async saveAccountSettings(
-      {
-        serviceEnabled,
-        serviceAddress,
-        activeDirectoryEnabled,
-        bindDn,
-        bindPassword,
-        baseDn,
-        userIdAttribute,
-        groupIdAttribute,
-      },
-    ) {
+    async saveAccountSettings({
+      serviceEnabled,
+      serviceAddress,
+      activeDirectoryEnabled,
+      bindDn,
+      bindPassword,
+      baseDn,
+      userIdAttribute,
+      groupIdAttribute,
+    }) {
       const data = {
         ServiceEnabled: serviceEnabled,
         ServiceAddresses: [serviceAddress],
@@ -176,11 +173,9 @@ export const LdapStore = defineStore('ldapStore', {
         return await this.saveLdapSettings(data);
       }
     },
-    async addNewRoleGroup(
-      { groupName, groupPrivilege },
-    ) {
+    async addNewRoleGroup({ groupName, groupPrivilege }) {
       const data = {};
-      const enabledRoleGroups = this.enabledRoleGroups
+      const enabledRoleGroups = this.enabledRoleGroups;
       const isActiveDirectoryEnabled = this.isActiveDirectoryEnabledGetter;
       const RemoteRoleMapping = [
         ...enabledRoleGroups,
@@ -207,12 +202,10 @@ export const LdapStore = defineStore('ldapStore', {
           throw new Error(i18n.global.t('pageLdap.toast.errorAddRoleGroup'));
         });
     },
-    async saveRoleGroup(
-      { groupNamePreviously, groupName, groupPrivilege },
-    ) {
+    async saveRoleGroup({ groupNamePreviously, groupName, groupPrivilege }) {
       const data = {};
-      const enabledRoleGroups = this.enabledRoleGroups
-      const isActiveDirectoryEnabled = this.isActiveDirectoryEnabledGetter
+      const enabledRoleGroups = this.enabledRoleGroups;
+      const isActiveDirectoryEnabled = this.isActiveDirectoryEnabledGetter;
       const RemoteRoleMapping = enabledRoleGroups.map((group) => {
         if (group.RemoteGroup === groupNamePreviously) {
           return {
@@ -241,8 +234,8 @@ export const LdapStore = defineStore('ldapStore', {
     },
     async deleteRoleGroup({ roleGroups = [] }) {
       const data = {};
-      const enabledRoleGroups = this.enabledRoleGroups
-      const isActiveDirectoryEnabled = this.isActiveDirectoryEnabledGetter
+      const enabledRoleGroups = this.enabledRoleGroups;
+      const isActiveDirectoryEnabled = this.isActiveDirectoryEnabledGetter;
       const RemoteRoleMapping = enabledRoleGroups.map((group) => {
         if (find(roleGroups, { groupName: group.RemoteGroup })) {
           return null;
@@ -259,12 +252,18 @@ export const LdapStore = defineStore('ldapStore', {
         .patch('/redfish/v1/AccountService', data)
         .then(() => this.getAccountSettings())
         .then(() =>
-          i18n.global.t('pageLdap.toast.successDeleteRoleGroup', roleGroups.length),
+          i18n.global.t(
+            'pageLdap.toast.successDeleteRoleGroup',
+            roleGroups.length,
+          ),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageLdap.toast.errorDeleteRoleGroup', roleGroups.length),
+            i18n.global.t(
+              'pageLdap.toast.errorDeleteRoleGroup',
+              roleGroups.length,
+            ),
           );
         });
     },

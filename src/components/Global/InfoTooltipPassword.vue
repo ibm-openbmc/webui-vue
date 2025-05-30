@@ -36,11 +36,11 @@ import { defineProps } from 'vue';
 import IconTooltip from '@carbon/icons-vue/es/information/16';
 
 defineProps({
-    title: {
-      type: String,
-      default: '',
-    },
-  })
+  title: {
+    type: String,
+    default: '',
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -51,7 +51,7 @@ defineProps({
     vertical-align: baseline;
   }
 }
-#tooltip{
+#tooltip {
   text-align: left !important;
 }
 </style>

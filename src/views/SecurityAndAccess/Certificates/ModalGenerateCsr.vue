@@ -1,8 +1,8 @@
 <template>
   <div>
     <BModal
-      v-model="modal"
       id="generate-csr"
+      v-model="modal"
       size="lg"
       no-stacking
       :title="$t('pageCertificates.modal.generateACertificateSigningRequest')"
@@ -328,17 +328,17 @@
       </template>
     </BModal>
     <BModal
-      v-model="openCsrModal"
       id="csr-string"
+      v-model="openCsrModal"
       no-stacking
       size="lg"
-      @cancel="copyCsrString"
       :cancel-title="
         csrStringCopied ? $t('global.status.copied') : $t('global.action.copy')
       "
-      @ok="downloadCsr"
       :ok-title="$t('global.action.download')"
       :title="$t('pageCertificates.modal.certificateSigningRequest')"
+      @cancel="copyCsrString"
+      @ok="downloadCsr"
       @hidden="onHiddenCsrStringModal"
     >
       <span class="span-csr-string">{{ csrString }}</span>
@@ -419,12 +419,12 @@ const rules = computed(() => ({
     keyPairAlgorithm: { required },
     keyCurveId: {
       requiredIf: requiredIf(function () {
-        return form.keyPairAlgorithm === 'EC';
+        return form.value.keyPairAlgorithm === 'EC';
       }),
     },
     keyBitLength: {
       requiredIf: requiredIf(function () {
-        return form.keyPairAlgorithm === 'RSA';
+        return form.value.keyPairAlgorithm === 'RSA';
       }),
     },
   },

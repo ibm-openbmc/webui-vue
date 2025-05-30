@@ -118,7 +118,7 @@
 
       <template #row-details="{ item }">
         <b-container fluid>
-          <BRow style="margin-left: 50px;">
+          <BRow style="margin-left: 50px">
             <BCol sm="6" xl="6">
               <dl>
                 <!-- Name -->

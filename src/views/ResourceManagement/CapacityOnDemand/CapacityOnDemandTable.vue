@@ -4,7 +4,7 @@
       <page-section :section-title="$t('pageCapacityOnDemand.vetCapabilities')">
         <BTable
           responsive="xl"
-          show-empty  
+          show-empty
           hover
           sticky-header="75vh"
           :no-border-collapse="true"
@@ -166,38 +166,38 @@ import { LicenseStore } from '@/store';
 const licenseStore = LicenseStore();
 
 const fields = ref([
-        {
-          key: 'settings',
-          label: i18n.global.t('pageCapacityOnDemand.table.setting'),
-        },
-        {
-          key: 'status',
-          label: i18n.global.t('pageCapacityOnDemand.table.bitCapabilityStatus'),
-        },
-      ]);
+  {
+    key: 'settings',
+    label: i18n.global.t('pageCapacityOnDemand.table.setting'),
+  },
+  {
+    key: 'status',
+    label: i18n.global.t('pageCapacityOnDemand.table.bitCapabilityStatus'),
+  },
+]);
 
 const items = computed(() => {
-      const vetCapabilities = licenseStore.vetCapabilities;
+  const vetCapabilities = licenseStore.vetCapabilities;
 
-      const items = [];
+  const items = [];
 
-      forOwn(vetCapabilities, (license) => {
-        items.push({
-          settings: license.Name,
-          status: license.Status?.State,
-        });
-      });
-
-      return items;
+  forOwn(vetCapabilities, (license) => {
+    items.push({
+      settings: license.Name,
+      status: license.Status?.State,
     });
+  });
+
+  return items;
+});
 
 const statusIconValue = (value) => {
-      if (value === 'Enabled') {
-        return 'success';
-      } else if (value === 'Disabled') {
-        return 'danger';
-      } else {
-        return 'secondary';
-      }
-    };
+  if (value === 'Enabled') {
+    return 'success';
+  } else if (value === 'Disabled') {
+    return 'danger';
+  } else {
+    return 'secondary';
+  }
+};
 </script>

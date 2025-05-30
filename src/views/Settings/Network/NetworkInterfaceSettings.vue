@@ -160,7 +160,7 @@ watch(
   () => props.tabIndex,
   () => {
     getSettings();
-  }
+  },
 );
 
 const getSettings = () => {

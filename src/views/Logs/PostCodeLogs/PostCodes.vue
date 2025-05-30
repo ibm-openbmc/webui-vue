@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { GlobalStore } from "../../../store";
+import { GlobalStore } from '../../../store';
 export default {
   name: 'PostCodes',
   data() {

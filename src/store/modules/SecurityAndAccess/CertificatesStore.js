@@ -33,7 +33,7 @@ export const CERTIFICATE_TYPES = [
 ];
 const getCertificateProp = (type, prop) => {
   const certificate = CERTIFICATE_TYPES.find(
-    (certificate) => certificate.type === type
+    (certificate) => certificate.type === type,
   );
   return certificate ? certificate[prop] : null;
 };
@@ -83,7 +83,7 @@ export const CertificatesStore = defineStore('certificates', {
             } else {
               this.acfCertificate = [];
             }
-          }
+          },
         )
         .catch((error) => console.log(error));
     },
@@ -95,11 +95,11 @@ export const CertificatesStore = defineStore('certificates', {
             data: {
               Links: { Certificates },
             },
-          }) => Certificates.map((certificate) => certificate['@odata.id'])
+          }) => Certificates.map((certificate) => certificate['@odata.id']),
         )
         .then((certificateLocations) => {
           const promises = certificateLocations.map((location) =>
-            api.get(location)
+            api.get(location),
           );
           api.all(promises).then(
             api.spread((...responses) => {
@@ -123,7 +123,7 @@ export const CertificatesStore = defineStore('certificates', {
               });
               this.allCertificates = certificates;
               this.getAvailableCertificates();
-            })
+            }),
           );
         });
     },
@@ -172,7 +172,7 @@ export const CertificatesStore = defineStore('certificates', {
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorAddCertificate')
+            i18n.global.t('pageCertificates.toast.errorAddCertificate'),
           );
         });
     },
@@ -194,12 +194,12 @@ export const CertificatesStore = defineStore('certificates', {
         .then(() =>
           i18n.global.t('pageCertificates.toast.successAddCertificate', {
             certificate: getCertificateProp(type, 'label'),
-          })
+          }),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorAddCertificate')
+            i18n.global.t('pageCertificates.toast.errorAddCertificate'),
           );
         });
     },
@@ -216,21 +216,21 @@ export const CertificatesStore = defineStore('certificates', {
               'pageCertificates.toast.successAddedHTTPCertificate',
               {
                 certificate: getCertificateProp(type, 'label'),
-              }
+              },
             );
           } else {
             return i18n.global.t(
               'pageCertificates.toast.successAddCertificate',
               {
                 certificate: getCertificateProp(type, 'label'),
-              }
+              },
             );
           }
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorAddCertificate')
+            i18n.global.t('pageCertificates.toast.errorAddCertificate'),
           );
         });
     },
@@ -256,12 +256,12 @@ export const CertificatesStore = defineStore('certificates', {
         .then(() =>
           i18n.global.t('pageCertificates.toast.successReplaceCertificate', {
             certificate: getCertificateProp(type, 'label'),
-          })
+          }),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorReplaceCertificate')
+            i18n.global.t('pageCertificates.toast.errorReplaceCertificate'),
           );
         });
     },
@@ -274,7 +274,7 @@ export const CertificatesStore = defineStore('certificates', {
       return await api
         .post(
           '/redfish/v1/CertificateService/Actions/CertificateService.ReplaceCertificate',
-          data
+          data,
         )
         .then(() => {
           this.getAcfCertificate();
@@ -286,21 +286,21 @@ export const CertificatesStore = defineStore('certificates', {
               'pageCertificates.toast.successReplacedHTTPCertificate',
               {
                 certificate: getCertificateProp(type, 'label'),
-              }
+              },
             );
           } else {
             return i18n.global.t(
               'pageCertificates.toast.successReplaceCertificate',
               {
                 certificate: getCertificateProp(type, 'label'),
-              }
+              },
             );
           }
         })
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorReplaceCertificate')
+            i18n.global.t('pageCertificates.toast.errorReplaceCertificate'),
           );
         });
     },
@@ -320,12 +320,12 @@ export const CertificatesStore = defineStore('certificates', {
         .then(() =>
           i18n.global.t('pageCertificates.toast.successDeleteCertificate', {
             certificate: getCertificateProp(type, 'label'),
-          })
+          }),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorDeleteCertificate')
+            i18n.global.t('pageCertificates.toast.errorDeleteCertificate'),
           );
         });
     },
@@ -336,12 +336,12 @@ export const CertificatesStore = defineStore('certificates', {
         .then(() =>
           i18n.global.t('pageCertificates.toast.successDeleteCertificate', {
             certificate: getCertificateProp(type, 'label'),
-          })
+          }),
         )
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorDeleteCertificate')
+            i18n.global.t('pageCertificates.toast.errorDeleteCertificate'),
           );
         });
     },
@@ -380,14 +380,14 @@ export const CertificatesStore = defineStore('certificates', {
       return await api
         .post(
           '/redfish/v1/CertificateService/Actions/CertificateService.GenerateCSR',
-          data
+          data,
         )
         //TODO: Success response also throws error so
         // can't accurately show legitimate error in UI
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageCertificates.toast.errorGenerateCsr')
+            i18n.global.t('pageCertificates.toast.errorGenerateCsr'),
           );
         });
     },

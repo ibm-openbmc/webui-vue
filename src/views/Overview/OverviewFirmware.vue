@@ -16,7 +16,9 @@
       <BCol sm="7">
         <dl>
           <dt>{{ $t('pageOverview.accessKeyExpiration') }}</dt>
-          <dd>{{ $filters.formatDate(firmwareAccessKeyInfo.expirationDate) }}</dd>
+          <dd>
+            {{ $filters.formatDate(firmwareAccessKeyInfo.expirationDate) }}
+          </dd>
         </dl>
       </BCol>
     </BRow>
@@ -36,13 +38,13 @@ const firmwareStore = FirmwareStore();
 const licenseStore = LicenseStore();
 
 onBeforeMount(() => {
-    Promise.all([
-      licenseStore.getLicenses(),
-      firmwareStore.getFirmwareInformation(),
-    ]).finally(() => {
-      eventBus.emit('overview-firmware-complete');
-    });
+  Promise.all([
+    licenseStore.getLicenses(),
+    firmwareStore.getFirmwareInformation(),
+  ]).finally(() => {
+    eventBus.emit('overview-firmware-complete');
   });
+});
 
 const backupBmcFirmware = computed(() => {
   return firmwareStore.backupBmcFirmware;
@@ -54,7 +56,7 @@ const activeBmcFirmware = computed(() => {
   return firmwareStore.activeBmcFirmware;
 });
 const firmwareAccessKeyInfo = computed(() => {
-      return licenseStore.firmwareAccessKeyInfo;
+  return licenseStore.firmwareAccessKeyInfo;
 });
 const runningVersion = computed(() => {
   return activeBmcFirmware.value?.version;

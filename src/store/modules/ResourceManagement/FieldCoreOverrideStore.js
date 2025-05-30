@@ -45,15 +45,15 @@ const FieldCoreOverrideStore = defineStore('fieldCoreOverride', {
         .then(() => {
           this.getBiosAttributes();
           return i18n.global.t(
-            'pageFieldCoreOverride.toast.configurationChangeSuccess'
+            'pageFieldCoreOverride.toast.configurationChangeSuccess',
           );
         })
         .catch((error) => {
           console.log('Field core override', error);
           throw new Error(
             i18n.global.t(
-              'pageFieldCoreOverride.toast.configurationChangeError'
-            )
+              'pageFieldCoreOverride.toast.configurationChangeError',
+            ),
           );
         });
     },

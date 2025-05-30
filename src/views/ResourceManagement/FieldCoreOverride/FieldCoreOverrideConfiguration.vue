@@ -67,11 +67,11 @@ const fieldCoreOverrideStore = FieldCoreOverrideStore();
 const licenseStore = LicenseStore();
 
 const inputEnableFieldCoreOverride = ref(
-  fieldCoreOverrideStore.isEnabledGetter
+  fieldCoreOverrideStore.isEnabledGetter,
 );
 
 const inputConfiguredCores = ref(
-  fieldCoreOverrideStore.configuredCoresGetter || null
+  fieldCoreOverrideStore.configuredCoresGetter || null,
 );
 
 const minimumValue = ref(1);

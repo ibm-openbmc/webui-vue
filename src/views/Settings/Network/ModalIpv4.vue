@@ -1,7 +1,7 @@
 <template>
   <BModal
-    v-model="modal"
     id="modal-add-ipv4"
+    v-model="modal"
     :title="
       editModal
         ? $t('pageNetwork.table.editIpv4')
@@ -152,21 +152,21 @@ watch(
   () => props.defaultGateway,
   () => {
     form.value.gateway = props.defaultGateway;
-  }
+  },
 );
 
 watch(
   () => props.ipAddress,
   () => {
     form.value.ipAddress = props.ipAddress;
-  }
+  },
 );
 
 watch(
   () => props.subnet,
   () => {
     form.value.subnetMask = props.subnet;
-  }
+  },
 );
 
 const handleSubmit = () => {

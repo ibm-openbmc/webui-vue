@@ -5,7 +5,11 @@
       <div class="login-main">
         <div>
           <div class="login-brand mb-5">
-            <img width="90px" src="@/assets/images/login-company-logo.svg" :alt="altLogo" />
+            <img
+              width="90px"
+              src="@/assets/images/login-company-logo.svg"
+              :alt="altLogo"
+            />
           </div>
           <h1 v-if="customizableGuiName" class="h3 mb-5">
             {{ customizableGuiName }}
@@ -27,7 +31,7 @@ import { ref } from 'vue';
 // Need to uncomment the below when env based configuration is implemented
 // const  altLogo = ref(process.env.VUE_APP_COMPANY_NAME || 'OpenBMC');
 // const customizableGuiName = ref(process.env.VUE_APP_GUI_NAME || '');
-const  altLogo = ref('OpenBMC');
+const altLogo = ref('OpenBMC');
 const customizableGuiName = ref('Advanced System Management Interface (ASMI)');
 </script>
 

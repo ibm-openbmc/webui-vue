@@ -148,7 +148,7 @@ watch(
   () => props.tabIndex,
   () => {
     getipv6DefaultGatewayTableItems();
-  }
+  },
 );
 
 watch(network, () => {
@@ -167,14 +167,14 @@ const getipv6DefaultGatewayTableItems = () => {
           value: 'edit',
           enabled: true,
           title: i18n.global.t(
-            'pageNetwork.table.editIpv6StaticDefaultGateway'
+            'pageNetwork.table.editIpv6StaticDefaultGateway',
           ),
         },
         {
           value: 'delete',
           enabled: true,
           title: i18n.global.t(
-            'pageNetwork.table.deleteIpv6StaticDefaultGateway'
+            'pageNetwork.table.deleteIpv6StaticDefaultGateway',
           ),
         },
       ],

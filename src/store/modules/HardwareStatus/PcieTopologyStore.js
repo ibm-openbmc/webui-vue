@@ -2,16 +2,16 @@ import api from '@/store/api';
 import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
-export const PcieTopologyStore = defineStore('pcieTopologyStore',{
+export const PcieTopologyStore = defineStore('pcieTopologyStore', {
   namespaced: true,
-  state: ()=>({
+  state: () => ({
     entries: [],
   }),
   getters: {
     entriesGetter: (state) => state.entries,
   },
   actions: {
-    setEntries(data){
+    setEntries(data) {
       this.entries = data.map((pcie) => {
         return {
           id: pcie?.linkId,
@@ -1125,7 +1125,7 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
             });
             rows.push(row);
             // commit('setEntries', rows);
-            this.setEntries(rows)
+            this.setEntries(rows);
           }
         });
       });
@@ -1186,7 +1186,7 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
         remotePortLocation: [],
         ioSlots: [],
       };
-    
+
       const fetchPcieBridge = async () => {
         if (selectedObj.pcieBridge?.uri) {
           const { data } = await api.get(selectedObj.pcieBridge?.uri);
@@ -1197,7 +1197,7 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
           });
         }
       };
-    
+
       const fetchLocalPorts = async () => {
         if (selectedObj.localPortLocation.length > 0) {
           await Promise.all(
@@ -1208,11 +1208,11 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
                 locationNumber: data.Location?.PartLocation?.ServiceLabel,
                 uri: data['@odata.id'],
               });
-            })
+            }),
           );
         }
       };
-    
+
       const fetchRemotePorts = async () => {
         if (selectedObj.remotePortLocation.length > 0) {
           await Promise.all(
@@ -1223,11 +1223,11 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
                 locationNumber: data.Location?.PartLocation?.ServiceLabel,
                 uri: data['@odata.id'],
               });
-            })
+            }),
           );
         }
       };
-    
+
       const fetchIoSlots = async () => {
         if (selectedObj.ioSlots.length > 0) {
           await Promise.all(
@@ -1246,22 +1246,22 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore',{
                       uri: ioSlot.uri,
                     });
                   }
-                })
+                }),
               );
-            })
+            }),
           );
         }
       };
-    
+
       await Promise.all([
         fetchPcieBridge(),
         fetchLocalPorts(),
         fetchRemotePorts(),
         fetchIoSlots(),
       ]);
-    
+
       return returningObj;
-    }    
+    },
   },
 });
 

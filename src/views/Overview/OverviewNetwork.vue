@@ -29,7 +29,7 @@
               dataFormatter(
                 network.dhcpAddress.length !== 0
                   ? network.dhcpAddress[0].Address
-                  : null
+                  : null,
               )
             }}
           </dd>
@@ -51,10 +51,10 @@ const { dataFormatter } = useDataFormatterGlobal();
 const networkStore = NetworkStore();
 
 onBeforeMount(() => {
-    networkStore?.getEthernetData().finally(() => {
+  networkStore?.getEthernetData().finally(() => {
     eventBus.emit('overview-network-complete');
-    });
   });
+});
 
 const network = computed(() => {
   return networkStore.networkSettings[0];

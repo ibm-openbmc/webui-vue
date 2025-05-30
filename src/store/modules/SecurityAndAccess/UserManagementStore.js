@@ -6,13 +6,13 @@ import { defineStore } from 'pinia';
 export const UserManagementStore = defineStore('userManagment', {
   namespaced: true,
   state: () => ({
-      allUsers: [],
-      accountRoles: [],
-      accountLockoutDuration: null,
-      accountLockoutThreshold: null,
-      accountMinPasswordLength: null,
-      accountMaxPasswordLength: null,
-    }),
+    allUsers: [],
+    accountRoles: [],
+    accountLockoutDuration: null,
+    accountLockoutThreshold: null,
+    accountMinPasswordLength: null,
+    accountMaxPasswordLength: null,
+  }),
   getters: {
     allUsersGetter(state) {
       return state.allUsers;
@@ -41,7 +41,7 @@ export const UserManagementStore = defineStore('userManagment', {
       return await api
         .get('/redfish/v1/AccountService/Accounts')
         .then((response) =>
-          response.data.Members.map((user) => user['@odata.id'])
+          response.data.Members.map((user) => user['@odata.id']),
         )
         .then((userIds) => {
           api
@@ -51,12 +51,12 @@ export const UserManagementStore = defineStore('userManagment', {
               this.allUsers = userData;
               this.allUsers.map((user) => {
                 user.isSelected = false;
-              })
+              });
             })
             .catch((error) => {
               console.log(error);
               const message = i18n.global.t(
-                'pageUserManagement.toast.errorLoadUsers'
+                'pageUserManagement.toast.errorLoadUsers',
               );
               throw new Error(message);
             });
@@ -64,7 +64,7 @@ export const UserManagementStore = defineStore('userManagment', {
         .catch((error) => {
           console.log(error);
           const message = i18n.global.t(
-            'pageUserManagement.toast.errorLoadUsers'
+            'pageUserManagement.toast.errorLoadUsers',
           );
           throw new Error(message);
         });
@@ -137,9 +137,12 @@ export const UserManagementStore = defineStore('userManagment', {
               );
             case REGEX_MAPPINGS.createLimitReachedForResource.test(errorMsg):
               throw new Error(
-                i18n.global.t('pageUserManagement.toast.errorCreateUserMaxUsers', {
-                  username,
-                }),
+                i18n.global.t(
+                  'pageUserManagement.toast.errorCreateUserMaxUsers',
+                  {
+                    username,
+                  },
+                ),
               );
             default:
               throw new Error(
@@ -150,17 +153,15 @@ export const UserManagementStore = defineStore('userManagment', {
           }
         });
     },
-    async updateUserfromUserManagement(
-      {
-        originalUsername,
-        currentUser,
-        username,
-        password,
-        privilege,
-        status,
-        locked,
-      },
-    ) {
+    async updateUserfromUserManagement({
+      originalUsername,
+      currentUser,
+      username,
+      password,
+      privilege,
+      status,
+      locked,
+    }) {
       const data = {};
       const notReadOnly =
         privilege !== 'ReadOnly' && currentUser.RoleId !== 'ReadOnly';
@@ -202,9 +203,14 @@ export const UserManagementStore = defineStore('userManagment', {
           throw new Error(message);
         });
     },
-    async updateUser(
-      { originalUsername, username, password, privilege, status, locked },
-    ) {
+    async updateUser({
+      originalUsername,
+      username,
+      password,
+      privilege,
+      status,
+      locked,
+    }) {
       const data = {};
       if (username) data.UserName = username;
       if (password) data.Password = password;
@@ -251,9 +257,12 @@ export const UserManagementStore = defineStore('userManagment', {
         )
         .catch((error) => {
           console.log(error);
-          const message = i18n.global.t('pageUserManagement.toast.errorDeleteUser', {
-            username,
-          });
+          const message = i18n.global.t(
+            'pageUserManagement.toast.errorDeleteUser',
+            {
+              username,
+            },
+          );
           throw new Error(message);
         });
     },
@@ -383,9 +392,7 @@ export const UserManagementStore = defineStore('userManagment', {
           }),
         );
     },
-    async saveAccountSettings(
-      { lockoutThreshold, lockoutDuration },
-    ) {
+    async saveAccountSettings({ lockoutThreshold, lockoutDuration }) {
       const data = {};
       if (lockoutThreshold !== undefined) {
         data.AccountLockoutThreshold = lockoutThreshold;
@@ -397,10 +404,14 @@ export const UserManagementStore = defineStore('userManagment', {
       return await api
         .patch('/redfish/v1/AccountService', data)
         .then(() => this.getAccountSettings())
-        .then(() => i18n.global.t('pageUserManagement.toast.successSaveSettings'))
+        .then(() =>
+          i18n.global.t('pageUserManagement.toast.successSaveSettings'),
+        )
         .catch((error) => {
           console.log(error);
-          const message = i18n.global.t('pageUserManagement.toast.errorSaveSettings');
+          const message = i18n.global.t(
+            'pageUserManagement.toast.errorSaveSettings',
+          );
           throw new Error(message);
         });
     },

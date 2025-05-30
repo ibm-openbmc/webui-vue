@@ -1,7 +1,7 @@
 <template>
   <BModal
-    v-model="modal"
     id="modal-dns"
+    v-model="modal"
     :title="$t('pageNetwork.table.addDnsAddress')"
     :ok-title="$t('global.action.add')"
     @ok="onOk"

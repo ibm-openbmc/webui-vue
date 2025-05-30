@@ -112,7 +112,7 @@
 
       <template #row-details="{ item }">
         <b-container fluid>
-          <b-row style="margin-left: 5px;">
+          <b-row style="margin-left: 5px">
             <b-col class="mt-2" sm="6" xl="6">
               <dl>
                 <!-- Name -->

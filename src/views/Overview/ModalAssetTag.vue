@@ -1,7 +1,7 @@
 <template>
-  <BModal 
-    v-model="modal"
+  <BModal
     id="modal-asset-tag"
+    v-model="modal"
     :title="$t('pageOverview.modal.editAssetTag')"
     @hidden="resetForm"
   >
@@ -53,58 +53,57 @@ import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
 
-const props = defineProps ({
+const props = defineProps({
   tag: {
-      type: String,
-      default: '',
-    },
-  });
+    type: String,
+    default: '',
+  },
+});
 
 const modal = ref(false);
 const form = ref({
-        assetTag: props.tag ? props.tag : '',
-      });
+  assetTag: props.tag ? props.tag : '',
+});
 
 eventBus.on('openmodal-true', () => {
   modal.value = true;
 });
 
 const rules = computed(() => ({
-      form: {
-        assetTag: {
-          required,
-        },
-      },
-    }));
+  form: {
+    assetTag: {
+      required,
+    },
+  },
+}));
 const v$ = useVuelidate(rules, { form });
 
 watch(
-  ()=>props.tag,
-  ()=>{
-    form.value.assetTag = props.tag;   
-  }
-)
+  () => props.tag,
+  () => {
+    form.value.assetTag = props.tag;
+  },
+);
 
 const handleSubmit = () => {
-      v$.value.$touch();
-      if (v$.value.$invalid) return;
-      eventBus.emit('ok', { AssetTag: form.value.assetTag });
-      closeModal();
-    };
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  eventBus.emit('ok', { AssetTag: form.value.assetTag });
+  closeModal();
+};
 const closeModal = () => {
-  nextTick(()=>{
-    modal.value=false
-  })
-    };
+  nextTick(() => {
+    modal.value = false;
+  });
+};
 const resetForm = () => {
-      form.value.assetTag = props.tag;
-      v$.value.$reset();
-      eventBus.emit('hidden');
-    };
+  form.value.assetTag = props.tag;
+  v$.value.$reset();
+  eventBus.emit('hidden');
+};
 const onOk = (bvModalEvt) => {
-      // prevent modal close
-      bvModalEvt.preventDefault();
-      handleSubmit();
-    };
-
+  // prevent modal close
+  bvModalEvt.preventDefault();
+  handleSubmit();
+};
 </script>

@@ -69,14 +69,18 @@ export const DateTimeStore = defineStore('dateTime', {
         })
         .then(() => {
           if (dateTimeForm.ntpProtocolEnabled) {
-            return i18n.global.t('pageDateTime.toast.successSaveDateTimeForNtpServer');
+            return i18n.global.t(
+              'pageDateTime.toast.successSaveDateTimeForNtpServer',
+            );
           } else {
             return i18n.global.t('pageDateTime.toast.successSaveDateTime');
           }
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.global.t('pageDateTime.toast.errorSaveDateTime'));
+          throw new Error(
+            i18n.global.t('pageDateTime.toast.errorSaveDateTime'),
+          );
         });
     },
   },

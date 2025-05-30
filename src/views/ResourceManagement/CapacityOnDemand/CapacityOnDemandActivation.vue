@@ -90,47 +90,47 @@ const maxLengthVal = ref(34);
 const accessKeyLink = ref('www.ibm.com/servers/eserver/ess');
 
 const rules = computed(() => ({
-      licenseKey: {
-        required,
-        minLength: minLength(maxLengthVal.value),
-        maxLength: maxLength(maxLengthVal.value),
-      },
-    }));
+  licenseKey: {
+    required,
+    minLength: minLength(maxLengthVal.value),
+    maxLength: maxLength(maxLengthVal.value),
+  },
+}));
 const v$ = useVuelidate(rules, { licenseKey });
 
 const isInPhypStandby = computed(() => {
-      return global.isInPhypStandby();
-    });
+  return global.isInPhypStandby();
+});
 const isActivationDisabled = computed(() => {
-      if (
-        licenseStore.licensesGetter?.UAK?.Status?.State ===
-          'Enabled' &&
-        isInPhypStandby
-      ) {
-        return false;
-      } else {
-        return true;
-      }
-    });
+  if (
+    licenseStore.licensesGetter?.UAK?.Status?.State === 'Enabled' &&
+    isInPhypStandby
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+});
 
 onMounted(() => {
-    Promise.all([
-      global.getSystemInfo(),
-      global.getBootProgress(),
-      licenseStore.getLicenses(),
-    ]);
-  });
+  Promise.all([
+    global.getSystemInfo(),
+    global.getBootProgress(),
+    licenseStore.getLicenses(),
+  ]);
+});
 
 const submitForm = () => {
-      v$.value.$touch();
-      if (!v$.value.$invalid) {
-        startLoader();
-        licenseStore.activateLicense(licenseKey.value)
-          .then((success) => successToast(success))
-          .catch(({ message }) => errorToast(message))
-          .finally(() => endLoader());
-      }
-    };
+  v$.value.$touch();
+  if (!v$.value.$invalid) {
+    startLoader();
+    licenseStore
+      .activateLicense(licenseKey.value)
+      .then((success) => successToast(success))
+      .catch(({ message }) => errorToast(message))
+      .finally(() => endLoader());
+  }
+};
 </script>
 
 <style lang="scss" scoped>

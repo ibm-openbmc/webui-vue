@@ -1,8 +1,8 @@
 <template>
   <BModal
-    v-model="modal"
     id="modal-partition-dump-confirmation"
     ref="modal"
+    v-model="modal"
     :title="
       selected === 'partition'
         ? $t('pageDumps.modal.initiatePartitionDump')
@@ -49,40 +49,39 @@ import eventBus from '@/eventBus';
 const { getValidationState } = useVuelidateComposable();
 
 defineProps({
-    selected: {
-      type: String,
-      required: true,
-    },
-  });
+  selected: {
+    type: String,
+    required: true,
+  },
+});
 
 const confirmed = ref(false);
 const modal = ref(false);
 
 const mustBeTrue = (value) => {
-      return value === true;
-}
+  return value === true;
+};
 
 const rules = computed(() => ({
-    confirmed: {
-      mustBeTrue
-    },
-  }));
+  confirmed: {
+    mustBeTrue,
+  },
+}));
 const v$ = useVuelidate(rules, { confirmed });
 
 const closeModal = () => {
-      nextTick(() => {
-        modal.value=false;
-      });
-    };
+  nextTick(() => {
+    modal.value = false;
+  });
+};
 const handleSubmit = () => {
-      v$.value.$touch();
-      if (v$.value.$invalid) return;
-      eventBus.emit('ok');
-      closeModal();
-    };
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  eventBus.emit('ok');
+  closeModal();
+};
 const resetForm = () => {
-      confirmed.value = false;
-      v$.value.$reset();
-    };
-
+  confirmed.value = false;
+  v$.value.$reset();
+};
 </script>

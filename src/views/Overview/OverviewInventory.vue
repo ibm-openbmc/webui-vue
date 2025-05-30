@@ -40,8 +40,8 @@ const systemStore = SystemStore();
 
 onBeforeMount(() => {
   systemStore.getSystem().finally(() => {
-      eventBus.emit('overview-inventory-complete');
-    });
+    eventBus.emit('overview-inventory-complete');
+  });
 });
 
 const systems = computed(() => {
@@ -50,11 +50,12 @@ const systems = computed(() => {
 });
 
 const toggleIdentifyLedSwitch = (state) => {
-  systemStore.changeIdentifyLedState(state)
-  .then((message) => successToast(message))
-  .catch(({ message }) => {
-    console.log(message);
-    errorToast(message);
-  });
+  systemStore
+    .changeIdentifyLedState(state)
+    .then((message) => successToast(message))
+    .catch(({ message }) => {
+      console.log(message);
+      errorToast(message);
+    });
 };
 </script>
