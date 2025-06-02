@@ -1,4 +1,3 @@
-<!-- Work Requird -->
 <template>
   <div>
     <header id="page-header">
@@ -7,10 +6,10 @@
         href="#main-content"
         @click="setFocus"
       >
-        {{ t('appHeader.skipToContent') }}
+        {{ $t('appHeader.skipToContent') }}
       </a>
 
-      <BNavbar variant="dark" :aria-label="t('appHeader.applicationHeader')">
+      <BNavbar type="dark" :aria-label="$t('appHeader.applicationHeader')">
         <!-- Left aligned nav items -->
         <BButton
           id="app-header-trigger"
@@ -19,21 +18,21 @@
           type="button"
           variant="link"
           :class="{ open: isNavigationOpen }"
-          @click="handleToggleNavigation"
+          @click="toggleNavigation"
         >
           <icon-close
             v-if="isNavigationOpen"
-            :title="t('appHeader.titleHideNavigation')"
+            :title="$t('appHeader.titleHideNavigation')"
           />
           <icon-menu
             v-if="!isNavigationOpen"
-            :title="t('appHeader.titleShowNavigation')"
+            :title="$t('appHeader.titleShowNavigation')"
           />
         </BButton>
         <BNavbarNav>
           <BNavbarBrand
             class="me-0 logo-header"
-            href="/"
+            to="/"
             data-test-id="appHeader-container-overview"
           >
             <img
@@ -54,29 +53,29 @@
         <!-- Right aligned nav items -->
         <BNavbarNav class="ms-auto helper-menu">
           <BNavItem
-            to="/logs/eventBus-logs"
+            to="/logs/event-logs"
             data-test-id="appHeader-container-health"
           >
             <status-icon :status="healthStatusIcon" />
-            {{ t('appHeader.health') }}
+            {{ $t('appHeader.health') }}
           </BNavItem>
           <BNavItem
             to="/operations/server-power-operations"
             data-test-id="appHeader-container-power"
           >
             <status-icon :status="serverStatusIcon" />
-            {{ t('appHeader.power') }}
+            {{ $t('appHeader.power') }}
           </BNavItem>
-          <!-- Using LI elements instead of b-nav-item to support semantic button elements -->
+          <!-- Using LI elements instead of BNavItem to support semantic button elements -->
           <li class="nav-item">
             <BButton
               id="app-header-refresh"
               variant="link"
               data-test-id="appHeader-button-refresh"
-              @click="handleRefresh"
+              @click="refresh"
             >
-              <icon-renew :title="t('appHeader.titleRefresh')" />
-              <span class="responsive-text">{{ t('appHeader.refresh') }}</span>
+              <icon-renew :title="$t('appHeader.titleRefresh')" />
+              <span class="responsive-text">{{ $t('appHeader.refresh') }}</span>
             </BButton>
           </li>
           <li class="nav-item">
@@ -87,19 +86,19 @@
               data-test-id="appHeader-container-user"
             >
               <template #button-content>
-                <icon-avatar :title="t('appHeader.titleProfile')" />
+                <icon-avatar :title="$t('appHeader.titleProfile')" />
                 <span class="responsive-text">{{ username }}</span>
               </template>
               <BDropdownItem
                 to="/profile-settings"
                 data-test-id="appHeader-link-profile"
-                >{{ t('appHeader.profileSettings') }}
+                >{{ $t('appHeader.profileSettings') }}
               </BDropdownItem>
               <BDropdownItem
                 data-test-id="appHeader-link-logout"
                 @click="logout"
               >
-                {{ t('appHeader.logOut') }}
+                {{ $t('appHeader.logOut') }}
               </BDropdownItem>
             </BDropdown>
           </li>
@@ -111,21 +110,23 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onMounted, defineEmits } from 'vue';
-// import BVToastMixin from '@/components/Mixins/BVToastMixin';
+import { computed, ref, watch, onMounted, onBeforeMount } from 'vue';
 import IconAvatar from '@carbon/icons-vue/es/user--avatar/20';
 import IconClose from '@carbon/icons-vue/es/close/20';
 import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
-import StatusIcon from '../Global/StatusIcon.vue';
-import LoadingBar from '../Global/LoadingBar.vue';
+import StatusIcon from '@/components/Global/StatusIcon.vue';
+import useToast from '@/components/Composables/useToastComposable';
 import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
-import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import useToastComposable from '@/components/Composables/useToastComposable';
+import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 
-const { t } = useI18n();
+const { errorToast } = useToast();
+
+const authenticationStore = AuthenticationStore();
+const global = GlobalStore();
+const eventLogStore = EventLogStore();
+
 const props = defineProps({
   routerKey: {
     type: Number,
@@ -133,114 +134,113 @@ const props = defineProps({
   },
 });
 
-const { errorToast } = useToastComposable();
-const router = useRouter();
-const authenticationStore = AuthenticationStore();
-const globalStore = GlobalStore();
-const eventLogStore = EventLogStore();
 const isNavigationOpen = ref(false);
-// const loadingStatus = ref(null);
-const altLogo = 'Built on OpenBMC';
-const headerText = 'ASMI';
-const emit = defineEmits(['refresh']);
-const routerKey = ref(props.routerKey);
-const getSystemInfo = () => {
-  globalStore.getSystemInfo();
-};
-const getEvents = () => {
-  eventLogStore.getEventLogData();
-};
-//commented due to cookies values are not getting
-authenticationStore.resetStoreState();
-getSystemInfo();
-getEvents();
+const altLogo = ref(import.meta.env.VUE_APP_COMPANY_NAME || 'Built on OpenBMC');
+const headerText = ref('ASMI');
 
-const assetTag = computed(() => globalStore.assetTag);
-const isNavTagPresent = computed(
-  () => assetTag.value || globalStore.modelType || globalStore.serialNumber
-);
-const modelType = computed(() => globalStore.modelType);
-const serialNumber = computed(() => globalStore.serialNumber);
-const isAuthorized = computed(() => globalStore.isAuthorized);
-// const userPrivilege = computed(() => globalStore.userPrivilege);
-const serverStatus = computed(() => globalStore.serverStatus);
-const healthStatus = computed(() => eventLogStore.getHealthStatus);
-const serverStatusIcon = computed(() => {
-  switch (serverStatus.value) {
-    case 'on':
-      return 'success';
-    case 'error':
-      return 'danger';
-    case 'diagnosticMode':
-      return 'warning';
-    case 'off':
-    default:
-      return 'secondary';
-  }
-});
-const healthStatusIcon = computed(() => {
-  switch (healthStatus.value) {
-    case 'OK':
-      return 'success';
-    case 'Warning':
-      return 'warning';
-    case 'Critical':
-      return 'danger';
-    default:
-      return 'secondary';
-  }
-});
-const username = computed(() => {
-  return globalStore.username;
-});
-const consoleWindow = computed(() => authenticationStore.consoleWindow);
+onBeforeMount(() => {
+    // Reset auth state to check if user is authenticated based
+    // on available browser cookies
+    authenticationStore.resetStoreState();
+    getSystemInfo();
+    getEvents();
+  });
+  
 onMounted(() => {
-  watch('consoleWindow', () => {
-    if (consoleWindow.value === false) this.$eventBus.$consoleWindow.close();
+    eventBus.on(
+      'change-is-navigation-open',
+      (isNavigationOpenVal) => (isNavigationOpen.value = isNavigationOpenVal)
+    );
   });
-  watch(isAuthorized, (newValue) => {
-    if (newValue === false) {
-      errorToast(t('global.toast.unAuthDescription'), {
-        title: t('global.toast.unAuthTitle'),
-      });
-    }
-  });
-  eventBus.on('change-is-navigation-open', (value) => {
-    isNavigationOpen.value = value;
-  });
-});
 
-const handleToggleNavigation = () => {
-  isNavigationOpen.value = !isNavigationOpen.value;
-  eventBus.emit('toggle-navigation', () => {
-    isNavigationOpen;
-  });
-};
+const isNavTagPresent = computed(() => {
+      return assetTag.value || modelType.value || serialNumber.value;
+    });
+const assetTag = computed(() => {
+      return global.assetTagGetter;
+    });
+const modelType = computed(() => {
+      return global.modelTypeGetter;
+    });
+const serialNumber = computed(() => {
+      return global.serialNumberGetter;
+    });
+const isAuthorized = computed(() => {
+      return global.isAuthorizedGetter;
+    });
+const serverStatus = computed(() => {
+      return global.serverStatusGetter;
+    });
+const healthStatus = computed(() => {
+      return eventLogStore.healthStatus;
+    });
+const serverStatusIcon = computed(() => {
+      switch (serverStatus.value) {
+        case 'on':
+          return 'success';
+        case 'error':
+          return 'danger';
+        case 'diagnosticMode':
+          return 'warning';
+        case 'off':
+        default:
+          return 'secondary';
+      }
+    });
+const healthStatusIcon = computed(() => {
+      switch (healthStatus.value) {
+        case 'OK':
+          return 'success';
+        case 'Warning':
+          return 'warning';
+        case 'Critical':
+          return 'danger';
+        default:
+          return 'secondary';
+      }
+    });
+const username = computed(() => {
+      return global.usernameGetter;
+    });
+
+watch(isAuthorized, (value) => {
+      if (value === false) {
+        errorToast(i18n.global.t('global.toast.unAuthDescription'), {
+          title: i18n.global.t('global.toast.unAuthTitle'),
+        });
+      }
+    })
+
+const getSystemInfo = () => {
+      global.getSystemInfo();
+    };
+const getEvents = () => {
+     eventLogStore.getEventLogData();
+    };
+const refresh = () => {
+      eventBus.emit('refresh-application');
+    };
 const logout = () => {
-  authenticationStore.logout().then(() => {
-    router.push('/login');
-  });
-};
-
-const handleRefresh = () => {
-  // Emit a custom eventBus to notify the Applayout component
-  emit('refresh');
-};
+      authenticationStore.logout();
+    };
+const toggleNavigation = () => {
+      eventBus.emit('toggle-navigation');
+    };
 const setFocus = (event) => {
-  event.preventDefault();
-  this.$root.$emit('skip-navigation');
-};
+      event.preventDefault();
+      eventBus.emit('skip-navigation');
+    };
 // const getImageUrl = () => {
-//   let pathName = location.pathname !== '/' ? location.pathname : '';
-//   return location.origin + pathName + require('@/assets/images/logo-header.svg');
-// };
+//       let pathName = location.pathname !== '/' ? location.pathname : '';
+//       return (
+//         location.origin + pathName + require('@/assets/images/logo-header.svg')
+//       );
+//     };
 </script>
 
 <style lang="scss">
 @mixin focus-box-shadow($padding-color: $navbar-color, $outline-color: $white) {
-  box-shadow:
-    inset 0 0 0 3px $padding-color,
-    inset 0 0 0 5px $outline-color;
+  box-shadow: inset 0 0 0 3px $padding-color, inset 0 0 0 5px $outline-color;
 }
 .app-header {
   .link-skip-nav {
@@ -248,13 +248,16 @@ const setFocus = (event) => {
     top: -60px;
     left: 0.5rem;
     z-index: $zindex-popover;
+    // transition: $duration--moderate-01 $exit-easing--expressive;
     transition: 150ms cubic-bezier(0.4, 0.14, 1, 1);
     &:focus {
       top: 0.5rem;
+      // transition-timing-function: $entrance-easing--expressive;
       transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
     }
   }
-  .navbar-text .nav-link,
+  .navbar-text,
+  .nav-link,
   .btn-link {
     color: #fff !important;
     fill: currentColor;
@@ -288,7 +291,8 @@ const setFocus = (event) => {
         background-color: $gray-800;
         width: 100%;
         justify-content: flex-end;
-        .nav-link .btn {
+        .nav-link
+        .btn {
           padding: calc(#{$spacer} / 1.125) calc($spacer / 2);
         }
         .nav-link:focus,
@@ -369,9 +373,6 @@ const setFocus = (event) => {
     @include media-breakpoint-down(md) {
       flex-flow: wrap;
     }
-    // .navbar-nav .nav-link {
-    //   color: color('white') !important;
-    // }
   }
 }
 
@@ -380,9 +381,7 @@ const setFocus = (event) => {
   height: $header-height;
   line-height: 1;
   &:focus {
-    box-shadow:
-      inset 0 0 0 3px $navbar-color,
-      inset 0 0 0 5px $white;
+    box-shadow: inset 0 0 0 3px $navbar-color, inset 0 0 0 5px white;
     outline: 0;
   }
 }
@@ -397,8 +396,8 @@ const setFocus = (event) => {
 .header-logo {
   width: 50px !important;
 }
-#page-header .container-fluid {
-  --bs-gutter-x: 0 !important;
-  justify-content: flex-start;
-}
+// #page-header .container-fluid {
+//   --bs-gutter-x: 0 !important;
+//   justify-content: flex-start;
+// }
 </style>
