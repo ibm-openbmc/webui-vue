@@ -524,10 +524,10 @@ export default {
           status: row.status,
         })
         .then((success) => {
-          this.reloadEventLogData();
           this.successToast(success);
         })
-        .catch(({ message }) => this.errorToast(message));
+        .catch(({ message }) => this.errorToast(message))
+        .finally(() => this.reloadEventLogData());
     },
     resolutionValue(item) {
       let value = item?.resolution?.split('\n');
