@@ -1,13 +1,32 @@
 <template>
-  <main id="main-content" class="page-container">
+  <main id="main-content" ref="main" class="page-container">
     <slot />
   </main>
 </template>
+
+<script setup>
+import { onMounted, ref, watch } from 'vue';
+import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
+import eventBus from '@/eventBus';
+
+const { setFocus } = useJumpLinkComposable();
+
+const main = ref(null);
+
+onMounted(() => { 
+    eventBus.on('skip-navigation', () => {
+      if (main.value){
+        setFocus(main.value)
+      }
+    })
+  })
+</script>
+
 <style lang="scss" scoped>
 main {
   width: 100%;
   height: 100%;
-  // overflow-x: hidden;
+  overflow-x: hidden;
   padding-top: $spacer * 1.5;
   padding-bottom: $spacer * 3;
   padding-left: $spacer;

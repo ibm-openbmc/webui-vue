@@ -4,7 +4,7 @@
       <a
         class="link-skip-nav btn btn-light"
         href="#main-content"
-        @click="setFocus"
+        @click="setFocus($event)"
       >
         {{ $t('appHeader.skipToContent') }}
       </a>
@@ -18,7 +18,7 @@
           type="button"
           variant="link"
           :class="{ open: isNavigationOpen }"
-          @click="toggleNavigation"
+          @click="toggleNavigation()"
         >
           <icon-close
             v-if="isNavigationOpen"
@@ -41,6 +41,7 @@
               src="@/assets/images/logo-header.svg"
               :alt="altLogo"
             />
+             <!-- :src="getImageUrl()" -->
             <span class="ps-1 nav-tags header-text">{{ headerText }}</span>
           </BNavbarBrand>
           <div v-if="isNavTagPresent" :key="routerKey" class="ps-2 nav-tags">
@@ -120,8 +121,10 @@ import useToast from '@/components/Composables/useToastComposable';
 import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
+import { useRouter } from 'vue-router';
 
 const { errorToast } = useToast();
+const router = useRouter();
 
 const authenticationStore = AuthenticationStore();
 const global = GlobalStore();
@@ -221,7 +224,9 @@ const refresh = () => {
       eventBus.emit('refresh-application');
     };
 const logout = () => {
-      authenticationStore.logout();
+      authenticationStore.logout().then(() => {
+      router.push('/login');
+  });
     };
 const toggleNavigation = () => {
       eventBus.emit('toggle-navigation');
