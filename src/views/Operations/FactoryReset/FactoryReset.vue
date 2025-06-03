@@ -114,9 +114,7 @@ export default {
           this.successToast(message);
         })
         .catch(({ message }) => {
-          this.errorToast('', {
-            title: message,
-          });
+          this.errorToast(message);
         });
     },
     onResetToDefaultsConfirm() {
