@@ -1,8 +1,37 @@
+//Work Required
 import api from '@/store/api';
 import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 import { GlobalStore } from '@/store/modules/GlobalStore.js';
+import { watch } from 'vue';
 
+    /**
+     * Watch for serverStatus changes in GlobalStore module
+     * to set isOperationInProgress state
+     * Stop watching status changes and resolve Promise when
+     * serverStatus value matches passed argument or after 5 minutes
+     * @param {string} serverStatus
+     * @returns {Promise}
+     */
+    const checkForServerStatus = (serverStatus) => {
+      const global = GlobalStore();
+      return new Promise((resolve) => {
+        const timer = setTimeout(() => {
+          resolve();
+          unwatch();
+        }, 300000 /*5mins*/);
+        const unwatch = watch(
+          () => global.serverStatus,
+          (value) => {
+            if (value === serverStatus) {
+              resolve();        
+              unwatch();
+              clearTimeout(timer);
+            }
+          }
+        );
+      });
+    }
 export const ControlStore = defineStore('control', {
   state: () => ({
     isOperationInProgress: false,
@@ -16,36 +45,36 @@ export const ControlStore = defineStore('control', {
     getLastBmcRebootTime: (state) => state.lastBmcRebootTime,
   },
   actions: {
-    /**
-     * Watch for serverStatus changes in GlobalStore module
-     * to set isOperationInProgress state
-     * Stop watching status changes and resolve Promise when
-     * serverStatus value matches passed argument or after 5 minutes
-     * @param {string} serverStatus
-     * @returns {Promise}
-     */
-    async checkForServerStatus(serverStatus) {
-      const global = GlobalStore();
-      return new Promise((resolve) => {
-        const timer = setTimeout(() => {
-          resolve();
-          clearSub();
-        }, 300000 /*5mins*/);
-        const clearSub = global.$subscribe(
-          ({ events }) => {
-            if (
-              events.key === 'serverStatus' &&
-              events.newValue === serverStatus
-            ) {
-              resolve();
-              clearSub();
-              clearTimeout(timer);
-            }
-          },
-          { detached: true }
-        );
-      });
-    },
+    // /**
+    //  * Watch for serverStatus changes in GlobalStore module
+    //  * to set isOperationInProgress state
+    //  * Stop watching status changes and resolve Promise when
+    //  * serverStatus value matches passed argument or after 5 minutes
+    //  * @param {string} serverStatus
+    //  * @returns {Promise}
+    //  */
+    // async checkForServerStatus(serverStatus) {
+    //   const global = GlobalStore();
+    //   return new Promise((resolve) => {
+    //     const timer = setTimeout(() => {
+    //       resolve();
+    //       clearSub();
+    //     }, 300000 /*5mins*/);
+    //     const clearSub = global.$subscribe(
+    //       ({ events }) => {
+    //         if (
+    //           events.key === 'serverStatus' &&
+    //           events.newValue === serverStatus
+    //         ) {
+    //           resolve();
+    //           clearSub();
+    //           clearTimeout(timer);
+    //         }
+    //       },
+    //       { detached: true }
+    //     );
+    //   });
+    // },
     async fetchLastPowerOperationTime() {
       return await api
         .get('/redfish/v1/Systems/system')
@@ -82,7 +111,7 @@ export const ControlStore = defineStore('control', {
         });
     },
     async powerOps(value) {
-      await this.checkForServerStatus(value);
+      await checkForServerStatus(value);
       this.isOperationInProgress = false;
       this.fetchLastPowerOperationTime();
     },
