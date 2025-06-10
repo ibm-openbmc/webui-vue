@@ -26,7 +26,8 @@
 import { ref } from 'vue';
 // Need to uncomment the below when env based configuration is implemented
 // const  altLogo = ref(process.env.VUE_APP_COMPANY_NAME || 'OpenBMC');
-// const customizableGuiName = ref(process.env.VUE_APP_GUI_NAME || '');
+// const  altLogo = ref(import.meta.env.VUE_APP_COMPANY_NAME || 'OpenBMC');
+// const customizableGuiName = ref(import.meta.env.VUE_APP_GUI_NAME || '');
 const  altLogo = ref('OpenBMC');
 const customizableGuiName = ref('Advanced System Management Interface (ASMI)');
 </script>

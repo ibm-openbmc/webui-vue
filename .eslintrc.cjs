@@ -1,13 +1,14 @@
 module.exports = {
   root: true,
   env: {
-    node: true,
+    es2021: true,
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended', '@vue/prettier'],
   rules: {
     'vue/multi-word-component-names': 'off',
     'no-console': 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // 'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': import.meta.env.NODE_ENV === 'production' ? 'error' : 'off',
     'prettier/prettier': [
       'error',
       {

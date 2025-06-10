@@ -143,7 +143,8 @@ export default defineConfig({
             `@/env/components/AppNavigation/${envName}.js`;
         }
       }
-      if (process.env.NODE_ENV === 'production') {
+      // if (process.env.NODE_ENV === 'production') {
+      if (import.meta.env.NODE_ENV === 'production') {
         res.locals.config.plugins.push(
           // eslint-disable-next-line no-undef
           new CompressionPlugin({
