@@ -66,11 +66,11 @@
       </b-button>
     </BForm>
     <modal-confirmation
-      v-modal="modalConfirmation"
+      v-model="modalConfirmation"
       @ok="createSystemDump($t(`pageDumps.form.${selectedDumpType}Dump`))"
     />
     <modal-partition-dump-confirmation
-      v-modal="modalPartition"
+      v-model="modalPartition"
       :selected="selectedDumpType"
       @ok="
         selectedDumpType === 'partition'
@@ -109,8 +109,8 @@ const resourceSelectorValue = ref(null);
 const resourcePasswordValue = ref(null);
 const dumpTypeOptions = ref([]);
 const taskProgress = ref('');
-const modalConfirmation = ref('false')
-const modalPartition = ref('false')
+const modalConfirmation = ref(false)
+const modalPartition = ref(false)
 
 onBeforeMount(() => {
     checkForUserData();
@@ -334,10 +334,10 @@ const isFunctionDisabled = (value) => {
       }
     };
 const showConfirmationModal = () => {
-      modalConfirmation=True
+      modalConfirmation.value = true
     };
 const showPartitionDumpConfirmationModal = () => {
-      modalPartition=True
+      modalPartition.value = true
     };
 const createSystemDump = (dumpType) => {
       dumps.createSystemDump(dumpType)

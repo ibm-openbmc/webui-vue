@@ -18,7 +18,7 @@
       <status-icon status="danger" />
       {{ $t('pageDumps.modal.initiateSystemDumpMessage3') }}
     </p>
-    <BFormCheckbox v-model="confirmed" @input="v$.confirmed.$touch()">
+    <BFormCheckbox v-model="confirmed" @update:modelValue="() => v$.confirmed.$touch()">
       {{ $t('pageDumps.modal.initiateSystemDumpMessage4') }}
     </BFormCheckbox>
     <BFormInvalidFeedback
@@ -27,11 +27,11 @@
     >
       {{ $t('global.form.required') }}
     </BFormInvalidFeedback>
-    <template #modal-footer="{ cancel }">
+    <template #footer="{ cancel }">
       <BButton variant="secondary" @click="cancel()">
         {{ $t('global.action.cancel') }}
       </BButton>
-      <BButton variant="danger" @click="handleSubmit">
+      <BButton variant="danger" @click="handleSubmit()">
         {{ $t('pageDumps.form.initiateDump') }}
       </BButton>
     </template>
@@ -43,7 +43,8 @@ import { ref, computed, nextTick } from 'vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
-import eventBus from '@/eventBus';
+
+const emit = defineEmits(['ok']);
 
 const { getValidationState } = useVuelidateComposable();
 
@@ -68,8 +69,8 @@ const closeModal = () => {
     };
 const handleSubmit = () => {
       v$.value.$touch();
-      if ( v$.value.$invalid) return;
-      eventBus.emit('ok');
+      if (v$.value.$invalid) return;
+      emit('ok');
       closeModal();
     };
 const resetForm = () => {
