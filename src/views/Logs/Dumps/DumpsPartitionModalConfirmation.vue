@@ -8,7 +8,7 @@
         ? $t('pageDumps.modal.initiatePartitionDump')
         : $t('pageDumps.modal.initiateRetryPartitionDump')
     "
-    @hidden="resetForm"
+    @show="resetForm"
   >
     <p>
       <strong>
@@ -19,7 +19,7 @@
       <status-icon status="danger" />
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage1') }}
     </p>
-    <BFormCheckbox v-model="confirmed" @update:modelValue="() => v$.confirmed.$touch()">
+    <BFormCheckbox v-model="confirmed" @update:modelValue="v$.confirmed.$touch()">
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage2') }}
     </BFormCheckbox>
     <BFormInvalidFeedback

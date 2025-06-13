@@ -4,7 +4,7 @@
     id="modal-confirmation"
     ref="modal"
     :title="$t('pageDumps.modal.initiateSystemDump')"
-    @hidden="resetForm"
+    @show="resetForm"
   >
     <p>
       <strong>
@@ -18,7 +18,7 @@
       <status-icon status="danger" />
       {{ $t('pageDumps.modal.initiateSystemDumpMessage3') }}
     </p>
-    <BFormCheckbox v-model="confirmed" @update:modelValue="() => v$.confirmed.$touch()">
+    <BFormCheckbox v-model="confirmed" @update:modelValue="v$.confirmed.$touch()">
       {{ $t('pageDumps.modal.initiateSystemDumpMessage4') }}
     </BFormCheckbox>
     <BFormInvalidFeedback

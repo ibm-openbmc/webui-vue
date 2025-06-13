@@ -119,6 +119,7 @@ onBeforeMount(() => {
       global.getHmcManaged(),
       global.getBootProgress(),
       ibmiServiceFunctions.getAvailableServiceFunctions(),
+      serverBootSettings.fetchBiosAttributes(),
       serverBootSettings.getBiosAttributes,
     ]);
   });
