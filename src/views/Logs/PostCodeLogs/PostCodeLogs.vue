@@ -283,7 +283,7 @@ import { PostCodeLogsStore } from "../../../store";
     }
     const openConsoleWindow = () => {
       window.open(
-        `${window.location.origin}/console/post-codes`,
+        `${window.location.origin}/#/console/post-codes`,
         '_blank',
         'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=200,height=200',
       );

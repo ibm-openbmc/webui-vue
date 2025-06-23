@@ -46,6 +46,7 @@ import Dumps from '@/views/Logs/Dumps';
 import DateTime from '@/views/Settings/DateTime/DateTime.vue';
 import ChangePassword from '@/views/ChangePassword';
 import SnmpAlerts from '@/views/Settings/SnmpAlerts';
+import ConsoleLayout from '@/layouts/ConsoleLayout.vue';
 
 const roles = {
   administrator: 'Administrator',
@@ -74,32 +75,38 @@ export const routes = [
       },
     ],
   },
-  // Needs reimplementation once routes is implemented
   {
-    path: '/console/host-console-console',
+    path: '/console',
+    component: ConsoleLayout,
     meta: {
       requiresAuth: true,
-      title: i18n.global.t('appPageTitle.hostConsole'),
     },
-    component: HostConsoleConsole,
-  },
-  // Needs reimplementation once routes is implemented
-  {
-    path: '/console/service-login-consoles',
-    meta: {
-      requiresAuth: true,
-      title: i18n.global.t('appPageTitle.serviceLogin'),
-    },
-    component: ServiceLoginConsoles,
-  },
-  // Needs reimplementation once routes is implemented
-  {
-    path: '/console/post-codes',
-    name: 'post-codes',
-    component: PostCodes,
-    meta: {
-      title: i18n.global.t('appPageTitle.postCodes'),
-    },
+    children: [
+      {
+        path: 'service-login-consoles',
+        name: 'service-login-consoles',
+        component: ServiceLoginConsoles,
+        meta: {
+          title: i18n.global.t('appPageTitle.serviceLogin'),
+        },
+      },
+      {
+        path: 'host-console-console',
+        name: 'host-console-console',
+        component: HostConsoleConsole,
+        meta: {
+          title: i18n.global.t('appPageTitle.hostConsole'),
+        },
+      },
+      {
+        path: 'post-codes',
+        name: 'post-codes',
+        component: PostCodes,
+        meta: {
+          title: i18n.global.t('appPageTitle.postCodes'),
+        },
+      },
+    ],
   },
   {
     path: '/',
