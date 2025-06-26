@@ -2,6 +2,7 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import { resolve, dirname } from 'node:path';
+import crypto from 'node:crypto';
 import vue from '@vitejs/plugin-vue';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import Components from 'unplugin-vue-components/vite';
@@ -9,6 +10,7 @@ import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers';
 import viteCompression from 'vite-plugin-compression';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import replace from '@rollup/plugin-replace';
+import path from 'path';
 
 const CWD = process.cwd();
 const DEV_ENV_CONFIG = loadEnv('developement', CWD);
@@ -16,9 +18,6 @@ const {
   VITE_BASE_URL,
   VITE_CUSTOM_STYLES,
   VITE_APP_ENV_NAME,
-  VITE_CUSTOM_ROUTER,
-  VITE_CUSTOM_APP_NAV,
-  VITE_CUSTOM_STORE,
 } = loadEnv(DEV_ENV_CONFIG, CWD);
 const envStyle = () => {
   const envName = VITE_APP_ENV_NAME;
@@ -61,6 +60,17 @@ export default defineConfig({
         './path/to/src/locales/**'
       ),
     }),
+    {
+      name: 'custom-server-middleware',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          const originalCreateHash = crypto.createHash;
+          crypto.createHash = (algorithm) =>
+            originalCreateHash(algorithm === 'md4' ? 'sha256' : algorithm);
+          next();
+        });
+      },
+    }
   ],
   css: {
     preprocessorOptions: {
@@ -76,6 +86,10 @@ export default defineConfig({
         find: '@',
         replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
+      // { find: /^\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
+      // { find: /^\.\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
+      // { find: /^\.\/routes$/, replacement: path.resolve(__dirname, `src/env/router/${VITE_APP_ENV_NAME}.js`) },
+      // { find: /^\.\/AppNavigationData$/, replacement: path.resolve(__dirname, `src/env/components/AppNavigation/${VITE_APP_ENV_NAME}.js`) },
     ],
   },
   optimizeDeps: {
@@ -108,53 +122,12 @@ export default defineConfig({
       },
     },
     // Custom middleware to add headers
-    middlewares: [
-      (req, res, next) => {
-        res.setHeader('Connection', 'keep-alive');
-        next();
-      },
-    ],
-  },
-  configureServer(server) {
-    server.middlewares.use((req, res, next) => {
-      const crypto = require('crypto');
-      const crypto_orig_createHash = crypto.createHash;
-      crypto.createHash = (algorithm) =>
-        crypto_orig_createHash(algorithm == 'md4' ? 'sha256' : algorithm);
-
-      const envName = VITE_APP_ENV_NAME;
-      const hasCustomStore = VITE_CUSTOM_STORE === 'true' ? true : false;
-      const hasCustomRouter = VITE_CUSTOM_ROUTER === 'true' ? true : false;
-      const hasCustomAppNav = VITE_CUSTOM_APP_NAV === 'true' ? true : false;
-
-      if (envName !== undefined) {
-        if (hasCustomStore) {
-          res.locals.config.resolve.alias['./store$'] =
-            `@/env/store/${envName}.js`;
-          res.locals.config.resolve.alias['../store$'] =
-            `@/env/store/${envName}.js`;
-        }
-        if (hasCustomRouter) {
-          res.locals.config.resolve.alias['./routes$'] =
-            `@/env/router/${envName}.js`;
-        }
-        if (hasCustomAppNav) {
-          res.locals.config.resolve.alias['./AppNavigationMixin$'] =
-            `@/env/components/AppNavigation/${envName}.js`;
-        }
-      }
-      // if (process.env.NODE_ENV === 'production') {
-      if (import.meta.env.NODE_ENV === 'production') {
-        res.locals.config.plugins.push(
-          // eslint-disable-next-line no-undef
-          new CompressionPlugin({
-            deleteOriginalAssets: true,
-          })
-        );
-      }
-
-      next();
-    });
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        res.setHeader('Connection', 'keep-alive')
+        next()
+      })
+    },
   },
   build: {
     chunkSizeWarningLimit: 1000,
