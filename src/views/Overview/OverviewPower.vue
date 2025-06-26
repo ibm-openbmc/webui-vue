@@ -12,7 +12,7 @@
           </dd>
           <dd v-else>{{ powerConsumptionValue }} W</dd>
           <dt>{{ $t('pageOverview.powerCap') }}</dt>
-          <dd v-if="!powerCapValue">
+          <dd v-if="!isPowerCapEnabled || !powerCapValue">
             {{ $t('global.status.disabled') }}
           </dd>
           <dd v-else>{{ powerCapValue }} W</dd>
@@ -61,6 +61,7 @@ export default {
   computed: {
     ...mapGetters({
       idlePowerSaverData: 'powerControl/idlePowerSaverData',
+      isPowerCapEnabled: 'powerControl/isPowerCapEnabled',
       powerCapValue: 'powerControl/powerCap',
       powerConsumptionValue: 'powerControl/powerConsumption',
       powerPerformanceMode: 'powerControl/powerPerformanceMode',
