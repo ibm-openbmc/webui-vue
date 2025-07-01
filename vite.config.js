@@ -1,7 +1,7 @@
 //Work Required
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
-import { resolve, dirname } from 'node:path';
+import path, { resolve, dirname } from 'node:path';
 import crypto from 'node:crypto';
 import vue from '@vitejs/plugin-vue';
 import basicSsl from '@vitejs/plugin-basic-ssl';
@@ -10,7 +10,6 @@ import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers';
 import viteCompression from 'vite-plugin-compression';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import replace from '@rollup/plugin-replace';
-import path from 'path';
 
 const CWD = process.cwd();
 const DEV_ENV_CONFIG = loadEnv('developement', CWD);
@@ -19,29 +18,21 @@ const {
   VITE_CUSTOM_STYLES,
   VITE_APP_ENV_NAME,
 } = loadEnv(DEV_ENV_CONFIG, CWD);
-const envStyle = () => {
-  const envName = VITE_APP_ENV_NAME;
-  const hasCustomStyles = VITE_CUSTOM_STYLES == 'true' ? true : false;
-  if (hasCustomStyles && envName !== undefined) {
-    // If there is an env name defined, import Sass
-    // overrides.
-    // It is important that these imports stay in this
-    // order to make sure enviroment overrides
-    // take precedence over the default BMC styles
-    return `
-      @use "sass:math";
-      @import "@/assets/styles/bmc/helpers";
-      @import "@/env/assets/styles/_${envName}";
-      @import "@/assets/styles/bootstrap/_helpers";
-    `;
-  } else {
-    return `
-      @use "sass:math";
-      @import "@/assets/styles/bmc/helpers";
-      @import "@/assets/styles/bootstrap/_helpers";
-    `;
-  }
-};
+  // Custom SCSS includes
+  const envStyle = () => {
+    const styles = [
+      `@use "sass:math";`,
+      `@import "@/assets/styles/bmc/helpers";`
+    ];
+
+    if (VITE_CUSTOM_STYLES === 'true' && VITE_APP_ENV_NAME) {
+      styles.push(`@import "@/env/assets/styles/_${VITE_APP_ENV_NAME}";`);
+    }
+
+    styles.push(`@import "@/assets/styles/bootstrap/_helpers";`);
+
+    return styles.join('\n');
+  };
 
 export default defineConfig({
   // other configurations...
@@ -95,63 +86,62 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['bootstrap'],
   },
-  server: {
-    https: true, // Enable HTTPS
-    port: 8000, // TCP Port 8000 is commonly used for development environments of web server software.
-    proxy: {
-      // Proxy settings if you need to proxy API requests
-      '/api': {
-        target: VITE_BASE_URL,
-        changeOrigin: true,
+    server: {
+      https: true, // Enable HTTPS
+      port: 8000, // TCP Port 8000 is commonly used for development environments of web server software.
+      proxy: {
+        // Proxy settings if you need to proxy API requests
+        '/api': {
+          target: VITE_BASE_URL,
+          changeOrigin: true,
         // Bypass SSL certificate validation (for development only)
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: (proxy) => {
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+          configure: (proxy) => {
           // Custom middleware to modify proxy response headers
-          proxy.on('proxyRes', (proxyRes) => {
-            const setCookieHeader = proxyRes.headers['set-cookie'];
-            if (setCookieHeader) {
-              proxyRes.headers['set-cookie'] = setCookieHeader.map(
-                (cookie) => cookie + '; Path=/'
-              );
-            }
+            proxy.on('proxyRes', (proxyRes) => {
+              const setCookieHeader = proxyRes.headers['set-cookie'];
+              if (setCookieHeader) {
+                proxyRes.headers['set-cookie'] = setCookieHeader.map(
+                  (cookie) => cookie + '; Path=/'
+                );
+              }
             // Remove the 'strict-transport-security' header
-            delete proxyRes.headers['strict-transport-security'];
-          });
+              delete proxyRes.headers['strict-transport-security'];
+            });
+          },
         },
       },
-    },
-    // Custom middleware to add headers
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        res.setHeader('Connection', 'keep-alive')
-        next()
-      })
-    },
-  },
-  build: {
-    chunkSizeWarningLimit: 1000,
-    minify: true,
-    rollupOptions: {
-      external: ['bootstrap'],
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return id
-              .toString()
-              .split('node_modules/')[1]
-              .split('/')[0]
-              .toString();
-          }
-        },
+      // Custom middleware to add headers
+      configureServer(server) {
+        server.middlewares.use((_req, res, next) => {
+          res.setHeader('Connection', 'keep-alive');
+          next();
+        })
       },
-      plugins: [
-        replace({
-          include: ['src/store/api.js'],
-          '/api': "''",
-          delimiters: ["'", "'"],
-        }),
-      ],
     },
-  },
+    build: {
+      chunkSizeWarningLimit: 1000,
+      minify: true,
+      rollupOptions: {
+        external: ['bootstrap'],
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.split('node_modules/')[1].split('/')[0];
+            }
+          },
+        },
+        plugins: [
+          replace({
+            include: ['src/store/api.js'],
+            delimiters: ["'", "'"],
+            preventAssignment: true,
+            values: {
+              '/api': ''
+            },
+          }),
+        ],
+      },
+    },
 });
