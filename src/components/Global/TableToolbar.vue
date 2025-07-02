@@ -3,7 +3,7 @@
     <div v-if="isToolbarActive" class="toolbar-container">
       <div class="toolbar-content">
         <p class="toolbar-selected">
-          {{ selectedItemsCount }} {{ t('global.action.selected') }}
+          {{ selectedItemsCount }} {{ $t('global.action.selected') }}
         </p>
         <div class="toolbar-actions d-flex">
           <slot name="toolbar-buttons"></slot>
@@ -22,7 +22,7 @@
             class="d-block"
             @click="eventBus.emit('clear-selected')"
           >
-            {{ t('global.action.cancel') }}
+            {{ $t('global.action.cancel') }}
           </BButton>
         </div>
       </div>
@@ -32,10 +32,8 @@
 
 <script setup>
 import eventBus from '@/eventBus';
-import { useI18n } from 'vue-i18n';
 import { ref, watch } from 'vue';
 
-const { t } = useI18n();
 const props = defineProps({
   selectedItemsCount: {
     type: Number,

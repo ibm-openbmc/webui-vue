@@ -1,42 +1,39 @@
-import { mount, createLocalVue } from '@vue/test-utils';
-import LoadingBar from '@/components/Global/LoadingBar';
-import BootstrapVue from 'bootstrap-vue';
-
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
+import { mount } from '@vue/test-utils';
+import LoadingBar from '@/components/Global/LoadingBar.vue';
 
 describe('LoadingBar.vue', () => {
-  const wrapper = mount(LoadingBar, {
-    localVue,
-    data() {
-      return {
-        loadingIndicatorValue: 0,
-        isLoadingComplete: false,
-      };
-    },
-    mocks: {
-      $t: (key) => key,
-    },
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(LoadingBar, {
+      global: {
+        mocks: {
+          $t: (key) => key,
+        },
+      },
+    });
   });
+
   it('should exist', () => {
     expect(wrapper.exists()).toBe(true);
   });
+
   it('should show loading bar element', async () => {
-    await wrapper.setData({
-      isLoadingComplete: false,
-      loadingIndicatorValue: 100,
-    });
+    wrapper.vm.isLoadingComplete = false;
+    wrapper.vm.loadingIndicatorValue = 100;
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.isLoadingComplete).toBe(false);
     expect(wrapper.find('.progress').exists()).toBe(true);
   });
+
   it('should hide loading bar element', async () => {
-    await wrapper.setData({
-      isLoadingComplete: true,
-      loadingIndicatorValue: 0,
-    });
+    wrapper.vm.isLoadingComplete = true;
+    wrapper.vm.loadingIndicatorValue = 0;
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.isLoadingComplete).toBe(true);
     expect(wrapper.find('.progress').exists()).toBe(false);
   });
+
   it('should render correctly', () => {
     expect(wrapper.element).toMatchSnapshot();
   });

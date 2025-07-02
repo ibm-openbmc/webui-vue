@@ -1,7 +1,7 @@
 <template>
   <div class="search-global">
     <BFormGroup
-      :label="t('global.form.search')"
+      :label="$t('global.form.search')"
       :label-for="`searchInput-${_uid}`"
       label-class="invisible"
       class="mb-2"
@@ -16,17 +16,16 @@
           v-model="filter"
           class="search-input"
           type="text"
-          :aria-label="t('global.form.search')"
-          :placeholder="props.placeholder"
-          :disabled="props.isSearchDisabled"
+          :aria-label="$t('global.form.search')"
+          :placeholder="placeholder"
+          :disabled="isSearchDisabled"
           @input="onChangeInput($event)"
-        >
-        </BFormInput>
+        />
         <BButton
           v-if="filter"
           variant="link"
           class="clear-button btn-icon-only input-action-btn"
-          :title="t('global.ariaLabel.clearSearch')"
+          :title="$t('global.ariaLabel.clearSearch')"
           @click="onClearSearch"
         >
           <icon-close />
@@ -39,12 +38,10 @@
 <script setup>
 import IconSearch from '@carbon/icons-vue/es/search/16';
 import IconClose from '@carbon/icons-vue/es/close/20';
-import { useI18n } from 'vue-i18n';
 import { ref, defineEmits } from 'vue';
 import i18n from '@/i18n';
-// eslint-disable-next-line vue/valid-define-emits
+
 const emit = defineEmits();
-const { t } = useI18n();
 
 const props = defineProps({
   placeholder: {
@@ -58,7 +55,9 @@ const props = defineProps({
     default: false,
   },
 });
+
 const filter = ref('');
+
 const onChangeInput = (event) => {
   emit('change-search', event.target.value);
 };

@@ -1,26 +1,27 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`StatusIcon.vue should render correctly 1`] = `
+exports[`StatusIcon.vue > should render correctly 1`] = `
 <span
-  class="status-icon secondary"
+  class="status-icon info"
+  data-v-4b0821d5=""
 >
   <svg
     aria-hidden="true"
+    data-v-4b0821d5=""
     fill="currentColor"
     focusable="false"
     height="20"
     preserveAspectRatio="xMidYMid meet"
-    viewBox="0 0 20 20"
+    viewBox="0 0 32 32"
     width="20"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+      d="M16,8a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,13.875H17.125v-8H13v2.25h1.875v5.75H12v2.25h8Z"
+      fill="none"
     />
     <path
-      d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-      data-icon-path="inner-path"
-      opacity="0"
+      d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,6a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,16.125H12v-2.25h2.875v-5.75H13v-2.25h4.125v8H20Z"
     />
   </svg>
 </span>

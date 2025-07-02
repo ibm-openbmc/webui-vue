@@ -1,3 +1,5 @@
+@use 'sass:math';
+@import '../helpers/variables';
 // Helper text
 .form-text {
   font-size: $form-label-font-size;

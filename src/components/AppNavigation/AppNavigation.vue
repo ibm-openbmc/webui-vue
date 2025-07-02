@@ -2,7 +2,7 @@
 <template>
   <div>
     <div class="nav-container" :class="{ open: isNavigationOpen }">
-      <nav ref="nav" :aria-label="t('appNavigation.primaryNavigation')">
+      <nav ref="nav" :aria-label="$t('appNavigation.primaryNavigation')">
         <BNav vertical class="mb-4">
           <template v-for="(navItem, index) in navigationItems">
             <!-- Navigation items with no children -->
@@ -61,7 +61,6 @@
 import { ref, watch } from 'vue';
 import { AppNavigationData } from './AppNavigationData';
 import { useRoute } from 'vue-router';
-import { useI18n } from 'vue-i18n';
 import { onMounted } from 'vue';
 import { GlobalStore } from '@/store';
 import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
@@ -69,7 +68,6 @@ import eventBus from '@/eventBus';
 
 const globalStore = GlobalStore();
 const { navigationItems } = AppNavigationData();
-const { t } = useI18n();
 let isNavigationOpen = ref(false);
 const route = useRoute();
 let currentUserRole = ref(null);

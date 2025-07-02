@@ -1,13 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`TableCellCount.vue should render correctly 1`] = `
+exports[`TableCellCount.vue > should render correctly 1`] = `
 <div
   class="mt-2"
 >
   <p>
-    
-    global.table.items
-  
+    global.table.selectedItems
   </p>
 </div>
 `;

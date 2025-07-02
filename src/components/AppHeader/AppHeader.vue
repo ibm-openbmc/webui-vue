@@ -7,10 +7,10 @@
         href="#main-content"
         @click="setFocus"
       >
-        {{ t('appHeader.skipToContent') }}
+        {{ $t('appHeader.skipToContent') }}
       </a>
 
-      <BNavbar variant="dark" :aria-label="t('appHeader.applicationHeader')">
+      <BNavbar variant="dark" :aria-label="$t('appHeader.applicationHeader')">
         <!-- Left aligned nav items -->
         <BButton
           id="app-header-trigger"
@@ -23,11 +23,11 @@
         >
           <icon-close
             v-if="isNavigationOpen"
-            :title="t('appHeader.titleHideNavigation')"
+            :title="$t('appHeader.titleHideNavigation')"
           />
           <icon-menu
             v-if="!isNavigationOpen"
-            :title="t('appHeader.titleShowNavigation')"
+            :title="$t('appHeader.titleShowNavigation')"
           />
         </BButton>
         <BNavbarNav>
@@ -58,14 +58,14 @@
             data-test-id="appHeader-container-health"
           >
             <status-icon :status="healthStatusIcon" />
-            {{ t('appHeader.health') }}
+            {{ $t('appHeader.health') }}
           </BNavItem>
           <BNavItem
             to="/operations/server-power-operations"
             data-test-id="appHeader-container-power"
           >
             <status-icon :status="serverStatusIcon" />
-            {{ t('appHeader.power') }}
+            {{ $t('appHeader.power') }}
           </BNavItem>
           <!-- Using LI elements instead of b-nav-item to support semantic button elements -->
           <li class="nav-item">
@@ -75,8 +75,8 @@
               data-test-id="appHeader-button-refresh"
               @click="handleRefresh"
             >
-              <icon-renew :title="t('appHeader.titleRefresh')" />
-              <span class="responsive-text">{{ t('appHeader.refresh') }}</span>
+              <icon-renew :title="$t('appHeader.titleRefresh')" />
+              <span class="responsive-text">{{ $t('appHeader.refresh') }}</span>
             </BButton>
           </li>
           <li class="nav-item">
@@ -87,19 +87,19 @@
               data-test-id="appHeader-container-user"
             >
               <template #button-content>
-                <icon-avatar :title="t('appHeader.titleProfile')" />
+                <icon-avatar :title="$t('appHeader.titleProfile')" />
                 <span class="responsive-text">{{ username }}</span>
               </template>
               <BDropdownItem
                 to="/profile-settings"
                 data-test-id="appHeader-link-profile"
-                >{{ t('appHeader.profileSettings') }}
+                >{{ $t('appHeader.profileSettings') }}
               </BDropdownItem>
               <BDropdownItem
                 data-test-id="appHeader-link-logout"
                 @click="logout"
               >
-                {{ t('appHeader.logOut') }}
+                {{ $t('appHeader.logOut') }}
               </BDropdownItem>
             </BDropdown>
           </li>
@@ -120,12 +120,13 @@ import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '../Global/StatusIcon.vue';
 import LoadingBar from '../Global/LoadingBar.vue';
 import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
-import { useI18n } from 'vue-i18n';
+// import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import useToastComposable from '@/components/Composables/useToastComposable';
+import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 
-const { t } = useI18n();
+// const { t } = useI18n();
 const props = defineProps({
   routerKey: {
     type: Number,
@@ -200,8 +201,8 @@ onMounted(() => {
   });
   watch(isAuthorized, (newValue) => {
     if (newValue === false) {
-      errorToast(t('global.toast.unAuthDescription'), {
-        title: t('global.toast.unAuthTitle'),
+      errorToast(i18n.global.t('global.toast.unAuthDescription'), {
+        title: i18n.global.t('global.toast.unAuthTitle'),
       });
     }
   });
