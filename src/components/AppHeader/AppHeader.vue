@@ -112,7 +112,6 @@
 
 <script setup>
 import { computed, ref, watch, onMounted, defineEmits } from 'vue';
-// import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import IconAvatar from '@carbon/icons-vue/es/user--avatar/20';
 import IconClose from '@carbon/icons-vue/es/close/20';
 import IconMenu from '@carbon/icons-vue/es/menu/20';
@@ -120,13 +119,11 @@ import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '../Global/StatusIcon.vue';
 import LoadingBar from '../Global/LoadingBar.vue';
 import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
-// import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 
-// const { t } = useI18n();
 const props = defineProps({
   routerKey: {
     type: Number,
