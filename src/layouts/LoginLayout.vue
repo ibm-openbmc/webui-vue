@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <main>
     <div class="login-container">
@@ -24,12 +23,9 @@
 
 <script setup>
 import { ref } from 'vue';
-// Need to uncomment the below when env based configuration is implemented
-// const  altLogo = ref(process.env.VUE_APP_COMPANY_NAME || 'OpenBMC');
-// const  altLogo = ref(import.meta.env.VUE_APP_COMPANY_NAME || 'OpenBMC');
-// const customizableGuiName = ref(import.meta.env.VUE_APP_GUI_NAME || '');
-const  altLogo = ref('OpenBMC');
-const customizableGuiName = ref('Advanced System Management Interface (ASMI)');
+
+const  altLogo = ref(import.meta.env.VITE_APP_COMPANY_NAME || 'OpenBMC');
+const customizableGuiName = ref(import.meta.env.VITE_APP_COMPANY_NAME || '');
 </script>
 
 <style lang="scss" scoped>

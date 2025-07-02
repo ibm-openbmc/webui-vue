@@ -7,8 +7,7 @@ module.exports = {
   rules: {
     'vue/multi-word-component-names': 'off',
     'no-console': 'off',
-    // 'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': import.meta.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'prettier/prettier': [
       'error',
       {
@@ -18,12 +17,10 @@ module.exports = {
         trailingComma: 'all',
       },
     ],
-    'vue/component-name-in-template-casing': [
-      'error',
-      'PascalCase' | 'kebab-case',
-    ],
+    'vue/component-name-in-template-casing': 'off',
   },
   ignorePatterns: ['*.timestamp-*.mjs'],
+  plugins: ['vitest'],
   overrides: [
     {
       files: [
@@ -31,7 +28,7 @@ module.exports = {
         '**/tests/unit/**/*.spec.{j,t}s?(x)',
       ],
       env: {
-        jest: true,
+        'vitest/globals': true,
       },
     },
   ],
