@@ -25,7 +25,7 @@
 import { ref } from 'vue';
 
 const  altLogo = ref(import.meta.env.VITE_APP_COMPANY_NAME || 'OpenBMC');
-const customizableGuiName = ref(import.meta.env.VITE_APP_COMPANY_NAME || '');
+const customizableGuiName = ref(import.meta.env.VITE_APP_GUI_NAME || '');
 </script>
 
 <style lang="scss" scoped>
