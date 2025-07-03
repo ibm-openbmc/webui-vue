@@ -1,3 +1,4 @@
+require('dotenv').config();
 module.exports = {
   root: true,
   env: {
@@ -28,7 +29,7 @@ module.exports = {
         '**/tests/unit/**/*.spec.{j,t}s?(x)',
       ],
       env: {
-        'vitest/globals': true,
+        node: true,
       },
     },
   ],
