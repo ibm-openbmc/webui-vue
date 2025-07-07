@@ -1,9 +1,40 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`LoadingBar.vue should render correctly 1`] = `
+exports[`LoadingBar.vue > should render correctly 1`] = `
 <transition-stub
+  appear="false"
+  css="true"
+  data-v-7df63c26=""
+  enteractiveclass="fade showing"
+  enterfromclass="showing"
+  entertoclass=""
+  leaveactiveclass="fade showing"
+  leavefromclass=""
+  leavetoclass="showing"
   name="fade"
+  persisted="false"
 >
-  <!---->
+  
+  <div
+    class="progress"
+    data-v-7df63c26=""
+  >
+    
+    <div
+      aria-label="Loading Progress"
+      aria-valuemin="0"
+      aria-valuenow="0"
+      class="progress-bar progress-bar-animated progress-bar-striped"
+      data-v-7df63c26=""
+      role="progressbar"
+      style="width: 0%;"
+    >
+      
+      
+      
+    </div>
+    
+  </div>
+  
 </transition-stub>
 `;

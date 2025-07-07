@@ -1,20 +1,30 @@
-import { mount, createWrapper } from '@vue/test-utils';
-import AppNavigation from '@/components/AppNavigation';
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import { BootstrapVue } from 'bootstrap-vue';
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { createRouter, createWebHistory } from 'vue-router';
+import { createPinia, setActivePinia } from 'pinia';
+import AppNavigation from '@/components/AppNavigation/AppNavigation.vue';
+import eventBus from '@/eventBus';
 
 describe('AppNavigation.vue', () => {
   let wrapper;
-  Vue.use(BootstrapVue);
-  Vue.use(VueRouter);
-  const router = new VueRouter();
 
-  wrapper = mount(AppNavigation, {
-    router,
-    mocks: {
-      $t: (key) => key,
-    },
+  const router = createRouter({
+    history: createWebHistory(),
+    routes: [],
+  });
+
+  beforeEach(() => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+
+    wrapper = mount(AppNavigation, {
+      global: {
+        plugins: [router, pinia],
+        mocks: {
+          $t: (key) => key,
+        },
+      },
+    });
   });
 
   it('should exist', async () => {
@@ -31,19 +41,24 @@ describe('AppNavigation.vue', () => {
   });
 
   it('Nav Overlay click should emit change-is-navigation-open event', async () => {
-    const rootWrapper = createWrapper(wrapper.vm.$root);
-    const navOverlay = wrapper.find('#nav-overlay');
-    navOverlay.trigger('click');
+    wrapper.vm.isNavigationOpen = true;
     await wrapper.vm.$nextTick();
-    expect(rootWrapper.emitted('change-is-navigation-open')).toBeTruthy();
+    const navOverlay = wrapper.find('#nav-overlay');
+    expect(navOverlay.exists()).toBe(true);
+    const spy = vi.spyOn(eventBus, 'emit');
+    await navOverlay.trigger('click');
+    await wrapper.vm.$nextTick();
+    expect(spy).toHaveBeenCalledWith('change-is-navigation-open', false);
+    spy.mockRestore();
   });
 
   it('toggle-navigation event should toggle isNavigation data prop value', async () => {
-    const rootWrapper = createWrapper(wrapper.vm.$root);
     wrapper.vm.isNavigationOpen = false;
-    rootWrapper.vm.$emit('toggle-navigation');
+    eventBus.emit('toggle-navigation');
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.isNavigationOpen).toBe(true);
-    rootWrapper.vm.$emit('toggle-navigation');
+    eventBus.emit('toggle-navigation');
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.isNavigationOpen).toBe(false);
   });
 });

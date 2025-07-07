@@ -1,28 +1,39 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AppNavigation.vue should render correctly 1`] = `
-<div>
+exports[`AppNavigation.vue > should render correctly 1`] = `
+<div
+  data-v-941bc754=""
+>
   <div
     class="nav-container"
+    data-v-941bc754=""
   >
     <nav
       aria-label="appNavigation.primaryNavigation"
+      data-v-941bc754=""
     >
       <ul
-        class="nav mb-4 flex-column"
+        class="nav flex-column mb-4"
+        data-v-941bc754=""
       >
+        
+        
+        
+        <!-- Navigation items with no children -->
         <li
-          class="nav-item"
+          class="nav-item nav-nochild"
           data-test-id="nav-item-overview"
+          data-v-941bc754=""
         >
           <a
-            aria-current="page"
-            class="nav-link router-link-exact-active router-link-active"
-            href="#/"
-            target="_self"
+            class="nav-link"
+            href="/"
           >
+            
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -38,23 +49,32 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M28,2H4A2.002,2.002,0,0,0,2,4V28a2.0023,2.0023,0,0,0,2,2H28a2.0027,2.0027,0,0,0,2-2V4A2.0023,2.0023,0,0,0,28,2Zm0,9H14V4H28ZM12,4v7H4V4ZM4,28V13H28.0007l.0013,15Z"
               />
             </svg>
+             Overview
             
-            appNavigation.overview
-          
+            
           </a>
         </li>
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
-            aria-controls="logs"
+            aria-controls="operations"
             aria-expanded="false"
-            class="btn btn-link collapsed"
-            data-test-id="nav-button-logs"
+            class="btn btn-md btn-link collapsed"
+            data-test-id="nav-button-operations"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -64,18 +84,14 @@ exports[`AppNavigation.vue should render correctly 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M8 10H16V12H8zM8 6H20V8H8zM8 2H20V4H8z"
-              />
-              <path
-                d="M4.7111,28l5.6312-9.9961,7.4341,6.49A2,2,0,0,0,20.86,23.96l6.9707-10.4034-1.6622-1.1132-7,10.4472-.07.1035-7.4345-6.4907a2.0032,2.0032,0,0,0-3.0806.5308L4,25.1826V2H2V28a2.0023,2.0023,0,0,0,2,2H30V28Z"
+                d="M30 8h-4.1c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2v2h14.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30V8zM21 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3S22.7 12 21 12zM2 24h4.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30v-2H15.9c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2V24zM11 20c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3S9.3 20 11 20z"
               />
             </svg>
-            
-              appNavigation.logs
-              
+             Operations 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -88,69 +104,210 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="operations"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="logs"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-server-power-operations"
+                data-v-941bc754=""
+                href="/operations/server-power-operations"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-event-logs"
-                  href="#/logs/event-logs"
-                >
-                  
-                  appNavigation.eventLogs
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-audit-logs"
-                  href="#/logs/audit-logs"
-                >
-                  
-                  appNavigation.auditLogs
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-post-code-logs"
-                  href="#/logs/post-code-logs"
-                >
-                  
-                  appNavigation.postCodeLogs
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Server power operations
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-host-console"
+                data-v-941bc754=""
+                href="/operations/host-console"
+              >
+                Host console
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-service-login"
+                data-v-941bc754=""
+                href="/operations/service-login"
+              >
+                Service login consoles
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-firmware"
+                data-v-941bc754=""
+                href="/operations/firmware"
+              >
+                Firmware
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-reboot-bmc"
+                data-v-941bc754=""
+                href="/operations/reboot-bmc"
+              >
+                Reboot BMC
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
+        >
+          <button
+            aria-controls="resource-management"
+            aria-expanded="false"
+            class="btn btn-md btn-link collapsed"
+            data-test-id="nav-button-resource-management"
+            data-v-941bc754=""
+            type="button"
+          >
+            
+            <svg
+              aria-hidden="true"
+              data-v-941bc754=""
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 24H26V26H19zM19 20H26V22H19zM19 16H26V18H19zM6 24H13V26H6zM6 20H13V22H6z"
+              />
+              <path
+                d="M28,4H17a2.0023,2.0023,0,0,0-2,2v6H4a2.0023,2.0023,0,0,0-2,2V28a2.0023,2.0023,0,0,0,2,2H28a2.0023,2.0023,0,0,0,2-2V6A2.0023,2.0023,0,0,0,28,4ZM15,28H4V14H15Zm2,0V6H28V28Z"
+              />
+            </svg>
+             Resource management 
+            <svg
+              aria-hidden="true"
+              class="icon-expand"
+              data-v-941bc754=""
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
+              />
+            </svg>
+            
+          </button>
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="resource-management"
+            is-nav="false"
+          >
+            
+            <li
+              class=""
+              data-v-941bc754=""
+            >
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-memory"
+                data-v-941bc754=""
+                href="/resource-management/memory"
+              >
+                Memory
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-power"
+                data-v-941bc754=""
+                href="/resource-management/power"
+              >
+                Power
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-capacity-on-demand"
+                data-v-941bc754=""
+                href="/resource-management/capacity-on-demand"
+              >
+                Capacity on demand
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-field-core-override"
+                data-v-941bc754=""
+                href="/resource-management/field-core-override"
+              >
+                Field core override
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-system-parameters"
+                data-v-941bc754=""
+                href="/resource-management/system-parameters"
+              >
+                System parameters
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
+        </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
+        <li
+          class="nav-item"
+          data-v-941bc754=""
         >
           <button
             aria-controls="hardware-status"
             aria-expanded="false"
-            class="btn btn-link collapsed"
+            class="btn btn-md btn-link collapsed"
             data-test-id="nav-button-hardware-status"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -181,12 +338,11 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M24,3H8A2,2,0,0,0,6,5V27a2,2,0,0,0,2,2h8V27H8V21H26V5A2,2,0,0,0,24,3Zm0,16H8V13H24Zm0-8H8V5H24Z"
               />
             </svg>
-            
-              appNavigation.hardwareStatus
-              
+             Hardware status 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -199,78 +355,92 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="hardware-status"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="hardware-status"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-inventory"
+                data-v-941bc754=""
+                href="/hardware-status/inventory"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-inventory"
-                  href="#/hardware-status/inventory"
-                >
-                  
-                  appNavigation.inventory
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-sensors"
-                  href="#/hardware-status/sensors"
-                >
-                  
-                  appNavigation.sensors
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-pcie-topology"
-                  href="#/hardware-status/pcie-topology"
-                >
-                  
-                  appNavigation.pcieTopology
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-concurrent-maintenance"
-                  href="#/hardware-status/concurrent-maintenance"
-                >
-                  
-                  appNavigation.concurrentMaintanence
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Inventory and LEDs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-sensors"
+                data-v-941bc754=""
+                href="/hardware-status/sensors"
+              >
+                Sensors
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-hardware-deconfiguration"
+                data-v-941bc754=""
+                href="/settings/hardware-deconfiguration"
+              >
+                Hardware deconfiguration
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-pcie-topology"
+                data-v-941bc754=""
+                href="/hardware-status/pcie-topology"
+              >
+                PCIe hardware topology
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-concurrent-maintenance"
+                data-v-941bc754=""
+                href="/hardware-status/concurrent-maintenance"
+              >
+                Concurrent maintenance
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
-            aria-controls="operations"
+            aria-controls="logs"
             aria-expanded="false"
-            class="btn btn-link collapsed"
-            data-test-id="nav-button-operations"
+            class="btn btn-md btn-link collapsed"
+            data-test-id="nav-button-logs"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -280,15 +450,17 @@ exports[`AppNavigation.vue should render correctly 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M30 8h-4.1c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2v2h14.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30V8zM21 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3S22.7 12 21 12zM2 24h4.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30v-2H15.9c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2V24zM11 20c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3S9.3 20 11 20z"
+                d="M8 10H16V12H8zM8 6H20V8H8zM8 2H20V4H8z"
+              />
+              <path
+                d="M4.7111,28l5.6312-9.9961,7.4341,6.49A2,2,0,0,0,20.86,23.96l6.9707-10.4034-1.6622-1.1132-7,10.4472-.07.1035-7.4345-6.4907a2.0032,2.0032,0,0,0-3.0806.5308L4,25.1826V2H2V28a2.0023,2.0023,0,0,0,2,2H30V28Z"
               />
             </svg>
-            
-              appNavigation.operations
-              
+             Logs and services 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -301,123 +473,100 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="logs"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="operations"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-post-code-logs"
+                data-v-941bc754=""
+                href="/logs/post-code-logs"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-factory-reset"
-                  href="#/operations/factory-reset"
-                >
-                  
-                  appNavigation.factoryReset
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-kvm"
-                  href="#/operations/kvm"
-                >
-                  
-                  appNavigation.kvm
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-key-clear"
-                  href="#/operations/key-clear"
-                >
-                  
-                  appNavigation.keyClear
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-firmware"
-                  href="#/operations/firmware"
-                >
-                  
-                  appNavigation.firmware
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-reboot-bmc"
-                  href="#/operations/reboot-bmc"
-                >
-                  
-                  appNavigation.rebootBmc
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-service-login"
-                  href="#/operations/service-login"
-                >
-                  
-                  appNavigation.serviceLogin
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-host-console"
-                  href="#/operations/host-console"
-                >
-                  
-                  appNavigation.hostConsole
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-server-power-operations"
-                  href="#/operations/server-power-operations"
-                >
-                  
-                  appNavigation.serverPowerOperations
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-virtual-media"
-                  href="#/operations/virtual-media"
-                >
-                  
-                  appNavigation.virtualMedia
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Progress logs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-event-logs"
+                data-v-941bc754=""
+                href="/logs/event-logs"
+              >
+                Event logs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-audit-logs"
+                data-v-941bc754=""
+                href="/logs/audit-logs"
+              >
+                Audit logs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-dumps"
+                data-v-941bc754=""
+                href="/logs/dumps"
+              >
+                Dumps
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-ibmi-service-functions"
+                data-v-941bc754=""
+                href="/logs/ibmi-service-functions"
+              >
+                IBM i service functions
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-deconfiguration-records"
+                data-v-941bc754=""
+                href="/logs/deconfiguration-records"
+              >
+                Deconfiguration records
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
             aria-controls="settings"
             aria-expanded="false"
-            class="btn btn-link collapsed"
+            class="btn btn-md btn-link collapsed"
             data-test-id="nav-button-settings"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -433,12 +582,11 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M8,11c-1.7,0-3-1.3-3-3s1.3-3,3-3s3,1.3,3,3C11,9.6,9.7,11,8,11C8,11,8,11,8,11z M8,6C6.9,6,6,6.8,6,7.9C6,7.9,6,8,6,8	c0,1.1,0.8,2,1.9,2c0,0,0.1,0,0.1,0c1.1,0,2-0.8,2-1.9c0,0,0-0.1,0-0.1C10,6.9,9.2,6,8,6C8.1,6,8,6,8,6z"
               />
             </svg>
-            
-              appNavigation.settings
-              
+             Settings 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -451,87 +599,92 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="settings"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="settings"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-date-time"
+                data-v-941bc754=""
+                href="/settings/date-time"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-date-time"
-                  href="#/settings/date-time"
-                >
-                  
-                  appNavigation.dateTime
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-hardware-deconfiguration"
-                  href="#/settings/hardware-deconfiguration"
-                >
-                  
-                  appNavigation.deconfigurationHardware
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-network"
-                  href="#/settings/network"
-                >
-                  
-                  appNavigation.network
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-power-restore-policy"
-                  href="#/settings/power-restore-policy"
-                >
-                  
-                  appNavigation.powerRestorePolicy
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-snmp-alerts"
-                  href="#/settings/snmp-alerts"
-                >
-                  
-                  appNavigation.snmpAlerts
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Date and time
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-network"
+                data-v-941bc754=""
+                href="/settings/network"
+              >
+                Network
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-power-restore-policy"
+                data-v-941bc754=""
+                href="/settings/power-restore-policy"
+              >
+                Power restore policy
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-snmp-alerts"
+                data-v-941bc754=""
+                href="/settings/snmp-alerts"
+              >
+                SNMP alerts
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-factory-reset"
+                data-v-941bc754=""
+                href="/operations/factory-reset"
+              >
+                Factory reset
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
             aria-controls="security-and-access"
             aria-expanded="false"
-            class="btn btn-link collapsed"
+            class="btn btn-md btn-link collapsed"
             data-test-id="nav-button-security-and-access"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -547,12 +700,11 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M16,30,9.8242,26.7071A10.9818,10.9818,0,0,1,4,17V4A2.0021,2.0021,0,0,1,6,2H26a2.0021,2.0021,0,0,1,2,2V17a10.9818,10.9818,0,0,1-5.8242,9.7071ZM6,4V17a8.9852,8.9852,0,0,0,4.7656,7.9423L16,27.7333l5.2344-2.791A8.9852,8.9852,0,0,0,26,17V4Z"
               />
             </svg>
-            
-              appNavigation.securityAndAccess
-              
+             Security and access 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -565,87 +717,96 @@ exports[`AppNavigation.vue should render correctly 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="security-and-access"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="security-and-access"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-sessions"
+                data-v-941bc754=""
+                href="/security-and-access/sessions"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-sessions"
-                  href="#/security-and-access/sessions"
-                >
-                  
-                  appNavigation.sessions
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-ldap"
-                  href="#/security-and-access/ldap"
-                >
-                  
-                  appNavigation.ldap
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-user-management"
-                  href="#/security-and-access/user-management"
-                >
-                  
-                  appNavigation.userManagement
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-policies"
-                  href="#/security-and-access/policies"
-                >
-                  
-                  appNavigation.policies
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-certificates"
-                  href="#/security-and-access/certificates"
-                >
-                  
-                  appNavigation.certificates
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                HMC and user sessions
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-user-management"
+                data-v-941bc754=""
+                href="/security-and-access/user-management"
+              >
+                User management
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-ldap"
+                data-v-941bc754=""
+                href="/security-and-access/ldap"
+              >
+                LDAP
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-certificates"
+                data-v-941bc754=""
+                href="/security-and-access/certificates"
+              >
+                Certificates
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-policies"
+                data-v-941bc754=""
+                href="/security-and-access/policies"
+              >
+                Policies
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-key-clear"
+                data-v-941bc754=""
+                href="/operations/key-clear"
+              >
+                Key clear
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
         <li
-          class="nav-item"
+          class="nav-item nav-nochild"
+          data-test-id="nav-item-notices"
+          data-v-941bc754=""
         >
-          <button
-            aria-controls="resource-management"
-            aria-expanded="false"
-            class="btn btn-link collapsed"
-            data-test-id="nav-button-resource-management"
-            type="button"
+          <a
+            class="nav-link"
+            href="/notices"
           >
+            
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -655,116 +816,69 @@ exports[`AppNavigation.vue should render correctly 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M19 24H26V26H19zM19 20H26V22H19zM19 16H26V18H19zM6 24H13V26H6zM6 20H13V22H6z"
+                d="M25.7,9.3l-7-7C18.5,2.1,18.3,2,18,2H8C6.9,2,6,2.9,6,4v24c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V10C26,9.7,25.9,9.5,25.7,9.3	z M18,4.4l5.6,5.6H18V4.4z M24,28H8V4h8v6c0,1.1,0.9,2,2,2h6V28z"
               />
               <path
-                d="M28,4H17a2.0023,2.0023,0,0,0-2,2v6H4a2.0023,2.0023,0,0,0-2,2V28a2.0023,2.0023,0,0,0,2,2H28a2.0023,2.0023,0,0,0,2-2V6A2.0023,2.0023,0,0,0,28,4ZM15,28H4V14H15Zm2,0V6H28V28Z"
+                d="M10 22H22V24H10zM10 16H22V18H10z"
               />
             </svg>
+             Notices
             
-              appNavigation.resourceManagement
-              
-            <svg
-              aria-hidden="true"
-              class="icon-expand"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 16 16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
-              />
-            </svg>
-          </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
-          >
-            <ul
-              class="collapse"
-              id="resource-management"
-              style="display: none;"
-            >
-              <li
-                class="nav-item"
-              >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-system-parameters"
-                  href="#/resource-management/system-parameters"
-                >
-                  
-                  appNavigation.systemParameters
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-memory"
-                  href="#/resource-management/memory"
-                >
-                  
-                  appNavigation.memory
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-power"
-                  href="#/resource-management/power"
-                >
-                  
-                  appNavigation.power
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+            
+          </a>
         </li>
+        
+        
+        
       </ul>
     </nav>
   </div>
-   
   <transition-stub
+    appear="false"
+    css="true"
+    data-v-941bc754=""
     name="fade"
+    persisted="false"
   >
-    <!---->
+    <!--v-if-->
   </transition-stub>
 </div>
 `;
 
-exports[`AppNavigation.vue should render with nav-container open 1`] = `
-<div>
+exports[`AppNavigation.vue > should render with nav-container open 1`] = `
+<div
+  data-v-941bc754=""
+>
   <div
     class="nav-container"
+    data-v-941bc754=""
   >
     <nav
       aria-label="appNavigation.primaryNavigation"
+      data-v-941bc754=""
     >
       <ul
-        class="nav mb-4 flex-column"
+        class="nav flex-column mb-4"
+        data-v-941bc754=""
       >
+        
+        
+        
+        <!-- Navigation items with no children -->
         <li
-          class="nav-item"
+          class="nav-item nav-nochild"
           data-test-id="nav-item-overview"
+          data-v-941bc754=""
         >
           <a
-            aria-current="page"
-            class="nav-link router-link-exact-active router-link-active"
-            href="#/"
-            target="_self"
+            class="nav-link"
+            href="/"
           >
+            
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -780,23 +894,32 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M28,2H4A2.002,2.002,0,0,0,2,4V28a2.0023,2.0023,0,0,0,2,2H28a2.0027,2.0027,0,0,0,2-2V4A2.0023,2.0023,0,0,0,28,2Zm0,9H14V4H28ZM12,4v7H4V4ZM4,28V13H28.0007l.0013,15Z"
               />
             </svg>
+             Overview
             
-            appNavigation.overview
-          
+            
           </a>
         </li>
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
-            aria-controls="logs"
+            aria-controls="operations"
             aria-expanded="false"
-            class="btn btn-link collapsed"
-            data-test-id="nav-button-logs"
+            class="btn btn-md btn-link collapsed"
+            data-test-id="nav-button-operations"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -806,18 +929,14 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M8 10H16V12H8zM8 6H20V8H8zM8 2H20V4H8z"
-              />
-              <path
-                d="M4.7111,28l5.6312-9.9961,7.4341,6.49A2,2,0,0,0,20.86,23.96l6.9707-10.4034-1.6622-1.1132-7,10.4472-.07.1035-7.4345-6.4907a2.0032,2.0032,0,0,0-3.0806.5308L4,25.1826V2H2V28a2.0023,2.0023,0,0,0,2,2H30V28Z"
+                d="M30 8h-4.1c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2v2h14.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30V8zM21 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3S22.7 12 21 12zM2 24h4.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30v-2H15.9c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2V24zM11 20c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3S9.3 20 11 20z"
               />
             </svg>
-            
-              appNavigation.logs
-              
+             Operations 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -830,69 +949,210 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="operations"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="logs"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-server-power-operations"
+                data-v-941bc754=""
+                href="/operations/server-power-operations"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-event-logs"
-                  href="#/logs/event-logs"
-                >
-                  
-                  appNavigation.eventLogs
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-audit-logs"
-                  href="#/logs/audit-logs"
-                >
-                  
-                  appNavigation.auditLogs
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-post-code-logs"
-                  href="#/logs/post-code-logs"
-                >
-                  
-                  appNavigation.postCodeLogs
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Server power operations
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-host-console"
+                data-v-941bc754=""
+                href="/operations/host-console"
+              >
+                Host console
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-service-login"
+                data-v-941bc754=""
+                href="/operations/service-login"
+              >
+                Service login consoles
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-firmware"
+                data-v-941bc754=""
+                href="/operations/firmware"
+              >
+                Firmware
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-reboot-bmc"
+                data-v-941bc754=""
+                href="/operations/reboot-bmc"
+              >
+                Reboot BMC
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
+        >
+          <button
+            aria-controls="resource-management"
+            aria-expanded="false"
+            class="btn btn-md btn-link collapsed"
+            data-test-id="nav-button-resource-management"
+            data-v-941bc754=""
+            type="button"
+          >
+            
+            <svg
+              aria-hidden="true"
+              data-v-941bc754=""
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 24H26V26H19zM19 20H26V22H19zM19 16H26V18H19zM6 24H13V26H6zM6 20H13V22H6z"
+              />
+              <path
+                d="M28,4H17a2.0023,2.0023,0,0,0-2,2v6H4a2.0023,2.0023,0,0,0-2,2V28a2.0023,2.0023,0,0,0,2,2H28a2.0023,2.0023,0,0,0,2-2V6A2.0023,2.0023,0,0,0,28,4ZM15,28H4V14H15Zm2,0V6H28V28Z"
+              />
+            </svg>
+             Resource management 
+            <svg
+              aria-hidden="true"
+              class="icon-expand"
+              data-v-941bc754=""
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
+              />
+            </svg>
+            
+          </button>
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="resource-management"
+            is-nav="false"
+          >
+            
+            <li
+              class=""
+              data-v-941bc754=""
+            >
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-memory"
+                data-v-941bc754=""
+                href="/resource-management/memory"
+              >
+                Memory
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-power"
+                data-v-941bc754=""
+                href="/resource-management/power"
+              >
+                Power
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-capacity-on-demand"
+                data-v-941bc754=""
+                href="/resource-management/capacity-on-demand"
+              >
+                Capacity on demand
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-field-core-override"
+                data-v-941bc754=""
+                href="/resource-management/field-core-override"
+              >
+                Field core override
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-system-parameters"
+                data-v-941bc754=""
+                href="/resource-management/system-parameters"
+              >
+                System parameters
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
+        </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
+        <li
+          class="nav-item"
+          data-v-941bc754=""
         >
           <button
             aria-controls="hardware-status"
             aria-expanded="false"
-            class="btn btn-link collapsed"
+            class="btn btn-md btn-link collapsed"
             data-test-id="nav-button-hardware-status"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -923,12 +1183,11 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M24,3H8A2,2,0,0,0,6,5V27a2,2,0,0,0,2,2h8V27H8V21H26V5A2,2,0,0,0,24,3Zm0,16H8V13H24Zm0-8H8V5H24Z"
               />
             </svg>
-            
-              appNavigation.hardwareStatus
-              
+             Hardware status 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -941,78 +1200,92 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="hardware-status"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="hardware-status"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-inventory"
+                data-v-941bc754=""
+                href="/hardware-status/inventory"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-inventory"
-                  href="#/hardware-status/inventory"
-                >
-                  
-                  appNavigation.inventory
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-sensors"
-                  href="#/hardware-status/sensors"
-                >
-                  
-                  appNavigation.sensors
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-pcie-topology"
-                  href="#/hardware-status/pcie-topology"
-                >
-                  
-                  appNavigation.pcieTopology
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-concurrent-maintenance"
-                  href="#/hardware-status/concurrent-maintenance"
-                >
-                  
-                  appNavigation.concurrentMaintanence
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Inventory and LEDs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-sensors"
+                data-v-941bc754=""
+                href="/hardware-status/sensors"
+              >
+                Sensors
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-hardware-deconfiguration"
+                data-v-941bc754=""
+                href="/settings/hardware-deconfiguration"
+              >
+                Hardware deconfiguration
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-pcie-topology"
+                data-v-941bc754=""
+                href="/hardware-status/pcie-topology"
+              >
+                PCIe hardware topology
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-concurrent-maintenance"
+                data-v-941bc754=""
+                href="/hardware-status/concurrent-maintenance"
+              >
+                Concurrent maintenance
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
-            aria-controls="operations"
+            aria-controls="logs"
             aria-expanded="false"
-            class="btn btn-link collapsed"
-            data-test-id="nav-button-operations"
+            class="btn btn-md btn-link collapsed"
+            data-test-id="nav-button-logs"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -1022,15 +1295,17 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M30 8h-4.1c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2v2h14.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30V8zM21 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3S22.7 12 21 12zM2 24h4.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30v-2H15.9c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2V24zM11 20c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3S9.3 20 11 20z"
+                d="M8 10H16V12H8zM8 6H20V8H8zM8 2H20V4H8z"
+              />
+              <path
+                d="M4.7111,28l5.6312-9.9961,7.4341,6.49A2,2,0,0,0,20.86,23.96l6.9707-10.4034-1.6622-1.1132-7,10.4472-.07.1035-7.4345-6.4907a2.0032,2.0032,0,0,0-3.0806.5308L4,25.1826V2H2V28a2.0023,2.0023,0,0,0,2,2H30V28Z"
               />
             </svg>
-            
-              appNavigation.operations
-              
+             Logs and services 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -1043,123 +1318,100 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="logs"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="operations"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-post-code-logs"
+                data-v-941bc754=""
+                href="/logs/post-code-logs"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-factory-reset"
-                  href="#/operations/factory-reset"
-                >
-                  
-                  appNavigation.factoryReset
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-kvm"
-                  href="#/operations/kvm"
-                >
-                  
-                  appNavigation.kvm
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-key-clear"
-                  href="#/operations/key-clear"
-                >
-                  
-                  appNavigation.keyClear
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-firmware"
-                  href="#/operations/firmware"
-                >
-                  
-                  appNavigation.firmware
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-reboot-bmc"
-                  href="#/operations/reboot-bmc"
-                >
-                  
-                  appNavigation.rebootBmc
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-service-login"
-                  href="#/operations/service-login"
-                >
-                  
-                  appNavigation.serviceLogin
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-host-console"
-                  href="#/operations/host-console"
-                >
-                  
-                  appNavigation.hostConsole
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-server-power-operations"
-                  href="#/operations/server-power-operations"
-                >
-                  
-                  appNavigation.serverPowerOperations
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-virtual-media"
-                  href="#/operations/virtual-media"
-                >
-                  
-                  appNavigation.virtualMedia
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Progress logs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-event-logs"
+                data-v-941bc754=""
+                href="/logs/event-logs"
+              >
+                Event logs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-audit-logs"
+                data-v-941bc754=""
+                href="/logs/audit-logs"
+              >
+                Audit logs
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-dumps"
+                data-v-941bc754=""
+                href="/logs/dumps"
+              >
+                Dumps
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-ibmi-service-functions"
+                data-v-941bc754=""
+                href="/logs/ibmi-service-functions"
+              >
+                IBM i service functions
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-deconfiguration-records"
+                data-v-941bc754=""
+                href="/logs/deconfiguration-records"
+              >
+                Deconfiguration records
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
             aria-controls="settings"
             aria-expanded="false"
-            class="btn btn-link collapsed"
+            class="btn btn-md btn-link collapsed"
             data-test-id="nav-button-settings"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -1175,12 +1427,11 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M8,11c-1.7,0-3-1.3-3-3s1.3-3,3-3s3,1.3,3,3C11,9.6,9.7,11,8,11C8,11,8,11,8,11z M8,6C6.9,6,6,6.8,6,7.9C6,7.9,6,8,6,8	c0,1.1,0.8,2,1.9,2c0,0,0.1,0,0.1,0c1.1,0,2-0.8,2-1.9c0,0,0-0.1,0-0.1C10,6.9,9.2,6,8,6C8.1,6,8,6,8,6z"
               />
             </svg>
-            
-              appNavigation.settings
-              
+             Settings 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -1193,87 +1444,92 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="settings"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="settings"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-date-time"
+                data-v-941bc754=""
+                href="/settings/date-time"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-date-time"
-                  href="#/settings/date-time"
-                >
-                  
-                  appNavigation.dateTime
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-hardware-deconfiguration"
-                  href="#/settings/hardware-deconfiguration"
-                >
-                  
-                  appNavigation.deconfigurationHardware
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-network"
-                  href="#/settings/network"
-                >
-                  
-                  appNavigation.network
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-power-restore-policy"
-                  href="#/settings/power-restore-policy"
-                >
-                  
-                  appNavigation.powerRestorePolicy
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-snmp-alerts"
-                  href="#/settings/snmp-alerts"
-                >
-                  
-                  appNavigation.snmpAlerts
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                Date and time
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-network"
+                data-v-941bc754=""
+                href="/settings/network"
+              >
+                Network
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-power-restore-policy"
+                data-v-941bc754=""
+                href="/settings/power-restore-policy"
+              >
+                Power restore policy
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-snmp-alerts"
+                data-v-941bc754=""
+                href="/settings/snmp-alerts"
+              >
+                SNMP alerts
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-factory-reset"
+                data-v-941bc754=""
+                href="/operations/factory-reset"
+              >
+                Factory reset
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
+        
+        <!-- Navigation items with children -->
         <li
           class="nav-item"
+          data-v-941bc754=""
         >
           <button
             aria-controls="security-and-access"
             aria-expanded="false"
-            class="btn btn-link collapsed"
+            class="btn btn-md btn-link collapsed"
             data-test-id="nav-button-security-and-access"
+            data-v-941bc754=""
             type="button"
           >
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -1289,12 +1545,11 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M16,30,9.8242,26.7071A10.9818,10.9818,0,0,1,4,17V4A2.0021,2.0021,0,0,1,6,2H26a2.0021,2.0021,0,0,1,2,2V17a10.9818,10.9818,0,0,1-5.8242,9.7071ZM6,4V17a8.9852,8.9852,0,0,0,4.7656,7.9423L16,27.7333l5.2344-2.791A8.9852,8.9852,0,0,0,26,17V4Z"
               />
             </svg>
-            
-              appNavigation.securityAndAccess
-              
+             Security and access 
             <svg
               aria-hidden="true"
               class="icon-expand"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -1307,87 +1562,96 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
                 d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
               />
             </svg>
+            
           </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
+          
+          
+          
+          <div
+            class="collapse nav-item__nav"
+            id="security-and-access"
+            is-nav="false"
           >
-            <ul
-              class="collapse"
-              id="security-and-access"
-              style="display: none;"
+            
+            <li
+              class=""
+              data-v-941bc754=""
             >
-              <li
-                class="nav-item"
+              
+              <a
+                class="nav-link"
+                data-test-id="nav-item-sessions"
+                data-v-941bc754=""
+                href="/security-and-access/sessions"
               >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-sessions"
-                  href="#/security-and-access/sessions"
-                >
-                  
-                  appNavigation.sessions
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-ldap"
-                  href="#/security-and-access/ldap"
-                >
-                  
-                  appNavigation.ldap
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-user-management"
-                  href="#/security-and-access/user-management"
-                >
-                  
-                  appNavigation.userManagement
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-policies"
-                  href="#/security-and-access/policies"
-                >
-                  
-                  appNavigation.policies
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-certificates"
-                  href="#/security-and-access/certificates"
-                >
-                  
-                  appNavigation.certificates
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+                HMC and user sessions
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-user-management"
+                data-v-941bc754=""
+                href="/security-and-access/user-management"
+              >
+                User management
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-ldap"
+                data-v-941bc754=""
+                href="/security-and-access/ldap"
+              >
+                LDAP
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-certificates"
+                data-v-941bc754=""
+                href="/security-and-access/certificates"
+              >
+                Certificates
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-policies"
+                data-v-941bc754=""
+                href="/security-and-access/policies"
+              >
+                Policies
+              </a>
+              <a
+                class="nav-link"
+                data-test-id="nav-item-key-clear"
+                data-v-941bc754=""
+                href="/operations/key-clear"
+              >
+                Key clear
+              </a>
+              
+            </li>
+            
+          </div>
+          
+          
+          
         </li>
+        
+        
+        
+        <!-- Navigation items with no children -->
         <li
-          class="nav-item"
+          class="nav-item nav-nochild"
+          data-test-id="nav-item-notices"
+          data-v-941bc754=""
         >
-          <button
-            aria-controls="resource-management"
-            aria-expanded="false"
-            class="btn btn-link collapsed"
-            data-test-id="nav-button-resource-management"
-            type="button"
+          <a
+            class="nav-link"
+            href="/notices"
           >
+            
+            
             <svg
               aria-hidden="true"
+              data-v-941bc754=""
               fill="currentColor"
               focusable="false"
               height="16"
@@ -1397,89 +1661,31 @@ exports[`AppNavigation.vue should render with nav-container open 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M19 24H26V26H19zM19 20H26V22H19zM19 16H26V18H19zM6 24H13V26H6zM6 20H13V22H6z"
+                d="M25.7,9.3l-7-7C18.5,2.1,18.3,2,18,2H8C6.9,2,6,2.9,6,4v24c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V10C26,9.7,25.9,9.5,25.7,9.3	z M18,4.4l5.6,5.6H18V4.4z M24,28H8V4h8v6c0,1.1,0.9,2,2,2h6V28z"
               />
               <path
-                d="M28,4H17a2.0023,2.0023,0,0,0-2,2v6H4a2.0023,2.0023,0,0,0-2,2V28a2.0023,2.0023,0,0,0,2,2H28a2.0023,2.0023,0,0,0,2-2V6A2.0023,2.0023,0,0,0,28,4ZM15,28H4V14H15Zm2,0V6H28V28Z"
+                d="M10 22H22V24H10zM10 16H22V18H10z"
               />
             </svg>
+             Notices
             
-              appNavigation.resourceManagement
-              
-            <svg
-              aria-hidden="true"
-              class="icon-expand"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 16 16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 5L13 10 12.3 10.7 8 6.4 3.7 10.7 3 10z"
-              />
-            </svg>
-          </button>
-           
-          <transition-stub
-            class="nav-item__nav"
-            css="true"
-            enteractiveclass="collapsing"
-            enterclass=""
-            entertoclass="collapse show"
-            leaveactiveclass="collapsing"
-            leaveclass="collapse show"
-            leavetoclass="collapse"
-          >
-            <ul
-              class="collapse"
-              id="resource-management"
-              style="display: none;"
-            >
-              <li
-                class="nav-item"
-              >
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-system-parameters"
-                  href="#/resource-management/system-parameters"
-                >
-                  
-                  appNavigation.systemParameters
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-memory"
-                  href="#/resource-management/memory"
-                >
-                  
-                  appNavigation.memory
-                
-                </a>
-                <a
-                  class="nav-link"
-                  data-test-id="nav-item-power"
-                  href="#/resource-management/power"
-                >
-                  
-                  appNavigation.power
-                
-                </a>
-              </li>
-            </ul>
-          </transition-stub>
+            
+          </a>
         </li>
+        
+        
+        
       </ul>
     </nav>
   </div>
-   
   <transition-stub
+    appear="false"
+    css="true"
+    data-v-941bc754=""
     name="fade"
+    persisted="false"
   >
-    <!---->
+    <!--v-if-->
   </transition-stub>
 </div>
 `;

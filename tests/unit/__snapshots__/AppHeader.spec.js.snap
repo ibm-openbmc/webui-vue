@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AppHeader.vue should render correctly 1`] = `
+exports[`AppHeader.vue > should render correctly 1`] = `
 <div>
   <header
     id="page-header"
@@ -9,211 +9,347 @@ exports[`AppHeader.vue should render correctly 1`] = `
       class="link-skip-nav btn btn-light"
       href="#main-content"
     >
-      
       appHeader.skipToContent
-    
     </a>
-     
-    <b-navbar
+    <nav
       aria-label="appHeader.applicationHeader"
+      class="navbar navbar-expand"
       type="dark"
     >
-      <b-button
-        aria-hidden="true"
-        class="nav-trigger"
-        id="app-header-trigger"
-        type="button"
-        variant="link"
+      <div
+        class="container-fluid"
       >
-        <!---->
-         
-        <svg
-          fill="currentColor"
-          focusable="false"
-          height="20"
-          preserveAspectRatio="xMidYMid meet"
-          role="img"
-          title="appHeader.titleShowNavigation"
-          viewBox="0 0 20 20"
-          width="20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <title>
-            appHeader.titleShowNavigation
-          </title>
-          <path
-            d="M2 14.8H18V16H2zM2 11.2H18V12.399999999999999H2zM2 7.6H18V8.799999999999999H2zM2 4H18V5.2H2z"
-          />
-        </svg>
-      </b-button>
-       
-      <b-navbar-nav>
-        <b-navbar-brand
-          class="mr-0 logo-header"
-          data-test-id="appHeader-container-overview"
-          to="/"
-        >
-          <img
-            alt="Built on OpenBMC"
-            class="header-logo"
-            src="http://localhost"
-            width="50px"
-          />
-           
-          <span
-            class="pl-1 nav-tags header-text"
-          >
-            ASMI
-          </span>
-        </b-navbar-brand>
-         
-        <!---->
-      </b-navbar-nav>
-       
-      <b-navbar-nav
-        class="ml-auto helper-menu"
-      >
-        <b-nav-item
-          data-test-id="appHeader-container-health"
-          to="/logs/event-logs"
-        >
-          <span
-            class="status-icon secondary"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              focusable="false"
-              height="20"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 20 20"
-              width="20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-              />
-              <path
-                d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-                data-icon-path="inner-path"
-                opacity="0"
-              />
-            </svg>
-          </span>
-          
-          appHeader.health
         
-        </b-nav-item>
-         
-        <b-nav-item
-          data-test-id="appHeader-container-power"
-          to="/operations/server-power-operations"
+        <!-- Left aligned nav items -->
+        <button
+          aria-hidden="true"
+          class="btn btn-md btn-link nav-trigger"
+          id="app-header-trigger"
+          type="button"
         >
-          <span
-            class="status-icon secondary"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              focusable="false"
-              height="20"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 20 20"
-              width="20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-              />
-              <path
-                d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-                data-icon-path="inner-path"
-                opacity="0"
-              />
-            </svg>
-          </span>
           
-          appHeader.power
-        
-        </b-nav-item>
-         
-        <li
-          class="nav-item"
-        >
-          <b-button
-            data-test-id="appHeader-button-refresh"
-            id="app-header-refresh"
-            variant="link"
+          <!--v-if-->
+          <svg
+            fill="currentColor"
+            focusable="false"
+            height="20"
+            preserveAspectRatio="xMidYMid meet"
+            role="img"
+            title="appHeader.titleShowNavigation"
+            viewBox="0 0 20 20"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              fill="currentColor"
-              focusable="false"
-              height="20"
-              preserveAspectRatio="xMidYMid meet"
-              role="img"
-              title="appHeader.titleRefresh"
-              viewBox="0 0 32 32"
-              width="20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>
-                appHeader.titleRefresh
-              </title>
-              <path
-                d="M12 10H6.78A11 11 0 0127 16h2A13 13 0 006 7.68V4H4v8h8zM20 22h5.22A11 11 0 015 16H3a13 13 0 0023 8.32V28h2V20H20z"
-              />
-            </svg>
-             
-            <span
-              class="responsive-text"
-            >
-              appHeader.refresh
-            </span>
-          </b-button>
-        </li>
-         
-        <li
-          class="nav-item"
+            <title>
+              appHeader.titleShowNavigation
+            </title>
+            <path
+              d="M2 14.8H18V16H2zM2 11.2H18V12.399999999999999H2zM2 7.6H18V8.799999999999999H2zM2 4H18V5.2H2z"
+            />
+          </svg>
+          
+        </button>
+        <ul
+          class="navbar-nav"
         >
-          <b-dropdown
-            data-test-id="appHeader-container-user"
-            id="app-header-user"
-            right=""
-            variant="link"
+          
+          <a
+            class="navbar-brand me-0 logo-header"
+            data-test-id="appHeader-container-overview"
+            href="/"
+            to="/"
           >
-             
-            <b-dropdown-item
-              data-test-id="appHeader-link-profile"
-              to="/profile-settings"
-            >
-              appHeader.profileSettings
             
-            </b-dropdown-item>
-             
-            <b-dropdown-item
-              data-test-id="appHeader-link-logout"
+            
+            <img
+              alt="Built on OpenBMC"
+              class="header-logo"
+              src="/src/assets/images/logo-header.svg"
+              width="50px"
+            />
+            <!-- :src="getImageUrl()" -->
+            <span
+              class="ps-1 nav-tags header-text"
+            >
+              ASMI
+            </span>
+            
+            
+          </a>
+          <div
+            class="ps-2 nav-tags"
+          >
+            <span>
+              |
+            </span>
+            <span
+              class="ps-3 asset-tag"
+            />
+            <span
+              class="ps-3"
+            >
+              --
+            </span>
+            <span
+              class="ps-3"
+            />
+          </div>
+          
+        </ul>
+        <!-- Right aligned nav items -->
+        <ul
+          class="navbar-nav ms-auto helper-menu"
+        >
+          
+          <li
+            class="nav-item"
+            data-test-id="appHeader-container-health"
+          >
+            <a
+              class="nav-link"
+              href="/logs/event-logs"
+              to="/logs/event-logs"
             >
               
-              appHeader.logOut
-            
-            </b-dropdown-item>
-          </b-dropdown>
-        </li>
-      </b-navbar-nav>
-    </b-navbar>
+              
+              <span
+                class="status-icon secondary"
+                data-v-4b0821d5=""
+              >
+                <svg
+                  aria-hidden="true"
+                  data-v-4b0821d5=""
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 20 20"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+                  />
+                  <path
+                    d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+                    data-icon-path="inner-path"
+                    opacity="0"
+                  />
+                </svg>
+              </span>
+               appHeader.health
+              
+              
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            data-test-id="appHeader-container-power"
+          >
+            <a
+              class="nav-link"
+              href="/operations/server-power-operations"
+              to="/operations/server-power-operations"
+            >
+              
+              
+              <span
+                class="status-icon secondary"
+                data-v-4b0821d5=""
+              >
+                <svg
+                  aria-hidden="true"
+                  data-v-4b0821d5=""
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 20 20"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+                  />
+                  <path
+                    d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+                    data-icon-path="inner-path"
+                    opacity="0"
+                  />
+                </svg>
+              </span>
+               appHeader.power
+              
+              
+            </a>
+          </li>
+          <!-- Using LI elements instead of BNavItem to support semantic button elements -->
+          <li
+            class="nav-item"
+          >
+            <button
+              class="btn btn-md btn-link"
+              data-test-id="appHeader-button-refresh"
+              id="app-header-refresh"
+              type="button"
+            >
+              
+              <svg
+                fill="currentColor"
+                focusable="false"
+                height="20"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                title="appHeader.titleRefresh"
+                viewBox="0 0 32 32"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>
+                  appHeader.titleRefresh
+                </title>
+                <path
+                  d="M12 10H6.78A11 11 0 0127 16h2A13 13 0 006 7.68V4H4v8h8zM20 22h5.22A11 11 0 015 16H3a13 13 0 0023 8.32V28h2V20H20z"
+                />
+              </svg>
+              <span
+                class="responsive-text"
+              >
+                appHeader.refresh
+              </span>
+              
+            </button>
+          </li>
+          <li
+            class="nav-item"
+          >
+            <div
+              class="btn-group"
+              data-test-id="appHeader-container-user"
+              right=""
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="menu"
+                class="btn btn-md btn-link dropdown-toggle"
+                id="app-header-user"
+                type="button"
+              >
+                
+                
+                <svg
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  title="appHeader.titleProfile"
+                  viewBox="0 0 32 32"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title>
+                    appHeader.titleProfile
+                  </title>
+                  <path
+                    d="M16,8a5,5,0,1,0,5,5A5,5,0,0,0,16,8Zm0,8a3,3,0,1,1,3-3A3.0034,3.0034,0,0,1,16,16Z"
+                  />
+                  <path
+                    d="M16,2A14,14,0,1,0,30,16,14.0158,14.0158,0,0,0,16,2ZM10,26.3765V25a3.0033,3.0033,0,0,1,3-3h6a3.0033,3.0033,0,0,1,3,3v1.3765a11.8989,11.8989,0,0,1-12,0Zm13.9925-1.4507A5.0016,5.0016,0,0,0,19,20H13a5.0016,5.0016,0,0,0-4.9925,4.9258,12,12,0,1,1,15.985,0Z"
+                  />
+                </svg>
+                <span
+                  class="responsive-text"
+                />
+                
+                
+              </button>
+              <!---->
+              <!--teleport start-->
+              <ul
+                aria-labelledby="app-header-user"
+                class="dropdown-menu overflow-auto"
+                role="menu"
+                style="position: absolute; left: 0px; top: 0px; display: none; transform: translate(0px, 0px);"
+              >
+                
+                <li
+                  role="presentation"
+                >
+                  <a
+                    class="dropdown-item"
+                    data-test-id="appHeader-link-profile"
+                    href="/profile-settings"
+                    role="menuitem"
+                    to="/profile-settings"
+                  >
+                    
+                    
+                    appHeader.profileSettings
+                    
+                    
+                  </a>
+                </li>
+                <li
+                  role="presentation"
+                >
+                  <button
+                    class="dropdown-item"
+                    data-test-id="appHeader-link-logout"
+                    role="menuitem"
+                    type="button"
+                  >
+                    
+                    appHeader.logOut
+                    
+                  </button>
+                </li>
+                
+              </ul>
+              <!--teleport end-->
+            </div>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </nav>
   </header>
-   
   <transition-stub
+    appear="false"
+    css="true"
+    data-v-7df63c26=""
+    enteractiveclass="fade showing"
+    enterfromclass="showing"
+    entertoclass=""
+    leaveactiveclass="fade showing"
+    leavefromclass=""
+    leavetoclass="showing"
     name="fade"
+    persisted="false"
   >
-    <b-progress>
-      <b-progress-bar
-        animated=""
-        aria-label="global.ariaLabel.progressBar"
-        striped=""
-        value="0"
-      />
-    </b-progress>
+    
+    <div
+      class="progress"
+      data-v-7df63c26=""
+    >
+      
+      <div
+        aria-label="Loading Progress"
+        aria-valuemin="0"
+        aria-valuenow="0"
+        class="progress-bar progress-bar-animated progress-bar-striped"
+        data-v-7df63c26=""
+        role="progressbar"
+        style="width: 0%;"
+      >
+        
+        
+        
+      </div>
+      
+    </div>
+    
   </transition-stub>
 </div>
 `;

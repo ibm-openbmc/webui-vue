@@ -1,32 +1,40 @@
-import { mount, createLocalVue } from '@vue/test-utils';
-import PageTitle from '@/components/Global/PageTitle';
-
-const localVue = createLocalVue();
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, beforeEach } from 'vitest';
+import PageTitle from '@/components/Global/PageTitle.vue';
 
 describe('PageTitle.vue', () => {
-  const wrapper = mount(PageTitle, {
-    localVue,
-    propsData: {
-      description: 'A page title test description',
-    },
-    mocks: {
-      $t: (key) => key,
-      $route: {
-        meta: {
-          title: 'Page Title',
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(PageTitle, {
+      props: {
+        description: 'A page title test description',
+      },
+      global: {
+        mocks: {
+          $t: (key) => key,
+          $route: {
+            meta: {
+              title: 'Page Title',
+            },
+          },
         },
       },
-    },
+    });
   });
+
   it('should exist', () => {
     expect(wrapper.exists()).toBe(true);
   });
+
   it('should render h1 element', () => {
     expect(wrapper.find('h1').exists()).toBe(true);
   });
+
   it('should render p element', () => {
     expect(wrapper.find('p').exists()).toBe(true);
   });
+
   it('should render correctly', () => {
     expect(wrapper.element).toMatchSnapshot();
   });

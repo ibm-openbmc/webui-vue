@@ -1,25 +1,31 @@
-import { mount, createLocalVue } from '@vue/test-utils';
-import Search from '@/components/Global/Search';
-import BootstrapVue from 'bootstrap-vue';
-
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
+import { mount } from '@vue/test-utils'
+import { describe, it, expect, beforeEach } from 'vitest';
+import Search from '@/components/Global/Search.vue'
 
 describe('Search.vue', () => {
-  const wrapper = mount(Search, {
-    localVue,
-    mocks: {
-      $t: (key) => key,
-    },
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(Search, {
+      global: {
+        mocks: {
+          $t: (key) => key,
+        },
+      },
+    });
   });
+
   it('should exist', () => {
     expect(wrapper.exists()).toBe(true);
   });
+
   it('should emit clear-search on triggering onClearSearch', async () => {
-    await wrapper.setData({ filter: 'true' });
-    wrapper.find('button').trigger('click');
+    wrapper.vm.filter = 'true';
+    await wrapper.vm.$nextTick();
+    await wrapper.find('button').trigger('click');
     expect(wrapper.emitted('clear-search')).toHaveLength(1);
   });
+
   it('should render correctly', () => {
     expect(wrapper.element).toMatchSnapshot();
   });
