@@ -5,7 +5,7 @@
   "type": "module",
   "description": "OpenBMC Web UI using the Vue.js front-end framework",
   "scripts": {
-    "serve": "npm test -- -u && vite --host",
+    "serve": "vite --host",
     "build": "vite build",
     "preview": "vite preview --host",
     "test": "vitest run",
