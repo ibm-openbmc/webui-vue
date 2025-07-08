@@ -127,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, onMounted, computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
@@ -221,10 +221,16 @@ onBeforeRouteLeave(() => {
           });
           clearSelectedRows(tableRef);
         });
-        eventBus.on('ok', ({isNewUser, userData}) => {
-          saveUser({isNewUser, userData});
-        });
+        eventBus.on('okUser', handleOkUser);
       });
+
+    const handleOkUser = ({ isNewUser, userData }) => {
+      saveUser({ isNewUser, userData });
+    };
+
+    onBeforeUnmount(() => {
+      eventBus.off('okUser', handleOkUser); // 👈 cleanup
+    });
   
   const accountRoles = computed(() => {
       return userManagement.accountRolesGetter;
@@ -348,6 +354,7 @@ onBeforeRouteLeave(() => {
       if (isNewUser !== undefined && userData !== undefined) {
         startLoader();
         if (isNewUser) {
+          console.log('saveUser');
           userManagement.createUser(userData)
             .then((success) => toast.successToast(success))
             .catch(({ message }) => toast.errorToast(message))

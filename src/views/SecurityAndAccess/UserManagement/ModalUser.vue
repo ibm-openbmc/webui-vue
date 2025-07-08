@@ -214,7 +214,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watch, computed } from 'vue';
+import { ref, defineProps, watch, computed, nextTick } from 'vue';
 import {   
   required,
   maxLength,
@@ -249,6 +249,13 @@ const userManagementStore = UserManagementStore();
   const modal = ref(false);
   eventBus.on('modal-user', () => {
     modal.value = true;
+    nextTick(() => {
+      if (props.user && (props.user.privilege !== 'Read only' && props.user.privilege !== 'ReadOnly')) {
+        form.value.username = props.user.username;
+        form.value.status = props.user.Enabled;
+        form.value.privilege = props.user.privilege === 'Read only' ? 'ReadOnly' : props.user.privilege;
+      }
+    })
   });
   const originalUsername = ref('');
   const form = ref({
@@ -379,7 +386,7 @@ const userManagementStore = UserManagementStore();
         }
       }
 
-      eventBus.emit('ok', { isNewUser: newUser.value, userData });
+      eventBus.emit('okUser', { isNewUser: newUser.value, userData });
       closeModal();
     };
     function closeModal() {
