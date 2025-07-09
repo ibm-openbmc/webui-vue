@@ -61,7 +61,7 @@ describe('AppHeader.vue', () => {
     const triggerBtn = wrapper.get('#app-header-trigger');
     await triggerBtn.trigger('click');
     await wrapper.vm.$nextTick();
-    expect(spy).toHaveBeenCalledWith('toggle-navigation'); // ✅ Only one argument
+    expect(spy).toHaveBeenCalledWith('toggle-navigation');
     spy.mockRestore();
   });
 

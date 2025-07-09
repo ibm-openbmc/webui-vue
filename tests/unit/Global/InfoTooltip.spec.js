@@ -2,8 +2,6 @@ import { mount } from '@vue/test-utils';
 import { describe, it, expect, beforeEach } from 'vitest';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 
-process.env.BOOTSTRAP_VUE_NO_WARN = true;
-
 describe('InfoTooltip.vue', () => {
   let wrapper;
 
