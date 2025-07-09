@@ -8,13 +8,13 @@ exports[`Search.vue > should render correctly 1`] = `
   <div
     class="mb-2"
     data-v-60d88d37=""
-    id="__BVID__257764___BV___"
+    id="__BVID__761622___BV___"
     role="group"
   >
     <label
       class="form-label d-block invisible"
       for="searchInput-undefined"
-      id="__BVID__055979___BV__BV_label___"
+      id="__BVID__653947___BV__BV_label___"
     >
       global.form.search
     </label>
