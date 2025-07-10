@@ -27,6 +27,12 @@ describe('Search.vue', () => {
   });
 
   it('should render correctly', () => {
+    //Updating ID with a blank string to avoid regeneration of a new one everytime test script is run
+    wrapper.element.querySelectorAll('[id]').forEach(el => {
+      if (el.id.startsWith('__BVID__')) {
+        el.id = '';
+      }
+    });
     expect(wrapper.element).toMatchSnapshot();
   });
 });
