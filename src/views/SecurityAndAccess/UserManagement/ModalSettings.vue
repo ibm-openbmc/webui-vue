@@ -93,7 +93,7 @@
                   @input="v$.form.lockoutDuration.$touch()"
                 />
                 <BFormInvalidFeedback role="alert">
-                  <template v-if="!v$.form.lockoutDuration.required">
+                  <template v-if="v$.form.lockoutDuration.required.$invalid">
                     {{ $t('global.form.fieldRequired') }}
                   </template>
                   <template v-else-if="!v$.form.lockoutDuration.minvalue">
