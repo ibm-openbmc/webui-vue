@@ -229,7 +229,7 @@ onBeforeRouteLeave(() => {
     };
 
     onBeforeUnmount(() => {
-      eventBus.off('okUser', handleOkUser); // 👈 cleanup
+      eventBus.off('okUser', handleOkUser);
     });
   
   const accountRoles = computed(() => {
@@ -354,7 +354,6 @@ onBeforeRouteLeave(() => {
       if (isNewUser !== undefined && userData !== undefined) {
         startLoader();
         if (isNewUser) {
-          console.log('saveUser');
           userManagement.createUser(userData)
             .then((success) => toast.successToast(success))
             .catch(({ message }) => toast.errorToast(message))
