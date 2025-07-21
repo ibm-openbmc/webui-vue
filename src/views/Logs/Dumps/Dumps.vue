@@ -93,7 +93,7 @@
             :items="filteredDumps"
             :empty-text="$t('global.table.emptyMessage')"
             :empty-filtered-text="$t('global.table.emptySearchMessage')"
-            :per-page="itemPerPage"
+            :per-page="itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage"
             :current-page="currentPageNo"
             :filter="searchFilterInput"
             :busy="isBusy"
@@ -153,7 +153,7 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="itemPerPage"
+          :per-page="itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage"
           :total-rows="getTotalRowCount(filteredRows, itemPerPage)"
           aria-controls="table-dump-entries"
         />

@@ -25,7 +25,7 @@ export const itemsPerPageOptions = [
 ];
 const usePaginationComposable = () => {
   const getTotalRowCount = (count, itemPerPage) => {
-    return itemPerPage === 0 ? 1 : count;
+    return count;
   };
 
   return {

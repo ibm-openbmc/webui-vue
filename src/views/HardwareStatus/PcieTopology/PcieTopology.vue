@@ -41,7 +41,7 @@
         <BTable id="table-pcie-topology" ref="table" responsive="xl" sort-icon-left hover no-sort-reset
           :sort-desc="false" show-empty sticky-header="75vh" sort-by="id" :fields="fields" :busy="tableIsBusy"
           :filter="searchFilterInput" :empty-text="$t('global.table.emptyMessage')"
-          :empty-filtered-text="$t('global.table.emptySearchMessage')" :items="filteredEntries" :per-page="itemPerPage"
+          :empty-filtered-text="$t('global.table.emptySearchMessage')" :items="filteredEntries" :per-page="itemPerPage === 0 ? filteredEntries.length || 1 : itemPerPage"
           :current-page="currentPageNo" @filtered="onFiltered">
           <template #cell(localPortLocation)="{ item }">
             <template v-if="item.localPortLocation.length > 0">
@@ -199,7 +199,7 @@
       </b-col>
 
       <b-col sm="6">
-        <b-pagination class="b-pagination" v-model="currentPageNo" first-number last-number :per-page="itemPerPage"
+        <b-pagination class="b-pagination" v-model="currentPageNo" first-number last-number :per-page="itemPerPage === 0 ? filteredEntries.length || 1 : itemPerPage"
           :total-rows="getTotalRowCount(filteredRows, itemPerPage)" aria-controls="table-event-logs" />
       </b-col>
     </b-row>

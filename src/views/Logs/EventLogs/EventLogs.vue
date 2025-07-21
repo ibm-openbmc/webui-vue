@@ -76,7 +76,7 @@
           :sort-compare="onSortCompare"
           :empty-text="$t('global.table.emptyMessage')"
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
-          :per-page="perPage"
+          :per-page="perPage === 0 ? filteredLogs.length || 1 : perPage"
           :current-page="currentPage"
           :filter="searchFilter"
           :busy="isBusy"
@@ -267,7 +267,7 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="perPage"
+          :per-page="perPage === 0 ? filteredLogs.length || 1 : perPage"
           :total-rows="getTotalRowCount(filteredRows, perPage)"
           aria-controls="table-event-logs"
         />

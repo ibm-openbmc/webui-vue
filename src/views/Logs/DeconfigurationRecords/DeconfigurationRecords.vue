@@ -58,7 +58,7 @@
           :items="filteredLogs"
           :empty-text="$t('global.table.emptyMessage')"
           :current-page="currentPageNo"
-          :per-page="itemPerPage"
+          :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
           @row-selected="onRowSelected($event, filteredLogs.length)"
         >
           <!-- Expand chevron icon -->
@@ -188,7 +188,7 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="itemPerPage"
+          :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
           :total-rows="getTotalRowCount(filteredLogs.length, itemPerPage)"
           aria-controls="table-event-logs"
         />
