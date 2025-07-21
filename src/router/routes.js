@@ -2,52 +2,52 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import AuditLogs from '@/views/Logs/AuditLogs';
 import ChangePassword from '@/views/ChangePassword';
 import ConsoleLayout from '@/layouts/ConsoleLayout.vue';
-import ConcurrentMaintenance from '@/views/HardwareStatus/ConcurrentMaintenance';
-import DateTime from '@/views/Settings/DateTime';
+import ConcurrentMaintenance from '../views/HardwareStatus/ConcurrentMaintenance/ConcurrentMaintenance.vue';
+import DateTime from '@/views/Settings/DateTime/DateTime.vue';
 import EventLogs from '@/views/Logs/EventLogs';
 import FactoryReset from '@/views/Operations/FactoryReset';
 import Firmware from '@/views/Operations/Firmware';
-import Inventory from '@/views/HardwareStatus/Inventory';
+import Inventory from '../views/HardwareStatus/Inventory/Inventory.vue';
 import Kvm from '@/views/Operations/Kvm';
 import KvmConsole from '@/views/Operations/Kvm/KvmConsole';
-import Sessions from '../views/SecurityAndAccess/Sessions';
-import Ldap from '@/views/SecurityAndAccess/Ldap';
+import Sessions from '@/views/SecurityAndAccess/Sessions';
+import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
 import UserManagement from '@/views/SecurityAndAccess/UserManagement';
-import Login from '@/views/Login';
-import LoginLayout from '@/layouts/LoginLayout';
-import HardwareDeconfiguration from '@/views/Settings/HardwareDeconfiguration';
+import LoginPage from '@/views/Login/Login.vue';
+import LoginLayout from '@/layouts/LoginLayout.vue';
+import HardwareDeconfiguration from '../views/Settings/HardwareDeconfiguration/HardwareDeconfiguration.vue';
 import Network from '@/views/Settings/Network';
-import Overview from '@/views/Overview';
-import PageNotFound from '@/views/PageNotFound';
-import PostCodes from '@/views/Logs/PostCodeLogs/PostCodes';
-import PostCodeLogs from '@/views/Logs/PostCodeLogs';
+import Overview from '@/views/Overview/Overview.vue';
+import PageNotFound from '@/views/PageNotFound/PageNotFound.vue';
+import PostCodes from '@/views/Logs/PostCodeLogs/PostCodes.vue';
+import PostCodeLogs from '@/views/Logs/PostCodeLogs/PostCodeLogs.vue';
 import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy';
 import ProfileSettings from '@/views/ProfileSettings';
 import RebootBmc from '@/views/Operations/RebootBmc';
 import Policies from '@/views/SecurityAndAccess/Policies';
-import KeyClear from '@/views/Operations/KeyClear';
-import PcieTopology from '@/views/HardwareStatus/PcieTopology';
+import KeyClear from '@/views/Operations/KeyClear/KeyClear.vue';
+import PcieTopology from '../views/HardwareStatus/PcieTopology/PcieTopology.vue';
 import Sensors from '@/views/HardwareStatus/Sensors';
 import HostConsole from '@/views/Operations/HostConsole';
-import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsole';
+import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsole.vue';
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Certificates from '@/views/SecurityAndAccess/Certificates';
-import VirtualMedia from '@/views/Operations/VirtualMedia';
+import VirtualMedia from '@/views/Operations/VirtualMedia/VirtualMedia.vue';
 import Memory from '@/views/ResourceManagement/Memory';
 import Power from '@/views/ResourceManagement/Power';
 import SystemParameters from '@/views/ResourceManagement/SystemParameters';
 import SnmpAlerts from '@/views/Settings/SnmpAlerts';
 import i18n from '@/i18n';
 
-const routes = [
+export const routes = [
   {
     path: '/login',
     component: LoginLayout,
     children: [
       {
         path: '',
-        name: 'login',
-        component: Login,
+        name: 'LoginPage',
+        component: LoginPage,
         meta: {
           title: i18n.t('appPageTitle.login'),
         },
@@ -57,7 +57,7 @@ const routes = [
         name: 'change-password',
         component: ChangePassword,
         meta: {
-          title: i18n.t('appPageTitle.changePassword'),
+          title: i18n.global.t('appPageTitle.changePassword'),
           requiresAuth: true,
         },
       },
@@ -72,10 +72,10 @@ const routes = [
     children: [
       {
         path: 'host-console-console',
-        name: 'host-console',
+        name: 'host-console-console',
         component: HostConsoleConsole,
         meta: {
-          title: i18n.t('appPageTitle.hostConsole'),
+          title: i18n.global.t('appPageTitle.hostConsole'),
         },
       },
       {
@@ -83,15 +83,15 @@ const routes = [
         name: 'post-codes',
         component: PostCodes,
         meta: {
-          title: i18n.t('appPageTitle.postCodes'),
+          title: i18n.global.t('appPageTitle.postCodes'),
         },
       },
-      {
+            {
         path: 'kvm',
         name: 'kvm-console',
         component: KvmConsole,
         meta: {
-          title: i18n.t('appPageTitle.kvm'),
+          title: i18n.global.t('appPageTitle.kvm'),
         },
       },
     ],
@@ -108,7 +108,7 @@ const routes = [
         name: 'overview',
         component: Overview,
         meta: {
-          title: i18n.t('appPageTitle.overview'),
+          title: i18n.global.t('appPageTitle.overview'),
         },
       },
       {
@@ -116,7 +116,7 @@ const routes = [
         name: 'profile-settings',
         component: ProfileSettings,
         meta: {
-          title: i18n.t('appPageTitle.profileSettings'),
+          title: i18n.global.t('appPageTitle.profileSettings'),
         },
       },
       {
@@ -124,7 +124,7 @@ const routes = [
         name: 'event-logs',
         component: EventLogs,
         meta: {
-          title: i18n.t('appPageTitle.eventLogs'),
+          title: i18n.global.t('appPageTitle.eventLogs'),
         },
       },
       {
@@ -132,7 +132,7 @@ const routes = [
         name: 'audit-logs',
         component: AuditLogs,
         meta: {
-          title: i18n.t('appPageTitle.auditLogs'),
+          title: i18n.global.t('appPageTitle.auditLogs'),
         },
       },
       {
@@ -140,7 +140,7 @@ const routes = [
         name: 'post-code-logs',
         component: PostCodeLogs,
         meta: {
-          title: i18n.t('appPageTitle.postCodeLogs'),
+          title: i18n.global.t('appPageTitle.postCodeLogs'),
         },
       },
       {
@@ -148,7 +148,7 @@ const routes = [
         name: 'inventory',
         component: Inventory,
         meta: {
-          title: i18n.t('appPageTitle.inventory'),
+          title: i18n.global.t('appPageTitle.inventory'),
         },
       },
       {
@@ -156,7 +156,7 @@ const routes = [
         name: 'sensors',
         component: Sensors,
         meta: {
-          title: i18n.t('appPageTitle.sensors'),
+          title: i18n.global.t('appPageTitle.sensors'),
         },
       },
       {
@@ -164,7 +164,7 @@ const routes = [
         name: 'pcie-topology',
         component: PcieTopology,
         meta: {
-          title: i18n.t('appPageTitle.pcieTopology'),
+          title: i18n.global.t('appPageTitle.pcieTopology'),
         },
       },
       {
@@ -172,7 +172,7 @@ const routes = [
         name: 'concurrent-maintenance',
         component: ConcurrentMaintenance,
         meta: {
-          title: i18n.t('appPageTitle.concurrentMaintenance'),
+          title: i18n.global.t('appPageTitle.concurrentMaintenance'),
         },
       },
       {
@@ -180,7 +180,7 @@ const routes = [
         name: 'sessions',
         component: Sessions,
         meta: {
-          title: i18n.t('appPageTitle.sessions'),
+          title: i18n.global.t('appPageTitle.sessions'),
         },
       },
       {
@@ -188,7 +188,7 @@ const routes = [
         name: 'ldap',
         component: Ldap,
         meta: {
-          title: i18n.t('appPageTitle.ldap'),
+          title: i18n.global.t('appPageTitle.ldap'),
         },
       },
       {
@@ -196,7 +196,7 @@ const routes = [
         name: 'local-users',
         component: UserManagement,
         meta: {
-          title: i18n.t('appPageTitle.userManagement'),
+          title: i18n.global.t('appPageTitle.userManagement'),
         },
       },
       {
@@ -204,7 +204,7 @@ const routes = [
         name: 'policies',
         component: Policies,
         meta: {
-          title: i18n.t('appPageTitle.policies'),
+          title: i18n.global.t('appPageTitle.policies'),
         },
       },
       {
@@ -212,7 +212,7 @@ const routes = [
         name: 'certificates',
         component: Certificates,
         meta: {
-          title: i18n.t('appPageTitle.certificates'),
+          title: i18n.global.t('appPageTitle.certificates'),
         },
       },
       {
@@ -220,7 +220,7 @@ const routes = [
         name: 'date-time',
         component: DateTime,
         meta: {
-          title: i18n.t('appPageTitle.dateTime'),
+          title: i18n.global.t('appPageTitle.dateTime'),
         },
       },
       {
@@ -228,7 +228,7 @@ const routes = [
         name: 'snmp-alerts',
         component: SnmpAlerts,
         meta: {
-          title: i18n.t('appPageTitle.snmpAlerts'),
+          title: i18n.global.t('appPageTitle.snmpAlerts'),
         },
       },
       {
@@ -236,15 +236,15 @@ const routes = [
         name: 'factory-reset',
         component: FactoryReset,
         meta: {
-          title: i18n.t('appPageTitle.factoryReset'),
+          title: i18n.global.t('appPageTitle.factoryReset'),
         },
       },
-      {
+      { 
         path: '/operations/key-clear',
         name: 'key-clear',
         component: KeyClear,
         meta: {
-          title: i18n.t('appPageTitle.keyClear'),
+          title: i18n.global.t('appPageTitle.keyClear'),
         },
       },
       {
@@ -252,7 +252,7 @@ const routes = [
         name: 'kvm',
         component: Kvm,
         meta: {
-          title: i18n.t('appPageTitle.kvm'),
+          title: i18n.global.t('appPageTitle.kvm'),
         },
       },
       {
@@ -260,7 +260,7 @@ const routes = [
         name: 'firmware',
         component: Firmware,
         meta: {
-          title: i18n.t('appPageTitle.firmware'),
+          title: i18n.global.t('appPageTitle.firmware'),
         },
       },
       {
@@ -268,7 +268,7 @@ const routes = [
         name: 'hardware-deconfiguration',
         component: HardwareDeconfiguration,
         meta: {
-          title: i18n.t('appPageTitle.deconfigurationHardware'),
+          title: i18n.global.t('appPageTitle.deconfigurationHardware'),
         },
       },
       {
@@ -276,7 +276,7 @@ const routes = [
         name: 'network',
         component: Network,
         meta: {
-          title: i18n.t('appPageTitle.network'),
+          title: i18n.global.t('appPageTitle.network'),
         },
       },
       {
@@ -284,7 +284,7 @@ const routes = [
         name: 'power-restore-policy',
         component: PowerRestorePolicy,
         meta: {
-          title: i18n.t('appPageTitle.powerRestorePolicy'),
+          title: i18n.global.t('appPageTitle.powerRestorePolicy'),
         },
       },
       {
@@ -292,7 +292,7 @@ const routes = [
         name: 'system-parameters',
         component: SystemParameters,
         meta: {
-          title: i18n.t('appPageTitle.systemParameters'),
+          title: i18n.global.t('appPageTitle.systemParameters'),
         },
       },
       {
@@ -300,7 +300,7 @@ const routes = [
         name: 'memory',
         component: Memory,
         meta: {
-          title: i18n.t('appPageTitle.memory'),
+          title: i18n.global.t('appPageTitle.memory'),
         },
       },
       {
@@ -308,7 +308,7 @@ const routes = [
         name: 'power',
         component: Power,
         meta: {
-          title: i18n.t('appPageTitle.power'),
+          title: i18n.global.t('appPageTitle.power'),
         },
       },
       {
@@ -316,7 +316,7 @@ const routes = [
         name: 'reboot-bmc',
         component: RebootBmc,
         meta: {
-          title: i18n.t('appPageTitle.rebootBmc'),
+          title: i18n.global.t('appPageTitle.rebootBmc'),
         },
       },
       {
@@ -324,7 +324,7 @@ const routes = [
         name: 'host-console',
         component: HostConsole,
         meta: {
-          title: i18n.t('appPageTitle.hostConsole'),
+          title: i18n.global.t('appPageTitle.hostConsole'),
         },
       },
       {
@@ -332,7 +332,7 @@ const routes = [
         name: 'server-power-operations',
         component: ServerPowerOperations,
         meta: {
-          title: i18n.t('appPageTitle.serverPowerOperations'),
+          title: i18n.global.t('appPageTitle.serverPowerOperations'),
         },
       },
       {
@@ -340,15 +340,16 @@ const routes = [
         name: 'virtual-media',
         component: VirtualMedia,
         meta: {
-          title: i18n.t('appPageTitle.virtualMedia'),
+          title: i18n.global.t('appPageTitle.virtualMedia'),
         },
       },
       {
+        // path: '/:pathMatch(.*)*',
         path: '*',
         name: 'page-not-found',
         component: PageNotFound,
         meta: {
-          title: i18n.t('appPageTitle.pageNotFound'),
+          title: i18n.global.t('appPageTitle.pageNotFound'),
         },
       },
     ],
