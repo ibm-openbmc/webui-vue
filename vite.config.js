@@ -79,7 +79,7 @@ export default defineConfig({
       },
       // { find: /^\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
       // { find: /^\.\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
-      // { find: /^\.\/routes$/, replacement: path.resolve(__dirname, `src/env/router/${VITE_APP_ENV_NAME}.js`) },
+      { find: /^\.\/routes$/, replacement: path.resolve(__dirname, `src/env/router/${VITE_APP_ENV_NAME}.js`) },
       // { find: /^\.\/AppNavigationData$/, replacement: path.resolve(__dirname, `src/env/components/AppNavigation/${VITE_APP_ENV_NAME}.js`) },
     ],
   },
