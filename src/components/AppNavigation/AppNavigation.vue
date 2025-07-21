@@ -1,6 +1,7 @@
-<!-- Work Requird -->
 <template>
-  <div>
+  <div
+    v-if="(modelType !== '--' && hmcMangedInfo !== null) || loadingCompleted"
+  >
     <div class="nav-container" :class="{ open: isNavigationOpen }">
       <nav ref="nav" :aria-label="$t('appNavigation.primaryNavigation')">
         <BNav vertical class="mb-4">
@@ -29,9 +30,9 @@
                 <icon-chevron-up class="icon-expand" />
               </BButton>
               <BCollapse :id="navItem.id" class="nav-item__nav">
-                <li class="">
+                <li>
                   <router-link
-                    v-for="(subNavItem, i) of filteredNavItem(navItem.children)"
+                    v-for="(subNavItem, i) of navItem.children"
                     :key="i"
                     :to="subNavItem.route"
                     :data-test-id="`nav-item-${subNavItem.id}`"
@@ -58,43 +59,51 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { AppNavigationData } from './AppNavigationData';
+//Do not change Mixin import.
+//Exact match alias set to support
+//dotenv customizations.
+import { ref, watch, onMounted, computed } from 'vue';
+import AppNavigationData from './AppNavigationData';
 import { useRoute } from 'vue-router';
-import { onMounted } from 'vue';
-import { GlobalStore } from '@/store';
-import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
+import { GlobalStore, UserManagementStore } from '@/store';
 import eventBus from '@/eventBus';
 
 const globalStore = GlobalStore();
-const { navigationItems } = AppNavigationData();
-let isNavigationOpen = ref(false);
-const route = useRoute();
-let currentUserRole = ref(null);
-onMounted(() => {
-  currentUserRole.value = globalStore.userPrivilege;
-  eventBus.on('toggle-navigation', toggleIsOpen);
-});
-// provide('isNavigationOpen', isNavigationOpen);
-watch(route, () => {
-  isNavigationOpen.value = false;
-});
-watch(isNavigationOpen, () => {
-  eventBus.emit('change-is-navigation-open', isNavigationOpen.value);
-});
-const toggleIsOpen = () => {
-  isNavigationOpen.value = !isNavigationOpen.value;
-};
-// provide('toggle-navigation', toggleIsOpen);
+const userManagementStore = UserManagementStore();
+  const isNavigationOpen = ref(false);
+  const loadingCompleted = ref(false);
+  const route = useRoute();
 
-const filteredNavItem = (navItem) => {
-  if (currentUserRole.value) {
-    return navItem.filter(({ exclusiveToRoles }) => {
-      if (!exclusiveToRoles?.length) return true;
-      return exclusiveToRoles.includes(currentUserRole);
+  const modelType = computed(() => {
+    return globalStore.modelTypeGetter;
+  });
+  const hmcMangedInfo = computed(() => {
+    return globalStore.hmcManagedGetter;
+  });
+  const currentUser = computed(() => {
+    return globalStore.currentUserGetter;
+  });
+  watch(route, () => {
+    isNavigationOpen.value = false;
+  });
+  watch(isNavigationOpen, () => {
+    eventBus.emit('change-is-navigation-open', isNavigationOpen.value);
+  });
+  onMounted(() => {
+    eventBus.on('loading-bar-status', (value) => {
+      loadingCompleted.value = value;
     });
-  } else return navItem;
-};
+    eventBus.on('toggle-navigation', toggleIsOpen);
+  });
+  const checkForUserData = () => {
+      if (!currentUser.value) {
+        userManagementStore.getUsers();
+        globalStore.getCurrentUser();
+      }
+    };
+  const toggleIsOpen = () => {
+      isNavigationOpen.value = !isNavigationOpen.value;
+  };
 </script>
 
 <style scoped lang="scss">
