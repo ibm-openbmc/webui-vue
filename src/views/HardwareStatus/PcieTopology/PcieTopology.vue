@@ -200,7 +200,7 @@
 
       <b-col sm="6">
         <b-pagination class="b-pagination" v-model="currentPageNo" first-number last-number :per-page="itemPerPage === 0 ? filteredEntries.length || 1 : itemPerPage"
-          :total-rows="getTotalRowCount(filteredRows, itemPerPage)" aria-controls="table-event-logs" />
+          :total-rows="getTotalRowCount(filteredRows)" aria-controls="table-event-logs" />
       </b-col>
     </b-row>
 

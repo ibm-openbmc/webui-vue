@@ -126,7 +126,7 @@
           first-number
           last-number
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
-          :total-rows="getTotalRowCount(filteredRows, itemPerPage)"
+          :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-audit-logs"
         />
       </BCol>

@@ -123,7 +123,7 @@
           first-number
           last-number
           :per-page="perPageVal === 0 ? filteredLogs.length || 1 : perPageVal"
-          :total-rows="getTotalRowCount(filteredRows, perPageVal)"
+          :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-post-code-logs"
         />
       </BCol>

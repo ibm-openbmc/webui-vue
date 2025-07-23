@@ -90,7 +90,7 @@
           first-number
           last-number
           :per-page="itemPerPage === 0 ? filteredCores.length || 1 : itemPerPage"
-          :total-rows="getTotalRowCount(filteredRows, itemPerPage)"
+          :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-sensors"
         />
       </BCol>
