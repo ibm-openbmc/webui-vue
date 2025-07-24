@@ -7,10 +7,11 @@ import IconSecurity from '@carbon/icons-vue/es/security/16';
 import IconDataBase from '@carbon/icons-vue/es/data--base--alt/16';
 import IconDocument from '@carbon/icons-vue/es/document/16';
 import i18n from '@/i18n';
+import { GlobalStore } from '@/store'
 
 import { ref, computed, onMounted } from 'vue';
 
-const AppNavigationData = ({ $store }) => {
+const AppNavigationData = () => {
   const navigationData = ref([
         {
           id: 'overview',
@@ -259,12 +260,13 @@ const AppNavigationData = ({ $store }) => {
           icon: IconDocument,
         },
   ]);
-
+  
+  const globalStore = GlobalStore();
   const roleId = computed(
-    () => $store?.getters?.['global/currentUser']?.RoleId,
+    () => globalStore.currentUserGetter?.RoleId,
   );
-  const systemInfo = computed(() => $store?.getters['global/modelType']);
-  const hmcInfo = computed(() => $store?.getters['global/hmcManaged']);
+  const systemInfo = computed(() => globalStore.modelTypeGetter);
+  const hmcInfo = computed(() => globalStore.hmcManagedGetter);
 
   const model = computed(() =>
     systemInfo.value?.startsWith('9043') ? 'Everest' : 'NotEverest',
@@ -298,7 +300,7 @@ const AppNavigationData = ({ $store }) => {
   });
 
   onMounted(() => {
-    $store.dispatch('global/getHmcManaged');
+    globalStore.getHmcManaged();
   });
 
   return {
