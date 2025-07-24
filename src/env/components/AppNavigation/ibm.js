@@ -6,11 +6,11 @@ import IconSettings from '@carbon/icons-vue/es/settings/16';
 import IconSecurity from '@carbon/icons-vue/es/security/16';
 import IconDataBase from '@carbon/icons-vue/es/data--base--alt/16';
 import IconDocument from '@carbon/icons-vue/es/document/16';
-// import i18n from '@/i18n';
+import i18n from '@/i18n';
 
 import { ref, computed, onMounted } from 'vue';
 
-const AppNavigationData = ({ $store, i18n }) => {
+const AppNavigationData = ({ $store }) => {
   const navigationData = ref([
         {
           id: 'overview',

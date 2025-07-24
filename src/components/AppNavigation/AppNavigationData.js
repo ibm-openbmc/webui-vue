@@ -5,6 +5,8 @@ import IconSettingsAdjust from '@carbon/icons-vue/es/settings--adjust/16';
 import IconSettings from '@carbon/icons-vue/es/settings/16';
 import IconSecurity from '@carbon/icons-vue/es/security/16';
 import IconDataBase from '@carbon/icons-vue/es/data--base--alt/16';
+import i18n from '@/i18n';
+
 const AppNavigationData = () => {
   const navigationItems = [
         {

@@ -68,6 +68,7 @@ import { useRoute } from 'vue-router';
 import { GlobalStore, UserManagementStore } from '@/store';
 import eventBus from '@/eventBus';
 
+const navigationItems = AppNavigationData().navigationItems;
 const globalStore = GlobalStore();
 const userManagementStore = UserManagementStore();
   const isNavigationOpen = ref(false);
