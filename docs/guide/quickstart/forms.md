@@ -1,41 +1,41 @@
 # Forms
 
-Forms are created using the [bootstrap-vue form
-component](https://bootstrap-vue.org/docs/components/form)
+Forms are created using the [bootstrap-vue-next form
+component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form.html#form)
 and validated with the [Vuelidate](https://vuelidate.js.org/#sub-installation)
 plugin.
 
 ## Form component
 
-When creating a new form, use the `<b-form>` [form
-component](https://bootstrap-vue.org/docs/components/form). Use the `.prevent`
+When creating a new form, use the `<BForm>` [form
+component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form.html#form). Use the `.prevent`
 event modifier on submit to prevent the submit event from reloading the page.
 
 ## Form group component
 
-The `<b-form-group>` [form group
-component](https://bootstrap-vue.org/docs/components/form-group)
+The `<BFormGroup>` [form group
+component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-group.html)
 pairs form controls with a legend or label, helper text, invalid/valid
 feedback text, and visual validation state feedback. Learn more about
 commonly used form components:
 
-- [Form checkbox](https://bootstrap-vue.org/docs/components/form-checkbox)
-- [Form input](https://bootstrap-vue.org/docs/components/form-input)
-- [Form radio](https://bootstrap-vue.org/docs/components/form-radio)
-- [Form select](https://bootstrap-vue.org/docs/components/form-select)
-- [Form file custom component](/guide/components/file-upload)
+- [Form checkbox](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-checkbox.html#form-checkbox)
+- [Form input](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-input.html)
+- [Form radio](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-radio.html)
+- [Form select](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-select.html)
+- [Form file custom component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-file.html#form-file)
 
-When helper text is provided, use the `<b-form-text>` component and `aria-describedby` on the
+When helper text is provided, use the `<BFormText>` component and `aria-describedby` on the
 form group component the helper text describes.
 
 ## Validation
 
 For custom form validation messages, disable browser native HTML5
-validation by setting the `novalidate` prop on `<b-form>`. Use Vuelidate to
+validation by setting the `novalidate` prop on `<BForm>`. Use Vuelidate to
 check the form validation state and add
-custom validation messages in the `<b-form-invalid-feedback>` component.
+custom validation messages in the `<BFormInvalidFeedback>` component.
 
-When creating a new form add the `VuelidateMixin`
+When creating a new form add the `useVuelidateComposable`
 to the `scripts` block and import any
 [validators](https://vuelidate.js.org/#validators) needed
 such as: `required`, `requiredIf`, etc. The use of built-in validators is
@@ -47,15 +47,15 @@ A complete form will look like this.
 
 ```vue
 <template>
-  <b-form novalidate @submit.prevent="handleSubmit">
-    <b-form-group
+  <BForm novalidate @submit.prevent="handleSubmit">
+    <BFormGroup
       :label="$t('pageName.form.inputLabel')"
       label-for="form-input-id"
     >
-      <b-form-text id="form-input-helper-text">
+      <BFormText id="form-input-helper-text">
         {{ $t('pageName.form.helperText') }}
-      </b-form-text>
-      <b-form-input
+      </BFormText>
+      <BFormInput
         id="form-input-id"
         v-model="form.input"
         type="text"
@@ -63,64 +63,56 @@ A complete form will look like this.
         :state="getValidationState($v.form.input)"
         @change="$v.form.input.$touch()"
       />
-      <b-form-invalid-feedback role="alert">
+      <BFormInvalidFeedback role="alert">
         <div v-if="!$v.form.input.required">
           {{ $t('global.form.fieldRequired') }}
         </div>
-      </b-form-invalid-feedback>
-    </b-form-group>
-    <b-button variant="primary" type="submit" class="mb-3">
+      </BFormInvalidFeedback>
+    </BFormGroup>
+    <BButton variant="primary" type="submit" class="mb-3">
       {{ $t('global.action.save') }}
-    </b-button>
-  </b-form>
+    </BButton>
+  </BForm>
 </template>
 
 <script>
-import VuelidateMixin from '@/components/Mixins/VuelidateMixin';
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import useToastComposable from '@/components/Composables/useToastComposable';
+import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useVuelidate } from '@vuelidate/core';
 import { required } from 'vuelidate/lib/validators';
+import { ExampleStore } from '@/store';
 
-export default {
-  name: 'PageName',
-  components: {
-  ...
-  },
-  mixins: [VuelidateMixin],
-  data(){
-    form: {
+const { successToast, errorToast } = useToastComposable();
+const exampleStore = ExampleStore();
+
+const form = ref({
       input: '',
-    }
-  },
-  validations() {
-    return {
+    });
+
+const rules = computed(() => ({
       form: {
         input: { required },
       }
-    }
-  },
-  computed: {
-    ...
-  },
-  created() {
-    ...
-  },
-  methods:{
-    handleSubmit() {
-      this.$v.$touch();
-      if (this.$v.$invalid) return;
-      this.$store
-        .dispatch(
-          'pageName/updateFormData',
-          formData
-        )
+}));
+const v$ = useVuelidate(rules, { input });
+
+const cumputedFunction = computed(() => {
+      ...
+    })
+
+const handleSubmit = () => {
+      v$.$touch();
+      if (v$.$invalid) return;
+      exampleStore.updateFormData(formData)
         .then((success) => {
-          this.successToast(success);
+          successToast(success);
         })
-        .catch(({ message }) => this.errorToast(message))
+        .catch(({ message }) => errorToast(message))
         .finally(() => {
-          this.$v.form.$reset();
-          this.endLoader();
+          v$.form.$reset();
+          endLoader();
         });
     },
-};
 </script>
 ```

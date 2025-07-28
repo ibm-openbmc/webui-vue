@@ -11,10 +11,10 @@ application navigation, and theming.
 
 [Read more in the Build Customization section](/customization/build)
 
-### Configuring environment specific builds
+<!-- ### Configuring environment specific builds
 The complete instructions can be found in the `env` directory in a file called
 env.md or by viewing the [Configuring environment specific builds
-page](./env.md)
+page](./env.md) -->
 
 ## Bootstrap Sass Options
 The Bootstrap Sass options are global styling toggles. The naming convention for
@@ -58,7 +58,7 @@ and collapsing elements.
 
 ### More Information
 - [Carbon Design System Motion
-  Guidelines](https://www.carbondesignsystem.com/guidelines/motion/basics/)
+  Guidelines](https://carbondesignsystem.com/elements/motion/overview/)
 - [Including Animation In Your Design
   System](https://www.smashingmagazine.com/2019/02/animation-design-system/)
 
@@ -81,7 +81,7 @@ function that only accepts a key from the Bootstrap `$grid-breakpoints` map.
 - [Bootstrap Sass
   Mixins](https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints)
 - [Customizing the Bootstrap
-  Grid](https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints)
+  Grid](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/grid-system.html#responsive-classes)
 
 ### $header-height
 This variable determines the height of the OpenBMC Web UI header element.

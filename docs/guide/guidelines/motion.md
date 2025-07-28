@@ -2,7 +2,7 @@
 The motion guidelines are based on Carbon Design System guidelines. These
 guidelines avoid easing curves that are unnatural, distracting, or purely
 decorative. [The documentation below is attributed to Carbon's animation
-documentation](https://www.carbondesignsystem.com/guidelines/motion/basics/).
+documentation](https://carbondesignsystem.com/elements/motion/overview/).
 
 
 ## Easing

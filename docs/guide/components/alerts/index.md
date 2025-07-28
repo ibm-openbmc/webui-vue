@@ -4,8 +4,8 @@ cannot manually dismiss. With exception to the error message on the login page,
 alerts are not triggered by user action. Success and error notifications based
 on user actions are created using a toast component.
 
-[Learn more about Bootstrap-vue alert
-options](https://bootstrap-vue.js.org/docs/components/alert)
+[Learn more about Bootstrap-vue-next alert
+options](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/alert)
 
 ![Alert examples](./alert.png)
 

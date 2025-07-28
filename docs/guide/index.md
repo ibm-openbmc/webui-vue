@@ -16,12 +16,12 @@ Having an understanding of semantic HTML, CSS, and JavaScript is the critical
 knowledge required to contribute to this project. The frameworks and libraries
 used to build this UI include:
 - [Vue](https://vuejs.org/)
-- [Vuex](https://vuex.vuejs.org/)
+- [Pinia](https://pinia.vuejs.org/)
 - [Vue Router](https://router.vuejs.org/)
 - [Axios](https://github.com/axios/axios)
-- [Bootstrap-vue](https://bootstrap-vue.js.org/)
+- [Bootstrap-vue-next](https://bootstrap-vue-next.github.io/bootstrap-vue-next/)
 - [Vuelidate](https://vuelidate.js.org/)
-- [Vue I18n](https://kazupon.github.io/vue-i18n/)
+- [Vue I18n](https://vue-i18n.intlify.dev/)
 
 ::: tip Acquiring an understanding of these technologies will also be necessary.
 :::
@@ -36,6 +36,6 @@ application. How to theme the application to meet company brand guidelines is
 documented in [Customization](/customization/).
 
 ## Components
-The [components section](/guide/components/) is a guide to using both custom Vue
+The [components section](components/alerts) is a guide to using both custom Vue
 components and components from the Bootstrap-Vue library.
 

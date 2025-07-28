@@ -3,7 +3,7 @@ The OpenBMC Web UI implements internationalization and separates the language-
 specific parts of the interface from the rest of the code, so they can be
 easily replaced. The OpenBMC Web UI uses the following library for
 internationalization:
-- [Vue I18n](https://kazupon.github.io/vue-i18n/introduction.html)
+- [Vue I18n](https://vue-i18n.intlify.dev/)
 
 ## Key naming convention
 The OpenBMC Web UI follows the following key naming conventions:
@@ -17,7 +17,7 @@ structure and improves readability of the language file.
    - e.g. `pageEventLogs.table.eventType`
 - Avoid any complex linked locale messages.
 - Alphabetize object keys. This helps in locating the keys.
-- We use the `$t()` function in markup and `this.$t` in scripts (which Vue I18n
+- We use the `$t()` function in markup and `i18n.global.t` in scripts (which Vue I18n
 provides to our components) for outputting translation messages.
 
 ## Using the Vue I18n plugin
@@ -52,7 +52,7 @@ node node_modules/vue-i18n-extract/bin/vue-i18n-extract.js -v 'src/**/*.?(js|vue
 
 - Vue I18n’s `$tc()` function can help with displaying plurals.
 [Learn more about
-pluralization.](https://kazupon.github.io/vue-i18n/guide/pluralization.html)
+pluralization.](https://vue-i18n.intlify.dev/guide/essentials/pluralization.html#custom-pluralization)
 
 ```json
 "modal": {

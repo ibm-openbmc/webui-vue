@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="color-tile-container">
-      <div v-for="color in colors">
+      <div v-for="color in colors" :key="color.variable">
         <div
           :style="{ backgroundColor: color.hex }"
           :class="{ 'color-tile--border': color.border }"

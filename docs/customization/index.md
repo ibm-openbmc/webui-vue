@@ -4,7 +4,7 @@ This section discusses the structure and purpose of the SCSS files and how to
 customize the application using Bootstrap theming.
 
 [Read more about Bootstrap
-Theming](https://getbootstrap.com/docs/4.0/getting-started/theming)
+Theming](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/reference/theming-bootstrap.html#theming-bootstrap)
 
 ## SCSS Directory Structure
 
@@ -53,6 +53,7 @@ files are based on these two libraries.
                ├─ _kvm.scss
                ├─ _modal.scss
                ├─ _pagination.scss
+               ├─ _section-divider.scss
                ├─ _sol.scss
                ├─ _tables.scss
                └─ _toasts.scss
@@ -162,7 +163,7 @@ $theme-colors: (
 ##### Color Resources
 
 - [Learn more about Bootstrap
-  colors](https://getbootstrap.com/docs/4.0/getting-started/theming/#color)
+  colors](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/reference/color-variants.html#color-variants-and-css-class-mapping)
 - [Learn more about Bootstrap
   variables](https://getbootstrap.com/docs/4.0/getting-started/theming/#css-variables)
 - [View the color palette and hex values in the color
@@ -202,8 +203,8 @@ set color highlights for some pseudo-elements like `: hover`.
     &:hover {
       background-color: theme-color-dark('light');
     }
-  }
 }
+
 
 &.alert-info {
 border-left-color: theme-color("info");
@@ -257,7 +258,7 @@ $exit-easing--expressive: cubic-bezier(0.4, 0.14, 1, 1);
 - [Including Animation In Your Design
   System](https://www.smashingmagazine.com/2019/02/animation-design-system/)
 - [Carbon Design System motion
-  guidelines](https://www.carbondesignsystem.com/guidelines/motion/basics/)
+  guidelines](https://carbondesignsystem.com/elements/motion/overview/)
 
 #### `_variables.scss`
 

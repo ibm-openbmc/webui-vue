@@ -9,11 +9,15 @@
     "build": "vite build",
     "preview": "vite preview --host",
     "test": "vitest run",
-    "test:unit": "vitest",
+    "test:unit": "npm run test",
+    "test:update": "npm test -- -u",
     "test:watch": "vitest --watch",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore  && npm run lint:success || true",
     "lint:success": "echo No lint errors found!",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   },
   "dependencies": {
     "@carbon/motion": "11.16.0",
@@ -63,6 +67,7 @@
     "vite": "5.2.10",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-sass": "0.1.0",
+    "vitepress": "1.6.3",
     "vitest": "0.33.0"
   },
   "lint-staged": {

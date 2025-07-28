@@ -3,7 +3,7 @@
 ## Store
 
 A "store" is a container that holds the application's state. [Learn more about
-Vuex.](https://vuex.vuejs.org/)
+Pinia.](https://pinia.vuejs.org/)
 
 ```sh
 # Store structure
@@ -22,41 +22,28 @@ Vuex.](https://vuex.vuejs.org/)
 
 The application store is divided into modules to prevent the store from getting
 bloated. Each module contains its own state, mutations, actions, and getters.
-[Learn more about Vuex modules.](https://vuex.vuejs.org/guide/modules.html)
+[Learn more about Pinia modules.](https://pinia.vuejs.org/core-concepts/)
 
 #### Module Anatomy
 
 - **State:** You cannot directly mutate the store's state. [Learn more about
-  state.](https://vuex.vuejs.org/guide/state.html)
+  state.](https://pinia.vuejs.org/core-concepts/state.html)
 - **Getters:** Getters are used to compute derived state based on store state.
-  [Learn more about getters.](https://vuex.vuejs.org/guide/getters.html)
-- **Mutations:** The only way to mutate the state is by committing mutations,
-  which are synchronous transactions. [Learn more about
-  mutations.](https://vuex.vuejs.org/guide/mutations.html)
+  [Learn more about getters.](https://pinia.vuejs.org/core-concepts/getters.html)
 - **Actions:** Asynchronous logic should be encapsulated in, and can be composed
   with actions. [Learn more about
-  actions.](https://vuex.vuejs.org/guide/actions.html)
+  actions.](https://pinia.vuejs.org/core-concepts/actions.html)
 
 Import new store modules in `src/store/index.js`.
 
 ```js
 // `src/store/index.js`
 
-import Vue from 'vue';
-import Vuex from 'vuex';
-
 import FeatureNameStore from './modules/FeatureNameStore';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {
-    feature: FeatureNameStore, // store names can be renamed for brevity
-  },
-});
+export {
+  FeatureNameStore, // store names can be renamed for brevity
+  };
 ```
 
 ## Complete store
@@ -66,21 +53,17 @@ A store module will look like this.
 ```js
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { defineStore } from 'pinia';
 
-const FeatureNameStore = {
+export const FeatureNameStore = defineStore('featureName',{
   // getters, actions, and mutations will be namespaced
   // based on the path the module is registered at
-  namespaced: true,
-  state: {
+  state: () => ({
     exampleValue: 'Off',
-  },
+  }),
   getters: {
     // namespace -> getters['featureNameStore/getExampleValue']
-    getExampleValue: state => state.exampleValue,
-  },
-  mutations: {
-    // namespace -> commit('featureNameStore/setExampleValue)
-    setExampleValue: state => state.exampleValue,
+    getExampleValue: (state) => state.exampleValue,
   },
   actions: {
     // namespace -> dispatch('featureNameStore/getExampleValue')
@@ -88,7 +71,7 @@ const FeatureNameStore = {
       return await api
         .get('/redfish/v1/../..')
         .then(response => {
-          commit('setExampleValue', response.data.Value);
+          this.exampleValue = response.data.Value;
         })
         .catch(error => console.log(error));
     },
@@ -97,14 +80,14 @@ const FeatureNameStore = {
       return await api
         .patch('/redfish/v1/../..', { Value: payload })
         .then(() => {
-          commit('setExampleValue', payload);
+          this.exampleValue = payload;
         })
         .catch(error => {
           console.log(error);
         });
     },
   },
-};
+});
 
 export default FeatureNameStore;
 ```

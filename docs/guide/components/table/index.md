@@ -1,16 +1,16 @@
 # Table
 
-All tables in the application are using the [BoostrapVue table
-component](https://bootstrap-vue.org/docs/components/table).
+All tables in the application are using the [Boostrap-vue-next table
+component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html).
 
-To use the component, include the `<b-table>` tag in the template. The component
+To use the component, include the `<BTable>` tag in the template. The component
 is registered globally so does not need to be imported in each SFC.
 
 ## Basic table
 There are a few required properties to maintain consistency across the
-application. The full list of options can be viewed on the [Bootstrap-vue table
+application. The full list of options can be viewed on the [Bootstrap-vue-next table
 component's documentation
-page](https://bootstrap-vue.org/docs/components/table#comp-ref-b-table-props).
+page](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#table-helper-components).
 
 
 ### Required properties
@@ -30,7 +30,7 @@ example](./table-empty.png)
 
 ```vue
 <template>
-  <b-table
+  <BTable
     hover
     show-empty
     responsive="md"
@@ -40,10 +40,10 @@ example](./table-empty.png)
   />
 </template>
 
-<script>
-  export default {
-    data() {
-      items: [
+<script setup>
+import { ref } from 'vue';
+
+const items = ref([
         {
           name: 'Babe',
           age: '3 years',
@@ -54,30 +54,28 @@ example](./table-empty.png)
           age: '4 months',
           color: 'grey'
         },
-      ],
-      fields: [
+      ]);
+const fields = ref([
         {
           key: 'name',
-          label: this.$t('table.name') //translated label
+          label: i18n.global.t('table.name') //translated label
         },
         {
           key: 'age',
-          label: this.$t('table.age') //translated label
+          label: i18n.global.t('table.age') //translated label
         },
         {
           key: 'color',
-          label: this.$t('table.color') // translated label
+          label: i18n.global.t('table.color') // translated label
         }
-      ]
-    }
-  }
+      ]);
 </script>
 ```
 
 ## Sort
 
 To enable table sort, include `sortable: true` in the fields array for sortable
-columns and add the following props to the `<b-table>` component:
+columns and add the following props to the `<BTable>` component:
 
 - `sort-by`
 - `no-sort-reset`
@@ -88,7 +86,7 @@ columns and add the following props to the `<b-table>` component:
 
 ```vue
 <template>
-  <b-table
+  <BTable
     hover
     no-sort-reset
     sort-icon-left
@@ -98,12 +96,11 @@ columns and add the following props to the `<b-table>` component:
     :fields="fields"
   />
 </template>
-<script>
-export default {
-  data() {
-    return {
-      items: [...],
-      fields: [
+<script setup>
+import { ref } from 'vue';
+
+const items = ref([...]);
+const fields = ref([
         {
           key: 'name',
           label: 'Name', //should be translated
@@ -119,10 +116,7 @@ export default {
           label: 'Description', //should be translated
           sortable: false
         }
-      ]
-    }
-  }
-}
+      ]);
 </script>
 ```
 
@@ -131,25 +125,25 @@ export default {
 To add an expandable row in the table, add a column for the expand button in the
 fields array. Include the tdClass `table-row-expand` to ensure icon rotation is
 handled. Use the built in [cell
-slot](https://bootstrap-vue.org/docs/components/table#comp-ref-b-table-slots) to
+slot](https://bootstrap-vue.org/docs/components/table#comp-ref-BTable-slots) to
 target the expand button column and add a button with the chevron icon.
 
 Include the
-[TableRowExpandMixin](https://github.com/openbmc/webui-vue/blob/master/src/components/Mixins/TableRowExpandMixin.js).
-The mixin contains the dynamic `aria-label` and `title` attribute values that
+[useTableRowExpandComposable](https://github.com/openbmc/webui-vue/blob/master/src/components/Mixins/TableRowExpandMixin.js).
+The composable contains the dynamic `aria-label` and `title` attribute values that
 need to be included with the expand button. The `toggleRowDetails` method should
 be the button's click event callback. Be sure to pass the `row` object to the
 function.
 
 Use the [row-details
-slot](https://bootstrap-vue.org/docs/components/table#comp-ref-b-table-slots) to
+slot](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#row-details-support) to
 format the expanded row content. The slot has access to the row `item` property.
 
 ### Summary
 
 1. Add a column for the expansion row button with the tdClass,
    `table-row-expand`
-2. Include the `TableRowExpandMixin` to handle the dynamic aria label, title,
+2. Include the `useTableRowExpandComposable` to handle the dynamic aria label, title,
    and row expansion toggling
 3. Use the `#cell` slot to target the expandable row column and add the button
    with accessible markup and click handler
@@ -159,67 +153,61 @@ format the expanded row content. The slot has access to the row `item` property.
 
 ```vue
 <template>
-  <b-table
+  <BTable
     hover
     responsive="md"
     :items="items"
     :fields="fields"
   >
     <template #cell(expandRow)="row">
-      <b-button
+      <BButton
         variant="link"
         :aria-label="expandRowLabel"
         :title="expandRowLabel"
         @click="toggleRowDetails(row)"
       >
         <icon-chevron />
-      </b-button>
+      </BButton>
     </template>
     <template #row-details="row">
       <h3>Expanded row details</h3>
       {{ row.item }}
     </template>
-  </b-table>
+  </BTable>
 </template>
-<script>
+<script setup>
+import { ref } from 'vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
-import TableRowExpandMixin, { expandRowLabel } from '@/components/Mixins/TableRowExpandMixin';
+import useTableRowExpandComposable from "../../../components/Composables/useTableRowExpandComposable";
 
-export default {
-  components: { IconChevron },
-  mixins: [ TableRowExpandMixin ],
-  data() {
-    return {
-      items: [...],
-      fields: [
+const { expandRowLabel } = useTableRowExpandComposable();
+
+const items =ref([...]);
+const fields = ref([
         {
           key: 'expandRow',
           label: '',
           tdClass: 'table-row-expand',
         },
         ...
-      ],
-      expandRowLabel
-    }
-  }
-}
+      ])
 </script>
 ```
 
 ## Search
 
 The table is leveraging [BootstrapVue table
-filtering](https://bootstrap-vue.org/docs/components/table#filtering) for
+filtering](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#filtering) for
 search. Add the
-[@filtered](https://bootstrap-vue.org/docs/components/table#filter-events) event
-listener onto the `<b-table>` component. The event callback should track the
+[@filtered](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#filter-events) event
+listener onto the `<BTable>` component. The event callback should track the
 total filtered items count.
 
 Import the `<search>` and `<table-cell-count>` components and include them in
-the template above the `<b-table>` component.
+the template above the `<BTable>` component.
 
 Include the
-[SearchFilterMixin](https://github.com/openbmc/webui-vue/blob/master/src/components/Mixins/SearchFilterMixin.js).
+[useSearchFilterComposable](https://github.com/openbmc/webui-vue/blob/master/src/components/Mixins/SearchFilterMixin.js).
 Add the `@change-search` and `@clear-search` event listeners on the `<search>`
 component and use the corresponding `onChangeSearchInput` and
 `onClearSearchInput` methods as the event callbacks. The table should also
@@ -239,22 +227,22 @@ if there are no search matches.
 
 ```vue
 <template>
-  <b-container>
-  <b-row>
-    <b-col>
+  <BContainer>
+  <BRow>
+    <BCol>
       <search
         @changeSearch="onChangeSearchInput"
         @clearSearch="onClearSearchInput"
       />
-    </b-col>
-    <b-col>
+    </BCol>
+    <BCol>
       <table-cell-count
         :filtered-items-count="filteredItemsCount"
         :total-number-of-cells="items.length"
       />
-    </b-col>
-  </b-row>
-  <b-table
+    </BCol>
+  </BRow>
+  <BTable
     hover
     responsive="md"
     :items="items"
@@ -263,35 +251,27 @@ if there are no search matches.
     :empty-filtered-text="$t('global.table.emptySearchMessage')"
     @filtered="onFiltered"
   />
-  </b-container>
+  </BContainer>
 </template>
-<script>
+<script setup>
+import { ref, computed } from 'vue';
 import Search from '@/components/Global/Search';
 import TableCellCount from '@/components/Global/TableCellCount';
-import SearchFilterMixin, { searchFilter } from '@/components/Mixins/SearchFilterMixin';
+import useSearchFilterComposable from "../../../components/Composables/useSearchFilterComposable";
 
-export default {
-  components: { Search, TableCellCount },
-  mixins: [ SearchFilterMixin ],
-  data() {
-    return {
-      items: [...],
-      fields: [...],
-      searchFilter,
-      filteredItems: [],
-    }
-  },
-  computed: {
-    filteredItemsCount() {
-      return this.filteredItems.length;
-    },
-  },
-  methods: {
-    onFiltered(items) {
-      this.filteredItems = items;
-    },
-  },
-}
+const { searchFilterInput } = useSearchFilterComposable();
+
+const items = ref([...]);
+const fields = ref([...]);
+const filteredItems = ref([]);
+
+const filteredItemsCount = computed(() => {
+      return filteredItems.value.length;
+    });
+
+const onFiltered = (items) => {
+      filteredItems.value = items.value;
+    };
 </script>
 ```
 
@@ -310,7 +290,7 @@ component will emit a `@click-table-action` with the event value.
 
 ```vue
 <template>
-  <b-table
+  <BTable
     hover
     responsive="md"
     :items="itemsWithActions"
@@ -330,60 +310,51 @@ component will emit a `@click-table-action` with the event value.
         </template>
       </table-row-action>
     </template>
-  </b-table>
+  </BTable>
 </template>
 <script>
+import { ref } from 'vue';
 import IconDelete from '@carbon/icons-vue/es/trash-can/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
-import TableRowAction from '@/components/Global/TableRowAction';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
 
-export default {
-  components: { IconDelete, IconEdit, TableRowAction },
-  data() {
-    return {
-      items: [...],
-      fields: [
+const items = ref([...]);
+const fields = ref([
         ...,
         {
           key: 'actions',
           label: '',
           tdClass: 'text-right text-nowrap',
         }
-      ],
-    }
-  },
-  computed: {
-    itemsWithActions() {
-      return this.items.map((item) => {
+      ]);
+
+const itemsWithActions = computed(() => {
+      return items.value.map((item) => {
         return {
           ...item,
           actions: [
             {
               value: 'edit',
-              title: this.$t('global.action.edit'),
+              title: i18n.global.t('global.action.edit'),
             },
             {
               value: 'delete',
-              title: this.$t('global.action.delete'),
+              title: i18n.global.t('global.action.delete'),
             },
           ],
         };
       });
-    }
-  },
-  methods: {
-    onTableRowAction(event, row) {
+    });
+const onTableRowAction = (event, row) => {
       // row action callback
-    }
-  }
-}
+    };
 </script>
 ```
 
 ## Filters
 
 To add a table dropdown filter:
-1. Import the `<table-filter> `component and TableFilterMixin.
+1. Import the `<table-filter> `component and useTableFilterComposable.
 1. Add a filters prop to the `<table-filters>` component. This prop should be an
    array of filter groups–each required to have a key, label, and values prop.
 
@@ -394,7 +365,7 @@ in the dropdown.
 
 The component will emit a `@filter-change` event that will provide the filter
 group and all selected values in the group. Use the getFilteredTableData method
-from the TableFilterMixin to show the filtered table data.
+from the useTableFilterComposable to show the filtered table data.
 
 ![Table filter example](./table-filter.png)
 
@@ -403,15 +374,15 @@ from the TableFilterMixin to show the filtered table data.
 ```vue
 <template>
   <b-container>
-    <b-row>
-      <b-col class="text-right">
+    <BRow>
+      <BCol class="text-right">
         <table-filter
           :filters="tableFilters"
           @filter-change="onTableFilterChange"
         />
-      </b-col>
-    </b-row>
-    <b-table
+      </BCol>
+    </BRow>
+    <BTable
       hover
       responsive="md"
       :items="filteredItems"
@@ -419,38 +390,31 @@ from the TableFilterMixin to show the filtered table data.
     />
   </b-container>
 </template>
-<script>
-import TableFilter from '@/components/Global/TableFilter';
-import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
+<script setup>
+import { ref, computed } from 'vue';
+import TableFilter from '@/components/Global/TableFilter.vue';
+import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
 
-export default {
-  components: { TableFilter },
-  mixins: [ TableFilterMixin ],
-  data() {
-    return {
-      items: [...],
-      fields: [...],
-      tableFilters: [
+const { getFilteredTableData } = useTableFilterComposable();
+
+const items = ref([...]);
+const fields = ref([...]);
+const tableFilters = ref([
         {
-          label: this.$t('table.status'),
+          label: i18n.global.t('table.status'),
           key: status,
           values: ['Open', 'Closed']
         }
-      ],
-      activeFilters: [],
-    },
-  },
-  computed: {
-    filteredItems() {
-      return this.getFilteredTableData(this.items, this.activeFilters);
-    },
-  },
-  methods: {
-    onTableFilterChange({ activeFilters }) {
-      this.activeFilters = activeFilters;
-    },
-  },
-}
+      ]);
+const activeFilters = ref([]);
+
+const filteredItems = computed(() => {
+      return getFilteredTableData(items.value, activeFilters.value);
+    });
+
+const onTableFilterChange = ({ activeFilters }) => {
+      activeFilters.value = activeFilters;
+    };
 </script>
 ```
 
@@ -459,7 +423,7 @@ export default {
 
 To add a date filter, import the `<table-date-filter>` component. It will emit a
 `@change` event with the user input date values. There is a date filter method,
-`getFilteredTableDataByDate`, in the `TableFilterMixin`.
+`getFilteredTableDataByDate`, in the `useTableFilterComposable`.
 
 
 ## Batch actions
@@ -468,14 +432,14 @@ Batch actions allow a user to take a single action on many items in a table at
 once.
 
 To add table batch actions:
-1. Import the `<table-toolbar> `component and BVTableSelectableMixin
+1. Import the `<table-toolbar> `component and useTableSelectableComposable
 1. Add the `selectable`, `no-select-on-click` props and a unique `ref` to the
    table. The table will emit a `@row-selected` event. Use the `onRowSelected`
-   mixin method as a callback and provide the `$event` as the first argument and
+   composable method as a callback and provide the `$event` as the first argument and
    the total table items count as the second argument.
 1. Add a table column for checkboxes. The table header checkbox should use the
    `tableHeaderCheckboxModel` and `tableHeaderCheckboxIndeterminate` values
-   provided by the mixin. The table header checkbox should also use the
+   provided by the composable. The table header checkbox should also use the
    `onChangeHeaderCheckbox` method as a callback for the `@change` event with
    the table `ref` passed as an argument. The table row checkboxes should use
    the `toggleSelectRow` method as a callback for the `@change` event with the
@@ -501,7 +465,7 @@ To add table batch actions:
       @clear-selected="clearSelectedRows($refs.table)"
       @batch-action="onBatchAction"
     />
-    <b-table
+    <BTable
       ref="table"
       hover
       selectable
@@ -512,62 +476,53 @@ To add table batch actions:
       @row-selected="onRowSelected($event, items.length)"
     >
       <template #head(checkbox)>
-        <b-form-checkbox
+        <BFormCheckbox
           v-model="tableHeaderCheckboxModel"
           :indeterminate="tableHeaderCheckboxIndeterminate"
           @change="onChangeHeaderCheckbox($refs.table)"
         />
       </template>
       <template #cell(checkbox)="row">
-        <b-form-checkbox
+        <BFormCheckbox
           v-model="row.rowSelected"
           @change="toggleSelectRow($refs.table, row.index)"
         />
       </template>
-    </b-table>
+    </BTable>
   </b-container>
 </template>
 <script>
-import TableToolbar from '@/components/Global/TableToolbar';
-import BVTableSelectableMixin, {
+import { ref } from 'vue';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+
+const {
+  selectedRowsList,
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
-  selectedRows
-} from '@/components/Mixins/BVTableSelectableMixin';
+} = useTableSelectableComposable();
 
-export default {
-  components: { TableToolbar },
-  mixins: [ BVTableSelectableMixin ],
-  data() {
-    return {
-      items: [...],
-      fields: [
+const items = ref([...]);
+const fields = ref([
         {
           key: 'checkbox'
         },
         ...
-      ],
-      tableToolbarActions: [
+      ]);
+const tableToolbarActions = ref([
         {
           value: 'edit',
-          label: this.$t('global.action.edit')
+          label: i18n.global.t('global.action.edit')
         },
         {
           value: 'delete',
-          label: this.$t('global.action.delete')
-        },
-      ],
-      tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate,
-      selectedRows
-    },
-  },
-  methods: {
-    onBatchAction(action) {
+          label: i18n.global.t('global.action.delete')
+        }
+      ])
+
+const onBatchAction = (action) => {
       // Do something with selected batch action and selected rows
-    },
-  },
-}
+    };
 </script>
 ```
 
@@ -575,27 +530,27 @@ export default {
 ## Pagination
 
 To add table pagination:
-1. Import the BVPaginationMixin
+1. Import the usePaginationComposable
 1. Add the `per-page` and `current-page` props to the `<table>` component.
 1. Add the below HTML snippet to the template. Make sure to update the
    `total-rows` prop.
 
 ```vue{21}
-<b-row>
-  <b-col sm="6">
-    <b-form-group
+<BRow>
+  <BCol sm="6">
+    <BFormGroup
       class="table-pagination-select"
       :label="$t('global.table.itemsPerPage')"
       label-for="pagination-items-per-page"
     >
-      <b-form-select
+      <BFormSelect
         id="pagination-items-per-page"
         v-model="perPage"
         :options="itemsPerPageOptions"
       />
-    </b-form-group>
-  </b-col>
-  <b-col sm="6">
+    </BFormGroup>
+  </BCol>
+  <BCol sm="6">
     <b-pagination
       v-model="currentPage"
       first-number
@@ -604,15 +559,15 @@ To add table pagination:
       :total-rows="getTotalRowCount(items.length)"
       aria-controls="table-event-logs"
     />
-  </b-col>
-</b-row>
+  </BCol>
+</BRow>
 ```
 ![Table pagination example](./table-pagination.png)
 
 ```vue
 <template>
-  <b-container>
-    <b-table
+  <BContainer>
+    <BTable
       hover
       responsive="md"
       :items="filteredItems"
@@ -620,21 +575,21 @@ To add table pagination:
       :per-page="perPage"
       :current-page="currentPage"
     />
-    <b-row>
-      <b-col sm="6">
-        <b-form-group
+    <BRow>
+      <BCol sm="6">
+        <BFormGroup
           class="table-pagination-select"
           :label="$t('global.table.itemsPerPage')"
           label-for="pagination-items-per-page"
         >
-          <b-form-select
+          <BFormSelect
             id="pagination-items-per-page"
             v-model="perPage"
             :options="itemsPerPageOptions"
           />
-        </b-form-group>
-      </b-col>
-      <b-col sm="6">
+        </BFormGroup>
+      </BCol>
+      <BCol sm="6">
         <b-pagination
           v-model="currentPage"
           first-number
@@ -643,28 +598,19 @@ To add table pagination:
           :total-rows="getTotalRowCount(items.length)"
           aria-controls="table-event-logs"
         />
-      </b-col>
-    </b-row>
-  </b-container>
+      </BCol>
+    </BRow>
+  </BContainer>
 </template>
 <script>
-import BVPaginationMixin, {
-  currentPage,
-  perPage,
-  itemsPerPageOptions
-} from '@/components/Mixins/BVPaginationMixin';
+import { ref } from 'vue';
+import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 
-export default {
-  mixins: [ BVPaginationMixin ],
-  data() {
-    return {
-      items: [...],
-      fields: [..],
-      currentPage,
-      perPage,
-      itemsPerPageOptions
-    },
-  }
-}
+const { currentPage, perPage, itemsPerPageOptions } =
+  usePaginationComposable();
+
+const tems = ref([...]);
+const fields = ref([..]);
+
 </script>
 ```

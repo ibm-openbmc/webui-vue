@@ -8,8 +8,8 @@ To use this component:
 2. Add the `<form-file />` tag
 3. Add the optional `id` , `disabled`, `accept` and `state` prop as required
 
-[Learn more about the Bootstrap-vue Form File
-component](https://bootstrap-vue.org/docs/components/form-file)
+[Learn more about the Bootstrap-vue-next Form File
+component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-file.html#form-file)
 ### Optional properties
 
 - `id`- Used to set the `id` attribute on the rendered content, and used as the

@@ -14,10 +14,10 @@
  > Publications, 2019)</cite>
 
 ## Test Libraries
-The OpenBMC Web UI unit test framework uses the Jest test runner and relies on
+The OpenBMC Web UI unit test framework uses the Vitest runner and relies on
 the following libraries:
 
-- @vue/cli-plugin-unit-jest
+- node_modules/vitest
 - @vue/test-utils
 
 ## Test specification location and naming conventions
@@ -71,7 +71,7 @@ The easiest way is to run the unit test in watch mode, `npm run test:unit --
 - Use `shallowMount` rather than mount unless child component rendering is
   required
 - Avoid leaky tests by using `localVue` for all plugin installs, for example,
-  when testing a plugin like Vuex
+  when testing a plugin like Pinia
 
 ## Components
 
@@ -109,9 +109,9 @@ changed due to any code updates or refactoring. Too many snapshots can slow down
 development during refactors. Typically, these are written once the UI
 presentational layer is complete and validated.
 
-## Vuex Store
+## Pinia Store
 
-There are two testing strategies for testing a Vuex store, which include testing
+There are two testing strategies for testing a Pinia store, which include testing
 store parts separately or testing a running store instance. Each strategy has
 its pros and cons. Given the size of the store and the number of developers that
 could potentially contribute to the project, the suggested strategy is to `test
@@ -119,7 +119,7 @@ store parts separately`.
 
 ### Testing Store Parts Separately
 Testing the parts separately is easy since each of the parts is a JavaScript
-function. Store parts to test include `actions`, `getters`, and `mutations`.
+function. Store parts to test include `actions`, and `getters`.
 
 #### Actions
 Since HTTP calls should never be used in a test, actions require extreme
@@ -129,11 +129,6 @@ mocking. Mocking tests rely on assumptions and can lead to faulty tests.
 Getters are JavaScript functions that return an output. These are basic
 functions that may not require testing unless there is getter logic. Any logic
 in a getter should be tested.
-
-#### Mutations
-Mutations are JavaScript functions that mutate the store state. These are basic
-functions that may not require testing unless there is mutation logic. Any logic
-in a mutation should be tested.
 
 #### Pros
 - Easier to debug
@@ -163,11 +158,11 @@ in a mutation should be tested.
 - When testing a vue router, it is important to use localVue
 
 
-[Vuex Testing](https://vuex.vuejs.org/guide/testing.html)
+[Pinia Testing](https://pinia.vuejs.org/cookbook/testing.html)
 
 ## Resources
 - [Vue Test Utils](https://vue-test-utils.vuejs.org/)
 - [Knowing What To Test — Vue Component Unit
   Testing](https://vuejsdevelopers.com/2019/08/26/vue-what-to-unit-test-components/)
-- [How to unit test a vuex
-  Store](https://www.dev-tips-and-tricks.com/how-to-unit-test-a-vuex-store)
+- [How to unit test a pinia
+  Store](https://pinia.vuejs.org/cookbook/testing.html)

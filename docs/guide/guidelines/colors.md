@@ -10,7 +10,7 @@ colors to override default styles set by the Bootstrap library.
   repo](https://github.com/openbmc/webui-vue/issues/new/choose) to request a
   change
 - [Learn more about Bootstrap
-  colors](https://getbootstrap.com/docs/4.4/getting-started/theming/#theme-colors)
+  colors](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/reference/color-variants.html#color-variants-and-css-class-mapping)
 
 ## Grays
 <colors-grays/>
@@ -33,7 +33,7 @@ colors to override default styles set by the Bootstrap library.
 `theme-colors` map colors.
 
 [Learn more about the Bootstrap color
-maps](https://getbootstrap.com/docs/4.0/getting-started/theming/#all-colors).
+maps](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/reference/color-variants.html#color-variants-and-css-class-mapping).
 <colors-all/>
 
 ## Theme Colors
@@ -42,7 +42,7 @@ prop that accepts any of the `theme-colors` keys to set the theme of a
 component.
 
 [Learn more about the Bootstrap theme-colors
-maps](https://getbootstrap.com/docs/4.0/getting-started/theming/#theme-colors).
+maps](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/reference/color-variants.html#color-variants-and-css-class-mapping).
 
 <colors-theme/>
 
