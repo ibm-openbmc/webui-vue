@@ -50,7 +50,7 @@
 
 <script setup>
 import { computed, defineProps, ref, defineEmits } from 'vue';
-import { GlobalStore } from '@/store';
+import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import i18n from '@/i18n';
@@ -59,7 +59,7 @@ import eventBus from '@/eventBus';
 const messagesEn = i18n.global.getLocaleMessage('en-US');
 const factoryResetMessage = messagesEn?.pageFactoryReset?.modal;
 const { getValidationState } = useVuelidateComposable();
-const global = GlobalStore();
+const global = stores.GlobalStore();
 defineProps({
   resetType: {
     type: String,

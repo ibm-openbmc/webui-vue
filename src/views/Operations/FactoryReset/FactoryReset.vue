@@ -80,12 +80,12 @@ import PageTitle from '@/components/Global/PageTitle.vue';
 import ModalReset from './FactoryResetModal.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
-import { FactoryResetStore, AuthenticationStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
-const global = GlobalStore();
-const authentication = AuthenticationStore();
-const factoryReset = FactoryResetStore();
+const global = stores.GlobalStore();
+const authentication = stores.AuthenticationStore();
+const factoryReset = stores.FactoryResetStore();
 const toast = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const resetOption = ref('resetBios');

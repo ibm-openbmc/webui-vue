@@ -231,7 +231,7 @@ import PageTitle from '@/components/Global/PageTitle.vue';
 import TableFilter from '@/components/Global/TableFilter.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableToolbarExport from '@/components/Global/TableToolbarExport.vue';
-import { DeconfigurationRecordsStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import { onBeforeRouteLeave } from 'vue-router';
 import eventBus from '@/eventBus';
 
@@ -256,8 +256,8 @@ const Toast = useToastComposable();
 const { getFilteredTableData } = useTableFilterComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
-const deconfigurationRecoredsStore = DeconfigurationRecordsStore();
-const global = GlobalStore();
+const deconfigurationRecoredsStore = stores.DeconfigurationRecordsStore();
+const global = stores.GlobalStore();
 
 onBeforeRouteLeave(() => {
   hideLoader();

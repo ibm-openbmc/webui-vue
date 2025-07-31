@@ -103,7 +103,7 @@ import TableRowAction from '@/components/Global/TableRowAction.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
-import { SnmpAlertsStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
   
   const snmpToDelete = ref('');
@@ -125,7 +125,7 @@ import eventBus from '@/eventBus';
         tableHeaderCheckboxModel,
         tableHeaderCheckboxIndeterminate,
   } = useTableSelectableComposable();
-  const snmpAlertsStore = SnmpAlertsStore();
+  const snmpAlertsStore = stores.SnmpAlertsStore();
 
   onBeforeRouteLeave (() => {
     hideLoader();

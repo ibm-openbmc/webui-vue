@@ -351,7 +351,7 @@ import { ref, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 
 import { required, requiredIf } from '@vuelidate/validators';
-import { CertificatesStore } from '@/store';
+import stores from '@/store';
 
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 
@@ -365,7 +365,7 @@ const { errorToast } = useToast();
 
 const { getValidationState } = useVuelidateComposable();
 const openCsrModal = ref(false);
-const uploadCertificate = CertificatesStore();
+const uploadCertificate = stores.CertificatesStore();
 const initialFormState = {
   certificateType: null,
   country: null,

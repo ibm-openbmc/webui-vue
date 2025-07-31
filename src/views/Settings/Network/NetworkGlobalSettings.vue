@@ -22,11 +22,11 @@ import eventBus from '@/eventBus';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import IconEdit from '@carbon/icons-vue/es/edit/16';
 import PageSection from '@/components/Global/PageSection.vue';
-import { NetworkStore } from '@/store';
+import stores from '@/store';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const networkStore = NetworkStore();
+const networkStore = stores.NetworkStore();
 
 const hostname = ref('');
 

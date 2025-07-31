@@ -157,13 +157,12 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import { useI18n } from 'vue-i18n';
 import { reactive, ref, computed, watch, onBeforeMount } from 'vue';
-import { GlobalStore } from '../../../store';
-import { FabricAdaptersStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 
-const globalStore = GlobalStore();
-const fabricAdaptersStore = FabricAdaptersStore();
+const globalStore = stores.GlobalStore();
+const fabricAdaptersStore = stores.FabricAdaptersStore();
 const props = defineProps({
   chassis: {
     type: String,

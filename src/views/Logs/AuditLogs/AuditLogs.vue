@@ -140,7 +140,7 @@ import i18n from '@/i18n';
 import IconDownload from '@carbon/icons-vue/es/download/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
-import { AuditLogsStore } from '@/store/index.js';
+import stores from '@/store/index.js';
 import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
 import Search from '@/components/Global/Search.vue';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
@@ -153,7 +153,7 @@ import eventBus from '@/eventBus';
 
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
-const auditLogsStore = AuditLogsStore();
+const auditLogsStore = stores.AuditLogsStore();
 const { successToast, infoToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();

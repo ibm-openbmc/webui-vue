@@ -179,16 +179,15 @@ import {
   onBeforeMount,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { PowerSupplyStore } from '../../../store';
-import { GlobalStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { BFormCheckbox } from 'bootstrap-vue-next';
 
 const { t } = useI18n();
 const { successToast, errorToast } = useToast();
-const powerSupplyStore = PowerSupplyStore();
-const globalStore = GlobalStore();
+const powerSupplyStore = stores.PowerSupplyStore();
+const globalStore = stores.GlobalStore();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { statusIconValue } = useDataFormatterGlobal();

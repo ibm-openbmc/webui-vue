@@ -225,8 +225,7 @@ import useSearchFilterComposable from "../../../components/Composables/useSearch
 import useTableFilter from "../../../components/Composables/useTableFilterComposable";
 import usePaginationComposable from "../../../components/Composables/usePaginationComposable";
 import useLoadingBar from "@/components/Composables/useLoadingBarComposable";
-import { PcieTopologyStore } from "../../../store";
-import { GlobalStore } from "../../../store";
+import stores from "../../../store";
 import eventBus from "@/eventBus";
 import useToast from "@/components/Composables/useToastComposable";
 import i18n from '@/i18n';
@@ -240,8 +239,8 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
 const { getFilteredTableData } = useTableFilter();
 const { startLoader, endLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
-const globalStore = GlobalStore();
-const pcieTopologyStore = PcieTopologyStore();
+const globalStore = stores.GlobalStore();
+const pcieTopologyStore = stores.PcieTopologyStore();
 const isBusy = ref(true);
 const resetOption = ref(null);
 const resetLinkUri = ref("");

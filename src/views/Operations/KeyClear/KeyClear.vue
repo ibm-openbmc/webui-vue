@@ -89,18 +89,18 @@
 
 <script setup>
 import { ref } from 'vue';
-import { GlobalStore, KeyClearStore } from '@/store';
+import stores from '@/store';
 import Alert from '@/components/Global/Alert.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import useToast from '@/components/Composables/useToastComposable';
 
-const globalStore = GlobalStore();
+const globalStore = stores.GlobalStore();
 const keyOption = ref('NONE');
 const username = ref(globalStore.username);
 const openModal = ref(false);
 const selectedKey = ref('');
 
-const keyClear = KeyClearStore();
+const keyClear = stores.KeyClearStore();
 const { successToast, errorToast } = useToast();
 
 function onKeyClearSubmit(valueSelected) {

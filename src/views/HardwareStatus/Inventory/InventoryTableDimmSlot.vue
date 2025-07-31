@@ -172,7 +172,7 @@ import useToast from '@/components/Composables/useToastComposable';
 
 import { ref, reactive, computed, onBeforeMount } from 'vue';
 
-import { MemoryStore } from '../../../store';
+import stores from '../../../store';
 
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
@@ -182,7 +182,7 @@ const isBusy = ref(false);
 const { t } = useI18n();
 const searchTotalFilteredRows = ref(0);
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
-const memoryStore = MemoryStore();
+const memoryStore = stores.MemoryStore();
 const { successToast, errorToast } = useToast();
 
 const fields = reactive([

@@ -120,7 +120,7 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import { reactive, ref, computed, onBeforeMount } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { ChassisStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 
@@ -129,7 +129,7 @@ const { t } = useI18n();
 const isBusy = ref(true);
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
-const chassisStore = ChassisStore();
+const chassisStore = stores.ChassisStore();
 
 const fields = reactive([
   {

@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import routes from './routes';
-import { GlobalStore, AuthenticationStore } from '@/store';
+import stores from '@/store';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -9,7 +9,7 @@ const router = createRouter({
 });
 
 function allowRouterToNavigate(to, next, currentUserRole) {
-  const authenticationStore = AuthenticationStore();
+  const authenticationStore = stores.AuthenticationStore();
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (authenticationStore.isLoggedIn) {
       if (to.meta.exclusiveToRoles) {
@@ -32,8 +32,8 @@ function allowRouterToNavigate(to, next, currentUserRole) {
 }
 
 router.beforeEach((to, from, next) => {
-  const globalStore = GlobalStore();
-  const authenticationStore = AuthenticationStore();
+  const globalStore = stores.GlobalStore();
+  const authenticationStore = stores.AuthenticationStore();
   let currentUserRole = globalStore.userPrivilege;
   // condition will get satisfied if user refreshed after login
   if (!currentUserRole && authenticationStore.isLoggedIn) {

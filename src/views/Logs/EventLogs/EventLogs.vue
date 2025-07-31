@@ -317,7 +317,7 @@ import useTableRowExpandComposable from "../../../components/Composables/useTabl
 import useSearchFilterComposable from "../../../components/Composables/useSearchFilterComposable";
 import eventBus from '@/eventBus';
 
-import { GlobalStore, EventLogStore } from "../../../store";
+import stores from "../../../store";
 
 export default {
   components: {
@@ -434,10 +434,10 @@ export default {
   },
   computed: {
     currentUser() {
-      return GlobalStore().currentUserGetter;
+      return stores.GlobalStore().currentUserGetter;
     },
     isServiceUser() {
-      return GlobalStore().isServiceUser;
+      return stores.GlobalStore().isServiceUser;
     },
     filteredRows() {
       return this.searchFilter
@@ -445,7 +445,7 @@ export default {
         : this.filteredLogs.length;
     },
     allLogs() {
-      return EventLogStore().eventlogsGetter;
+      return stores.EventLogStore().eventlogsGetter;
     },
     filteredLogsByDate() {
       return useTableFilter().getFilteredTableDataByDate(
@@ -463,17 +463,17 @@ export default {
   },
   created() {
     eventBus.on('clear-selected', () => {
-      EventLogStore().eventlogsGetter?.map((singleLog) => {
+      stores.EventLogStore().eventlogsGetter?.map((singleLog) => {
         singleLog.rowSelected = false;
       });
       useTableSelectableComposable().clearSelectedRowsOptions(this.$refs.table);
     }),
     useLoadingBar().startLoader();
-    EventLogStore().initializeLogs().then(() => {
-      EventLogStore().getEventLogData().finally(() => {
+    stores.EventLogStore().initializeLogs().then(() => {
+      stores.EventLogStore().getEventLogData().finally(() => {
         this.checkForUserData();
         if (this.isServiceUser) {
-          EventLogStore().getCELogData();
+          stores.EventLogStore().getCELogData();
         }
       });
       useLoadingBar().endLoader();
@@ -513,17 +513,17 @@ export default {
     checkForUserData() {
       if (!this.currentUser) {
         // this.$store.dispatch('userManagement/getUsers');
-        GlobalStore().getCurrentUser();
+        stores.GlobalStore().getCurrentUser();
       }
     },
     reloadEventLogData() {
       if (this.isServiceUser) {
-        EventLogStore().getCELogData();
+        stores.EventLogStore().getCELogData();
       }
-      EventLogStore().getEventLogData();
+      stores.EventLogStore().getEventLogData();
     },
     changelogStatus(row) {
-      EventLogStore().updateEventLogStatus({
+      stores.EventLogStore().updateEventLogStatus({
           uri: row.uri,
           status: row.status,
         })
@@ -550,7 +550,7 @@ export default {
     },
     handleOk(value) {
           if (value === 'all') {
-            EventLogStore().deleteAllEventLogs(this.allLogs)
+            stores.EventLogStore().deleteAllEventLogs(this.allLogs)
               .then((message) => {
                 this.reloadEventLogData();
                 this.toast.successToast(message);
@@ -559,7 +559,7 @@ export default {
               .finally(() => this.openModal = false)
           } else {
               if (this.selectedRows.length === this.allLogs.length) {
-                EventLogStore().deleteAllEventLogs(this.selectedRows)
+                stores.EventLogStore().deleteAllEventLogs(this.selectedRows)
                   .then((message) => {
                     this.reloadEventLogData();
                     this.toast.successToast(message);
@@ -572,7 +572,7 @@ export default {
             }
     },
     deleteLogs(uris) {
-      EventLogStore().deleteEventLogs(uris)
+      stores.EventLogStore().deleteEventLogs(uris)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             this.reloadEventLogData();
@@ -604,7 +604,7 @@ export default {
         //  download single log
         const pelJsonInfo = [];
         useLoadingBar().startLoader();
-        EventLogStore().downloadLogData(uri)
+        stores.EventLogStore().downloadLogData(uri)
           .then((returned) => {
             pelJsonInfo.push(returned);
           })
@@ -637,7 +637,7 @@ export default {
       this.searchTotalFilteredRows = filteredItems.length;
     },
     resolveLogs() {
-      EventLogStore().resolveEventLogs(this.selectedRows)
+      stores.EventLogStore().resolveEventLogs(this.selectedRows)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             if (type === 'success') {
@@ -651,7 +651,7 @@ export default {
         });
     },
     unresolveLogs() {
-      EventLogStore().unresolveEventLogs(this.selectedRows)
+      stores.EventLogStore().unresolveEventLogs(this.selectedRows)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             if (type === 'success') {
@@ -672,7 +672,7 @@ export default {
         let counter = 1;
         while (counter <= this.allLogs.length) {
           useLoadingBar().startLoader();
-          await EventLogStore().downloadLogData(this.allLogs[counter - 1].uri)
+          await stores.EventLogStore().downloadLogData(this.allLogs[counter - 1].uri)
             .then((returned) => {
               pelJsonInfo.push(returned);
               counter = counter + 1;
@@ -689,7 +689,7 @@ export default {
         let counter = 1;
         while (counter <= this.selectedRows.length) {
           useLoadingBar().startLoader();
-          await EventLogStore().downloadLogData(this.selectedRows[counter - 1].uri)
+          await stores.EventLogStore().downloadLogData(this.selectedRows[counter - 1].uri)
             .then((returned) => {
               pelJsonInfo.push(returned);
               counter = counter + 1;
@@ -710,7 +710,7 @@ export default {
       return useDataFormatterGlobal().dataFormatter(value);
     },
     toggleAll(checked) {
-      EventLogStore().eventlogsGetter?.map((singleLog) => {
+      stores.EventLogStore().eventlogsGetter?.map((singleLog) => {
         singleLog.rowSelected = checked;
       });
     },

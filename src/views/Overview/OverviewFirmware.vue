@@ -27,13 +27,13 @@
 import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import { FirmwareStore, LicenseStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const firmwareStore = FirmwareStore();
-const licenseStore = LicenseStore();
+const firmwareStore = stores.FirmwareStore();
+const licenseStore = stores.LicenseStore();
 
 onBeforeMount(() => {
     Promise.all([

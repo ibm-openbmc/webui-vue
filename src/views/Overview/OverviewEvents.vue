@@ -35,12 +35,12 @@ import OverviewCard from './OverviewCard.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import { computed, onBeforeMount } from 'vue';
-import { EventLogStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const eventLogStore = EventLogStore();
+const eventLogStore = stores.EventLogStore();
 
 onBeforeMount(() => {
   eventLogStore.getEventLogData().finally(() => {

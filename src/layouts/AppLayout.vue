@@ -22,13 +22,13 @@ import AppNavigation from '@/components/AppNavigation/AppNavigation.vue';
 import PageContainer from '@/components/Global/PageContainer.vue';
 import ButtonBackToTop from '@/components/Global/ButtonBackToTop.vue';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
-import { GlobalStore } from '@/store';
+import stores from '@/store';
 import { useRoute } from 'vue-router';
 import eventBus from '@/eventBus';
 
 const { setFocus } = useJumpLinkComposable();
 
-const global = GlobalStore();
+const global = stores.GlobalStore();
 
 const route = useRoute();
 

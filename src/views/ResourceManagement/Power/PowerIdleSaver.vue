@@ -189,13 +189,13 @@ import useLoadingBar, {
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
-import { PowerControlStore } from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
-const powerControlStore = PowerControlStore();
+const powerControlStore = stores.PowerControlStore();
 
 defineProps({
   safeMode: {

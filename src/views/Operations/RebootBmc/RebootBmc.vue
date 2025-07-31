@@ -61,7 +61,7 @@ import { ref, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
-import { ControlStore, BootSettingsStore } from '@/store';
+import stores from '@/store';
 
 const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
@@ -72,8 +72,8 @@ onBeforeRouteLeave(() => {
 
 const openModal = ref(false);
 
-const controlStore = ControlStore();
-const bootSettingsStore = BootSettingsStore();
+const controlStore = stores.ControlStore();
+const bootSettingsStore = stores.BootSettingsStore();
 
 const lastBmcRebootTime = computed(() => {
   return controlStore.getLastBmcRebootTime;

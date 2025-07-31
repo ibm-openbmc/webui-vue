@@ -38,12 +38,12 @@ import OverviewPower from './OverviewPower.vue';
 import OverviewEvents from './OverviewEvents.vue';
 import OverviewInventory from './OverviewInventory.vue';
 import OverviewDumps from './OverviewDumps.vue';
-import { UserManagementStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { startLoader, endLoader } = useLoadingBar();
 
-const userManagementStore = UserManagementStore();
+const userManagementStore = stores.UserManagementStore();
 
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 

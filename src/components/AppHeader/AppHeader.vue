@@ -119,7 +119,7 @@ import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import useToast from '@/components/Composables/useToastComposable';
-import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
+import stores from '@/store';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 import { useRouter } from 'vue-router';
@@ -127,9 +127,9 @@ import { useRouter } from 'vue-router';
 const { errorToast } = useToast();
 const router = useRouter();
 
-const authenticationStore = AuthenticationStore();
-const global = GlobalStore();
-const eventLogStore = EventLogStore();
+const authenticationStore = stores.AuthenticationStore();
+const global = stores.GlobalStore();
+const eventLogStore = stores.EventLogStore();
 
 const props = defineProps({
   routerKey: {

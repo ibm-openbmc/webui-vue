@@ -228,7 +228,7 @@ import useVuelidateComposable from '@/components/Composables/useVuelidateComposa
 import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
 import Alert from '@/components/Global/Alert.vue';
-import { GlobalStore, UserManagementStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
@@ -243,8 +243,8 @@ const { getValidationState } = useVuelidateComposable();
     },
 });
 
-const globalStore = GlobalStore();
-const userManagementStore = UserManagementStore();
+const globalStore = stores.GlobalStore();
+const userManagementStore = stores.UserManagementStore();
 
   const modal = ref(false);
   eventBus.on('modal-user', () => {

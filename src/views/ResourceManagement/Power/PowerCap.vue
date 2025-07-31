@@ -106,14 +106,14 @@ import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlo
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import { PowerControlStore } from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 const { dataFormatter } = useDataFormatterGlobal();
 const { getValidationState } = useVuelidateComposable();
 
-const powerControlStore = PowerControlStore();
+const powerControlStore = stores.PowerControlStore();
 
 defineProps({
   safeMode: {

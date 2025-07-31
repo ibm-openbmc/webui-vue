@@ -510,11 +510,11 @@ import { ref, computed, onBeforeMount, watch } from 'vue';
 import i18n from '@/i18n';
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
-import { GlobalStore, BootSettingsStore, ResourceMemoryStore } from '@/store';
+import stores from '@/store';
 
-const globalStore = GlobalStore();
-const bootSettingsStore = BootSettingsStore();
-const resourceMemoryStore = ResourceMemoryStore();
+const globalStore = stores.GlobalStore();
+const bootSettingsStore = stores.BootSettingsStore();
+const resourceMemoryStore = stores.ResourceMemoryStore();
 
 defineProps({
   attributeValues: {

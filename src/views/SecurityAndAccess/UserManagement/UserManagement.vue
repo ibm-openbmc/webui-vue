@@ -146,7 +146,7 @@ import TableRowAction from '@/components/Global/TableRowAction.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
-import { UserManagementStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 
 onBeforeRouteLeave(() => {
@@ -163,8 +163,8 @@ onBeforeRouteLeave(() => {
         tableHeaderCheckboxIndeterminate,
       } = useTableSelectableComposable();
 
-      const userManagement = UserManagementStore();
-      const global = GlobalStore();
+      const userManagement = stores.UserManagementStore();
+      const global = stores.GlobalStore();
       const { hideLoader, startLoader, endLoader } = useLoadingBar();
       const toast = useToastComposable();
       const isAllSelected = ref(false);

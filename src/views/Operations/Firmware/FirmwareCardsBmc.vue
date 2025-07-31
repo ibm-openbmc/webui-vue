@@ -79,13 +79,13 @@ import PageSection from '@/components/Global/PageSection.vue';
 import ModalSwitchToRunning from './FirmwareModalSwitchToRunning.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import IconSwitch from '@carbon/icons-vue/es/arrows--horizontal/20';
-import { GlobalStore, FirmwareStore } from '@/store';
+import stores from '@/store';
 
 const { errorToast, infoToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 
-const globalStore = GlobalStore();
-const firmwareStore = FirmwareStore();
+const globalStore = stores.GlobalStore();
+const firmwareStore = stores.FirmwareStore();
 
 const emit = defineEmits(['loadingStatus']);
 

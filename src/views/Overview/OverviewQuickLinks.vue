@@ -28,13 +28,13 @@
 
 <script setup>
 import { computed, onBeforeMount } from 'vue';
-import { GlobalStore } from '@/store';
+import stores from '@/store';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import eventBus from '@/eventBus';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const global = GlobalStore();
+const global = stores.GlobalStore();
 
 onBeforeMount(() => {
     Promise.all([global.getBmcTime(), global.getCurrentUser()]).finally(() => {

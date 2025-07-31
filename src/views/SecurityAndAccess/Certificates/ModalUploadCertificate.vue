@@ -81,13 +81,13 @@
 import { required, requiredIf } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { computed, defineProps, reactive, ref, watch, defineEmits } from 'vue';
-import { CertificatesStore } from '@/store';
+import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import FormFile from '@/components/Global/FormFile.vue';
 import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
-const uploadCertificate = CertificatesStore();
+const uploadCertificate = stores.CertificatesStore();
 const props = defineProps({
   certificate: {
     type: Object,

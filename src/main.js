@@ -3,7 +3,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import { createBootstrap } from 'bootstrap-vue-next';
-import { GlobalStore, AuthenticationStore } from './store';
+import stores from './store';
 import { format } from 'date-fns-tz';
 // Add the necessary CSSs
 // import 'bootstrap/dist/css/bootstrap.css';
@@ -25,8 +25,8 @@ app.use(i18n);
 
 pinia.use(WebSocketPlugin);
 
-const globalStore = GlobalStore();
-const authenticationStore = AuthenticationStore();
+const globalStore = stores.GlobalStore();
+const authenticationStore = stores.AuthenticationStore();
 
 if (authenticationStore.isLoggedIn) initWebSocket();
 

@@ -7,7 +7,7 @@ import IconSecurity from '@carbon/icons-vue/es/security/16';
 import IconDataBase from '@carbon/icons-vue/es/data--base--alt/16';
 import IconDocument from '@carbon/icons-vue/es/document/16';
 import i18n from '@/i18n';
-import { GlobalStore } from '@/store'
+import stores from '@/store'
 
 import { ref, computed, onMounted } from 'vue';
 
@@ -261,7 +261,7 @@ const AppNavigationData = () => {
         },
   ]);
   
-  const globalStore = GlobalStore();
+  const globalStore = stores.GlobalStore();
   const roleId = computed(
     () => globalStore.currentUserGetter?.RoleId,
   );

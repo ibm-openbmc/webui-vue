@@ -161,8 +161,7 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-import { GlobalStore } from '../../../store';
-import { AssemblyStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
 
 const props = defineProps({
@@ -175,8 +174,8 @@ const props = defineProps({
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
 const { successToast, errorToast } = useToast();
-const globalStore = GlobalStore();
-const assemblyStore = AssemblyStore();
+const globalStore = stores.GlobalStore();
+const assemblyStore = stores.AssemblyStore();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();

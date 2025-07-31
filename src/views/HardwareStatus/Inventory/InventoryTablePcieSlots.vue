@@ -86,8 +86,7 @@ import {
 
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-import { PcieSlotsStore } from '../../../store';
-import { GlobalStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { useI18n } from 'vue-i18n';
@@ -101,8 +100,8 @@ const props = defineProps({
   },
 });
 const { t } = useI18n();
-const pcieSlotsStore = PcieSlotsStore();
-const globalStore = GlobalStore();
+const pcieSlotsStore = stores.PcieSlotsStore();
+const globalStore = stores.GlobalStore();
 const isBusy = ref(true);
 const searchTotalFilteredRows = ref(0);
 const { successToast, errorToast } = useToast();

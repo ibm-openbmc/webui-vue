@@ -33,14 +33,14 @@ import i18n from '@/i18n';
 import BiosSettings from './BiosSettings.vue';
 import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import { GlobalStore, BootSettingsStore, ResourceMemoryStore } from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
 
-const globalStore = GlobalStore();
-const bootSettingsStore = BootSettingsStore();
-const resourceMemoryStore = ResourceMemoryStore();
+const globalStore = stores.GlobalStore();
+const bootSettingsStore = stores.BootSettingsStore();
+const resourceMemoryStore = stores.ResourceMemoryStore();
 
 const props = defineProps({
   isInPhypStandby: {

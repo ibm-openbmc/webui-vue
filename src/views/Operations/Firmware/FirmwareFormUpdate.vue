@@ -95,16 +95,16 @@ import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import IconInfo from '@carbon/icons-vue/es/information/16';
 import FormFile from '@/components/Global/FormFile.vue';
 import ModalUpdateFirmware from './FirmwareModalUpdateFirmware.vue';
-import { GlobalStore, BmcStore, FirmwareStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { errorToast, infoToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 const { getValidationState } = useVuelidateComposable();
 
-const globalStore = GlobalStore();
-const bmcStore = BmcStore();
-const firmwareStore = FirmwareStore();
+const globalStore = stores.GlobalStore();
+const bmcStore = stores.BmcStore();
+const firmwareStore = stores.FirmwareStore();
 
 const emit = defineEmits(['loadingStatus']);
 

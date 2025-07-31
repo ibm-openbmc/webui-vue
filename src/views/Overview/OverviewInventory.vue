@@ -31,12 +31,12 @@
 import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useToast from '@/components/Composables/useToastComposable';
-import { SystemStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { successToast, errorToast } = useToast();
 
-const systemStore = SystemStore();
+const systemStore = stores.SystemStore();
 
 onBeforeMount(() => {
   systemStore.getSystem().finally(() => {

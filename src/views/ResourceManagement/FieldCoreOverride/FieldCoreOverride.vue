@@ -28,15 +28,15 @@ import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
-import { SystemStore, FieldCoreOverrideStore, LicenseStore } from '@/store';
+import stores from '@/store';
 import CurrentConfiguration from './FieldCoreOverrideInfo.vue';
 import ChangeConfiguration from './FieldCoreOverrideConfiguration.vue';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
-const systemStore = SystemStore();
-const fieldCoreOverrideStore = FieldCoreOverrideStore();
-const licenseStore = LicenseStore();
+const systemStore = stores.SystemStore();
+const fieldCoreOverrideStore = stores.FieldCoreOverrideStore();
+const licenseStore = stores.LicenseStore();
 
 onBeforeMount(() => {
   startLoader();

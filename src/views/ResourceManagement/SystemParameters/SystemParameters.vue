@@ -19,11 +19,11 @@ import FrequencyCap from './FrequencyCap.vue';
 import AggressivePrefetch from './AggressivePrefetch.vue';
 import RuntimeProcessorDiagnostic from './RuntimeProcessorDiagnostic.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import { SystemParametersStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import { onBeforeMount, computed } from 'vue';
 const { startLoader, endLoader } = useLoadingBar();
-const systemParametersStore = SystemParametersStore();
-const global = GlobalStore();
+const systemParametersStore = stores.SystemParametersStore();
+const global = stores.GlobalStore();
 
 const serverStatus = computed(() => {
   return global.serverStatus;

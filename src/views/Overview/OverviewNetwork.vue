@@ -43,12 +43,12 @@
 import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import { NetworkStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const networkStore = NetworkStore();
+const networkStore = stores.NetworkStore();
 
 onBeforeMount(() => {
     networkStore?.getEthernetData().finally(() => {

@@ -30,9 +30,9 @@
 <script setup>
 import { ref, computed } from 'vue';
 import eventBus from '@/eventBus';
-import { FirmwareStore } from '@/store';
+import stores from '@/store';
 
-const firmwareStore = FirmwareStore();
+const firmwareStore = stores.FirmwareStore();
 
 const modal = ref(false);
 

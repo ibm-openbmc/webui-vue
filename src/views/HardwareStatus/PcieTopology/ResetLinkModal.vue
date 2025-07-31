@@ -40,15 +40,15 @@
   </b-modal>
 </template>
 <script setup>
-import { GlobalStore, PcieTopologyStore } from '../../../store';
+import stores from '../../../store';
 import useVuelidate from '@vuelidate/core';
 import useToast from '@/components/Composables/useToastComposable';
 import { ref,computed,nextTick } from 'vue';
 import i18n from '@/i18n';
 
 const { successToast, errorToast } = useToast();
-const pcieTopologyStore=PcieTopologyStore()
-const globalStore = GlobalStore();
+const pcieTopologyStore= stores.PcieTopologyStore()
+const globalStore = stores.GlobalStore();
 const props=defineProps({
   resetType: {
       type: Number,

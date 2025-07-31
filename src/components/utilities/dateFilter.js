@@ -1,9 +1,9 @@
 // Work required
 import { format } from 'date-fns';
-import { GlobalStore } from '@/store';
+import stores from '@/store';
 
 const globalStore = () => {
-  return GlobalStore();
+  return stores.GlobalStore();
 };
 
 // Short time zone filter

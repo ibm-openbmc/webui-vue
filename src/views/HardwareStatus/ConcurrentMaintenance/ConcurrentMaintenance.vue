@@ -96,12 +96,12 @@
 import { computed, onBeforeMount } from 'vue';
 import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import { ConcurrentMaintenanceStore } from '@/store';
+import stores from '@/store';
 
 const { successToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 
-const concurrentMaintenanceStore = ConcurrentMaintenanceStore();
+const concurrentMaintenanceStore = stores.ConcurrentMaintenanceStore();
 
 const readyToRemoveState = computed({
   get() {

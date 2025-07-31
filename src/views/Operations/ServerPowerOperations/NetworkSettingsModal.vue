@@ -323,11 +323,11 @@ import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { NETWORK_OBJECT } from '@/utilities/NetworkSettingsObject.js';
 import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants.js';
-import { NetworkSettingsStore } from '@/store';
+import stores from '@/store';
 
 const { getValidationState } = useVuelidateComposable();
 
-const networkSettingsStore = NetworkSettingsStore();
+const networkSettingsStore = stores.NetworkSettingsStore();
 
 const { successToast, errorToast } = useToast();
 

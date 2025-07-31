@@ -48,11 +48,11 @@
 <script setup>
 import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
-import { PowerControlStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
-const powerControlStore = PowerControlStore();
-const global = GlobalStore();
+const powerControlStore = stores.PowerControlStore();
+const global = stores.GlobalStore();
 
 onBeforeMount(() => {
     Promise.all([

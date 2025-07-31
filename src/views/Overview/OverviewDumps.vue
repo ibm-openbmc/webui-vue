@@ -20,12 +20,12 @@
 import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import { DumpsStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const dumpsStore = DumpsStore();
+const dumpsStore = stores.DumpsStore();
 
 onBeforeMount(() => {
       dumpsStore.getAllDumps().finally(() => {

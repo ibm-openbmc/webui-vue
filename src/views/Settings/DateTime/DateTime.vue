@@ -255,7 +255,7 @@ import LocalTimezoneLabelMixin from '@/components/Mixins/LocalTimezoneLabelMixin
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import { DateTimeStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 import { required, helpers, requiredIf, sameAs, not } from '@vuelidate/validators';
 
@@ -265,8 +265,8 @@ const formatTime = proxy.$filters.formatTime;
 const notSameAs = (value1, value2) => {
   return value2 ? value1 !== value2 : true;
 }
-const dateTimeStore = DateTimeStore();
-const globalStore = GlobalStore();
+const dateTimeStore = stores.DateTimeStore();
+const globalStore = stores.GlobalStore();
 const toast = useToastComposable();
 const { startLoader, hideLoader, endLoader } = useLoadingBar();
 const { getValidationState } = useVuelidateComposable();

@@ -110,7 +110,7 @@ import usePaginationComposable from '@/components/Composables/usePaginationCompo
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
-import { HardwareDeconfigurationStore, GlobalStore } from '@/store';
+import stores from '@/store';
 
 const Toast = useToastComposable();
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
@@ -122,8 +122,8 @@ const {
   } = useTableSelectableComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { getFilteredTableData } = useTableFilterComposable();
-const hardwareDeconfigurationStore = HardwareDeconfigurationStore();
-const global = GlobalStore();
+const hardwareDeconfigurationStore = stores.HardwareDeconfigurationStore();
+const global = stores.GlobalStore();
 
 onBeforeRouteLeave(() => {
   hideLoader();

@@ -44,7 +44,7 @@ import { Terminal } from 'xterm';
 import { throttle } from 'lodash';
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
-import { GlobalStore, ChassisStore, AuthenticationStore } from '@/store';
+import stores from '@/store';
 
 const props = defineProps({
   isFullWindow: {
@@ -57,9 +57,9 @@ const props = defineProps({
   },
 });
 
-const chassisStore = ChassisStore();
-const authenticationStore = AuthenticationStore();
-const globalStore = GlobalStore();
+const chassisStore = stores.ChassisStore();
+const authenticationStore = stores.AuthenticationStore();
+const globalStore = stores.GlobalStore();
 
 const panel = useTemplateRef('panel');
 

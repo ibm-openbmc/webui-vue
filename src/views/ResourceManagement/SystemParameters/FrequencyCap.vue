@@ -93,7 +93,7 @@
 <script setup>
 import { computed, defineProps, ref, onBeforeMount } from 'vue';
 import { requiredIf, between, numeric } from '@vuelidate/validators';
-import { SystemParametersStore } from '@/store';
+import stores from '@/store';
 import { useVuelidate } from '@vuelidate/core';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
@@ -105,7 +105,7 @@ const { startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { getValidationState } = useVuelidateComposable();
-const systemParametersStore = SystemParametersStore();
+const systemParametersStore = stores.SystemParametersStore();
 
 defineProps({
   safeMode: {

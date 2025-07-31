@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { GlobalStore } from "../../../store";
+import stores from "../../../store";
 export default {
   name: 'PostCodes',
   data() {
@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     postCodeValue() {
-      return GlobalStore().postCodeValueGetter;
+      return stores.GlobalStore().postCodeValueGetter;
     },
     postCodes: {
       get() {

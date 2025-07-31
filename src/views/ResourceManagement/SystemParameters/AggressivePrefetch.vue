@@ -31,9 +31,9 @@
 import { computed, defineProps } from 'vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
-import { SystemParametersStore } from '@/store';
+import stores from '@/store';
 const Toast = useToastComposable();
-const systemParametersStore = SystemParametersStore();
+const systemParametersStore = stores.SystemParametersStore();
 
 defineProps({
   safeMode: {

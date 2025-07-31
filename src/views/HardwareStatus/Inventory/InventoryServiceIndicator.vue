@@ -96,15 +96,14 @@
 <script setup>
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import PageSection from '@/components/Global/PageSection.vue';
-import { SystemStore } from '../../../store';
+import stores from '../../../store';
 import { ref, computed, watch, onBeforeMount } from 'vue';
-import { GlobalStore } from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 
 const { successToast, errorToast } = useToast();
-const globalStore = GlobalStore();
-const systemStore = SystemStore();
+const globalStore = stores.GlobalStore();
+const systemStore = stores.SystemStore();
 const isLampTestEditable = ref(true);
 
 const systems = computed(() => {

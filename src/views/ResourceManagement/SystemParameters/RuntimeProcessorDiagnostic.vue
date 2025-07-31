@@ -206,7 +206,7 @@ import { computed, defineProps, watch } from 'vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import { SystemParametersStore } from '@/store';
+import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers } from '@vuelidate/validators';
@@ -214,7 +214,7 @@ import { minValue, maxValue } from '@vuelidate/validators';
 import i18n from '@/i18n';
 const { getValidationState } = useVuelidateComposable();
 const Toast = useToastComposable();
-const systemParametersStore = SystemParametersStore();
+const systemParametersStore = stores.SystemParametersStore();
 const { startLoader, endLoader } = useLoadingBar();
 
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;

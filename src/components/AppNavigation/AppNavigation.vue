@@ -66,12 +66,12 @@ import { ref, watch, onMounted, computed } from 'vue';
 import AppNavigationData from './AppNavigationData';
 import { useRoute } from 'vue-router';
 import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
-import { GlobalStore, UserManagementStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const navigationItems = AppNavigationData().navigationItems;
-const globalStore = GlobalStore();
-const userManagementStore = UserManagementStore();
+const globalStore = stores.GlobalStore();
+const userManagementStore = stores.UserManagementStore();
   const isNavigationOpen = ref(false);
   const loadingCompleted = ref(false);
   const route = useRoute();

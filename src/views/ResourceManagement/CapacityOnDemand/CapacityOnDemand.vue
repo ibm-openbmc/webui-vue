@@ -51,13 +51,13 @@ import { onBeforeRouteLeave } from 'vue-router';
 import CapacityOnDemandOrderInfo from './CapacityOnDemandOrderInfo.vue';
 import CapacityOnDemandAcvitation from './CapacityOnDemandActivation.vue';
 import CapacityOnDemandTable from './CapacityOnDemandTable.vue';
-import { LicenseStore, GlobalStore, SystemStore } from '@/store';
+import stores from '@/store';
 
 const { scrollToOffset } = useJumpLinkComposable();
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
-const global = GlobalStore();
-const licenseStore = LicenseStore();
-const systemStore = SystemStore();
+const global = stores.GlobalStore();
+const licenseStore = stores.LicenseStore();
+const systemStore = stores.SystemStore();
 
 const activation = ref(null);
 const orderInfo = ref(null);

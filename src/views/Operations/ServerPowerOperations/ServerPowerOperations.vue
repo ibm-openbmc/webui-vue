@@ -247,22 +247,16 @@ import Alert from '@/components/Global/Alert.vue';
 import ArrowRight16 from '@carbon/icons-vue/es/arrow--right/16';
 import NetworkSettingsModal from './NetworkSettingsModal.vue';
 
-import {
-  GlobalStore,
-  ControlStore,
-  BmcStore,
-  BootSettingsStore,
-  ResourceMemoryStore,
-} from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
 
-const globalStore = GlobalStore();
-const controlStore = ControlStore();
-const bmcStore = BmcStore();
-const bootSettingsStore = BootSettingsStore();
-const resourceMemoryStore = ResourceMemoryStore();
+const globalStore = stores.GlobalStore();
+const controlStore = stores.ControlStore();
+const bmcStore = stores.BmcStore();
+const bootSettingsStore = stores.BootSettingsStore();
+const resourceMemoryStore = stores.ResourceMemoryStore();
 
 const openModal = ref(false);
 

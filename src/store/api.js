@@ -3,7 +3,7 @@ import Axios from 'axios';
 //Do not change store import.
 //Exact match alias set to support
 //dotenv customizations.
-import { GlobalStore, AuthenticationStore } from '@/store';
+import stores from '@/store';
 import { useRouter } from 'vue-router';
 
 Axios.defaults.headers.common['Accept'] = [
@@ -18,8 +18,8 @@ const api = Axios.create({
 });
 
 api.interceptors.response.use(undefined, (error) => {
-  const globalStore = GlobalStore();
-  const authenticationStore = AuthenticationStore();
+  const globalStore = stores.GlobalStore();
+  const authenticationStore = stores.AuthenticationStore();
   let response = error.response;
   // TODO: Provide user with a notification and way to keep system active
   if (response.status == 401) {

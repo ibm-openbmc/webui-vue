@@ -40,9 +40,9 @@
 import { computed } from 'vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
-import { FirmwareStore } from '@/store';
+import stores from '@/store';
 
-const firmwareStore = FirmwareStore();
+const firmwareStore = stores.FirmwareStore();
 
 const running = computed(() => {
   return firmwareStore.activeHostFirmware;

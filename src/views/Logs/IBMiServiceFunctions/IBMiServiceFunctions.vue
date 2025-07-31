@@ -188,16 +188,12 @@ import { ref, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
-import {
-  GlobalStore,
-  IBMiServiceFunctionsStore,
-  BootSettingsStore,
-} from '@/store';
+import stores from '@/store';
 import Alert from '@/components/Global/Alert.vue';
 
-const globalStore = GlobalStore();
-const ibmiServiceFunctionsStore = IBMiServiceFunctionsStore();
-const bootSettingsStore = BootSettingsStore();
+const globalStore = stores.GlobalStore();
+const ibmiServiceFunctionsStore = stores.IBMiServiceFunctionsStore();
+const bootSettingsStore = stores.BootSettingsStore();
 const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 

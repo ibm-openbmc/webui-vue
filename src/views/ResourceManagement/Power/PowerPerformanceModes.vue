@@ -64,12 +64,12 @@ import PageSection from '@/components/Global/PageSection.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import ModalPowerPerformanceModes from './ModalPowerPerformanceModes.vue';
 import TablePowerPerformanceModes from './TablePowerPerformanceModes.vue';
-import { PowerControlStore } from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 
-const powerControlStore = PowerControlStore();
+const powerControlStore = stores.PowerControlStore();
 
 defineProps({
   safeMode: {

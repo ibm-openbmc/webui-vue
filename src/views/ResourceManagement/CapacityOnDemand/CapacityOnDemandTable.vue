@@ -162,8 +162,8 @@ import i18n from '@/i18n';
 import { forOwn } from 'lodash';
 import PageSection from '@/components/Global/PageSection.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
-import { LicenseStore } from '@/store';
-const licenseStore = LicenseStore();
+import stores from '@/store';
+const licenseStore = stores.LicenseStore();
 
 const fields = ref([
         {

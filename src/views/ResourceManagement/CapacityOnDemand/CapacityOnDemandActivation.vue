@@ -77,13 +77,13 @@ import useVuelidateComposable from '@/components/Composables/useVuelidateComposa
 import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import { useVuelidate } from '@vuelidate/core';
-import { LicenseStore, GlobalStore } from '@/store';
+import stores from '@/store';
 
 const { getValidationState } = useVuelidateComposable();
 const { successToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
-const global = GlobalStore();
-const licenseStore = LicenseStore();
+const global = stores.GlobalStore();
+const licenseStore = stores.LicenseStore();
 
 const licenseKey = ref('');
 const maxLengthVal = ref(34);

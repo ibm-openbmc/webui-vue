@@ -147,7 +147,7 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useLocalTimezoneLabelComposable from '../../components/Composables/useLocalTimezoneLabelComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
-import { UserManagementStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import {
   minLength,
   maxLength,
@@ -159,8 +159,8 @@ const { getValidationState } = useVuelidateComposable();
 const { startLoader, endLoader } = useLoadingBar();
 const { localOffset } = useLocalTimezoneLabelComposable();
 
-const global = GlobalStore();
-const userManagementStore = UserManagementStore()
+const global = stores.GlobalStore();
+const userManagementStore = stores.UserManagementStore()
 
 const form = ref({
         newPassword: '',

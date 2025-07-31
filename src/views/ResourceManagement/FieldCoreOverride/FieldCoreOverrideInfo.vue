@@ -35,11 +35,11 @@ import { isUndefined } from 'lodash';
 import IconTime from '@carbon/icons-vue/es/time/16';
 import PageSection from '@/components/Global/PageSection.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import { SystemStore, FieldCoreOverrideStore, LicenseStore } from '@/store';
+import stores from '@/store';
 
-const systemStore = SystemStore();
-const fieldCoreOverrideStore = FieldCoreOverrideStore();
-const licenseStore = LicenseStore();
+const systemStore = stores.SystemStore();
+const fieldCoreOverrideStore = stores.FieldCoreOverrideStore();
+const licenseStore = stores.LicenseStore();
 
 const systems = computed(() => {
   return systemStore.getSystems;

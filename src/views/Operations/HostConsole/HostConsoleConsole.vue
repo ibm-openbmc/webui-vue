@@ -40,7 +40,7 @@ import { Terminal } from 'xterm';
 import { throttle } from 'lodash';
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
-import { ChassisStore, AuthenticationStore } from '@/store';
+import stores from '@/store';
 
 defineProps({
   isFullWindow: {
@@ -51,8 +51,8 @@ defineProps({
 
 const panel = useTemplateRef('panel');
 
-const chassisStore = ChassisStore();
-const authenticationStore = AuthenticationStore();
+const chassisStore = stores.ChassisStore();
+const authenticationStore = stores.AuthenticationStore();
 
 const checkingServerStatus = ref(null); // used to prevent extra api calls
 const resizeConsoleWindow = ref(null);

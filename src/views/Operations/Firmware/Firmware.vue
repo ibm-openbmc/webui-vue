@@ -64,19 +64,14 @@ import BmcCards from './FirmwareCardsBmc.vue';
 import HostCards from './FirmwareCardsHost.vue';
 import FormUpdate from './FirmwareFormUpdate.vue';
 import FirmwareAccessKey from './FirmwareAccessKey.vue';
-import {
-  GlobalStore,
-  FirmwareStore,
-  ControlStore,
-  LicenseStore,
-} from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
-const globalStore = GlobalStore();
-const firmwareStore = FirmwareStore();
-const controlStore = ControlStore();
-const licenseStore = LicenseStore();
+const globalStore = stores.GlobalStore();
+const firmwareStore = stores.FirmwareStore();
+const controlStore = stores.ControlStore();
+const licenseStore = stores.LicenseStore();
 
 const isServerPowerOffRequired = ref(
   import.meta.env.VITE_APP_SERVER_OFF_REQUIRED === 'true',

@@ -153,7 +153,7 @@ import useTableRowExpandComposable from "../../../components/Composables/useTabl
 import useSearchFilterComposable from "../../../components/Composables/useSearchFilterComposable";
 import { ref, onMounted, computed } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import { PostCodeLogsStore } from "../../../store";
+import stores from "../../../store";
 
     const {
       clearSelectedRows,
@@ -172,7 +172,7 @@ import { PostCodeLogsStore } from "../../../store";
     const { expandRowLabel } = useTableRowExpandComposable();
     const { errorToast } = useToastComposable();
     const { hideLoader, startLoader, endLoader } = useLoadingBar();
-    const postCodeLogsStore = PostCodeLogsStore();
+    const postCodeLogsStore = stores.PostCodeLogsStore();
     const srcData = ref({});
     const isBusy = ref(true)
     const fields = ref([

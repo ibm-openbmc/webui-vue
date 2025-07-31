@@ -1,8 +1,8 @@
 import { includes } from 'lodash';
-import { GlobalStore } from '@/store';
+import stores from '@/store';
 
 export default function useTableFilter() {
-  const globalStore = GlobalStore();
+  const globalStore = stores.GlobalStore();
   const getFilteredTableData = (tableData = [], filters = []) => {
     const filterItems = filters.reduce((arr, filter) => {
       return [...arr, ...filter.values];

@@ -85,13 +85,13 @@ import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import PageSection from '@/components/Global/PageSection.vue';
-import { NetworkStore } from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 const { dataFormatter } = useDataFormatterGlobal();
 
-const networkStore = NetworkStore();
+const networkStore = stores.NetworkStore();
 
 const props = defineProps({
   tabIndex: {

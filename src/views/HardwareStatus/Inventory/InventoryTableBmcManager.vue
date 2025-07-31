@@ -135,7 +135,7 @@ import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import { reactive, ref, computed, onBeforeMount } from 'vue';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
-import { BmcStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
 import { useI18n } from 'vue-i18n';
 import useToast from '@/components/Composables/useToastComposable';
@@ -143,7 +143,7 @@ import useToast from '@/components/Composables/useToastComposable';
 const { successToast, errorToast } = useToast();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
-const bmcStore = BmcStore();
+const bmcStore = stores.BmcStore();
 const isBusy = ref(false);
 const { t } = useI18n();
 const fields = reactive([

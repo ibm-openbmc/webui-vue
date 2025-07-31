@@ -54,13 +54,13 @@ import { ref, onMounted, computed } from 'vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
-import { PowerPolicyStore, BootSettingsStore } from '@/store';
+import stores from '@/store';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 
-const powerPolicy = PowerPolicyStore();
-const bootSettings = BootSettingsStore();
+const powerPolicy = stores.PowerPolicyStore();
+const bootSettings = stores.BootSettingsStore();
 const Toast = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const policyValue = ref(null);

@@ -149,7 +149,7 @@
 
 <script setup>
 import { ref, onMounted, computed, onBeforeMount } from 'vue';
-import { SessionsStore } from '@/store';
+import stores from '@/store';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
@@ -175,7 +175,7 @@ const {
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
-const sessionsStore = SessionsStore();
+const sessionsStore = stores.SessionsStore();
 const Toast = useToastComposable();
 const tableSessionsRef = ref(null);
 const isBusy = ref(true);

@@ -85,13 +85,13 @@ import TableIpv4 from './TableIpv4.vue';
 import TableDns from './TableDns.vue';
 import TableIpv6 from './TableIpv6.vue';
 import TableIpv6StaticDefaultGateway from './TableIpv6StaticDefaultGateway.vue';
-import { NetworkStore, AuthenticationStore } from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 
-const networkStore = NetworkStore();
-const authenticationStore = AuthenticationStore();
+const networkStore = stores.NetworkStore();
+const authenticationStore = stores.AuthenticationStore();
 
 const currentHostname = ref('');
 const defaultGateway = ref('');

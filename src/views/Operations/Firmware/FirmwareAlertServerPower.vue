@@ -33,9 +33,9 @@
 <script setup>
 import { computed } from 'vue';
 import Alert from '@/components/Global/Alert.vue';
-import { ControlStore } from '@/store';
+import stores from '@/store';
 
-const controlStore = ControlStore();
+const controlStore = stores.ControlStore();
 
 defineProps({
   isServerOff: {

@@ -164,8 +164,7 @@ import Search from '@/components/Global/Search.vue';
 import { reactive, ref, computed, watch, onBeforeMount } from 'vue';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
-import { FanStore } from '../../../store';
-import { GlobalStore } from '../../../store';
+import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { useI18n } from 'vue-i18n';
@@ -182,8 +181,8 @@ const props = defineProps({
   },
 });
 
-const fanStore = FanStore();
-const globalStore = GlobalStore();
+const fanStore = stores.FanStore();
+const globalStore = stores.GlobalStore();
 const isBusy = ref(false);
 const { successToast, errorToast } = useToast();
 const { toggleRow } = useTableRowExpandComposable();

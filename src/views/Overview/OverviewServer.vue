@@ -52,7 +52,7 @@ import useLoadingBar, { loading } from '@/components/Composables/useLoadingBarCo
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import IconEdit from '@carbon/icons-vue/es/edit/16';
 import { onBeforeRouteLeave } from 'vue-router';
-import { SystemStore, GlobalStore, BootSettingsStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 import ModalAssetTag from './ModalAssetTag.vue';
 
@@ -60,9 +60,9 @@ const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 const { dataFormatter } = useDataFormatterGlobal();
 
-const systemStore = SystemStore();
-const global = GlobalStore();
-const bootSettingsStore = BootSettingsStore();
+const systemStore = stores.SystemStore();
+const global = stores.GlobalStore();
+const bootSettingsStore = stores.BootSettingsStore();
 
 const openModal = ref(false);
 const serviceLoginStatus = ref(null);

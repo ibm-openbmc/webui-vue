@@ -93,12 +93,12 @@
 <script setup>
 
 import { ref,defineProps,watch, computed} from 'vue';
-import { PcieTopologyStore } from '../../../store';
+import stores from '../../../store';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useToast from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 
-const pcieTopologyStore=PcieTopologyStore();
+const pcieTopologyStore= stores.PcieTopologyStore();
 const {dataFormatter}=useDataFormatterGlobal()
 const props=defineProps({
   selectedObj: {

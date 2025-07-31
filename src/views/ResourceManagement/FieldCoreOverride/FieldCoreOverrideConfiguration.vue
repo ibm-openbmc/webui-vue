@@ -57,14 +57,14 @@ import { requiredIf, minValue } from '@vuelidate/validators';
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
-import { SystemStore, FieldCoreOverrideStore, LicenseStore } from '@/store';
+import stores from '@/store';
 
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
-const systemStore = SystemStore();
-const fieldCoreOverrideStore = FieldCoreOverrideStore();
-const licenseStore = LicenseStore();
+const systemStore = stores.SystemStore();
+const fieldCoreOverrideStore = stores.FieldCoreOverrideStore();
+const licenseStore = stores.LicenseStore();
 
 const inputEnableFieldCoreOverride = ref(
   fieldCoreOverrideStore.isEnabledGetter

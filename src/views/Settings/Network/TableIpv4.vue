@@ -95,12 +95,12 @@ import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import PageSection from '@/components/Global/PageSection.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-import { NetworkStore } from '@/store';
+import stores from '@/store';
 
 const { successToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 
-const networkStore = NetworkStore();
+const networkStore = stores.NetworkStore();
 
 const props = defineProps({
   tabIndex: {

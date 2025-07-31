@@ -383,15 +383,15 @@ import Alert from '@/components/Global/Alert.vue';
 import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
-import { GlobalStore, ResourceMemoryStore } from '@/store';
+import stores from '@/store';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { scrollToOffset } = useJumpLinkComposable();
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
-const globalStore = GlobalStore();
-const resourceMemoryStore = ResourceMemoryStore();
+const globalStore = stores.GlobalStore();
+const resourceMemoryStore = stores.ResourceMemoryStore();
 
 const logicalMemorySizeOption = ref(null);
 const inputSystemMemoryPageSetup = ref(null);

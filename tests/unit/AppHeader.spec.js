@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
-import { GlobalStore, EventLogStore, AuthenticationStore } from '@/store';
+import stores from '@/store';
 import AppHeader from '@/components/AppHeader/AppHeader.vue';
 import eventBus from '@/eventBus';
 
@@ -21,9 +21,9 @@ describe('AppHeader.vue', () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
-    globalStore = GlobalStore();
-    eventLogStore = EventLogStore();
-    authStore = AuthenticationStore();
+    globalStore = stores.GlobalStore();
+    eventLogStore = stores.EventLogStore();
+    authStore = stores.AuthenticationStore();
 
     globalStore.getSystemInfo = vi.fn();
     eventLogStore.getEventLogData = vi.fn();

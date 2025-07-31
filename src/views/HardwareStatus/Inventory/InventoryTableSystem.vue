@@ -127,11 +127,11 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { SystemStore } from '../../../store';
+import stores from '../../../store';
 
 import eventBus from '@/eventBus';
 
-const systemStore = SystemStore();
+const systemStore = stores.SystemStore();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();

@@ -31,10 +31,10 @@
 
 <script setup>
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import { SystemParametersStore } from '@/store';
+import stores from '@/store';
 import { computed, defineProps } from 'vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
-const systemParametersStore = SystemParametersStore();
+const systemParametersStore = stores.SystemParametersStore();
 const Toast = useToastComposable();
 
 defineProps({

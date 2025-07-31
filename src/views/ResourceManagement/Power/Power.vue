@@ -40,11 +40,11 @@ import Alert from '@/components/Global/Alert.vue';
 import PowerCap from './PowerCap.vue';
 import PowerPerformanceModes from './PowerPerformanceModes.vue';
 import PowerIdleSaver from './PowerIdleSaver.vue';
-import { GlobalStore } from '@/store';
+import stores from '@/store';
 
 const { hideLoader } = useLoadingBar();
 
-const globalStore = GlobalStore();
+const globalStore = stores.GlobalStore();
 
 const safeMode = computed(() => {
   return globalStore.safeModeGetter;

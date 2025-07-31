@@ -78,7 +78,7 @@
 <script setup>
 import { ref, computed} from 'vue'
 import i18n from '@/i18n';
-import { UserManagementStore, GlobalStore, AuthenticationStore } from '@/store';
+import stores from '@/store';
 import { required, sameAs } from '@vuelidate/validators';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
@@ -87,9 +87,9 @@ import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
 import { useRouter } from 'vue-router';
 
-const global = GlobalStore();
-const userManagementStore = UserManagementStore();
-const authenticationStore = AuthenticationStore();
+const global = stores.GlobalStore();
+const userManagementStore = stores.UserManagementStore();
+const authenticationStore = stores.AuthenticationStore();
 
 const router = useRouter();
 const { getValidationState } = useVuelidateComposable();

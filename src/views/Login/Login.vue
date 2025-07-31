@@ -113,7 +113,7 @@
 <script setup>
 import { ref, reactive, computed, onBeforeMount } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { AuthenticationStore, CertificatesStore, GlobalStore } from '@/store';
+import stores from '@/store';
 import i18n from '@/i18n';
 import { useRouter } from 'vue-router';
 import eventBus from '@/eventBus';
@@ -130,10 +130,10 @@ import ModalUploadCertificate from './ModalUploadCertificate.vue';
 
 const passwordType = ref('password');
 const router = useRouter();
-const globalStore = GlobalStore();
+const globalStore = stores.GlobalStore();
 const { getValidationState } = useVuelidateComposable();
-const authenticationStore = AuthenticationStore();
-const certificatesStore = CertificatesStore();
+const authenticationStore = stores.AuthenticationStore();
+const certificatesStore = stores.CertificatesStore();
 const { dataFormatter } = useDataFormatterGlobal();
 const { successToast, errorToast } = useToast();
 const { t } = useI18n();

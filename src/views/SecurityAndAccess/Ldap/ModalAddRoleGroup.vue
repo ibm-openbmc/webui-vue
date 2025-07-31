@@ -73,14 +73,14 @@
 <script setup>
 import { computed, ref, reactive, watch,nextTick } from 'vue';
 import { required, requiredIf } from '@vuelidate/validators';
-import { UserManagementStore } from '../../../store';
+import stores from '../../../store';
 import useVuelidate from '@vuelidate/core';
 import eventBus from '@/eventBus';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
 // import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
 
-const userManagementStore = UserManagementStore();
+const userManagementStore = stores.UserManagementStore();
 const { getValidationState } = useVuelidateComposable();
 const { hideLoader, startLoader, endLoader, loading } = useLoadingBar();
 const modal = ref(false);

@@ -92,17 +92,17 @@ import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import { useVuelidate } from '@vuelidate/core';
-import { GlobalStore, IBMiServiceFunctionsStore, BootSettingsStore, UserManagementStore, DumpsStore } from '@/store/index.js';
+import stores from '@/store/index.js';
 import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
 const { successToast, errorToast, infoToast } = useToast();
 
-const global = GlobalStore();
-const ibmiServiceFunctions = IBMiServiceFunctionsStore();
-const serverBootSettings = BootSettingsStore();
-const userManagement = UserManagementStore();
-const dumps = DumpsStore()
+const global = stores.GlobalStore();
+const ibmiServiceFunctions = stores.IBMiServiceFunctionsStore();
+const serverBootSettings = stores.BootSettingsStore();
+const userManagement = stores.UserManagementStore();
+const dumps = stores.DumpsStore()
 
 const selectedDumpType =  ref('');
 const resourceSelectorValue = ref(null);

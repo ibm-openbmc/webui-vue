@@ -22,9 +22,9 @@
 
 <script setup>
 import { computed } from 'vue';
-import { LicenseStore } from '@/store';
+import stores from '@/store';
 
-const licenseStore = LicenseStore();
+const licenseStore = stores.LicenseStore();
 
 const firmwareAccessKeyInfo = computed(() => {
   return licenseStore.firmwareAccessKeyInfo;

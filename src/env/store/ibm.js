@@ -1,16 +1,21 @@
-//TODO: Work Requird -->
-import store from '@/store';
-import DumpsStore from '@/store/modules/Logs/DumpsStore';
-import KeyClearStore from '@/store/modules/Operations/KeyClearStore';
-import LicenseStore from '@/store/modules/ResourceManagement/LicenseStore';
-import FieldCoreOverrideStore from '@/store/modules/ResourceManagement/FieldCoreOverrideStore';
+import stores from '@/store';
+import DumpsStore from '../../store/modules/Logs/DumpsStore.js';
+import KeyClearStore from '../../store/modules/Operations/KeyClearStore';
+import LicenseStore from '../../store/modules/ResourceManagement/LicenseStore';
+import FieldCoreOverrideStore from '../../store/modules/ResourceManagement/FieldCoreOverrideStore.js';
 
-store.unregisterModule('virtualMedia');
+  Object.assign(stores, {
+    DumpsStore: DumpsStore,
+  });
+  Object.assign(stores, {
+    KeyClearStore: KeyClearStore,
+  });
+  Object.assign(stores, {
+    LicenseStore: LicenseStore,
+  });
+  Object.assign(stores, {
+    FieldCoreOverrideStore: FieldCoreOverrideStore,
+  });
 
-store.registerModule('dumps', DumpsStore);
-store.registerModule('licenses', LicenseStore);
-store.registerModule('fieldCoreOverride', FieldCoreOverrideStore);
+  export default stores;
 
-store.registerModule('key-clear', KeyClearStore);
-
-export default store;

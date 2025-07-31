@@ -1,5 +1,5 @@
 import JSONbig from 'json-bigint';
-import { AuthenticationStore, GlobalStore, EventLogStore } from '@/store';
+import stores from '@/store';
 /**
  * WebSocketPlugin will allow us to get new data from the server
  * without having to poll for changes on the frontend.
@@ -25,9 +25,9 @@ const data = {
 };
 
 export const initWebSocket = () => {
-  const globalStore = GlobalStore();
-  const authenticationStore = AuthenticationStore();
-  const eventLogStore = EventLogStore();
+  const globalStore = stores.GlobalStore();
+  const authenticationStore = stores.AuthenticationStore();
+  const eventLogStore = stores.EventLogStore();
 
   const socketDisabled =
     import.meta.env.VITE_APP_SUBSCRIBE_SOCKET_DISABLED === 'true'

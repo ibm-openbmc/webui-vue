@@ -194,7 +194,7 @@ import useToast from '@/components/Composables/useToastComposable';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
-import { DumpsStore, UserManagementStore, ResourceMemoryStore,  GlobalStore } from '@/store';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
@@ -202,10 +202,10 @@ const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } = usePagin
 const { getFilteredTableData, getFilteredTableDataByDate } = useTableFilterComposable();
 const { successToast, errorToast } = useToast();
 
-const dumps = DumpsStore();
-const userManagement = UserManagementStore();
-const resourceMemory = ResourceMemoryStore();
-const global = GlobalStore();
+const dumps = stores.DumpsStore();
+const userManagement = stores.UserManagementStore();
+const resourceMemory = stores.ResourceMemoryStore();
+const global = stores.GlobalStore();
 
 const isBusy = ref(true);
 const selectedDumpType = ref('');
