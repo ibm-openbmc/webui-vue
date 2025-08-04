@@ -172,13 +172,27 @@ const CertificatesStore = {
           dispatch('getCertificates');
         })
         .then(() => {
-          return i18n.t('pageCertificates.toast.successAddCertificate', {
-            certificate: getCertificateProp(type, 'label'),
-          });
+          if (type === 'BMC shell' || type === 'Resource dump') {
+            return i18n.t('pageCertificates.toast.succesUploadedCertificate', {
+              certificate: type,
+            });
+          } else {
+            return i18n.t('pageCertificates.toast.successAddCertificate', {
+              certificate: getCertificateProp(type, 'label'),
+            });
+          }
         })
         .catch((error) => {
-          console.log(error);
-          throw new Error(i18n.t('pageCertificates.toast.errorAddCertificate'));
+          if (type === 'BMC shell' || type === 'Resource dump') {
+            throw new Error(
+              error?.response?.data['@Message.ExtendedInfo']?.[0]?.Message
+            );
+          } else {
+            console.log(error);
+            throw new Error(
+              i18n.t('pageCertificates.toast.errorAddCertificate')
+            );
+          }
         });
     },
     async addNewACFCertificateOnLoginPage(_, { file, type }) {

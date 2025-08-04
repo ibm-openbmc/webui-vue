@@ -22,7 +22,8 @@
       "replace": "Replace",
       "reset": "Reset",
       "save": "Save",
-      "selected": "Selected"
+      "selected": "Selected",
+      "upload": "Upload"
     },
     "ariaLabel": {
       "clearSearch": "Clear search input",
@@ -342,6 +343,7 @@
     "ldapCertificate": "LDAP Certificate",
     "replaceCertificate": "Replace certificate",
     "serviceLoginCertificate": "Service login Certificate",
+    "uploadNewAcfCertificate": "Upload ACF certificate",
     "alert": {
       "certificateExpiredMessage": "%{certificate} has expired. Consider replacing it with a new certificate.",
       "certificateExpiringMessage": "%{certificate} is expiring soon. Consider replacing it with a new certificate.",
@@ -387,7 +389,8 @@
       "successAddedHTTPCertificate": "Successfully added %{certificate}. Reload the browser page to see the changes.",
       "successDeleteCertificate": "Successfully deleted %{certificate}.",
       "successReplaceCertificate": "Successfully replaced %{certificate}.",
-      "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to see the changes."
+      "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to see the changes.",
+      "succesUploadedCertificate": "Successfully uploaded %{certificate}."
     }
   },
   "pageChangePassword": {

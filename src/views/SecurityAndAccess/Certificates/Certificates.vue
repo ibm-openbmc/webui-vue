@@ -41,6 +41,10 @@
           <icon-add />
           {{ $t('pageCertificates.generateCsr') }}
         </b-button>
+        <b-button variant="link" @click="initAcfModalUploadCertificate(null)">
+          <icon-add />
+          {{ $t('pageCertificates.uploadNewAcfCertificate') }}
+        </b-button>
         <b-button
           variant="primary"
           :disabled="certificatesForUpload.length === 0"
@@ -104,6 +108,11 @@
       :user-role-id="userRoleId"
       @ok="onModalOk"
     />
+    <modal-upload-acf-certificate
+      :certificate="modalAcfCertificate"
+      :user-role-id="userRoleId"
+      @ok="onModalOk"
+    />
     <modal-generate-csr />
   </b-container>
 </template>
@@ -113,6 +122,7 @@ import IconReplace from '@carbon/icons-vue/es/renew/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import ModalGenerateCsr from './ModalGenerateCsr';
 import ModalUploadCertificate from './ModalUploadCertificate';
+import ModalUploadAcfCertificate from './ModalUploadAcfCertificate';
 import PageTitle from '@/components/Global/PageTitle';
 import TableRowAction from '@/components/Global/TableRowAction';
 import StatusIcon from '@/components/Global/StatusIcon';
@@ -128,6 +138,7 @@ export default {
     IconReplace,
     IconTrashcan,
     ModalGenerateCsr,
+    ModalUploadAcfCertificate,
     ModalUploadCertificate,
     PageTitle,
     StatusIcon,
@@ -142,6 +153,7 @@ export default {
     return {
       userRoleId: null,
       isBusy: true,
+      modalAcfCertificate: null,
       modalCertificate: null,
       fields: [
         {
@@ -251,6 +263,10 @@ export default {
           break;
       }
     },
+    initAcfModalUploadCertificate(certificate = null) {
+      this.modalAcfCertificate = certificate;
+      this.$bvModal.show('upload-acf-certificate');
+    },
     initModalUploadCertificate(certificate = null) {
       this.modalCertificate = certificate;
       this.$bvModal.show('upload-certificate');
@@ -286,7 +302,14 @@ export default {
     },
     addNewCertificate(file, type) {
       this.startLoader();
+      console.log('type', type);
       if (type === 'ServiceLogin Certificate') {
+        this.$store
+          .dispatch('certificates/addNewACFCertificate', { file, type })
+          .then((success) => this.successToast(success))
+          .catch(({ message }) => this.errorToast(message))
+          .finally(() => this.endLoader());
+      } else if (type === 'BMC shell' || type === 'Resource dump') {
         this.$store
           .dispatch('certificates/addNewACFCertificate', { file, type })
           .then((success) => this.successToast(success))
