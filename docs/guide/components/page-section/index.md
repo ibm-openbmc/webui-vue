@@ -10,4 +10,4 @@ string will be rendered in an `h2` header element.
 ```
 
 [View the page section component source
-code](https://github.com/openbmc/webui-vue/blob/master/src/components/Global/PageSection.vue).
+code](https://github.com/ibm-openbmc/webui-vue/blob/1060-vue3/src/components/Global/PageSection.vue).

@@ -23,11 +23,11 @@ component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/componen
 ## Example of form file
 
 ```vue
-<form-file
+<FormFile
   id="image-file"
   accept=".tar"
   >
-</form-file>
+</FormFile>
 ```
 
 ![Formfile example in firmware](./formfile.png)

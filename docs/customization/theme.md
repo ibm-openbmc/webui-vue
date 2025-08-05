@@ -81,7 +81,7 @@ function that only accepts a key from the Bootstrap `$grid-breakpoints` map.
 - [Bootstrap Sass
   Mixins](https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints)
 - [Customizing the Bootstrap
-  Grid](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/grid-system.html#responsive-classes)
+  Grid](https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints)
 
 ### $header-height
 This variable determines the height of the OpenBMC Web UI header element.

@@ -36,6 +36,6 @@ application. How to theme the application to meet company brand guidelines is
 documented in [Customization](/customization/).
 
 ## Components
-The [components section](components/alerts) is a guide to using both custom Vue
+The [components section](components/) is a guide to using both custom Vue
 components and components from the Bootstrap-Vue library.
 

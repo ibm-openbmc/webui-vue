@@ -18,7 +18,7 @@ export default defineConfig({
         },
         {
           text: "Github",
-          link: "https://github.com/openbmc/webui-vue"
+          link: "https://github.com/ibm-openbmc/webui-vue/blob/1060-vue3"
         }
       ],
       sidebar: {

@@ -29,8 +29,6 @@ the following libraries:
   `AppHeader.spec.js`
 - Create a global component like `PageSection.vue` in the `/tests/global`
   directory with the name `PageSection.spec.js`
-- Create a mixin like BVToastMixin  in the `/tests/mixins` directory with the
-  name `BVToastMixin.spec.js` Running Tests
 
  ## Running Tests
 

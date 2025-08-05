@@ -129,7 +129,7 @@ slot](https://bootstrap-vue.org/docs/components/table#comp-ref-BTable-slots) to
 target the expand button column and add a button with the chevron icon.
 
 Include the
-[useTableRowExpandComposable](https://github.com/openbmc/webui-vue/blob/master/src/components/Mixins/TableRowExpandMixin.js).
+[useTableRowExpandComposable](https://github.com/ibm-openbmc/webui-vue/blob/1060-vue3/src/components/Composables/useTableRowExpandComposable.js).
 The composable contains the dynamic `aria-label` and `title` attribute values that
 need to be included with the expand button. The `toggleRowDetails` method should
 be the button's click event callback. Be sure to pass the `row` object to the
@@ -207,7 +207,7 @@ Import the `<search>` and `<table-cell-count>` components and include them in
 the template above the `<BTable>` component.
 
 Include the
-[useSearchFilterComposable](https://github.com/openbmc/webui-vue/blob/master/src/components/Mixins/SearchFilterMixin.js).
+[useSearchFilterComposable](https://github.com/ibm-openbmc/webui-vue/blob/1060-vue3/src/components/Composables/useSearchFilterComposable.js).
 Add the `@change-search` and `@clear-search` event listeners on the `<search>`
 component and use the corresponding `onChangeSearchInput` and
 `onClearSearchInput` methods as the event callbacks. The table should also

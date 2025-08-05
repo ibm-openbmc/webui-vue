@@ -4,7 +4,7 @@ This section discusses the structure and purpose of the SCSS files and how to
 customize the application using Bootstrap theming.
 
 [Read more about Bootstrap
-Theming](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/reference/theming-bootstrap.html#theming-bootstrap)
+Theming](https://getbootstrap.com/docs/4.0/getting-started/theming)
 
 ## SCSS Directory Structure
 
@@ -163,7 +163,7 @@ $theme-colors: (
 ##### Color Resources
 
 - [Learn more about Bootstrap
-  colors](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/reference/color-variants.html#color-variants-and-css-class-mapping)
+  colors](https://getbootstrap.com/docs/4.0/getting-started/theming/#color)
 - [Learn more about Bootstrap
   variables](https://getbootstrap.com/docs/4.0/getting-started/theming/#css-variables)
 - [View the color palette and hex values in the color
@@ -204,7 +204,6 @@ set color highlights for some pseudo-elements like `: hover`.
       background-color: theme-color-dark('light');
     }
 }
-
 
 &.alert-info {
 border-left-color: theme-color("info");
@@ -264,7 +263,7 @@ $exit-easing--expressive: cubic-bezier(0.4, 0.14, 1, 1);
 
 This file contains all the global Sass options. There are Bootstrap option
 overrides, Bootstrap global variable overrides, and custom BMC global variables.
-Read more about these in the [Customization section](/customize/theme).
+Read more about these in the [Customization section](/customization/theme).
 
 ### `bootstrap` Directory
 
