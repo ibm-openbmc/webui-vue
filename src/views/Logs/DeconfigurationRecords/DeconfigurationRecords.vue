@@ -429,7 +429,7 @@ const toggleAll = (checked) => {
   }
 }
 .container-xl {
-  margin-left: 42px;
+  width: calc(100% - 90px);
 }
 .tableStyle {
   overflow-x: hidden;
