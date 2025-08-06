@@ -99,14 +99,16 @@ export default {
 
       // Step 1 - Upload
       const uploadFirmware = () => {
-        this.infoToast(
-          this.$t('pageFirmware.toast.updateFirmware.step1Message'),
-          {
-            title: this.$t('pageFirmware.toast.updateFirmware.step1'),
-            timestamp: true,
-          }
-        );
-        this.dispatchWorkstationUpload(activateFirmware);
+        const onSuccess = () => {
+          this.infoToast(
+            this.$t('pageFirmware.toast.updateFirmware.step1Message'),
+            {
+              title: this.$t('pageFirmware.toast.updateFirmware.step1'),
+              timestamp: true,
+            }
+          );
+        };
+        this.dispatchWorkstationUpload(activateFirmware).then(onSuccess);
       };
 
       // Step 2 - Activation
