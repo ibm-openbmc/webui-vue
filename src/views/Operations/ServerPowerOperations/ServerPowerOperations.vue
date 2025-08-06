@@ -254,6 +254,9 @@ export default {
           })
           .catch((error) => {
             console.log(error);
+            this.errorToast(
+              this.$t('pageServerPowerOperations.toast.errorSaveSettings')
+            );
           });
       } else {
         this.errorToast(
@@ -293,6 +296,11 @@ export default {
                   })
                   .catch((error) => {
                     console.log(error);
+                    this.errorToast(
+                      this.$t(
+                        'pageServerPowerOperations.toast.errorSaveSettings'
+                      )
+                    );
                   });
               }
             });
@@ -312,6 +320,11 @@ export default {
                   })
                   .catch((error) => {
                     console.log(error);
+                    this.errorToast(
+                      this.$t(
+                        'pageServerPowerOperations.toast.errorSaveSettings'
+                      )
+                    );
                   });
               }
             });
@@ -349,6 +362,9 @@ export default {
                 })
                 .catch((error) => {
                   console.log(error);
+                  this.errorToast(
+                    this.$t('pageServerPowerOperations.toast.errorSaveSettings')
+                  );
                 });
             }
           });
@@ -369,6 +385,9 @@ export default {
                 })
                 .catch((error) => {
                   console.log(error);
+                  this.errorToast(
+                    this.$t('pageServerPowerOperations.toast.errorSaveSettings')
+                  );
                 });
             }
           });

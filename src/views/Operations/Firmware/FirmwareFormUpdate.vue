@@ -161,17 +161,20 @@ export default {
 
       // Step 1 - Upload
       const uploadFirmware = () => {
-        this.infoToast(
-          this.$t('pageFirmware.toast.updateFirmware.step1Message'),
-          {
-            title: this.$t('pageFirmware.toast.updateFirmware.step1'),
-            timestamp: true,
-          }
-        );
+        const onSuccess = () => {
+          this.infoToast(
+            this.$t('pageFirmware.toast.updateFirmware.step1Message'),
+            {
+              title: this.$t('pageFirmware.toast.updateFirmware.step1'),
+              timestamp: true,
+            }
+          );
+        };
+
         if (this.isWorkstationSelected) {
-          this.dispatchWorkstationUpload(activateFirmware);
+          this.dispatchWorkstationUpload(activateFirmware).then(onSuccess);
         } else {
-          this.dispatchTftpUpload(activateFirmware);
+          this.dispatchTftpUpload(activateFirmware).then(onSuccess);
         }
       };
 
