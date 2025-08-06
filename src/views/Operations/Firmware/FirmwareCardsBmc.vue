@@ -145,6 +145,14 @@ export default {
       this.$emit('loadingStatus', this.loading);
 
       // Step 1 - Switch firmware
+      this.$store
+        .dispatch('firmware/switchBmcFirmwareAndReboot')
+        .then(async () => switchFirmware())
+        .then(async () => bmcReboot())
+        .catch(({ message }) => {
+          this.endLoader();
+          this.errorToast(message);
+        });
       const switchFirmware = () => {
         this.infoToast(
           this.$t('pageFirmware.toast.switchToRunning.step1Message'),
@@ -153,13 +161,6 @@ export default {
             timestamp: true,
           }
         );
-        this.$store
-          .dispatch('firmware/switchBmcFirmwareAndReboot')
-          .then(async () => bmcReboot())
-          .catch(({ message }) => {
-            this.endLoader();
-            this.errorToast(message);
-          });
       };
 
       // Step 2 - BMC Reboot
@@ -211,8 +212,6 @@ export default {
           );
         }, 120000); // 2 minutes
       };
-
-      switchFirmware();
     },
   },
 };

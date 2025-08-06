@@ -138,6 +138,9 @@ const ControlStore = {
           console.log(error);
           state.displayInfoToast = false;
           commit('setOperationInProgress', false);
+          throw new Error(
+            i18n.t('pageServerPowerOperations.toast.errorSaveSettings')
+          );
         });
     },
   },
