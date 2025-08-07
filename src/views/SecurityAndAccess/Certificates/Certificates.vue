@@ -286,7 +286,11 @@ export default {
     },
     addNewCertificate(file, type) {
       this.startLoader();
-      if (type === 'ServiceLogin Certificate') {
+      if (
+        type === 'ServiceLogin Certificate' ||
+        type === 'BMC shell ACF certificate' ||
+        type === 'Resource dump ACF certificate'
+      ) {
         this.$store
           .dispatch('certificates/addNewACFCertificate', { file, type })
           .then((success) => this.successToast(success))

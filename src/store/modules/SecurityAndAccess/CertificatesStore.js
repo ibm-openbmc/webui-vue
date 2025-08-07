@@ -28,6 +28,18 @@ export const CERTIFICATE_TYPES = [
     label: i18n.t('pageCertificates.serviceLoginCertificate'),
     limit: 1,
   },
+  {
+    type: 'BMC shell ACF certificate',
+    location: '/redfish/v1/AccountService/Accounts/service',
+    label: i18n.t('pageCertificates.bmcShell'),
+    limit: 100,
+  },
+  {
+    type: 'Resource dump ACF certificate',
+    location: '/redfish/v1/AccountService/Accounts/service',
+    label: i18n.t('pageCertificates.resourceDump'),
+    limit: 100,
+  },
 ];
 const getCertificateProp = (type, prop) => {
   const certificate = CERTIFICATE_TYPES.find(
@@ -172,13 +184,35 @@ const CertificatesStore = {
           dispatch('getCertificates');
         })
         .then(() => {
-          return i18n.t('pageCertificates.toast.successAddCertificate', {
-            certificate: getCertificateProp(type, 'label'),
-          });
+          if (
+            type === 'BMC shell ACF certificate' ||
+            type === 'Resource dump ACF certificate'
+          ) {
+            // Specific success message for tagerted ACF
+            return i18n.t('pageCertificates.toast.successAddCertificate', {
+              certificate: getCertificateProp(type, 'label'),
+            });
+          } else {
+            return i18n.t('pageCertificates.toast.successAddCertificate', {
+              certificate: getCertificateProp(type, 'label'),
+            });
+          }
         })
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.t('pageCertificates.toast.errorAddCertificate'));
+          if (
+            type === 'BMC shell ACF certificate' ||
+            type === 'Resource dump ACF certificate'
+          ) {
+            // Specific error message for tagerted ACF
+            throw new Error(
+              i18n.t('pageCertificates.toast.errorAddCertificate')
+            );
+          } else {
+            throw new Error(
+              i18n.t('pageCertificates.toast.errorAddCertificate')
+            );
+          }
         });
     },
     async addNewACFCertificateOnLoginPage(_, { file, type }) {

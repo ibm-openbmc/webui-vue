@@ -335,18 +335,21 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Add new certificate",
+    "bmcShell": "BMC shell ACF certificate",
     "caCertificate": "CA Certificate",
     "deleteCertificate": "Delete certificate",
     "generateCsr": "Generate CSR",
     "httpsCertificate": "HTTPS Certificate",
     "ldapCertificate": "LDAP Certificate",
     "replaceCertificate": "Replace certificate",
+    "resourceDump": "Resource dump ACF certificate",
     "serviceLoginCertificate": "Service login Certificate",
     "alert": {
       "certificateExpiredMessage": "%{certificate} has expired. Consider replacing it with a new certificate.",
       "certificateExpiringMessage": "%{certificate} is expiring soon. Consider replacing it with a new certificate.",
       "certificatesExpiredMessage": "Some certificates have expired. Consider replacing them with new certificates.",
-      "certificatesExpiringMessage": "Some certificates are expiring soon. Consider replacing them with new certificates."
+      "certificatesExpiringMessage": "Some certificates are expiring soon. Consider replacing them with new certificates.",
+      "targetedAcfMessage": "BMC shell and Resource dump ACF certificates will not be listed in the table."
     },
     "modal": {
       "alternateName": "Alternate name",
@@ -1129,7 +1132,7 @@
     "password": "Password",
     "serialNumber": "Serial number",
     "totpTooltip": "Enter the TOTP when the user is enrolled in MFA and MFA has not been bypassed.",
-    "uploadServiceLoginCertificate": "Upload service login certificate",
+    "uploadAcfCertificate": "Upload ACF certificate",
     "username": "Username",
     "alert": {
       "unauthorizedMessage": "User unauthorized",
