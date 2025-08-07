@@ -72,8 +72,10 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, { confirmed });
 
 const closeModal = () => {
+    nextTick(() => {
       modal.value=false;
       eventBus.emit('partition-modal-close');
+      });
     };
 const handleSubmit = () => {
       v$.value.$touch();
