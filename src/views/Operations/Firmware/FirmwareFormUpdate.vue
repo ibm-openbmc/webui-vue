@@ -75,6 +75,9 @@ export default {
     bootProgress() {
       return this.$store.getters['global/bootProgress'];
     },
+    isReadonly() {
+      return this.$store.getters['global/isReadOnlyUser'];
+    },
   },
   watch: {
     loading: function (value) {
@@ -99,7 +102,7 @@ export default {
 
       // Step 1 - Upload
       const uploadFirmware = () => {
-        const onSuccess = () => {
+        if (!this.isReadonly) {
           this.infoToast(
             this.$t('pageFirmware.toast.updateFirmware.step1Message'),
             {
@@ -107,8 +110,8 @@ export default {
               timestamp: true,
             }
           );
-        };
-        this.dispatchWorkstationUpload(activateFirmware).then(onSuccess);
+        }
+        this.dispatchWorkstationUpload(activateFirmware);
       };
 
       // Step 2 - Activation
