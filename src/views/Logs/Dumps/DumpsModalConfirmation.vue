@@ -43,6 +43,7 @@ import { ref, computed, nextTick } from 'vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
+import eventBus from '@/eventBus';
 
 const emit = defineEmits(['ok']);
 
@@ -63,9 +64,8 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, { confirmed });
 
 const closeModal = () => {
-      nextTick(() => {
-        modal.value=false
-      });
+      modal.value=false;
+      eventBus.emit('modal-close');
     };
 const handleSubmit = () => {
       v$.value.$touch();

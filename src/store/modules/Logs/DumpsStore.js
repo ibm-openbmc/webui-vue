@@ -60,7 +60,7 @@ export const DumpsStore = defineStore('dumps', {
         })
         .catch((error) => console.log(error));
     },
-    async createBmcDump(_, dumpType) {
+    async createBmcDump(dumpType) {
       return await api
         .post(
           '/redfish/v1/Managers/bmc/LogServices/Dump/Actions/LogService.CollectDiagnosticData',
@@ -147,7 +147,7 @@ export const DumpsStore = defineStore('dumps', {
           }
         });
     },
-    async createSystemDump(_, dumpType) {
+    async createSystemDump(dumpType) {
       return await api
         .post(
           '/redfish/v1/Systems/system/LogServices/Dump/Actions/LogService.CollectDiagnosticData',

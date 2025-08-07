@@ -122,6 +122,12 @@ onBeforeMount(() => {
       serverBootSettings.fetchBiosAttributes(),
       serverBootSettings.getBiosAttributes,
     ]);
+    eventBus.on('modal-close', () => {
+      modalConfirmation.value = false
+    })
+    eventBus.on('partition-modal-close', () => {
+      modalPartition.value = false
+    })
   });
 
 const rules = computed(() => ({
