@@ -125,6 +125,9 @@ export default {
     isTftpUploadAvailable() {
       return this.$store.getters['firmware/isTftpUploadAvailable'];
     },
+    isReadonly() {
+      return this.$store.getters['global/isReadOnlyUser'];
+    },
   },
   watch: {
     isWorkstationSelected: function () {
@@ -161,13 +164,15 @@ export default {
 
       // Step 1 - Upload
       const uploadFirmware = () => {
-        this.infoToast(
-          this.$t('pageFirmware.toast.updateFirmware.step1Message'),
-          {
-            title: this.$t('pageFirmware.toast.updateFirmware.step1'),
-            timestamp: true,
-          }
-        );
+        if (!this.isReadonly) {
+          this.infoToast(
+            this.$t('pageFirmware.toast.updateFirmware.step1Message'),
+            {
+              title: this.$t('pageFirmware.toast.updateFirmware.step1'),
+              timestamp: true,
+            }
+          );
+        }
         if (this.isWorkstationSelected) {
           this.dispatchWorkstationUpload(activateFirmware);
         } else {

@@ -133,6 +133,9 @@ export default {
     firmwareBootSide() {
       return this.$store.getters['firmware/firmwareBootSide'];
     },
+    isReadonly() {
+      return this.$store.getters['global/isReadOnlyUser'];
+    },
   },
   watch: {
     loading: function (value) {
@@ -146,13 +149,15 @@ export default {
 
       // Step 1 - Switch firmware
       const switchFirmware = () => {
-        this.infoToast(
-          this.$t('pageFirmware.toast.switchToRunning.step1Message'),
-          {
-            title: this.$t('pageFirmware.toast.switchToRunning.step1'),
-            timestamp: true,
-          }
-        );
+        if (!this.isReadonly) {
+          this.infoToast(
+            this.$t('pageFirmware.toast.switchToRunning.step1Message'),
+            {
+              title: this.$t('pageFirmware.toast.switchToRunning.step1'),
+              timestamp: true,
+            }
+          );
+        }
         this.$store
           .dispatch('firmware/switchBmcFirmwareAndReboot')
           .then(async () => bmcReboot())
