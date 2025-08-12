@@ -10,7 +10,6 @@ import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import replace from '@rollup/plugin-replace';
 
-const isDev = process.env.NODE_ENV === 'development';
 const CWD = process.cwd();
 const DEV_ENV_CONFIG = loadEnv('development', CWD);
 const {
@@ -95,9 +94,9 @@ export default defineConfig({
         target: VITE_BASE_URL,
         changeOrigin: true,
       // Bypass SSL certificate validation (for development only)
-        secure: !isDev,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: isDev ? (proxy) => {
+        configure: (proxy) => {
         // Custom middleware to modify proxy response headers
           proxy.on('proxyRes', (proxyRes) => {
             const setCookieHeader = proxyRes.headers['set-cookie'];
@@ -109,7 +108,7 @@ export default defineConfig({
             // Remove the 'strict-transport-security' header
             delete proxyRes.headers['strict-transport-security'];
           });
-        } : undefined,
+        },
       },
     },
     // Custom middleware to add headers
