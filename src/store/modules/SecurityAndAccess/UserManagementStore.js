@@ -134,7 +134,7 @@ const UserManagementStore = {
               return await api
                 .get(member['@odata.id'])
                 .then(async ({ data }) => {
-                  return await data.Description;
+                  return await data.RoleId;
                 });
             })
           );

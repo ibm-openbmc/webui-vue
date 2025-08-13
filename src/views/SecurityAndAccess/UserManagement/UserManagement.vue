@@ -328,7 +328,7 @@ export default {
           user.RoleId.includes(role)
         )[0];
 
-        if (userDescription) user.Description = userDescription;
+        if (userDescription) user.RoleId = userDescription;
 
         return user;
       });
@@ -342,13 +342,13 @@ export default {
         return {
           username: user.UserName,
           privilege:
-            user.Description === 'Administrator'
+            user.RoleId === 'Administrator'
               ? this.$t('pageUserManagement.table.administrator')
-              : user.Description === 'ReadOnly'
+              : user.RoleId === 'ReadOnly'
               ? this.$t('pageUserManagement.table.readOnly')
-              : user.Description === 'ServiceAgent'
+              : user.RoleId === 'OemIBMServiceAgent'
               ? this.$t('pageUserManagement.table.serviceAgent')
-              : user.Description,
+              : user.RoleId,
           status: user.Locked
             ? this.$t('global.status.locked')
             : user.Enabled
