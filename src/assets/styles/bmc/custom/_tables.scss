@@ -8,6 +8,12 @@
     thead {
       tr {
         th {
+          svg.bi-arrow-down-short,
+          svg.bi-arrow-up-short {
+            position: absolute !important;
+            left: -3px !important;
+            top: 38% !important;
+          }
           // svg {
           //   background-position: left calc(1.5rem / 2) center !important;
           //   padding-left: calc(1.2rem + 0.65em) !important;
