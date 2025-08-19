@@ -27,7 +27,7 @@ import AuditLogsStore from './modules/Logs/AuditLogsStore';
 // import PoliciesStore from './modules/SecurityAndAccess/PoliciesStore';
 import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
-import KeyClearStore from './modules/Operations/KeyClearStore';
+// import KeyClearStore from './modules/Operations/KeyClearStore';
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore';
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
 import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
@@ -40,10 +40,27 @@ import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsSt
 import ConcurrentMaintenanceStore from './modules/HardwareStatus/ConcurrentMaintenanceStore';
 import PcieSlotsStore from './modules/HardwareStatus/PcieSlotsStore';
 import FabricAdaptersStore from './modules/HardwareStatus/FabricAdaptersStore';
-
-// ... (export use other stores)
+// import stores from '@/store';
+import DumpsStore from './modules/Logs/DumpsStore.js';
+import KeyClearStore from './modules/Operations/KeyClearStore';
+import LicenseStore from './modules/ResourceManagement/LicenseStore';
+import FieldCoreOverrideStore from './modules/ResourceManagement/FieldCoreOverrideStore.js';
 
 const stores = {};
+
+  Object.assign(stores, {
+    DumpsStore: DumpsStore,
+  });
+  // Object.assign(stores, {
+  //   KeyClearStore: KeyClearStore,
+  // });
+  Object.assign(stores, {
+    LicenseStore: LicenseStore,
+  });
+  Object.assign(stores, {
+    FieldCoreOverrideStore: FieldCoreOverrideStore,
+  });
+// ... (export use other stores)
 
   Object.assign(stores, {
     GlobalStore: GlobalStore,

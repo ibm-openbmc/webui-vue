@@ -1,55 +1,63 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuditLogs from '@/views/Logs/AuditLogs';
 import ChangePassword from '@/views/ChangePassword';
+import ConcurrentMaintenance from '@/views/HardwareStatus/ConcurrentMaintenance';
+import Sessions from '@/views/SecurityAndAccess/Sessions';
 import ConsoleLayout from '@/layouts/ConsoleLayout.vue';
-import ConcurrentMaintenance from '../views/HardwareStatus/ConcurrentMaintenance/ConcurrentMaintenance.vue';
-import DateTime from '@/views/Settings/DateTime/DateTime.vue';
+import DateTime from '@/views/Settings/DateTime';
 import EventLogs from '@/views/Logs/EventLogs';
 import FactoryReset from '@/views/Operations/FactoryReset';
 import Firmware from '@/views/Operations/Firmware';
-import Inventory from '../views/HardwareStatus/Inventory/Inventory.vue';
-import Kvm from '@/views/Operations/Kvm';
-import KvmConsole from '@/views/Operations/Kvm/KvmConsole';
-import Sessions from '@/views/SecurityAndAccess/Sessions';
-import Ldap from '../views/SecurityAndAccess/Ldap/Ldap.vue';
+import Inventory from '@/views/HardwareStatus/Inventory';
+import Ldap from '@/views/SecurityAndAccess/Ldap';
 import UserManagement from '@/views/SecurityAndAccess/UserManagement';
-import LoginPage from '@/views/Login/Login.vue';
+import Login from '@/views/Login';
 import LoginLayout from '@/layouts/LoginLayout.vue';
-import HardwareDeconfiguration from '../views/Settings/HardwareDeconfiguration/HardwareDeconfiguration.vue';
 import Network from '@/views/Settings/Network';
-import Overview from '@/views/Overview/Overview.vue';
-import PageNotFound from '@/views/PageNotFound/PageNotFound.vue';
-import PostCodes from '@/views/Logs/PostCodeLogs/PostCodes.vue';
-import PostCodeLogs from '@/views/Logs/PostCodeLogs/PostCodeLogs.vue';
+import Notices from '@/views/Notices';
+import HardwareDeconfiguration from '@/views/Settings/HardwareDeconfiguration';
+import Overview from '@/views/Overview';
+import PageNotFound from '@/views/PageNotFound';
+import PostCodeLogs from '@/views/Logs/PostCodeLogs';
+import PostCodes from '@/views/Logs/PostCodeLogs/index';
 import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy';
 import ProfileSettings from '@/views/ProfileSettings';
 import RebootBmc from '@/views/Operations/RebootBmc';
 import Policies from '@/views/SecurityAndAccess/Policies';
-import KeyClear from '@/views/Operations/KeyClear/KeyClear.vue';
-import PcieTopology from '../views/HardwareStatus/PcieTopology/PcieTopology.vue';
+import KeyClear from '@/views/Operations/KeyClear';
 import Sensors from '@/views/HardwareStatus/Sensors';
+import PcieTopology from '@/views/HardwareStatus/PcieTopology';
+import ServiceLogin from '@/views/Operations/ServiceLoginConsoles/index';
+import ServiceLoginConsoles from '@/views/Operations/ServiceLoginConsoles/index';
 import HostConsole from '@/views/Operations/HostConsole';
-import HostConsoleConsole from '@/views/Operations/HostConsole/HostConsoleConsole.vue';
+import HostConsoleConsole from '@/views/Operations/HostConsole/index';
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations';
 import Certificates from '@/views/SecurityAndAccess/Certificates';
-import VirtualMedia from '@/views/Operations/VirtualMedia/VirtualMedia.vue';
 import Memory from '@/views/ResourceManagement/Memory';
 import Power from '@/views/ResourceManagement/Power';
 import SystemParameters from '@/views/ResourceManagement/SystemParameters';
 import SnmpAlerts from '@/views/Settings/SnmpAlerts';
+import CapacityOnDemand from '@/views/ResourceManagement/CapacityOnDemand';
+import FieldCoreOverride from '@/views/ResourceManagement/FieldCoreOverride';
+import DeconfigurationRecords from '@/views/Logs/DeconfigurationRecords';
+import IBMiServiceFunctions from '@/views/Logs/IBMiServiceFunctions';
+
 import i18n from '@/i18n';
 
-export const routes = [
+// Custom components
+import Dumps from '@/views/Logs/Dumps';
+
+const routes = [
   {
     path: '/login',
     component: LoginLayout,
     children: [
       {
         path: '',
-        name: 'LoginPage',
-        component: LoginPage,
+        name: 'login',
+        component: Login,
         meta: {
-          title: i18n.t('appPageTitle.login'),
+          title: i18n.global.t('appPageTitle.login'),
         },
       },
       {
@@ -71,6 +79,14 @@ export const routes = [
     },
     children: [
       {
+        path: 'service-login-consoles',
+        name: 'service-login-consoles',
+        component: ServiceLoginConsoles,
+        meta: {
+          title: i18n.global.t('appPageTitle.serviceLogin'),
+        },
+      },
+      {
         path: 'host-console-console',
         name: 'host-console-console',
         component: HostConsoleConsole,
@@ -84,14 +100,6 @@ export const routes = [
         component: PostCodes,
         meta: {
           title: i18n.global.t('appPageTitle.postCodes'),
-        },
-      },
-            {
-        path: 'kvm',
-        name: 'kvm-console',
-        component: KvmConsole,
-        meta: {
-          title: i18n.global.t('appPageTitle.kvm'),
         },
       },
     ],
@@ -112,11 +120,43 @@ export const routes = [
         },
       },
       {
+        path: 'notices',
+        name: 'notices',
+        component: Notices,
+        meta: {
+          title: i18n.global.t('appPageTitle.notices'),
+        },
+      },
+      {
         path: '/profile-settings',
         name: 'profile-settings',
         component: ProfileSettings,
         meta: {
           title: i18n.global.t('appPageTitle.profileSettings'),
+        },
+      },
+      {
+        path: '/logs/deconfiguration-records',
+        name: 'deconfiguration-records',
+        component: DeconfigurationRecords,
+        meta: {
+          title: i18n.global.t('appPageTitle.deconfigurationRecords'),
+        },
+      },
+      {
+        path: '/logs/dumps',
+        name: 'dumps',
+        component: Dumps,
+        meta: {
+          title: i18n.global.t('appPageTitle.dumps'),
+        },
+      },
+      {
+        path: '/logs/ibmi-service-functions',
+        name: 'ibmiServiceFunctions',
+        component: IBMiServiceFunctions,
+        meta: {
+          title: i18n.global.t('appPageTitle.ibmiServiceFunctions'),
         },
       },
       {
@@ -193,7 +233,7 @@ export const routes = [
       },
       {
         path: '/security-and-access/user-management',
-        name: 'local-users',
+        name: 'user-management',
         component: UserManagement,
         meta: {
           title: i18n.global.t('appPageTitle.userManagement'),
@@ -221,38 +261,6 @@ export const routes = [
         component: DateTime,
         meta: {
           title: i18n.global.t('appPageTitle.dateTime'),
-        },
-      },
-      {
-        path: '/settings/snmp-alerts',
-        name: 'snmp-alerts',
-        component: SnmpAlerts,
-        meta: {
-          title: i18n.global.t('appPageTitle.snmpAlerts'),
-        },
-      },
-      {
-        path: '/operations/factory-reset',
-        name: 'factory-reset',
-        component: FactoryReset,
-        meta: {
-          title: i18n.global.t('appPageTitle.factoryReset'),
-        },
-      },
-      { 
-        path: '/operations/key-clear',
-        name: 'key-clear',
-        component: KeyClear,
-        meta: {
-          title: i18n.global.t('appPageTitle.keyClear'),
-        },
-      },
-      {
-        path: '/operations/kvm',
-        name: 'kvm',
-        component: Kvm,
-        meta: {
-          title: i18n.global.t('appPageTitle.kvm'),
         },
       },
       {
@@ -288,6 +296,14 @@ export const routes = [
         },
       },
       {
+        path: '/settings/snmp-alerts',
+        name: 'snmp-alerts',
+        component: SnmpAlerts,
+        meta: {
+          title: i18n.global.t('appPageTitle.snmpAlerts'),
+        },
+      },
+      {
         path: '/resource-management/system-parameters',
         name: 'system-parameters',
         component: SystemParameters,
@@ -312,11 +328,51 @@ export const routes = [
         },
       },
       {
+        path: '/resource-management/capacity-on-demand',
+        name: 'capacity-on-demand',
+        component: CapacityOnDemand,
+        meta: {
+          title: i18n.global.t('appPageTitle.capacityOnDemand'),
+        },
+      },
+      {
+        path: '/resource-management/field-core-override',
+        name: 'field-core-override',
+        component: FieldCoreOverride,
+        meta: {
+          title: i18n.global.t('appPageTitle.fieldCoreOverride'),
+        },
+      },
+      {
+        path: '/operations/factory-reset',
+        name: 'factory-reset',
+        component: FactoryReset,
+        meta: {
+          title: i18n.global.t('appPageTitle.factoryReset'),
+        },
+      },
+      {
+        path: '/operations/key-clear',
+        name: 'key-clear',
+        component: KeyClear,
+        meta: {
+          title: i18n.global.t('appPageTitle.keyClear'),
+        },
+      },
+      {
         path: '/operations/reboot-bmc',
         name: 'reboot-bmc',
         component: RebootBmc,
         meta: {
           title: i18n.global.t('appPageTitle.rebootBmc'),
+        },
+      },
+      {
+        path: '/operations/service-login',
+        name: 'service-login',
+        component: ServiceLogin,
+        meta: {
+          title: i18n.global.t('appPageTitle.serviceLogin'),
         },
       },
       {
@@ -336,15 +392,7 @@ export const routes = [
         },
       },
       {
-        path: '/operations/virtual-media',
-        name: 'virtual-media',
-        component: VirtualMedia,
-        meta: {
-          title: i18n.global.t('appPageTitle.virtualMedia'),
-        },
-      },
-      {
-        path: '/:pathMatch(.*)*',
+        path: '*',
         name: 'page-not-found',
         component: PageNotFound,
         meta: {

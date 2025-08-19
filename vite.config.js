@@ -1,38 +1,47 @@
-//Work Required
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
-import path, { resolve, dirname } from 'node:path';
-import crypto from 'node:crypto';
+import { resolve, dirname } from 'node:path';
 import vue from '@vitejs/plugin-vue';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import Components from 'unplugin-vue-components/vite';
 import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers';
+import viteCompression from 'vite-plugin-compression';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import replace from '@rollup/plugin-replace';
 
-const isDev = process.env.NODE_ENV === 'development';
 const CWD = process.cwd();
 const DEV_ENV_CONFIG = loadEnv('development', CWD);
 const {
   VITE_BASE_URL,
   VITE_CUSTOM_STYLES,
   VITE_APP_ENV_NAME,
-} = DEV_ENV_CONFIG;
-  // Custom SCSS includes
-  const envStyle = () => {
-    const styles = [
-      `@use "sass:math";`,
-      `@import "@/assets/styles/bmc/helpers";`
-    ];
-
-    if (VITE_CUSTOM_STYLES === 'true' && VITE_APP_ENV_NAME) {
-      styles.push(`@import "@/env/assets/styles/_${VITE_APP_ENV_NAME}";`);
-    }
-
-    styles.push(`@import "@/assets/styles/bootstrap/_helpers";`);
-
-    return styles.join('\n');
-  };
+  VITE_CUSTOM_ROUTER,
+  VITE_CUSTOM_APP_NAV,
+  VITE_CUSTOM_STORE,
+} = loadEnv(DEV_ENV_CONFIG, CWD);
+const envStyle = () => {
+  const envName = VITE_APP_ENV_NAME;
+  const hasCustomStyles = VITE_CUSTOM_STYLES == 'true' ? true : false;
+  if (hasCustomStyles && envName !== undefined) {
+    // If there is an env name defined, import Sass
+    // overrides.
+    // It is important that these imports stay in this
+    // order to make sure enviroment overrides
+    // take precedence over the default BMC styles
+    return `
+      @use "sass:math";
+      @import "@/assets/styles/bmc/helpers";
+      @import "@/env/assets/styles/_${envName}";
+      @import "@/assets/styles/bootstrap/_helpers";
+    `;
+  } else {
+    return `
+      @use "sass:math";
+      @import "@/assets/styles/bmc/helpers";
+      @import "@/assets/styles/bootstrap/_helpers";
+    `;
+  }
+};
 
 export default defineConfig({
   // other configurations...
@@ -40,9 +49,9 @@ export default defineConfig({
     vue(),
     Components({
       resolvers: [BootstrapVueNextResolver()],
-      dts: false,
     }),
     basicSsl(),
+    viteCompression({ deleteOriginFile: true }),
     VueI18nPlugin({
       /* options */
       // locale messages resource pre-compile option
@@ -51,17 +60,6 @@ export default defineConfig({
         './path/to/src/locales/**'
       ),
     }),
-    {
-      name: 'custom-server-middleware',
-      configureServer(server) {
-        server.middlewares.use((req, res, next) => {
-          const originalCreateHash = crypto.createHash;
-          crypto.createHash = (algorithm) =>
-            originalCreateHash(algorithm === 'md4' ? 'sha256' : algorithm);
-          next();
-        });
-      },
-    }
   ],
   css: {
     preprocessorOptions: {
@@ -77,10 +75,6 @@ export default defineConfig({
         find: '@',
         replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
-      { find: /^\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
-      { find: /^\.\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
-      { find: /^\.\/routes$/, replacement: path.resolve(__dirname, `src/env/router/${VITE_APP_ENV_NAME}.js`) },
-      { find: /^\.\/AppNavigationData$/, replacement: path.resolve(__dirname, `src/env/components/AppNavigation/${VITE_APP_ENV_NAME}.js`) },
     ],
   },
   optimizeDeps: {
@@ -94,11 +88,11 @@ export default defineConfig({
       '/api': {
         target: VITE_BASE_URL,
         changeOrigin: true,
-      // Bypass SSL certificate validation (for development only)
-        secure: !isDev,
+        // Bypass SSL certificate validation (for development only)
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: isDev ? (proxy) => {
-        // Custom middleware to modify proxy response headers
+        configure: (proxy) => {
+          // Custom middleware to modify proxy response headers
           proxy.on('proxyRes', (proxyRes) => {
             const setCookieHeader = proxyRes.headers['set-cookie'];
             if (setCookieHeader) {
@@ -109,16 +103,56 @@ export default defineConfig({
             // Remove the 'strict-transport-security' header
             delete proxyRes.headers['strict-transport-security'];
           });
-        } : undefined,
+        },
       },
     },
     // Custom middleware to add headers
-    configureServer(server) {
-      server.middlewares.use((_req, res, next) => {
+    middlewares: [
+      (req, res, next) => {
         res.setHeader('Connection', 'keep-alive');
         next();
-      })
-    },
+      },
+    ],
+  },
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      const crypto = require('crypto');
+      const crypto_orig_createHash = crypto.createHash;
+      crypto.createHash = (algorithm) =>
+        crypto_orig_createHash(algorithm == 'md4' ? 'sha256' : algorithm);
+
+      const envName = VITE_APP_ENV_NAME;
+      const hasCustomStore = VITE_CUSTOM_STORE === 'true' ? true : false;
+      const hasCustomRouter = VITE_CUSTOM_ROUTER === 'true' ? true : false;
+      const hasCustomAppNav = VITE_CUSTOM_APP_NAV === 'true' ? true : false;
+
+      if (envName !== undefined) {
+        if (hasCustomStore) {
+          res.locals.config.resolve.alias['./store$'] =
+            `@/env/store/${envName}.js`;
+          res.locals.config.resolve.alias['../store$'] =
+            `@/env/store/${envName}.js`;
+        }
+        if (hasCustomRouter) {
+          res.locals.config.resolve.alias['./routes$'] =
+            `@/env/router/${envName}.js`;
+        }
+        if (hasCustomAppNav) {
+          res.locals.config.resolve.alias['./AppNavigationMixin$'] =
+            `@/env/components/AppNavigation/${envName}.js`;
+        }
+      }
+      if (process.env.NODE_ENV === 'production') {
+        res.locals.config.plugins.push(
+          // eslint-disable-next-line no-undef
+          new CompressionPlugin({
+            deleteOriginalAssets: true,
+          })
+        );
+      }
+
+      next();
+    });
   },
   build: {
     chunkSizeWarningLimit: 1000,
@@ -128,18 +162,19 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            return id.split('node_modules/')[1].split('/')[0];
+            return id
+              .toString()
+              .split('node_modules/')[1]
+              .split('/')[0]
+              .toString();
           }
         },
       },
       plugins: [
         replace({
           include: ['src/store/api.js'],
+          '/api': "''",
           delimiters: ["'", "'"],
-          preventAssignment: true,
-          values: {
-            '/api': ''
-          },
         }),
       ],
     },
