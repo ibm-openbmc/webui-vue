@@ -35,10 +35,11 @@
               :key="value"
               :value="value"
               :data-test-id="`tableFilter-checkbox-${value}`"
+              :label="value"
+              class="dropdown-item filter-checkbox-keys"
+              @click.native="toggleCheckbox($event)"
             >
-              <b-dropdown-item>
-                {{ value }}
-              </b-dropdown-item>
+              {{ value }}
             </b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
@@ -108,6 +109,14 @@ export default {
       });
       this.$emit('filter-change', { activeFilters });
     },
+    toggleCheckbox(event) {
+      if (event.target.classList.contains('filter-checkbox-keys')) {
+        const input = event.currentTarget.querySelector(
+          'input[type="checkbox"]'
+        );
+        if (input) input.click();
+      }
+    },
   },
 };
 </script>
@@ -115,5 +124,13 @@ export default {
 <style lang="scss" scoped>
 .badge {
   margin-right: $spacer / 2;
+}
+.filter-checkbox-keys {
+  cursor: pointer;
+  padding: 0.25rem 1.5rem;
+
+  ::v-deep label {
+    cursor: pointer;
+  }
 }
 </style>
