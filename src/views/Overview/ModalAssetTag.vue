@@ -3,6 +3,10 @@
     v-model="modal"
     id="modal-asset-tag"
     :title="$t('pageOverview.modal.editAssetTag')"
+    :ok-title="
+      $t('global.action.save')
+    "
+    @ok="onOk"
     @hidden="resetForm"
   >
     <BForm id="asset-settings" @submit.prevent="handleSubmit">
@@ -31,14 +35,6 @@
     <template #modal-footer="{ cancel }">
       <BButton variant="secondary" @click="cancel()">
         {{ $t('global.action.cancel') }}
-      </BButton>
-      <BButton
-        form="asset-settings"
-        type="submit"
-        variant="primary"
-        @click="onOk"
-      >
-        {{ $t('global.action.save') }}
       </BButton>
     </template>
   </BModal>
@@ -88,7 +84,7 @@ watch(
 const handleSubmit = () => {
       v$.value.$touch();
       if (v$.value.$invalid) return;
-      eventBus.emit('ok', { AssetTag: form.value.assetTag });
+      eventBus.emit('okAssetTag', { AssetTag: form.value.assetTag });
       closeModal();
     };
 const closeModal = () => {

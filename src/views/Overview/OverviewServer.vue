@@ -38,7 +38,7 @@
         </dl>
       </BCol>
     </BRow>
-    <modal-asset-tag v-modal=openModal :tag="assetTag" @ok="saveAssetTag" />
+    <modal-asset-tag v-modal=openModal :tag="assetTag" />
   </overview-card>
 </template>
 
@@ -137,6 +137,10 @@ const initAssetTagModal = () => {
       openModal.value = true;
       eventBus.emit('openmodal-true');
     };
+
+eventBus.on('okAssetTag', (value) => {
+  saveAssetTag(value);
+});
 const saveAssetTag = (modalFormData) => {
       startLoader();
       systemStore.saveAssetTag(modalFormData)
