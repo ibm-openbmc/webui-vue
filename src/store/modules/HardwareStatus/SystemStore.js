@@ -129,7 +129,7 @@ export const SystemStore = defineStore('system', {
     },
     async saveAssetTag(assetTag) {
       return api
-        .patch('/api/redfish/v1/Systems/system', assetTag)
+        .patch('/redfish/v1/Systems/system', assetTag)
         .then(() => {
           return i18n.global.t('pageOverview.toast.successSaveAssetTag');
         })
