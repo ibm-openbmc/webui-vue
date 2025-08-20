@@ -1,7 +1,7 @@
 <template>
   <b-modal id="upload-certificate" ref="modal" @ok="onOk" @hidden="resetForm">
     <template #modal-title>
-      {{ $t('pageLogin.modal.addNewServiceLoginCertificate') }}</template
+      {{ $t('pageLogin.modal.addNewAcfCertificate') }}</template
     >
     <b-form>
       <b-form-group

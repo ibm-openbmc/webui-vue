@@ -349,7 +349,7 @@
       "certificateExpiringMessage": "%{certificate} is expiring soon. Consider replacing it with a new certificate.",
       "certificatesExpiredMessage": "Some certificates have expired. Consider replacing them with new certificates.",
       "certificatesExpiringMessage": "Some certificates are expiring soon. Consider replacing them with new certificates.",
-      "targetedAcfMessage": "BMC shell and Resource dump ACF certificates will not be listed in the table."
+      "targetedAcfMessage": "BMC shell and Resource dump ACF certificates will not be listed in the table. System has to be powered on to upload Resource dump ACF certificate."
     },
     "modal": {
       "alternateName": "Alternate name",
@@ -1139,7 +1139,7 @@
       "message": "Invalid username or password"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "Add new service login certificate",
+      "addNewAcfCertificate": "Add new ACF certificate",
       "certificateFile": "Certificate File",
       "login": "Log In",
       "register": "Register"
