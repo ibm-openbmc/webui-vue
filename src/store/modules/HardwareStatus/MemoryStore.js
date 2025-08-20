@@ -73,7 +73,7 @@ export const MemoryStore = defineStore('memoryStore', {
           }
         })
         .catch((error) => {
-          this.getDimms;
+          this.getDimms();
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(

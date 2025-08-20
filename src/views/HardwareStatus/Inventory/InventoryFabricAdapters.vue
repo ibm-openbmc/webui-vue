@@ -285,6 +285,7 @@ function toggleIdentifyLedValue(row) {
       uri: row.uri,
       memberId: row.id,
       identifyLed: row.identifyLed,
+      chassisUri: props.chassis,
     })
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));

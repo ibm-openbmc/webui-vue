@@ -76,6 +76,8 @@ export const FanStore = defineStore('fanStore', {
           }
         })
         .catch((error) => {
+          const chassisUri = uri.split('/ThermalSubsystem').shift();
+          this.getAllFans({ uri: chassisUri });
           console.log(error);
           if (led.identifyLed) {
             throw new Error(

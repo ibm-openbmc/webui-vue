@@ -101,7 +101,8 @@ export const AssemblyStore = defineStore('assemblyStore', {
           }
         })
         .catch((error) => {
-          this.getAssemblyInfo();
+          const chassisUri = uri.split('/Assembly').shift();
+          this.getAssemblyInfo({ uri: chassisUri });
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(

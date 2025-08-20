@@ -79,6 +79,10 @@ export const PowerSupplyStore = defineStore('powerSupplyStore', {
           }
         })
         .catch((error) => {
+          const chassisUri = uri.split('/PowerSubsystem').shift();
+          this.getAllPowerSupplies({
+            uri: chassisUri,
+          });
           console.log(error);
           if (led.identifyLed) {
             throw new Error(

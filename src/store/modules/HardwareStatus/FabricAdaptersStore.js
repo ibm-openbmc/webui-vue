@@ -91,7 +91,9 @@ export const FabricAdaptersStore = defineStore('fabricStore', {
           }
         })
         .catch((error) => {
-          this.getFabricAdaptersInfo(led);
+          this.getFabricAdaptersInfo({
+            uri: led.chassisUri,
+          });
           console.log('error', error);
           if (led.identifyLed) {
             throw new Error(
