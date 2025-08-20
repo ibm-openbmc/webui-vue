@@ -184,35 +184,13 @@ const CertificatesStore = {
           dispatch('getCertificates');
         })
         .then(() => {
-          if (
-            type === 'BMC shell ACF certificate' ||
-            type === 'Resource dump ACF certificate'
-          ) {
-            // Specific success message for tagerted ACF
-            return i18n.t('pageCertificates.toast.successAddCertificate', {
-              certificate: getCertificateProp(type, 'label'),
-            });
-          } else {
-            return i18n.t('pageCertificates.toast.successAddCertificate', {
-              certificate: getCertificateProp(type, 'label'),
-            });
-          }
+          return i18n.t('pageCertificates.toast.successAddCertificate', {
+            certificate: getCertificateProp(type, 'label'),
+          });
         })
         .catch((error) => {
           console.log(error);
-          if (
-            type === 'BMC shell ACF certificate' ||
-            type === 'Resource dump ACF certificate'
-          ) {
-            // Specific error message for tagerted ACF
-            throw new Error(
-              i18n.t('pageCertificates.toast.errorAddCertificate')
-            );
-          } else {
-            throw new Error(
-              i18n.t('pageCertificates.toast.errorAddCertificate')
-            );
-          }
+          throw new Error(i18n.t('pageCertificates.toast.errorAddCertificate'));
         });
     },
     async addNewACFCertificateOnLoginPage(_, { file, type }) {
