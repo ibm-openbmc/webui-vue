@@ -19,6 +19,15 @@
 
       <!-- Add new Certificate type -->
       <template v-else>
+        <b-row>
+          <b-col>
+            <alert variant="info" class="mb-4">
+              <div>
+                {{ $t('pageCertificates.alert.targetedAcfMessage') }}
+              </div>
+            </alert>
+          </b-col>
+        </b-row>
         <b-form-group
           :label="$t('pageCertificates.modal.certificateType')"
           label-for="certificate-type"
@@ -40,7 +49,13 @@
       </template>
 
       <b-form-group :label="$t('pageCertificates.modal.certificateFile')">
-        <template v-if="form.certificateType === 'ServiceLogin Certificate'">
+        <template
+          v-if="
+            form.certificateType === 'ServiceLogin Certificate' ||
+            form.certificateType === 'BMC shell ACF certificate' ||
+            form.certificateType === 'Resource dump ACF certificate'
+          "
+        >
           <form-file
             id="certificate-file"
             v-model="form.file"
@@ -87,11 +102,12 @@
 <script>
 import { required, requiredIf } from 'vuelidate/lib/validators';
 import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
+import Alert from '@/components/Global/Alert';
 
 import FormFile from '@/components/Global/FormFile';
 
 export default {
-  components: { FormFile },
+  components: { FormFile, Alert },
   mixins: [VuelidateMixin],
   props: {
     certificate: {
@@ -147,7 +163,11 @@ export default {
     fileFormat() {
       if (
         this.certificate?.certificate === 'ServiceLogin Certificate' ||
-        this.form.certificateType === 'ServiceLogin Certificate'
+        this.form.certificateType === 'ServiceLogin Certificate' ||
+        this.certificate?.certificate === 'BMC shell ACF certificate' ||
+        this.form.certificateType === 'BMC shell ACF certificate' ||
+        this.certificate?.certificate === 'Resource dump ACF certificate' ||
+        this.form.certificateType === 'Resource dump ACF certificate'
       ) {
         return '.acf';
       } else {

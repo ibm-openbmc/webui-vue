@@ -107,11 +107,11 @@
       @click="initModalUploadCertificate"
     >
       <icon-upload />
-      {{ $t('pageLogin.uploadServiceLoginCertificate') }}
+      {{ $t('pageLogin.uploadAcfCertificate') }}
     </b-button>
 
     <!-- Modals -->
-    <modal-upload-certificate @ok="onModalOk" />
+    <modal-upload-certificate @ok="addNewCertificate" />
     <modal-otp-generate />
   </div>
 </template>
@@ -249,11 +249,7 @@ export default {
     initModalUploadCertificate() {
       this.$bvModal.show('upload-certificate');
     },
-    onModalOk({ file }) {
-      this.addNewCertificate(file);
-    },
-    addNewCertificate(file) {
-      const type = 'ServiceLogin Certificate';
+    addNewCertificate({ type, file }) {
       this.$store
         .dispatch('certificates/addNewACFCertificateOnLoginPage', {
           file,

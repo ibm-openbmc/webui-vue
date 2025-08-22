@@ -28,6 +28,18 @@ export const CERTIFICATE_TYPES = [
     label: i18n.t('pageCertificates.serviceLoginCertificate'),
     limit: 1,
   },
+  {
+    type: 'BMC shell ACF certificate',
+    location: '/redfish/v1/AccountService/Accounts/service',
+    label: i18n.t('pageCertificates.bmcShell'),
+    limit: 100,
+  },
+  {
+    type: 'Resource dump ACF certificate',
+    location: '/redfish/v1/AccountService/Accounts/service',
+    label: i18n.t('pageCertificates.resourceDump'),
+    limit: 100,
+  },
 ];
 const getCertificateProp = (type, prop) => {
   const certificate = CERTIFICATE_TYPES.find(
