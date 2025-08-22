@@ -86,6 +86,9 @@ export default {
       }
     },
   },
+  mounted() {
+    this.form.certificateType = this.certificateOptions[0]?.value;
+  },
   validations() {
     return {
       form: {
