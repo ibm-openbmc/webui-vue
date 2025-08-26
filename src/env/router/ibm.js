@@ -392,7 +392,7 @@ const routes = [
         },
       },
       {
-        path: '*',
+        path: '/:pathMatch(.*)*',
         name: 'page-not-found',
         component: PageNotFound,
         meta: {
