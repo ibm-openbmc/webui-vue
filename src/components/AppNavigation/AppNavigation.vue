@@ -66,8 +66,11 @@ import { useRoute } from 'vue-router';
 import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
 import stores from '@/store';
 import eventBus from '@/eventBus';
-const navigationItems = AppNavigationData().navigationItems;
-const globalStore = stores.GlobalStore();
+
+  const navigationItems = computed(() => {
+    return AppNavigationData().navigationItems;
+  });
+  const globalStore = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
 const isNavigationOpen = ref(false);
 const loadingCompleted = ref(false);

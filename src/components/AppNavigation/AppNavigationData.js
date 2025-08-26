@@ -9,10 +9,10 @@ import IconDocument from '@carbon/icons-vue/es/document/16';
 import i18n from '@/i18n';
 import stores from '@/store'
 
-import { ref, computed, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 
 const AppNavigationData = () => {
-  const navigationData = ref([
+  const navigationData = [
         {
           id: 'overview',
           label: i18n.global.t('appNavigation.overview'),
@@ -259,7 +259,7 @@ const AppNavigationData = () => {
           route: '/notices',
           icon: IconDocument,
         },
-  ]);
+  ];
   
   const globalStore = stores.GlobalStore();
   const roleId = computed(
@@ -275,34 +275,37 @@ const AppNavigationData = () => {
     hmcInfo.value === 'Enabled' ? 'HMCManaged' : 'NonHMCManaged',
   );
 
-  const navigationItems = computed(() => {
-    return navigationData.value.map((section) => {
-      const restrictedPages = [];
-      section.children?.forEach((page) => {
-        if (page.restrictTo.length > 0) {
-          const isPageNeeded = page.restrictTo.some(
-            (requiredRole) =>
-              requiredRole === roleId.value ||
-              requiredRole === model.value ||
-              requiredRole === isHmcManged.value,
-          );
-          if (!isPageNeeded) restrictedPages.push(page);
-        }
-      });
-      if (section?.children && section?.children.length > 0) {
-        const finalSection = section.children.filter(
-          (item) => !restrictedPages.includes(item),
-        );
-        section.children = finalSection;
-      }
-      return section;
-    });
-  });
+  const navigationItems = navigationData;
+  // const navigationItems = computed(() => {
+  //   console.log('navigationData', navigationData);
+  //   return navigationData.map((section) => {
+  //     const restrictedPages = [];
+  //     section.children?.forEach((page) => {
+  //       if (page.restrictTo.length > 0) {
+  //         const isPageNeeded = page.restrictTo.some(
+  //           (requiredRole) =>
+  //             requiredRole === roleId.value ||
+  //             requiredRole === model.value ||
+  //             requiredRole === isHmcManged.value,
+  //         );
+  //         if (!isPageNeeded) restrictedPages.push(page);
+  //       }
+  //     });
+  //     if (section?.children && section?.children.length > 0) {
+  //       const finalSection = section.children.filter(
+  //         (item) => !restrictedPages.includes(item),
+  //       );
+  //       section.children = finalSection;
+  //     }
+  //     console.log('section', section);
+  //     return section;
+  //   });
+  // });
 
   onMounted(() => {
     globalStore.getHmcManaged();
   });
-
+  
   return {
     navigationItems,
     roleId,
