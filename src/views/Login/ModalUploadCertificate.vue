@@ -76,6 +76,10 @@ export default {
           value: this.$t('pageCertificates.serviceLoginCertificate'),
         },
         {
+          text: 'Admin reset certificate',
+          value: this.$t('pageCertificates.adminResetCertificate'),
+        },
+        {
           text: 'BMC shell ACF certificate',
           value: this.$t('pageCertificates.bmcShell'),
         },
@@ -152,6 +156,14 @@ export default {
             }
           } else if (decoded.includes('service')) {
             if (this.form.certificateType === 'ServiceLogin Certificate') {
+              this.fileTypeMismatch = false;
+            } else {
+              this.fileTypeMismatch = true;
+              this.$v.form.file.$touch();
+              return;
+            }
+          } else if (decoded.includes('adminreset')) {
+            if (this.form.certificateType === 'Admin reset certificate') {
               this.fileTypeMismatch = false;
             } else {
               this.fileTypeMismatch = true;

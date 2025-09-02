@@ -335,6 +335,7 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Add new certificate",
+    "adminResetCertificate": "Admin reset certificate",
     "bmcShell": "BMC shell ACF certificate",
     "caCertificate": "CA Certificate",
     "deleteCertificate": "Delete certificate",
