@@ -151,6 +151,9 @@ export default {
     certificateOptions() {
       const filteredCertificates = this.certificateTypes
         .filter((certificate) => {
+          if (certificate.type === 'Admin reset certificate') {
+            return false;
+          }
           if (
             certificate.type === 'ServiceLogin Certificate' &&
             this.isNotAdmin
