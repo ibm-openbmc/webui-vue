@@ -113,9 +113,7 @@ const onResetBiosConfirm = () => {
       toast.successToast(message);
     })
     .catch(({ message }) => {
-      toast.errorToast('', {
-        title: message,
-      });
+      toast.errorToast(message);
     });
 };
 const onResetToDefaultsConfirm = () => {

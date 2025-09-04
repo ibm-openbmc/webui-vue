@@ -140,7 +140,6 @@ const ioSlotsLength=computed(()=>{
 const getAllLeds=async()=>{
   await pcieTopologyStore.getAllLedValues(props.selectedObj)
   .then((returnedObj) => {
-          ioSlotsLed.value = returnedObj.ioSlots;
           pcieBridgeLed.value = returnedObj.pcieBridge;
           localPortLed.value = [];
           props.selectedObj.localPortLocation.map((selectedPort) => {
@@ -149,6 +148,7 @@ const getAllLeds=async()=>{
                 localPortLed.push(returnedPort);
               }
             });
+          });
           remotePortLed.value = [];
           props.selectedObj.remotePortLocation.map((selectedPort) => {
             returnedObj.remotePortLocation.map((returnedPort) => {
@@ -157,10 +157,17 @@ const getAllLeds=async()=>{
               }
             });
           });
-        });
-        
-    });
-
+          ioSlotsLed.value = [];
+          if (props.selectedObj.ioSlots.length > 0) {
+            props.selectedObj.ioSlots.map((selectedSlot) => {
+              returnedObj.ioSlots.map((returnedSlot) => {
+              if (selectedSlot.locationNumber === returnedSlot.locationNumber) {
+                ioSlotsLed.value.push(returnedSlot);
+              }
+              });
+            });
+          }
+  })
 }
 
 const changeLedValue=async(value,type)=>{

@@ -435,10 +435,10 @@ export const SystemParametersStore = defineStore('systemParameters', {
       } else {
         this.frequencyRequestCurrentToggle = false;
       }
-      return this.newFrequencyCapRequest(frequency);
+      return this.newFrequencyCapRequest({ frequency, state });
     },
 
-    async newFrequencyCapRequest(frequency) {
+    async newFrequencyCapRequest({ frequency, state }) {
       const newFrequencyRequest = {
         Attributes: { hb_cap_freq_mhz_request: Number(frequency) },
       };
@@ -451,12 +451,8 @@ export const SystemParametersStore = defineStore('systemParameters', {
           );
         })
         .catch((error) => {
-          if (frequency == 0) {
-            this.frequencyRequestCurrentToggle = false;
-          } else {
-            this.frequencyRequestCurrentToggle = true;
-          }
           console.log(error);
+          this.frequencyRequestCurrentToggle = !state;
           throw new Error(
             i18n.global.t('pageSystemParameters.toast.errorSavingFrequencyCap'),
           );

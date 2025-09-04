@@ -253,7 +253,7 @@ export const PoliciesStore = defineStore('policies', {
         })
         .catch((error) => {
           console.log(error);
-          this.rtadEnabled = !updatedRtad;
+          this.rtadEnabled = updatedRtad === 'Enabled' ? 'Disabled' : 'Enabled';
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.rtad'),
@@ -279,7 +279,7 @@ export const PoliciesStore = defineStore('policies', {
         })
         .catch((error) => {
           console.log(error);
-          this.vtpmEnabled = !updatedVtpm;
+          this.vtpmEnabled = updatedVtpm === 'Enabled' ? 'Disabled' : 'Enabled';
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.vtpm'),
@@ -293,7 +293,7 @@ export const PoliciesStore = defineStore('policies', {
         .patch('/redfish/v1/Systems/system/Bios/Settings', {
           Attributes: {
             hb_secure_ver_lockin_enabled:
-              updatedSvle === true ? 'Enabled' : 'Disabled',
+              updatedSvle === 'Enabled' ? 'Disabled' : 'Enabled',
           },
         })
         .then(() => {
@@ -330,7 +330,7 @@ export const PoliciesStore = defineStore('policies', {
         })
         .catch((error) => {
           console.log(error);
-          this.hostUsbEnabled = !updatedHostUsb;
+          this.hostUsbEnabled = updatedHostUsb === 'Enabled' ? 'Disabled' : 'Enabled';
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.hostUsb'),

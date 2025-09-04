@@ -162,6 +162,9 @@ export const ControlStore = defineStore('control', {
           console.log(error);
           this.displayInfoToast = false;
           this.isOperationInProgress = false;
+          throw new Error(
+            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+          );
         });
     },
   },

@@ -528,10 +528,10 @@ export default {
           status: row.status,
         })
         .then((success) => {
-          this.reloadEventLogData();
           this.toast.successToast(success);
         })
-        .catch(({ message }) => this.toast.errorToast(message));
+        .catch(({ message }) => this.toast.errorToast(message))
+        .finally(() => this.reloadEventLogData());
     },
     resolutionValue(item) {
       let value = item?.resolution?.split('\n');

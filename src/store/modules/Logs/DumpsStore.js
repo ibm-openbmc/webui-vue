@@ -175,7 +175,7 @@ export const DumpsStore = defineStore('dumps', {
                 }),
               );
             default:
-              throw new Error(i18n.global.t('pageDumps.toast.errorStartSystemDump'));
+              throw new Error(i18n.global.t('pageDumps.toast.errorStartBmcDump'));
           }
         });
     },

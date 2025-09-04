@@ -114,11 +114,7 @@ const isActivationDisabled = computed(() => {
     });
 
 onMounted(() => {
-    Promise.all([
-      global.getSystemInfo(),
-      global.getBootProgress(),
-      licenseStore.getLicenses(),
-    ]);
+    fetchInfo()
   });
 
 const submitForm = () => {
@@ -126,10 +122,18 @@ const submitForm = () => {
       if (!v$.value.$invalid) {
         startLoader();
         licenseStore.activateLicense(licenseKey.value)
-          .then((success) => successToast(success))
+          .then((success) => successToast(success)            
+                .then(() => fetchInfo()))
           .catch(({ message }) => errorToast(message))
           .finally(() => endLoader());
       }
+    };
+const fetchInfo = () => {
+      Promise.all([
+        global.getSystemInfo(),
+        global.getBootProgress(),
+        licenseStore.getLicenses(),
+      ]);
     };
 </script>
 

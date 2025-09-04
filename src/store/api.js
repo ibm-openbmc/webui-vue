@@ -4,7 +4,7 @@ import Axios from 'axios';
 //Exact match alias set to support
 //dotenv customizations.
 import stores from '@/store';
-import { useRouter } from 'vue-router';
+import router from '@/router';
 
 Axios.defaults.headers.common['Accept'] = [
   'application/octet-stream',
@@ -12,7 +12,6 @@ Axios.defaults.headers.common['Accept'] = [
 ];
 Axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-const router = useRouter();
 const api = Axios.create({
   withCredentials: true,
 });

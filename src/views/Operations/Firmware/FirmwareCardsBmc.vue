@@ -149,6 +149,10 @@ const firmwareBootSide = computed(() => {
   return firmwareStore.firmwareBootSideGetter;
 });
 
+const isReadonly = () => {
+  return globalStore.isReadOnlyUser;
+};
+
 watch(loading, (value) => {
   emit('loadingStatus', value);
 });
@@ -164,13 +168,15 @@ function switchToRunning() {
 
   // Step 1 - Switch firmware
   const switchFirmware = () => {
-    infoToast(
-      i18n.global.t('pageFirmware.toast.switchToRunning.step1Message'),
-      {
-        title: i18n.global.t('pageFirmware.toast.switchToRunning.step1'),
-        timestamp: true,
-      },
-    );
+    if (!isReadonly) {
+      infoToast(
+        i18n.global.t('pageFirmware.toast.switchToRunning.step1Message'),
+        {
+          title: i18n.global.t('pageFirmware.toast.switchToRunning.step1'),
+          timestamp: true,
+        },
+      );
+    }
     firmwareStore
       .switchBmcFirmwareAndReboot()
       .then(async () => bmcReboot())

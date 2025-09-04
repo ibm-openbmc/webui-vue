@@ -168,16 +168,25 @@ watch(loading, (value) => {
   emit('loadingStatus', value);
 });
 
+const isReadonly = () => {
+  return globalStore.isReadOnlyUser;
+};
+
 function updateFirmware() {
   startLoader();
   emit('loadingStatus', loading.value);
 
   // Step 1 - Upload
   const uploadFirmware = () => {
-    infoToast(i18n.global.t('pageFirmware.toast.updateFirmware.step1Message'), {
-      title: i18n.global.t('pageFirmware.toast.updateFirmware.step1'),
-      timestamp: true,
-    });
+    if (!isReadonly) {
+          infoToast(
+            i18n.global.t('pageFirmware.toast.updateFirmware.step1Message'),
+            {
+              title: i18n.global.t('pageFirmware.toast.updateFirmware.step1'),
+              timestamp: true,
+            }
+          );
+        }
     if (isWorkstationSelected.value) {
       dispatchWorkstationUpload(activateFirmware);
     } else {
@@ -207,7 +216,8 @@ function updateFirmware() {
       Promise.all([currentTask(data)]).then((res) => {
         // Check to see if activation was aborted
         const activationAborted = res[0].Messages.filter(
-          (message) => message.MessageId === 'TaskEvent.1.0.1.TaskAborted',
+          (message) =>
+              message.MessageId.endsWith('TaskAborted')
         )[0];
 
         if (activationAborted) {

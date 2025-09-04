@@ -269,7 +269,7 @@ const AppNavigationData = () => {
   const hmcInfo = computed(() => globalStore.hmcManagedGetter);
 
   const model = computed(() =>
-    systemInfo.value?.startsWith('9043') ? 'Everest' : 'NotEverest',
+    systemInfo.value?.startsWith('9043') || systemInfo.value?.startsWith('8860') ? 'Everest' : 'NotEverest',
   );
   const isHmcManged = computed(() =>
     hmcInfo.value === 'Enabled' ? 'HMCManaged' : 'NonHMCManaged',

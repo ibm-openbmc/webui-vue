@@ -375,6 +375,9 @@ function powerOn() {
       })
       .catch((error) => {
         console.log(error);
+        errorToast(
+          i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+        );
       });
   } else {
     errorToast(i18n.global.t('pageServerPowerOperations.toast.errorPowerOn'));
@@ -438,6 +441,9 @@ function operationConfirm() {
           }
         })
         .catch((error) => {
+          errorToast(
+            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+          );
           console.log(error);
         });
     } else if (form.value.rebootOption === 'immediate') {
@@ -449,6 +455,9 @@ function operationConfirm() {
           }
         })
         .catch((error) => {
+          errorToast(
+            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+          );
           console.log(error);
         });
     }
@@ -462,6 +471,9 @@ function operationConfirm() {
           }
         })
         .catch((error) => {
+          errorToast(
+            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+          );
           console.log(error);
         });
     } else if (form.value.shutdownOption === 'immediate') {
@@ -473,6 +485,9 @@ function operationConfirm() {
           }
         })
         .catch((error) => {
+          errorToast(
+            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+          );
           console.log(error);
         });
     }

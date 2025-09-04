@@ -155,7 +155,10 @@ export const FirmwareStore = defineStore('firmware', {
       return api
         .patch('/redfish/v1/UpdateService', data)
         .then(() => (this.applyTime = 'Immediate'))
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          throw new Error(i18n.global.t('pageFirmware.toast.errorUploadFirmware'));
+        });
     },
     async uploadFirmware(image) {
       if (this.applyTime !== 'Immediate') {

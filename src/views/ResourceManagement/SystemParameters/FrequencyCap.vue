@@ -182,7 +182,10 @@ const saveFrequencyRequest = () => {
     return;
   }
   systemParametersStore
-    .newFrequencyCapRequest(frequencyValue.value)
+    .newFrequencyCapRequest({
+      frequency: frequencyValue.value,
+      state: true,
+    })
     .then((message) => Toast.successToast(message))
     .catch(({ message }) => Toast.errorToast(message));
 };

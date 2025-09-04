@@ -44,36 +44,17 @@
         <BRow class="section-divider">
           <BCol class="d-flex align-items-center justify-content-between">
             <dl class="mt-3 mr-3 w-75">
-              <dt id="disableRemoteService-label">
-                {{ $t('pageIbmiServiceFunctions.disableRemoteService') }}
+              <dt id="consoleServiceFunction-label">
+                {{ $t('pageIbmiServiceFunctions.consoleServiceFunction') }}
               </dt>
-              <dd id="disableRemoteService-description">
-                {{ $t('pageIbmiServiceFunctions.disableRemoteServiceDesc') }}
+              <dd id="consoleServiceFunction-description">
+                {{ $t('pageIbmiServiceFunctions.consoleServiceFunctionDesc') }}
               </dd>
             </dl>
             <BButton
               variant="primary"
               :disabled="isFunctionDisabled(65)"
               @click="exceuteFunction(65)"
-            >
-              {{ $t('pageIbmiServiceFunctions.execute') }}
-            </BButton>
-          </BCol>
-        </BRow>
-        <BRow class="section-divider">
-          <BCol class="d-flex align-items-center justify-content-between">
-            <dl class="mt-3 mr-3 w-75">
-              <dt id="enableRemoteService-label">
-                {{ $t('pageIbmiServiceFunctions.enableRemoteService') }}
-              </dt>
-              <dd id="enableRemoteService-description">
-                {{ $t('pageIbmiServiceFunctions.enableRemoteServiceDesc') }}
-              </dd>
-            </dl>
-            <BButton
-              variant="primary"
-              :disabled="isFunctionDisabled(66)"
-              @click="exceuteFunction(66)"
             >
               {{ $t('pageIbmiServiceFunctions.execute') }}
             </BButton>
