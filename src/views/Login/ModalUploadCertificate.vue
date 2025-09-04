@@ -103,6 +103,11 @@ export default {
         this.form.certificateType = options[0].value;
       }
     },
+    'form.certificateType'(newValue) {
+      if (newValue) {
+        this.$v.form.file.$reset();
+      }
+    },
   },
   mounted() {
     this.form.certificateType = this.certificateOptions[0]?.value;
@@ -170,6 +175,10 @@ export default {
               this.$v.form.file.$touch();
               return;
             }
+          } else {
+            this.fileTypeMismatch = true;
+            this.$v.form.file.$touch();
+            return;
           }
           this.$emit('ok', {
             type: this.form.certificateType,
