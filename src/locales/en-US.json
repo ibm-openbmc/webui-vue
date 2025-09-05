@@ -335,6 +335,7 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Add new certificate",
+    "adminResetCertificate": "Admin reset certificate",
     "bmcShell": "BMC shell ACF certificate",
     "caCertificate": "CA Certificate",
     "deleteCertificate": "Delete certificate",
@@ -371,6 +372,7 @@
       "keyBitLength": "Key bit length",
       "keyCurveId": "Key curve ID",
       "keyPairAlgorithm": "Key pair algorithm",
+      "mismatchError": "Uploaded certificate does not match selected Certificate type.",
       "privateKey": "Private key",
       "state": "State"
     },

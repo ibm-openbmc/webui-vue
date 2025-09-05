@@ -30,8 +30,14 @@
           @change="onFileChange($event)"
         >
           <template #invalid>
-            <b-form-invalid-feedback role="alert">
+            <b-form-invalid-feedback v-if="!$v.form.file.required" role="alert">
               {{ $t('global.form.required') }}
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              v-else-if="!$v.form.file.fileMatchesType"
+              role="alert"
+            >
+              {{ $t('pageCertificates.modal.mismatchError') }}
             </b-form-invalid-feedback>
           </template>
         </form-file>
@@ -59,6 +65,7 @@ export default {
         certificateType: null,
         file: null,
       },
+      fileTypeMismatch: false,
     };
   },
   computed: {
@@ -67,6 +74,10 @@ export default {
         {
           text: 'ServiceLogin Certificate',
           value: this.$t('pageCertificates.serviceLoginCertificate'),
+        },
+        {
+          text: 'Admin reset certificate',
+          value: this.$t('pageCertificates.adminResetCertificate'),
         },
         {
           text: 'BMC shell ACF certificate',
@@ -80,9 +91,21 @@ export default {
     },
   },
   watch: {
+    'form.file'(newFile) {
+      if (newFile) {
+        this.fileTypeMismatch = false;
+        this.$v.form.file.$reset();
+        this.$v.form.file.$touch();
+      }
+    },
     certificateOptions: function (options) {
       if (options.length) {
         this.form.certificateType = options[0].value;
+      }
+    },
+    'form.certificateType'(newValue) {
+      if (newValue) {
+        this.$v.form.file.$reset();
       }
     },
   },
@@ -99,6 +122,7 @@ export default {
         },
         file: {
           required,
+          fileMatchesType: this.validateFileMatchesType,
         },
       },
     };
@@ -108,13 +132,64 @@ export default {
       this.attachment.file = event.target.files[0];
     },
     handleSubmit() {
+      this.fileTypeMismatch = false;
       this.$v.$touch();
       if (this.$v.$invalid) return;
-      this.$emit('ok', {
-        type: this.form.certificateType,
-        file: this.form.file,
-      });
-      this.closeModal();
+      const file = this.form.file;
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        try {
+          const base64String = reader.result;
+          const cleanBase64 = base64String.replace(/^data:.*;base64,/, '');
+          const decoded = atob(cleanBase64);
+          if (decoded.includes('resourcedump')) {
+            if (this.form.certificateType === 'Resource dump ACF certificate') {
+              this.fileTypeMismatch = false;
+            } else {
+              this.fileTypeMismatch = true;
+              this.$v.form.file.$touch();
+              return;
+            }
+          } else if (decoded.includes('bmcshell')) {
+            if (this.form.certificateType === 'BMC shell ACF certificate') {
+              this.fileTypeMismatch = false;
+            } else {
+              this.fileTypeMismatch = true;
+              this.$v.form.file.$touch();
+              return;
+            }
+          } else if (decoded.includes('service')) {
+            if (this.form.certificateType === 'ServiceLogin Certificate') {
+              this.fileTypeMismatch = false;
+            } else {
+              this.fileTypeMismatch = true;
+              this.$v.form.file.$touch();
+              return;
+            }
+          } else if (decoded.includes('adminreset')) {
+            if (this.form.certificateType === 'Admin reset certificate') {
+              this.fileTypeMismatch = false;
+            } else {
+              this.fileTypeMismatch = true;
+              this.$v.form.file.$touch();
+              return;
+            }
+          } else {
+            this.fileTypeMismatch = true;
+            this.$v.form.file.$touch();
+            return;
+          }
+          this.$emit('ok', {
+            type: this.form.certificateType,
+            file: this.form.file,
+          });
+          this.closeModal();
+        } catch (error) {
+          console.error('Error during file processing:', error);
+        }
+      };
+      reader.readAsDataURL(file);
     },
     closeModal() {
       this.$nextTick(() => {
@@ -123,11 +198,16 @@ export default {
     },
     resetForm() {
       (this.form.certificateType = null), (this.form.file = null);
+      this.fileTypeMismatch = false;
       this.$v.$reset();
     },
     onOk(bvModalEvt) {
       bvModalEvt.preventDefault();
       this.handleSubmit();
+    },
+    validateFileMatchesType() {
+      if (!this.$v.form.file.$dirty) return true;
+      return !this.fileTypeMismatch;
     },
   },
 };
