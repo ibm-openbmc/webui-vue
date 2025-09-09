@@ -41,6 +41,7 @@ export const EventLogStore = defineStore('eventLog', {
       let eventLogs = [];
       this.eventlogs = eventLogs;
       this.ceLogs = eventLogs;
+      this.loadedEvents = true;
     },
     async getEventLogData() {
       return await api
@@ -88,6 +89,7 @@ export const EventLogStore = defineStore('eventLog', {
           });
           this.eventlogs = eventLogs;
           this.allEvents = eventLogs;
+          this.loadedEvents = true;
         })
         .catch((error) => {
           console.log('Event Log Data:', error);
@@ -136,6 +138,7 @@ export const EventLogStore = defineStore('eventLog', {
             };
           });
           this.ceLogs = eventLogs;
+          this.loadedEvents = true;
         })
         .catch((error) => {
           console.log('Event Log Data:', error);
