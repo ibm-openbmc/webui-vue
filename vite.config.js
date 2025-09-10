@@ -1,4 +1,3 @@
-//Work Required
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import path, { resolve, dirname } from 'node:path';
@@ -8,15 +7,15 @@ import basicSsl from '@vitejs/plugin-basic-ssl';
 import Components from 'unplugin-vue-components/vite';
 import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
-import replace from '@rollup/plugin-replace';
 
-const CWD = process.cwd();
-const DEV_ENV_CONFIG = loadEnv('development', CWD);
-const {
-  VITE_BASE_URL,
-  VITE_CUSTOM_STYLES,
-  VITE_APP_ENV_NAME,
-} = DEV_ENV_CONFIG;
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
+
+  const {
+    VITE_BASE_URL,
+    VITE_CUSTOM_STYLES,
+    VITE_APP_ENV_NAME,
+  } = env;
   // Custom SCSS includes
   const envStyle = () => {
     const styles = [
@@ -33,114 +32,109 @@ const {
     return styles.join('\n');
   };
 
-export default defineConfig({
-  // other configurations...
-  plugins: [
-    vue(),
-    Components({
-      resolvers: [BootstrapVueNextResolver()],
-      dts: false,
-    }),
-    basicSsl(),
-    VueI18nPlugin({
+  return {
+    plugins: [
+      vue(),
+      Components({
+        resolvers: [BootstrapVueNextResolver()],
+        dts: false,
+      }),
+      basicSsl(),
+      VueI18nPlugin({
       /* options */
       // locale messages resource pre-compile option
-      include: resolve(
-        dirname(fileURLToPath(import.meta.url)),
-        './path/to/src/locales/**'
-      ),
-    }),
-    {
-      name: 'custom-server-middleware',
-      configureServer(server) {
-        server.middlewares.use((req, res, next) => {
-          const originalCreateHash = crypto.createHash;
-          crypto.createHash = (algorithm) =>
-            originalCreateHash(algorithm === 'md4' ? 'sha256' : algorithm);
-          next();
-        });
-      },
-    }
-  ],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: envStyle(),
-        includePaths: ['node_modules'],
+        include: resolve(
+          dirname(fileURLToPath(import.meta.url)),
+          './path/to/src/locales/**'
+        ),
+      }),
+      {
+        name: 'custom-server-middleware',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const originalCreateHash = crypto.createHash;
+            crypto.createHash = (algorithm) =>
+              originalCreateHash(algorithm === 'md4' ? 'sha256' : algorithm);
+            next();
+          });
+        },
+      }
+    ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: envStyle(),
+          includePaths: ['node_modules'],
+        },
       },
     },
-  },
-  resolve: {
-    alias: [
-      {
-        find: '@',
-        replacement: fileURLToPath(new URL('./src', import.meta.url)),
-      },
-      // { find: /^\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
-      // { find: /^\.\.\/store$/, replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`) },
-      // { find: /^\.\/routes$/, replacement: path.resolve(__dirname, `src/env/router/${VITE_APP_ENV_NAME}.js`) },
-      // { find: /^\.\/AppNavigationData$/, replacement: path.resolve(__dirname, `src/env/components/AppNavigation/${VITE_APP_ENV_NAME}.js`) },
-    ],
-  },
-  optimizeDeps: {
-    exclude: ['bootstrap'],
-  },
-  server: {
+    resolve: {
+      alias: [
+        {
+          find: '@',
+          replacement: fileURLToPath(new URL('./src', import.meta.url)),
+        },
+        {
+          find: /^\.\/store$/,
+          replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`)
+        },
+        {
+          find: /^\.\.\/store$/,
+          replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`)
+        },
+        {
+          find: /^\.\/routes$/,
+          replacement: path.resolve(__dirname, `src/env/router/${VITE_APP_ENV_NAME}.js`)
+        },
+      ],
+    },
+    optimizeDeps: {
+      exclude: ['bootstrap'],
+    },
+    server: {
     https: true, // Enable HTTPS
     port: 8000, // TCP Port 8000 is commonly used for development environments of web server software.
     proxy: {
-      // Proxy settings if you need to proxy API requests
-      '/api': {
-        target: VITE_BASE_URL,
-        changeOrigin: true,
-      // Bypass SSL certificate validation (for development only)
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: (proxy) => {
-        // Custom middleware to modify proxy response headers
-          proxy.on('proxyRes', (proxyRes) => {
-            const setCookieHeader = proxyRes.headers['set-cookie'];
-            if (setCookieHeader) {
-              proxyRes.headers['set-cookie'] = setCookieHeader.map(
-                (cookie) => cookie + '; Path=/'
-              );
-            }
-            // Remove the 'strict-transport-security' header
-            delete proxyRes.headers['strict-transport-security'];
-          });
-        },
-      },
-    },
-    // Custom middleware to add headers
-    configureServer(server) {
-      server.middlewares.use((_req, res, next) => {
-        res.setHeader('Connection', 'keep-alive');
-        next();
-      })
-    },
-  },
-  build: {
-    chunkSizeWarningLimit: 1000,
-    minify: true,
-    rollupOptions: {
-      external: ['bootstrap'],
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return id.split('node_modules/')[1].split('/')[0];
-          }
-        },
-      },
-      plugins: [
-        replace({
-          include: ['src/store/api.js'],
-          // delimiters: ["'", "'"],
-          preventAssignment: true,
-          values: {
-            '/api': ''
+        '/api': {
+          target: VITE_BASE_URL,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+          configure: (proxy) => {
+            proxy.on('proxyRes', (proxyRes) => {
+              const setCookieHeader = proxyRes.headers['set-cookie'];
+              if (setCookieHeader) {
+                proxyRes.headers['set-cookie'] = setCookieHeader.map(
+                  (cookie) => cookie + '; Path=/'
+                );
+              }
+              // Remove the 'strict-transport-security' header
+              delete proxyRes.headers['strict-transport-security'];
+            });
           },
-        }),
-      ],
+        },
+      },
+    // Custom middleware to add headers
+      configureServer(server) {
+        server.middlewares.use((_req, res, next) => {
+          res.setHeader('Connection', 'keep-alive');
+          next();
+        })
+      },
     },
-  },
+    build: {
+      chunkSizeWarningLimit: 1000,
+      minify: true,
+      rollupOptions: {
+        external: ['bootstrap'],
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.split('node_modules/')[1].split('/')[0];
+            }
+          },
+        },
+      },
+    },
+  };
 });

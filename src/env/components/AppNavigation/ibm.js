@@ -275,29 +275,30 @@ const AppNavigationData = () => {
     hmcInfo.value === 'Enabled' ? 'HMCManaged' : 'NonHMCManaged',
   );
 
-  const navigationItems = computed(() => {
-    return navigationData.value.map((section) => {
-      const restrictedPages = [];
-      section.children?.forEach((page) => {
-        if (page.restrictTo.length > 0) {
-          const isPageNeeded = page.restrictTo.some(
-            (requiredRole) =>
-              requiredRole === roleId.value ||
-              requiredRole === model.value ||
-              requiredRole === isHmcManged.value,
-          );
-          if (!isPageNeeded) restrictedPages.push(page);
-        }
-      });
-      if (section?.children && section?.children.length > 0) {
-        const finalSection = section.children.filter(
-          (item) => !restrictedPages.includes(item),
-        );
-        section.children = finalSection;
-      }
-      return section;
-    });
-  });
+  const navigationItems = navigationData;
+  // const navigationItems = computed(() => {
+  //   return navigationData.value.map((section) => {
+  //     const restrictedPages = [];
+  //     section.children?.forEach((page) => {
+  //       if (page.restrictTo.length > 0) {
+  //         const isPageNeeded = page.restrictTo.some(
+  //           (requiredRole) =>
+  //             requiredRole === roleId.value ||
+  //             requiredRole === model.value ||
+  //             requiredRole === isHmcManged.value,
+  //         );
+  //         if (!isPageNeeded) restrictedPages.push(page);
+  //       }
+  //     });
+  //     if (section?.children && section?.children.length > 0) {
+  //       const finalSection = section.children.filter(
+  //         (item) => !restrictedPages.includes(item),
+  //       );
+  //       section.children = finalSection;
+  //     }
+  //     return section;
+  //   });
+  // });
 
   onMounted(() => {
     globalStore.getHmcManaged();

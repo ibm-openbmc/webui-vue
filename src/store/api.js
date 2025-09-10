@@ -16,6 +16,15 @@ const api = Axios.create({
   withCredentials: true,
 });
 
+const constructUrl = (path) => {
+  if (import.meta.env.DEV) {
+    const basePath = '/api'; // The base path for your API
+    return `${basePath}${path}`;
+  } else {
+    return `${path}`;
+  }
+};
+
 api.interceptors.response.use(undefined, (error) => {
   const globalStore = stores.GlobalStore();
   const authenticationStore = stores.AuthenticationStore();
@@ -41,10 +50,6 @@ api.interceptors.response.use(undefined, (error) => {
 
   return Promise.reject(error);
 });
-const constructUrl = (path) => {
-  const basePath = '/api'; // The base path for your API
-  return `${basePath}${path}`;
-};
 export default {
   get(path, config) {
     return api.get(constructUrl(path), config);
