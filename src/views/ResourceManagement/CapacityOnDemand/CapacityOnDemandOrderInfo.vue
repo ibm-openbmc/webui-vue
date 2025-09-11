@@ -55,12 +55,6 @@
                 {{ $t('pageCapacityOnDemand.orderInfo.processorInfo') }}
               </h3>
               <p>
-                {{ $t('pageCapacityOnDemand.orderInfo.previousActivated') }}
-                <span class="fw-bold">
-                  {{ processorPreviousActivated }}
-                </span>
-              </p>
-              <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.processorResourceId') }}
                 <span class="fw-bold">
                   {{ processorInfo.resourceId }}
@@ -81,12 +75,6 @@
                   {{ dataFormatter(processorLicensed) }}
                 </span>
               </p>
-              <p>
-                {{ $t('pageCapacityOnDemand.orderInfo.entryCheck') }}:
-                <span class="fw-bold">
-                  {{ processorEntryCheck }}
-                </span>
-              </p>
             </BCol>
           </BRow>
 
@@ -96,12 +84,6 @@
               <h3 class="h4 mb-3">
                 {{ $t('pageCapacityOnDemand.orderInfo.memoryInfo') }}
               </h3>
-              <p>
-                {{ $t('pageCapacityOnDemand.orderInfo.previousActivated') }}
-                <span class="fw-bold">
-                  {{ memoryPreviousActivated }}
-                </span>
-              </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.memoryResourceId') }}
                 <span class="fw-bold">
@@ -119,12 +101,6 @@
                 {{ $t('pageCapacityOnDemand.orderInfo.memoryLicensed') }}
                 <span class="fw-bold">
                   {{ dataFormatter(memoryLicensed) }}
-                </span>
-              </p>
-              <p>
-                {{ $t('pageCapacityOnDemand.orderInfo.entryCheck') }}:
-                <span class="fw-bold">
-                  {{ memoryEntryCheck }}
                 </span>
               </p>
             </BCol>
@@ -193,26 +169,6 @@ const hasLicenses = computed(() => {
       // This logic checks to see if there are any licences in the store.
       // If there are none, the result is true, otherwise false.
       return !Object.keys(licenseStore.licensesGetter).length;
-    });
-const memoryPreviousActivated = computed(() => {
-      return licenseStore.licensesGetter?.PermMem?.AuthDeviceNumber
-        ? licenseStore.licensesGetter?.PermMem?.AuthDeviceNumber
-        : '0000';
-    });
-const processorPreviousActivated = computed(() => {
-      return licenseStore.licensesGetter?.PermProcs?.AuthDeviceNumber
-        ? licenseStore.licensesGetter?.PermProcs?.AuthDeviceNumber
-        : '0000';
-    });
-const processorEntryCheck = computed(() => {
-      return licenseStore.licensesGetter?.PermProcs?.EntryCheck
-        ? licenseStore.licensesGetter?.PermProcs?.EntryCheck
-        : 'XX';
-    });
-const memoryEntryCheck = computed(() => {
-      return licenseStore.licensesGetter?.PermMem?.EntryCheck
-        ? licenseStore.licensesGetter.PermMem?.EntryCheck
-        : 'XX';
     });
 const processorLicensed = computed(() => {
       return licenseStore.licensesGetter?.PermProcs?.MaxAuthorizedDevices;
