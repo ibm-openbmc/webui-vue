@@ -215,6 +215,7 @@ import i18n from '@/i18n';
 const { getValidationState } = useVuelidateComposable();
 const Toast = useToastComposable();
 const systemParametersStore = stores.SystemParametersStore();
+const global = stores.GlobalStore();
 const { startLoader, endLoader } = useLoadingBar();
 
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -310,7 +311,7 @@ const guardOnErrorState = computed({
   },
 });
 const serverStatus = computed(() => {
-  return systemParametersStore.serverStatus;
+  return global.serverStatusGetter;
 });
 const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
@@ -337,7 +338,7 @@ const updateImmediateTestRequestedState = (value) => {
     systemParametersStore.getRpdScheduledRun,
   ])
     .then((message) => {
-      if (value && isServerOff) {
+      if (value && isServerOff.value) {
         Toast.successToast(
           i18n.global.t(
             'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
