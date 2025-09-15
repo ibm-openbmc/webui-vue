@@ -86,7 +86,7 @@
                 @blur="v$.rpdScheduledRun.$touch()"
               />
               <BFormInvalidFeedback role="alert">
-                <div v-if="!v$.rpdScheduledRun.pattern">
+                <div v-if="v$.rpdScheduledRun.$error">
                   {{ $t('global.form.invalidFormat') }}
                 </div>
               </BFormInvalidFeedback>
@@ -202,7 +202,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, watch } from 'vue';
+import { computed, defineProps } from 'vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
@@ -215,7 +215,6 @@ import i18n from '@/i18n';
 const { getValidationState } = useVuelidateComposable();
 const Toast = useToastComposable();
 const systemParametersStore = stores.SystemParametersStore();
-const global = stores.GlobalStore();
 const { startLoader, endLoader } = useLoadingBar();
 
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -290,6 +289,7 @@ const rpdScheduledRun = computed({
   },
   set(value) {
     v$.value.$touch();
+    // console.log('value', value);
     systemParametersStore.rpdScheduledRun = value;
   },
 });
@@ -311,16 +311,33 @@ const guardOnErrorState = computed({
   },
 });
 const serverStatus = computed(() => {
-  return global.serverStatusGetter;
+  return systemParametersStore.serverStatus;
 });
 const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
 });
 
+// const patternValidator = helpers.withMessage(
+//   'Invalid time format',
+//   (value) => {
+//     // log to debug what value is checked
+//     console.log('Validating rpdScheduledRun:', value);
+//     // accept empty values (optional), otherwise check pattern
+//     if (!value) return false;  // or true if empty allowed
+//     return isoTimeRegex.test(value);
+//   },
+// );
+
 const rules = computed(() => ({
   rpdScheduledRun: {
-    pattern: helpers.regex('pattern', isoTimeRegex),
+    pattern: helpers.withMessage('Invalid time format', (value) =>
+      isoTimeRegex.test(value),
+    ),
   },
+  // rpdScheduledRun: {
+  //   pattern: helpers.regex('pattern', isoTimeRegex),
+  // },
+  // rpdScheduledRun: { patternValidator },
   rpdScheduledRunDuration: {
     minValue: minValue(30),
     maxValue: maxValue(1440),
@@ -338,7 +355,7 @@ const updateImmediateTestRequestedState = (value) => {
     systemParametersStore.getRpdScheduledRun,
   ])
     .then((message) => {
-      if (value && isServerOff.value) {
+      if (value && isServerOff) {
         Toast.successToast(
           i18n.global.t(
             'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
@@ -380,6 +397,12 @@ const updateRpdFeature = () => {
     });
 };
 const updateRpdScheduledRun = (startTime, duration) => {
+  // console.log('pattern valid:', isoTimeRegex.test(rpdScheduledRun.value));
+  v$.value.rpdScheduledRun.$touch();
+  if (v$.value.rpdScheduledRun.$invalid) {
+    Toast.errorToast(i18n.global.t('global.form.fixErrors'));
+    return;
+  }
   startLoader();
   const [hours, minutes] = startTime.split(':');
   const totalSeconds = (+hours * 60 + +minutes) * 60;
