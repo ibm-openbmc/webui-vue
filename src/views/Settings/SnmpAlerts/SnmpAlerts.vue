@@ -223,6 +223,7 @@ const onModalOk = ({ ipAddress, port }) => {
   const data = {
     Destination: destination,
     SubscriptionType: 'SNMPTrap',
+    DeliveryRetryPolicy: 'TerminateAfterRetries',
     Protocol: 'SNMPv2c',
   };
   startLoader();
