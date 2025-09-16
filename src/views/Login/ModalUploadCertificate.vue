@@ -72,20 +72,20 @@ export default {
     certificateOptions() {
       return [
         {
-          text: 'ServiceLogin Certificate',
-          value: this.$t('pageCertificates.serviceLoginCertificate'),
+          text: this.$t('pageCertificates.serviceLoginCertificate'),
+          value: 'ServiceLogin Certificate',
         },
         {
-          text: 'Admin reset certificate',
-          value: this.$t('pageCertificates.adminResetCertificate'),
+          text: this.$t('pageCertificates.adminResetCertificate'),
+          value: 'Admin reset certificate',
         },
         {
-          text: 'BMC shell ACF certificate',
-          value: this.$t('pageCertificates.bmcShell'),
+          text: this.$t('pageCertificates.bmcShell'),
+          value: 'BMC shell ACF certificate',
         },
         {
-          text: 'Resource dump ACF certificate',
-          value: this.$t('pageCertificates.resourceDump'),
+          text: this.$t('pageCertificates.resourceDump'),
+          value: 'Resource dump ACF certificate',
         },
       ];
     },
