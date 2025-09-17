@@ -1,5 +1,5 @@
 <template>
-  <BModal id="modal-user" v-model="modal" :title="newUser?$t('pageUserManagement.addUser'): $t('pageUserManagement.editUser')" :ok-title="newUser?$t('pageUserManagement.addUser'):$t('global.action.save')" @ok="onOk" @hidden="resetForm">
+  <BModal id="modal-user" v-model="modalUser" :title="newUser?$t('pageUserManagement.addUser'): $t('pageUserManagement.editUser')" :ok-title="newUser?$t('pageUserManagement.addUser'):$t('global.action.save')" @ok="onOk" @hidden="resetForm">
     <BForm id="form-user" novalidate>
       <BContainer>
         <!-- Manual unlock form control -->
@@ -246,11 +246,11 @@ const { getValidationState } = useVuelidateComposable();
 const globalStore = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
 
-  const modal = ref(false);
+  const modalUser = ref(false);
   eventBus.on('modal-user', () => {
-    modal.value = true;
+    modalUser.value = true;
     nextTick(() => {
-      if (props.user && (props.user.privilege !== 'Read only' && props.user.privilege !== 'ReadOnly')) {
+      if (props.user) {
         form.value.username = props.user.username;
         form.value.status = props.user.Enabled;
         form.value.privilege = props.user.privilege === 'Read only' ? 'ReadOnly' : props.user.privilege;
@@ -359,7 +359,6 @@ const userManagementStore = stores.UserManagementStore();
         userData.password = form.value.password;
       } else {
         form.value.username = props.user.username;
-        v$.value.$touch();
         if (v$.value.$invalid) return;
         userData.originalUsername = form.value.username;
         userData.currentUser = currentUser.value;
@@ -390,7 +389,7 @@ const userManagementStore = stores.UserManagementStore();
       closeModal();
     };
     function closeModal() {
-      modal.value = false;
+      modalUser.value = false;
     };
     function resetForm() {
       form.value.originalUsername = '';
