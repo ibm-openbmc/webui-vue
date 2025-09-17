@@ -380,18 +380,11 @@ const updateRpdFeature = () => {
     });
 };
 const updateRpdScheduledRun = (startTime, duration) => {
-  v$.value.rpdScheduledRun.$touch();
-  if (v$.value.rpdScheduledRun.$invalid) {
-    Toast.errorToast(
-      i18n.global.t('pageSystemParameters.toast.errorSavingRpdRun'),
-    );
-    return;
-  }
   startLoader();
   const [hours, minutes] = startTime.split(':');
   const totalSeconds = (+hours * 60 + +minutes) * 60;
   systemParametersStore
-    .saveRpdScheduledRun({ totalSeconds, duration, startTime })
+    .saveRpdScheduledRun({totalSeconds, duration, startTime})
     .then((message) => Toast.successToast(message))
     .catch(({ message }) => Toast.errorToast(message))
     .finally(() => {
