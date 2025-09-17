@@ -142,7 +142,9 @@ const rules = computed(() => ({
   frequencyValue: {
     requiredIf: requiredIf(frequencyRequestCurrentToggle),
     numeric,
-    between: between(frequencyMin, frequencyMax),
+    between: frequencyRequestCurrentToggle.value
+      ? between(frequencyMin.value, frequencyMax.value)
+      : true,
   },
 }));
 const v$ = useVuelidate(rules, { frequencyValue });

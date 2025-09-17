@@ -215,6 +215,7 @@ import i18n from '@/i18n';
 const { getValidationState } = useVuelidateComposable();
 const Toast = useToastComposable();
 const systemParametersStore = stores.SystemParametersStore();
+const global = stores.GlobalStore();
 const { startLoader, endLoader } = useLoadingBar();
 
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -249,12 +250,12 @@ const isRpdPolicyScheduled = computed(() => {
   return systemParametersStore.pvmRpdPolicy === 'Scheduled';
 });
 const options = computed(() => {
-  if (systemParametersStore.rpdPolicyOptionsGetter){
-  return systemParametersStore.rpdPolicyOptions.map((option) => ({
-    value: option,
-    text: option,
-  }));
- } else return;
+  if (systemParametersStore.rpdPolicyOptionsGetter) {
+    return systemParametersStore.rpdPolicyOptions.map((option) => ({
+      value: option,
+      text: option,
+    }));
+  } else return;
 });
 const rpdFeatOptions = computed(() => {
   if (systemParametersStore.rpdFeatureOptionsGetter) {
@@ -289,7 +290,6 @@ const rpdScheduledRun = computed({
   },
   set(value) {
     v$.value.$touch();
-    // console.log('value', value);
     systemParametersStore.rpdScheduledRun = value;
   },
 });
@@ -311,33 +311,16 @@ const guardOnErrorState = computed({
   },
 });
 const serverStatus = computed(() => {
-  return systemParametersStore.serverStatus;
+  return global.serverStatusGetter;
 });
 const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
 });
 
-// const patternValidator = helpers.withMessage(
-//   'Invalid time format',
-//   (value) => {
-//     // log to debug what value is checked
-//     console.log('Validating rpdScheduledRun:', value);
-//     // accept empty values (optional), otherwise check pattern
-//     if (!value) return false;  // or true if empty allowed
-//     return isoTimeRegex.test(value);
-//   },
-// );
-
 const rules = computed(() => ({
   rpdScheduledRun: {
-    pattern: helpers.withMessage('Invalid time format', (value) =>
-      isoTimeRegex.test(value),
-    ),
+    pattern: (value) => isoTimeRegex.test(value),
   },
-  // rpdScheduledRun: {
-  //   pattern: helpers.regex('pattern', isoTimeRegex),
-  // },
-  // rpdScheduledRun: { patternValidator },
   rpdScheduledRunDuration: {
     minValue: minValue(30),
     maxValue: maxValue(1440),
@@ -355,7 +338,7 @@ const updateImmediateTestRequestedState = (value) => {
     systemParametersStore.getRpdScheduledRun,
   ])
     .then((message) => {
-      if (value && isServerOff) {
+      if (value && isServerOff.value) {
         Toast.successToast(
           i18n.global.t(
             'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
@@ -397,17 +380,18 @@ const updateRpdFeature = () => {
     });
 };
 const updateRpdScheduledRun = (startTime, duration) => {
-  // console.log('pattern valid:', isoTimeRegex.test(rpdScheduledRun.value));
   v$.value.rpdScheduledRun.$touch();
   if (v$.value.rpdScheduledRun.$invalid) {
-    Toast.errorToast(i18n.global.t('global.form.fixErrors'));
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingRpdRun'),
+    );
     return;
   }
   startLoader();
   const [hours, minutes] = startTime.split(':');
   const totalSeconds = (+hours * 60 + +minutes) * 60;
   systemParametersStore
-    .saveRpdScheduledRun({totalSeconds, duration, startTime})
+    .saveRpdScheduledRun({ totalSeconds, duration, startTime })
     .then((message) => Toast.successToast(message))
     .catch(({ message }) => Toast.errorToast(message))
     .finally(() => {
