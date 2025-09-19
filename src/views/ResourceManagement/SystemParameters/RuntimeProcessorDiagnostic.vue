@@ -380,6 +380,8 @@ const updateRpdFeature = () => {
     });
 };
 const updateRpdScheduledRun = (startTime, duration) => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
   startLoader();
   const [hours, minutes] = startTime.split(':');
   const totalSeconds = (+hours * 60 + +minutes) * 60;
