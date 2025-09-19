@@ -93,7 +93,7 @@
               </BFormInvalidFeedback>
             </BFormGroup>
             <BFormGroup
-              v-if="notService && notReadyOnly"
+              v-show="notService && notReadyOnly"
               :label="$t('pageUserManagement.modal.privilege')"
               label-for="privilege"
             >
@@ -120,7 +120,7 @@
           </BCol>
           <BCol>
             <BFormGroup
-              v-if="notService"
+              v-show="notService"
               :label="$t('pageUserManagement.modal.userPassword')"
               label-for="password"
             >
@@ -159,7 +159,7 @@
               </input-password-toggle>
             </BFormGroup>
             <BFormGroup
-              v-if="notService"
+              v-show="notService"
               :label="$t('pageUserManagement.modal.confirmUserPassword')"
               label-for="password-confirmation"
             >
