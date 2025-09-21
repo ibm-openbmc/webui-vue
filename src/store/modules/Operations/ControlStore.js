@@ -5,33 +5,33 @@ import { defineStore } from 'pinia';
 import { GlobalStore } from '@/store/modules/GlobalStore.js';
 import { watch } from 'vue';
 
-    /**
-     * Watch for serverStatus changes in GlobalStore module
-     * to set isOperationInProgress state
-     * Stop watching status changes and resolve Promise when
-     * serverStatus value matches passed argument or after 5 minutes
-     * @param {string} serverStatus
-     * @returns {Promise}
-     */
-    const checkForServerStatus = (serverStatus) => {
-      const global = GlobalStore();
-      return new Promise((resolve) => {
-        const timer = setTimeout(() => {
+/**
+ * Watch for serverStatus changes in GlobalStore module
+ * to set isOperationInProgress state
+ * Stop watching status changes and resolve Promise when
+ * serverStatus value matches passed argument or after 5 minutes
+ * @param {string} serverStatus
+ * @returns {Promise}
+ */
+const checkForServerStatus = (serverStatus) => {
+  const global = GlobalStore();
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      resolve();
+      unwatch();
+    }, 300000 /*5mins*/);
+    const unwatch = watch(
+      () => global.serverStatus,
+      (value) => {
+        if (value === serverStatus) {
           resolve();
           unwatch();
-        }, 300000 /*5mins*/);
-        const unwatch = watch(
-          () => global.serverStatus,
-          (value) => {
-            if (value === serverStatus) {
-              resolve();        
-              unwatch();
-              clearTimeout(timer);
-            }
-          }
-        );
-      });
-    }
+          clearTimeout(timer);
+        }
+      },
+    );
+  });
+};
 export const ControlStore = defineStore('control', {
   state: () => ({
     isOperationInProgress: false,
@@ -106,7 +106,7 @@ export const ControlStore = defineStore('control', {
         .catch((error) => {
           console.log(error);
           throw new Error(
-            i18n.global.t('pageRebootBmc.toast.errorRebootStart')
+            i18n.global.t('pageRebootBmc.toast.errorRebootStart'),
           );
         });
     },

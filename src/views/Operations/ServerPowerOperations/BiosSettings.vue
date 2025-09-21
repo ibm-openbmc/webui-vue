@@ -16,7 +16,7 @@
           <BFormGroup
             v-if="
               hmcManagedChecks(
-                $t(`${'pageServerPowerOperations.biosSettings'}.${key}`)
+                $t(`${'pageServerPowerOperations.biosSettings'}.${key}`),
               )
             "
             :key="key"
@@ -84,14 +84,14 @@
                     <p>
                       {{
                         $t(
-                          'pageServerPowerOperations.biosSettings.currentOperatingModeNormal'
+                          'pageServerPowerOperations.biosSettings.currentOperatingModeNormal',
                         )
                       }}
                     </p>
                     <p>
                       {{
                         $t(
-                          'pageServerPowerOperations.biosSettings.selectedOperatingModeManual'
+                          'pageServerPowerOperations.biosSettings.selectedOperatingModeManual',
                         )
                       }}
                     </p>
@@ -110,9 +110,9 @@
                               : powerPolicy === 'AlwaysOn'
                                 ? $t(`pagePowerRestorePolicy.policies.AlwaysOn`)
                                 : $t(
-                                    `pagePowerRestorePolicy.policies.LastState`
+                                    `pagePowerRestorePolicy.policies.LastState`,
                                   ),
-                        }
+                        },
                       )
                     }}
                   </div>
@@ -129,14 +129,14 @@
                     <p>
                       {{
                         $t(
-                          'pageServerPowerOperations.biosSettings.currentOperatingModeManual'
+                          'pageServerPowerOperations.biosSettings.currentOperatingModeManual',
                         )
                       }}
                     </p>
                     <p>
                       {{
                         $t(
-                          'pageServerPowerOperations.biosSettings.selectedOperatingModeNormal'
+                          'pageServerPowerOperations.biosSettings.selectedOperatingModeNormal',
                         )
                       }}
                     </p>
@@ -155,9 +155,9 @@
                               : powerPolicy === 'AlwaysOn'
                                 ? $t(`pagePowerRestorePolicy.policies.AlwaysOn`)
                                 : $t(
-                                    `pagePowerRestorePolicy.policies.LastState`
+                                    `pagePowerRestorePolicy.policies.LastState`,
                                   ),
-                        }
+                        },
                       )
                     }}
                   </div>
@@ -170,7 +170,7 @@
                           `pageServerPowerOperations.biosSettings.currentOperatingModeManual`,
                           {
                             currOptMode: currentOperatingMode,
-                          }
+                          },
                         )
                       }}
                     </p>
@@ -189,9 +189,9 @@
                               : powerPolicy === 'AlwaysOn'
                                 ? $t(`pagePowerRestorePolicy.policies.AlwaysOn`)
                                 : $t(
-                                    `pagePowerRestorePolicy.policies.LastState`
+                                    `pagePowerRestorePolicy.policies.LastState`,
                                   ),
-                        }
+                        },
                       )
                     }}
                   </div>
@@ -224,7 +224,7 @@
                   >
                     {{
                       $t(
-                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.powerOffHelperText'
+                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.powerOffHelperText',
                       )
                     }}
                   </BFormText>
@@ -236,7 +236,7 @@
                   >
                     {{
                       $t(
-                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.automaticHelperText'
+                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.automaticHelperText',
                       )
                     }}
                   </BFormText>
@@ -248,7 +248,7 @@
                   >
                     {{
                       $t(
-                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.stayOnHelperText'
+                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.stayOnHelperText',
                       )
                     }}
                   </BFormText>
@@ -273,7 +273,7 @@
             :key="index"
             :label="
               $t(
-                `${'pageServerPowerOperations.biosSettings'}.${taggedSetting.settingKey}`
+                `${'pageServerPowerOperations.biosSettings'}.${taggedSetting.settingKey}`,
               )
             "
             class="mb-4 form-group"
@@ -286,7 +286,7 @@
               @input="
                 changeTaggedSettingsValue(
                   taggedSetting.settingKey,
-                  taggedSetting.settingValue
+                  taggedSetting.settingValue,
                 )
               "
             >
@@ -310,7 +310,7 @@
           class="mb-4 form-group"
           :label="
             $t(
-              `${'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage'}`
+              `${'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage'}`,
             )
           "
         >
@@ -356,7 +356,7 @@
           >
             {{
               $t(
-                'pageServerPowerOperations.biosSettings.linuxKvmPercentage.errorMessage'
+                'pageServerPowerOperations.biosSettings.linuxKvmPercentage.errorMessage',
               )
             }}
           </span>
@@ -431,7 +431,7 @@
             <template #table-caption>
               {{
                 $t(
-                  'pageServerPowerOperations.biosSettings.pvm_ibmi_load_source'
+                  'pageServerPowerOperations.biosSettings.pvm_ibmi_load_source',
                 )
               }}
               ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
@@ -447,7 +447,7 @@
             <template #table-caption>
               {{
                 $t(
-                  'pageServerPowerOperations.biosSettings.pvm_ibmi_alt_load_source'
+                  'pageServerPowerOperations.biosSettings.pvm_ibmi_alt_load_source',
                 )
               }}
               ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
@@ -477,7 +477,7 @@
             <template #table-caption>
               {{
                 $t(
-                  'pageServerPowerOperations.biosSettings.pvm_linux_kvm_memory'
+                  'pageServerPowerOperations.biosSettings.pvm_linux_kvm_memory',
                 )
               }}
               ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
@@ -493,7 +493,7 @@
             <template #table-caption>
               {{
                 $t(
-                  'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage'
+                  'pageServerPowerOperations.biosSettings.pvm_linux_kvm_percentage',
                 )
               }}
               ({{ $t('pageServerPowerOperations.biosSettings.nonHMCManaged') }})
@@ -587,26 +587,26 @@ const taggedSettingsFields = ref([
 const serverFirmwareItems = ref([
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartOnly'
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartOnly',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartOnly'
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartOnly',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartAlways'
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartAlways',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartAlways'
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartAlways',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.standBy'
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.standBy',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.standBy'
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.standBy',
     ),
   },
 ]);
@@ -614,42 +614,42 @@ const serverFirmwareItems = ref([
 const defaultPartitionItems = ref([
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.aix'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.aix',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.aix'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.aix',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linux'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linux',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linux'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linux',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.ibmI'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.ibmI',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.ibmI'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.ibmI',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linuxKVM'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linuxKVM',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linuxKVM'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linuxKVM',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.default'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.default',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.default'
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.default',
     ),
   },
 ]);
@@ -657,42 +657,42 @@ const defaultPartitionItems = ref([
 const aixPartitionItems = ref([
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.partitionBoot'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.partitionBoot',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.partitionBoot'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.partitionBoot',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBoot'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBoot',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBoot'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBoot',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToSms'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToSms',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToSms'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToSms',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToOpenFirware'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToOpenFirware',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToOpenFirware'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToOpenFirware',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBootMode'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBootMode',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBootMode'
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBootMode',
     ),
   },
 ]);
@@ -700,34 +700,34 @@ const aixPartitionItems = ref([
 const ibmiItems = ref([
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.setting.a'
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.a',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.description.a'
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.a',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.setting.b'
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.b',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.description.b'
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.b',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.setting.c'
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.c',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.description.c'
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.c',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.setting.d'
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.d',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiItems.description.d'
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.d',
     ),
   },
 ]);
@@ -735,18 +735,18 @@ const ibmiItems = ref([
 const linuxKvmItems = ref([
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.automatic'
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.automatic',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.linuxKvmItems.description.automatic'
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.description.automatic',
     ),
   },
   {
     setting: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.custom'
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.custom',
     ),
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.linuxKvmItems.description.custom'
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.description.custom',
     ),
   },
 ]);
@@ -754,7 +754,7 @@ const linuxKvmItems = ref([
 const linuxKvmPercentageItems = ref([
   {
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.linuxKvmPercentage.description'
+      'pageServerPowerOperations.biosSettings.linuxKvmPercentage.description',
     ),
   },
 ]);
@@ -762,7 +762,7 @@ const linuxKvmPercentageItems = ref([
 const ibmiLoadSourceItems = ref([
   {
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiLoadSource.description'
+      'pageServerPowerOperations.biosSettings.ibmiLoadSource.description',
     ),
   },
 ]);
@@ -770,7 +770,7 @@ const ibmiLoadSourceItems = ref([
 const ibmiAltLoadSourceItems = ref([
   {
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiAltLoadSource.description'
+      'pageServerPowerOperations.biosSettings.ibmiAltLoadSource.description',
     ),
   },
 ]);
@@ -778,7 +778,7 @@ const ibmiAltLoadSourceItems = ref([
 const ibmiConsoleItems = ref([
   {
     description: i18n.global.t(
-      'pageServerPowerOperations.biosSettings.ibmiConsole.description'
+      'pageServerPowerOperations.biosSettings.ibmiConsole.description',
     ),
   },
 ]);
@@ -957,7 +957,7 @@ watch(
     emit('updated-attributes', attributeKeys.value);
     emit('is-linux-kvm-valid', isLinuxKvmValid.value);
   },
-  { deep: true }
+  { deep: true },
 );
 
 onBeforeMount(() => {

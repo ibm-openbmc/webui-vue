@@ -1,8 +1,8 @@
 <template>
   <b-modal
     id="modal-leds"
-    v-model="props.openIdentifyLedModal"
     ref="modal"
+    v-model="props.openIdentifyLedModal"
     hide-footer
     title="Identify LEDs"
     title-tag="h2"
@@ -91,116 +91,112 @@
   </b-modal>
 </template>
 <script setup>
-
-import { ref,defineProps,watch, computed} from 'vue';
+import { ref, defineProps, watch, computed } from 'vue';
 import stores from '../../../store';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useToast from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 
-const pcieTopologyStore= stores.PcieTopologyStore();
-const {dataFormatter}=useDataFormatterGlobal()
-const props=defineProps({
+const pcieTopologyStore = stores.PcieTopologyStore();
+const { dataFormatter } = useDataFormatterGlobal();
+const props = defineProps({
   selectedObj: {
-      type: Object,
-      default: null,
-    },
-  openIdentifyLedModal:{
-      type:Boolean,
-      default:false
-    }
-})
+    type: Object,
+    default: null,
+  },
+  openIdentifyLedModal: {
+    type: Boolean,
+    default: false,
+  },
+});
 const { successToast, errorToast } = useToast();
-const pcieBridgeLed=ref([])
-const ioSlotsLed=ref([])
-const localPortLed=ref([])
-const remotePortLed=ref([])
-
-
+const pcieBridgeLed = ref([]);
+const ioSlotsLed = ref([]);
+const localPortLed = ref([]);
+const remotePortLed = ref([]);
 
 watch(
-  ()=>props.selectedObj,
-  ()=>{
-    pcieBridgeLed.value=[];
-    ioSlotsLed.value=[];
-    localPortLed.value=[];
-    remotePortLed.value=[];
+  () => props.selectedObj,
+  () => {
+    pcieBridgeLed.value = [];
+    ioSlotsLed.value = [];
+    localPortLed.value = [];
+    remotePortLed.value = [];
     getAllLeds();
-    
-  }
-)
+  },
+);
 
 const emitUpdate = defineEmits(['update:openIdentifyLedModal']);
-function onModalHidden(){
-  emitUpdate('update:openIdentifyLedModal',false);
+function onModalHidden() {
+  emitUpdate('update:openIdentifyLedModal', false);
 }
-const ioSlotsLength=computed(()=>{
-  return ioSlotsLed.length
-})
-const getAllLeds=async()=>{
-  await pcieTopologyStore.getAllLedValues(props.selectedObj)
-  .then((returnedObj) => {
-          pcieBridgeLed.value = returnedObj.pcieBridge;
-          localPortLed.value = [];
-          props.selectedObj.localPortLocation.map((selectedPort) => {
-            returnedObj.localPortLocation.map((returnedPort) => {
-              if (selectedPort.locationNumber === returnedPort.locationNumber) {
-                localPortLed.push(returnedPort);
-              }
-            });
-          });
-          remotePortLed.value = [];
-          props.selectedObj.remotePortLocation.map((selectedPort) => {
-            returnedObj.remotePortLocation.map((returnedPort) => {
-              if (selectedPort.locationNumber === returnedPort.locationNumber) {
-                remotePortLed.push(returnedPort);
-              }
-            });
-          });
-          ioSlotsLed.value = [];
-          if (props.selectedObj.ioSlots.length > 0) {
-            props.selectedObj.ioSlots.map((selectedSlot) => {
-              returnedObj.ioSlots.map((returnedSlot) => {
-              if (selectedSlot.locationNumber === returnedSlot.locationNumber) {
-                ioSlotsLed.value.push(returnedSlot);
-              }
-              });
-            });
-          }
-  })
-}
-
-const changeLedValue=async(value,type)=>{
-  pcieTopologyStore.updateLedValue({value:value, type:type})
-        .then(() => {
-          getAllLeds();
-          if (value.led) {
-            successToast(
-              i18n.global.t('pagePcieTopology.toast.successEnableIdentifyLed'),
-            );
-          } else {
-            successToast(
-              i18n.global.t('pagePcieTopology.toast.successDisableIdentifyLed'),
-            );
-          }
-        })
-        .catch(() => {
-          getAllLeds();
-          if (value.led) {
-            errorToast(
-              i18n.global.t('pagePcieTopology.toast.errorEnableIdentifyLed'),
-            );
-          } else {
-            errorToast(
-              i18n.global.t('pagePcieTopology.toast.errorDisableIdentifyLed'),
-            );
+const ioSlotsLength = computed(() => {
+  return ioSlotsLed.length;
+});
+const getAllLeds = async () => {
+  await pcieTopologyStore
+    .getAllLedValues(props.selectedObj)
+    .then((returnedObj) => {
+      pcieBridgeLed.value = returnedObj.pcieBridge;
+      localPortLed.value = [];
+      props.selectedObj.localPortLocation.map((selectedPort) => {
+        returnedObj.localPortLocation.map((returnedPort) => {
+          if (selectedPort.locationNumber === returnedPort.locationNumber) {
+            localPortLed.push(returnedPort);
           }
         });
-}
+      });
+      remotePortLed.value = [];
+      props.selectedObj.remotePortLocation.map((selectedPort) => {
+        returnedObj.remotePortLocation.map((returnedPort) => {
+          if (selectedPort.locationNumber === returnedPort.locationNumber) {
+            remotePortLed.push(returnedPort);
+          }
+        });
+      });
+      ioSlotsLed.value = [];
+      if (props.selectedObj.ioSlots.length > 0) {
+        props.selectedObj.ioSlots.map((selectedSlot) => {
+          returnedObj.ioSlots.map((returnedSlot) => {
+            if (selectedSlot.locationNumber === returnedSlot.locationNumber) {
+              ioSlotsLed.value.push(returnedSlot);
+            }
+          });
+        });
+      }
+    });
+};
 
+const changeLedValue = async (value, type) => {
+  pcieTopologyStore
+    .updateLedValue({ value: value, type: type })
+    .then(() => {
+      getAllLeds();
+      if (value.led) {
+        successToast(
+          i18n.global.t('pagePcieTopology.toast.successEnableIdentifyLed'),
+        );
+      } else {
+        successToast(
+          i18n.global.t('pagePcieTopology.toast.successDisableIdentifyLed'),
+        );
+      }
+    })
+    .catch(() => {
+      getAllLeds();
+      if (value.led) {
+        errorToast(
+          i18n.global.t('pagePcieTopology.toast.errorEnableIdentifyLed'),
+        );
+      } else {
+        errorToast(
+          i18n.global.t('pagePcieTopology.toast.errorDisableIdentifyLed'),
+        );
+      }
+    });
+};
 </script>
 <style scoped>
-
 .headerStyle {
   font-weight: bold;
 }

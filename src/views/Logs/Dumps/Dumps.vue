@@ -43,7 +43,7 @@
     <BRow>
       <BCol sm="6" lg="5" xl="4">
         <page-section :section-title="$t('pageDumps.initiateDump')">
-          <dumps-form @updateDumpInfo="updateDumpInfo"/>
+          <dumps-form @updateDumpInfo="updateDumpInfo" />
         </page-section>
       </BCol>
     </BRow>
@@ -51,7 +51,11 @@
       <BCol xl="10">
         <page-section :section-title="$t('pageDumps.dumpsAvailableOnBmc')">
           <BRow class="align-items-start">
-            <BCol sm="8" xl="6" class="d-sm-flex align-items-end mb-4 searchStyle">
+            <BCol
+              sm="8"
+              xl="6"
+              class="d-sm-flex align-items-end mb-4 searchStyle"
+            >
               <search
                 :placeholder="$t('pageDumps.table.searchDumps')"
                 @change-search="onChangeSearch"
@@ -93,7 +97,9 @@
             :items="filteredDumps"
             :empty-text="$t('global.table.emptyMessage')"
             :empty-filtered-text="$t('global.table.emptySearchMessage')"
-            :per-page="itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage"
+            :per-page="
+              itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage
+            "
             :current-page="currentPageNo"
             :filter="searchFilterInput"
             :busy="isBusy"
@@ -153,7 +159,9 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage
+          "
           :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-dump-entries"
         />
@@ -163,14 +171,12 @@
       v-model="openModal"
       :title="$t('pageDumps.modal.deleteDump')"
       :ok-title="$t('pageDumps.modal.deleteDump')"
-      okVariant="danger"
+      ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk"
     >
       <p>
-        {{
-          $t('pageDumps.modal.deleteDumpConfirmation')
-        }}
+        {{ $t('pageDumps.modal.deleteDumpConfirmation') }}
       </p>
     </BModal>
   </BContainer>
@@ -198,8 +204,10 @@ import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
-const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } = usePaginationComposable();
-const { getFilteredTableData, getFilteredTableDataByDate } = useTableFilterComposable();
+const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
+  usePaginationComposable();
+const { getFilteredTableData, getFilteredTableDataByDate } =
+  useTableFilterComposable();
 const { successToast, errorToast } = useToast();
 
 const dumps = stores.DumpsStore();
@@ -210,47 +218,47 @@ const global = stores.GlobalStore();
 const isBusy = ref(true);
 const selectedDumpType = ref('');
 const fields = ref([
-        {
-          key: 'id',
-          label: i18n.global.t('pageDumps.table.id'),
-          sortable: true,
-        },
-        {
-          key: 'dateTime',
-          label: i18n.global.t('pageDumps.table.dateAndTime'),
-          sortable: true,
-        },
-        {
-          key: 'dumpType',
-          label: i18n.global.t('pageDumps.table.dumpType'),
-          sortable: true,
-        },
-        {
-          key: 'size',
-          label: i18n.global.t('pageDumps.table.size'),
-          sortable: true,
-        },
-        {
-          key: 'actions',
-          sortable: false,
-          label: '',
-          tdClass: 'text-right text-nowrap',
-        },
-      ]);
+  {
+    key: 'id',
+    label: i18n.global.t('pageDumps.table.id'),
+    sortable: true,
+  },
+  {
+    key: 'dateTime',
+    label: i18n.global.t('pageDumps.table.dateAndTime'),
+    sortable: true,
+  },
+  {
+    key: 'dumpType',
+    label: i18n.global.t('pageDumps.table.dumpType'),
+    sortable: true,
+  },
+  {
+    key: 'size',
+    label: i18n.global.t('pageDumps.table.size'),
+    sortable: true,
+  },
+  {
+    key: 'actions',
+    sortable: false,
+    label: '',
+    tdClass: 'text-right text-nowrap',
+  },
+]);
 const tableFilters = ref([
-        {
-          key: 'dumpType',
-          label: i18n.global.t('pageDumps.table.dumpType'),
-          values: [
-            'BMC Dump Entry',
-            'Hardware Dump Entry',
-            'Hostboot Dump Entry',
-            'SBE Dump Entry',
-            'Resource Dump Entry',
-            'System Dump Entry',
-          ],
-        },
-      ]);
+  {
+    key: 'dumpType',
+    label: i18n.global.t('pageDumps.table.dumpType'),
+    values: [
+      'BMC Dump Entry',
+      'Hardware Dump Entry',
+      'Hostboot Dump Entry',
+      'SBE Dump Entry',
+      'Resource Dump Entry',
+      'System Dump Entry',
+    ],
+  },
+]);
 const activeFiltersRows = ref([]);
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
@@ -267,83 +275,82 @@ onBeforeRouteLeave(() => {
 
 onBeforeMount(() => {
   startLoader();
-    Promise.all([
-      dumps.getAllDumps(),
-      userManagement.getUsers(),
-      resourceMemory.getHmcManaged(),
-      global.getBootProgress(),
-    ]).finally(() => {
-      endLoader();
-      isBusy.value = false;
-    });
+  Promise.all([
+    dumps.getAllDumps(),
+    userManagement.getUsers(),
+    resourceMemory.getHmcManaged(),
+    global.getBootProgress(),
+  ]).finally(() => {
+    endLoader();
+    isBusy.value = false;
+  });
 });
 onMounted(() => {
-      eventBus.on('updateDumpInfo', updateDumpInfo);
-    });
+  eventBus.on('updateDumpInfo', updateDumpInfo);
+});
 const filteredRows = computed(() => {
-      return searchFilterInput.value
-        ? searchTotalFilteredRows.value
-        : filteredDumps.value.length;
-    });
+  return searchFilterInput.value
+    ? searchTotalFilteredRows.value
+    : filteredDumps.value.length;
+});
 const allDumps = computed(() => {
-      return dumps.allDumpsGetter
-    });
+  return dumps.allDumpsGetter;
+});
 const filteredDumpsByDate = computed(() => {
-      return getFilteredTableDataByDate(
-        allDumps.value,
-        filterStartDate.value,
-        filterEndDate.value,
-        'dateTime'
-      );
-    });
+  return getFilteredTableDataByDate(
+    allDumps.value,
+    filterStartDate.value,
+    filterEndDate.value,
+    'dateTime',
+  );
+});
 const filteredDumps = computed(() => {
-      return getFilteredTableData(
-        filteredDumpsByDate.value,
-        activeFiltersRows.value,
-      );
-    });
+  return getFilteredTableData(
+    filteredDumpsByDate.value,
+    activeFiltersRows.value,
+  );
+});
 const isInPhypStandby = computed(() => {
-      return global.isInPhypStandby;
-    });
+  return global.isInPhypStandby;
+});
 const hmcManaged = computed(() => {
-      return resourceMemory.hmcManagedGetter;
-    });
+  return resourceMemory.hmcManagedGetter;
+});
 
 const updateDumpInfo = (selectedDumpTypeVal) => {
-      selectedDumpType.value = selectedDumpTypeVal.toString();
-    };
+  selectedDumpType.value = selectedDumpTypeVal.toString();
+};
 const convertBytesToMegabytes = (bytes) => {
-      return parseFloat((bytes / 1000000).toFixed(3));
-    };
+  return parseFloat((bytes / 1000000).toFixed(3));
+};
 const onFilterChange = ({ activeFilters }) => {
-      activeFiltersRows.value = activeFilters;
-    };
+  activeFiltersRows.value = activeFilters;
+};
 const onFiltered = (filteredItems) => {
-      searchTotalFilteredRows.value = filteredItems.length;
-    };
+  searchTotalFilteredRows.value = filteredItems.length;
+};
 const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
-      filterStartDate.value = fromDate;
-      filterEndDate.value = toDate;
-    };
+  filterStartDate.value = fromDate;
+  filterEndDate.value = toDate;
+};
 const onTableRowAction = (action, dump) => {
-      if (action === 'delete') {
-        openModal.value = true;
-        dumpVal.value = dump;
-      }
-    };
+  if (action === 'delete') {
+    openModal.value = true;
+    dumpVal.value = dump;
+  }
+};
 const handleOk = () => {
   openModal.value = false;
-  dumps.deleteDumps([dumpVal.value])
-                .then((messages) => {
-                  messages.forEach(({ type, message }) => {
-                    if (type === 'success') {
-                      successToast(message);
-                    } else if (type === 'error') {
-                      errorToast(message);
-                    }
-                  });
-                });
-    };
+  dumps.deleteDumps([dumpVal.value]).then((messages) => {
+    messages.forEach(({ type, message }) => {
+      if (type === 'success') {
+        successToast(message);
+      } else if (type === 'error') {
+        errorToast(message);
+      }
+    });
+  });
+};
 const onChangeSearch = (event) => {
   searchFilterInput.value = event;
 };
@@ -351,10 +358,10 @@ const onClearSearch = () => {
   searchFilterInput.value = '';
 };
 const exportFileName = (row) => {
-      let filename = row.item.dumpType + '_' + row.item.id;
-      filename = filename.replace(RegExp(' ', 'g'), '_');
-      return filename;
-    };
+  let filename = row.item.dumpType + '_' + row.item.id;
+  filename = filename.replace(RegExp(' ', 'g'), '_');
+  return filename;
+};
 </script>
 <style lang="scss" scoped>
 #table-dumps {

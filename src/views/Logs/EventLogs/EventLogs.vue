@@ -471,13 +471,13 @@ export default {
     },
   },
   created() {
-    eventBus.on('clear-selected', () => {
+    (eventBus.on('clear-selected', () => {
       stores.EventLogStore().eventlogsGetter?.map((singleLog) => {
         singleLog.rowSelected = false;
       });
       useTableSelectableComposable().clearSelectedRowsOptions(this.$refs.table);
     }),
-      useLoadingBar().startLoader();
+      useLoadingBar().startLoader());
     stores
       .EventLogStore()
       .initializeLogs()

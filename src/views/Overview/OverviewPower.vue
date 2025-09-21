@@ -55,14 +55,14 @@ const powerControlStore = stores.PowerControlStore();
 const global = stores.GlobalStore();
 
 onBeforeMount(() => {
-    Promise.all([
-      powerControlStore.getPowerControl(),
-      powerControlStore.getPowerPerformanceMode(),
-      powerControlStore.getIdlePowerSaverData(),
-    ]).finally(() => {
-      eventBus.emit('overview-power-complete');
-    });
+  Promise.all([
+    powerControlStore.getPowerControl(),
+    powerControlStore.getPowerPerformanceMode(),
+    powerControlStore.getIdlePowerSaverData(),
+  ]).finally(() => {
+    eventBus.emit('overview-power-complete');
   });
+});
 
 const idlePowerSaverData = computed(() => {
   return powerControlStore.idlePowerSaverData;
@@ -82,5 +82,4 @@ const powerPerformanceMode = computed(() => {
 const safeMode = computed(() => {
   return global.safeMode;
 });
-
 </script>

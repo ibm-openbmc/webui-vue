@@ -120,7 +120,7 @@
       </template>
       <template #row-details="{ item }">
         <b-container fluid>
-          <BRow style="margin-left: 5px;">
+          <BRow style="margin-left: 5px">
             <BCol sm="6" xl="6">
               <dl>
                 <dt>{{ $t('pageInventory.table.model') }}</dt>

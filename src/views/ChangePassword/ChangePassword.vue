@@ -56,7 +56,14 @@
               <template v-if="v$.form.passwordConfirm.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
-              <template v-else-if="v$.form.passwordConfirm.$errors.length > 0 ? v$.form.passwordConfirm.$errors[0].$validator === 'sameAsPassword' : false">
+              <template
+                v-else-if="
+                  v$.form.passwordConfirm.$errors.length > 0
+                    ? v$.form.passwordConfirm.$errors[0].$validator ===
+                      'sameAsPassword'
+                    : false
+                "
+              >
                 {{ $t('global.form.passwordsDoNotMatch') }}
               </template>
             </BFormInvalidFeedback>
@@ -76,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed} from 'vue'
+import { ref, computed } from 'vue';
 import i18n from '@/i18n';
 import stores from '@/store';
 import { required, sameAs } from '@vuelidate/validators';
@@ -95,56 +102,57 @@ const router = useRouter();
 const { getValidationState } = useVuelidateComposable();
 
 const form = ref({
-        password: '',
-        passwordConfirm: '',
-      });
+  password: '',
+  passwordConfirm: '',
+});
 const username = ref(global.usernameGetter);
 const changePasswordError = ref(false);
-const inputType = ref('password')
-const confirmPasswordType = ref('password')
+const inputType = ref('password');
+const confirmPasswordType = ref('password');
 
 const rules = computed(() => ({
-      form: {
-        password: { required },
-        passwordConfirm: {
-          required,
-          sameAsPassword: sameAs(form.value.password),
-        },
-      },
-    }));
-const v$ = useVuelidate(rules, {form});
+  form: {
+    password: { required },
+    passwordConfirm: {
+      required,
+      sameAsPassword: sameAs(form.value.password),
+    },
+  },
+}));
+const v$ = useVuelidate(rules, { form });
 
 const goBack = () => {
-      // Remove session created if navigating back to the Login page
-      authenticationStore.logout().then(() => {
-      router.push('/login');
+  // Remove session created if navigating back to the Login page
+  authenticationStore.logout().then(() => {
+    router.push('/login');
   });
-    };
+};
 const changePassword = () => {
-      v$.value.$touch();
-      if (v$.value.$invalid) return;
-      let data = {
-        originalUsername: username.value,
-        password: form.value.password,
-      };
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  let data = {
+    originalUsername: username.value,
+    password: form.value.password,
+  };
 
-      userManagementStore.updateUser(data)
-        .then(() => {
-          Promise.all([
-            userManagementStore.getUsers(),
-            global.getCurrentUser(username.value),
-            global.getSystemInfo(),
-          ])
-          v$.value.$reset();
-        })
-        .then(() => router.push('/'))
-        .catch(() => (changePasswordError.value = true));
-      };
+  userManagementStore
+    .updateUser(data)
+    .then(() => {
+      Promise.all([
+        userManagementStore.getUsers(),
+        global.getCurrentUser(username.value),
+        global.getSystemInfo(),
+      ]);
+      v$.value.$reset();
+    })
+    .then(() => router.push('/'))
+    .catch(() => (changePasswordError.value = true));
+};
 const updatePasswordType = (passwordType) => {
-  inputType.value=passwordType
+  inputType.value = passwordType;
 };
 const updateConfirmPasswordType = (passwordType) => {
-  confirmPasswordType.value=passwordType
+  confirmPasswordType.value = passwordType;
 };
 </script>
 <style lang="scss" scoped>

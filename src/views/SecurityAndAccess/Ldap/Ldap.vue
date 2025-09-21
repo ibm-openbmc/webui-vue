@@ -141,8 +141,9 @@
                       :label="$t('pageLdap.form.bindPassword')"
                       label-for="bind-password"
                     >
-                      <input-password-toggle @updatePassView="updateInputType"
+                      <input-password-toggle
                         data-test-id="ldap-input-togglePassword"
+                        @updatePassView="updateInputType"
                       >
                         <b-form-input
                           id="bind-password"
@@ -258,7 +259,7 @@ import useToast from '@/components/Composables/useToastComposable';
 
 const { t } = useI18n();
 const isPasswordVisible = ref(false);
-const inputType=ref('password')
+const inputType = ref('password');
 const ldapStore = stores.LdapStore();
 const certificatesStore = stores.CertificatesStore();
 const { getValidationState } = useVuelidateComposable();
@@ -333,7 +334,6 @@ const sslCertificates = computed(() => {
   return certificatesStore.allCertificatesGetter;
 });
 
-
 const caCertificateExpiration = computed(() => {
   const caCertificate = find(sslCertificates.value, {
     type: 'TrustStore Certificate',
@@ -357,7 +357,7 @@ watch(
   () => isServiceEnabled.value,
   (value) => {
     formLdap.ldapAuthenticationEnabled = value;
-  }
+  },
 );
 
 watch(
@@ -365,23 +365,22 @@ watch(
   (val) => {
     formLdap.activeDirectoryEnabled = val;
     setFormValues();
-  }
+  },
 );
 
 watch(
   () => caCertificateExpiration.value,
   () => {
     setFormValues();
-  }
+  },
 );
 
 watch(
   () => ldapCertificateExpiration.value,
   () => {
     setFormValues();
-  }
+  },
 );
-
 
 onBeforeMount(() => {
   startLoader();
@@ -452,7 +451,8 @@ function handleSubmit() {
 function onChangeServiceType(event) {
   v$.value.formLdap.activeDirectoryEnabled.$touch();
   const isActiveDirectoryEnabled = event.target.value;
-  const serviceType = isActiveDirectoryEnabled==="true" ? activeDirectory.value : ldap.value;
+  const serviceType =
+    isActiveDirectoryEnabled === 'true' ? activeDirectory.value : ldap.value;
   // Set form values according to user selected
   // service type
   setFormValues(serviceType);
@@ -469,8 +469,8 @@ function onChangeldapAuthenticationEnabled(event) {
     setFormValues();
   }
 }
-function updateInputType(passwordType){
-  inputType.value=passwordType
+function updateInputType(passwordType) {
+  inputType.value = passwordType;
 }
 </script>
 <style lang="scss" scoped>

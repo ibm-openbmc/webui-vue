@@ -1,8 +1,8 @@
 <template>
   <BModal
-    v-model="modal"
     id="modal-partition-dump-confirmation"
     ref="modal"
+    v-model="modal"
     :title="
       selected === 'partition'
         ? $t('pageDumps.modal.initiatePartitionDump')
@@ -19,7 +19,10 @@
       <status-icon status="danger" />
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage1') }}
     </p>
-    <BFormCheckbox v-model="confirmed" @update:modelValue="v$.confirmed.$touch()">
+    <BFormCheckbox
+      v-model="confirmed"
+      @update:modelValue="v$.confirmed.$touch()"
+    >
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage2') }}
     </BFormCheckbox>
     <BFormInvalidFeedback
@@ -51,41 +54,40 @@ const emit = defineEmits(['ok']);
 const { getValidationState } = useVuelidateComposable();
 
 defineProps({
-    selected: {
-      type: String,
-      required: true,
-    },
-  });
+  selected: {
+    type: String,
+    required: true,
+  },
+});
 
 const confirmed = ref(false);
 const modal = ref(false);
 
 const mustBeTrue = (value) => {
-      return value === true;
-}
+  return value === true;
+};
 
 const rules = computed(() => ({
-    confirmed: {
-      mustBeTrue
-    },
-  }));
+  confirmed: {
+    mustBeTrue,
+  },
+}));
 const v$ = useVuelidate(rules, { confirmed });
 
 const closeModal = () => {
-    nextTick(() => {
-      modal.value=false;
-      eventBus.emit('partition-modal-close');
-      });
-    };
+  nextTick(() => {
+    modal.value = false;
+    eventBus.emit('partition-modal-close');
+  });
+};
 const handleSubmit = () => {
-      v$.value.$touch();
-      if (v$.value.$invalid) return;
-      emit('ok');
-      closeModal();
-    };
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('ok');
+  closeModal();
+};
 const resetForm = () => {
-      confirmed.value = false;
-      v$.value.$reset();
-    };
-
+  confirmed.value = false;
+  v$.value.$reset();
+};
 </script>

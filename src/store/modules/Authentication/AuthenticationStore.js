@@ -18,9 +18,7 @@ export const AuthenticationStore = defineStore('authentication', {
     unauthErrorGetter: (state) => state.unauthError,
     isLoggedIn: (state) => {
       //Change null to undefined once the cookies value able to get
-      return (
-        state.xsrfCookie !== null || state.isAuthenticatedCookie == 'true'
-      );
+      return state.xsrfCookie !== null || state.isAuthenticatedCookie == 'true';
     },
     token: (state) => state.xsrfCookie,
   },
@@ -67,9 +65,9 @@ export const AuthenticationStore = defineStore('authentication', {
       };
       return api
         .post('/logout', { data: [] }, { headers: headers })
-        .then(()=>{
-          Cookies.remove('XSRF-TOKEN')
-          Cookies.remove('IsAuthenticated')
+        .then(() => {
+          Cookies.remove('XSRF-TOKEN');
+          Cookies.remove('IsAuthenticated');
           localStorage.removeItem('storedModelType');
           localStorage.removeItem('storedUsername');
           localStorage.removeItem('storedCurrentUser');

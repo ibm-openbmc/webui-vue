@@ -1,7 +1,7 @@
 <template>
   <BModal
-    v-model="modal"
     id="modal-hostname"
+    v-model="modal"
     :title="$t('pageNetwork.modal.editHostnameTitle')"
     :ok-title="$t('global.action.save')"
     @ok="onOk"
@@ -89,7 +89,7 @@ watch(
   () => props.hostname,
   () => {
     form.value.hostname = props.hostname;
-  }
+  },
 );
 
 const handleSubmit = () => {

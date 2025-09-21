@@ -54,7 +54,9 @@
           :items="allConnections"
           :filter="searchFilterInput"
           :empty-text="$t('global.table.emptyMessage')"
-          :per-page="itemPerPage === 0 ? allConnections.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? allConnections.length || 1 : itemPerPage
+          "
           :current-page="currentPageNo"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, allConnections.length)"
@@ -125,7 +127,9 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="itemPerPage === 0 ? allConnections.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? allConnections.length || 1 : itemPerPage
+          "
           :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-session-logs"
         />

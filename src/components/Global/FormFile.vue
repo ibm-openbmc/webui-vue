@@ -8,8 +8,8 @@
         :disabled="disabled"
         :state="state"
         plain
-        @update:model-value="$emit('input', file)"
         class="form-control-file"
+        @update:model-value="$emit('input', file)"
       >
       </BFormFile>
       <span

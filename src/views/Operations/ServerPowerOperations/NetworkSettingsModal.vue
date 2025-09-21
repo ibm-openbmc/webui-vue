@@ -18,14 +18,14 @@
         <h3>
           {{
             $t(
-              'pageServerPowerOperations.modal.networkSettings.settingsHeading'
+              'pageServerPowerOperations.modal.networkSettings.settingsHeading',
             )
           }}
         </h3>
         <span>
           {{
             $t(
-              'pageServerPowerOperations.modal.networkSettings.settingsDescription'
+              'pageServerPowerOperations.modal.networkSettings.settingsDescription',
             )
           }}
         </span>
@@ -36,7 +36,7 @@
               <BFormGroup
                 :label="
                   $t(
-                    'pageServerPowerOperations.modal.networkSettings.networkTypeHeading'
+                    'pageServerPowerOperations.modal.networkSettings.networkTypeHeading',
                   )
                 "
                 class="mb-2"
@@ -59,7 +59,7 @@
                 "
                 :label="
                   $t(
-                    'pageServerPowerOperations.modal.networkSettings.ipAddressProtocolHeading'
+                    'pageServerPowerOperations.modal.networkSettings.ipAddressProtocolHeading',
                   )
                 "
                 class="mb-2"
@@ -108,10 +108,10 @@
                     :label="
                       server.validations.isRequired
                         ? $t(
-                            `pageServerPowerOperations.modal.networkSettings.serverSettings.${server.property}`
+                            `pageServerPowerOperations.modal.networkSettings.serverSettings.${server.property}`,
                           ) + ' *'
                         : $t(
-                            `pageServerPowerOperations.modal.networkSettings.serverSettings.${server.property}`
+                            `pageServerPowerOperations.modal.networkSettings.serverSettings.${server.property}`,
                           )
                     "
                     class="mb-2 ml-4"
@@ -142,7 +142,7 @@
                   >
                     {{
                       $t(
-                        'pageServerPowerOperations.modal.networkSettings.serverSettings.restoreDefault'
+                        'pageServerPowerOperations.modal.networkSettings.serverSettings.restoreDefault',
                       )
                     }}
                   </BButton>
@@ -165,7 +165,7 @@
               >
                 {{
                   $t(
-                    'pageServerPowerOperations.modal.networkSettings.partition'
+                    'pageServerPowerOperations.modal.networkSettings.partition',
                   )
                 }}:
               </h5>
@@ -184,10 +184,10 @@
                     :label="
                       partition.validations.isRequired
                         ? $t(
-                            `pageServerPowerOperations.modal.networkSettings.partitionSettings.${partition.property}`
+                            `pageServerPowerOperations.modal.networkSettings.partitionSettings.${partition.property}`,
                           ) + ' *'
                         : $t(
-                            `pageServerPowerOperations.modal.networkSettings.partitionSettings.${partition.property}`
+                            `pageServerPowerOperations.modal.networkSettings.partitionSettings.${partition.property}`,
                           )
                     "
                     class="mb-2 ml-4"
@@ -228,7 +228,7 @@
               >
                 {{
                   $t(
-                    'pageServerPowerOperations.modal.networkSettings.advanced'
+                    'pageServerPowerOperations.modal.networkSettings.advanced',
                   )
                 }}:
               </h5>
@@ -246,7 +246,7 @@
                     :key="advanced.property + 'group'"
                     :label="
                       $t(
-                        `pageServerPowerOperations.modal.networkSettings.advancedSettings.${advanced.property}`
+                        `pageServerPowerOperations.modal.networkSettings.advancedSettings.${advanced.property}`,
                       )
                     "
                     class="mb-2 ml-4"
@@ -408,7 +408,7 @@ watch(
         selectedIpProtocol.value.server.length > 0
       ) {
         let initiatorName = selectedIpProtocol.value.server.find(
-          (element) => element.property === 'initiatorName'
+          (element) => element.property === 'initiatorName',
         );
         initiatorName.value =
           attributesList.value['pvm_ibmi_iscsi_initiator_name'];
@@ -425,12 +425,12 @@ watch(
       selectedIpProtocol.value.advanced.length > 0
     ) {
       let maxFrame = selectedIpProtocol.value.advanced.find(
-        (element) => element.property === 'maxFrameSize'
+        (element) => element.property === 'maxFrameSize',
       );
       maxFrame.value = attributesList.value['pvm_ibmi_max_frame_size'];
     }
   },
-  { deep: true }
+  { deep: true },
 );
 
 const rules = computed(() => {
@@ -660,7 +660,7 @@ function handleSubmit() {
       form = {
         ...form,
         pvm_ibmi_iscsi_target_port: Number(
-          properties.value.pvm_ibmi_iscsi_target_port
+          properties.value.pvm_ibmi_iscsi_target_port,
         ),
       };
     }
@@ -723,24 +723,24 @@ function generateErrorMsg(value) {
     return i18n.global.t('global.form.fieldRequired');
   } else if (isInvalid(validationAttribute, 'ipAddress'))
     return i18n.global.t(
-      'pageServerPowerOperations.modal.networkSettings.validators.invalidIpv4'
+      'pageServerPowerOperations.modal.networkSettings.validators.invalidIpv4',
     );
   else if (isInvalid(validationAttribute, 'ipAddressV6'))
     return i18n.global.t(
-      'pageServerPowerOperations.modal.networkSettings.validators.invalidIpv6'
+      'pageServerPowerOperations.modal.networkSettings.validators.invalidIpv6',
     );
   else if (isInvalid(validationAttribute, 'imageDirectory'))
     return i18n.global.t(
-      'pageServerPowerOperations.modal.networkSettings.validators.invalidImageDirectory'
+      'pageServerPowerOperations.modal.networkSettings.validators.invalidImageDirectory',
     );
   else if (isInvalid(validationAttribute, 'requiredIf')) {
     if (attribute === 'chapName') {
       return i18n.global.t(
-        'pageServerPowerOperations.modal.networkSettings.validators.chapNameRequired'
+        'pageServerPowerOperations.modal.networkSettings.validators.chapNameRequired',
       );
     }
     return i18n.global.t(
-      'pageServerPowerOperations.modal.networkSettings.validators.chapSecretRequired'
+      'pageServerPowerOperations.modal.networkSettings.validators.chapSecretRequired',
     );
   } else if (
     isInvalid(validationAttribute, 'minLength') ||
@@ -751,10 +751,10 @@ function generateErrorMsg(value) {
         'pageServerPowerOperations.modal.networkSettings.validators.invalidFieldLength',
         {
           field: i18n.global.t(
-            'pageServerPowerOperations.modal.networkSettings.serverSettings.chapName'
+            'pageServerPowerOperations.modal.networkSettings.serverSettings.chapName',
           ),
           max: 32,
-        }
+        },
       );
     } else if (attribute === 'chapSecret') {
       return i18n.global.t(
@@ -762,37 +762,37 @@ function generateErrorMsg(value) {
         {
           min: 12,
           max: 32,
-        }
+        },
       );
     } else if (attribute === 'pvm_ibmi_iscsi_target_name') {
       return i18n.global.t(
         'pageServerPowerOperations.modal.networkSettings.validators.invalidFieldLength',
         {
           field: i18n.global.t(
-            'pageServerPowerOperations.modal.networkSettings.serverSettings.targetName'
+            'pageServerPowerOperations.modal.networkSettings.serverSettings.targetName',
           ),
           max: targetNameMaxLength.value,
-        }
+        },
       );
     } else if (attribute === 'pvm_ibmi_iscsi_initiator_name') {
       return i18n.global.t(
         'pageServerPowerOperations.modal.networkSettings.validators.invalidFieldLength',
         {
           field: i18n.global.t(
-            'pageServerPowerOperations.modal.networkSettings.serverSettings.initiatorName'
+            'pageServerPowerOperations.modal.networkSettings.serverSettings.initiatorName',
           ),
           max: initiatorNameMaxLength.value,
-        }
+        },
       );
     } else if (attribute === 'pvm_ibmi_nfs_image_directory') {
       return i18n.global.t(
         'pageServerPowerOperations.modal.networkSettings.validators.invalidFieldLength',
         {
           field: i18n.global.t(
-            'pageServerPowerOperations.modal.networkSettings.serverSettings.imageDirectoryPath'
+            'pageServerPowerOperations.modal.networkSettings.serverSettings.imageDirectoryPath',
           ),
           max: nfsImageDirMaxLength.value,
-        }
+        },
       );
     }
   } else if (isInvalid(validationAttribute, 'between')) {
@@ -802,7 +802,7 @@ function generateErrorMsg(value) {
         {
           min: 1,
           max: vlanTagIdUpperBound.value,
-        }
+        },
       );
     else if (attribute === 'pvm_ibmi_iscsi_target_port');
     return i18n.global.t(
@@ -810,7 +810,7 @@ function generateErrorMsg(value) {
       {
         min: 1,
         max: targetPortUpperBound.value,
-      }
+      },
     );
   }
 }

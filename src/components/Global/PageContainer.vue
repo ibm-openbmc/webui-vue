@@ -13,13 +13,13 @@ const { setFocus } = useJumpLinkComposable();
 
 const main = ref(null);
 
-onMounted(() => { 
-    eventBus.on('skip-navigation', () => {
-      if (main.value){
-        setFocus(main.value)
-      }
-    })
-  })
+onMounted(() => {
+  eventBus.on('skip-navigation', () => {
+    if (main.value) {
+      setFocus(main.value);
+    }
+  });
+});
 </script>
 
 <style lang="scss" scoped>

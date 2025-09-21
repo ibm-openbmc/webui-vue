@@ -34,12 +34,14 @@ export const SnmpAlertsStore = defineStore('snmpAlerts', {
           const finalSNmpData = snmpDetailsDataFiltered.map((singleData) => {
             singleData.isSelected = false;
             return singleData;
-          })
+          });
           this.allSnmpDetails = finalSNmpData;
         })
         .catch((error) => {
           console.log(error);
-          const message = i18n.global.t('pageSnmpAlerts.toast.errorLoadSnmpDetails');
+          const message = i18n.global.t(
+            'pageSnmpAlerts.toast.errorLoadSnmpDetails',
+          );
           throw new Error(message);
         });
     },
@@ -108,7 +110,9 @@ export const SnmpAlertsStore = defineStore('snmpAlerts', {
         .then(() => i18n.global.t('pageSnmpAlerts.toast.successAddDestination'))
         .catch((error) => {
           console.log(error);
-          const message = i18n.global.t('pageSnmpAlerts.toast.errorAddDestination');
+          const message = i18n.global.t(
+            'pageSnmpAlerts.toast.errorAddDestination',
+          );
           throw new Error(message);
         });
     },

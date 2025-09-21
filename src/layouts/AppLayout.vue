@@ -36,22 +36,21 @@ const routerKey = ref(0);
 const focusTarget = ref(null);
 
 watch(route, () => {
-      nextTick(()=>{
-        setFocus(focusTarget.value.$el)
-    })
-    }
-  );
-    
-onMounted(() => {
-   eventBus.on('refresh-application', () => refresh());
+  nextTick(() => {
+    setFocus(focusTarget.value.$el);
   });
+});
+
+onMounted(() => {
+  eventBus.on('refresh-application', () => refresh());
+});
 
 const refresh = () => {
-      global.getSystemInfo();
-      // Changing the component :key value will trigger
-      // a component re-rendering and 'refresh' the view
-      routerKey.value += 1;
-    };
+  global.getSystemInfo();
+  // Changing the component :key value will trigger
+  // a component re-rendering and 'refresh' the view
+  routerKey.value += 1;
+};
 </script>
 
 <style lang="scss" scoped>

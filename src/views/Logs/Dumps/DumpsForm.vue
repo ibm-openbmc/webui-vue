@@ -102,258 +102,261 @@ const global = stores.GlobalStore();
 const ibmiServiceFunctions = stores.IBMiServiceFunctionsStore();
 const serverBootSettings = stores.BootSettingsStore();
 const userManagement = stores.UserManagementStore();
-const dumps = stores.DumpsStore()
+const dumps = stores.DumpsStore();
 
-const selectedDumpType =  ref('');
+const selectedDumpType = ref('');
 const resourceSelectorValue = ref(null);
 const resourcePasswordValue = ref(null);
 const dumpTypeOptions = ref([]);
 const taskProgress = ref('');
-const modalConfirmation = ref(false)
-const modalPartition = ref(false)
+const modalConfirmation = ref(false);
+const modalPartition = ref(false);
 
 onBeforeMount(() => {
-    checkForUserData();
-    checkIfInPhypStandby();
-    Promise.all([
-      global.getHmcManaged(),
-      global.getBootProgress(),
-      ibmiServiceFunctions.getAvailableServiceFunctions(),
-      serverBootSettings.fetchBiosAttributes(),
-      serverBootSettings.getBiosAttributes,
-    ]);
-    eventBus.on('modal-close', () => {
-      modalConfirmation.value = false
-    })
-    eventBus.on('partition-modal-close', () => {
-      modalPartition.value = false
-    })
+  checkForUserData();
+  checkIfInPhypStandby();
+  Promise.all([
+    global.getHmcManaged(),
+    global.getBootProgress(),
+    ibmiServiceFunctions.getAvailableServiceFunctions(),
+    serverBootSettings.fetchBiosAttributes(),
+    serverBootSettings.getBiosAttributes,
+  ]);
+  eventBus.on('modal-close', () => {
+    modalConfirmation.value = false;
   });
+  eventBus.on('partition-modal-close', () => {
+    modalPartition.value = false;
+  });
+});
 
 const rules = computed(() => ({
-      selectedDumpType: { required },
-    }
-  ));
+  selectedDumpType: { required },
+}));
 const v$ = useVuelidate(rules, { selectedDumpType });
 
 const isOSRunning = computed(() => {
-      return global.isOSRunningGetter;
-    });
+  return global.isOSRunningGetter;
+});
 const availableFunctions = computed(() => {
-      return ibmiServiceFunctions.serviceFunctionsGetter;
-    });
+  return ibmiServiceFunctions.serviceFunctionsGetter;
+});
 const isIBMi = computed(() => {
-      if (
-        attributeKeys.value?.pvm_default_os_type === 'Default' ||
-        attributeKeys.value?.pvm_default_os_type === 'IBM I'
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+  if (
+    attributeKeys.value?.pvm_default_os_type === 'Default' ||
+    attributeKeys.value?.pvm_default_os_type === 'IBM I'
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
 const attributeKeys = computed(() => {
-      return serverBootSettings.getBiosAttributes;
-    });
+  return serverBootSettings.getBiosAttributes;
+});
 const currentUser = computed(() => {
-      return global.currentUserGetter;
-    });
+  return global.currentUserGetter;
+});
 const isServiceUser = computed(() => {
-      return global.isServiceUser;
-    });
+  return global.isServiceUser;
+});
 const isInPhypStandby = computed(() => {
-      return global.isInPhypStandby;
-    });
+  return global.isInPhypStandby;
+});
 const updatedDumpTypeOptions = computed(() => {
-      return setDumpTypeOptions();
-    });
+  return setDumpTypeOptions();
+});
 const hmcInfo = computed(() => {
-      return global.hmcManagedGetter;
-    });
+  return global.hmcManagedGetter;
+});
 const isButtonDisabled = computed(() => {
-      if (
-        !isOSRunning.value &&
-        (selectedDumpType.value === 'partition' ||
-          selectedDumpType.value === 'retryPartition')
-      ) {
-        return true;
-      } else if (
-        isOSRunning.value &&
-        (selectedDumpType.value === 'partition' ||
-          selectedDumpType.value === 'retryPartition')
-      ) {
-        if (selectedDumpType.value === 'partition') {
-          return isFunctionDisabled(22);
-        } else {
-          return isFunctionDisabled(34);
-        }
-      } else {
-        return false;
+  if (
+    !isOSRunning.value &&
+    (selectedDumpType.value === 'partition' ||
+      selectedDumpType.value === 'retryPartition')
+  ) {
+    return true;
+  } else if (
+    isOSRunning.value &&
+    (selectedDumpType.value === 'partition' ||
+      selectedDumpType.value === 'retryPartition')
+  ) {
+    if (selectedDumpType.value === 'partition') {
+      return isFunctionDisabled(22);
+    } else {
+      return isFunctionDisabled(34);
+    }
+  } else {
+    return false;
+  }
+});
+
+const checkTask = async () => {
+  //getting list of all tasks and getting the api to the most recent task
+  const taskObj = await dumps.getTask();
+  taskProgress.value = taskObj.data.Members[taskObj.data.Members.length - 1];
+  const taskLink = taskProgress.value['@odata.id'];
+  //going to the most recent task
+  const currentTask = async () => {
+    return await global.getCurrentTask(taskLink);
+  };
+  const currentTaskProgress = (checkCounter = 0) => {
+    checkCounter++;
+    //if 'TaskState' is in running state for more than 20 mins, error message will be displayed to the user
+    if (checkCounter > 40) {
+      return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
+    }
+    Promise.all([currentTask()]).then((res) => {
+      //monitor the value of parameter 'TaskState'
+      const taskState = res[0]['TaskState'];
+      //if TaskState is completed
+      if (taskState == 'Completed') {
+        successToast(i18n.global.t('pageDumps.toast.resourceDumpSuccess'));
+        //if TaskState is running/in progress
+      } else if (taskState == 'Running') {
+        //reload the api after every 30 seconds till 20 mins to check if the 'TaskState' is changed to Completed or Cancelled
+        setTimeout(() => {
+          currentTaskProgress(checkCounter);
+        }, 30000);
+        //if TaskState is Cancelled
+      } else if (taskState == 'Cancelled') {
+        errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
       }
     });
-    
-const checkTask = async() => {
-      //getting list of all tasks and getting the api to the most recent task
-      const taskObj = await dumps.getTask();
-      taskProgress.value = taskObj.data.Members[taskObj.data.Members.length - 1];
-      const taskLink = taskProgress.value['@odata.id'];
-      //going to the most recent task
-      const currentTask = async () => {
-        return await global.getCurrentTask(taskLink);
-      };
-      const currentTaskProgress = (checkCounter = 0) => {
-        checkCounter++;
-        //if 'TaskState' is in running state for more than 20 mins, error message will be displayed to the user
-        if (checkCounter > 40) {
-          return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
-        }
-        Promise.all([currentTask()]).then((res) => {
-          //monitor the value of parameter 'TaskState'
-          const taskState = res[0]['TaskState'];
-          //if TaskState is completed
-          if (taskState == 'Completed') {
-            successToast(i18n.global.t('pageDumps.toast.resourceDumpSuccess'));
-            //if TaskState is running/in progress
-          } else if (taskState == 'Running') {
-            //reload the api after every 30 seconds till 20 mins to check if the 'TaskState' is changed to Completed or Cancelled
-            setTimeout(() => {
-              currentTaskProgress(checkCounter);
-            }, 30000);
-            //if TaskState is Cancelled
-          } else if (taskState == 'Cancelled') {
-            errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
-          }
-        });
-      };
-      //trigger funtion to check 'TaskState'
-      if (taskLink) {
-        currentTaskProgress(0);
-      } else {
-        return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
-      }
-    };
+  };
+  //trigger funtion to check 'TaskState'
+  if (taskLink) {
+    currentTaskProgress(0);
+  } else {
+    return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
+  }
+};
 const checkForUserData = () => {
-      if (!currentUser.value) {
-        userManagement.getUsers();
-        global.getCurrentUser();
-      }
-    };
+  if (!currentUser.value) {
+    userManagement.getUsers();
+    global.getCurrentUser();
+  }
+};
 const checkIfInPhypStandby = (checkCounter = 0) => {
-      checkCounter++;
-      if (checkCounter > 15) return;
-      if (!isInPhypStandby.value) {
-        global.getBootProgress();
-        setTimeout(() => {
-          checkIfInPhypStandby(checkCounter);
-        }, 60000);
-      }
-    };
+  checkCounter++;
+  if (checkCounter > 15) return;
+  if (!isInPhypStandby.value) {
+    global.getBootProgress();
+    setTimeout(() => {
+      checkIfInPhypStandby(checkCounter);
+    }, 60000);
+  }
+};
 const updateDumpInfo = () => {
   nextTick(() => {
     eventBus.emit('updateDumpInfo', selectedDumpType.value);
   });
-    };
+};
 const handleSubmit = () => {
-      v$.value.$touch();
-      if (v$.value.selectedDumpType.$invalid) return;
+  v$.value.$touch();
+  if (v$.value.selectedDumpType.$invalid) return;
 
-      const dumpType = i18n.global.t(`pageDumps.form.${selectedDumpType.value}Dump`);
+  const dumpType = i18n.global.t(
+    `pageDumps.form.${selectedDumpType.value}Dump`,
+  );
 
-      if (selectedDumpType.value === 'system') {
-        // System dump initiation
-        showConfirmationModal();
-      }
-      // Resource dump initiation
-      else if (selectedDumpType.value === 'resource') {
-        dumps.createResourceDump({
-            resourceSelector: resourceSelectorValue.value,
-            // If not logged as service, '' must be used
-            resourcePassword: resourcePasswordValue.value || '',
-          })
-          .then(() => {
-            infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
-              title: i18n.global.t('pageDumps.toast.successStartResourceDumpTitle'),
-              timestamp: true,
-            });
-            checkTask();
-          })
-          .catch(({ message }) => errorToast(message));
-      }
-      // BMC dump initiation
-      else if (selectedDumpType.value === 'bmc') {
-        dumps.createBmcDump(dumpType)
-          .then(() =>
-            infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
-              title: i18n.global.t('pageDumps.toast.successStartBmcDumpTitle'),
-              timestamp: true,
-            })
-          )
-          .catch(({ message }) => errorToast(message));
-      } else if (selectedDumpType.value === 'partition') {
-        // Partition dump initiation
-        showPartitionDumpConfirmationModal();
-      } else if (selectedDumpType.value === 'retryPartition') {
-        // Retry partition dump
-        showPartitionDumpConfirmationModal();
-      }
-    };
+  if (selectedDumpType.value === 'system') {
+    // System dump initiation
+    showConfirmationModal();
+  }
+  // Resource dump initiation
+  else if (selectedDumpType.value === 'resource') {
+    dumps
+      .createResourceDump({
+        resourceSelector: resourceSelectorValue.value,
+        // If not logged as service, '' must be used
+        resourcePassword: resourcePasswordValue.value || '',
+      })
+      .then(() => {
+        infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
+          title: i18n.global.t('pageDumps.toast.successStartResourceDumpTitle'),
+          timestamp: true,
+        });
+        checkTask();
+      })
+      .catch(({ message }) => errorToast(message));
+  }
+  // BMC dump initiation
+  else if (selectedDumpType.value === 'bmc') {
+    dumps
+      .createBmcDump(dumpType)
+      .then(() =>
+        infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
+          title: i18n.global.t('pageDumps.toast.successStartBmcDumpTitle'),
+          timestamp: true,
+        }),
+      )
+      .catch(({ message }) => errorToast(message));
+  } else if (selectedDumpType.value === 'partition') {
+    // Partition dump initiation
+    showPartitionDumpConfirmationModal();
+  } else if (selectedDumpType.value === 'retryPartition') {
+    // Retry partition dump
+    showPartitionDumpConfirmationModal();
+  }
+};
 const setDumpTypeOptions = () => {
-      let minimumOptions = [
-        { value: 'bmc', text: i18n.global.t('pageDumps.form.bmcDump') },
-        { value: 'resource', text: i18n.global.t('pageDumps.form.resourceDump') },
-        { value: 'system', text: i18n.global.t('pageDumps.form.systemDump') },
-      ];
-      dumpTypeOptions.value = [];
-      if (hmcInfo.value === 'Enabled') {
-        return (dumpTypeOptions.value = minimumOptions);
-      } else if (isIBMi.value) {
-        return (dumpTypeOptions.value = [
-          ...minimumOptions,
-          {
-            value: 'partition',
-            text: i18n.global.t('pageDumps.form.partitionDump'),
-          },
-          {
-            value: 'retryPartition',
-            text: i18n.global.t('pageDumps.form.retryPartitionDump'),
-          },
-        ]);
-      } else {
-        return (dumpTypeOptions.value = minimumOptions);
-      }
-    };
+  let minimumOptions = [
+    { value: 'bmc', text: i18n.global.t('pageDumps.form.bmcDump') },
+    { value: 'resource', text: i18n.global.t('pageDumps.form.resourceDump') },
+    { value: 'system', text: i18n.global.t('pageDumps.form.systemDump') },
+  ];
+  dumpTypeOptions.value = [];
+  if (hmcInfo.value === 'Enabled') {
+    return (dumpTypeOptions.value = minimumOptions);
+  } else if (isIBMi.value) {
+    return (dumpTypeOptions.value = [
+      ...minimumOptions,
+      {
+        value: 'partition',
+        text: i18n.global.t('pageDumps.form.partitionDump'),
+      },
+      {
+        value: 'retryPartition',
+        text: i18n.global.t('pageDumps.form.retryPartitionDump'),
+      },
+    ]);
+  } else {
+    return (dumpTypeOptions.value = minimumOptions);
+  }
+};
 const exceuteFunction = (value) => {
-      ibmiServiceFunctions.executeServiceFunction(value)
-        .then((message) => {
-          infoToast(
-            i18n.global.t('pageDumps.toast.successSavePartitionDumpInfo')
-          );
-          successToast(message);
-        })
-        .catch(({ message }) => errorToast(message));
-    };
+  ibmiServiceFunctions
+    .executeServiceFunction(value)
+    .then((message) => {
+      infoToast(i18n.global.t('pageDumps.toast.successSavePartitionDumpInfo'));
+      successToast(message);
+    })
+    .catch(({ message }) => errorToast(message));
+};
 const isFunctionDisabled = (value) => {
-      // This condition is to check if the function is available to execute
-      if (availableFunctions.value.includes(value)) {
-        return false;
-      } else {
-        return true;
-      }
-    };
+  // This condition is to check if the function is available to execute
+  if (availableFunctions.value.includes(value)) {
+    return false;
+  } else {
+    return true;
+  }
+};
 const showConfirmationModal = () => {
-      modalConfirmation.value = true
-    };
+  modalConfirmation.value = true;
+};
 const showPartitionDumpConfirmationModal = () => {
-      modalPartition.value = true
-    };
+  modalPartition.value = true;
+};
 const createSystemDump = (dumpType) => {
-      dumps.createSystemDump(dumpType)
-        .then(() =>
-          infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
-            title: i18n.global.t('pageDumps.toast.successStartSystemDumpTitle'),
-            timestamp: true,
-          })
-        )
-        .catch(({ message }) => errorToast(message));
-    };
+  dumps
+    .createSystemDump(dumpType)
+    .then(() =>
+      infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
+        title: i18n.global.t('pageDumps.toast.successStartSystemDumpTitle'),
+        timestamp: true,
+      }),
+    )
+    .catch(({ message }) => errorToast(message));
+};
 </script>

@@ -3,7 +3,7 @@
     <page-title :title="$t('appPageTitle.userManagement')" />
     <BRow>
       <BCol xl="9" class="text-right">
-        <BButton variant="link" @click="initModalSettings()" :disabled="isBusy">
+        <BButton variant="link" :disabled="isBusy" @click="initModalSettings()">
           <icon-settings />
           {{ $t('pageUserManagement.accountPolicySettings') }}
         </BButton>
@@ -47,7 +47,9 @@
               v-model="tableHeaderCheckboxModel"
               data-test-id="userManagement-checkbox-tableHeaderCheckbox"
               :indeterminate="tableHeaderCheckboxIndeterminate"
-              @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)"
+              @change="
+                onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)
+              "
               @update:modelValue="toggleAll"
             >
             </BFormCheckbox>
@@ -56,7 +58,14 @@
             <BFormCheckbox
               v-model="userManagement.allUsers[row.index].isSelected"
               data-test-id="userManagement-checkbox-toggleSelectRow"
-              @change="toggleSelectRowByUsername(tableRef, row.index, userManagement.allUsers[row.index].isSelected, row.item)"
+              @change="
+                toggleSelectRowByUsername(
+                  tableRef,
+                  row.index,
+                  userManagement.allUsers[row.index].isSelected,
+                  row.item,
+                )
+              "
             >
             </BFormCheckbox>
           </template>
@@ -113,14 +122,12 @@
       v-model="openModal"
       :title="deleteTitle"
       :ok-title="okTitle"
-      okVariant="danger"
+      ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk(deleteType)"
     >
       <p>
-        {{
-          deleteMessage
-        }}
+        {{ deleteMessage }}
       </p>
     </BModal>
   </BContainer>
@@ -153,187 +160,260 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-      const {
-        clearSelectedRows,
-        toggleSelectRowByUsername,
-        onRowSelected,
-        onChangeHeaderCheckbox,
-        selectedRowsList,
-        tableHeaderCheckboxModel,
-        tableHeaderCheckboxIndeterminate,
-      } = useTableSelectableComposable();
+const {
+  clearSelectedRows,
+  toggleSelectRowByUsername,
+  onRowSelected,
+  onChangeHeaderCheckbox,
+  selectedRowsList,
+  tableHeaderCheckboxModel,
+  tableHeaderCheckboxIndeterminate,
+} = useTableSelectableComposable();
 
-      const userManagement = stores.UserManagementStore();
-      const global = stores.GlobalStore();
-      const { hideLoader, startLoader, endLoader } = useLoadingBar();
-      const toast = useToastComposable();
-      const isAllSelected = ref(false);
-      const isBusy = ref(true);
-      const activeUser = ref(null);
-      const openModal = ref(false);
-      const okTitle = ref('');
-      const deleteTitle = ref('');
-      const deleteType = ref('');
-      const deleteMessage = ref('');
-      const fields = ref([
+const userManagement = stores.UserManagementStore();
+const global = stores.GlobalStore();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const toast = useToastComposable();
+const isAllSelected = ref(false);
+const isBusy = ref(true);
+const activeUser = ref(null);
+const openModal = ref(false);
+const okTitle = ref('');
+const deleteTitle = ref('');
+const deleteType = ref('');
+const deleteMessage = ref('');
+const fields = ref([
+  {
+    key: 'checkbox',
+  },
+  {
+    key: 'username',
+    label: i18n.global.t('pageUserManagement.table.username'),
+  },
+  {
+    key: 'privilege',
+    label: i18n.global.t('pageUserManagement.table.privilege'),
+  },
+  {
+    key: 'status',
+    label: i18n.global.t('pageUserManagement.table.status'),
+  },
+  {
+    key: 'actions',
+    label: '',
+    tdClass: 'text-right text-nowrap',
+  },
+]);
+const tableToolbarActions = ref([
+  {
+    value: 'delete',
+    label: i18n.global.t('global.action.delete'),
+  },
+  {
+    value: 'enable',
+    label: i18n.global.t('global.action.enable'),
+  },
+  {
+    value: 'disable',
+    label: i18n.global.t('global.action.disable'),
+  },
+]);
+const selectedRows = ref(selectedRowsList);
+const tableRef = ref(null);
+const userToDelete = ref('');
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    userManagement?.allUsersGetter?.map((singleConnection) => {
+      singleConnection.isSelected = false;
+    });
+    clearSelectedRows(tableRef);
+  });
+  eventBus.on('okUser', handleOkUser);
+});
+
+const handleOkUser = ({ isNewUser, userData }) => {
+  saveUser({ isNewUser, userData });
+};
+
+onBeforeUnmount(() => {
+  eventBus.off('okUser', handleOkUser);
+});
+
+const accountRoles = computed(() => {
+  return userManagement.accountRolesGetter;
+});
+const allUsers = computed(() => {
+  return userManagement.allUsersGetter.map((user) => {
+    // Changing users' description with redfish role description
+    const userDescription = accountRoles.value.filter((role) =>
+      user.RoleId.includes(role),
+    )[0];
+
+    if (userDescription) user.Description = userDescription;
+
+    return user;
+  });
+});
+const currentUser = computed(() => {
+  return userManagement.currentUserGetter;
+});
+const tableItems = computed(() => {
+  // transform user data to table data
+  return allUsers.value.map((user) => {
+    return {
+      username: user.UserName,
+      privilege:
+        user.Description === 'Administrator'
+          ? i18n.global.t('pageUserManagement.table.administrator')
+          : user.Description === 'ReadOnly'
+            ? i18n.global.t('pageUserManagement.table.readOnly')
+            : user.Description === 'ServiceAgent'
+              ? i18n.global.t('pageUserManagement.table.serviceAgent')
+              : user.Description,
+      status: user.Locked
+        ? i18n.global.t('global.status.locked')
+        : user.Enabled
+          ? i18n.global.t('global.status.enabled')
+          : i18n.global.t('global.status.disabled'),
+      actions: [
         {
-          key: 'checkbox',
+          value: 'edit',
+          enabled: true,
         },
-        {
-          key: 'username',
-          label: i18n.global.t('pageUserManagement.table.username'),
-        },
-        {
-          key: 'privilege',
-          label: i18n.global.t('pageUserManagement.table.privilege'),
-        },
-        {
-          key: 'status',
-          label: i18n.global.t('pageUserManagement.table.status'),
-        },
-        {
-          key: 'actions',
-          label: '',
-          tdClass: 'text-right text-nowrap',
-        },
-      ]);
-      const tableToolbarActions = ref([
         {
           value: 'delete',
-          label: i18n.global.t('global.action.delete'),
+          enabled: user.RoleId !== 'OemIBMServiceAgent',
         },
-        {
-          value: 'enable',
-          label: i18n.global.t('global.action.enable'),
-        },
-        {
-          value: 'disable',
-          label: i18n.global.t('global.action.disable'),
-        },
-      ]);
-      const selectedRows = ref(selectedRowsList);
-      const tableRef = ref(null);
-      const userToDelete = ref('');
-      onBeforeMount(() => {
-        eventBus.on('clear-selected', () => {
-          userManagement?.allUsersGetter?.map((singleConnection) => {
-            singleConnection.isSelected = false;
-          });
-          clearSelectedRows(tableRef);
-        });
-        eventBus.on('okUser', handleOkUser);
-      });
-
-    const handleOkUser = ({ isNewUser, userData }) => {
-      saveUser({ isNewUser, userData });
+      ],
+      ...user,
     };
+  });
+});
+const settings = computed(() => {
+  return userManagement.accountSettingsGetter;
+});
+const passwordRequirements = computed(() => {
+  if (activeUser.value?.AccountTypes?.includes('IPMI')) {
+    return {
+      minLength: 8,
+      maxLength: 20,
+    };
+  } else {
+    return userManagement.accountPasswordRequirementsGetter;
+  }
+});
 
-    onBeforeUnmount(() => {
-      eventBus.off('okUser', handleOkUser);
-    });
-  
-  const accountRoles = computed(() => {
-      return userManagement.accountRolesGetter;
-    })
-    const allUsers = computed(() => {
-      return userManagement.allUsersGetter.map((user) => {
-        // Changing users' description with redfish role description
-        const userDescription = accountRoles.value.filter((role) =>
-          user.RoleId.includes(role),
-        )[0];
+onBeforeMount(() => {
+  startLoader();
+  userManagement.getAccountSettings();
+  Promise.all([
+    userManagement.getAccountRoles(),
+    userManagement.getUsers(),
+  ]).finally(() => {
+    endLoader();
+    isBusy.value = false;
+  });
+});
 
-        if (userDescription) user.Description = userDescription;
-
-        return user;
-      });
-    })
-    const currentUser = computed (() => {
-      return userManagement.currentUserGetter;
-    })
-    const tableItems = computed (() => {
-      // transform user data to table data
-      return allUsers.value.map((user) => {
-        return {
-          username: user.UserName,
-          privilege:
-            user.Description === 'Administrator'
-              ? i18n.global.t('pageUserManagement.table.administrator')
-              : user.Description === 'ReadOnly'
-                ? i18n.global.t('pageUserManagement.table.readOnly')
-                : user.Description === 'ServiceAgent'
-                  ? i18n.global.t('pageUserManagement.table.serviceAgent')
-                  : user.Description,
-          status: user.Locked
-            ? i18n.global.t('global.status.locked')
-            : user.Enabled
-              ? i18n.global.t('global.status.enabled')
-              : i18n.global.t('global.status.disabled'),
-          actions: [
-            {
-              value: 'edit',
-              enabled: true,
-            },
-            {
-              value: 'delete',
-              enabled: user.RoleId !== 'OemIBMServiceAgent',
-            },
-          ],
-          ...user,
-        };
-      });
-    })
-    const settings = computed (()  => {
-      return userManagement.accountSettingsGetter;
-    })
-        const passwordRequirements = computed(() => {
-      if (activeUser.value?.AccountTypes?.includes('IPMI')) {
-        return {
-          minLength: 8,
-          maxLength: 20,
-        };
-      } else {
-        return userManagement.accountPasswordRequirementsGetter;
-      }
-    })
-
-  onBeforeMount(() => {
+function toggleAll(checked) {
+  userManagement?.allUsers?.map((singleUser) => {
+    singleUser.isSelected = checked;
+  });
+  isAllSelected.value = checked;
+}
+function initModalUser(user) {
+  activeUser.value = user;
+  eventBus.emit('modal-user');
+}
+function initModalDelete(user) {
+  userToDelete.value = user;
+  openModal.value = true;
+  okTitle.value = i18n.global.t('pageUserManagement.deleteUser');
+  deleteMessage.value = i18n.global.t(
+    'pageUserManagement.modal.deleteConfirmMessage',
+    {
+      user: user.username,
+    },
+  );
+  deleteTitle.value = i18n.global.t('pageUserManagement.deleteUser');
+  deleteType.value = 'singleEntry';
+}
+function handleOk(value) {
+  if (value === 'singleEntry') {
+    deleteUser(userToDelete.value);
+  } else {
     startLoader();
-    userManagement.getAccountSettings();
-    Promise.all([
-      userManagement.getAccountRoles(),
-      userManagement.getUsers(),
-    ]).finally(() => {
-      endLoader();
-      isBusy.value = false;
-    });
-  })
-
-    function toggleAll(checked) {
-      userManagement?.allUsers?.map((singleUser) => {
-        singleUser.isSelected = checked;
+    userManagement
+      .deleteUsers(selectedRows.value)
+      .then((messages) => {
+        messages.forEach(({ type, message }) => {
+          if (type === 'success') toast.successToast(message);
+          if (type === 'error') toast.errorToast(message);
+        });
+      })
+      .finally(() => {
+        endLoader();
+        openModal.value = false;
+        eventBus.emit('clear-selected');
       });
-      isAllSelected.value = checked;
+  }
+}
+function initModalSettings() {
+  eventBus.emit('modal-settings');
+}
+function saveUser({ isNewUser, userData }) {
+  if (isNewUser !== undefined && userData !== undefined) {
+    startLoader();
+    if (isNewUser) {
+      userManagement
+        .createUser(userData)
+        .then((success) => toast.successToast(success))
+        .catch(({ message }) => toast.errorToast(message))
+        .finally(() => endLoader());
+    } else {
+      userManagement
+        .updateUserfromUserManagement(userData)
+        .then((success) => toast.successToast(success))
+        .catch(({ message }) => toast.errorToast(message))
+        .finally(() => endLoader());
     }
-    function initModalUser(user) {
-      activeUser.value = user;
-      eventBus.emit('modal-user');
-    }
-    function initModalDelete(user) {
-      userToDelete.value = user;
+  }
+}
+function deleteUser({ username }) {
+  startLoader();
+  userManagement
+    .deleteUser(username)
+    .then((success) => toast.successToast(success))
+    .catch(({ message }) => toast.errorToast(message))
+    .finally(() => {
+      endLoader();
+      openModal.value = false;
+      userToDelete.value = '';
+      eventBus.emit('clear-selected');
+    });
+}
+function onBatchAction(action) {
+  switch (action) {
+    case 'delete':
       openModal.value = true;
-      okTitle.value = i18n.global.t('pageUserManagement.deleteUser');
-      deleteMessage.value = i18n.global.t('pageUserManagement.modal.deleteConfirmMessage', {
-            user: user.username,
-          })
-      deleteTitle.value = i18n.global.t('pageUserManagement.deleteUser');
-      deleteType.value = 'singleEntry'; 
-    }
-    function handleOk(value) {
-      if (value === 'singleEntry') {
-        deleteUser(userToDelete.value);
-      } else {
-        startLoader();
-        userManagement.deleteUsers(selectedRows.value)
+      okTitle.value = i18n.global.t(
+        'pageUserManagement.deleteUser',
+        selectedRows.value.length,
+      );
+      deleteMessage.value = i18n.global.t(
+        'pageUserManagement.modal.batchDeleteConfirmMessage',
+        selectedRows.value.length,
+      );
+      deleteTitle.value = i18n.global.t(
+        'pageUserManagement.deleteUser',
+        selectedRows.value.length,
+      );
+      deleteType.value = 'selectedEntries';
+      break;
+    case 'enable':
+      startLoader();
+      userManagement
+        .enableUsers(selectedRows.value)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             if (type === 'success') toast.successToast(message);
@@ -342,113 +422,50 @@ onBeforeRouteLeave(() => {
         })
         .finally(() => {
           endLoader();
-          openModal.value = false;
           eventBus.emit('clear-selected');
         });
-      }
-    }
-    function initModalSettings() {
-      eventBus.emit('modal-settings');
-    }
-    function saveUser({ isNewUser, userData }) {
-      if (isNewUser !== undefined && userData !== undefined) {
-        startLoader();
-        if (isNewUser) {
-          userManagement.createUser(userData)
-            .then((success) => toast.successToast(success))
-            .catch(({ message }) => toast.errorToast(message))
-            .finally(() => endLoader());
-        } else {
-          userManagement.updateUserfromUserManagement(userData)
-            .then((success) => toast.successToast(success))
-            .catch(({ message }) => toast.errorToast(message))
-            .finally(() => endLoader());
-        }
-      }
-    }
-    function deleteUser({ username }) {
+      break;
+    case 'disable':
       startLoader();
-      userManagement.deleteUser(username)
-        .then((success) => toast.successToast(success))
-        .catch(({ message }) => toast.errorToast(message))
+      userManagement
+        .disableUsers(selectedRows.value)
+        .then((messages) => {
+          messages.forEach(({ type, message }) => {
+            if (type === 'success') toast.successToast(message);
+            if (type === 'error') toast.errorToast(message);
+          });
+        })
         .finally(() => {
           endLoader();
-          openModal.value = false;
-          userToDelete.value = '';
           eventBus.emit('clear-selected');
         });
-    }
-    function onBatchAction(action) {
-      switch (action) {
-        case 'delete':
-          openModal.value = true;
-          okTitle.value = i18n.global.t(
-                  'pageUserManagement.deleteUser',
-                  selectedRows.value.length,
-                );
-          deleteMessage.value = i18n.global.t(
-                'pageUserManagement.modal.batchDeleteConfirmMessage',
-                selectedRows.value.length,
-              )
-          deleteTitle.value =  i18n.global.t(
-                  'pageUserManagement.deleteUser',
-                  selectedRows.value.length,
-                );
-          deleteType.value = 'selectedEntries'; 
-          break;
-        case 'enable':
-          startLoader();
-          userManagement.enableUsers(selectedRows.value)
-            .then((messages) => {
-              messages.forEach(({ type, message }) => {
-                if (type === 'success') toast.successToast(message);
-                if (type === 'error') toast.errorToast(message);
-              });
-            })
-            .finally(() => {
-              endLoader();
-              eventBus.emit('clear-selected');
-            });
-          break;
-        case 'disable':
-          startLoader();
-          userManagement.disableUsers(selectedRows.value)
-            .then((messages) => {
-              messages.forEach(({ type, message }) => {
-                if (type === 'success') toast.successToast(message);
-                if (type === 'error') toast.errorToast(message);
-              });
-            })
-            .finally(() => {
-              endLoader();
-              eventBus.emit('clear-selected');
-            });
-          break;
-      }
-    }
-    function onTableRowAction(action, row) {
-      switch (action) {
-        case 'edit':
-          initModalUser(row);
-          break;
-        case 'delete':
-          initModalDelete(row);
-          break;
-        default:
-          break;
-      }
-    }
-    function saveAccountSettings(settings) {
-      startLoader();
-      isBusy.value = true;
-      userManagement.saveAccountSettings(settings)
-        .then((message) => toast.successToast(message))
-        .catch(({ message }) => toast.errorToast(message))
-        .finally(() => {
-          endLoader();
-          isBusy.value = false;
-        });
-    }
+      break;
+  }
+}
+function onTableRowAction(action, row) {
+  switch (action) {
+    case 'edit':
+      initModalUser(row);
+      break;
+    case 'delete':
+      initModalDelete(row);
+      break;
+    default:
+      break;
+  }
+}
+function saveAccountSettings(settings) {
+  startLoader();
+  isBusy.value = true;
+  userManagement
+    .saveAccountSettings(settings)
+    .then((message) => toast.successToast(message))
+    .catch(({ message }) => toast.errorToast(message))
+    .finally(() => {
+      endLoader();
+      isBusy.value = false;
+    });
+}
 </script>
 
 <style lang="scss" scoped>

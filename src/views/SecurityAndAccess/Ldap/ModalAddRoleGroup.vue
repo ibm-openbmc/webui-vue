@@ -2,13 +2,13 @@
   <b-modal
     id="modal-role-group"
     v-model="modal"
-    @ok="onOk"
-    @hidden="resetForm"
     :title="
       roleGroup
         ? $t('pageLdap.modal.editRoleGroup')
         : $t('pageLdap.modal.addNewRoleGroup')
     "
+    @ok="onOk"
+    @hidden="resetForm"
   >
     <b-container>
       <b-row>
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive, watch,nextTick } from 'vue';
+import { computed, ref, reactive, watch, nextTick } from 'vue';
 import { required, requiredIf } from '@vuelidate/validators';
 import stores from '../../../store';
 import useVuelidate from '@vuelidate/core';
@@ -107,7 +107,7 @@ const form = reactive({
 });
 const accountRoles = computed(() => {
   return userManagementStore.filteredAccountRoles.filter(
-    (role) => role !== 'ServiceAgent' && role !== 'Operator'
+    (role) => role !== 'ServiceAgent' && role !== 'Operator',
   );
 });
 watch(
@@ -116,10 +116,8 @@ watch(
     if (value === null) return;
     form.groupName = value.groupName;
     form.groupPrivilege = value.groupPrivilege;
-  }
+  },
 );
-
-
 
 const ruless = computed(() => ({
   form: {
@@ -129,7 +127,7 @@ const ruless = computed(() => ({
     groupPrivilege: modal.value ? { required } : {},
   },
 }));
-const vv$ = useVuelidate(ruless, {form});
+const vv$ = useVuelidate(ruless, { form });
 const emit = defineEmits(['ok']);
 function handleSubmit() {
   vv$.value.$touch();
@@ -147,7 +145,7 @@ function handleSubmit() {
 
 function closeModal() {
   nextTick(() => {
-    modal.value=false
+    modal.value = false;
   });
 }
 

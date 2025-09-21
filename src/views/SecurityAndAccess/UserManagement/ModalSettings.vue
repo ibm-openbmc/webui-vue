@@ -107,10 +107,7 @@
       </BContainer>
     </BForm>
     <template #modal-footer>
-      <BButton
-        variant="secondary"
-        data-test-id="userManagement-button-cancel"
-      >
+      <BButton variant="secondary" data-test-id="userManagement-button-cancel">
         {{ $t('global.action.cancel') }}
       </BButton>
       <BButton
@@ -152,65 +149,63 @@ const props = defineProps({
     required: true,
   },
 });
-      const form = ref({
-        lockoutThreshold: 0,
-        unlockMethod: 0,
-        lockoutDuration: null,
-      });
-  const rules = {
-    form: {
-      lockoutThreshold: {
-        minValue: minValue(0),
-        maxValue: maxValue(65535),
-        required,
-      },
-      unlockMethod: { required },
-      lockoutDuration: {
-        minValue: function (value) {
-          return form.value.unlockMethod === 0 || value > 0;
-        },
-        required: requiredIf(function () {
-          return form.value.unlockMethod === 1;
-        }),
-      },
+const form = ref({
+  lockoutThreshold: 0,
+  unlockMethod: 0,
+  lockoutDuration: null,
+});
+const rules = {
+  form: {
+    lockoutThreshold: {
+      minValue: minValue(0),
+      maxValue: maxValue(65535),
+      required,
     },
-  };
-  const v$ = useVuelidate(rules, { form });
+    unlockMethod: { required },
+    lockoutDuration: {
+      minValue: function (value) {
+        return form.value.unlockMethod === 0 || value > 0;
+      },
+      required: requiredIf(function () {
+        return form.value.unlockMethod === 1;
+      }),
+    },
+  },
+};
+const v$ = useVuelidate(rules, { form });
 
-    function handleSubmit() {
-      v$.value.$touch();
-      if (v$.value.$invalid) return;
+function handleSubmit() {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
 
-      let lockoutThreshold;
-      let lockoutDuration;
-      if (v$.value.form.lockoutThreshold.$dirty) {
-        lockoutThreshold = form.value.lockoutThreshold;
-      }
-      if (v$.value.form.unlockMethod.$dirty) {
-        lockoutDuration = form.value.unlockMethod
-          ? form.value.lockoutDuration
-          : 0;
-      }
-      emitUpdate('ok',{ lockoutThreshold, lockoutDuration })
-      closeModal();
-    };
+  let lockoutThreshold;
+  let lockoutDuration;
+  if (v$.value.form.lockoutThreshold.$dirty) {
+    lockoutThreshold = form.value.lockoutThreshold;
+  }
+  if (v$.value.form.unlockMethod.$dirty) {
+    lockoutDuration = form.value.unlockMethod ? form.value.lockoutDuration : 0;
+  }
+  emitUpdate('ok', { lockoutThreshold, lockoutDuration });
+  closeModal();
+}
 
-    function onOk(bvModalEvt) {
-      bvModalEvt.preventDefault();
-      handleSubmit();
-    };
+function onOk(bvModalEvt) {
+  bvModalEvt.preventDefault();
+  handleSubmit();
+}
 
-    const closeModal = () => {
-      v$.value.$reset();
-      modalSettings.value = false;
-    };
+const closeModal = () => {
+  v$.value.$reset();
+  modalSettings.value = false;
+};
 
-    function resetForm() {
-      form.value.lockoutThreshold = props.settings.lockoutThreshold;
-      form.value.unlockMethod = props.settings.lockoutDuration ? 1 : 0;
-      form.value.lockoutDuration = props.settings.lockoutDuration
-        ? props.settings.lockoutDuration
-        : null;
-      v$.value.$reset();
-    };
+function resetForm() {
+  form.value.lockoutThreshold = props.settings.lockoutThreshold;
+  form.value.unlockMethod = props.settings.lockoutDuration ? 1 : 0;
+  form.value.lockoutDuration = props.settings.lockoutDuration
+    ? props.settings.lockoutDuration
+    : null;
+  v$.value.$reset();
+}
 </script>

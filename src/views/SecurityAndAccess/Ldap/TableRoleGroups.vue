@@ -61,7 +61,14 @@
             <b-form-checkbox
               v-model="ldapStore.enabledRoleGroups[row.index].isSelected"
               :disabled="!isServiceEnabled"
-              @change="toggleSelectRowByGroupName(tableRef, row.index,ldapStore.enabledRoleGroups[row.index].isSelected,row.item)"
+              @change="
+                toggleSelectRowByGroupName(
+                  tableRef,
+                  row.index,
+                  ldapStore.enabledRoleGroups[row.index].isSelected,
+                  row.item,
+                )
+              "
             >
             </b-form-checkbox>
           </template>
@@ -125,7 +132,7 @@
         $t(
           'pageLdap.modal.deleteRoleGroupBatchConfirmMessage',
           { count: count },
-          count
+          count,
         )
       }}
     </p>
@@ -231,8 +238,8 @@ const tableItems = computed(() => {
 const deleteRoleGroupBatchConfirmMessage = computed(() =>
   i18n.global.t(
     'pageLdap.modal.deleteRoleGroupBatchConfirmMessage',
-    selectedRowsList.value.length
-  )
+    selectedRowsList.value.length,
+  ),
 );
 
 onBeforeMount(() => {
@@ -328,7 +335,6 @@ function saveRoleGroup({
       .finally(() => endLoader());
   }
 }
-
 </script>
 <style scoped>
 .text-right {

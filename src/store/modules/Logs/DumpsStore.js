@@ -42,21 +42,21 @@ export const DumpsStore = defineStore('dumps', {
           const systemDumpEntries = response[1].data?.Members || [];
           const allDumps = [...bmcDumpEntries, ...systemDumpEntries];
           this.allDumps = allDumps.map((dump) => ({
-                  data: dump.AdditionalDataURI,
-                  dateTime: new Date(dump.Created),
-                  dumpType: dump.Name,
-                  id: dump.Id,
-                  location: dump['@odata.id'],
-                  size: dump.AdditionalDataSizeBytes,
-                  actions: [
-                    {
-                      value: 'download',
-                    },
-                    {
-                      value: 'delete',
-                    },
-                  ],
-                }));
+            data: dump.AdditionalDataURI,
+            dateTime: new Date(dump.Created),
+            dumpType: dump.Name,
+            id: dump.Id,
+            location: dump['@odata.id'],
+            size: dump.AdditionalDataSizeBytes,
+            actions: [
+              {
+                value: 'download',
+              },
+              {
+                value: 'delete',
+              },
+            ],
+          }));
         })
         .catch((error) => console.log(error));
     },
@@ -75,18 +75,26 @@ export const DumpsStore = defineStore('dumps', {
           switch (true) {
             case REGEX_MAPPINGS.resourceInUse.test(errorMsg):
               throw new Error(
-                i18n.global.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
-                  dump: dumpType,
-                })
+                i18n.global.t(
+                  'pageDumps.toast.errorStartDumpAnotherInProgress',
+                  {
+                    dump: dumpType,
+                  },
+                ),
               );
             case REGEX_MAPPINGS.resourceInStandby.test(errorMsg):
               throw new Error(
-                i18n.global.t('pageDumps.toast.errorStartDumpResourceInStandby', {
-                  dump: dumpType,
-                })
+                i18n.global.t(
+                  'pageDumps.toast.errorStartDumpResourceInStandby',
+                  {
+                    dump: dumpType,
+                  },
+                ),
               );
             default:
-              throw new Error(i18n.global.t('pageDumps.toast.errorStartBmcDump'));
+              throw new Error(
+                i18n.global.t('pageDumps.toast.errorStartBmcDump'),
+              );
           }
         });
     },
@@ -129,21 +137,29 @@ export const DumpsStore = defineStore('dumps', {
               error.response?.data?.error?.code,
             )
           ) {
-            throw new Error(i18n.global.t('pageDumps.toast.errorPhypInStandby'));
+            throw new Error(
+              i18n.global.t('pageDumps.toast.errorPhypInStandby'),
+            );
           }
           switch (true) {
             case REGEX_MAPPINGS.actionParameterUnknown.test(errorMsg):
               throw new Error(
-                i18n.global.t('pageDumps.toast.errorStartResourceDumpInvalidSelector'),
+                i18n.global.t(
+                  'pageDumps.toast.errorStartResourceDumpInvalidSelector',
+                ),
               );
             case REGEX_MAPPINGS.resourceAtUriUnauthorized.test(errorMsg):
               throw new Error(
-                i18n.global.t('pageDumps.toast.errorStartResourceDumpInvalidPassword'),
+                i18n.global.t(
+                  'pageDumps.toast.errorStartResourceDumpInvalidPassword',
+                ),
               );
             case REGEX_MAPPINGS.insufficientPrivilege.test(errorMsg):
               throw new Error(i18n.global.t('global.toast.unAuthDescription'));
             default:
-              throw new Error(i18n.global.t('pageDumps.toast.errorStartResourceDump'));
+              throw new Error(
+                i18n.global.t('pageDumps.toast.errorStartResourceDump'),
+              );
           }
         });
     },
@@ -164,18 +180,26 @@ export const DumpsStore = defineStore('dumps', {
           switch (true) {
             case REGEX_MAPPINGS.resourceInUse.test(errorMsg):
               throw new Error(
-                i18n.global.t('pageDumps.toast.errorStartDumpAnotherInProgress', {
-                  dump: dumpType,
-                }),
+                i18n.global.t(
+                  'pageDumps.toast.errorStartDumpAnotherInProgress',
+                  {
+                    dump: dumpType,
+                  },
+                ),
               );
             case REGEX_MAPPINGS.resourceInStandby.test(errorMsg):
               throw new Error(
-                i18n.global.t('pageDumps.toast.errorStartDumpResourceInStandby', {
-                  dump: dumpType,
-                }),
+                i18n.global.t(
+                  'pageDumps.toast.errorStartDumpResourceInStandby',
+                  {
+                    dump: dumpType,
+                  },
+                ),
               );
             default:
-              throw new Error(i18n.global.t('pageDumps.toast.errorStartBmcDump'));
+              throw new Error(
+                i18n.global.t('pageDumps.toast.errorStartBmcDump'),
+              );
           }
         });
     },
@@ -225,7 +249,10 @@ export const DumpsStore = defineStore('dumps', {
         )
         .then(() => {
           this.allDumps = [];
-          return i18n.global.t('pageDumps.toast.successDeleteDump', totalDumpCount);
+          return i18n.global.t(
+            'pageDumps.toast.successDeleteDump',
+            totalDumpCount,
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -235,7 +262,6 @@ export const DumpsStore = defineStore('dumps', {
         });
     },
   },
-}
-);
+});
 
 export default DumpsStore;

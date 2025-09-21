@@ -45,119 +45,119 @@ import FabricAdaptersStore from './modules/HardwareStatus/FabricAdaptersStore';
 
 const stores = {};
 
-  Object.assign(stores, {
-    GlobalStore: GlobalStore,
-  });
-    Object.assign(stores, {
-    AuthenticationStore: AuthenticationStore,
-  });
-    Object.assign(stores, {
-    ConcurrentMaintenanceStore: ConcurrentMaintenanceStore,
-  });
-    Object.assign(stores, {
-    SessionsStore: SessionsStore,
-  });
-    Object.assign(stores, {
-    DateTimeStore: DateTimeStore,
-  });
-    Object.assign(stores, {
-    LdapStore: LdapStore,
-  });
-    Object.assign(stores, {
-    UserManagementStore: UserManagementStore,
-  });
-    Object.assign(stores, {
-    FirmwareStore: FirmwareStore,
-  });
-    Object.assign(stores, {
-    BootSettingsStore: BootSettingsStore,
-  });
-    Object.assign(stores, {
-    ControlStore: ControlStore,
-  });
-      Object.assign(stores, {
-    PcieTopologyStore: PcieTopologyStore,
-  });
-      Object.assign(stores, {
-    PowerControlStore: PowerControlStore,
-  });
-      Object.assign(stores, {
-    PowerPolicyStore: PowerPolicyStore,
-  });
-      Object.assign(stores, {
-    PowerPolicyStore: PowerPolicyStore,
-  });
-      Object.assign(stores, {
-    PowerSupplyStore: PowerSupplyStore,
-  });
-      Object.assign(stores, {
-    NetworkStore: NetworkStore,
-  });
-      Object.assign(stores, {
-    EventLogStore: EventLogStore,
-  });
-      Object.assign(stores, {
-    SnmpAlertsStore: SnmpAlertsStore,
-  });
-      Object.assign(stores, {
-    CertificatesStore: CertificatesStore,
-  });
-      Object.assign(stores, {
-    SystemStore: SystemStore,
-  });
-      Object.assign(stores, {
-    MemoryStore: MemoryStore,
-  });
-      Object.assign(stores, {
-    FanStore: FanStore,
-  });
-      Object.assign(stores, {
-    ChassisStore: ChassisStore,
-  });
-      Object.assign(stores, {
-    BmcStore: BmcStore,
-  });
-      Object.assign(stores, {
-    ProcessorStore: ProcessorStore,
-  });
-      Object.assign(stores, {
-    AssemblyStore: AssemblyStore,
-  });
-      Object.assign(stores, {
-    PcieSlotsStore: PcieSlotsStore,
-  });
-      Object.assign(stores, {
-    PostCodeLogsStore: PostCodeLogsStore,
-  });
-      Object.assign(stores, {
-    AuditLogsStore: AuditLogsStore,
-  });
-      Object.assign(stores, {
-    FactoryResetStore: FactoryResetStore,
-  });
-      Object.assign(stores, {
-    KeyClearStore: KeyClearStore,
-  });
-      Object.assign(stores, {
-    NetworkSettingsStore: NetworkSettingsStore,
-  });
-      Object.assign(stores, {
-    ResourceMemoryStore: ResourceMemoryStore,
-  });
-      Object.assign(stores, {
-    HardwareDeconfigurationStore: HardwareDeconfigurationStore,
-  });
-      Object.assign(stores, {
-    DeconfigurationRecordsStore: DeconfigurationRecordsStore,
-  });
-      Object.assign(stores, {
-    SystemParametersStore: SystemParametersStore,
-  });
-      Object.assign(stores, {
-    FabricAdaptersStore: FabricAdaptersStore,
-  });
-      Object.assign(stores, {
-    IBMiServiceFunctionsStore: IBMiServiceFunctionsStore,
-  });
+Object.assign(stores, {
+  GlobalStore: GlobalStore,
+});
+Object.assign(stores, {
+  AuthenticationStore: AuthenticationStore,
+});
+Object.assign(stores, {
+  ConcurrentMaintenanceStore: ConcurrentMaintenanceStore,
+});
+Object.assign(stores, {
+  SessionsStore: SessionsStore,
+});
+Object.assign(stores, {
+  DateTimeStore: DateTimeStore,
+});
+Object.assign(stores, {
+  LdapStore: LdapStore,
+});
+Object.assign(stores, {
+  UserManagementStore: UserManagementStore,
+});
+Object.assign(stores, {
+  FirmwareStore: FirmwareStore,
+});
+Object.assign(stores, {
+  BootSettingsStore: BootSettingsStore,
+});
+Object.assign(stores, {
+  ControlStore: ControlStore,
+});
+Object.assign(stores, {
+  PcieTopologyStore: PcieTopologyStore,
+});
+Object.assign(stores, {
+  PowerControlStore: PowerControlStore,
+});
+Object.assign(stores, {
+  PowerPolicyStore: PowerPolicyStore,
+});
+Object.assign(stores, {
+  PowerPolicyStore: PowerPolicyStore,
+});
+Object.assign(stores, {
+  PowerSupplyStore: PowerSupplyStore,
+});
+Object.assign(stores, {
+  NetworkStore: NetworkStore,
+});
+Object.assign(stores, {
+  EventLogStore: EventLogStore,
+});
+Object.assign(stores, {
+  SnmpAlertsStore: SnmpAlertsStore,
+});
+Object.assign(stores, {
+  CertificatesStore: CertificatesStore,
+});
+Object.assign(stores, {
+  SystemStore: SystemStore,
+});
+Object.assign(stores, {
+  MemoryStore: MemoryStore,
+});
+Object.assign(stores, {
+  FanStore: FanStore,
+});
+Object.assign(stores, {
+  ChassisStore: ChassisStore,
+});
+Object.assign(stores, {
+  BmcStore: BmcStore,
+});
+Object.assign(stores, {
+  ProcessorStore: ProcessorStore,
+});
+Object.assign(stores, {
+  AssemblyStore: AssemblyStore,
+});
+Object.assign(stores, {
+  PcieSlotsStore: PcieSlotsStore,
+});
+Object.assign(stores, {
+  PostCodeLogsStore: PostCodeLogsStore,
+});
+Object.assign(stores, {
+  AuditLogsStore: AuditLogsStore,
+});
+Object.assign(stores, {
+  FactoryResetStore: FactoryResetStore,
+});
+Object.assign(stores, {
+  KeyClearStore: KeyClearStore,
+});
+Object.assign(stores, {
+  NetworkSettingsStore: NetworkSettingsStore,
+});
+Object.assign(stores, {
+  ResourceMemoryStore: ResourceMemoryStore,
+});
+Object.assign(stores, {
+  HardwareDeconfigurationStore: HardwareDeconfigurationStore,
+});
+Object.assign(stores, {
+  DeconfigurationRecordsStore: DeconfigurationRecordsStore,
+});
+Object.assign(stores, {
+  SystemParametersStore: SystemParametersStore,
+});
+Object.assign(stores, {
+  FabricAdaptersStore: FabricAdaptersStore,
+});
+Object.assign(stores, {
+  IBMiServiceFunctionsStore: IBMiServiceFunctionsStore,
+});
 
-  export default stores;
+export default stores;

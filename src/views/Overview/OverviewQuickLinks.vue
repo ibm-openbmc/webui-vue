@@ -6,7 +6,8 @@
         <dl>
           <dt>{{ $t('pageOverview.bmcTime') }}</dt>
           <dd v-if="bmcTime" data-test-id="overviewQuickLinks-text-bmcTime">
-            {{ $filters.formatDate(bmcTime) }} {{ $filters.formatTime(bmcTime) }}
+            {{ $filters.formatDate(bmcTime) }}
+            {{ $filters.formatTime(bmcTime) }}
           </dd>
           <dd v-else>--</dd>
         </dl>
@@ -37,22 +38,22 @@ const { dataFormatter } = useDataFormatterGlobal();
 const global = stores.GlobalStore();
 
 onBeforeMount(() => {
-    Promise.all([global.getBmcTime(), global.getCurrentUser()]).finally(() => {
-      eventBus.emit('overview-quicklinks-complete');
-    });
+  Promise.all([global.getBmcTime(), global.getCurrentUser()]).finally(() => {
+    eventBus.emit('overview-quicklinks-complete');
+  });
 });
 
 const bmcTime = computed(() => {
   return global.bmcTime;
 });
 const currentUserRole = computed(() => {
-      return global.currentUser?.RoleId;
+  return global.currentUser?.RoleId;
 });
 const canUseHostConsole = computed(() => {
-      return (
-        currentUserRole.value === 'Administrator' ||
-        currentUserRole.value === 'OemIBMServiceAgent'
-      );
+  return (
+    currentUserRole.value === 'Administrator' ||
+    currentUserRole.value === 'OemIBMServiceAgent'
+  );
 });
 </script>
 <style lang="scss" scoped>

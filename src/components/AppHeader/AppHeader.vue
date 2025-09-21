@@ -42,7 +42,7 @@
               src="@/assets/images/logo-header.svg"
               :alt="altLogo"
             />
-             <!-- :src="getImageUrl()" -->
+            <!-- :src="getImageUrl()" -->
             <span class="ps-1 nav-tags header-text">{{ headerText }}</span>
           </BNavbarBrand>
           <div v-if="isNavTagPresent" :key="routerKey" class="ps-2 nav-tags">
@@ -143,99 +143,99 @@ const altLogo = ref(import.meta.env.VUE_APP_COMPANY_NAME || 'Built on OpenBMC');
 const headerText = ref('ASMI');
 
 onBeforeMount(() => {
-    // Reset auth state to check if user is authenticated based
-    // on available browser cookies
-    authenticationStore.resetStoreState();
-    getSystemInfo();
-    getEvents();
-  });
-  
+  // Reset auth state to check if user is authenticated based
+  // on available browser cookies
+  authenticationStore.resetStoreState();
+  getSystemInfo();
+  getEvents();
+});
+
 onMounted(() => {
-    eventBus.on(
-      'change-is-navigation-open',
-      (isNavigationOpenVal) => (isNavigationOpen.value = isNavigationOpenVal)
-    );
-  });
+  eventBus.on(
+    'change-is-navigation-open',
+    (isNavigationOpenVal) => (isNavigationOpen.value = isNavigationOpenVal),
+  );
+});
 
 const isNavTagPresent = computed(() => {
-      return assetTag.value || modelType.value || serialNumber.value;
-    });
+  return assetTag.value || modelType.value || serialNumber.value;
+});
 const assetTag = computed(() => {
-      return global.assetTagGetter;
-    });
+  return global.assetTagGetter;
+});
 const modelType = computed(() => {
-      return global.modelTypeGetter;
-    });
+  return global.modelTypeGetter;
+});
 const serialNumber = computed(() => {
-      return global.serialNumberGetter;
-    });
+  return global.serialNumberGetter;
+});
 const isAuthorized = computed(() => {
-      return global.isAuthorizedGetter;
-    });
+  return global.isAuthorizedGetter;
+});
 const serverStatus = computed(() => {
-      return global.serverStatusGetter;
-    });
+  return global.serverStatusGetter;
+});
 const healthStatus = computed(() => {
-      return eventLogStore.healthStatus;
-    });
+  return eventLogStore.healthStatus;
+});
 const serverStatusIcon = computed(() => {
-      switch (serverStatus.value) {
-        case 'on':
-          return 'success';
-        case 'error':
-          return 'danger';
-        case 'diagnosticMode':
-          return 'warning';
-        case 'off':
-        default:
-          return 'secondary';
-      }
-    });
+  switch (serverStatus.value) {
+    case 'on':
+      return 'success';
+    case 'error':
+      return 'danger';
+    case 'diagnosticMode':
+      return 'warning';
+    case 'off':
+    default:
+      return 'secondary';
+  }
+});
 const healthStatusIcon = computed(() => {
-      switch (healthStatus.value) {
-        case 'OK':
-          return 'success';
-        case 'Warning':
-          return 'warning';
-        case 'Critical':
-          return 'danger';
-        default:
-          return 'secondary';
-      }
-    });
+  switch (healthStatus.value) {
+    case 'OK':
+      return 'success';
+    case 'Warning':
+      return 'warning';
+    case 'Critical':
+      return 'danger';
+    default:
+      return 'secondary';
+  }
+});
 const username = computed(() => {
-      return global.usernameGetter;
-    });
+  return global.usernameGetter;
+});
 
 watch(isAuthorized, (value) => {
-      if (value === false) {
-        errorToast(i18n.global.t('global.toast.unAuthDescription'), {
-          title: i18n.global.t('global.toast.unAuthTitle'),
-        });
-      }
-    })
+  if (value === false) {
+    errorToast(i18n.global.t('global.toast.unAuthDescription'), {
+      title: i18n.global.t('global.toast.unAuthTitle'),
+    });
+  }
+});
 
 const getSystemInfo = () => {
-      global.getSystemInfo();
-    };
+  global.getSystemInfo();
+};
 const getEvents = () => {
-     eventLogStore.getEventLogData();
-    };
+  eventLogStore.getEventLogData();
+};
 const refresh = () => {
-      eventBus.emit('refresh-application');
-    };
+  eventBus.emit('refresh-application');
+};
 const logout = () => {
-      authenticationStore.logout().then(() => {
-      router.push('/login');
+  authenticationStore.logout().then(() => {
+    router.push('/login');
   });
-    };
+};
 const toggleNavigation = () => {
-      eventBus.emit('toggle-navigation');
-    };
+  eventBus.emit('toggle-navigation');
+};
 const setFocus = (event) => {
-      event.preventDefault();
-      eventBus.emit('skip-navigation');
-    };
+  event.preventDefault();
+  eventBus.emit('skip-navigation');
+};
 // const getImageUrl = () => {
 //       let pathName = location.pathname !== '/' ? location.pathname : '';
 //       return (
@@ -246,7 +246,9 @@ const setFocus = (event) => {
 
 <style lang="scss">
 @mixin focus-box-shadow($padding-color: $navbar-color, $outline-color: $white) {
-  box-shadow: inset 0 0 0 3px $padding-color, inset 0 0 0 5px $outline-color;
+  box-shadow:
+    inset 0 0 0 3px $padding-color,
+    inset 0 0 0 5px $outline-color;
 }
 .app-header {
   .link-skip-nav {
@@ -297,8 +299,7 @@ const setFocus = (event) => {
         background-color: $gray-800;
         width: 100%;
         justify-content: flex-end;
-        .nav-link
-        .btn {
+        .nav-link .btn {
           padding: calc(#{$spacer} / 1.125) calc($spacer / 2);
         }
         .nav-link:focus,
@@ -387,7 +388,9 @@ const setFocus = (event) => {
   height: $header-height;
   line-height: 1;
   &:focus {
-    box-shadow: inset 0 0 0 3px $navbar-color, inset 0 0 0 5px white;
+    box-shadow:
+      inset 0 0 0 3px $navbar-color,
+      inset 0 0 0 5px white;
     outline: 0;
   }
 }

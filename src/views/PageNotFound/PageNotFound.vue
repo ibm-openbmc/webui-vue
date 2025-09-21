@@ -1,6 +1,6 @@
 <template>
   <BContainer fluid="xl">
-    <page-title 
+    <page-title
       :title="$t('appPageTitle.pageNotFound')"
       :description="$t('pagePageNotFound.description')"
     />

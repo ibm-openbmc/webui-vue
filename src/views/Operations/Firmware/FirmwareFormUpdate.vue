@@ -179,14 +179,14 @@ function updateFirmware() {
   // Step 1 - Upload
   const uploadFirmware = () => {
     if (!isReadonly) {
-          infoToast(
-            i18n.global.t('pageFirmware.toast.updateFirmware.step1Message'),
-            {
-              title: i18n.global.t('pageFirmware.toast.updateFirmware.step1'),
-              timestamp: true,
-            }
-          );
-        }
+      infoToast(
+        i18n.global.t('pageFirmware.toast.updateFirmware.step1Message'),
+        {
+          title: i18n.global.t('pageFirmware.toast.updateFirmware.step1'),
+          timestamp: true,
+        },
+      );
+    }
     if (isWorkstationSelected.value) {
       dispatchWorkstationUpload(activateFirmware);
     } else {
@@ -215,9 +215,8 @@ function updateFirmware() {
 
       Promise.all([currentTask(data)]).then((res) => {
         // Check to see if activation was aborted
-        const activationAborted = res[0].Messages.filter(
-          (message) =>
-              message.MessageId.endsWith('TaskAborted')
+        const activationAborted = res[0].Messages.filter((message) =>
+          message.MessageId.endsWith('TaskAborted'),
         )[0];
 
         if (activationAborted) {

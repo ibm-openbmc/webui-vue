@@ -7,9 +7,9 @@ import eventBus from '@/eventBus';
 
 vi.mock('vue-router', () => ({
   useRouter: () => ({
-    push: vi.fn()
-  })
-}))
+    push: vi.fn(),
+  }),
+}));
 
 describe('AppHeader.vue', () => {
   let wrapper;
@@ -37,7 +37,6 @@ describe('AppHeader.vue', () => {
         },
       },
     });
-
   });
 
   it('should exist', () => {
@@ -67,12 +66,12 @@ describe('AppHeader.vue', () => {
 
   it('logout button should dispatch authentication/logout', async () => {
     const logoutSpy = vi.spyOn(authStore, 'logout').mockResolvedValue();
-     wrapper.get('[data-test-id="appHeader-link-logout"]').trigger('click');
+    wrapper.get('[data-test-id="appHeader-link-logout"]').trigger('click');
     await wrapper.vm.$nextTick();
     expect(logoutSpy).toHaveBeenCalled();
     logoutSpy.mockRestore();
-    expect(wrapper.exists()).toBe(true)
-});
+    expect(wrapper.exists()).toBe(true);
+  });
 
   it('change:isNavigationOpen event should set isNavigationOpen prop to false', async () => {
     wrapper.vm.$root.$emit('change-is-navigation-open', false);

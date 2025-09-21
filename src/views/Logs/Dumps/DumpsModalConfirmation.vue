@@ -1,8 +1,8 @@
 <template>
   <BModal
-    v-model="modal"
     id="modal-confirmation"
     ref="modal"
+    v-model="modal"
     :title="$t('pageDumps.modal.initiateSystemDump')"
     @show="resetForm"
   >
@@ -18,7 +18,10 @@
       <status-icon status="danger" />
       {{ $t('pageDumps.modal.initiateSystemDumpMessage3') }}
     </p>
-    <BFormCheckbox v-model="confirmed" @update:modelValue="v$.confirmed.$touch()">
+    <BFormCheckbox
+      v-model="confirmed"
+      @update:modelValue="v$.confirmed.$touch()"
+    >
       {{ $t('pageDumps.modal.initiateSystemDumpMessage4') }}
     </BFormCheckbox>
     <BFormInvalidFeedback
@@ -54,30 +57,29 @@ const modal = ref(false);
 
 const mustBeTrue = (value) => {
   return value === true;
-}
+};
 
 const rules = computed(() => ({
-    confirmed: {
-      mustBeTrue
-    },
-  }));
+  confirmed: {
+    mustBeTrue,
+  },
+}));
 const v$ = useVuelidate(rules, { confirmed });
 
 const closeModal = () => {
-    nextTick(() => {
-      modal.value=false;
-      eventBus.emit('modal-close');
-      });
-    };
-const handleSubmit = () => {
-      v$.value.$touch();
-      if (v$.value.$invalid) return;
-      emit('ok');
-      closeModal();
-    };
-const resetForm = () => {
-      confirmed.value = false;
-      v$.value.$reset();
+  nextTick(() => {
+    modal.value = false;
+    eventBus.emit('modal-close');
+  });
 };
-
+const handleSubmit = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('ok');
+  closeModal();
+};
+const resetForm = () => {
+  confirmed.value = false;
+  v$.value.$reset();
+};
 </script>

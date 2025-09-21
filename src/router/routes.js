@@ -86,7 +86,7 @@ export const routes = [
           title: i18n.global.t('appPageTitle.postCodes'),
         },
       },
-            {
+      {
         path: 'kvm',
         name: 'kvm-console',
         component: KvmConsole,
@@ -239,7 +239,7 @@ export const routes = [
           title: i18n.global.t('appPageTitle.factoryReset'),
         },
       },
-      { 
+      {
         path: '/operations/key-clear',
         name: 'key-clear',
         component: KeyClear,

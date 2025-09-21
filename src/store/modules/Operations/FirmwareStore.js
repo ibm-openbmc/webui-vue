@@ -157,7 +157,9 @@ export const FirmwareStore = defineStore('firmware', {
         .then(() => (this.applyTime = 'Immediate'))
         .catch((error) => {
           console.log(error);
-          throw new Error(i18n.global.t('pageFirmware.toast.errorUploadFirmware'));
+          throw new Error(
+            i18n.global.t('pageFirmware.toast.errorUploadFirmware'),
+          );
         });
     },
     async uploadFirmware(image) {

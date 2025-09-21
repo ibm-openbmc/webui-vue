@@ -117,10 +117,10 @@
       </template>
 
       <template #row-details="{ item }">
-        <BContainer fluid >
-          <BRow style="margin-left: 50px;">
+        <BContainer fluid>
+          <BRow style="margin-left: 50px">
             <BCol class="mt-10" sm="6" xl="6">
-              <dl >
+              <dl>
                 <!-- Name -->
                 <dt>{{ $t('pageInventory.table.name') }}</dt>
                 <dd>{{ dataFormatter(item.name) }}</dd>

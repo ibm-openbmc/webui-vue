@@ -64,7 +64,7 @@
                 row.item.toggleDetails
                   ? 'rotateSvg btn-icon-only'
                   : 'btn-icon-only'
-                "
+              "
               @click="fetchSrcDetails(row)"
             >
               <icon-chevron />
@@ -143,199 +143,203 @@ import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import useTableFilter from "../../../components/Composables/useTableFilterComposable";
+import useTableFilter from '../../../components/Composables/useTableFilterComposable';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
-import useToastComposable from "@/components/Composables/useToastComposable";
+import useToastComposable from '@/components/Composables/useToastComposable';
 import useTableSortComposable from '../../../components/Composables/useTableSortComposable';
-import useTableRowExpandComposable from "../../../components/Composables/useTableRowExpandComposable";
-import useSearchFilterComposable from "../../../components/Composables/useSearchFilterComposable";
+import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
+import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import { ref, onMounted, computed } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import stores from "../../../store";
+import stores from '../../../store';
 
-    const {
-      clearSelectedRows,
-      toggleSelectRow,
-      onRowSelected,
-      onChangeHeaderCheckbox,
-      selectedRowsList,
-      tableHeaderCheckboxModel,
-      tableHeaderCheckboxIndeterminate,
-    } = useTableSelectableComposable();
-    const { dataFormatter } = useDataFormatterGlobal();
-    const { searchFilterInput } = useSearchFilterComposable();
-    const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } = usePaginationComposable();
-    const { getFilteredTableData, getFilteredTableDataByDate } = useTableFilter();
-    const { toggleRowDetails } = useTableRowExpandComposable();
-    const { expandRowLabel } = useTableRowExpandComposable();
-    const { errorToast } = useToastComposable();
-    const { hideLoader, startLoader, endLoader } = useLoadingBar();
-    const postCodeLogsStore = stores.PostCodeLogsStore();
-    const srcData = ref({});
-    const isBusy = ref(true)
-    const fields = ref([
-        {
-          key: 'expandRow',
-          label: '',
-          tdClass: 'table-row-expand',
-        },
-        {
-          key: 'date',
-          label: i18n.global.t('pagePostCodeLogs.table.created'),
-          sortable: true,
-        },
-        {
-          key: 'timeStampOffset',
-          label: i18n.global.t('pagePostCodeLogs.table.timeStampOffset'),
-        },
-        {
-          key: 'bootCount',
-          label: i18n.global.t('pagePostCodeLogs.table.bootCount'),
-        },
-        {
-          key: 'postCode',
-          label: i18n.global.t('pagePostCodeLogs.table.postCode'),
-        },
-      ])
-    const activeFiltersData = ref([]);
-    const currentPageNo = ref(currentPage);
-    const filterStartDate= ref( null);
-    const filterEndDate= ref(null)
-    const itemsPerPageOptionsVal = ref(itemsPerPageOptions);
-    const perPageVal = ref(perPage);
-    const searchFilterInputVal = ref(searchFilterInput);
-    const searchTotalFilteredRows = ref(0);
-    const selectedRows= ref(selectedRowsList);
-    const tableHeaderCheckboxModelVal = ref(tableHeaderCheckboxModel);
-    const tableHeaderCheckboxIndeterminateVal = ref(tableHeaderCheckboxIndeterminate);
+const {
+  clearSelectedRows,
+  toggleSelectRow,
+  onRowSelected,
+  onChangeHeaderCheckbox,
+  selectedRowsList,
+  tableHeaderCheckboxModel,
+  tableHeaderCheckboxIndeterminate,
+} = useTableSelectableComposable();
+const { dataFormatter } = useDataFormatterGlobal();
+const { searchFilterInput } = useSearchFilterComposable();
+const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
+  usePaginationComposable();
+const { getFilteredTableData, getFilteredTableDataByDate } = useTableFilter();
+const { toggleRowDetails } = useTableRowExpandComposable();
+const { expandRowLabel } = useTableRowExpandComposable();
+const { errorToast } = useToastComposable();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const postCodeLogsStore = stores.PostCodeLogsStore();
+const srcData = ref({});
+const isBusy = ref(true);
+const fields = ref([
+  {
+    key: 'expandRow',
+    label: '',
+    tdClass: 'table-row-expand',
+  },
+  {
+    key: 'date',
+    label: i18n.global.t('pagePostCodeLogs.table.created'),
+    sortable: true,
+  },
+  {
+    key: 'timeStampOffset',
+    label: i18n.global.t('pagePostCodeLogs.table.timeStampOffset'),
+  },
+  {
+    key: 'bootCount',
+    label: i18n.global.t('pagePostCodeLogs.table.bootCount'),
+  },
+  {
+    key: 'postCode',
+    label: i18n.global.t('pagePostCodeLogs.table.postCode'),
+  },
+]);
+const activeFiltersData = ref([]);
+const currentPageNo = ref(currentPage);
+const filterStartDate = ref(null);
+const filterEndDate = ref(null);
+const itemsPerPageOptionsVal = ref(itemsPerPageOptions);
+const perPageVal = ref(perPage);
+const searchFilterInputVal = ref(searchFilterInput);
+const searchTotalFilteredRows = ref(0);
+const selectedRows = ref(selectedRowsList);
+const tableHeaderCheckboxModelVal = ref(tableHeaderCheckboxModel);
+const tableHeaderCheckboxIndeterminateVal = ref(
+  tableHeaderCheckboxIndeterminate,
+);
 
-  onMounted(() => {
-    startLoader();
-    postCodeLogsStore.getPostCodesLogData().finally(() => {
-      endLoader();
-      isBusy.value = false;
-    });
-  })
-  onBeforeRouteLeave(() => {
-    // Hide loader if the user navigates to another page
-    // before request is fulfilled.
-    hideLoader();
+onMounted(() => {
+  startLoader();
+  postCodeLogsStore.getPostCodesLogData().finally(() => {
+    endLoader();
+    isBusy.value = false;
   });
+});
+onBeforeRouteLeave(() => {
+  // Hide loader if the user navigates to another page
+  // before request is fulfilled.
+  hideLoader();
+});
 
-    const filteredRows = computed(() => {
-      return searchFilterInputVal.value
-        ? searchTotalFilteredRows.value
-        : filteredLogs.value.length;
-    })
-    const allLogs = computed(() => {
-      return postCodeLogsStore.allPostCodesGetter;
-    });
-    const batchExportData = computed(() => {
-      return selectedRows.value.map((row) => omit(row, 'actions'));
-    })
-    const filteredLogsByDate = computed(() => {
-      return getFilteredTableDataByDate(
-        allLogs.value,
-        filterStartDate.value,
-        filterEndDate.value,
-      );
-    })
-    const filteredLogs = computed(() => {
-      return getFilteredTableData(
-        filteredLogsByDate.value,
-        activeFiltersData.value,
-      );
-    })
+const filteredRows = computed(() => {
+  return searchFilterInputVal.value
+    ? searchTotalFilteredRows.value
+    : filteredLogs.value.length;
+});
+const allLogs = computed(() => {
+  return postCodeLogsStore.allPostCodesGetter;
+});
+const batchExportData = computed(() => {
+  return selectedRows.value.map((row) => omit(row, 'actions'));
+});
+const filteredLogsByDate = computed(() => {
+  return getFilteredTableDataByDate(
+    allLogs.value,
+    filterStartDate.value,
+    filterEndDate.value,
+  );
+});
+const filteredLogs = computed(() => {
+  return getFilteredTableData(
+    filteredLogsByDate.value,
+    activeFiltersData.value,
+  );
+});
 
-    const fetchSrcDetails = (row) => {
-      row.item.toggleDetails = !row.item.toggleDetails;
-      toggleRowDetails(row);
-      if (!row.detailsShowing) {
-        const { timeStampOffset, uri, postCode } = row.item;
-        if (!srcData.value[timeStampOffset]) {
-          api
-            .get(uri)
-            .then((response) => generateSrcWords(response.data))
-            .then((srcWords) => {
-              srcData.value[timeStampOffset] = `${postCode.trim()} ${srcWords}`;
-            }
-            )
-            .catch(() =>
-              errorToast(i18n.global.t('pagePostCodeLogs.toast.errorSrcFetch')),
-            );
-        }
-      }
+const fetchSrcDetails = (row) => {
+  row.item.toggleDetails = !row.item.toggleDetails;
+  toggleRowDetails(row);
+  if (!row.detailsShowing) {
+    const { timeStampOffset, uri, postCode } = row.item;
+    if (!srcData.value[timeStampOffset]) {
+      api
+        .get(uri)
+        .then((response) => generateSrcWords(response.data))
+        .then((srcWords) => {
+          srcData.value[timeStampOffset] = `${postCode.trim()} ${srcWords}`;
+        })
+        .catch(() =>
+          errorToast(i18n.global.t('pagePostCodeLogs.toast.errorSrcFetch')),
+        );
     }
-    const generateSrcWords = (data) => {
-      const decodedData = atob(data); // `atob` decodes base64 to ASCII string
-      const hexData = Array.from(decodedData).map(c => c.charCodeAt(0).toString(16)).join('');
-      const srcBulk = hexData.substring(16, 80).toUpperCase();
-      if (!isNaN(srcBulk) && !Number(srcBulk)) {
-        return '';
-      }
-      let srcWords = '';
-      for (let i = 0; i <= 56; i += 8) {
-        srcWords += `${srcBulk.substring(i, i + 8)} `;
-      }
-      return srcWords.trim();
-    }
-    const openConsoleWindow = () => {
-      window.open(
-        `${window.location.origin}/#/console/post-codes`,
-        '_blank',
-        'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=200,height=200',
-      );
-    }
-    const onFilterChange = ({ activeFilters }) => {
-      activeFiltersData.value = activeFilters;
-    }
-    const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
-      filterStartDate.value = fromDate;
-      filterEndDate.value = toDate;
-    }
-    const onFiltered = (filteredItems) => {
-      searchTotalFilteredRows.value = filteredItems.length;
-    }
-    // Create export file name based on date and action
-    const exportFileNameByDate = (value) => {
-      let date = new Date();
-      date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
-      let fileName;
-      if (value === 'download') {
-        fileName = i18n.global.t('pagePostCodeLogs.downloadFilePrefix');
-      } else if (value === 'export') {
-        fileName = i18n.global.t('pagePostCodeLogs.exportFilePrefix');
-      } else {
-        fileName = i18n.global.t('pagePostCodeLogs.allExportFilePrefix');
-      }
-      return fileName + date;
-    }
-    const onChangeSearchInput = (event) => {
-      searchFilterInputVal.value = event;
-    }
-    const onClearSearchInput = () => {
-      searchFilterInputVal.value = '';
-    };
+  }
+};
+const generateSrcWords = (data) => {
+  const decodedData = atob(data); // `atob` decodes base64 to ASCII string
+  const hexData = Array.from(decodedData)
+    .map((c) => c.charCodeAt(0).toString(16))
+    .join('');
+  const srcBulk = hexData.substring(16, 80).toUpperCase();
+  if (!isNaN(srcBulk) && !Number(srcBulk)) {
+    return '';
+  }
+  let srcWords = '';
+  for (let i = 0; i <= 56; i += 8) {
+    srcWords += `${srcBulk.substring(i, i + 8)} `;
+  }
+  return srcWords.trim();
+};
+const openConsoleWindow = () => {
+  window.open(
+    `${window.location.origin}/#/console/post-codes`,
+    '_blank',
+    'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=200,height=200',
+  );
+};
+const onFilterChange = ({ activeFilters }) => {
+  activeFiltersData.value = activeFilters;
+};
+const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
+  filterStartDate.value = fromDate;
+  filterEndDate.value = toDate;
+};
+const onFiltered = (filteredItems) => {
+  searchTotalFilteredRows.value = filteredItems.length;
+};
+// Create export file name based on date and action
+const exportFileNameByDate = (value) => {
+  let date = new Date();
+  date =
+    date.toISOString().slice(0, 10) +
+    '_' +
+    date.toString().split(':').join('-').split(' ')[4];
+  let fileName;
+  if (value === 'download') {
+    fileName = i18n.global.t('pagePostCodeLogs.downloadFilePrefix');
+  } else if (value === 'export') {
+    fileName = i18n.global.t('pagePostCodeLogs.exportFilePrefix');
+  } else {
+    fileName = i18n.global.t('pagePostCodeLogs.allExportFilePrefix');
+  }
+  return fileName + date;
+};
+const onChangeSearchInput = (event) => {
+  searchFilterInputVal.value = event;
+};
+const onClearSearchInput = () => {
+  searchFilterInputVal.value = '';
+};
 </script>
 <style lang="scss" scoped>
-  .text-right {
-    text-align: right;
-  }
+.text-right {
+  text-align: right;
+}
 .margin-style {
   margin-bottom: 23px;
   margin-left: 1.5rem;
 }
-  .container-fluid {
-    width: calc(100% - 126px);
+.container-fluid {
+  width: calc(100% - 126px);
+}
+.rotateSvg {
+  svg {
+    transform: rotate(180deg);
   }
-  .rotateSvg {
-    svg {
-      transform: rotate(180deg);
-    }
-  }
+}
 </style>

@@ -330,7 +330,8 @@ export const PoliciesStore = defineStore('policies', {
         })
         .catch((error) => {
           console.log(error);
-          this.hostUsbEnabled = updatedHostUsb === 'Enabled' ? 'Disabled' : 'Enabled';
+          this.hostUsbEnabled =
+            updatedHostUsb === 'Enabled' ? 'Disabled' : 'Enabled';
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.hostUsb'),

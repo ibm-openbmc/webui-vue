@@ -28,23 +28,23 @@ const { dataFormatter } = useDataFormatterGlobal();
 const dumpsStore = stores.DumpsStore();
 
 onBeforeMount(() => {
-      dumpsStore.getAllDumps().finally(() => {
-      eventBus.emit('overview-dumps-complete');
-    });
+  dumpsStore.getAllDumps().finally(() => {
+    eventBus.emit('overview-dumps-complete');
   });
+});
 
 const dumps = computed(() => {
-    return dumpsStore.allDumpsGetter;
-    });
+  return dumpsStore.allDumpsGetter;
+});
 
 const exportFileNameByDate = () => {
-      // Create export file name based on date
-      let date = new Date();
-      date =
-        date.toISOString().slice(0, 10) +
-        '_' +
-        date.toString().split(':').join('-').split(' ')[4];
-      let fileName = 'all_dumps_';
-      return fileName + date;
-    };
+  // Create export file name based on date
+  let date = new Date();
+  date =
+    date.toISOString().slice(0, 10) +
+    '_' +
+    date.toString().split(':').join('-').split(' ')[4];
+  let fileName = 'all_dumps_';
+  return fileName + date;
+};
 </script>

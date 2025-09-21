@@ -8,11 +8,11 @@
             <dd>
               <BFormCheckbox
                 id="dhcpSwitch"
+                :key="componentKey"
                 v-model="dhcpEnabledState"
                 data-test-id="networkSettings-switch-dhcpEnabled"
                 switch
                 :disabled="isTablesDisabled"
-                :key="componentKey"
                 @update:model-value="openChangeDhcpEnabledStateModal"
               >
                 <span v-if="dhcpEnabledState">
@@ -192,7 +192,7 @@ watch(
   () => props.tabIndex,
   () => {
     getIpv4TableItems();
-  }
+  },
 );
 
 watch(network, () => {
@@ -288,7 +288,7 @@ const openChangeDhcpEnabledStateModal = (state) => {
       dhcpState: state
         ? i18n.global.t('global.action.enable')
         : i18n.global.t('global.action.disable'),
-    }
+    },
   );
   modalOptions.value.okVariant = 'danger';
   modalOptions.value.okTitle = state

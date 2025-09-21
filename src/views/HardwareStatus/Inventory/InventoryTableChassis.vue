@@ -90,7 +90,7 @@
       </template>
       <template #row-details="{ item }">
         <b-container fluid>
-          <b-row style="margin-left: 50px;">
+          <b-row style="margin-left: 50px">
             <b-col class="mt-2" sm="6" xl="6">
               <dl>
                 <!-- Name -->
@@ -227,5 +227,4 @@ function getStatusTooltip(status) {
 .b-table-sticky-header {
   overflow: visible !important;
 }
-
 </style>

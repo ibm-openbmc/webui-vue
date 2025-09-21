@@ -101,7 +101,7 @@ watch(
   () => props.tabIndex,
   () => {
     getStaticDnsItems();
-  }
+  },
 );
 
 watch(network, () => {

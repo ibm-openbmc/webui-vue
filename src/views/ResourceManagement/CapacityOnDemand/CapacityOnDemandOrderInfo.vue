@@ -130,9 +130,7 @@
                 }}
                 <span v-if="hasLicenses" class="fw-bold">--</span>
                 <span v-else class="fw-bold">
-                  {{
-                    $filters.formatDate(aixAccessKeyInfo.expirationDate)
-                  }}
+                  {{ $filters.formatDate(aixAccessKeyInfo.expirationDate) }}
                 </span>
               </p>
             </BCol>
@@ -155,39 +153,39 @@ const { dataFormatter } = useDataFormatterGlobal();
 
 const processorInfo = computed(() => {
   return licenseStore.processorInfo;
-})
+});
 const memoryInfo = computed(() => {
   return licenseStore.memoryInfo;
-})
+});
 const firmwareAccessKeyInfo = computed(() => {
   return licenseStore.firmwareAccessKeyInfo;
-})
+});
 const aixAccessKeyInfo = computed(() => {
   return licenseStore.aixAccessKeyInfo;
-})
+});
 const hasLicenses = computed(() => {
-      // This logic checks to see if there are any licences in the store.
-      // If there are none, the result is true, otherwise false.
-      return !Object.keys(licenseStore.licensesGetter).length;
-    });
+  // This logic checks to see if there are any licences in the store.
+  // If there are none, the result is true, otherwise false.
+  return !Object.keys(licenseStore.licensesGetter).length;
+});
 const processorLicensed = computed(() => {
-      return licenseStore.licensesGetter?.PermProcs?.MaxAuthorizedDevices;
-    });
+  return licenseStore.licensesGetter?.PermProcs?.MaxAuthorizedDevices;
+});
 const apid = computed(() => {
-      return licenseStore.licensesGetter?.APID?.SerialNumber;
-    });
+  return licenseStore.licensesGetter?.APID?.SerialNumber;
+});
 const systemCodPublicKey = computed(() => {
-      return licenseStore.licensesGetter?.APPublicKey?.SerialNumber;
-    });
+  return licenseStore.licensesGetter?.APPublicKey?.SerialNumber;
+});
 const memoryLicensed = computed(() => {
-      return licenseStore.licensesGetter?.PermMem?.MaxAuthorizedDevices;
-    });
+  return licenseStore.licensesGetter?.PermMem?.MaxAuthorizedDevices;
+});
 const systemInfo = computed(() => {
-      return systemStore.getSystems?.[0] || {};
-    });
+  return systemStore.getSystems?.[0] || {};
+});
 const systemAnchor = computed(() => {
-      return licenseStore.licensesGetter?.SystemAnchor?.SerialNumber;
-    });
+  return licenseStore.licensesGetter?.SystemAnchor?.SerialNumber;
+});
 </script>
 
 <style lang="scss" scoped>

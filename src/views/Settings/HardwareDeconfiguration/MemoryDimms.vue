@@ -20,7 +20,9 @@
           :no-border-collapse="true"
           :items="filteredDimms"
           :fields="fields"
-          :per-page="itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage
+          "
           :current-page="currentPageNo"
           :filter="searchFilter"
           :empty-text="$t('global.table.emptyMessage')"
@@ -76,7 +78,9 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage
+          "
           :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="hardware-deconfiguration"
         />
@@ -115,117 +119,118 @@ const itemPerPage = ref(perPage);
 const searchFilter = ref('');
 const searchTotalFilteredRows = ref(0);
 const fields = ref([
-        {
-          key: 'name',
-          sortable: true,
-          label: i18n.global.t('pageDeconfigurationHardware.table.name'),
-        },
-        {
-          key: 'size',
-          sortable: true,
-          label: i18n.global.t('pageDeconfigurationHardware.table.size'),
-        },
-        {
-          key: 'locationCode',
-          sortable: true,
-          label: i18n.global.t('pageDeconfigurationHardware.table.locationCode'),
-        },
-        {
-          key: 'functionalState',
-          sortable: true,
-          label: i18n.global.t('pageDeconfigurationHardware.table.functionalState'),
-          tdClass: 'text-nowrap',
-        },
-        {
-          key: 'eventID',
-          sortable: true,
-          label: i18n.global.t('pageDeconfigurationHardware.table.eventId'),
-        },
-        {
-          key: 'deconfigurationType',
-          sortable: true,
-          label: i18n.global.t(
-            'pageDeconfigurationHardware.table.deconfigurationType',
-          ),
-        },
-        {
-          key: 'settings',
-          sortable: true,
-          label: i18n.global.t('pageDeconfigurationHardware.table.settings'),
-        },
-      ]);
+  {
+    key: 'name',
+    sortable: true,
+    label: i18n.global.t('pageDeconfigurationHardware.table.name'),
+  },
+  {
+    key: 'size',
+    sortable: true,
+    label: i18n.global.t('pageDeconfigurationHardware.table.size'),
+  },
+  {
+    key: 'locationCode',
+    sortable: true,
+    label: i18n.global.t('pageDeconfigurationHardware.table.locationCode'),
+  },
+  {
+    key: 'functionalState',
+    sortable: true,
+    label: i18n.global.t('pageDeconfigurationHardware.table.functionalState'),
+    tdClass: 'text-nowrap',
+  },
+  {
+    key: 'eventID',
+    sortable: true,
+    label: i18n.global.t('pageDeconfigurationHardware.table.eventId'),
+  },
+  {
+    key: 'deconfigurationType',
+    sortable: true,
+    label: i18n.global.t(
+      'pageDeconfigurationHardware.table.deconfigurationType',
+    ),
+  },
+  {
+    key: 'settings',
+    sortable: true,
+    label: i18n.global.t('pageDeconfigurationHardware.table.settings'),
+  },
+]);
 const tableFilters = ref([
-        {
-          key: 'deconfigurationType',
-          label: i18n.global.t(
-            'pageDeconfigurationHardware.table.deconfigurationType',
-          ),
-          values: [
-            i18n.global.t('pageDeconfigurationHardware.table.filter.byAssociation'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.error'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.fatal'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.fcoDeconfigured'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.invalid'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.manual'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.none'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.predictive'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.recovered'),
-            i18n.global.t('pageDeconfigurationHardware.table.filter.unknown'),
-          ],
-        },
-      ]);
+  {
+    key: 'deconfigurationType',
+    label: i18n.global.t(
+      'pageDeconfigurationHardware.table.deconfigurationType',
+    ),
+    values: [
+      i18n.global.t('pageDeconfigurationHardware.table.filter.byAssociation'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.error'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.fatal'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.fcoDeconfigured'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.invalid'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.manual'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.none'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.predictive'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.recovered'),
+      i18n.global.t('pageDeconfigurationHardware.table.filter.unknown'),
+    ],
+  },
+]);
 
 const allDimms = computed(() => {
-      return hardwareDeconfigurationStore.dimmsGetter;
-    })
+  return hardwareDeconfigurationStore.dimmsGetter;
+});
 const filteredRows = computed(() => {
-      return searchFilter.value
-        ? searchTotalFilteredRows.value
-        : filteredDimms.value.length;
-    });
+  return searchFilter.value
+    ? searchTotalFilteredRows.value
+    : filteredDimms.value.length;
+});
 const filteredDimms = computed(() => {
-      return getFilteredTableData(allDimms.value, activeFiltersRows.value);
-    });
+  return getFilteredTableData(allDimms.value, activeFiltersRows.value);
+});
 const serverStatus = computed(() => {
-      return global.serverStatusGetter;
-    });
+  return global.serverStatusGetter;
+});
 const isServerOff = computed(() => {
-      return serverStatus.value === 'off' ? true : false;
-    });
+  return serverStatus.value === 'off' ? true : false;
+});
 const isReadOnlyUser = computed(() => {
-      return global.isReadOnlyUserGetter;
-    });
+  return global.isReadOnlyUserGetter;
+});
 
 onBeforeMount(() => {
-    startLoader();
-    hardwareDeconfigurationStore.getDimms().finally(() => {
-      endLoader();
-      isBusy.value = false;
-    });
+  startLoader();
+  hardwareDeconfigurationStore.getDimms().finally(() => {
+    endLoader();
+    isBusy.value = false;
   });
+});
 const onFilterChange = ({ activeFilters }) => {
-    activeFiltersRows.value = activeFilters;
-    };
+  activeFiltersRows.value = activeFilters;
+};
 const onFiltered = (filteredItems) => {
-      searchTotalFilteredRows.value = filteredItems.length;
-    };
+  searchTotalFilteredRows.value = filteredItems.length;
+};
 const toggleSettingsSwitch = (row) => {
-      startLoader();
-      hardwareDeconfigurationStore.updateSettingsState({
-          uri: row.item.uri,
-          settings: row.item.settings,
-        })
-        .catch(({ message }) => {
-          row.item.settings = !row.item.settings;
-          Toast.errorToast(message);
-        })
-        .finally(() => {
-          endLoader();
-        });
-    };
- </script>
- <style lang="scss" scoped>
- .text-right {
-   text-align: right;
- }
- </style>
+  startLoader();
+  hardwareDeconfigurationStore
+    .updateSettingsState({
+      uri: row.item.uri,
+      settings: row.item.settings,
+    })
+    .catch(({ message }) => {
+      row.item.settings = !row.item.settings;
+      Toast.errorToast(message);
+    })
+    .finally(() => {
+      endLoader();
+    });
+};
+</script>
+<style lang="scss" scoped>
+.text-right {
+  text-align: right;
+}
+</style>

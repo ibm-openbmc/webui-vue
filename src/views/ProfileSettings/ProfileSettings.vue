@@ -57,8 +57,14 @@
                 <BFormInvalidFeedback role="alert">
                   <template
                     v-if="
-                      v$.form.newPassword.$errors.length > 0 ? (v$.form.newPassword.$errors[0].$validator === 'minLength' || v$.form.newPassword.$errors[0].$validator === 'maxLength') : false
-                    ">
+                      v$.form.newPassword.$errors.length > 0
+                        ? v$.form.newPassword.$errors[0].$validator ===
+                            'minLength' ||
+                          v$.form.newPassword.$errors[0].$validator ===
+                            'maxLength'
+                        : false
+                    "
+                  >
                     {{
                       $t('pageProfileSettings.newPassLabelTextInfo', {
                         min: passwordRequirements.minLength,
@@ -74,7 +80,9 @@
               :label="$t('pageProfileSettings.confirmPassword')"
               label-for="input-2"
             >
-              <input-password-toggle @updatePassView="updateConfirmPasswordType">
+              <input-password-toggle
+                @updatePassView="updateConfirmPasswordType"
+              >
                 <BFormInput
                   id="password-confirmation"
                   v-model="form.confirmPassword"
@@ -86,9 +94,16 @@
                   class="form-control-with-button"
                   @input="v$.form.confirmPassword.$touch()"
                 />
-                
+
                 <BFormInvalidFeedback role="alert">
-                  <template v-if="v$.form.confirmPassword.$errors.length > 0 ? v$.form.confirmPassword.$errors[0].$validator === 'sameAsPassword' : false">
+                  <template
+                    v-if="
+                      v$.form.confirmPassword.$errors.length > 0
+                        ? v$.form.confirmPassword.$errors[0].$validator ===
+                          'sameAsPassword'
+                        : false
+                    "
+                  >
                     {{ $t('pageProfileSettings.passwordsDoNotMatch') }}
                   </template>
                 </BFormInvalidFeedback>
@@ -148,11 +163,7 @@ import useLocalTimezoneLabelComposable from '../../components/Composables/useLoc
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import stores from '@/store';
-import {
-  minLength,
-  maxLength,
-  sameAs,
-} from '@vuelidate/validators';
+import { minLength, maxLength, sameAs } from '@vuelidate/validators';
 
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
@@ -160,101 +171,102 @@ const { startLoader, endLoader } = useLoadingBar();
 const { localOffset } = useLocalTimezoneLabelComposable();
 
 const global = stores.GlobalStore();
-const userManagementStore = stores.UserManagementStore()
+const userManagementStore = stores.UserManagementStore();
 
 const form = ref({
-        newPassword: '',
-        confirmPassword: '',
-        isUtcDisplay: global.isUtcDisplayGetter,
-      });
-const inputType = ref('password')
-const confirmPasswordType = ref('password')
+  newPassword: '',
+  confirmPassword: '',
+  isUtcDisplay: global.isUtcDisplayGetter,
+});
+const inputType = ref('password');
+const confirmPasswordType = ref('password');
 
 onBeforeMount(() => {
-    startLoader();
-    Promise.all([
-      userManagementStore.getAccountSettings(),
-      checkForUserData(),
-    ]).finally(() => {
-      endLoader();
-    });
+  startLoader();
+  Promise.all([
+    userManagementStore.getAccountSettings(),
+    checkForUserData(),
+  ]).finally(() => {
+    endLoader();
   });
+});
 
 const username = computed(() => {
-      return global.usernameGetter;
-    });
+  return global.usernameGetter;
+});
 const currentUser = computed(() => {
-      return global.currentUserGetter;
-    });
+  return global.currentUserGetter;
+});
 const isServiceUser = computed(() => {
-      return global.isServiceUser;
-    });
+  return global.isServiceUser;
+});
 const passwordRequirements = computed(() => {
-      if (currentUser.value?.AccountTypes?.includes('IPMI')) {
-        return {
-          minLength: 8,
-          maxLength: 20,
-        };
-      } else {
-        return userManagementStore.accountPasswordRequirementsGetter
-      }
-    });
+  if (currentUser.value?.AccountTypes?.includes('IPMI')) {
+    return {
+      minLength: 8,
+      maxLength: 20,
+    };
+  } else {
+    return userManagementStore.accountPasswordRequirementsGetter;
+  }
+});
 const timezone = computed(() => {
-      return localOffset();
-    });
+  return localOffset();
+});
 
 const rules = computed(() => ({
   form: {
-        newPassword: {
-          minLength: minLength(passwordRequirements.value.minLength),
-          maxLength: maxLength(passwordRequirements.value.maxLength),
-        },
-        confirmPassword: {
-          sameAsPassword: sameAs(form.value.newPassword),
-        },
-      },
-    }));
-const v$ = useVuelidate(rules, {form});
+    newPassword: {
+      minLength: minLength(passwordRequirements.value.minLength),
+      maxLength: maxLength(passwordRequirements.value.maxLength),
+    },
+    confirmPassword: {
+      sameAsPassword: sameAs(form.value.newPassword),
+    },
+  },
+}));
+const v$ = useVuelidate(rules, { form });
 
 const checkForUserData = () => {
-      if (!currentUser.value) {
-        userManagementStore.getUsers();
-        global.getCurrentUser();
-      }
-    };
+  if (!currentUser.value) {
+    userManagementStore.getUsers();
+    global.getCurrentUser();
+  }
+};
 const saveNewPasswordInputData = () => {
-      v$.value.form.confirmPassword.$touch();
-      v$.value.form.newPassword.$touch();
-      if (v$.value.$invalid) return;
-      let userData = {
-        originalUsername: username.value,
-        password: form.value.newPassword,
-      };
-      userManagementStore.updateUser(userData)
-        .then((message) => {
-          (form.value.newPassword = ''), (form.value.confirmPassword = '');
-          v$.value.$reset();
-          successToast(message);
-        })
-        .catch(({ message }) => errorToast(message));
-    };
+  v$.value.form.confirmPassword.$touch();
+  v$.value.form.newPassword.$touch();
+  if (v$.value.$invalid) return;
+  let userData = {
+    originalUsername: username.value,
+    password: form.value.newPassword,
+  };
+  userManagementStore
+    .updateUser(userData)
+    .then((message) => {
+      ((form.value.newPassword = ''), (form.value.confirmPassword = ''));
+      v$.value.$reset();
+      successToast(message);
+    })
+    .catch(({ message }) => errorToast(message));
+};
 const saveTimeZonePrefrenceData = () => {
-      localStorage.setItem('storedUtcDisplay', form.value.isUtcDisplay);
-      global.setUtcTime(form.value.isUtcDisplay);
-      successToast(
-        i18n.global.t('pageProfileSettings.toast.successUpdatingTimeZone'),
-      );
-    };
+  localStorage.setItem('storedUtcDisplay', form.value.isUtcDisplay);
+  global.setUtcTime(form.value.isUtcDisplay);
+  successToast(
+    i18n.global.t('pageProfileSettings.toast.successUpdatingTimeZone'),
+  );
+};
 const submitForm = () => {
-      if (form.value.confirmPassword || form.value.newPassword) {
-        saveNewPasswordInputData();
-      }
-      saveTimeZonePrefrenceData();
-    };
+  if (form.value.confirmPassword || form.value.newPassword) {
+    saveNewPasswordInputData();
+  }
+  saveTimeZonePrefrenceData();
+};
 const updatePasswordType = (passwordType) => {
-  inputType.value=passwordType
+  inputType.value = passwordType;
 };
 const updateConfirmPasswordType = (passwordType) => {
-  confirmPasswordType.value=passwordType
+  confirmPasswordType.value = passwordType;
 };
 </script>

@@ -59,51 +59,51 @@ import { defineProps, computed } from 'vue';
 import { omit } from 'lodash';
 
 const props = defineProps({
-    value: {
-      type: String,
-      required: true,
-    },
-    enabled: {
-      type: Boolean,
-      default: true,
-    },
-    title: {
-      type: String,
-      default: null,
-    },
-    rowData: {
-      type: Object,
-      default: () => {},
-    },
-    exportName: {
-      type: String,
-      default: 'export',
-    },
-    downloadLocation: {
-      type: String,
-      default: '',
-    },
-    btnIconOnly: {
-      type: Boolean,
-      default: true,
-    },
-    downloadInNewTab: {
-      type: Boolean,
-      default: false,
-    },
-    showButton: {
-      type: Boolean,
-      default: true,
-    },
-  });
+  value: {
+    type: String,
+    required: true,
+  },
+  enabled: {
+    type: Boolean,
+    default: true,
+  },
+  title: {
+    type: String,
+    default: null,
+  },
+  rowData: {
+    type: Object,
+    default: () => {},
+  },
+  exportName: {
+    type: String,
+    default: 'export',
+  },
+  downloadLocation: {
+    type: String,
+    default: '',
+  },
+  btnIconOnly: {
+    type: Boolean,
+    default: true,
+  },
+  downloadInNewTab: {
+    type: Boolean,
+    default: false,
+  },
+  showButton: {
+    type: Boolean,
+    default: true,
+  },
+});
 
 const dataForExport = computed(() => {
-      return JSON.stringify(omit(props.rowData, 'actions'));
-    });
+  return JSON.stringify(omit(props.rowData, 'actions'));
+});
 const download = computed(() => {
-      return `${props.exportName}.json`;
-    });
+  return `${props.exportName}.json`;
+});
 const href = computed(() => {
-      return `data:text/json;charset=utf-8,${dataForExport.value}`;
+  return `data:text/json;charset=utf-8,${dataForExport.value}`;
 });
 </script>

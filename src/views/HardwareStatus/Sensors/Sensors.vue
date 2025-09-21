@@ -50,7 +50,9 @@
           :no-border-collapse="true"
           :items="filteredSensors"
           :fields="fields"
-          :per-page="itemPerPage === 0 ? filteredSensors.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? filteredSensors.length || 1 : itemPerPage
+          "
           :current-page="currentPageNo"
           :filter="searchFilterInput"
           :empty-text="$t('global.table.emptyMessage')"
@@ -114,7 +116,9 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="itemPerPage === 0 ? filteredSensors.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? filteredSensors.length || 1 : itemPerPage
+          "
           :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-sensors"
         />

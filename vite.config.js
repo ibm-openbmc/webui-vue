@@ -11,16 +11,12 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
-  const {
-    VITE_BASE_URL,
-    VITE_CUSTOM_STYLES,
-    VITE_APP_ENV_NAME,
-  } = env;
+  const { VITE_BASE_URL, VITE_CUSTOM_STYLES, VITE_APP_ENV_NAME } = env;
   // Custom SCSS includes
   const envStyle = () => {
     const styles = [
       `@use "sass:math";`,
-      `@import "@/assets/styles/bmc/helpers";`
+      `@import "@/assets/styles/bmc/helpers";`,
     ];
 
     if (VITE_CUSTOM_STYLES === 'true' && VITE_APP_ENV_NAME) {
@@ -41,11 +37,11 @@ export default defineConfig(({ mode }) => {
       }),
       basicSsl(),
       VueI18nPlugin({
-      /* options */
-      // locale messages resource pre-compile option
+        /* options */
+        // locale messages resource pre-compile option
         include: resolve(
           dirname(fileURLToPath(import.meta.url)),
-          './path/to/src/locales/**'
+          './path/to/src/locales/**',
         ),
       }),
       {
@@ -58,7 +54,7 @@ export default defineConfig(({ mode }) => {
             next();
           });
         },
-      }
+      },
     ],
     css: {
       preprocessorOptions: {
@@ -76,19 +72,31 @@ export default defineConfig(({ mode }) => {
         },
         {
           find: /^\.\/store$/,
-          replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`)
+          replacement: path.resolve(
+            __dirname,
+            `src/env/store/${VITE_APP_ENV_NAME}.js`,
+          ),
         },
         {
           find: /^\.\.\/store$/,
-          replacement: path.resolve(__dirname, `src/env/store/${VITE_APP_ENV_NAME}.js`)
+          replacement: path.resolve(
+            __dirname,
+            `src/env/store/${VITE_APP_ENV_NAME}.js`,
+          ),
         },
         {
           find: /^\.\/routes$/,
-          replacement: path.resolve(__dirname, `src/env/router/${VITE_APP_ENV_NAME}.js`)
+          replacement: path.resolve(
+            __dirname,
+            `src/env/router/${VITE_APP_ENV_NAME}.js`,
+          ),
         },
         {
           find: /^\.\/AppNavigationData$/,
-          replacement: path.resolve(__dirname, `src/env/components/AppNavigation/${VITE_APP_ENV_NAME}.js`)
+          replacement: path.resolve(
+            __dirname,
+            `src/env/components/AppNavigation/${VITE_APP_ENV_NAME}.js`,
+          ),
         },
       ],
     },
@@ -96,9 +104,9 @@ export default defineConfig(({ mode }) => {
       exclude: ['bootstrap'],
     },
     server: {
-    https: true, // Enable HTTPS
-    port: 8000, // TCP Port 8000 is commonly used for development environments of web server software.
-    proxy: {
+      https: true, // Enable HTTPS
+      port: 8000, // TCP Port 8000 is commonly used for development environments of web server software.
+      proxy: {
         '/api': {
           target: VITE_BASE_URL,
           changeOrigin: true,
@@ -109,7 +117,7 @@ export default defineConfig(({ mode }) => {
               const setCookieHeader = proxyRes.headers['set-cookie'];
               if (setCookieHeader) {
                 proxyRes.headers['set-cookie'] = setCookieHeader.map(
-                  (cookie) => cookie + '; Path=/'
+                  (cookie) => cookie + '; Path=/',
                 );
               }
               // Remove the 'strict-transport-security' header
@@ -118,12 +126,12 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
-    // Custom middleware to add headers
+      // Custom middleware to add headers
       configureServer(server) {
         server.middlewares.use((_req, res, next) => {
           res.setHeader('Connection', 'keep-alive');
           next();
-        })
+        });
       },
     },
     build: {

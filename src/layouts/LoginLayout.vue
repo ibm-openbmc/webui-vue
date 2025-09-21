@@ -4,7 +4,11 @@
       <div class="login-main">
         <div>
           <div class="login-brand mb-5">
-            <img width="90px" src="@/assets/images/login-company-logo.svg" :alt="altLogo" />
+            <img
+              width="90px"
+              src="@/assets/images/login-company-logo.svg"
+              :alt="altLogo"
+            />
           </div>
           <h1 v-if="customizableGuiName" class="h3 mb-5">
             {{ customizableGuiName }}
@@ -24,7 +28,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const  altLogo = ref(import.meta.env.VITE_APP_COMPANY_NAME || 'OpenBMC');
+const altLogo = ref(import.meta.env.VITE_APP_COMPANY_NAME || 'OpenBMC');
 const customizableGuiName = ref(import.meta.env.VITE_APP_GUI_NAME || '');
 </script>
 

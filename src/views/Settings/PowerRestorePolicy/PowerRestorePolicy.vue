@@ -98,7 +98,7 @@ const renderPowerRestoreSettings = () => {
     powerPolicy.getPowerRestoreCurrentPolicy(),
   ]).finally(() => {
     options.value.length = 0;
-    powerRestorePolicies.value.map((item) => {
+    (powerRestorePolicies.value.map((item) => {
       options.value.push({
         text: i18n.global.t(
           `pagePowerRestorePolicy.policiesDesc.${item.state}`,
@@ -106,7 +106,7 @@ const renderPowerRestoreSettings = () => {
         value: `${item.state}`,
       });
     }),
-      endLoader();
+      endLoader());
   });
 };
 const submitForm = () => {
