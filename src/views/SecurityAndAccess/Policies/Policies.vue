@@ -19,7 +19,7 @@
               aria-labelledby="ssh-label"
               aria-describedby="ssh-description"
               switch
-              @update:modelValue="changeSshProtocolState"
+              @update:model-value="changeSshProtocolState"
             >
               <span v-if="Policies.sshProtocolEnabled">
                 {{ $t('global.status.enabled') }}
@@ -43,7 +43,7 @@
               aria-labelledby="ipmi-label"
               aria-describedby="ipmi-description"
               switch
-              @update:modelValue="changeIpmiProtocolState"
+              @update:model-value="changeIpmiProtocolState"
             >
               <span v-if="Policies.ipmiProtocolEnabled">
                 {{ $t('global.status.enabled') }}
@@ -66,7 +66,7 @@
               aria-labelledby="host-tpm-label"
               aria-describedby="host-tpm-description"
               switch
-              @update:modelValue="changeTpmPolicyState"
+              @update:model-value="changeTpmPolicyState"
             >
               <span v-if="Policies.tpmPolicyEnabled">
                 {{ $t('global.status.enabled') }}
@@ -94,7 +94,7 @@
               v-model="Policies.vtpmEnabled"
               data-test-id="policies-toggle-vtpm"
               switch
-              @update:modelValue="changeVtpmState"
+              @update:model-value="changeVtpmState"
             >
               <span class="visually-hidden">
                 {{ $t('pagePolicies.vtpm') }}
@@ -124,7 +124,7 @@
               v-model="Policies.rtadEnabled"
               data-test-id="policies-toggle-rtad"
               switch
-              @update:modelValue="changeRtadState"
+              @update:model-value="changeRtadState"
             >
               <span class="visually-hidden">
                 {{ $t('pagePolicies.rtad') }}
@@ -149,7 +149,7 @@
               v-model="Policies.usbFirmwareUpdatePolicyEnabled"
               data-test-id="policies-toggle-usbFirmwareUpdatePolicy"
               switch
-              @update:modelValue="changeUsbFirmwareUpdatePolicyState"
+              @update:model-value="changeUsbFirmwareUpdatePolicyState"
             >
               <span class="visually-hidden">
                 {{ $t('pagePolicies.usbFirmwareUpdatePolicy') }}
@@ -174,7 +174,7 @@
               v-model="Policies.svleEnabled"
               data-test-id="policies-toggle-svle"
               switch
-              @update:modelValue="changeSvleState"
+              @update:model-value="changeSvleState"
             >
               <span class="visually-hidden">
                 {{ $t('pagePolicies.secureVersion') }}
@@ -204,7 +204,7 @@
               v-model="Policies.hostUsbEnabled"
               data-test-id="policies-toggle-hostUsb"
               switch
-              @update:modelValue="changeHostUsbState"
+              @update:model-value="changeHostUsbState"
             >
               <span class="visually-hidden">
                 {{ $t('pagePolicies.hostUsb') }}
@@ -232,7 +232,7 @@
               v-model="Policies.unAuthenticatedACFUploadEnablementState"
               data-test-id="policies-toggle-unauthenticatedACFUploadEnablement"
               switch
-              @update:modelValue="changeUnauthenticatedACFUploadEnablement"
+              @update:model-value="changeUnauthenticatedACFUploadEnablement"
             >
               <span class="visually-hidden">
                 {{ $t('pagePolicies.usbFirmwareUpdatePolicy') }}

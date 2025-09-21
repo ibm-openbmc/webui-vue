@@ -66,7 +66,7 @@
               v-model="tableHeaderCheckbox"
               :indeterminate="tableHeaderCheckboxIndeterminated"
               @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckbox)"
-              @update:modelValue="toggleAll"
+              @update:model-value="toggleAll"
             >
             </BFormCheckbox>
           </template>

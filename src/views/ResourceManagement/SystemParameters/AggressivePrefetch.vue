@@ -16,7 +16,7 @@
         aria-labelledby="aggressive-prefetch-label"
         aria-describedby="aggressive-prefetch-description"
         switch
-        @update:modelValue="changeAggressivePrefetchState"
+        @update:model-value="changeAggressivePrefetchState"
       >
         <span v-if="aggressivePrefetchState">
           {{ $t('global.status.enabled') }}

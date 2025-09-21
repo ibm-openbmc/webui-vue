@@ -13,7 +13,7 @@
         <bmc-cards
           :is-page-disabled="isPageDisabled"
           :is-server-off="isServerOff"
-          @loadingStatus="loadingStatus"
+          @loading-status="loadingStatus"
         />
 
         <!-- Host Firmware -->
@@ -38,7 +38,7 @@
           <!-- Update form -->
           <form-update
             :is-page-disabled="isPageDisabled"
-            @loadingStatus="loadingStatus"
+            @loading-status="loadingStatus"
           />
         </BCol>
         <BCol sm="8" md="6" xl="4">

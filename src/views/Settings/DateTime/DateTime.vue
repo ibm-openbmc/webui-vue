@@ -462,7 +462,7 @@ const emitChange = () => {
   if (v$.value.$invalid) return;
   v$.value.$reset(); //reset to re-validate on blur
   eventBus.emit('change', {
-    manualDate: manualDate ? new Date(manualDate) : null,
+    manualDate: manualDate.value ? new Date(manualDate.value) : null,
   });
 };
 const setInitialNtpValues = () => {

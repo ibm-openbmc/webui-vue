@@ -29,7 +29,7 @@
               id="battery"
               v-model="readyToRemoveState"
               switch
-              @update:modelValue="changeReadyToRemoveState"
+              @update:model-value="changeReadyToRemoveState"
             >
               <span v-if="readyToRemoveState">
                 {{ $t('global.status.enabled') }}
@@ -53,7 +53,7 @@
               id="base"
               v-model="readyToRemoveControlPanelState"
               switch
-              @update:modelValue="changeControlPanelState"
+              @update:model-value="changeControlPanelState"
             >
               <span v-if="readyToRemoveControlPanelState">
                 {{ $t('global.status.enabled') }}
@@ -77,7 +77,7 @@
               id="lcd"
               v-model="readyToRemoveControlPanelDispState"
               switch
-              @update:modelValue="changeControlPanelDispState"
+              @update:model-value="changeControlPanelDispState"
             >
               <span v-if="readyToRemoveControlPanelDispState">
                 {{ $t('global.status.enabled') }}

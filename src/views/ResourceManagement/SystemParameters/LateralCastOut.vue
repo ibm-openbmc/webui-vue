@@ -17,7 +17,7 @@
           aria-labelledby="lateral-cast-out-label"
           aria-describedby="lateral-cast-out-description"
           switch
-          @update:modelValue="changeLateralCastOutState"
+          @update:model-value="changeLateralCastOutState"
         >
           <span v-if="lateralCastOutModeState">
             {{ $t('global.status.enabled') }}

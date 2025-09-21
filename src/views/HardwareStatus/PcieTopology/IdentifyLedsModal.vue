@@ -130,9 +130,7 @@ const emitUpdate = defineEmits(['update:openIdentifyLedModal']);
 function onModalHidden() {
   emitUpdate('update:openIdentifyLedModal', false);
 }
-const ioSlotsLength = computed(() => {
-  return ioSlotsLed.length;
-});
+
 const getAllLeds = async () => {
   await pcieTopologyStore
     .getAllLedValues(props.selectedObj)
@@ -142,7 +140,7 @@ const getAllLeds = async () => {
       props.selectedObj.localPortLocation.map((selectedPort) => {
         returnedObj.localPortLocation.map((returnedPort) => {
           if (selectedPort.locationNumber === returnedPort.locationNumber) {
-            localPortLed.push(returnedPort);
+            localPortLed.value.push(returnedPort);
           }
         });
       });
@@ -150,7 +148,7 @@ const getAllLeds = async () => {
       props.selectedObj.remotePortLocation.map((selectedPort) => {
         returnedObj.remotePortLocation.map((returnedPort) => {
           if (selectedPort.locationNumber === returnedPort.locationNumber) {
-            remotePortLed.push(returnedPort);
+            remotePortLed.value.push(returnedPort);
           }
         });
       });

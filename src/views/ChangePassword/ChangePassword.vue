@@ -20,7 +20,7 @@
             {{ $t('pageUserManagement.modal.userPassword') }}
             <info-tooltip-password />
           </template>
-          <input-password-toggle @updatePassView="updatePasswordType">
+          <input-password-toggle @update-pass-view="updatePasswordType">
             <BFormInput
               id="password"
               v-model="form.password"
@@ -42,7 +42,7 @@
           label-for="password-confirm"
           :label="$t('pageChangePassword.confirmNewPassword')"
         >
-          <input-password-toggle @updatePassView="updateConfirmPasswordType">
+          <input-password-toggle @update-pass-view="updateConfirmPasswordType">
             <BFormInput
               id="password-confirm"
               v-model="form.passwordConfirm"

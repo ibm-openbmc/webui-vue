@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import TableFilter from '@/components/Global/TableFilter.vue';

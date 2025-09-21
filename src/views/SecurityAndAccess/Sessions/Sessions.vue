@@ -70,7 +70,7 @@
               @change="
                 onChangeHeaderCheckbox(tableSessionsRef, tableHeaderCheckbox)
               "
-              @update:modelValue="toggleAll"
+              @update:model-value="toggleAll"
             >
             </BFormCheckbox>
           </template>

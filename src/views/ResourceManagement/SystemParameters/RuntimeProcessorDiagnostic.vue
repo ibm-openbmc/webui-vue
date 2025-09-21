@@ -153,7 +153,7 @@
           aria-describedby="guard-on-error-description"
           switch
           :disabled="isRpdFeatureCurrentDisabled"
-          @update:modelValue="updateGuardOnErrorState"
+          @update:model-value="updateGuardOnErrorState"
         >
           <span v-if="guardOnErrorState">
             {{ $t('global.status.enabled') }}

@@ -44,7 +44,7 @@ import i18n from '@/i18n';
 // eslint-disable-next-line vue/valid-define-emits
 const emit = defineEmits();
 
-const props = defineProps({
+defineProps({
   placeholder: {
     type: String,
     default: function () {

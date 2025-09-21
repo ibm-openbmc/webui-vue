@@ -168,7 +168,7 @@
                 {{ $t('pageUserManagement.modal.userPassword') }}
                 <info-tooltip-password />
               </template>
-              <input-password-toggle @updatePassView="updatePasswordType">
+              <input-password-toggle @update-pass-view="updatePasswordType">
                 <BFormInput
                   id="password"
                   v-model="form.password"
@@ -214,7 +214,7 @@
               label-for="password-confirmation"
             >
               <input-password-toggle
-                @updatePassView="updateConfirmPasswordType"
+                @update-pass-view="updateConfirmPasswordType"
               >
                 <BFormInput
                   id="password-confirmation"

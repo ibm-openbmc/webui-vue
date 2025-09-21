@@ -43,7 +43,7 @@
       </BFormGroup>
       <div class="login-form__section mb-3">
         <label for="password">{{ t('pageLogin.password') }}</label>
-        <input-password-toggle @updatePassView="updatePasswordType">
+        <input-password-toggle @update-pass-view="updatePasswordType">
           <BFormInput
             id="password"
             v-model="userInfo.password"
@@ -93,10 +93,8 @@
         </dl>
       </BCol>
     </BRow>
-    <!-- Uncomment the below line once env based cofiguration is done -->
-    <!-- v-if="acfUploadButton && loginPageDetails.acfWindowActive" -->
     <BButton
-      v-if="loginPageDetails.acfWindowActive"
+      v-if="acfUploadButton && loginPageDetails.acfWindowActive"
       class="mt-3 p-0 block"
       variant="link"
       @click="initModalUploadCertificate"

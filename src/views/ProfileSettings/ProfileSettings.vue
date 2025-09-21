@@ -41,7 +41,7 @@
                   })
                 }}
               </BFormText>
-              <input-password-toggle @updatePassView="updatePasswordType">
+              <input-password-toggle @update-pass-view="updatePasswordType">
                 <BFormInput
                   id="password"
                   v-model="form.newPassword"
@@ -81,7 +81,7 @@
               label-for="input-2"
             >
               <input-password-toggle
-                @updatePassView="updateConfirmPasswordType"
+                @update-pass-view="updateConfirmPasswordType"
               >
                 <BFormInput
                   id="password-confirmation"

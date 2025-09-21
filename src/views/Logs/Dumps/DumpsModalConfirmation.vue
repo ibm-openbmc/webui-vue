@@ -20,7 +20,7 @@
     </p>
     <BFormCheckbox
       v-model="confirmed"
-      @update:modelValue="v$.confirmed.$touch()"
+      @update:model-value="v$.confirmed.$touch()"
     >
       {{ $t('pageDumps.modal.initiateSystemDumpMessage4') }}
     </BFormCheckbox>

@@ -131,14 +131,14 @@ const certificateOptions = computed(() => {
       };
     });
   if (filteredCertificates.length === 1) {
-    form.certificateType === filteredCertificates?.[0]?.value;
+    form.value.certificateType === filteredCertificates?.[0]?.value;
   }
   return filteredCertificates;
 });
 const fileFormat = computed(() => {
   if (
     props.certificate?.certificate === 'ServiceLogin Certificate' ||
-    form.certificateType === 'ServiceLogin Certificate'
+    form.value.certificateType === 'ServiceLogin Certificate'
   ) {
     return '.acf';
   } else {

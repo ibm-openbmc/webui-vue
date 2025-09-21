@@ -92,7 +92,7 @@
               @change="
                 onChangeHeaderCheckbox($refs.table, tableHeaderCheckboxModel)
               "
-              @update:modelValue="toggleAll"
+              @update:model-value="toggleAll"
             >
             </b-form-checkbox>
           </template>

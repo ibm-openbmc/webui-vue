@@ -43,7 +43,7 @@
     <BRow>
       <BCol sm="6" lg="5" xl="4">
         <page-section :section-title="$t('pageDumps.initiateDump')">
-          <dumps-form @updateDumpInfo="updateDumpInfo" />
+          <dumps-form @update-dump-info="updateDumpInfo" />
         </page-section>
       </BCol>
     </BRow>
@@ -309,9 +309,6 @@ const filteredDumps = computed(() => {
     filteredDumpsByDate.value,
     activeFiltersRows.value,
   );
-});
-const isInPhypStandby = computed(() => {
-  return global.isInPhypStandby;
 });
 const hmcManaged = computed(() => {
   return resourceMemory.hmcManagedGetter;

@@ -418,12 +418,12 @@ const rules = computed(() => ({
     keyPairAlgorithm: { required },
     keyCurveId: {
       requiredIf: requiredIf(function () {
-        return form.keyPairAlgorithm === 'EC';
+        return form.value.keyPairAlgorithm === 'EC';
       }),
     },
     keyBitLength: {
       requiredIf: requiredIf(function () {
-        return form.keyPairAlgorithm === 'RSA';
+        return form.value.keyPairAlgorithm === 'RSA';
       }),
     },
   },

@@ -91,6 +91,7 @@ onMounted(() => {
   eventBus.on('loading-bar-status', (value) => {
     loadingCompleted.value = value;
   });
+  checkForUserData();
   eventBus.on('toggle-navigation', toggleIsOpen);
 });
 const checkForUserData = () => {

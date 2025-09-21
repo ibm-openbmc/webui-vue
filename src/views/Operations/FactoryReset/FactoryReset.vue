@@ -69,7 +69,7 @@
     </BForm>
 
     <!-- Modals -->
-    <modal-reset :reset-type="resetOption" @okConfirm="onOkConfirm" />
+    <modal-reset :reset-type="resetOption" @ok-confirm="onOkConfirm" />
   </BContainer>
 </template>
 

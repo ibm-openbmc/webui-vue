@@ -143,7 +143,7 @@
                     >
                       <input-password-toggle
                         data-test-id="ldap-input-togglePassword"
-                        @updatePassView="updateInputType"
+                        @update-pass-view="updateInputType"
                       >
                         <b-form-input
                           id="bind-password"

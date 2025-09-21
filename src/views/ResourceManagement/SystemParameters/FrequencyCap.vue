@@ -24,7 +24,7 @@
           aria-describedby="frequency-cap-description"
           :disabled="frequencyMax === 0 && frequencyMin === 0"
           switch
-          @update:modelValue="changeFrequencyRequestCurrent"
+          @update:model-value="changeFrequencyRequestCurrent"
         >
           <span v-if="frequencyRequestCurrentToggle">
             {{ $t('global.status.enabled') }}
