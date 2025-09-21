@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeMount, nextTick } from 'vue';
+import { ref, computed, watch, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';

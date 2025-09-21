@@ -83,7 +83,7 @@
 
 <script setup>
 import i18n from '@/i18n';
-import { computed, ref, onBeforeMount, watch, nextTick } from 'vue';
+import { computed, ref, onBeforeMount, nextTick } from 'vue';
 import { required } from '@vuelidate/validators';
 import ModalConfirmation from './DumpsModalConfirmation.vue';
 import ModalPartitionDumpConfirmation from './DumpsPartitionModalConfirmation.vue';

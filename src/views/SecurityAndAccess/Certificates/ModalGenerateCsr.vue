@@ -359,7 +359,6 @@ import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
 import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
-import eventBus from '@/eventBus';
 
 const { errorToast } = useToast();
 

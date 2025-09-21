@@ -301,7 +301,7 @@ import TableFilter from '@/components/Global/TableFilter.vue';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import ModalReset from './ResetLinkModal.vue';
 import ModalLeds from './IdentifyLedsModal.vue';
-import { onBeforeMount, onMounted, reactive, ref, computed, watch } from 'vue';
+import { onBeforeMount, onMounted, reactive, ref, computed } from 'vue';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import useTableFilter from '../../../components/Composables/useTableFilterComposable';
