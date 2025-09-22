@@ -254,23 +254,21 @@
         </BRow>
       </BContainer>
     </BForm>
-    <template>
-      <BButton variant="secondary" data-test-id="userManagement-button-cancel">
-        {{ $t('global.action.cancel') }}
-      </BButton>
-      <BButton
-        form="form-user"
-        data-test-id="userManagement-button-submit"
-        variant="primary"
-      >
-        <template v-if="newUser">
-          {{ $t('pageUserManagement.addUser') }}
-        </template>
-        <template v-else>
-          {{ $t('global.action.save') }}
-        </template>
-      </BButton>
-    </template>
+    <BButton variant="secondary" data-test-id="userManagement-button-cancel">
+      {{ $t('global.action.cancel') }}
+    </BButton>
+    <BButton
+      form="form-user"
+      data-test-id="userManagement-button-submit"
+      variant="primary"
+    >
+      <template v-if="newUser">
+        {{ $t('pageUserManagement.addUser') }}
+      </template>
+      <template v-else>
+        {{ $t('global.action.save') }}
+      </template>
+    </BButton>
   </BModal>
 </template>
 
@@ -306,6 +304,7 @@ const props = defineProps({
 
 const globalStore = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
+const uploadCertificate = stores.CertificatesStore();
 
 const modalUser = ref(false);
 eventBus.on('modal-user', () => {
@@ -369,7 +368,7 @@ const privilegeTypes = computed(() => {
 });
 
 watch(props.user, (value) => {
-  if (options.length) {
+  if (value.length) {
     if (value === null) return;
     originalUsername.value = value.username;
     form.value.username = value.username;

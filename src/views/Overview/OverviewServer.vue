@@ -106,9 +106,9 @@ const serviceLogin = computed(() => {
     expirationDateTimeStamp >= dateTimeStamp &&
     global?.isServiceLoginEnabled
   ) {
-    serviceLoginStatus.value = i18n.global.t('global.status.enabled');
+    setServiceLoginStatus(i18n.global.t('global.status.enabled'));
   } else {
-    serviceLoginStatus.value = i18n.global.t('global.status.disabled');
+    setServiceLoginStatus(i18n.global.t('global.status.disabled'));
   }
   return serviceLoginStatus.value;
 });
@@ -135,6 +135,10 @@ const serviceLoginStatusIcon = computed(() => {
   }
 });
 
+const setServiceLoginStatus = (value) => {
+  serviceLoginStatus.value = value;
+  return;
+};
 const initAssetTagModal = () => {
   openModal.value = true;
   eventBus.emit('openmodal-true');

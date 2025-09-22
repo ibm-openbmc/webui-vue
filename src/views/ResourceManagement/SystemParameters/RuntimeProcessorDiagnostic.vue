@@ -255,7 +255,9 @@ const options = computed(() => {
       value: option,
       text: option,
     }));
-  } else return;
+  } else {
+    return [];
+  }
 });
 const rpdFeatOptions = computed(() => {
   if (systemParametersStore.rpdFeatureOptionsGetter) {
@@ -263,7 +265,9 @@ const rpdFeatOptions = computed(() => {
       value: option,
       text: option,
     }));
-  } else return;
+  } else {
+    return [];
+  }
 });
 const isRpdFeatureCurrentDisabled = computed(() => {
   return systemParametersStore.rpdPolicyCurrent === 'Disabled';

@@ -150,7 +150,7 @@ const pcieSlots = computed(() => {
       slotsList.push(slot);
     }
   });
-  slotListLength.value = slotsList.length;
+  setSlotListLength(slotsList.length);
   return slotsList;
 });
 
@@ -180,6 +180,11 @@ onBeforeMount(() => {
     isBusy.value = false;
   });
 });
+
+const setSlotListLength = (value) => {
+  slotListLength.value = value;
+  return;
+};
 
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;

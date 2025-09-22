@@ -2,7 +2,7 @@
   <b-modal
     id="modal-leds"
     ref="modal"
-    v-model="props.openIdentifyLedModal"
+    v-model="openLedModal"
     hide-footer
     title="Identify LEDs"
     title-tag="h2"
@@ -11,11 +11,11 @@
     <b-row>
       <b-col>
         <dt>{{ i18n.global.t('pagePcieTopology.id') }}</dt>
-        <dd>{{ dataFormatter(props.selectedObj.id) }}</dd>
+        <dd>{{ dataFormatter(selectedObj.id) }}</dd>
       </b-col>
       <b-col>
         <dt>{{ i18n.global.t('pagePcieTopology.parentId') }}</dt>
-        <dd>{{ dataFormatter(props.selectedObj.parentId) }}</dd>
+        <dd>{{ dataFormatter(selectedObj.parentId) }}</dd>
       </b-col>
     </b-row>
 
@@ -110,6 +110,7 @@ const props = defineProps({
   },
 });
 const { successToast, errorToast } = useToast();
+const openLedModal = ref(props.openIdentifyLedModal);
 const pcieBridgeLed = ref([]);
 const ioSlotsLed = ref([]);
 const localPortLed = ref([]);
@@ -126,10 +127,10 @@ watch(
   },
 );
 
-const emitUpdate = defineEmits(['update:openIdentifyLedModal']);
-function onModalHidden() {
-  emitUpdate('update:openIdentifyLedModal', false);
-}
+const emitUpdate = defineEmits(['update:openLedModal']);
+const onModalHidden = () => {
+  emitUpdate('update:openLedModal', false);
+};
 
 const getAllLeds = async () => {
   await pcieTopologyStore

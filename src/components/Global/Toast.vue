@@ -26,21 +26,32 @@ import StatusIcon from './StatusIcon.vue';
 import { formatTime } from '../utilities/dateFilter';
 import eventBus from '@/eventBus';
 
-const { title, body, statusPassed, timestamp, refreshAction } = defineProps({
-  // eslint-disable-next-line vue/require-default-prop
-  title: String,
-  // eslint-disable-next-line vue/require-default-prop
-  body: String,
-  // eslint-disable-next-line vue/require-default-prop
-  statusPassed: String,
-  timestamp: Boolean,
-  refreshAction: Boolean,
+const props = defineProps({
+  title: {
+    type: String,
+    default: '',
+  },
+  body: {
+    type: String,
+    default: '',
+  },
+  statusPassed: {
+    type: String,
+    default: '',
+  },
+  timestamp: {
+    type: Boolean,
+    default: false,
+  },
+  refreshAction: {
+    type: Boolean,
+    default: false,
+  },
 });
-
 const showToast = ref(false);
 
 const formattedTimestamp = computed(() => {
-  if (timestamp) {
+  if (props?.timestamp) {
     return formatTime(new Date());
   } else {
     return ''; // Provide a default value when timestamp is false

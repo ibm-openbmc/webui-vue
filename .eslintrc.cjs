@@ -34,6 +34,7 @@ module.exports = {
     'vue/component-name-in-template-casing': 'off',
     'no-unused-vars': 'off',
     'vue/script-setup-uses-vars': 'error',
+    'vue/require-explicit-emits': 'off',
   },
   ignorePatterns: ['*.timestamp-*.mjs'],
   overrides: [

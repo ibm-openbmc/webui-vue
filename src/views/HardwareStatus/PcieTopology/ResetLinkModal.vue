@@ -2,10 +2,10 @@
   <b-modal
     id="modal-reset"
     ref="modal"
-    v-model="props.openResetModal"
+    v-model="openResetLinkModal"
     :title="
       i18n.global.t('pagePcieTopology.modal.resetLinkHeader', {
-        id: props.resetType,
+        id: resetType,
       })
     "
     title-tag="h2"
@@ -36,7 +36,7 @@
       >
         {{
           i18n.global.t('pagePcieTopology.modal.resetLinkHeader', {
-            id: props.resetType,
+            id: resetType,
           })
         }}
       </b-button>
@@ -67,6 +67,7 @@ const props = defineProps({
     default: false,
   },
 });
+const openResetLinkModal = ref(props.openResetModal);
 const confirm = ref(false);
 const modal = ref(null);
 const serverStatus = computed(() => {
@@ -96,11 +97,11 @@ function handleConfirm() {
   nextTick(() => modal.value.hide());
   resetConfirm();
 }
-const emitUpdate = defineEmits(['update:openResetModal']);
+const emitUpdate = defineEmits(['update:openResetLinkModal']);
 function resetConfirm() {
   confirm.value = false;
   v$.value.$reset();
-  emitUpdate('update:openResetModal', false);
+  emitUpdate('update:openResetLinkModal', false);
 }
 function resetLink() {
   pcieTopologyStore
