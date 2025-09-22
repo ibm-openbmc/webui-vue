@@ -91,11 +91,12 @@
   </b-modal>
 </template>
 <script setup>
-import { ref, defineProps, watch, computed } from 'vue';
+import { ref, defineProps, watch, computed, nextTick } from 'vue';
 import stores from '../../../store';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useToast from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
+import eventBus from '@/eventBus';
 
 const pcieTopologyStore = stores.PcieTopologyStore();
 const { dataFormatter } = useDataFormatterGlobal();
@@ -104,17 +105,17 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-  openIdentifyLedModal: {
-    type: Boolean,
-    default: false,
-  },
 });
 const { successToast, errorToast } = useToast();
-const openLedModal = ref(props.openIdentifyLedModal);
+const openLedModal = ref(false);
 const pcieBridgeLed = ref([]);
 const ioSlotsLed = ref([]);
 const localPortLed = ref([]);
 const remotePortLed = ref([]);
+
+eventBus.on('modal-leds', () => {
+  openLedModal.value = true;
+});
 
 watch(
   () => props.selectedObj,
@@ -127,9 +128,10 @@ watch(
   },
 );
 
-const emitUpdate = defineEmits(['update:openLedModal']);
 const onModalHidden = () => {
-  emitUpdate('update:openLedModal', false);
+  nextTick(() => {
+    openLedModal.value = false;
+  });
 };
 
 const getAllLeds = async () => {

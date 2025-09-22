@@ -280,15 +280,8 @@
     </b-row>
 
     <!-- Modals -->
-    <modal-reset
-      v-model:open-reset-modal="openResetModal"
-      :reset-type="resetOption"
-      :reset-uri="resetLinkUri"
-    />
-    <modal-leds
-      v-model:open-identify-led-modal="openIdentifyLedModal"
-      :selected-obj="selectedObj"
-    />
+    <modal-reset :reset-type="resetOption" :reset-uri="resetLinkUri" />
+    <modal-leds :selected-obj="selectedObj" />
   </b-container>
 </template>
 <script setup>
@@ -331,8 +324,6 @@ const { successToast, errorToast } = useToast();
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
 const fetched = ref(false);
-const openResetModal = ref(false);
-const openIdentifyLedModal = ref(false);
 const fields = reactive([
   {
     key: 'expandRow',
@@ -462,11 +453,11 @@ function checkIfInPhypStandby(checkCounter = 0) {
 function openResetLinkModal(value) {
   resetOption.value = value.id;
   resetLinkUri.value = value.resetLinkUri;
-  openResetModal.value = true;
+  eventBus.emit('modal-reset');
 }
 function openIdentifyLedsModal(value) {
   selectedObj.value = value;
-  openIdentifyLedModal.value = true;
+  eventBus.emit('modal-leds');
 }
 function savePcieTopology() {
   pcieTopologyStore

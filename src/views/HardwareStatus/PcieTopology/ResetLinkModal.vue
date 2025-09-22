@@ -49,6 +49,7 @@ import useVuelidate from '@vuelidate/core';
 import useToast from '@/components/Composables/useToastComposable';
 import { ref, computed, nextTick } from 'vue';
 import i18n from '@/i18n';
+import eventBus from '@/eventBus';
 
 const { successToast, errorToast } = useToast();
 const pcieTopologyStore = stores.PcieTopologyStore();
@@ -62,14 +63,15 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  openResetModal: {
-    type: Boolean,
-    default: false,
-  },
 });
-const openResetLinkModal = ref(props.openResetModal);
+const openResetLinkModal = ref(false);
 const confirm = ref(false);
 const modal = ref(null);
+
+eventBus.on('modal-reset', () => {
+  openResetLinkModal.value = true;
+});
+
 const serverStatus = computed(() => {
   return globalStore.serverStatus;
 });
@@ -97,11 +99,12 @@ function handleConfirm() {
   nextTick(() => modal.value.hide());
   resetConfirm();
 }
-const emitUpdate = defineEmits(['update:openResetLinkModal']);
 function resetConfirm() {
   confirm.value = false;
   v$.value.$reset();
-  emitUpdate('update:openResetLinkModal', false);
+  nextTick(() => {
+    openResetLinkModal.value = false;
+  });
 }
 function resetLink() {
   pcieTopologyStore
