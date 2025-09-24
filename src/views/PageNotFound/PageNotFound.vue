@@ -6,6 +6,7 @@
     />
   </BContainer>
 </template>
+
 <script setup>
 import PageTitle from '@/components/Global/PageTitle.vue';
 </script>

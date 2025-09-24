@@ -12,6 +12,7 @@
 import PageTitle from '@/components/Global/PageTitle.vue';
 import KvmConsole from './KvmConsole.vue';
 import { ref } from 'vue';
+
 const isFullWindow = ref(false);
 </script>
 

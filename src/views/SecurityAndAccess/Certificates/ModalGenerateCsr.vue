@@ -349,22 +349,20 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-
 import { required, requiredIf } from '@vuelidate/validators';
 import stores from '@/store';
-
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
-
 import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
 import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 
 const { errorToast } = useToast();
-
 const { getValidationState } = useVuelidateComposable();
-const openCsrModal = ref(false);
+
 const uploadCertificate = stores.CertificatesStore();
+
+const openCsrModal = ref(false);
 const initialFormState = {
   certificateType: null,
   country: null,

@@ -19,9 +19,12 @@ import IconView from '@carbon/icons-vue/es/view/20';
 import IconViewOff from '@carbon/icons-vue/es/view--off/20';
 import i18n from '@/i18n';
 import { ref } from 'vue';
+
 const isVisible = ref(false);
 const togglePasswordLabel = ref(i18n.global.t('global.ariaLabel.showPassword'));
+
 const emit = defineEmits(['updatePassView']);
+
 const toggleVisibility = () => {
   isVisible.value = !isVisible.value;
   emit('updatePassView', isVisible.value ? 'text' : 'password');

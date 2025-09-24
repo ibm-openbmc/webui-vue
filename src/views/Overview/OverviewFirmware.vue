@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <overview-card
     :title="$t('pageOverview.firmwareInformation')"

@@ -43,7 +43,7 @@
               @change="
                 onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)
               "
-              @update:model-value="toggleAll"
+              @update:modelValue="toggleAll"
             >
             </BFormCheckbox>
           </template>
@@ -52,7 +52,18 @@
               v-model="
                 snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected
               "
+              v-model="
+                snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected
+              "
               :data-test-id="`snmpAlerts-checkbox-selectRow-${row.index}`"
+              @change="
+                toggleSelectRowByIpAddress(
+                  tableRef,
+                  row.index,
+                  snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected,
+                  row.item,
+                )
+              "
               @change="
                 toggleSelectRowByIpAddress(
                   tableRef,
@@ -90,15 +101,18 @@
       :title="deleteTitle"
       :ok-title="okTitle"
       ok-variant="danger"
+      ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk(deleteType)"
     >
       <p>
         {{ deleteMessage }}
+        {{ deleteMessage }}
       </p>
     </BModal>
   </BContainer>
 </template>
+
 <script setup>
 import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -115,14 +129,6 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
 import stores from '../../../store';
 import eventBus from '@/eventBus';
 
-const snmpToDelete = ref('');
-const openDeleteModal = ref(false);
-const okTitle = ref('');
-const deleteTitle = ref('');
-const deleteType = ref('');
-const deleteMessage = ref('');
-const tableRef = ref(null);
-const isAllSelected = ref(false);
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToastComposable();
 const {
@@ -134,20 +140,17 @@ const {
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
+
 const snmpAlertsStore = stores.SnmpAlertsStore();
 
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-onBeforeMount(() => {
-  eventBus.on('clear-selected', () => {
-    snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
-      singleConnection.isSelected = false;
-    });
-    clearSelectedRows(tableRef);
-  });
-});
+const snmpToDelete = ref('');
+const openDeleteModal = ref(false);
+const okTitle = ref('');
+const deleteTitle = ref('');
+const deleteType = ref('');
+const deleteMessage = ref('');
+const tableRef = ref(null);
+const isAllSelected = ref(false);
 
 const fields = ref([
   {
@@ -178,6 +181,24 @@ const tableHeaderCheckboxModelValue = ref(tableHeaderCheckboxModel);
 const tableHeaderCheckboxIndeterminateValue = ref(
   tableHeaderCheckboxIndeterminate,
 );
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
+      singleConnection.isSelected = false;
+    });
+    clearSelectedRows(tableRef);
+  });
+});
+
+onMounted(() => {
+  startLoader();
+  snmpAlertsStore.getSnmpDetails().finally(() => endLoader());
+});
 
 const allSnmpDetails = computed(() => {
   return snmpAlertsStore.allSnmpDetailsGetter;
@@ -213,10 +234,7 @@ const tableItems = computed(() => {
     };
   });
 });
-onMounted(() => {
-  startLoader();
-  snmpAlertsStore.getSnmpDetails().finally(() => endLoader());
-});
+
 const onModalOk = ({ ipAddress, port }) => {
   const protocolIpAddress = 'snmp://' + ipAddress;
   const destination = port ? protocolIpAddress + ':' + port : protocolIpAddress;

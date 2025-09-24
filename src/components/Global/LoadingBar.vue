@@ -72,6 +72,7 @@ const hideLoadingBar = () => {
   isLoadingComplete.value = true;
 };
 </script>
+
 <style lang="scss" scoped>
 .progress {
   position: absolute;

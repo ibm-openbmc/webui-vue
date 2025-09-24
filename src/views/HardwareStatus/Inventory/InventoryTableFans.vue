@@ -173,8 +173,15 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
-
 const { expandRowLabel } = useTableRowExpandComposable();
+const { successToast, errorToast } = useToast();
+const { toggleRow } = useTableRowExpandComposable();
+const { t } = useI18n();
+const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
+
+const fanStore = stores.FanStore();
+const globalStore = stores.GlobalStore();
+
 const props = defineProps({
   chassis: {
     type: String,
@@ -182,13 +189,8 @@ const props = defineProps({
   },
 });
 
-const fanStore = stores.FanStore();
-const globalStore = stores.GlobalStore();
 const isBusy = ref(false);
-const { successToast, errorToast } = useToast();
-const { toggleRow } = useTableRowExpandComposable();
-const { t } = useI18n();
-const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
+const searchTotalFilteredRows = ref(0);
 
 const fields = reactive([
   {
@@ -230,7 +232,13 @@ const fields = reactive([
   },
 ]);
 
-const searchTotalFilteredRows = ref(0);
+onBeforeMount(() => {
+  fanStore.getAllFans({ uri: props.chassis }).finally(() => {
+    // Emit initial data fetch complete to parent component
+    eventBus.emit('hardware-status-fans-complete');
+    isBusy.value = false;
+  });
+});
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
@@ -279,18 +287,9 @@ watch(
   },
 );
 
-onBeforeMount(() => {
-  fanStore.getAllFans({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-fans-complete');
-    isBusy.value = false;
-  });
-});
-
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
-
 function toggleIdentifyLedValue(row) {
   fanStore
     .updateIdentifyLedValue({ uri: row.uri, identifyLed: row.identifyLed })

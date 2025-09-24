@@ -237,6 +237,7 @@ const initIpv6DefaultGatewayModal = () => {
   eventBus.emit('modal-add-ipv6-default-gateway');
 };
 </script>
+
 <style lang="scss" scoped>
 .text-right {
   text-align: right;

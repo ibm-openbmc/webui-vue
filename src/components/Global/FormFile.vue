@@ -74,7 +74,9 @@ function clearFile() {
   file.value = null;
   emit('input', file.value);
 }
+
 const file = ref(null);
+
 const isSecondary = computed(() => {
   return props.variant === 'secondary';
 });

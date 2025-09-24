@@ -145,6 +145,7 @@ import useTableFilterComposable from '@/components/Composables/useTableFilterCom
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import eventBus from '@/eventBus';
+
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
 const {
@@ -159,6 +160,10 @@ const {
 const { dataFormatter } = useDataFormatterGlobal();
 const { statusIconValue } = useDataFormatterGlobal();
 const { getFilteredTableData } = useTableFilterComposable();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
+const sensorsStore = SensorsStore();
+
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
 const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
@@ -169,8 +174,7 @@ const activeFiltersRows = ref([]);
 const isBusy = ref(true);
 const isAllSelected = ref(false);
 const searchFilterInput = ref('');
-const sensorsStore = SensorsStore();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
 const fields = ref([
   {
     key: 'checkbox',
@@ -204,9 +208,11 @@ const tableFilters = ref([
     ],
   },
 ]);
+
 onBeforeRouteLeave(() => {
   hideLoader();
 });
+
 onBeforeMount(() => {
   eventBus.on('clear-selected', () => {
     sensorsStore?.sensors?.map((singleSensor) => {
@@ -215,6 +221,7 @@ onBeforeMount(() => {
     clearSelectedRows(tableRef);
   });
 });
+
 onMounted(() => {
   startLoader();
   sensorsStore.getAllSensors().finally(() => {
@@ -222,6 +229,7 @@ onMounted(() => {
     endLoader();
   });
 });
+
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
@@ -236,6 +244,7 @@ const filteredSensors = computed(() => {
   }
   return [];
 });
+
 function toggleAll(checked) {
   sensorsStore?.sensors?.map((singleSensor) => {
     singleSensor.isSelected = checked;
@@ -264,6 +273,7 @@ function exportFileNameByDate() {
   return i18n.global.t('pageSensors.exportFilePrefix') + date;
 }
 </script>
+
 <style lang="scss" scoped>
 #table-sensors {
   td .btn-link {

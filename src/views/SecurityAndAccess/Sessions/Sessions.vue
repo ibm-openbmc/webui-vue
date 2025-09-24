@@ -167,6 +167,7 @@ import TableToolbar from '@/components/Global/TableToolbar.vue';
 import Alert from '@/components/Global/Alert.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
+
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
@@ -179,8 +180,10 @@ const {
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
-const sessionsStore = stores.SessionsStore();
 const Toast = useToastComposable();
+
+const sessionsStore = stores.SessionsStore();
+
 const tableSessionsRef = ref(null);
 const isBusy = ref(true);
 const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
@@ -222,8 +225,25 @@ const batchActions = ref([
     label: i18n.global.t('pageSessions.action.disconnect'),
   },
 ]);
+
 onBeforeRouteLeave(() => {
   hideLoader();
+});
+
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    sessionsStore?.allConnectionsGetter?.map((singleConnection) => {
+      singleConnection.isSelected = false;
+    });
+    clearSelectedRows(tableSessionsRef);
+  });
+});
+onMounted(() => {
+  startLoader();
+  sessionsStore.getSessionsData().finally(() => {
+    isBusy.value = false;
+    endLoader();
+  });
 });
 
 const filteredRows = computed(() => {
@@ -245,21 +265,7 @@ const allConnections = computed(() => {
     };
   });
 });
-onBeforeMount(() => {
-  eventBus.on('clear-selected', () => {
-    sessionsStore?.allConnectionsGetter?.map((singleConnection) => {
-      singleConnection.isSelected = false;
-    });
-    clearSelectedRows(tableSessionsRef);
-  });
-});
-onMounted(() => {
-  startLoader();
-  sessionsStore.getSessionsData().finally(() => {
-    isBusy.value = false;
-    endLoader();
-  });
-});
+
 const onFiltered = (filteredItems) => {
   searchTotalFilteredRows.value = filteredItems.length;
 };
@@ -313,6 +319,7 @@ const toggleAll = (checked) => {
   isAllSelected.value = checked;
 };
 </script>
+
 <style lang="scss" scoped>
 #table-session-logs {
   td .btn-link {

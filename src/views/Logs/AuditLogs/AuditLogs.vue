@@ -153,10 +153,16 @@ import eventBus from '@/eventBus';
 
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
-const auditLogsStore = stores.AuditLogsStore();
 const { successToast, infoToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
+const { expandRowLabel } = useTableRowExpandComposable();
+const { toggleRowDetails } = useTableRowExpandComposable();
+const { getFilteredTableData, getFilteredTableDataByDate } =
+  useTableFilterComposable();
+
+const auditLogsStore = stores.AuditLogsStore();
+
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
 const isBusy = ref(true);
@@ -187,10 +193,6 @@ const fields = ref([
     label: i18n.global.t('pageAuditLogs.table.res'),
   },
 ]);
-const { expandRowLabel } = useTableRowExpandComposable();
-const { toggleRowDetails } = useTableRowExpandComposable();
-const { getFilteredTableData, getFilteredTableDataByDate } =
-  useTableFilterComposable();
 const searchTotalFilteredRows = ref(0);
 const searchFilterInput = ref('');
 const activeFilters = ref([]);
@@ -230,7 +232,6 @@ const filteredLogs = computed(() => {
   }
   return [];
 });
-
 const allLogs = computed(() => {
   return auditLogsStore.allAuditLogsGetter.map((auditLogs) => {
     return {
@@ -249,16 +250,13 @@ function onChangeSearch(event) {
 const onClearSearch = () => {
   searchFilterInput.value = '';
 };
-
 const toggleRow = (row) => {
   row.item.toggleDetails = !row.item.toggleDetails;
   toggleRowDetails(row);
 };
-
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
-
 const downloadFile = (data) => {
   const decodedData = atob(data);
   let date = new Date();
@@ -279,7 +277,6 @@ const downloadFile = (data) => {
   element.click();
   document.body.removeChild(element);
 };
-
 const downloadEventLogs = async (value) => {
   const auditLogsData = [];
   infoToast(i18n.global.t('pageAuditLogs.toast.infoStartDownload'));
@@ -304,6 +301,7 @@ const downloadEventLogs = async (value) => {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 #table-audit-logs {
   td .btn-link {

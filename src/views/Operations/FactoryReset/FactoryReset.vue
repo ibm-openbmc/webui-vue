@@ -83,17 +83,21 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import stores from '@/store';
 import eventBus from '@/eventBus';
 
+const toast = useToastComposable();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
 const global = stores.GlobalStore();
 const authentication = stores.AuthenticationStore();
 const factoryReset = stores.FactoryResetStore();
-const toast = useToastComposable();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
 const resetOption = ref('resetBios');
-const serverStatus = computed(() => {
-  return global.serverStatus;
-});
+
 onMounted(() => {
   hideLoader();
+});
+
+const serverStatus = computed(() => {
+  return global.serverStatus;
 });
 
 const onResetSubmit = () => {
@@ -133,6 +137,7 @@ const onResetToDefaultsConfirm = () => {
     .finally(() => endLoader());
 };
 </script>
+
 <style scoped>
 label {
   color: #666;

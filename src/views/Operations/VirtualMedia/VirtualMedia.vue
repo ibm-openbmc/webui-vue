@@ -110,9 +110,11 @@ import { computed, ref } from 'vue';
 import FormFile from '@/components/Global/FormFile.vue';
 import { VirtualMediaStore } from '../../../store/modules/Operations/VirtualMediaStore';
 // import { AuthenticationStore } from '../../../store/modules/Authentication/AuthenticationStore';
+
 const virtualMediaStore = VirtualMediaStore();
 // const authenticationStore = AuthenticationStore();
 const { t } = useI18n();
+
 // const proxyDevFile = ref(null);
 // let modalConfigureConnectionData = reactive(null);
 const loadImageFromExternalServer = ref(

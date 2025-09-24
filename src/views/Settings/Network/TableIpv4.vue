@@ -334,6 +334,7 @@ const operationCancel = () => {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .text-right {
   text-align: right;

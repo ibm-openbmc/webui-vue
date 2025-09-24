@@ -142,7 +142,9 @@
                       label-for="bind-password"
                     >
                       <input-password-toggle
+                      <input-password-toggle
                         data-test-id="ldap-input-togglePassword"
+                        @updatePassView="updateInputType"
                         @update-pass-view="updateInputType"
                       >
                         <b-form-input
@@ -266,8 +268,21 @@ const { getValidationState } = useVuelidateComposable();
 const { hideLoader, startLoader, endLoader, loading } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 
+const ldapStore = stores.LdapStore();
+const certificatesStore = stores.CertificatesStore();
+
+const isPasswordVisible = ref(false);
+const inputType = ref('password');
+
 onBeforeRouteLeave(() => {
   hideLoader();
+});
+
+onBeforeMount(() => {
+  startLoader();
+  ldapStore.getAccountSettings().finally(() => endLoader());
+  certificatesStore.getCertificates().finally(() => endLoader());
+  setFormValues();
 });
 
 const initialFormState = {
@@ -282,6 +297,7 @@ const initialFormState = {
   groupIdAttribute: '',
 };
 const formLdap = reactive({ ...initialFormState });
+
 const rules = computed(() => ({
   formLdap: {
     ldapAuthenticationEnabled: {},
@@ -348,7 +364,6 @@ const ldapCertificateExpiration = computed(() => {
   if (ldapCertificate === undefined) return null;
   return ldapCertificate.validUntil;
 });
-
 const ldapProtocol = computed(() => {
   return formLdap.secureLdapEnabled ? 'ldaps://' : 'ldap://';
 });
@@ -366,12 +381,14 @@ watch(
     formLdap.activeDirectoryEnabled = val;
     setFormValues();
   },
+  },
 );
 
 watch(
   () => caCertificateExpiration.value,
   () => {
     setFormValues();
+  },
   },
 );
 
@@ -380,14 +397,8 @@ watch(
   () => {
     setFormValues();
   },
+  },
 );
-
-onBeforeMount(() => {
-  startLoader();
-  ldapStore.getAccountSettings().finally(() => endLoader());
-  certificatesStore.getCertificates().finally(() => endLoader());
-  setFormValues();
-});
 
 function setFormValues(serviceType) {
   if (!serviceType) {
@@ -453,6 +464,8 @@ function onChangeServiceType(event) {
   const isActiveDirectoryEnabled = event.target.value;
   const serviceType =
     isActiveDirectoryEnabled === 'true' ? activeDirectory.value : ldap.value;
+  const serviceType =
+    isActiveDirectoryEnabled === 'true' ? activeDirectory.value : ldap.value;
   // Set form values according to user selected
   // service type
   setFormValues(serviceType);
@@ -471,8 +484,11 @@ function onChangeldapAuthenticationEnabled(event) {
 }
 function updateInputType(passwordType) {
   inputType.value = passwordType;
+function updateInputType(passwordType) {
+  inputType.value = passwordType;
 }
 </script>
+
 <style lang="scss" scoped>
 .no-underline-link {
   ::v-deep a {

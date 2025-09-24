@@ -108,6 +108,7 @@
     </BForm>
     <template #modal-footer>
       <BButton variant="secondary" data-test-id="userManagement-button-cancel">
+      <BButton variant="secondary" data-test-id="userManagement-button-cancel">
         {{ $t('global.action.cancel') }}
       </BButton>
       <BButton
@@ -134,8 +135,9 @@ import {
 } from '@vuelidate/validators';
 
 const { getValidationState } = useVuelidateComposable();
+
 const emitUpdate = defineEmits(['ok']);
-const modalSettings = ref(false);
+
 eventBus.on('modal-settings', () => {
   modalSettings.value = true;
   form.value.lockoutThreshold = props.settings?.lockoutThreshold;
@@ -149,11 +151,14 @@ const props = defineProps({
     required: true,
   },
 });
+
+const modalSettings = ref(false);
 const form = ref({
   lockoutThreshold: 0,
   unlockMethod: 0,
   lockoutDuration: null,
 });
+
 const rules = {
   form: {
     lockoutThreshold: {
@@ -194,12 +199,28 @@ function onOk(bvModalEvt) {
   bvModalEvt.preventDefault();
   handleSubmit();
 }
+function onOk(bvModalEvt) {
+  bvModalEvt.preventDefault();
+  handleSubmit();
+}
 
 const closeModal = () => {
   v$.value.$reset();
   modalSettings.value = false;
 };
+const closeModal = () => {
+  v$.value.$reset();
+  modalSettings.value = false;
+};
 
+function resetForm() {
+  form.value.lockoutThreshold = props.settings.lockoutThreshold;
+  form.value.unlockMethod = props.settings.lockoutDuration ? 1 : 0;
+  form.value.lockoutDuration = props.settings.lockoutDuration
+    ? props.settings.lockoutDuration
+    : null;
+  v$.value.$reset();
+}
 function resetForm() {
   form.value.lockoutThreshold = props.settings.lockoutThreshold;
   form.value.unlockMethod = props.settings.lockoutDuration ? 1 : 0;

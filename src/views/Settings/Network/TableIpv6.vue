@@ -132,7 +132,6 @@ const props = defineProps({
 });
 
 const openModal = ref(false);
-
 const modalMessage = ref('');
 const modalPayload = ref({
   newIpv6Array: null,
@@ -341,6 +340,7 @@ const changeIpv6AutoConfigState = (state) => {
     .catch(({ message }) => errorToast(message));
 };
 </script>
+
 <style lang="scss" scoped>
 .text-right {
   text-align: right;

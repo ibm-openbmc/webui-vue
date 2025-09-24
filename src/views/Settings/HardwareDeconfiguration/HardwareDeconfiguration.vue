@@ -53,11 +53,13 @@ import ProcessorCores from './ProcessorCores.vue';
 import MemoryDimms from './MemoryDimms.vue';
 import { onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
+
 const { startLoader, hideLoader } = useLoadingBar();
 
 onBeforeRouteLeave(() => {
   hideLoader();
 });
+
 onBeforeMount(() => {
   startLoader();
 });

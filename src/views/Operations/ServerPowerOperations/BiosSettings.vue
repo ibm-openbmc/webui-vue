@@ -783,6 +783,17 @@ const ibmiConsoleItems = ref([
   },
 ]);
 
+onBeforeMount(() => {
+  bootSettingsStore.fetchLocationCodes();
+  setTimeout(() => {
+    resourceMemoryStore.getHmcManaged();
+  }, 5000);
+  currentOperatingMode.value = attributeKeys.value['pvm_system_operating_mode'];
+  if (currentOperatingMode.value === manualMode.value) {
+    onChangeSystemOpsMode(manualMode.value);
+  }
+});
+
 const hmcManaged = computed(() => {
   return resourceMemoryStore.hmcManagedGetter;
 });
@@ -959,18 +970,8 @@ watch(
   },
   { deep: true },
 );
-
-onBeforeMount(() => {
-  bootSettingsStore.fetchLocationCodes();
-  setTimeout(() => {
-    resourceMemoryStore.getHmcManaged();
-  }, 5000);
-  currentOperatingMode.value = attributeKeys.value['pvm_system_operating_mode'];
-  if (currentOperatingMode.value === manualMode.value) {
-    onChangeSystemOpsMode(manualMode.value);
-  }
-});
 </script>
+
 <style lang="scss" scoped>
 caption {
   padding-top: 0.75rem;

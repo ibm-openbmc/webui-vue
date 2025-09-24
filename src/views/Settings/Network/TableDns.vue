@@ -145,6 +145,7 @@ const initDnsModal = () => {
   eventBus.emit('modal-dns');
 };
 </script>
+
 <style lang="scss" scoped>
 :deep(.text-right) {
   text-align: right;

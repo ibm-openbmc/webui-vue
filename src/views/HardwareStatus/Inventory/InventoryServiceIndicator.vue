@@ -93,6 +93,7 @@
     </div>
   </page-section>
 </template>
+
 <script setup>
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import PageSection from '@/components/Global/PageSection.vue';
@@ -102,9 +103,18 @@ import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 
 const { successToast, errorToast } = useToast();
+
 const globalStore = stores.GlobalStore();
 const systemStore = stores.SystemStore();
+
 const isLampTestEditable = ref(true);
+
+onBeforeMount(() => {
+  return systemStore.getSystem().finally(() => {
+    // Emit initial data fetch complete to parent component
+    eventBus.emit('hardware-status-service-complete');
+  });
+});
 
 const systems = computed(() => {
   let systemData = systemStore.getSystems[0];
@@ -114,6 +124,7 @@ const systems = computed(() => {
 const serverStatus = computed(() => {
   return globalStore.serverStatus;
 });
+
 const powerStatus = computed(() => {
   if (serverStatus.value === 'unreachable') {
     return `global.status.off`;
@@ -132,13 +143,6 @@ watch(
     }
   },
 );
-
-onBeforeMount(() => {
-  return systemStore.getSystem().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-service-complete');
-  });
-});
 
 function toggleIdentifyLedSwitch(ledState) {
   systemStore
@@ -167,4 +171,5 @@ function toggleLampTestSwitch(lampTestState) {
     .catch(({ message }) => errorToast(message));
 }
 </script>
+
 <style lang="scss" scoped></style>

@@ -170,7 +170,6 @@ import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import Search from '@/components/Global/Search.vue';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-
 import {
   defineProps,
   ref,
@@ -187,13 +186,14 @@ import { BFormCheckbox } from 'bootstrap-vue-next';
 
 const { t } = useI18n();
 const { successToast, errorToast } = useToast();
-const powerSupplyStore = stores.PowerSupplyStore();
-const globalStore = stores.GlobalStore();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { statusIconValue } = useDataFormatterGlobal();
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
+
+const powerSupplyStore = stores.PowerSupplyStore();
+const globalStore = stores.GlobalStore();
 
 const props = defineProps({
   chassis: {
@@ -251,6 +251,14 @@ const filteredRows = computed(() => {
     : powerSupplyStore.powerSuppliesGetter.length;
 });
 
+onBeforeMount(() => {
+  powerSupplyStore.getAllPowerSupplies({ uri: props.chassis }).finally(() => {
+    // Emit initial data fetch complete to parent component
+    eventBus.emit('hardware-status-power-supplies-complete');
+    isBusy.value = false;
+  });
+});
+
 const serverStatus = computed(() => {
   if (props.chassis.endsWith('chassis')) {
     return false;
@@ -260,7 +268,6 @@ const serverStatus = computed(() => {
     return false;
   }
 });
-
 const isPoweredOff = computed(() => {
   if (globalStore.serverStatus === 'off') {
     return true;
@@ -268,7 +275,6 @@ const isPoweredOff = computed(() => {
     return false;
   }
 });
-
 const isIoExpansionChassis = computed(() => {
   if (props.chassis.endsWith('chassis')) {
     return false;
@@ -276,7 +282,6 @@ const isIoExpansionChassis = computed(() => {
     return true;
   }
 });
-
 const powerSupplies = computed(() => {
   return powerSupplyStore.powerSuppliesGetter;
 });
@@ -292,18 +297,9 @@ watch(
   },
 );
 
-onBeforeMount(() => {
-  powerSupplyStore.getAllPowerSupplies({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-power-supplies-complete');
-    isBusy.value = false;
-  });
-});
-
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
-
 function toggleIdentifyLedValue(row) {
   powerSupplyStore
     .updateIdentifyLedValue({ uri: row.uri, identifyLed: row.identifyLed })
@@ -344,6 +340,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .info-icon {
   width: 25px !important;

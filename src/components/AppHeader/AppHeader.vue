@@ -1,4 +1,3 @@
-<!-- Work Requird -->
 <template>
   <div>
     <header id="page-header">

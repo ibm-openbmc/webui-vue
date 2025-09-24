@@ -82,6 +82,7 @@ import stores from '@/store';
 const { getValidationState } = useVuelidateComposable();
 const { successToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
+
 const global = stores.GlobalStore();
 const licenseStore = stores.LicenseStore();
 
@@ -89,7 +90,17 @@ const licenseKey = ref('');
 const maxLengthVal = ref(34);
 const accessKeyLink = ref('www.ibm.com/servers/eserver/ess');
 
+onMounted(() => {
+  fetchInfo();
+});
+
 const rules = computed(() => ({
+  licenseKey: {
+    required,
+    minLength: minLength(maxLengthVal.value),
+    maxLength: maxLength(maxLengthVal.value),
+  },
+}));
   licenseKey: {
     required,
     minLength: minLength(maxLengthVal.value),
@@ -99,6 +110,8 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, { licenseKey });
 
 const isInPhypStandby = computed(() => {
+  return global.isInPhypStandby();
+});
   return global.isInPhypStandby();
 });
 const isActivationDisabled = computed(() => {
@@ -112,10 +125,6 @@ const isActivationDisabled = computed(() => {
   }
 });
 
-onMounted(() => {
-  fetchInfo();
-});
-
 const submitForm = () => {
   v$.value.$touch();
   if (!v$.value.$invalid) {
@@ -127,7 +136,23 @@ const submitForm = () => {
       .finally(() => endLoader());
   }
 };
+  v$.value.$touch();
+  if (!v$.value.$invalid) {
+    startLoader();
+    licenseStore
+      .activateLicense(licenseKey.value)
+      .then((success) => successToast(success).then(() => fetchInfo()))
+      .catch(({ message }) => errorToast(message))
+      .finally(() => endLoader());
+  }
+};
 const fetchInfo = () => {
+  Promise.all([
+    global.getSystemInfo(),
+    global.getBootProgress(),
+    licenseStore.getLicenses(),
+  ]);
+};
   Promise.all([
     global.getSystemInfo(),
     global.getBootProgress(),

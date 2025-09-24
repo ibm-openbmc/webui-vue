@@ -97,22 +97,25 @@ import { useI18n } from 'vue-i18n';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import { BLink } from 'bootstrap-vue-next';
 
+const { t } = useI18n();
+const searchTotalFilteredRows = ref(0);
+const { successToast, errorToast } = useToast();
+const { searchFilterInput, onChangeSearch, onClearSearch } =
+  useSearchFilterComposable();
+const { dataFormatter } = useDataFormatterGlobal();
+
+const pcieSlotsStore = stores.PcieSlotsStore();
+const globalStore = stores.GlobalStore();
+
 const props = defineProps({
   chassis: {
     type: String,
     default: '',
   },
 });
-const { t } = useI18n();
-const pcieSlotsStore = stores.PcieSlotsStore();
-const globalStore = stores.GlobalStore();
-const isBusy = ref(true);
-const searchTotalFilteredRows = ref(0);
-const { successToast, errorToast } = useToast();
 
-const { searchFilterInput, onChangeSearch, onClearSearch } =
-  useSearchFilterComposable();
-const { dataFormatter } = useDataFormatterGlobal();
+const isBusy = ref(true);
+const slotListLength = ref(0);
 
 const fields = reactive([
   {
@@ -135,12 +138,18 @@ const fields = reactive([
   },
 ]);
 
+onBeforeMount(() => {
+  pcieSlotsStore.getPcieSlotsInfo({ uri: props.chassis }).finally(() => {
+    eventBus.emit('hardware-status-pcie-slots-complete');
+    isBusy.value = false;
+  });
+});
+
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
     : slotListLength.value;
 });
-const slotListLength = ref(0);
 
 const pcieSlots = computed(() => {
   let slotsList = [];
@@ -174,18 +183,6 @@ watch(
   },
 );
 
-onBeforeMount(() => {
-  pcieSlotsStore.getPcieSlotsInfo({ uri: props.chassis }).finally(() => {
-    eventBus.emit('hardware-status-pcie-slots-complete');
-    isBusy.value = false;
-  });
-});
-
-const setSlotListLength = (value) => {
-  slotListLength.value = value;
-  return;
-};
-
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
@@ -205,6 +202,7 @@ function hasIdentifyLed(identifyLed) {
   return typeof identifyLed === 'boolean';
 }
 </script>
+
 <style lang="scss" scoped>
 .no-underline-link {
   ::v-deep a {

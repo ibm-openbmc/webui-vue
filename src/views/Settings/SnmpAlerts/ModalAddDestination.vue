@@ -7,6 +7,14 @@
     @ok="onOk"
     @hidden="resetForm"
   >
+  <BModal
+    id="add-destination"
+    v-model="modal"
+    :title="$t('pageSnmpAlerts.modal.addSnmpDestinationTitle')"
+    :ok-title="$t('pageSnmpAlerts.addDestination')"
+    @ok="onOk"
+    @hidden="resetForm"
+  >
     <BForm id="form-destination">
       <BContainer>
         <BRow>
@@ -70,6 +78,7 @@
     </BForm>
   </BModal>
 </template>
+
 <script setup>
 import { ref, nextTick, computed } from 'vue';
 import { required, minValue, maxValue } from '@vuelidate/validators';
@@ -78,16 +87,20 @@ import useVuelidateComposable from '@/components/Composables/useVuelidateComposa
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import eventBus from '@/eventBus';
 
+const { getValidationState } = useVuelidateComposable();
+
 eventBus.on('add-destination', () => {
   modal.value = true;
 });
-const { getValidationState } = useVuelidateComposable();
+
 const emit = defineEmits(['ok']);
+
 const modal = ref(false);
 const form = ref({
   ipaddress: null,
   port: null,
 });
+
 const rules = computed(() => ({
   form: {
     ipAddress: {
@@ -127,7 +140,33 @@ const onOk = (bvModalEvt) => {
   bvModalEvt.preventDefault();
   handleSubmit();
 };
+const handleSubmit = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('ok', {
+    ipAddress: form.value.ipAddress,
+    port: form.value.port,
+  });
+  closeModal();
+};
+const closeModal = () => {
+  nextTick(() => {
+    modal.value = false;
+  });
+};
+const resetForm = () => {
+  form.value.ipAddress = '';
+  form.value.port = '';
+  v$.value.$reset();
+  eventBus.emit('hidden');
+};
+const onOk = (bvModalEvt) => {
+  // prevent modal close
+  bvModalEvt.preventDefault();
+  handleSubmit();
+};
 </script>
+
 <style lang="scss" scoped>
 .info-icon {
   width: 20px !important;

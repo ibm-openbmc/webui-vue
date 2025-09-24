@@ -162,15 +162,6 @@ import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 
-const globalStore = stores.GlobalStore();
-const fabricAdaptersStore = stores.FabricAdaptersStore();
-const props = defineProps({
-  chassis: {
-    type: String,
-    default: '',
-  },
-});
-const isBusy = ref(false);
 const { t } = useI18n();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { searchFilterInput, onChangeSearch, onClearSearch } =
@@ -178,6 +169,17 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
 const { toggleRow } = useTableRowExpandComposable();
 const { successToast, errorToast } = useToast();
 
+const globalStore = stores.GlobalStore();
+const fabricAdaptersStore = stores.FabricAdaptersStore();
+
+const props = defineProps({
+  chassis: {
+    type: String,
+    default: '',
+  },
+});
+
+const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
 const fields = reactive([
   {
@@ -218,6 +220,19 @@ const fields = reactive([
     formatter: dataFormatter,
   },
 ]);
+
+onBeforeMount(() => {
+  fabricAdaptersStore
+    .getFabricAdaptersInfo({ uri: props.chassis })
+    .finally(() => {
+      eventBus.emit('hardware-status-fabric-adapters-complete');
+      isBusy.value = false;
+    });
+});
+
+function onFiltered(filteredItems) {
+  searchTotalFilteredRows.value = filteredItems.length;
+}
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
@@ -268,18 +283,6 @@ watch(
   },
 );
 
-onBeforeMount(() => {
-  fabricAdaptersStore
-    .getFabricAdaptersInfo({ uri: props.chassis })
-    .finally(() => {
-      eventBus.emit('hardware-status-fabric-adapters-complete');
-      isBusy.value = false;
-    });
-});
-function onFiltered(filteredItems) {
-  searchTotalFilteredRows.value = filteredItems.length;
-}
-
 function toggleIdentifyLedValue(row) {
   fabricAdaptersStore
     .updateIdentifyLedValue({
@@ -325,6 +328,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .text-right {
   text-align: right;

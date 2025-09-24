@@ -102,9 +102,10 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 
 const { startLoader, endLoader } = useLoadingBar();
-const Toast = useToastComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { getValidationState } = useVuelidateComposable();
+const Toast = useToastComposable();
+
 const systemParametersStore = stores.SystemParametersStore();
 
 defineProps({
@@ -116,6 +117,16 @@ defineProps({
 
 const isDisabled = ref(true);
 const frequencyValue = ref(0);
+
+onBeforeMount(() => {
+  startLoader();
+  systemParametersStore
+    .getFrequencyCap()
+    .then(() => {
+      frequencyValue.value = systemParametersStore.frequencyRequestGetter;
+    })
+    .finally(() => endLoader());
+});
 
 const frequencyMax = computed(() => systemParametersStore.frequencyMaxGetter);
 const frequencyMin = computed(() => systemParametersStore.frequencyMinGetter);
@@ -149,15 +160,6 @@ const rules = computed(() => ({
 }));
 const v$ = useVuelidate(rules, { frequencyValue });
 
-onBeforeMount(() => {
-  startLoader();
-  systemParametersStore
-    .getFrequencyCap()
-    .then(() => {
-      frequencyValue.value = systemParametersStore.frequencyRequestGetter;
-    })
-    .finally(() => endLoader());
-});
 const changeFrequencyRequestCurrent = (state) => {
   if (state) {
     frequencyValue.value = frequencyMax.value;

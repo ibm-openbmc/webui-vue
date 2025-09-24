@@ -326,10 +326,9 @@ import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants.js';
 import stores from '@/store';
 
 const { getValidationState } = useVuelidateComposable();
+const { successToast, errorToast } = useToast();
 
 const networkSettingsStore = stores.NetworkSettingsStore();
-
-const { successToast, errorToast } = useToast();
 
 const modal = ref(false);
 
@@ -354,6 +353,10 @@ const properties = ref({
   pvm_ibmi_iscsi_target_port: '',
   chapName: '',
   chapSecret: '',
+});
+
+onBeforeMount(() => {
+  getCurrentValues();
 });
 
 const attributesList = computed(() => {
@@ -814,8 +817,4 @@ function generateErrorMsg(value) {
     );
   }
 }
-
-onBeforeMount(() => {
-  getCurrentValues();
-});
 </script>

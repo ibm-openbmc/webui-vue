@@ -56,11 +56,11 @@
             @input="v$.password.$touch()"
           >
           </BFormInput>
-          <BFormInvalidFeedback id="password-required" role="alert">
-            <template v-if="v$.password.required">
-              {{ t('global.form.fieldRequired') }}
-            </template>
-          </BFormInvalidFeedback>
+            <BFormInvalidFeedback id="password-required" role="alert">
+              <template v-if="v$.password.required">
+                {{ t('global.form.fieldRequired') }}
+              </template>
+            </BFormInvalidFeedback>
         </input-password-toggle>
       </div>
       <BButton
@@ -78,6 +78,8 @@
         <dl>
           <dt>{{ t('pageLogin.dateAndTime') }}</dt>
           <dd v-if="loginPageDetails.dateTime">
+            {{ $filters.formatDate(loginPageDetails.dateTime) }}
+            {{ $filters.formatTime(loginPageDetails.dateTime) }}
             {{ $filters.formatDate(loginPageDetails.dateTime) }}
             {{ $filters.formatTime(loginPageDetails.dateTime) }}
           </dd>
@@ -126,25 +128,33 @@ import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import ModalUploadCertificate from './ModalUploadCertificate.vue';
 
-const passwordType = ref('password');
 const router = useRouter();
-const globalStore = stores.GlobalStore();
 const { getValidationState } = useVuelidateComposable();
-const authenticationStore = stores.AuthenticationStore();
-const certificatesStore = stores.CertificatesStore();
 const { dataFormatter } = useDataFormatterGlobal();
 const { successToast, errorToast } = useToast();
 const { t } = useI18n();
-const userInfo = reactive({ username: null, password: null });
 const rules = { username: { required }, password: { required } };
-const acfUploadButton = ref(
-  import.meta.env.VITE_APP_ACF_UPLOAD_REQUIRED === 'true',
-);
-const v$ = useVuelidate(rules, userInfo);
-const isBusy = ref(true);
 const { startLoader, endLoader } = useLoadingBar();
+
+const authenticationStore = stores.AuthenticationStore();
+const certificatesStore = stores.CertificatesStore();
+const globalStore = stores.GlobalStore();
+
+const userInfo = reactive({ username: null, password: null });
+const passwordType = ref('password');
+
+const v$ = useVuelidate(rules, userInfo);
+const acfUploadButton = ref(
+  import.meta.env.VITE_APP_ACF_UPLOAD_REQUIRED === 'true',,
+);
+const isBusy = ref(true);
 const disableSubmitButton = ref(false);
 const languages = ref([
+  {
+    value: 'en-US',
+    text: 'English',
+  },
+]);
   {
     value: 'en-US',
     text: 'English',
@@ -167,6 +177,25 @@ onBeforeMount(() => {
     endLoader();
     isBusy.value = false;
   });
+});
+onBeforeMount(() => {
+  startLoader();
+  authenticationStore.dateAndTime().finally(() => {
+    endLoader();
+    isBusy.value = false;
+  });
+});
+
+const authError = computed(() => {
+  return authenticationStore.authErrorGetter;
+});
+
+const unauthError = computed(() => {
+  return authenticationStore.unauthErrorGetter;
+});
+
+const loginPageDetails = computed(() => {
+  return authenticationStore.loginPageDetailsGetter;
 });
 
 const login = () => {
@@ -206,15 +235,53 @@ const login = () => {
     .catch((error) => console.log(error))
     .finally(() => (disableSubmitButton.value = false));
 };
+const login = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  disableSubmitButton.value = true;
+  const username = userInfo.username;
+  const password = userInfo.password;
+  authenticationStore
+    .login({ username, password })
+    .then(() => {
+      localStorage.setItem('storedLanguage', i18n.locale);
+      localStorage.setItem('storedUsername', username);
+      globalStore.username = username;
+      globalStore.languagePreference = i18n.locale;
+      return authenticationStore.checkPasswordChangeRequired(username);
+    })
+    .then((passwordChangeRequired) => {
+      if (passwordChangeRequired) {
+        router.push('/change-password');
+      } else {
+        Promise.all([
+          globalStore.getCurrentUser(userInfo.username),
+          globalStore.getSystemInfo(),
+        ])
+          .then(() => {
+            router.push('/');
+          })
+          .catch(() => {
+            Promise.all([
+              authenticationStore.unauthlogin(),
+              authenticationStore.logout(),
+            ]);
+          });
+      }
+    })
+    .catch((error) => console.log(error))
+    .finally(() => (disableSubmitButton.value = false));
+};
+
 const initModalUploadCertificate = () => {
   eventBus.emit('upload-login-certificate');
-};
+};;
 const onModalOk = ({ file }) => {
   addNewCertificate(file);
-};
+};;
 const updatePasswordType = (type) => {
   passwordType.value = type;
-};
+};;
 const addNewCertificate = (file) => {
   const type = 'ServiceLogin Certificate';
   certificatesStore
@@ -224,5 +291,5 @@ const addNewCertificate = (file) => {
     })
     .then((success) => successToast(success))
     .catch(({ message }) => errorToast(message));
-};
+};;
 </script>

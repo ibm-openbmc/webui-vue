@@ -6,12 +6,14 @@
         <alert v-if="isInPhypStandby" variant="info" class="mb-4">
           <span>
             {{ i18n.global.t('pagePcieTopology.alert') }}
+            {{ i18n.global.t('pagePcieTopology.alert') }}
           </span>
         </alert>
         <alert v-else variant="warning" class="mb-4">
           <span class="alert-message-link">
             {{ $t('pagePcieTopology.warning') }}
             <b-link to="/operations/server-power-operations">{{
+              i18n.global.t('pagePower.alert.message3Link')
               i18n.global.t('pagePower.alert.message3Link')
             }}</b-link>
           </span>
@@ -20,6 +22,13 @@
     </b-row>
     <b-row class="align-items-start">
       <b-col sm="8" xl="6" class="d-sm-flex align-items-end mb-4">
+        <search
+          :placeholder="$t('pagePcieTopology.table.search')"
+          data-test-id="pcie-input-search"
+          :is-search-disabled="isBusy"
+          @change-search="onChangeSearch"
+          @clear-search="onClearSearch"
+        />
         <search
           :placeholder="$t('pagePcieTopology.table.search')"
           data-test-id="pcie-input-search"
@@ -37,6 +46,18 @@
     </b-row>
     <b-row>
       <b-col class="text-right">
+        <table-filter
+          :is-filter-disabled="isBusy"
+          :filters="tableFilters"
+          @filter-change="onFilterChange"
+        />
+        <b-button
+          v-if="isServiceUser"
+          variant="primary"
+          :disabled="isBusy"
+          @click="savePcieTopology"
+        >
+          {{ i18n.global.t('pagePcieTopology.savePcieTopology') }}
         <table-filter
           :is-filter-disabled="isBusy"
           :filters="tableFilters"
@@ -77,8 +98,35 @@
           :current-page="currentPageNo"
           @filtered="onFiltered"
         >
+        <BTable
+          id="table-pcie-topology"
+          ref="table"
+          responsive="xl"
+          sort-icon-left
+          hover
+          no-sort-reset
+          :sort-desc="false"
+          show-empty
+          sticky-header="75vh"
+          sort-by="id"
+          :fields="fields"
+          :busy="tableIsBusy"
+          :filter="searchFilterInput"
+          :empty-text="$t('global.table.emptyMessage')"
+          :empty-filtered-text="$t('global.table.emptySearchMessage')"
+          :items="filteredEntries"
+          :per-page="
+            itemPerPage === 0 ? filteredEntries.length || 1 : itemPerPage
+          "
+          :current-page="currentPageNo"
+          @filtered="onFiltered"
+        >
           <template #cell(localPortLocation)="{ item }">
             <template v-if="item.localPortLocation.length > 0">
+              <span
+                v-for="(value, index) in item.localPortLocation"
+                :key="'localPortLocation ' + index"
+              >
               <span
                 v-for="(value, index) in item.localPortLocation"
                 :key="'localPortLocation ' + index"
@@ -94,6 +142,10 @@
                 v-for="(value, index) in item.remotePortLocation"
                 :key="'remotePortLocation ' + index"
               >
+              <span
+                v-for="(value, index) in item.remotePortLocation"
+                :key="'remotePortLocation ' + index"
+              >
                 {{ value.locationNumber }}
               </span>
             </template>
@@ -101,6 +153,17 @@
           </template>
           <!-- Expand chevron icon -->
           <template #cell(expandRow)="row">
+            <b-button
+              variant="link"
+              :aria-label="expandRowLabel"
+              :title="expandRowLabel"
+              :class="
+                row.item.toggleDetails
+                  ? 'rotateSvg btn-icon-only'
+                  : 'btn-icon-only'
+              "
+              @click="toggleRow(row)"
+            >
             <b-button
               variant="link"
               :aria-label="expandRowLabel"
@@ -124,16 +187,20 @@
                       <!-- Link properties -->
                       <dt class="headerStyle">
                         {{ i18n.global.t('pagePcieTopology.linkProperties') }}:
+                        {{ i18n.global.t('pagePcieTopology.linkProperties') }}:
                       </dt>
                       <dd>
+                        {{ i18n.global.t('pagePcieTopology.speed') }}:
                         {{ i18n.global.t('pagePcieTopology.speed') }}:
                         {{ dataFormatter(item.linkPropertiesSpeed) }}
                       </dd>
                       <dd>
                         {{ i18n.global.t('pagePcieTopology.width') }}:
+                        {{ i18n.global.t('pagePcieTopology.width') }}:
                         {{ dataFormatter(item.linkPropertiesWidth) }}
                       </dd>
                       <dd>
+                        {{ i18n.global.t('pagePcieTopology.type') }}:
                         {{ i18n.global.t('pagePcieTopology.type') }}:
                         {{ dataFormatter(item.linkPropertiesType) }}
                       </dd>
@@ -145,6 +212,9 @@
                         <dl class="fontStyle">
                           <!-- PCIe Bridge -->
                           <dt class="headerStyle">
+                            {{
+                              i18n.global.t('pagePcieTopology.bridgeOrHost')
+                            }}:
                             {{
                               i18n.global.t('pagePcieTopology.bridgeOrHost')
                             }}:
@@ -162,6 +232,13 @@
                           @click="openResetLinkModal(item)"
                         >
                           {{ i18n.global.t('pagePcieTopology.resetLink') }}
+                        <b-button
+                          v-if="item.resetLinkAvailable"
+                          class="btn btn-secondary float-right reset-btn"
+                          target="_blank"
+                          @click="openResetLinkModal(item)"
+                        >
+                          {{ i18n.global.t('pagePcieTopology.resetLink') }}
                         </b-button>
                       </b-col>
                     </b-row>
@@ -169,19 +246,24 @@
                       <div class="section-divider mb-3 mt-2"></div>
                       <div class="fontStyle headerStyle">
                         {{ dataFormatter('Cable ' + (i + 1)) }}
+                        {{ dataFormatter('Cable ' + (i + 1)) }}
                       </div>
                       <b-row>
                         <b-col lg="5" xl="5" md="5" sm="5" xs="5">
                           <div class="fontStyle">
                             {{ i18n.global.t('pagePcieTopology.localPort') }}:
+                            {{ i18n.global.t('pagePcieTopology.localPort') }}:
                             {{
                               item.localPortLocation.length > 0 &&
                               item.localPortLocation[i]
+                              item.localPortLocation[i]
                                 ? item.localPortLocation[i].locationNumber
+                                : '--'
                                 : '--'
                             }}
                           </div>
                           <div class="fontStyle">
+                            {{ i18n.global.t('pagePcieTopology.remotePort') }}:
                             {{ i18n.global.t('pagePcieTopology.remotePort') }}:
                             {{
                               dataFormatter(
@@ -196,9 +278,11 @@
                         <b-col lg="4" xl="4" md="4" sm="4" xs="4">
                           <div class="fontStyle">
                             {{ i18n.global.t('pagePcieTopology.partNumber') }}:
+                            {{ i18n.global.t('pagePcieTopology.partNumber') }}:
                             {{ dataFormatter(value) }}
                           </div>
                           <div class="fontStyle">
+                            {{ i18n.global.t('pagePcieTopology.cableType') }}:
                             {{ i18n.global.t('pagePcieTopology.cableType') }}:
                             {{ dataFormatter(item.cableType[i]) }}
                           </div>
@@ -206,9 +290,11 @@
                         <b-col lg="3" xl="3" md="3" sm="6" xs="3">
                           <div class="fontStyle">
                             {{ i18n.global.t('pagePcieTopology.cableLength') }}:
+                            {{ i18n.global.t('pagePcieTopology.cableLength') }}:
                             {{ dataFormatter(item.cableLength[i]) }}m
                           </div>
                           <div class="fontStyle">
+                            {{ i18n.global.t('pagePcieTopology.cableStatus') }}:
                             {{ i18n.global.t('pagePcieTopology.cableStatus') }}:
                             {{ dataFormatter(item.cableStatus[i]) }}
                           </div>
@@ -218,10 +304,16 @@
                     <div class="section-divider mb-3 mt-2"></div>
                     <div class="fontStyle headerStyle">
                       {{ i18n.global.t('pagePcieTopology.ioSlots') }}
+                      {{ i18n.global.t('pagePcieTopology.ioSlots') }}
                     </div>
                     <b-row>
                       <b-col>
                         <template v-if="item.ioSlots.length > 0">
+                          <div
+                            v-for="(val, i) in item.ioSlots"
+                            :key="i"
+                            class="fontStyle"
+                          >
                           <div
                             v-for="(val, i) in item.ioSlots"
                             :key="i"
@@ -242,6 +334,7 @@
           <template #cell(actions)="{ item }">
             <span class="identifyLedStyle" @click="openIdentifyLedsModal(item)">
               {{ i18n.global.t('pagePcieTopology.identifyLed') }}
+              {{ i18n.global.t('pagePcieTopology.identifyLed') }}
             </span>
           </template>
         </BTable>
@@ -251,6 +344,16 @@
 
     <b-row>
       <b-col sm="6">
+        <b-form-group
+          class="table-pagination-select"
+          :label="$t('global.table.itemsPerPage')"
+          label-for="pagination-items-per-page"
+        >
+          <b-form-select
+            id="pagination-items-per-page"
+            v-model="itemPerPage"
+            :options="itemsPerPageOptions"
+          />
         <b-form-group
           class="table-pagination-select"
           :label="$t('global.table.itemsPerPage')"
@@ -276,14 +379,33 @@
           :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-event-logs"
         />
+        <b-pagination
+          v-model="currentPageNo"
+          class="b-pagination"
+          first-number
+          last-number
+          :per-page="
+            itemPerPage === 0 ? filteredEntries.length || 1 : itemPerPage
+          "
+          :total-rows="getTotalRowCount(filteredRows)"
+          aria-controls="table-event-logs"
+        />
       </b-col>
     </b-row>
 
     <!-- Modals -->
-    <modal-reset :reset-type="resetOption" :reset-uri="resetLinkUri" />
-    <modal-leds :selected-obj="selectedObj" />
+    <modal-reset
+     
+      :reset-type="resetOption"
+      :reset-uri="resetLinkUri"
+    />
+    <modal-leds
+     
+      :selected-obj="selectedObj"
+    />
   </b-container>
 </template>
+
 <script setup>
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
@@ -314,13 +436,15 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
 const { getFilteredTableData } = useTableFilter();
 const { startLoader, endLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
+const { successToast, errorToast } = useToast();
+
 const globalStore = stores.GlobalStore();
 const pcieTopologyStore = stores.PcieTopologyStore();
+
 const isBusy = ref(true);
 const resetOption = ref(null);
 const resetLinkUri = ref('');
 const selectedObj = ref({});
-const { successToast, errorToast } = useToast();
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
 const fetched = ref(false);
@@ -328,10 +452,15 @@ const fields = reactive([
   {
     key: 'expandRow',
     label: '',
+    key: 'expandRow',
+    label: '',
     formatter: dataFormatter,
+    tdClass: 'table-row-expand',
     tdClass: 'table-row-expand',
   },
   {
+    key: 'id',
+    label: i18n.global.t('pagePcieTopology.id'),
     key: 'id',
     label: i18n.global.t('pagePcieTopology.id'),
     formatter: dataFormatter,
@@ -340,25 +469,36 @@ const fields = reactive([
   {
     key: 'parentId',
     label: i18n.global.t('pagePcieTopology.parentId'),
+    key: 'parentId',
+    label: i18n.global.t('pagePcieTopology.parentId'),
     formatter: dataFormatter,
     sortable: true,
+    tdClass: 'text-nowrap',
     tdClass: 'text-nowrap',
   },
   {
     key: 'linkStatus',
     label: i18n.global.t('pagePcieTopology.linkStatus'),
+    key: 'linkStatus',
+    label: i18n.global.t('pagePcieTopology.linkStatus'),
     formatter: dataFormatter,
     sortable: false,
+    tdClass: 'text-nowrap',
     tdClass: 'text-nowrap',
   },
   {
     key: 'localPortLocation',
     label: i18n.global.t('pagePcieTopology.localPortLocation'),
+    key: 'localPortLocation',
+    label: i18n.global.t('pagePcieTopology.localPortLocation'),
     formatter: dataFormatter,
     sortable: false,
     tdClass: 'text-break',
+    tdClass: 'text-break',
   },
   {
+    key: 'remotePortLocation',
+    label: i18n.global.t('pagePcieTopology.remotePortLocation'),
     key: 'remotePortLocation',
     label: i18n.global.t('pagePcieTopology.remotePortLocation'),
     formatter: dataFormatter,
@@ -366,8 +506,11 @@ const fields = reactive([
   },
   {
     key: 'actions',
+    key: 'actions',
     sortable: false,
     formatter: dataFormatter,
+    label: ' ',
+    tdClass: 'text-right text-nowrap',
     label: ' ',
     tdClass: 'text-right text-nowrap',
   },
@@ -376,7 +519,15 @@ const tableFilters = reactive([
   {
     key: 'linkStatus',
     label: i18n.global.t('pagePcieTopology.table.linkStatusType'),
+    key: 'linkStatus',
+    label: i18n.global.t('pagePcieTopology.table.linkStatusType'),
     values: [
+      i18n.global.t('pagePcieTopology.table.filter.degraded'),
+      i18n.global.t('pagePcieTopology.table.filter.inactive'),
+      i18n.global.t('pagePcieTopology.table.filter.open'),
+      i18n.global.t('pagePcieTopology.table.filter.operational'),
+      i18n.global.t('pagePcieTopology.table.filter.unknown'),
+      i18n.global.t('pagePcieTopology.table.filter.failed'),
       i18n.global.t('pagePcieTopology.table.filter.degraded'),
       i18n.global.t('pagePcieTopology.table.filter.inactive'),
       i18n.global.t('pagePcieTopology.table.filter.open'),
@@ -391,27 +542,39 @@ const batchActions = reactive([
   {
     value: 'delete',
     label: i18n.global.t('global.action.delete'),
+    value: 'delete',
+    label: i18n.global.t('global.action.delete'),
   },
 ]);
-
 const searchTotalFilteredRows = ref(0);
+
+onBeforeMount(() => {
+  globalStore.getBootProgress().then(() => {
+    checkIfInPhypStandby();
+  });
+});
+
+onMounted(() => {
+  eventBus.emit('loading-bar-status', true);
+});
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
     : filteredEntries.value.length;
 });
-
 const filteredEntries = computed(() => {
   if (pcieTopologyStore.entriesGetter) {
     return getFilteredTableData(
+      
       pcieTopologyStore.entriesGetter,
+     
       activeFiltersRows.value,
+    ,
     );
   }
   return [];
 });
-
 const tableIsBusy = computed(() => {
   if (!globalStore.isInPhypStandby) return false;
   if (fetched.value == true && globalStore.isInPhypStandby) return false;
@@ -422,15 +585,6 @@ const isInPhypStandby = computed(() => {
 });
 const isServiceUser = computed(() => {
   return globalStore.isServiceUser;
-});
-
-onBeforeMount(() => {
-  globalStore.getBootProgress().then(() => {
-    checkIfInPhypStandby();
-  });
-});
-onMounted(() => {
-  eventBus.emit('loading-bar-status', true);
 });
 
 function checkIfInPhypStandby(checkCounter = 0) {
@@ -478,6 +632,7 @@ function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
 </script>
+
 <style lang="scss" scoped>
 .identifyLedStyle {
   color: rgb(1, 80, 230);

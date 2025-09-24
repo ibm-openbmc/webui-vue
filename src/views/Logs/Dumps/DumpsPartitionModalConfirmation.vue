@@ -3,6 +3,7 @@
     id="modal-partition-dump-confirmation"
     ref="modal"
     v-model="modal"
+    v-model="modal"
     :title="
       selected === 'partition'
         ? $t('pageDumps.modal.initiatePartitionDump')
@@ -20,8 +21,11 @@
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage1') }}
     </p>
     <BFormCheckbox
+     
       v-model="confirmed"
+     
       @update:model-value="v$.confirmed.$touch()"
+    
     >
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage2') }}
     </BFormCheckbox>
@@ -59,6 +63,11 @@ defineProps({
     required: true,
   },
 });
+  selected: {
+    type: String,
+    required: true,
+  },
+});
 
 const confirmed = ref(false);
 const modal = ref(false);
@@ -66,8 +75,14 @@ const modal = ref(false);
 const mustBeTrue = (value) => {
   return value === true;
 };
+  return value === true;
+};
 
 const rules = computed(() => ({
+  confirmed: {
+    mustBeTrue,
+  },
+}));
   confirmed: {
     mustBeTrue,
   },
@@ -80,7 +95,17 @@ const closeModal = () => {
     eventBus.emit('partition-modal-close');
   });
 };
+  nextTick(() => {
+    modal.value = false;
+    eventBus.emit('partition-modal-close');
+  });
+};
 const handleSubmit = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  emit('ok');
+  closeModal();
+};
   v$.value.$touch();
   if (v$.value.$invalid) return;
   emit('ok');
@@ -90,4 +115,8 @@ const resetForm = () => {
   confirmed.value = false;
   v$.value.$reset();
 };
+  confirmed.value = false;
+  v$.value.$reset();
+};
 </script>
+

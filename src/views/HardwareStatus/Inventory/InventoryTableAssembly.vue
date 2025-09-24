@@ -174,11 +174,13 @@ const props = defineProps({
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
 const { successToast, errorToast } = useToast();
-const globalStore = stores.GlobalStore();
-const assemblyStore = stores.AssemblyStore();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();
+
+const globalStore = stores.GlobalStore();
+const assemblyStore = stores.AssemblyStore();
+
 const isBusy = ref(true);
 const searchTotalFilteredRows = ref(0);
 
@@ -220,6 +222,14 @@ const fields = reactive([
     formatter: dataFormatter,
   },
 ]);
+
+onBeforeMount(() => {
+  assemblyStore.getAssemblyInfo({ uri: props.chassis }).finally(() => {
+    // Emit initial data fetch complete to parent component
+    eventBus.emit('hardware-status-assembly-complete');
+    isBusy.value = false;
+  });
+});
 
 const assemblies = computed(() => {
   return assemblyStore.assemblies;
@@ -289,14 +299,6 @@ watch(
   },
 );
 
-onBeforeMount(() => {
-  assemblyStore.getAssemblyInfo({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-assembly-complete');
-    isBusy.value = false;
-  });
-});
-
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
@@ -345,6 +347,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .rotateSvg {
   svg {

@@ -169,21 +169,20 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import { useI18n } from 'vue-i18n';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
-
 import { ref, reactive, computed, onBeforeMount } from 'vue';
-
 import stores from '../../../store';
 
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
-
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
-const isBusy = ref(false);
 const { t } = useI18n();
-const searchTotalFilteredRows = ref(0);
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
-const memoryStore = stores.MemoryStore();
 const { successToast, errorToast } = useToast();
+
+const memoryStore = stores.MemoryStore();
+
+const isBusy = ref(false);
+const searchTotalFilteredRows = ref(0);
 
 const fields = reactive([
   {
@@ -225,6 +224,14 @@ const fields = reactive([
   },
 ]);
 
+onBeforeMount(() => {
+  memoryStore.getDimms().finally(() => {
+    // Emit initial data fetch complete to parent component
+    eventBus.emit('hardware-status-dimm-slot-complete');
+    isBusy.value = false;
+  });
+});
+
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
@@ -233,14 +240,6 @@ const filteredRows = computed(() => {
 
 const dimms = computed(() => {
   return memoryStore.dimms;
-});
-
-onBeforeMount(() => {
-  memoryStore.getDimms().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-dimm-slot-complete');
-    isBusy.value = false;
-  });
 });
 
 function onFiltered(filteredItems) {
@@ -287,6 +286,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .text-right {
   text-align: right;

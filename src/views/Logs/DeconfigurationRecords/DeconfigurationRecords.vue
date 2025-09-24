@@ -262,19 +262,15 @@ const {
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
-
 const Toast = useToastComposable();
 const { getFilteredTableData } = useTableFilterComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
 const deconfigurationRecoredsStore = stores.DeconfigurationRecordsStore();
 const global = stores.GlobalStore();
 
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
 const tableDeconfigurationRecordsRef = ref(null);
-
 const fields = ref([
   {
     key: 'expandRow',
@@ -335,6 +331,25 @@ const itemPerPage = ref(perPage);
 const openModal = ref(false);
 const isAllSelected = ref(false);
 
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+onBeforeMount(() => {
+  startLoader();
+  deconfigurationRecoredsStore
+    .getDeconfigurationRecordInfo()
+    .finally(() => endLoader());
+  eventBus.on('clear-selected', () => {
+    deconfigurationRecoredsStore?.deconfigRecordsGetter?.map(
+      (singleConnection) => {
+        singleConnection.isSelected = false;
+      },
+    );
+    clearSelectedRows(tableDeconfigurationRecordsRef);
+  });
+});
+
 const href = computed(() => {
   return `data:text/json;charset=utf-8,${exportAllRecords()}`;
 });
@@ -352,21 +367,6 @@ const filteredLogs = computed(() => {
 });
 const serverStatus = computed(() => {
   return global.serverStatusGetter;
-});
-
-onBeforeMount(() => {
-  startLoader();
-  deconfigurationRecoredsStore
-    .getDeconfigurationRecordInfo()
-    .finally(() => endLoader());
-  eventBus.on('clear-selected', () => {
-    deconfigurationRecoredsStore?.deconfigRecordsGetter?.map(
-      (singleConnection) => {
-        singleConnection.isSelected = false;
-      },
-    );
-    clearSelectedRows(tableDeconfigurationRecordsRef);
-  });
 });
 
 const isServerOff = () => {
@@ -426,6 +426,7 @@ const toggleAll = (checked) => {
   isAllSelected.value = checked;
 };
 </script>
+
 <style lang="scss" scoped>
 .text-right {
   text-align: right;

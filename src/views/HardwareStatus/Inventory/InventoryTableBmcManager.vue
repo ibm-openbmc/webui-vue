@@ -143,9 +143,12 @@ import useToast from '@/components/Composables/useToastComposable';
 const { successToast, errorToast } = useToast();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
-const bmcStore = stores.BmcStore();
-const isBusy = ref(false);
 const { t } = useI18n();
+
+const bmcStore = stores.BmcStore();
+
+const isBusy = ref(false);
+
 const fields = reactive([
   {
     key: 'expandRow',
@@ -180,6 +183,14 @@ const fields = reactive([
   },
 ]);
 
+onBeforeMount(() => {
+  bmcStore.getBmcInfo().finally(() => {
+    // Emit initial data fetch complete to parent component
+    eventBus.emit('hardware-status-bmc-manager-complete');
+    isBusy.value = false;
+  });
+});
+
 const bmc = computed(() => {
   return bmcStore.bmc;
 });
@@ -190,14 +201,6 @@ const items = computed(() => {
   } else {
     return [];
   }
-});
-
-onBeforeMount(() => {
-  bmcStore.getBmcInfo().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-bmc-manager-complete');
-    isBusy.value = false;
-  });
 });
 
 function toggleIdentifyLedValue(row) {
@@ -240,6 +243,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .info-icon {
   width: 25px !important;

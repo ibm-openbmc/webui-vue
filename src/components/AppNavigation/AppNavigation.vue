@@ -56,8 +56,9 @@
     </transition>
   </div>
 </template>
+
 <script setup>
-//Do not change Mixin import.
+//Do not change data import.
 //Exact match alias set to support
 //dotenv customizations.
 import { ref, watch, onMounted, computed } from 'vue';
@@ -66,12 +67,25 @@ import { useRoute } from 'vue-router';
 import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
 import stores from '@/store';
 import eventBus from '@/eventBus';
-const navigationItems = AppNavigationData().navigationItems;
+
 const globalStore = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
+
+const navigationItems = AppNavigationData().navigationItems;
+
 const isNavigationOpen = ref(false);
 const loadingCompleted = ref(false);
+
 const route = useRoute();
+
+onMounted(() => {
+  eventBus.on('loading-bar-status', (value) => {
+    loadingCompleted.value = value;
+  });
+  checkForUserData();
+  eventBus.on('toggle-navigation', toggleIsOpen);
+});
+
 const modelType = computed(() => {
   return globalStore.modelTypeGetter;
 });
@@ -81,19 +95,14 @@ const hmcMangedInfo = computed(() => {
 const currentUser = computed(() => {
   return globalStore.currentUserGetter;
 });
+
 watch(route, () => {
   isNavigationOpen.value = false;
 });
 watch(isNavigationOpen, () => {
   eventBus.emit('change-is-navigation-open', isNavigationOpen.value);
 });
-onMounted(() => {
-  eventBus.on('loading-bar-status', (value) => {
-    loadingCompleted.value = value;
-  });
-  checkForUserData();
-  eventBus.on('toggle-navigation', toggleIsOpen);
-});
+
 const checkForUserData = () => {
   if (!currentUser.value) {
     userManagementStore.getUsers();
@@ -104,6 +113,7 @@ const toggleIsOpen = () => {
   isNavigationOpen.value = !isNavigationOpen.value;
 };
 </script>
+
 <style scoped lang="scss">
 svg {
   fill: currentColor;

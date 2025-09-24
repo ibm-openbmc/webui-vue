@@ -47,6 +47,9 @@ import Alert from '@/components/Global/Alert.vue';
 import useLoadingBar, {
   loading,
 } from '@/components/Composables/useLoadingBarComposable';
+import useLoadingBar, {
+  loading,
+} from '@/components/Composables/useLoadingBarComposable';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -57,6 +60,7 @@ import stores from '@/store';
 
 const { scrollToOffset } = useJumpLinkComposable();
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
+
 const global = stores.GlobalStore();
 const licenseStore = stores.LicenseStore();
 const systemStore = stores.SystemStore();
@@ -69,11 +73,6 @@ const refs = {
   orderInfo,
   vetCapabilities,
 };
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
 const quickLinks = reactive([
   {
     id: 'activation',
@@ -94,9 +93,28 @@ const quickLinks = reactive([
     linkText: i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
   },
 ]);
+  {
+    id: 'activation',
+    dataRef: 'activation',
+    href: '#activation',
+    linkText: i18n.global.t('pageCapacityOnDemand.activation.sectionTitle'),
+  },
+  {
+    id: 'orderInfo',
+    dataRef: 'orderInfo',
+    href: '#orderInfo',
+    linkText: i18n.global.t('pageCapacityOnDemand.orderInfo.title'),
+  },
+  {
+    id: 'vetCapabilities',
+    dataRef: 'vetCapabilities',
+    href: '#vetCapabilities',
+    linkText: i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
+  },
+]);
 
-const serverStatus = computed(() => {
-  return global.serverStatusGetter;
+onBeforeRouteLeave(() => {
+  hideLoader();
 });
 
 onMounted(() => {
@@ -104,6 +122,10 @@ onMounted(() => {
   Promise.all([licenseStore.getLicenses(), systemStore.getSystem()]).finally(
     () => endLoader(),
   );
+});
+
+const serverStatus = computed(() => {
+  return global.serverStatusGetter;
 });
 </script>
 <style lang="scss" scoped>

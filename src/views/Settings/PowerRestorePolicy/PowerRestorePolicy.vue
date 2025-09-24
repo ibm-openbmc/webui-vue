@@ -59,15 +59,24 @@ import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 
-const powerPolicy = stores.PowerPolicyStore();
-const bootSettings = stores.BootSettingsStore();
 const Toast = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
+const powerPolicy = stores.PowerPolicyStore();
+const bootSettings = stores.BootSettingsStore();
+
 const policyValue = ref(null);
 const options = ref([]);
+
 onBeforeRouteLeave(() => {
   hideLoader();
 });
+
+onMounted(() => {
+  startLoader();
+  renderPowerRestoreSettings();
+});
+
 const powerRestorePolicies = computed(() => {
   return powerPolicy.powerRestorePolicies;
 });
@@ -84,11 +93,6 @@ const isOperatingModeManual = computed(() => {
     !bootSettings.biosAttributes?.pvm_system_operating_mode ||
     bootSettings.biosAttributes?.pvm_system_operating_mode === 'Manual'
   );
-});
-
-onMounted(() => {
-  startLoader();
-  renderPowerRestoreSettings();
 });
 
 const renderPowerRestoreSettings = () => {

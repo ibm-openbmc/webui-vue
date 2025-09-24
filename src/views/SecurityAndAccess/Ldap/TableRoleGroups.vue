@@ -143,7 +143,6 @@
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
-
 import Alert from '@/components/Global/Alert.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
@@ -178,6 +177,7 @@ const {
   toggleSelectRowByGroupName,
   onRowSelected,
 } = useTableSelectableComposable();
+
 const isBusy = ref(true);
 const activeRoleGroup = ref(null);
 
@@ -210,13 +210,27 @@ const batchActions = reactive([
   },
 ]);
 
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    ldapStore?.enabledRoleGroups?.map((enabledRoleGroup) => {
+      enabledRoleGroup.isSelected = false;
+    });
+    clearSelectedRows(tableRef);
+  });
+});
+
+onMounted(() => {
+  userManagementStore.getAccountRoles().finally(() => {
+    isBusy.value = false;
+  });
+});
+
 const isServiceEnabled = computed(() => {
   return ldapStore.isServiceEnabledGetter;
 });
 const enabledRoleGroups = computed(() => {
   return ldapStore.enabledRoleGroups;
 });
-
 const tableItems = computed(() => {
   return enabledRoleGroups.value.map(({ LocalRole, RemoteGroup }) => {
     return {
@@ -241,21 +255,6 @@ const deleteRoleGroupBatchConfirmMessage = computed(() =>
     selectedRowsList.value.length,
   ),
 );
-
-onBeforeMount(() => {
-  eventBus.on('clear-selected', () => {
-    ldapStore?.enabledRoleGroups?.map((enabledRoleGroup) => {
-      enabledRoleGroup.isSelected = false;
-    });
-    clearSelectedRows(tableRef);
-  });
-});
-
-onMounted(() => {
-  userManagementStore.getAccountRoles().finally(() => {
-    isBusy.value = false;
-  });
-});
 
 function onBatchAction() {
   selectedRowsNo.value = selectedRowsList.value.map((row) => row.uri).length;
@@ -336,6 +335,7 @@ function saveRoleGroup({
   }
 }
 </script>
+
 <style scoped>
 .text-right {
   text-align: right !important;

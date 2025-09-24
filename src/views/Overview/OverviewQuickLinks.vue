@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <BCard bg-variant="light" border-variant="light">
     <BRow class="d-flex justify-content-between align-items-center">
@@ -56,6 +55,7 @@ const canUseHostConsole = computed(() => {
   );
 });
 </script>
+
 <style lang="scss" scoped>
 dd,
 dl {

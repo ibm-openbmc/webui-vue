@@ -9,6 +9,8 @@
     "
     @ok="onOk"
     @hidden="resetForm"
+    @ok="onOk"
+    @hidden="resetForm"
   >
     <b-container>
       <b-row>
@@ -71,22 +73,25 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive, watch, nextTick } from 'vue';
+import { computed, ref, reactive, watch,  nextTick } from 'vue';
 import { required, requiredIf } from '@vuelidate/validators';
 import stores from '../../../store';
 import useVuelidate from '@vuelidate/core';
 import eventBus from '@/eventBus';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
-// import VuelidateMixin from '@/components/Mixins/VuelidateMixin.js';
 
-const userManagementStore = stores.UserManagementStore();
 const { getValidationState } = useVuelidateComposable();
 const { hideLoader, startLoader, endLoader, loading } = useLoadingBar();
+
+const userManagementStore = stores.UserManagementStore();
+
 const modal = ref(false);
+
 eventBus.on('modal-role-group', () => {
   modal.value = true;
 });
+
 const props = defineProps({
   roleGroup: {
     type: Object,
@@ -105,18 +110,20 @@ const form = reactive({
   groupName: null,
   groupPrivilege: null,
 });
+
 const accountRoles = computed(() => {
   return userManagementStore.filteredAccountRoles.filter(
-    (role) => role !== 'ServiceAgent' && role !== 'Operator',
+    (role) => role !== 'ServiceAgent' && role !== 'Operator',,
   );
 });
+
 watch(
   () => props.roleGroup,
   (value) => {
     if (value === null) return;
     form.groupName = value.groupName;
     form.groupPrivilege = value.groupPrivilege;
-  },
+  },,
 );
 
 const ruless = computed(() => ({
@@ -127,7 +134,8 @@ const ruless = computed(() => ({
     groupPrivilege: modal.value ? { required } : {},
   },
 }));
-const vv$ = useVuelidate(ruless, { form });
+const vv$ = useVuelidate(ruless, {  form  });
+
 const emit = defineEmits(['ok']);
 function handleSubmit() {
   vv$.value.$touch();
@@ -145,6 +153,7 @@ function handleSubmit() {
 
 function closeModal() {
   nextTick(() => {
+    modal.value = false;
     modal.value = false;
   });
 }

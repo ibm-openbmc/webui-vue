@@ -117,16 +117,17 @@ defineProps({
 });
 
 const isWorkstationSelected = ref(true);
-
 const file = ref(null);
-
 const tftpFileAddress = ref(null);
-
 const isServerPowerOffRequired = ref(
   import.meta.env.VITE_APP_SERVER_OFF_REQUIRED === 'true',
 );
-
 const tftpServer = ref(import.meta.env.VITE_APP_TFTP_SERVER === 'true');
+
+onBeforeMount(() => {
+  bmcStore.getBmcInfo();
+  firmwareStore.getUpdateServiceSettings();
+});
 
 const bmcPowerState = computed(() => {
   return bmcStore.bmcGetter?.powerState;
@@ -338,9 +339,4 @@ function onFileUpload(Uploadedfile) {
   file.value = Uploadedfile;
   v$.value.file.$touch();
 }
-
-onBeforeMount(() => {
-  bmcStore.getBmcInfo();
-  firmwareStore.getUpdateServiceSettings();
-});
 </script>

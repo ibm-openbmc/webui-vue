@@ -60,6 +60,15 @@ const form = ref({
   attributeValues: bootSettingsStore.getAttributeValues,
 });
 
+onBeforeMount(() => {
+  Promise.all([
+    bootSettingsStore.fetchBiosAttributes(),
+    bootSettingsStore.fetchAttributeValues(),
+  ]).finally(() => {
+    eventBus.emit('server-power-operations-boot-settings-complete');
+  });
+});
+
 const attributeValues = computed(() => {
   return bootSettingsStore.getAttributeValues;
 });
@@ -171,13 +180,4 @@ function handleSubmit() {
       endLoader();
     });
 }
-
-onBeforeMount(() => {
-  Promise.all([
-    bootSettingsStore.fetchBiosAttributes(),
-    bootSettingsStore.fetchAttributeValues(),
-  ]).finally(() => {
-    eventBus.emit('server-power-operations-boot-settings-complete');
-  });
-});
 </script>

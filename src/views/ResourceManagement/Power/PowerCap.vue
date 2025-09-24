@@ -122,6 +122,11 @@ defineProps({
   },
 });
 
+onBeforeMount(() => {
+  startLoader();
+  powerControlStore.getPowerControl().finally(() => endLoader());
+});
+
 const powerConsumption = computed(() => {
   return powerControlStore.powerConsumptionGetter;
 });
@@ -181,9 +186,4 @@ function submitForm() {
     .catch(({ message }) => errorToast(message))
     .finally(() => endLoader());
 }
-
-onBeforeMount(() => {
-  startLoader();
-  powerControlStore.getPowerControl().finally(() => endLoader());
-});
 </script>

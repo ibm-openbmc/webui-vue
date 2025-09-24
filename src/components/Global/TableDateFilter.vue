@@ -49,9 +49,11 @@
 import { ref, watch, computed } from 'vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
+
+const { getValidationState } = useVuelidateComposable();
+
 const fromDate = ref('');
 const toDate = ref('');
-const { getValidationState } = useVuelidateComposable();
 const offsetToDate = ref('');
 
 const emit = defineEmits(['change']);
@@ -76,8 +78,8 @@ const rules = computed(() => ({
     },
   },
 }));
-
 const v$ = useVuelidate(rules, { fromDate, toDate });
+
 watch(fromDate, () => {
   emitChange();
 });
@@ -96,6 +98,7 @@ const emitChange = () => {
   });
 };
 </script>
+
 <style scoped>
 .carbon-date {
   border-bottom: 1px solid;

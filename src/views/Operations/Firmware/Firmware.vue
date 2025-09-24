@@ -76,12 +76,29 @@ const licenseStore = stores.LicenseStore();
 const isServerPowerOffRequired = ref(
   import.meta.env.VITE_APP_SERVER_OFF_REQUIRED === 'true',
 );
-
 const lowestSupportedFirmwareVersion = ref('');
-
 const showAlert = ref(false);
-
 const isLoading = ref(loading.value);
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+onBeforeMount(() => {
+  startLoader();
+  Promise.all([
+    licenseStore.getLicenses(),
+    firmwareStore.getFirmwareInformation(),
+    firmwareStore.getFirmwareBootSide(),
+    firmwareStore.getLowestSupportedFirmwareVersion().then(() => {
+      lowestSupportedFirmwareVersion.value =
+        firmwareStore.lowestSupportedFirmwareVersionGetter;
+    }),
+    firmwareStore.getLowestSupportedFirmwareVersion().then(() => {
+      showAlert.value = firmwareStore.showAlertGetter;
+    }),
+  ]).finally(() => endLoader());
+});
 
 const serverStatus = computed(() => {
   return globalStore.serverStatusGetter;
@@ -109,27 +126,8 @@ const isPageDisabled = computed(() => {
 function loadingStatus(value) {
   isLoading.value = value;
 }
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-onBeforeMount(() => {
-  startLoader();
-  Promise.all([
-    licenseStore.getLicenses(),
-    firmwareStore.getFirmwareInformation(),
-    firmwareStore.getFirmwareBootSide(),
-    firmwareStore.getLowestSupportedFirmwareVersion().then(() => {
-      lowestSupportedFirmwareVersion.value =
-        firmwareStore.lowestSupportedFirmwareVersionGetter;
-    }),
-    firmwareStore.getLowestSupportedFirmwareVersion().then(() => {
-      showAlert.value = firmwareStore.showAlertGetter;
-    }),
-  ]).finally(() => endLoader());
-});
 </script>
+
 <style lang="scss" scoped>
 .p1 {
   display: inline-block;

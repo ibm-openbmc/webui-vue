@@ -103,6 +103,17 @@ const { startLoader, endLoader } = useLoadingBar();
 
 const concurrentMaintenanceStore = stores.ConcurrentMaintenanceStore();
 
+onBeforeMount(() => {
+  startLoader();
+  Promise.all([
+    concurrentMaintenanceStore.fetchReadyToRemove(),
+    concurrentMaintenanceStore.fetchControlPanel(),
+    concurrentMaintenanceStore.fetchControlPanelDisp(),
+  ]).finally(() => {
+    endLoader();
+  });
+});
+
 const readyToRemoveState = computed({
   get() {
     return concurrentMaintenanceStore.ReadyToRemoveGetter;
@@ -128,17 +139,6 @@ const readyToRemoveControlPanelDispState = computed({
   set(newValue) {
     concurrentMaintenanceStore.readyToRemoveControlPanelDisp = newValue;
   },
-});
-
-onBeforeMount(() => {
-  startLoader();
-  Promise.all([
-    concurrentMaintenanceStore.fetchReadyToRemove(),
-    concurrentMaintenanceStore.fetchControlPanel(),
-    concurrentMaintenanceStore.fetchControlPanelDisp(),
-  ]).finally(() => {
-    endLoader();
-  });
 });
 
 function changeReadyToRemoveState(state) {

@@ -185,7 +185,6 @@ import TableFans from './InventoryTableFans.vue';
 import TableBmcManager from './InventoryTableBmcManager.vue';
 import TableChassis from './InventoryTableChassis.vue';
 import TableProcessors from './InventoryTableProcessors.vue';
-
 import TableAssembly from './InventoryTableAssembly.vue';
 import TableFabricAdapters from './InventoryFabricAdapters.vue';
 import TablePcieSlots from './InventoryTablePcieSlots.vue';
@@ -203,14 +202,14 @@ import useJumpLinkComposable from '../../../components/Composables/useJumpLinkCo
 import { BLink } from 'bootstrap-vue-next';
 
 const { startLoader, endLoader } = useLoadingBar();
+const { t } = useI18n();
+const { scrollToOffsetInventory } = useJumpLinkComposable();
+
 const chassisStore = ChassisStore();
 const global = stores.GlobalStore();
 
 const isBusy = ref(false);
 const currentTab = ref(0);
-
-const { t } = useI18n();
-const { scrollToOffsetInventory } = useJumpLinkComposable();
 
 const links = reactive([
   {
@@ -301,6 +300,10 @@ const mexLinks = reactive([
   },
 ]);
 
+onBeforeMount(() => {
+  getAllInfo('created');
+});
+
 const quicklinkColumns = computed(() => {
   return chunk(links, 3);
 });
@@ -310,7 +313,6 @@ const quicklinkMexColumns = computed(() => {
 const chassis = computed(() => {
   return chassisStore.chassis;
 });
-
 const serverStatus = computed(() => global.serverStatus);
 const isPoweredOff = computed(() =>
   serverStatus.value === 'off' ? true : false,
@@ -322,6 +324,7 @@ watch(
     getAllInfo('watched');
   },
 );
+
 function getAllInfo(val) {
   startLoader();
   isBusy.value = true;
@@ -408,15 +411,11 @@ function getAllInfo(val) {
     });
   }
 }
-
 function currentTabUpdate(index) {
   currentTab.value = index;
 }
-
-onBeforeMount(() => {
-  getAllInfo('created');
-});
 </script>
+
 <style lang="scss" scoped>
 .inventory-container {
   min-width: 90%;

@@ -4,6 +4,7 @@
     <BRow>
       <BCol xl="9" class="text-right">
         <BButton variant="link" :disabled="isBusy" @click="initModalSettings()">
+        <BButton variant="link" :disabled="isBusy" @click="initModalSettings()">
           <icon-settings />
           {{ $t('pageUserManagement.accountPolicySettings') }}
         </BButton>
@@ -58,6 +59,14 @@
             <BFormCheckbox
               v-model="userManagement.allUsers[row.index].isSelected"
               data-test-id="userManagement-checkbox-toggleSelectRow"
+              @change="
+                toggleSelectRowByUsername(
+                  tableRef,
+                  row.index,
+                  userManagement.allUsers[row.index].isSelected,
+                  row.item,
+                )
+              "
               @change="
                 toggleSelectRowByUsername(
                   tableRef,
@@ -123,10 +132,12 @@
       :title="deleteTitle"
       :ok-title="okTitle"
       ok-variant="danger"
+      ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk(deleteType)"
     >
       <p>
+        {{ deleteMessage }}
         {{ deleteMessage }}
       </p>
     </BModal>
@@ -154,7 +165,6 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import stores from '@/store';
-import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -169,11 +179,12 @@ const {
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const toast = useToastComposable();
 
 const userManagement = stores.UserManagementStore();
 const global = stores.GlobalStore();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
-const toast = useToastComposable();
+
 const isAllSelected = ref(false);
 const isBusy = ref(true);
 const activeUser = ref(null);
@@ -221,6 +232,7 @@ const tableToolbarActions = ref([
 const selectedRows = ref(selectedRowsList);
 const tableRef = ref(null);
 const userToDelete = ref('');
+
 onBeforeMount(() => {
   eventBus.on('clear-selected', () => {
     userManagement?.allUsersGetter?.map((singleConnection) => {
@@ -231,12 +243,20 @@ onBeforeMount(() => {
   eventBus.on('okUser', handleOkUser);
 });
 
-const handleOkUser = ({ isNewUser, userData }) => {
-  saveUser({ isNewUser, userData });
-};
-
 onBeforeUnmount(() => {
   eventBus.off('okUser', handleOkUser);
+});
+
+onBeforeMount(() => {
+  startLoader();
+  userManagement.getAccountSettings();
+  Promise.all([
+    userManagement.getAccountRoles(),
+    userManagement.getUsers(),
+  ]).finally(() => {
+    endLoader();
+    isBusy.value = false;
+  });
 });
 
 const accountRoles = computed(() => {
@@ -303,18 +323,9 @@ const passwordRequirements = computed(() => {
   }
 });
 
-onBeforeMount(() => {
-  startLoader();
-  userManagement.getAccountSettings();
-  Promise.all([
-    userManagement.getAccountRoles(),
-    userManagement.getUsers(),
-  ]).finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
-});
-
+const handleOkUser = ({ isNewUser, userData }) => {
+  saveUser({ isNewUser, userData });
+};
 function toggleAll(checked) {
   userManagement?.allUsers?.map((singleUser) => {
     singleUser.isSelected = checked;
@@ -389,7 +400,6 @@ function deleteUser({ username }) {
       endLoader();
       openModal.value = false;
       userToDelete.value = '';
-      eventBus.emit('clear-selected');
     });
 }
 function onBatchAction(action) {

@@ -454,6 +454,20 @@ const quickLinks = ref([
   },
 ]);
 
+onBeforeMount(() => {
+  startLoader();
+  Promise.all([
+    resourceMemoryStore.getMemorySizeOptions(),
+    resourceMemoryStore.getLogicalMemorySize(),
+    resourceMemoryStore.getIoAdapterCapacity(),
+    resourceMemoryStore.getNumHugePages(),
+    resourceMemoryStore.getMaxNumHugePages(),
+    resourceMemoryStore.getHmcManaged(),
+    resourceMemoryStore.getActiveMemoryMirroring(),
+    resourceMemoryStore.getPredictiveDynamicMemoryDeallocation(),
+  ]).finally(() => endLoader());
+});
+
 const { logicalMemorySizeOptions, logicalMemorySize } =
   storeToRefs(resourceMemoryStore);
 
@@ -617,20 +631,6 @@ function changePredictiveDynamicMemoryDeallocationState(state) {
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }
-
-onBeforeMount(() => {
-  startLoader();
-  Promise.all([
-    resourceMemoryStore.getMemorySizeOptions(),
-    resourceMemoryStore.getLogicalMemorySize(),
-    resourceMemoryStore.getIoAdapterCapacity(),
-    resourceMemoryStore.getNumHugePages(),
-    resourceMemoryStore.getMaxNumHugePages(),
-    resourceMemoryStore.getHmcManaged(),
-    resourceMemoryStore.getActiveMemoryMirroring(),
-    resourceMemoryStore.getPredictiveDynamicMemoryDeallocation(),
-  ]).finally(() => endLoader());
-});
 </script>
 
 <style lang="scss" scoped>

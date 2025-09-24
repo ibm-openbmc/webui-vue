@@ -94,14 +94,15 @@ import Alert from '@/components/Global/Alert.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import useToast from '@/components/Composables/useToastComposable';
 
+const { successToast, errorToast } = useToast();
+
 const globalStore = stores.GlobalStore();
+const keyClear = stores.KeyClearStore();
+
 const keyOption = ref('NONE');
 const username = ref(globalStore.username);
 const openModal = ref(false);
 const selectedKey = ref('');
-
-const keyClear = stores.KeyClearStore();
-const { successToast, errorToast } = useToast();
 
 function onKeyClearSubmit(valueSelected) {
   openModal.value = true;

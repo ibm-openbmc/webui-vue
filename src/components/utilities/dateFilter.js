@@ -1,4 +1,3 @@
-// Work required
 import { format } from 'date-fns';
 import stores from '@/store';
 

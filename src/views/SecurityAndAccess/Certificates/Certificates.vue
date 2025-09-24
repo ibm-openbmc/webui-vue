@@ -132,6 +132,7 @@
     <modal-generate-csr />
   </BContainer>
 </template>
+
 <script setup>
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconReplace from '@carbon/icons-vue/es/renew/20';
@@ -149,16 +150,16 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
+
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const toast = useToastComposable();
+
 const certificate = stores.CertificatesStore();
 const userManagement = stores.UserManagementStore();
 const global = stores.GlobalStore();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
-const toast = useToastComposable();
+
 const modal = ref(false);
 const modalContent = ref('');
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
 const userRoleId = ref(null);
 const isBusy = ref(true);
 const modalCertificate = ref(null);
@@ -189,13 +190,31 @@ const fields = ref([
     tdClass: 'text-right text-nowrap',
   },
 ]);
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+onMounted(() => {
+  startLoader();
+  Promise.all([
+    global.getBmcTime(),
+    certificate.getAcfCertificate(),
+    certificate.getCertificates(),
+    userManagement.getUsers(),
+  ]).finally(() => {
+    endLoader();
+    isBusy.value = false;
+    userRoleId.value = ref(global.username);
+  });
+});
+
 const certificates = computed(() => {
   const acfCertificate = certificate.acfCertificateGetter;
   const otherCertificates = certificate.allCertificatesGetter;
   const allCertificates = [...acfCertificate, ...otherCertificates];
   return allCertificates;
 });
-
 const tableItems = computed(() => {
   return certificates.value.map((certificate) => {
     return {
@@ -230,7 +249,6 @@ const expiredCertificateTypes = computed(() => {
     return acc;
   }, []);
 });
-
 const expiringCertificateTypes = computed(() => {
   return certificates.value.reduce((acc, val) => {
     const daysUntilExpired = getDaysUntilExpired(val.validUntil);
@@ -240,19 +258,7 @@ const expiringCertificateTypes = computed(() => {
     return acc;
   }, []);
 });
-onMounted(() => {
-  startLoader();
-  Promise.all([
-    global.getBmcTime(),
-    certificate.getAcfCertificate(),
-    certificate.getCertificates(),
-    userManagement.getUsers(),
-  ]).finally(() => {
-    endLoader();
-    isBusy.value = false;
-    userRoleId.value = ref(global.username);
-  });
-});
+
 const onTableRowAction = (event, rowItem) => {
   switch (event) {
     case 'replace':
@@ -382,6 +388,7 @@ const getIconStatus = (date) => {
   }
 };
 </script>
+
 <style scoped>
 .text-right {
   text-align: right !important;

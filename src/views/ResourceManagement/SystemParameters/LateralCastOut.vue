@@ -34,8 +34,10 @@ import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import stores from '@/store';
 import { computed, defineProps } from 'vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
-const systemParametersStore = stores.SystemParametersStore();
+
 const Toast = useToastComposable();
+
+const systemParametersStore = stores.SystemParametersStore();
 
 defineProps({
   safeMode: {
@@ -43,6 +45,7 @@ defineProps({
     default: null,
   },
 });
+
 const lateralCastOutModeState = computed({
   get() {
     return systemParametersStore.lateralCastOutModeGetter;

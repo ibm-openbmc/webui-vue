@@ -54,6 +54,7 @@ const props = defineProps({
 });
 
 const isToolbarActive = ref(false);
+
 watch(
   () => props.selectedItemsCount,
   (newCount) => {

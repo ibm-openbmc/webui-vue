@@ -147,9 +147,10 @@ import PageSection from '@/components/Global/PageSection.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import stores from '@/store';
 
+const { dataFormatter } = useDataFormatterGlobal();
+
 const licenseStore = stores.LicenseStore();
 const systemStore = stores.SystemStore();
-const { dataFormatter } = useDataFormatterGlobal();
 
 const processorInfo = computed(() => {
   return licenseStore.processorInfo;

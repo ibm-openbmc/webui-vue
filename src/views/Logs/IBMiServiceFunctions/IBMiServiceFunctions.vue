@@ -172,17 +172,32 @@ import useToast from '@/components/Composables/useToastComposable';
 import stores from '@/store';
 import Alert from '@/components/Global/Alert.vue';
 
+const { successToast, errorToast } = useToast();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
 const globalStore = stores.GlobalStore();
 const ibmiServiceFunctionsStore = stores.IBMiServiceFunctionsStore();
 const bootSettingsStore = stores.BootSettingsStore();
-const { successToast, errorToast } = useToast();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
+
+const isLoading = ref(false);
 
 onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-const isLoading = ref(false);
+onBeforeMount(() => {
+  startLoader();
+  isLoading.value = true;
+  Promise.all([
+    globalStore.getBootProgress(),
+    ibmiServiceFunctionsStore.getAvailableServiceFunctions,
+    bootSettingsStore.fetchBiosAttributes(),
+  ]).finally(() => {
+    isLoading.value = false;
+    endLoader();
+  });
+});
+
 const isOSRunning = computed(() => {
   return globalStore.isOSRunningGetter;
 });
@@ -202,18 +217,7 @@ const isIBMi = computed(() => {
 const attributeKeys = computed(() => {
   return bootSettingsStore.getBiosAttributes;
 });
-onBeforeMount(() => {
-  startLoader();
-  isLoading.value = true;
-  Promise.all([
-    globalStore.getBootProgress(),
-    ibmiServiceFunctionsStore.getAvailableServiceFunctions,
-    bootSettingsStore.fetchBiosAttributes(),
-  ]).finally(() => {
-    isLoading.value = false;
-    endLoader();
-  });
-});
+
 const exceuteFunction = (value) => {
   ibmiServiceFunctionsStore
     .executeServiceFunction(value)

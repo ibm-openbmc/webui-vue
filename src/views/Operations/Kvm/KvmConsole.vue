@@ -50,22 +50,38 @@ import { throttle } from 'lodash';
 import { AuthenticationStore } from '../../../store/modules/Authentication/AuthenticationStore';
 
 const authenticationStore = AuthenticationStore();
+
 const Connecting = 0;
 const Connected = 1;
 const Disconnected = 2;
+
 const props = defineProps({
   isFullWindow: {
     type: Boolean,
     default: true,
   },
 });
+
 let rfb = ref(null);
 let isConnected = ref(false);
 const terminalClass = ref(props.isFullWindow ? 'full-window' : '');
 const marginClass = props.isFullWindow ? 'margin-left-full-window' : '';
+
 let status = Connecting;
 // let convasRef = ref(null);
 let resizeKvmWindow = ref(null);
+const panel = ref(null);
+const toolbar = ref(null);
+
+onMounted(() => {
+  openTerminal();
+});
+onBeforeUnmount(() => {
+  // Your cleanup logic here
+  window.removeEventListener('resize', resizeKvmWindow);
+  closeTerminal();
+});
+
 const serverStatusIcon = computed(() => {
   if (status === Connected) {
     return 'success';
@@ -83,15 +99,6 @@ const serverStatus = computed(() => {
   return i18n.global.t('pageKvm.connecting');
 });
 
-onMounted(() => {
-  openTerminal();
-});
-onBeforeUnmount(() => {
-  // Your cleanup logic here
-  window.removeEventListener('resize', resizeKvmWindow);
-  closeTerminal();
-});
-
 const sendCtrlAltDel = () => {
   rfb.value.sendCtrlAltDel();
 };
@@ -99,8 +106,6 @@ const closeTerminal = () => {
   rfb.value.disconnect();
   rfb.value = null;
 };
-const panel = ref(null);
-const toolbar = ref(null);
 const openTerminal = () => {
   const token = authenticationStore.token;
   rfb.value = new RFB(

@@ -129,6 +129,7 @@ const { t } = useI18n();
 const isBusy = ref(true);
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
+
 const chassisStore = stores.ChassisStore();
 
 const fields = reactive([
@@ -166,16 +167,16 @@ const fields = reactive([
   },
 ]);
 
-const chassis = computed(() => {
-  return chassisStore.chassis;
-});
-
 onBeforeMount(() => {
   chassisStore.fetchGetChassisInfo().finally(() => {
     // Emit initial data fetch complete to parent component
     eventBus.emit('hardware-status-chassis-complete');
     isBusy.value = false;
   });
+});
+
+const chassis = computed(() => {
+  return chassisStore.chassis;
 });
 
 function toggleIdentifyLedValue(row) {
@@ -218,6 +219,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .rotateSvg {
   svg {

@@ -128,13 +128,14 @@ import useTableRowExpandComposable from '../../../components/Composables/useTabl
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import stores from '../../../store';
-
 import eventBus from '@/eventBus';
 
-const systemStore = stores.SystemStore();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();
+
+const systemStore = stores.SystemStore();
+
 const isBusy = ref(true);
 const fields = reactive([
   {
@@ -160,9 +161,6 @@ const fields = reactive([
     tdClass: 'text-nowrap',
   },
 ]);
-const systems = computed(() => {
-  return systemStore.systems;
-});
 
 onBeforeMount(() => {
   systemStore.getSystem().finally(() => {
@@ -170,6 +168,11 @@ onBeforeMount(() => {
     isBusy.value = false;
   });
 });
+
+const systems = computed(() => {
+  return systemStore.systems;
+});
+
 function getStatusTooltip(status) {
   switch (status) {
     case 'Enabled':
@@ -201,6 +204,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .info-icon {
   width: 25px !important;

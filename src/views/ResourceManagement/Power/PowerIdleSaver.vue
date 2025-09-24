@@ -217,6 +217,18 @@ const idlePowerSaver = ref({
   exitUtilizationPercent: null,
 });
 
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+onBeforeMount(() => {
+  startLoader();
+  powerControlStore.getIdlePowerSaverData().finally(() => {
+    setIdlePowerSaveFormValues(idlePowerSaverData.value);
+    endLoader();
+  });
+});
+
 const idlePowerSaverData = computed(() => {
   return powerControlStore.idlePowerSaverDataGetter;
 });
@@ -282,16 +294,4 @@ function resetIdlePowerSaverData() {
       endLoader();
     });
 }
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-onBeforeMount(() => {
-  startLoader();
-  powerControlStore.getIdlePowerSaverData().finally(() => {
-    setIdlePowerSaveFormValues(idlePowerSaverData.value);
-    endLoader();
-  });
-});
 </script>

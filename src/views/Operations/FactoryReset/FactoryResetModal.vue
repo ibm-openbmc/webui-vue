@@ -56,21 +56,27 @@ import { useVuelidate } from '@vuelidate/core';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 
+const { getValidationState } = useVuelidateComposable();
+
+const global = stores.GlobalStore();
+
 const messagesEn = i18n.global.getLocaleMessage('en-US');
 const factoryResetMessage = messagesEn?.pageFactoryReset?.modal;
-const { getValidationState } = useVuelidateComposable();
-const global = stores.GlobalStore();
+
 defineProps({
   resetType: {
     type: String,
     default: null,
   },
 });
+
 const modal = ref(null);
 eventBus.on('modal-reset', () => {
   modal.value.show();
 });
+
 const confirm = ref(false);
+
 const serverStatus = computed(() => global.serverStatus);
 const isServerOff = computed(() =>
   serverStatus.value === 'off' ? true : false,
@@ -81,6 +87,7 @@ const rules = {
   },
 };
 const v$ = useVuelidate(rules, { confirm });
+
 const emit = defineEmits(['okConfirm']);
 
 const handleConfirm = () => {

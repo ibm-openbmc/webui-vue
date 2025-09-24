@@ -66,14 +66,21 @@ import stores from '@/store';
 const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
+const controlStore = stores.ControlStore();
+const bootSettingsStore = stores.BootSettingsStore();
+
+const openModal = ref(false);
+
 onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-const openModal = ref(false);
-
-const controlStore = stores.ControlStore();
-const bootSettingsStore = stores.BootSettingsStore();
+onBeforeMount(() => {
+  startLoader();
+  controlStore.fetchLastBmcRebootTime().finally(() => {
+    endLoader();
+  });
+});
 
 const lastBmcRebootTime = computed(() => {
   return controlStore.getLastBmcRebootTime;
@@ -100,11 +107,4 @@ function handleOK() {
   openModal.value = false;
   rebootBmc();
 }
-
-onBeforeMount(() => {
-  startLoader();
-  controlStore.fetchLastBmcRebootTime().finally(() => {
-    endLoader();
-  });
-});
 </script>

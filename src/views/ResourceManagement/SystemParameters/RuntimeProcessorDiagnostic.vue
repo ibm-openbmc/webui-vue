@@ -212,11 +212,13 @@ import { useVuelidate } from '@vuelidate/core';
 import { helpers } from '@vuelidate/validators';
 import { minValue, maxValue } from '@vuelidate/validators';
 import i18n from '@/i18n';
+
 const { getValidationState } = useVuelidateComposable();
+const { startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
+
 const systemParametersStore = stores.SystemParametersStore();
 const global = stores.GlobalStore();
-const { startLoader, endLoader } = useLoadingBar();
 
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 

@@ -1,6 +1,20 @@
 <template>
   <BModal
     id="modal-user"
+    v-model="modal"
+    :title="
+      newUser
+        ? $t('pageUserManagement.addUser')
+        : $t('pageUserManagement.editUser')
+    "
+    :ok-title="
+      newUser ? $t('pageUserManagement.addUser') : $t('global.action.save')
+    "
+    @ok="onOk"
+    @hidden="resetForm"
+  >
+  <BModal
+    id="modal-user"
     v-model="modalUser"
     :title="
       newUser
@@ -102,8 +116,22 @@
                       : false
                   "
                 >
+                <template
+                  v-if="
+                    v$.form.username.$errors.length > 0
+                      ? v$.form.username.$errors[0].$validator === 'required'
+                      : false
+                  "
+                >
                   {{ $t('global.form.fieldRequired') }}
                 </template>
+                <template
+                  v-else-if="
+                    v$.form.username.$errors.length > 0
+                      ? v$.form.username.$errors[0].$validator === 'maxLength'
+                      : false
+                  "
+                >
                 <template
                   v-else-if="
                     v$.form.username.$errors.length > 0
@@ -115,6 +143,13 @@
                     $t('global.form.lengthMustBeBetween', { min: 1, max: 16 })
                   }}
                 </template>
+                <template
+                  v-else-if="
+                    v$.form.username.$errors.length > 0
+                      ? v$.form.username.$errors[0].$validator === 'pattern'
+                      : false
+                  "
+                >
                 <template
                   v-else-if="
                     v$.form.username.$errors.length > 0
@@ -146,6 +181,13 @@
                 </template>
               </BFormSelect>
               <BFormInvalidFeedback role="alert">
+                <template
+                  v-if="
+                    v$.form.privilege.$errors.length > 0
+                      ? v$.form.privilege.$errors[0].$validator === 'required'
+                      : false
+                  "
+                >
                 <template
                   v-if="
                     v$.form.privilege.$errors.length > 0
@@ -187,10 +229,22 @@
                         : false
                     "
                   >
+                  <template
+                    v-if="
+                      v$.form.password.$errors.length > 0
+                        ? v$.form.password.$errors[0].$validator === 'required'
+                        : false
+                    "
+                  >
                     {{ $t('global.form.fieldRequired') }}
                   </template>
                   <template
                     v-if="
+                      v$.form.password.$errors.length > 0
+                        ? v$.form.password.$errors[0].$validator ===
+                            'minLength' ||
+                          v$.form.password.$errors[0].$validator === 'maxLength'
+                        : false
                       v$.form.password.$errors.length > 0
                         ? v$.form.password.$errors[0].$validator ===
                             'minLength' ||
@@ -214,7 +268,9 @@
               label-for="password-confirmation"
             >
               <input-password-toggle
+               
                 @update-pass-view="updateConfirmPasswordType"
+              
               >
                 <BFormInput
                   id="password-confirmation"
@@ -235,14 +291,27 @@
                         : false
                     "
                   >
+                  <template
+                    v-if="
+                      v$.form.passwordConfirmation.$errors.length > 0
+                        ? v$.form.passwordConfirmation.$errors[0].$validator ===
+                          'required'
+                        : false
+                    "
+                  >
                     {{ $t('global.form.fieldRequired') }}
                   </template>
                   <template
                     v-else-if="
+                      
                       v$.form.passwordConfirmation.$errors.length > 0
+                       
                         ? v$.form.passwordConfirmation.$errors[0].$validator ===
+                         
                           'sameAsPassword'
+                       
                         : false
+                    
                     "
                   >
                     {{ $t('pageUserManagement.modal.passwordsDoNotMatch') }}
@@ -254,32 +323,37 @@
         </BRow>
       </BContainer>
     </BForm>
-    <BButton variant="secondary" data-test-id="userManagement-button-cancel">
-      {{ $t('global.action.cancel') }}
-    </BButton>
-    <BButton
-      form="form-user"
-      data-test-id="userManagement-button-submit"
-      variant="primary"
-    >
-      <template v-if="newUser">
-        {{ $t('pageUserManagement.addUser') }}
-      </template>
-      <template v-else>
-        {{ $t('global.action.save') }}
-      </template>
-    </BButton>
+    <template>
+      <BButton variant="secondary" data-test-id="userManagement-button-cancel">
+        {{ $t('global.action.cancel') }}
+      </BButton>
+      <BButton
+        form="form-user"
+        data-test-id="userManagement-button-submit"
+        variant="primary"
+      >
+        <template v-if="newUser">
+          {{ $t('pageUserManagement.addUser') }}
+        </template>
+        <template v-else>
+          {{ $t('global.action.save') }}
+        </template>
+      </BButton>
+    </template>
   </BModal>
 </template>
 
 <script setup>
 import { ref, defineProps, watch, computed, nextTick } from 'vue';
 import {
+import {
   required,
   maxLength,
   minLength,
   sameAs,
   helpers,
+  requiredIf,
+} from '@vuelidate/validators';
   requiredIf,
 } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
@@ -291,6 +365,10 @@ import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
+
+const globalStore = stores.GlobalStore();
+const userManagementStore = stores.UserManagementStore();
+
 const props = defineProps({
   user: {
     type: Object,
@@ -302,15 +380,16 @@ const props = defineProps({
   },
 });
 
-const globalStore = stores.GlobalStore();
-const userManagementStore = stores.UserManagementStore();
-const uploadCertificate = stores.CertificatesStore();
+const modal = ref(false);
 
-const modalUser = ref(false);
 eventBus.on('modal-user', () => {
-  modalUser.value = true;
+  modal.value = true;
   nextTick(() => {
-    if (props.user) {
+    if (
+      props.user &&
+      props.user.privilege !== 'Read only' &&
+      props.user.privilege !== 'ReadOnly'
+    ) {
       form.value.username = props.user.username;
       form.value.status = props.user.Enabled;
       form.value.privilege =
@@ -320,6 +399,7 @@ eventBus.on('modal-user', () => {
     }
   });
 });
+
 const originalUsername = ref('');
 const form = ref({
   status: true,
@@ -331,10 +411,10 @@ const form = ref({
 });
 const passwordType = ref('password');
 const confirmPasswordType = ref('password');
+
 const certificateTypes = computed(() => {
   return uploadCertificate.availableUploadTypesGetter;
 });
-
 const editDisabled = computed(() => {
   return !props.user?.RoleId;
 });
@@ -368,8 +448,14 @@ const privilegeTypes = computed(() => {
 });
 
 watch(props.user, (value) => {
-  if (value.length) {
+  if (options.length) {
     if (value === null) return;
+    originalUsername.value = value.username;
+    form.value.username = value.username;
+    form.value.status = value.Enabled;
+    form.value.privilege = value.privilege;
+  }
+});
     originalUsername.value = value.username;
     form.value.username = value.username;
     form.value.status = value.Enabled;
@@ -407,7 +493,39 @@ const rules = computed(() => ({
   },
 }));
 const v$ = useVuelidate(rules, { form });
+const rules = computed(() => ({
+  form: {
+    status: {
+      required,
+    },
+    username: {
+      required,
+      maxLength: maxLength(16),
+      pattern: helpers.regex(/^([a-zA-Z_][a-zA-Z0-9_]*)/),
+    },
+    privilege: {
+      required,
+    },
+    password: {
+      required: requiredIf(function () {
+        return requirePassword();
+      }),
+      minLength: minLength(props.passwordRequirements.minLength),
+      maxLength: maxLength(props.passwordRequirements.maxLength),
+    },
+    passwordConfirmation: {
+      required: requiredIf(function () {
+        return requirePassword();
+      }),
+      sameAsPassword: sameAs(form.value.password),
+    },
+    manualUnlock: {},
+  },
+}));
+const v$ = useVuelidate(rules, { form });
 
+function handleSubmit() {
+  let userData = {};
 function handleSubmit() {
   let userData = {};
 
@@ -420,6 +538,7 @@ function handleSubmit() {
     userData.password = form.value.password;
   } else {
     form.value.username = props.user.username;
+    v$.value.$touch();
     if (v$.value.$invalid) return;
     userData.originalUsername = form.value.username;
     userData.currentUser = currentUser.value;
@@ -450,7 +569,7 @@ function handleSubmit() {
   closeModal();
 }
 function closeModal() {
-  modalUser.value = false;
+  modal.value = false;
 }
 function resetForm() {
   form.value.originalUsername = '';
@@ -479,6 +598,7 @@ function updateConfirmPasswordType(type) {
   confirmPasswordType.value = type;
 }
 </script>
+
 <style lang="scss" scoped>
 .radioButtonStyle {
   margin-bottom: 1rem;

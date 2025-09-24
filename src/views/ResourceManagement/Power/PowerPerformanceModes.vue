@@ -92,6 +92,14 @@ const powerPerformanceModeOptions = ref([
   },
 ]);
 
+onBeforeMount(() => {
+  startLoader();
+  powerControlStore.getPowerPerformanceMode().finally(() => {
+    setPowerPerformanceValue(powerPerformanceModeData.value);
+    endLoader();
+  });
+});
+
 const powerPerformanceModeData = computed(() => {
   return powerControlStore.powerPerformanceModeGetter;
 });
@@ -120,14 +128,6 @@ function handlePowerPerformanceSubmit() {
 function showConfirmationModal() {
   eventBus.emit('modal-power-performance-modes');
 }
-
-onBeforeMount(() => {
-  startLoader();
-  powerControlStore.getPowerPerformanceMode().finally(() => {
-    setPowerPerformanceValue(powerPerformanceModeData.value);
-    endLoader();
-  });
-});
 </script>
 
 <style lang="scss" scoped>

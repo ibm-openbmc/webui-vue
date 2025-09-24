@@ -13,11 +13,15 @@
   >
     <p class="mb-2">
       <strong>{{
+       
         i18n.global.t('pagePcieTopology.modal.resetConfirm')
+     
       }}</strong>
     </p>
     <div>
+      
       {{ i18n.global.t('pagePcieTopology.modal.resetLinkDescription') }}
+    
     </div>
 
     <template #footer="{ cancel }">
@@ -43,6 +47,7 @@
     </template>
   </b-modal>
 </template>
+
 <script setup>
 import stores from '../../../store';
 import useVuelidate from '@vuelidate/core';
@@ -79,12 +84,22 @@ const serverStatus = computed(() => {
 const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
 });
+const isServerOff = computed(() => {
+  return serverStatus.value === 'off' ? true : false;
+});
 
+function mustBeTrue(value) {
 function mustBeTrue(value) {
   return isServerOff.value || value === true;
 }
 
 //Validation Rules
+const rules = computed(() => ({
+  confirm: {
+    mustBeTrue,
+  },
+}));
+const v$ = useVuelidate(rules, { confirm });
 const rules = computed(() => ({
   confirm: {
     mustBeTrue,
@@ -98,15 +113,41 @@ function handleConfirm() {
   if (v$.value.$invalid) return;
   nextTick(() => modal.value.hide());
   resetConfirm();
+  resetLink();
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+  nextTick(() => modal.value.hide());
+  resetConfirm();
 }
+const emitUpdate = defineEmits(['update:openResetModal']);
 function resetConfirm() {
   confirm.value = false;
   v$.value.$reset();
   nextTick(() => {
     openResetLinkModal.value = false;
   });
+  confirm.value = false;
+  v$.value.$reset();
+  emitUpdate('update:openResetModal', false);
 }
 function resetLink() {
+  pcieTopologyStore
+    .resetTheLink({ uri: props.resetUri })
+    .then(() => {
+      successToast(
+        i18n.global.t('pagePcieTopology.toast.successReset', {
+          id: props.resetType,
+        }),
+      );
+    })
+    .catch(() => {
+      errorToast(
+        i18n.global.t('pagePcieTopology.toast.errorReset', {
+          id: props.resetType,
+        }),
+      );
+    });
+  nextTick(() => modal.value.hide());
   pcieTopologyStore
     .resetTheLink({ uri: props.resetUri })
     .then(() => {

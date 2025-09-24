@@ -59,6 +59,19 @@ const resizeConsoleWindow = ref(null);
 const ws = ref(null); // websocket object
 const wsConnection = ref(null); // websocket connection status
 
+onBeforeMount(() => {
+  chassisStore.getPowerState();
+});
+
+onMounted(() => {
+  openTerminal();
+});
+
+onBeforeUnmount(() => {
+  ws.value.close();
+  window.removeEventListener('resize', resizeConsoleWindow.value);
+});
+
 const serverStatus = computed(() => {
   return chassisStore.powerStateGetter !== 'Off' && wsConnection.value;
 });
@@ -149,19 +162,6 @@ function openConsoleWindow() {
     'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550',
   );
 }
-
-onBeforeMount(() => {
-  chassisStore.getPowerState();
-});
-
-onMounted(() => {
-  openTerminal();
-});
-
-onBeforeUnmount(() => {
-  ws.value.close();
-  window.removeEventListener('resize', resizeConsoleWindow.value);
-});
 </script>
 
 <style lang="scss" scoped>

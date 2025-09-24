@@ -163,6 +163,7 @@ import { forOwn } from 'lodash';
 import PageSection from '@/components/Global/PageSection.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import stores from '@/store';
+
 const licenseStore = stores.LicenseStore();
 
 const fields = ref([

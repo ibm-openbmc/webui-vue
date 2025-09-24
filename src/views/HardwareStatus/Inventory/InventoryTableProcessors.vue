@@ -173,19 +173,18 @@ import useTableRowExpandComposable from '../../../components/Composables/useTabl
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 
 const { t } = useI18n();
+const { toggleRow } = useTableRowExpandComposable();
+const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
+const { successToast, errorToast } = useToast();
+const { searchFilterInput, onChangeSearch, onClearSearch } =
+  useSearchFilterComposable();
+const { expandRowLabel } = useTableRowExpandComposable();
+
+const processorStore = ProcessorStore();
+
 const isBusy = ref(true);
 const searchTotalFilteredRows = ref(0);
 
-const { toggleRow } = useTableRowExpandComposable();
-const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
-
-const processorStore = ProcessorStore();
-const { successToast, errorToast } = useToast();
-
-const { searchFilterInput, onChangeSearch, onClearSearch } =
-  useSearchFilterComposable();
-
-const { expandRowLabel } = useTableRowExpandComposable();
 const fields = reactive([
   {
     key: 'expandRow',
@@ -226,11 +225,6 @@ const fields = reactive([
     sortable: false,
   },
 ]);
-const filteredRows = computed(() => {
-  return searchFilterInput.value
-    ? searchTotalFilteredRows.value
-    : processorStore.processorsGetter.length;
-});
 
 onBeforeMount(() => {
   processorStore.getProcessorsInfo().finally(() => {
@@ -238,6 +232,12 @@ onBeforeMount(() => {
     eventBus.emit('hardware-status-processors-complete');
     isBusy.value = false;
   });
+});
+
+const filteredRows = computed(() => {
+  return searchFilterInput.value
+    ? searchTotalFilteredRows.value
+    : processorStore.processorsGetter.length;
 });
 
 const processors = computed(() => {
@@ -293,6 +293,7 @@ function getStatusTooltip(status) {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .text-right {
   text-align: right;

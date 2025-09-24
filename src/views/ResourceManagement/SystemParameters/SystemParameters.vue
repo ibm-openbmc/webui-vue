@@ -21,16 +21,11 @@ import RuntimeProcessorDiagnostic from './RuntimeProcessorDiagnostic.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import stores from '@/store';
 import { onBeforeMount, computed } from 'vue';
+
 const { startLoader, endLoader } = useLoadingBar();
+
 const systemParametersStore = stores.SystemParametersStore();
 const global = stores.GlobalStore();
-
-const serverStatus = computed(() => {
-  return global.serverStatus;
-});
-const isServerOff = computed(() => {
-  return serverStatus.value === 'off' ? true : false;
-});
 
 onBeforeMount(() => {
   startLoader();
@@ -47,5 +42,12 @@ onBeforeMount(() => {
     systemParametersStore.getRpdScheduledRun(),
     systemParametersStore.getRpdScheduledRunDuration(),
   ]).finally(() => endLoader());
+});
+
+const serverStatus = computed(() => {
+  return global.serverStatus;
+});
+const isServerOff = computed(() => {
+  return serverStatus.value === 'off' ? true : false;
 });
 </script>

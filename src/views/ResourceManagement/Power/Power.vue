@@ -46,15 +46,15 @@ const { hideLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
 
-const safeMode = computed(() => {
-  return globalStore.safeModeGetter;
-});
-
 onBeforeRouteLeave(() => {
   hideLoader();
 });
 
 onBeforeMount(() => {
   globalStore.getSystemInfo();
+});
+
+const safeMode = computed(() => {
+  return globalStore.safeModeGetter;
 });
 </script>

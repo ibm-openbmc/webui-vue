@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.policies')" />
@@ -273,21 +272,24 @@ import { onBeforeRouteLeave } from 'vue-router';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import IconTime from '@carbon/icons-vue/es/time/16';
 
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const Toast = useToastComposable();
+
 const Policies = PoliciesStore();
 const UserManagement = UserManagementStore();
 const Global = GlobalStore();
+
 const username = ref(Global.username);
-const Toast = useToastComposable();
 const modal = ref(false);
 const ModalContent = i18n.global.t(
   'pagePolicies.acfUploadEnablementConfirmText',
 );
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const myModalRef = ref(null);
 
 onBeforeRouteLeave(() => {
   hideLoader();
 });
+
 onMounted(() => {
   startLoader();
   Promise.all([
@@ -312,7 +314,6 @@ onMounted(() => {
 const currentUser = () => {
   return Global.currentUser;
 };
-
 const changeSshProtocolState = (state) => {
   Policies.saveSshProtocolState(state)
     .then((message) => {
@@ -371,7 +372,6 @@ const changeVtpmState = (state) => {
       Toast.errorToast(message);
     });
 };
-
 const changeSvleState = (state) => {
   Policies.saveSvleState(state)
     .then((message) => {
@@ -381,7 +381,6 @@ const changeSvleState = (state) => {
       Toast.errorToast(message);
     });
 };
-
 const changeTpmPolicyState = (state) => {
   Policies.saveTpmPolicy(state)
     .then((message) => {
@@ -391,7 +390,6 @@ const changeTpmPolicyState = (state) => {
       Toast.errorToast(message);
     });
 };
-
 const changeUnauthenticatedACFUploadEnablement = (state) => {
   if (state) {
     modal.value = state;
@@ -415,7 +413,6 @@ const onModalHide = (event) => {
     Policies.unAuthenticatedACFUploadEnablementState = !stateCancel;
   }
 };
-
 const uploadApi = (state) => {
   Policies.saveUnauthenticatedACFUploadEnablement(state)
     .then((message) => Toast.successToast(message))
@@ -424,7 +421,6 @@ const uploadApi = (state) => {
     })
     .catch(({ message }) => Toast.errorToast(message));
 };
-
 const enableUpload = (state) => {
   state
     ? uploadApi(state)
@@ -437,6 +433,7 @@ const checkForUserData = () => {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .mr-3 {
   margin-right: 1rem !important;
