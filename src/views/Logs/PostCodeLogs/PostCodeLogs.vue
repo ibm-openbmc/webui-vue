@@ -154,7 +154,6 @@ import useSearchFilterComposable from '../../../components/Composables/useSearch
 import { ref, onMounted, computed } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import stores from '../../../store';
-import stores from '../../../store';
 
 const {
   clearSelectedRows,
@@ -217,18 +216,6 @@ const tableHeaderCheckboxIndeterminateVal = ref(
   tableHeaderCheckboxIndeterminate,
 );
 
-onMounted(() => {
-  startLoader();
-  postCodeLogsStore.getPostCodesLogData().finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
-});
-onBeforeRouteLeave(() => {
-  // Hide loader if the user navigates to another page
-  // before request is fulfilled.
-  hideLoader();
-});
 onMounted(() => {
   startLoader();
   postCodeLogsStore.getPostCodesLogData().finally(() => {

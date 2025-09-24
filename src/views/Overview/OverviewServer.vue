@@ -107,9 +107,9 @@ const serviceLogin = computed(() => {
     expirationDateTimeStamp >= dateTimeStamp &&
     global?.isServiceLoginEnabled
   ) {
-    serviceLoginStatus.value = i18n.global.t('global.status.enabled');
+    setServiceLoginStatus(i18n.global.t('global.status.enabled'));
   } else {
-    serviceLoginStatus.value = i18n.global.t('global.status.disabled');
+    setServiceLoginStatus(i18n.global.t('global.status.disabled'));
   }
   return serviceLoginStatus.value;
 });

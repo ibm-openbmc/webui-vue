@@ -57,7 +57,7 @@ const modal = ref(false);
 
 const mustBeTrue = (value) => {
   return value === true;
-};;
+};
 
 const rules = computed(() => ({
   confirmed: {

@@ -254,21 +254,21 @@
         </BRow>
       </BContainer>
     </BForm>
-      <BButton variant="secondary" data-test-id="userManagement-button-cancel">
-        {{ $t('global.action.cancel') }}
-      </BButton>
-      <BButton
-        form="form-user"
-        data-test-id="userManagement-button-submit"
-        variant="primary"
-      >
-        <template v-if="newUser">
-          {{ $t('pageUserManagement.addUser') }}
-        </template>
-        <template v-else>
-          {{ $t('global.action.save') }}
-        </template>
-      </BButton>
+    <BButton variant="secondary" data-test-id="userManagement-button-cancel">
+      {{ $t('global.action.cancel') }}
+    </BButton>
+    <BButton
+      form="form-user"
+      data-test-id="userManagement-button-submit"
+      variant="primary"
+    >
+      <template v-if="newUser">
+        {{ $t('pageUserManagement.addUser') }}
+      </template>
+      <template v-else>
+        {{ $t('global.action.save') }}
+      </template>
+    </BButton>
   </BModal>
 </template>
 
@@ -294,6 +294,7 @@ const { getValidationState } = useVuelidateComposable();
 
 const globalStore = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
+const uploadCertificate = stores.CertificatesStore();
 
 const props = defineProps({
   user: {
@@ -315,7 +316,7 @@ eventBus.on('modal-user', () => {
       form.value.username = props.user.username;
       form.value.status = props.user.Enabled;
       form.value.privilege =
-      props.user.privilege === 'Read only'
+        props.user.privilege === 'Read only'
           ? 'ReadOnly'
           : props.user.privilege;
     }

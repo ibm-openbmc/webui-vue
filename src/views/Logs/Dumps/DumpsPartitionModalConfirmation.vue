@@ -20,11 +20,8 @@
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage1') }}
     </p>
     <BFormCheckbox
-     
       v-model="confirmed"
-     
       @update:model-value="v$.confirmed.$touch()"
-    
     >
       {{ $t('pageDumps.modal.initiatePartitionDumpMessage2') }}
     </BFormCheckbox>
@@ -94,4 +91,3 @@ const resetForm = () => {
   v$.value.$reset();
 };
 </script>
-

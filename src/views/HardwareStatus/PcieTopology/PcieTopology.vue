@@ -27,13 +27,6 @@
           @change-search="onChangeSearch"
           @clear-search="onClearSearch"
         />
-        <search
-          :placeholder="$t('pagePcieTopology.table.search')"
-          data-test-id="pcie-input-search"
-          :is-search-disabled="isBusy"
-          @change-search="onChangeSearch"
-          @clear-search="onClearSearch"
-        />
         <div class="ml-sm-10 mb-4 ms-4">
           <table-cell-count
             :filtered-items-count="filteredRows"
@@ -213,11 +206,9 @@
                         <b-col lg="3" xl="3" md="3" sm="6" xs="3">
                           <div class="fontStyle">
                             {{ i18n.global.t('pagePcieTopology.cableLength') }}:
-                            {{ i18n.global.t('pagePcieTopology.cableLength') }}:
                             {{ dataFormatter(item.cableLength[i]) }}m
                           </div>
                           <div class="fontStyle">
-                            {{ i18n.global.t('pagePcieTopology.cableStatus') }}:
                             {{ i18n.global.t('pagePcieTopology.cableStatus') }}:
                             {{ dataFormatter(item.cableStatus[i]) }}
                           </div>
@@ -378,7 +369,6 @@ const fields = reactive([
   },
   {
     key: 'actions',
-    key: 'actions',
     sortable: false,
     formatter: dataFormatter,
     label: ' ',
@@ -387,8 +377,6 @@ const fields = reactive([
 ]);
 const tableFilters = reactive([
   {
-    key: 'linkStatus',
-    label: i18n.global.t('pagePcieTopology.table.linkStatusType'),
     key: 'linkStatus',
     label: i18n.global.t('pagePcieTopology.table.linkStatusType'),
     values: [
@@ -404,8 +392,6 @@ const tableFilters = reactive([
 const activeFiltersRows = ref([]);
 const batchActions = reactive([
   {
-    value: 'delete',
-    label: i18n.global.t('global.action.delete'),
     value: 'delete',
     label: i18n.global.t('global.action.delete'),
   },

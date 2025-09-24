@@ -211,16 +211,13 @@ onBeforeMount(() => {
 
 const allCores = computed(() => {
   return hardwareDeconfigurationStore.coresGetter;
-  return hardwareDeconfigurationStore.coresGetter;
 });
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
     : filteredCores.value.length;
-
 });
 const filteredCores = computed(() => {
-  return getFilteredTableData(allCores.value, activeFiltersRows.value);
   return getFilteredTableData(allCores.value, activeFiltersRows.value);
 });
 const serverStatus = computed(() => {

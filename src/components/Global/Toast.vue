@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <BToast :show="showToast" :variant="statusPassed" class="toast-top-right">
     <template #title>

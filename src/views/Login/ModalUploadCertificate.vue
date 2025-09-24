@@ -51,7 +51,6 @@ const form = reactive({
 const rules = computed(() => ({
   form: {
     file: modal.value ? { required } : {},
-    file: modal.value ? { required } : {},
   },
 }));
 const v$ = useVuelidate(rules, { form });

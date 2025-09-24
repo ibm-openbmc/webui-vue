@@ -388,6 +388,7 @@ function deleteUser({ username }) {
       endLoader();
       openModal.value = false;
       userToDelete.value = '';
+      eventBus.emit('clear-selected');
     });
 }
 function onBatchAction(action) {

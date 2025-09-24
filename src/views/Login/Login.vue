@@ -56,11 +56,11 @@
             @input="v$.password.$touch()"
           >
           </BFormInput>
-            <BFormInvalidFeedback id="password-required" role="alert">
-              <template v-if="v$.password.required">
-                {{ t('global.form.fieldRequired') }}
-              </template>
-            </BFormInvalidFeedback>
+          <BFormInvalidFeedback id="password-required" role="alert">
+            <template v-if="v$.password.required">
+              {{ t('global.form.fieldRequired') }}
+            </template>
+          </BFormInvalidFeedback>
         </input-password-toggle>
       </div>
       <BButton
@@ -150,17 +150,10 @@ const languages = ref([
   },
 ]);
 
-const rules = { username: { required }, password: { required } };
 const userInfo = reactive({ username: null, password: null });
+const rules = { username: { required }, password: { required } };
 const v$ = useVuelidate(rules, userInfo);
 
-onBeforeMount(() => {
-  startLoader();
-  authenticationStore.dateAndTime().finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
-});
 onBeforeMount(() => {
   startLoader();
   authenticationStore.dateAndTime().finally(() => {
@@ -236,5 +229,5 @@ const addNewCertificate = (file) => {
     })
     .then((success) => successToast(success))
     .catch(({ message }) => errorToast(message));
-};;
+};
 </script>

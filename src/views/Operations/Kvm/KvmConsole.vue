@@ -1,4 +1,3 @@
-<!-- TODO: Work Requird -->
 <template>
   <div :class="marginClass">
     <div ref="toolbar" class="kvm-toolbar">
