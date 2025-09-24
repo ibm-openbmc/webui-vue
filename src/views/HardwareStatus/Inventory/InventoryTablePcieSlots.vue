@@ -98,7 +98,6 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import { BLink } from 'bootstrap-vue-next';
 
 const { t } = useI18n();
-const searchTotalFilteredRows = ref(0);
 const { successToast, errorToast } = useToast();
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
@@ -114,6 +113,7 @@ const props = defineProps({
   },
 });
 
+const searchTotalFilteredRows = ref(0);
 const isBusy = ref(true);
 const slotListLength = ref(0);
 
@@ -182,6 +182,11 @@ watch(
     });
   },
 );
+
+const setSlotListLength = (value) => {
+  slotListLength.value = value;
+  return;
+};
 
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;

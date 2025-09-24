@@ -83,8 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed} from 'vue'
-import i18n from '@/i18n';
+import { ref, computed } from 'vue'
 import stores from '@/store';
 import { required, sameAs } from '@vuelidate/validators';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';

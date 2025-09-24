@@ -3,7 +3,6 @@
     id="modal-confirmation"
     ref="modal"
     v-model="modal"
-    v-model="modal"
     :title="$t('pageDumps.modal.initiateSystemDump')"
     @show="resetForm"
   >
@@ -20,11 +19,8 @@
       {{ $t('pageDumps.modal.initiateSystemDumpMessage3') }}
     </p>
     <BFormCheckbox
-     
       v-model="confirmed"
-     
       @update:model-value="v$.confirmed.$touch()"
-    
     >
       {{ $t('pageDumps.modal.initiateSystemDumpMessage4') }}
     </BFormCheckbox>
@@ -68,18 +64,9 @@ const rules = computed(() => ({
     mustBeTrue,
   },
 }));
-  confirmed: {
-    mustBeTrue,
-  },
-}));
 const v$ = useVuelidate(rules, { confirmed });
 
 const closeModal = () => {
-  nextTick(() => {
-    modal.value = false;
-    eventBus.emit('modal-close');
-  });
-};
   nextTick(() => {
     modal.value = false;
     eventBus.emit('modal-close');
@@ -91,16 +78,8 @@ const handleSubmit = () => {
   emit('ok');
   closeModal();
 };
-  v$.value.$touch();
-  if (v$.value.$invalid) return;
-  emit('ok');
-  closeModal();
-};
 const resetForm = () => {
-  confirmed.value = false;
-  v$.value.$reset();
   confirmed.value = false;
   v$.value.$reset();
 };
 </script>
-

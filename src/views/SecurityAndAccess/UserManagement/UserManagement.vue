@@ -4,7 +4,6 @@
     <BRow>
       <BCol xl="9" class="text-right">
         <BButton variant="link" :disabled="isBusy" @click="initModalSettings()">
-        <BButton variant="link" :disabled="isBusy" @click="initModalSettings()">
           <icon-settings />
           {{ $t('pageUserManagement.accountPolicySettings') }}
         </BButton>
@@ -59,14 +58,6 @@
             <BFormCheckbox
               v-model="userManagement.allUsers[row.index].isSelected"
               data-test-id="userManagement-checkbox-toggleSelectRow"
-              @change="
-                toggleSelectRowByUsername(
-                  tableRef,
-                  row.index,
-                  userManagement.allUsers[row.index].isSelected,
-                  row.item,
-                )
-              "
               @change="
                 toggleSelectRowByUsername(
                   tableRef,
@@ -132,12 +123,10 @@
       :title="deleteTitle"
       :ok-title="okTitle"
       ok-variant="danger"
-      ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk(deleteType)"
     >
       <p>
-        {{ deleteMessage }}
         {{ deleteMessage }}
       </p>
     </BModal>
@@ -154,7 +143,6 @@ import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconSettings from '@carbon/icons-vue/es/settings/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import eventBus from '@/eventBus';
-
 import ModalUser from './ModalUser.vue';
 import ModalSettings from './ModalSettings.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';

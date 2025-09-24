@@ -101,17 +101,9 @@ const rules = computed(() => ({
     maxLength: maxLength(maxLengthVal.value),
   },
 }));
-  licenseKey: {
-    required,
-    minLength: minLength(maxLengthVal.value),
-    maxLength: maxLength(maxLengthVal.value),
-  },
-}));
 const v$ = useVuelidate(rules, { licenseKey });
 
 const isInPhypStandby = computed(() => {
-  return global.isInPhypStandby();
-});
   return global.isInPhypStandby();
 });
 const isActivationDisabled = computed(() => {
@@ -136,23 +128,7 @@ const submitForm = () => {
       .finally(() => endLoader());
   }
 };
-  v$.value.$touch();
-  if (!v$.value.$invalid) {
-    startLoader();
-    licenseStore
-      .activateLicense(licenseKey.value)
-      .then((success) => successToast(success).then(() => fetchInfo()))
-      .catch(({ message }) => errorToast(message))
-      .finally(() => endLoader());
-  }
-};
 const fetchInfo = () => {
-  Promise.all([
-    global.getSystemInfo(),
-    global.getBootProgress(),
-    licenseStore.getLicenses(),
-  ]);
-};
   Promise.all([
     global.getSystemInfo(),
     global.getBootProgress(),

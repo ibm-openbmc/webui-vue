@@ -23,9 +23,6 @@
           :per-page="
             itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage
           "
-          :per-page="
-            itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage
-          "
           :current-page="currentPageNo"
           :filter="searchFilter"
           :empty-text="$t('global.table.emptyMessage')"
@@ -81,9 +78,6 @@
           class="b-pagination"
           first-number
           last-number
-          :per-page="
-            itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage
-          "
           :per-page="
             itemPerPage === 0 ? filteredDimms.length || 1 : itemPerPage
           "
@@ -161,45 +155,6 @@ const fields = ref([
     label: i18n.global.t('pageDeconfigurationHardware.table.settings'),
   },
 ]);
-  {
-    key: 'name',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.name'),
-  },
-  {
-    key: 'size',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.size'),
-  },
-  {
-    key: 'locationCode',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.locationCode'),
-  },
-  {
-    key: 'functionalState',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.functionalState'),
-    tdClass: 'text-nowrap',
-  },
-  {
-    key: 'eventID',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.eventId'),
-  },
-  {
-    key: 'deconfigurationType',
-    sortable: true,
-    label: i18n.global.t(
-      'pageDeconfigurationHardware.table.deconfigurationType',
-    ),
-  },
-  {
-    key: 'settings',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.settings'),
-  },
-]);
 const tableFilters = ref([
   {
     key: 'deconfigurationType',
@@ -236,13 +191,7 @@ onBeforeMount(() => {
 const allDimms = computed(() => {
   return hardwareDeconfigurationStore.dimmsGetter;
 });
-  return hardwareDeconfigurationStore.dimmsGetter;
-});
 const filteredRows = computed(() => {
-  return searchFilter.value
-    ? searchTotalFilteredRows.value
-    : filteredDimms.value.length;
-});
   return searchFilter.value
     ? searchTotalFilteredRows.value
     : filteredDimms.value.length;
@@ -250,32 +199,20 @@ const filteredRows = computed(() => {
 const filteredDimms = computed(() => {
   return getFilteredTableData(allDimms.value, activeFiltersRows.value);
 });
-  return getFilteredTableData(allDimms.value, activeFiltersRows.value);
-});
 const serverStatus = computed(() => {
-  return global.serverStatusGetter;
-});
   return global.serverStatusGetter;
 });
 const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
 });
-  return serverStatus.value === 'off' ? true : false;
-});
 const isReadOnlyUser = computed(() => {
-  return global.isReadOnlyUserGetter;
-});
   return global.isReadOnlyUserGetter;
 });
 
 const onFilterChange = ({ activeFilters }) => {
   activeFiltersRows.value = activeFilters;
 };
-  activeFiltersRows.value = activeFilters;
-};
 const onFiltered = (filteredItems) => {
-  searchTotalFilteredRows.value = filteredItems.length;
-};
   searchTotalFilteredRows.value = filteredItems.length;
 };
 const toggleSettingsSwitch = (row) => {

@@ -142,9 +142,7 @@
                       label-for="bind-password"
                     >
                       <input-password-toggle
-                      <input-password-toggle
                         data-test-id="ldap-input-togglePassword"
-                        @updatePassView="updateInputType"
                         @update-pass-view="updateInputType"
                       >
                         <b-form-input
@@ -260,10 +258,6 @@ import { useVuelidate } from '@vuelidate/core';
 import useToast from '@/components/Composables/useToastComposable';
 
 const { t } = useI18n();
-const isPasswordVisible = ref(false);
-const inputType = ref('password');
-const ldapStore = stores.LdapStore();
-const certificatesStore = stores.CertificatesStore();
 const { getValidationState } = useVuelidateComposable();
 const { hideLoader, startLoader, endLoader, loading } = useLoadingBar();
 const { successToast, errorToast } = useToast();
@@ -381,7 +375,6 @@ watch(
     formLdap.activeDirectoryEnabled = val;
     setFormValues();
   },
-  },
 );
 
 watch(
@@ -389,14 +382,12 @@ watch(
   () => {
     setFormValues();
   },
-  },
 );
 
 watch(
   () => ldapCertificateExpiration.value,
   () => {
     setFormValues();
-  },
   },
 );
 
@@ -464,8 +455,6 @@ function onChangeServiceType(event) {
   const isActiveDirectoryEnabled = event.target.value;
   const serviceType =
     isActiveDirectoryEnabled === 'true' ? activeDirectory.value : ldap.value;
-  const serviceType =
-    isActiveDirectoryEnabled === 'true' ? activeDirectory.value : ldap.value;
   // Set form values according to user selected
   // service type
   setFormValues(serviceType);
@@ -482,8 +471,6 @@ function onChangeldapAuthenticationEnabled(event) {
     setFormValues();
   }
 }
-function updateInputType(passwordType) {
-  inputType.value = passwordType;
 function updateInputType(passwordType) {
   inputType.value = passwordType;
 }

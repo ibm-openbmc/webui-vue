@@ -105,15 +105,12 @@ const { successToast, errorToast } = useToast();
 const pcieTopologyStore = stores.PcieTopologyStore();
 
 const props = defineProps({
-const pcieTopologyStore = stores.PcieTopologyStore();
-const { dataFormatter } = useDataFormatterGlobal();
-const props = defineProps({
   selectedObj: {
     type: Object,
     default: null,
   },
 });
-const { successToast, errorToast } = useToast();
+
 const openLedModal = ref(false);
 const pcieBridgeLed = ref([]);
 const ioSlotsLed = ref([]);

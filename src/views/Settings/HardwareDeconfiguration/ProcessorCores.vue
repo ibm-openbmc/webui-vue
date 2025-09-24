@@ -35,9 +35,6 @@
           :per-page="
             itemPerPage === 0 ? filteredCores.length || 1 : itemPerPage
           "
-          :per-page="
-            itemPerPage === 0 ? filteredCores.length || 1 : itemPerPage
-          "
           :current-page="currentPageNo"
           :filter="searchFilterInput"
           :empty-text="$t('global.table.emptyMessage')"
@@ -97,9 +94,6 @@
           :per-page="
             itemPerPage === 0 ? filteredCores.length || 1 : itemPerPage
           "
-          :per-page="
-            itemPerPage === 0 ? filteredCores.length || 1 : itemPerPage
-          "
           :total-rows="getTotalRowCount(filteredRows)"
           aria-controls="table-sensors"
         />
@@ -127,8 +121,6 @@ const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
 const { selectedRowsList, clearSelectedRows, onRowSelected } =
   useTableSelectableComposable();
-const { selectedRowsList, clearSelectedRows, onRowSelected } =
-  useTableSelectableComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { getFilteredTableData } = useTableFilterComposable();
 
@@ -144,46 +136,6 @@ const itemPerPage = ref(perPage);
 const searchFilterInput = ref('');
 const searchTotalFilteredRows = ref(0);
 const fields = ref([
-  {
-    key: 'processorId',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.id'),
-  },
-  {
-    key: 'id',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.name'),
-  },
-  {
-    key: 'location',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.locationCode'),
-  },
-  {
-    key: 'functionalState',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.functionalState'),
-    tdClass: 'text-nowrap',
-  },
-  {
-    key: 'eventID',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.eventId'),
-    tdClass: 'text-nowrap',
-  },
-  {
-    key: 'deconfigurationType',
-    sortable: true,
-    label: i18n.global.t(
-      'pageDeconfigurationHardware.table.deconfigurationType',
-    ),
-  },
-  {
-    key: 'settings',
-    sortable: true,
-    label: i18n.global.t('pageDeconfigurationHardware.table.settings'),
-  },
-]);
   {
     key: 'processorId',
     sortable: true,
@@ -265,10 +217,7 @@ const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
     : filteredCores.value.length;
-const filteredRows = computed(() => {
-  return searchFilterInput.value
-    ? searchTotalFilteredRows.value
-    : filteredCores.value.length;
+
 });
 const filteredCores = computed(() => {
   return getFilteredTableData(allCores.value, activeFiltersRows.value);
@@ -276,42 +225,21 @@ const filteredCores = computed(() => {
 });
 const serverStatus = computed(() => {
   return global.serverStatusGetter;
-const serverStatus = computed(() => {
-  return global.serverStatusGetter;
 });
 const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
-const isServerOff = computed(() => {
-  return serverStatus.value === 'off' ? true : false;
 });
-const isReadOnlyUser = computed(() => {
-  return global.isReadOnlyUserGetter;
 const isReadOnlyUser = computed(() => {
   return global.isReadOnlyUserGetter;
 });
 
 const onFilterChange = ({ activeFilters }) => {
   activeFiltersRows.value = activeFilters;
-  activeFiltersRows.value = activeFilters;
 };
 const onFiltered = (filteredItems) => {
   searchTotalFilteredRows.value = filteredItems.length;
-  searchTotalFilteredRows.value = filteredItems.length;
 };
 const toggleSettingsSwitch = (row) => {
-  startLoader();
-  hardwareDeconfigurationStore
-    .updateCoresSettingsState({
-      uri: row.item.uri,
-      settings: row.item.settings,
-    })
-    .catch(({ message }) => {
-      row.item.settings = !row.item.settings;
-      Toast.errorToast(message);
-    })
-    .finally(() => {
-      endLoader();
-    });
   startLoader();
   hardwareDeconfigurationStore
     .updateCoresSettingsState({

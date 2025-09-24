@@ -47,9 +47,6 @@ import Alert from '@/components/Global/Alert.vue';
 import useLoadingBar, {
   loading,
 } from '@/components/Composables/useLoadingBarComposable';
-import useLoadingBar, {
-  loading,
-} from '@/components/Composables/useLoadingBarComposable';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -74,25 +71,6 @@ const refs = {
   vetCapabilities,
 };
 const quickLinks = reactive([
-  {
-    id: 'activation',
-    dataRef: 'activation',
-    href: '#activation',
-    linkText: i18n.global.t('pageCapacityOnDemand.activation.sectionTitle'),
-  },
-  {
-    id: 'orderInfo',
-    dataRef: 'orderInfo',
-    href: '#orderInfo',
-    linkText: i18n.global.t('pageCapacityOnDemand.orderInfo.title'),
-  },
-  {
-    id: 'vetCapabilities',
-    dataRef: 'vetCapabilities',
-    href: '#vetCapabilities',
-    linkText: i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
-  },
-]);
   {
     id: 'activation',
     dataRef: 'activation',

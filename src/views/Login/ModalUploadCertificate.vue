@@ -3,7 +3,6 @@
     id="upload-login-certificate"
     v-model="modal"
     :ok-title="$t('global.action.add')"
-    :ok-title="$t('global.action.add')"
     :title="$t('pageLogin.modal.addNewServiceLoginCertificate')"
     @ok="onOk"
     @hidden="resetForm"
@@ -37,7 +36,7 @@ import FormFile from '@/components/Global/FormFile.vue';
 import { required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
-import { ref,  computed, nextTick } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { reactive } from 'vue';
 import eventBus from '@/eventBus';
 

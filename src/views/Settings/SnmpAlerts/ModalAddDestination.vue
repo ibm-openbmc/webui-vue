@@ -7,14 +7,6 @@
     @ok="onOk"
     @hidden="resetForm"
   >
-  <BModal
-    id="add-destination"
-    v-model="modal"
-    :title="$t('pageSnmpAlerts.modal.addSnmpDestinationTitle')"
-    :ok-title="$t('pageSnmpAlerts.addDestination')"
-    @ok="onOk"
-    @hidden="resetForm"
-  >
     <BForm id="form-destination">
       <BContainer>
         <BRow>
@@ -115,31 +107,6 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, { form });
 
-const handleSubmit = () => {
-  v$.value.$touch();
-  if (v$.value.$invalid) return;
-  emit('ok', {
-    ipAddress: form.value.ipAddress,
-    port: form.value.port,
-  });
-  closeModal();
-};
-const closeModal = () => {
-  nextTick(() => {
-    modal.value = false;
-  });
-};
-const resetForm = () => {
-  form.value.ipAddress = '';
-  form.value.port = '';
-  v$.value.$reset();
-  eventBus.emit('hidden');
-};
-const onOk = (bvModalEvt) => {
-  // prevent modal close
-  bvModalEvt.preventDefault();
-  handleSubmit();
-};
 const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;

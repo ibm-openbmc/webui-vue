@@ -43,7 +43,7 @@
               @change="
                 onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)
               "
-              @update:modelValue="toggleAll"
+              @update:model-value="toggleAll"
             >
             </BFormCheckbox>
           </template>
@@ -52,18 +52,7 @@
               v-model="
                 snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected
               "
-              v-model="
-                snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected
-              "
               :data-test-id="`snmpAlerts-checkbox-selectRow-${row.index}`"
-              @change="
-                toggleSelectRowByIpAddress(
-                  tableRef,
-                  row.index,
-                  snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected,
-                  row.item,
-                )
-              "
               @change="
                 toggleSelectRowByIpAddress(
                   tableRef,
@@ -101,12 +90,10 @@
       :title="deleteTitle"
       :ok-title="okTitle"
       ok-variant="danger"
-      ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk(deleteType)"
     >
       <p>
-        {{ deleteMessage }}
         {{ deleteMessage }}
       </p>
     </BModal>

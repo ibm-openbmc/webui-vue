@@ -230,10 +230,6 @@ onBeforeMount(() => {
     });
 });
 
-function onFiltered(filteredItems) {
-  searchTotalFilteredRows.value = filteredItems.length;
-}
-
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
@@ -283,6 +279,9 @@ watch(
   },
 );
 
+function onFiltered(filteredItems) {
+  searchTotalFilteredRows.value = filteredItems.length;
+}
 function toggleIdentifyLedValue(row) {
   fabricAdaptersStore
     .updateIdentifyLedValue({
