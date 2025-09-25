@@ -3,7 +3,6 @@ import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
 export const MemoryStore = defineStore('memoryStore', {
-  namespaced: true,
   state: () => ({
     dimms: [],
   }),

@@ -4,7 +4,6 @@ import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
 import { defineStore } from 'pinia';
 
 export const UserManagementStore = defineStore('userManagment', {
-  namespaced: true,
   state: () => ({
     allUsers: [],
     accountRoles: [],

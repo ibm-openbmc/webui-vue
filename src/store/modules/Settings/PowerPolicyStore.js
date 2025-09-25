@@ -3,7 +3,6 @@ import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
 export const PowerPolicyStore = defineStore('powerPolicy', {
-  namespaced: true,
   state: () => ({
     powerRestoreCurrentPolicy: null,
     powerRestorePolicies: [],

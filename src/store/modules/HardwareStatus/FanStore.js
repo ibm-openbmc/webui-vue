@@ -3,7 +3,6 @@ import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
 export const FanStore = defineStore('fanStore', {
-  namespaced: true,
   state: () => ({
     fans: [],
   }),

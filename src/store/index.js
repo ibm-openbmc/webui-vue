@@ -12,7 +12,6 @@ import PowerPolicyStore from './modules/Settings/PowerPolicyStore';
 import NetworkStore from './modules/Settings/NetworkStore';
 import EventLogStore from './modules/Logs/EventLogStore';
 // import SensorsStore from './modules/HardwareStatus/SensorsStore';
-// import ServerLedStore from './modules/HardwareStatus/ServerLedStore';
 import SystemStore from './modules/HardwareStatus/SystemStore';
 import PowerSupplyStore from './modules/HardwareStatus/PowerSupplyStore';
 import MemoryStore from './modules/HardwareStatus/MemoryStore';
@@ -33,7 +32,6 @@ import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore'
 import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
 // import WebSocketPlugin from './plugins/WebSocketPlugin';
 import DateTimeStore from './modules/Settings/DateTimeStore';
-// import VirtualMediaStore from './modules/Operations/VirtualMediaStore';
 import ResourceMemoryStore from './modules/ResourceManagement/ResourceMemoryStore';
 import SystemParametersStore from './modules/ResourceManagement/SystemParametersStore';
 import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsStore';

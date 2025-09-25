@@ -21,7 +21,6 @@ const getHighPriorityEvents = (events) =>
   events.filter(({ severity }) => severity === 'Critical');
 
 export const EventLogStore = defineStore('eventLog', {
-  namespaced: true,
   state: () => ({
     allEvents: [],
     ceLogs: [],

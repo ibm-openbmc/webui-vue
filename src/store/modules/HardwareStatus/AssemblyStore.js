@@ -3,7 +3,6 @@ import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
 export const AssemblyStore = defineStore('assemblyStore', {
-  namespaced: true,
   state: () => ({
     assemblies: null,
   }),

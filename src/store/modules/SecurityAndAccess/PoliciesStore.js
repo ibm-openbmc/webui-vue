@@ -3,7 +3,6 @@ import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
 export const PoliciesStore = defineStore('policies', {
-  namespaced: true,
   state: () => {
     return {
       acfUploadEnablement: false,

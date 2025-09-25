@@ -4,7 +4,6 @@ import { find } from 'lodash';
 import { defineStore } from 'pinia';
 
 export const LdapStore = defineStore('ldapStore', {
-  namespaced: true,
   state: () => ({
     isServiceEnabled: null,
     ldap: {
