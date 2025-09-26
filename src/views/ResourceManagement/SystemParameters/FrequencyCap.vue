@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import { requiredIf, between, numeric } from '@vuelidate/validators';
 import stores from '@/store';
 import { useVuelidate } from '@vuelidate/core';

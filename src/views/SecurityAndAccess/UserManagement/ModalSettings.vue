@@ -122,7 +122,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import eventBus from '@/eventBus';
@@ -197,7 +197,7 @@ function handleSubmit() {
 function onOk(bvModalEvt) {
   bvModalEvt.preventDefault();
   handleSubmit();
-};
+}
 
 const closeModal = () => {
   v$.value.$reset();

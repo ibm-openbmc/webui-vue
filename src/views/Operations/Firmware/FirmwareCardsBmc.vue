@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, defineEmits } from 'vue';
+import { ref, computed, watch } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 import useLoadingBar, {

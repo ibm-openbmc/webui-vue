@@ -147,7 +147,7 @@ const { t } = useI18n();
 
 const bmcStore = stores.BmcStore();
 
-const isBusy = ref(false);
+const isBusy = ref(true);
 
 const fields = reactive([
   {

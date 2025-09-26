@@ -448,7 +448,7 @@ const toggleAll = (checked) => {
   overflow-x: hidden;
 }
 .deconfig-records-title {
-  ::v-deep a {
+  :deep(a) {
     text-decoration: none;
     &:hover {
       text-decoration: underline;

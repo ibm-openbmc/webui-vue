@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from 'vue';
+import { ref, computed } from 'vue';
 import i18n from '@/i18n';
 import StatusIcon from './StatusIcon.vue';
 import { formatTime } from '../utilities/dateFilter';

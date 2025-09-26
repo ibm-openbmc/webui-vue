@@ -9,36 +9,6 @@ export const AssemblyStore = defineStore('assemblyStore', {
   getters: {
     assembliesGetter: (state) => state.assemblies,
   },
-  mutations: {
-    setAssemblyInfo: (state, data) => {
-      state.assemblies = data.map((assembly) => {
-        const {
-          MemberId,
-          PartNumber,
-          SerialNumber,
-          SparePartNumber,
-          Model,
-          Name,
-          Location,
-          Status,
-          LocationIndicatorActive,
-        } = assembly;
-        return {
-          id: MemberId,
-          health: Status?.Health,
-          partNumber: PartNumber,
-          serialNumber: SerialNumber,
-          sparePartNumber: SparePartNumber,
-          model: Model,
-          name: Name,
-          locationNumber: Location?.PartLocation?.ServiceLabel,
-          identifyLed: LocationIndicatorActive,
-          status: Status?.State === 'Enabled' ? 'Present' : Status?.State,
-          uri: assembly['@odata.id'],
-        };
-      });
-    },
-  },
   actions: {
     setAssemblyInfo(data) {
       this.assemblies = data.map((assembly) => {

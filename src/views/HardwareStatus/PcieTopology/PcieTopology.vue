@@ -517,7 +517,7 @@ function onFiltered(filteredItems) {
 }
 
 .alert-message-link {
-  ::v-deep a {
+  :deep(a) {
     text-decoration: none;
     &:hover {
       text-decoration: underline;

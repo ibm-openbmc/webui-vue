@@ -478,7 +478,7 @@ function updateInputType(passwordType) {
 
 <style lang="scss" scoped>
 .no-underline-link {
-  ::v-deep a {
+  :deep(a) {
     text-decoration: none;
     &:hover {
       text-decoration: underline;

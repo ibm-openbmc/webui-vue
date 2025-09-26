@@ -170,14 +170,7 @@ import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import Search from '@/components/Global/Search.vue';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-import {
-  defineProps,
-  ref,
-  reactive,
-  computed,
-  watch,
-  onBeforeMount,
-} from 'vue';
+import { ref, reactive, computed, watch, onBeforeMount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import stores from '../../../store';
 import eventBus from '@/eventBus';
@@ -202,7 +195,7 @@ const props = defineProps({
   },
 });
 
-const isBusy = ref(false);
+const isBusy = ref(true);
 const fields = reactive([
   {
     key: 'expandRow',

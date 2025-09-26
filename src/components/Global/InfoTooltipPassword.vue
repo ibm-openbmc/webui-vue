@@ -32,7 +32,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
 import IconTooltip from '@carbon/icons-vue/es/information/16';
 
 defineProps({

@@ -80,7 +80,7 @@
 <script setup>
 import { required, requiredIf } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import { computed, defineProps, ref, watch, defineEmits } from 'vue';
+import { computed, ref, watch } from 'vue';
 import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import FormFile from '@/components/Global/FormFile.vue';

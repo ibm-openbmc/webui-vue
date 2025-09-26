@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, defineEmits } from 'vue';
+import { computed, ref } from 'vue';
 import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';

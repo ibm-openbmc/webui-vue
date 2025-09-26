@@ -273,7 +273,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watch, computed, nextTick } from 'vue';
+import { ref, watch, computed, nextTick } from 'vue';
 import {
   required,
   maxLength,

@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineEmits } from 'vue';
+import { ref, computed } from 'vue';
 import IconClose from '@carbon/icons-vue/es/close/20';
 import eventBus from '@/eventBus';
 

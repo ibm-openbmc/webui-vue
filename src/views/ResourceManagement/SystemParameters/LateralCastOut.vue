@@ -32,7 +32,7 @@
 <script setup>
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import stores from '@/store';
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
 
 const Toast = useToastComposable();

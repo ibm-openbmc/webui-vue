@@ -79,14 +79,7 @@
 <script setup>
 import PageSection from '@/components/Global/PageSection.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
-import {
-  defineProps,
-  reactive,
-  ref,
-  computed,
-  watch,
-  onBeforeMount,
-} from 'vue';
+import { reactive, ref, computed, watch, onBeforeMount } from 'vue';
 
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
@@ -210,7 +203,7 @@ function hasIdentifyLed(identifyLed) {
 
 <style lang="scss" scoped>
 .no-underline-link {
-  ::v-deep a {
+  :deep(a) {
     text-decoration: none;
     &:hover {
       text-decoration: underline;

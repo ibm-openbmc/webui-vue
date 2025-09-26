@@ -67,7 +67,7 @@ onBeforeMount(() => {
 
 <style lang="scss" scoped>
 .hw-deconfig-title {
-  ::v-deep a {
+  :deep(a) {
     text-decoration: none;
     &:hover {
       text-decoration: underline;

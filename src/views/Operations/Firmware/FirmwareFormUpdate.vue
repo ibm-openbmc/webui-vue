@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, defineEmits, onBeforeMount } from 'vue';
+import { ref, computed, watch, onBeforeMount } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { requiredIf } from '@vuelidate/validators';
 import i18n from '@/i18n';

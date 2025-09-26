@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watch, computed, nextTick } from 'vue';
+import { ref, watch, computed, nextTick } from 'vue';
 import stores from '../../../store';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useToast from '@/components/Composables/useToastComposable';

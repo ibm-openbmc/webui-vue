@@ -181,7 +181,7 @@ const { successToast, errorToast } = useToast();
 
 const memoryStore = stores.MemoryStore();
 
-const isBusy = ref(false);
+const isBusy = ref(true);
 const searchTotalFilteredRows = ref(0);
 
 const fields = reactive([
@@ -308,7 +308,7 @@ function getStatusTooltip(status) {
     transform: rotate(180deg);
   }
 }
-.total-fixed-header ::v-deep thead th {
+.total-fixed-header :deep(thead th) {
   position: sticky;
   top: 0;
   z-index: 1;

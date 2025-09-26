@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue';
+import { computed } from 'vue';
 import { omit } from 'lodash';
 
 const props = defineProps({

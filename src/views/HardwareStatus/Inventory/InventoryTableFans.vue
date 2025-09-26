@@ -189,7 +189,7 @@ const props = defineProps({
   },
 });
 
-const isBusy = ref(false);
+const isBusy = ref(true);
 const searchTotalFilteredRows = ref(0);
 
 const fields = reactive([

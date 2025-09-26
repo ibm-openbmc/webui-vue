@@ -596,7 +596,7 @@ const showCollapse = () => {
   color: black !important;
 }
 .no-underline-link {
-  ::v-deep a {
+  :deep(a) {
     text-decoration: none;
     &:hover {
       text-decoration: underline;

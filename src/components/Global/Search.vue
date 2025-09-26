@@ -39,7 +39,7 @@
 <script setup>
 import IconSearch from '@carbon/icons-vue/es/search/16';
 import IconClose from '@carbon/icons-vue/es/close/20';
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 import i18n from '@/i18n';
 // eslint-disable-next-line vue/valid-define-emits
 const emit = defineEmits();

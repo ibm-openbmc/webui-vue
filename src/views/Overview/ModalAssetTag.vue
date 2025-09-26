@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps, nextTick, computed } from 'vue';
+import { ref, watch, nextTick, computed } from 'vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';

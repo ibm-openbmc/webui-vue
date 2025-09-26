@@ -14,7 +14,6 @@
 
 <script setup>
 import IconTooltip from '@carbon/icons-vue/es/information/16';
-import { defineProps } from 'vue';
 
 defineProps({
   status: {
