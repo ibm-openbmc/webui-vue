@@ -1,10 +1,13 @@
 import { fileURLToPath } from 'node:url';
 import { mergeConfig, defineConfig } from 'vite';
 import { configDefaults } from 'vitest/config';
-import viteConfig from './vite.config';
-
+import viteBaseConfig from './vite.config.js';
+const viteConfig =
+  typeof viteBaseConfig === 'function'
+    ? viteBaseConfig({ mode: 'test' })
+    : viteBaseConfig;
 export default mergeConfig(
-  viteConfig,
+  await viteConfig,
   defineConfig({
     test: {
       environment: 'jsdom',
@@ -18,7 +21,7 @@ export default mergeConfig(
       postcss: null,
       preprocessorOptions: {
         scss: {
-          additionalData: `     
+          additionalData: `
         @import "./src/assets/styles/bootstrap/_helpers.scss";
         @import './src/assets/styles/_obmc-custom.scss';
             `,

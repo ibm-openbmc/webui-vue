@@ -105,7 +105,9 @@ watch(isNavigationOpen, () => {
 
 const checkForUserData = () => {
   if (!currentUser.value) {
-    userManagementStore.getUsers();
+    userManagementStore.getUsers().catch((error) => {
+      console.log(error);
+    });
     globalStore.getCurrentUser();
   }
 };

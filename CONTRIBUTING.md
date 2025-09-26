@@ -44,7 +44,7 @@ npm install
 npm run serve
 ```
 
-### Run Documentation Locally (Vuepress static site generation)
+### Run Documentation Locally (Vitepress static site generation)
 ```
 npm run docs:serve
 ```
