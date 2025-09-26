@@ -7,8 +7,9 @@
       :items="items"
       :fields="fields"
       show-empty
-      :empty-text="$t('global.table.emptyMessage')"
-      :busy="isBusy"
+      :empty-text="
+        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
+      "
     >
       <!-- Expand chevron icon -->
       <template #cell(expandRow)="row">
@@ -147,7 +148,7 @@ const { t } = useI18n();
 
 const bmcStore = stores.BmcStore();
 
-const isBusy = ref(true);
+const isBusy = ref(false);
 
 const fields = reactive([
   {
@@ -184,6 +185,7 @@ const fields = reactive([
 ]);
 
 onBeforeMount(() => {
+  isBusy.value = true;
   bmcStore.getBmcInfo().finally(() => {
     // Emit initial data fetch complete to parent component
     eventBus.emit('hardware-status-bmc-manager-complete');

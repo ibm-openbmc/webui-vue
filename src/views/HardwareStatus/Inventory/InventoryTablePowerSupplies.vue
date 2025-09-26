@@ -23,9 +23,10 @@
       :fields="fields"
       :sort-desc="false"
       :filter="searchFilterInput"
-      :empty-text="$t('global.table.emptyMessage')"
+      :empty-text="
+        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
+      "
       :empty-filtered-text="$t('global.table.emptySearchMessage')"
-      :busy="isBusy"
       class="no-scroll-sticky"
       @filtered="onFiltered"
     >
@@ -195,7 +196,7 @@ const props = defineProps({
   },
 });
 
-const isBusy = ref(true);
+const isBusy = ref(false);
 const fields = reactive([
   {
     key: 'expandRow',
@@ -245,6 +246,7 @@ const filteredRows = computed(() => {
 });
 
 onBeforeMount(() => {
+  isBusy.value = true;
   powerSupplyStore.getAllPowerSupplies({ uri: props.chassis }).finally(() => {
     // Emit initial data fetch complete to parent component
     eventBus.emit('hardware-status-power-supplies-complete');
@@ -282,6 +284,7 @@ const powerSupplies = computed(() => {
 watch(
   () => props.chassis,
   (value) => {
+    isBusy.value = true;
     powerSupplyStore.getAllPowerSupplies({ uri: value }).finally(() => {
       // Emit initial data fetch complete to parent component
       eventBus.emit('hardware-status-power-supplies-complete');

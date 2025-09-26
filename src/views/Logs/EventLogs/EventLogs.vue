@@ -74,12 +74,15 @@
           :fields="fields"
           :items="filteredLogs"
           :sort-compare="onSortCompare"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
           :per-page="perPage === 0 ? filteredLogs.length || 1 : perPage"
           :current-page="currentPage"
           :filter="searchFilter"
-          :busy="isBusy"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredLogs.length)"
         >

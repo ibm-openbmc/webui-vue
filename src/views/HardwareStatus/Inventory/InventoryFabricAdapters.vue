@@ -25,9 +25,10 @@
       :sort-desc="false"
       :filter="searchFilterInput"
       class="no-scroll-sticky"
-      :empty-text="$t('global.table.emptyMessage')"
+      :empty-text="
+        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
+      "
       :empty-filtered-text="$t('global.table.emptySearchMessage')"
-      :busy="isBusy"
       @filtered="onFiltered"
     >
       <template #head(identifyLed)="row">
@@ -179,7 +180,7 @@ const props = defineProps({
   },
 });
 
-const isBusy = ref(true);
+const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
 const fields = reactive([
   {
@@ -222,6 +223,7 @@ const fields = reactive([
 ]);
 
 onBeforeMount(() => {
+  isBusy.value = true;
   fabricAdaptersStore
     .getFabricAdaptersInfo({ uri: props.chassis })
     .finally(() => {
@@ -270,6 +272,7 @@ const fabricAdapters = computed(() => {
 watch(
   () => props.chassis,
   () => {
+    isBusy.value = true;
     fabricAdaptersStore
       .getFabricAdaptersInfo({ uri: props.chassis })
       .finally(() => {

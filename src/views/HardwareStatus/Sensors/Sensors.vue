@@ -45,7 +45,6 @@
           hover
           sticky-header="75vh"
           :sort-by="[{ key: 'status', order: 'asc' }]"
-          :busy="isBusy"
           show-empty
           :no-border-collapse="true"
           :items="filteredSensors"
@@ -55,7 +54,11 @@
           "
           :current-page="currentPageNo"
           :filter="searchFilterInput"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredSensors.length)"

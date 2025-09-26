@@ -105,6 +105,7 @@
       "fromDate": "From date",
       "items": "%{count} items",
       "itemsPerPage": "Items per page",
+      "loading": "Loading...",
       "selectAll": "Select all",
       "selectedItems": "%{filterCount} of %{count} items",
       "selectItem": "Select item",

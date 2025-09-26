@@ -25,9 +25,12 @@
           "
           :current-page="currentPageNo"
           :filter="searchFilter"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
-          :busy="isBusy"
           @filtered="onFiltered"
         >
           <template #cell(functionalState)="{ value }">

@@ -58,10 +58,13 @@
           show-empty
           sticky-header="75vh"
           hover
-          :busy="isBusy"
           :fields="fields"
           :items="tableItems"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
         >
           <!-- Certificate -->
           <template #cell(certificate)="row">

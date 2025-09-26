@@ -45,12 +45,15 @@
           show-empty
           :fields="fields"
           :items="filteredLogs"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
           :per-page="perPageVal === 0 ? filteredLogs.length || 1 : perPageVal"
           :current-page="currentPageNo"
           :filter="searchFilterInputVal"
-          :busy="isBusy"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredLogs.length)"
         >

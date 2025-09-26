@@ -38,10 +38,13 @@
           hover
           no-sort-reset
           sort-icon-left
-          :busy="isBusy"
           :items="tableItems"
           :fields="fields"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           @row-selected="onRowSelected($event, tableItems.length)"
         >
           <!-- Checkbox column -->

@@ -57,7 +57,11 @@
           sort-desc.sync="status"
           :fields="fields"
           :items="filteredLogs"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           :current-page="currentPageNo"
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
           @row-selected="onRowSelected($event, filteredLogs.length)"
@@ -271,6 +275,7 @@ const deconfigurationRecoredsStore = stores.DeconfigurationRecordsStore();
 const global = stores.GlobalStore();
 
 const tableDeconfigurationRecordsRef = ref(null);
+const isBusy = ref(false);
 const fields = ref([
   {
     key: 'expandRow',
@@ -332,14 +337,17 @@ const openModal = ref(false);
 const isAllSelected = ref(false);
 
 onBeforeRouteLeave(() => {
+  isBusy.value = false;
   hideLoader();
 });
 
 onBeforeMount(() => {
   startLoader();
-  deconfigurationRecoredsStore
-    .getDeconfigurationRecordInfo()
-    .finally(() => endLoader());
+  isBusy.value = true;
+  deconfigurationRecoredsStore.getDeconfigurationRecordInfo().finally(() => {
+    isBusy.value = false;
+    endLoader();
+  });
   eventBus.on('clear-selected', () => {
     deconfigurationRecoredsStore?.deconfigRecordsGetter?.map(
       (singleConnection) => {

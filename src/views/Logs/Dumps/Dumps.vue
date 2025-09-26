@@ -95,14 +95,17 @@
             sticky-header="75vh"
             :fields="fields"
             :items="filteredDumps"
-            :empty-text="$t('global.table.emptyMessage')"
+            :empty-text="
+              isBusy
+                ? $t('global.table.loading')
+                : $t('global.table.emptyMessage')
+            "
             :empty-filtered-text="$t('global.table.emptySearchMessage')"
             :per-page="
               itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage
             "
             :current-page="currentPageNo"
             :filter="searchFilterInput"
-            :busy="isBusy"
             @filtered="onFiltered"
             @row-selected="onRowSelected($event, filteredDumps.length)"
           >

@@ -37,9 +37,12 @@
           "
           :current-page="currentPageNo"
           :filter="searchFilterInput"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
-          :busy="isBusy"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredCores.length)"
         >

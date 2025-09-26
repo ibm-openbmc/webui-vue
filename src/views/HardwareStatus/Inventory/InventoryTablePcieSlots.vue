@@ -30,9 +30,10 @@
       :fields="fields"
       :sort-desc="false"
       :filter="searchFilterInput"
-      :empty-text="$t('global.table.emptyMessage')"
+      :empty-text="
+        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
+      "
       :empty-filtered-text="$t('global.table.emptySearchMessage')"
-      :busy="isBusy"
       class="no-scroll-sticky"
       @filtered="onFiltered"
     >
@@ -107,7 +108,7 @@ const props = defineProps({
 });
 
 const searchTotalFilteredRows = ref(0);
-const isBusy = ref(true);
+const isBusy = ref(false);
 const slotListLength = ref(0);
 
 const fields = reactive([
@@ -132,6 +133,7 @@ const fields = reactive([
 ]);
 
 onBeforeMount(() => {
+  isBusy.value = true;
   pcieSlotsStore.getPcieSlotsInfo({ uri: props.chassis }).finally(() => {
     eventBus.emit('hardware-status-pcie-slots-complete');
     isBusy.value = false;
@@ -169,6 +171,7 @@ const serverStatus = computed(() => {
 watch(
   () => props.chassis,
   (value) => {
+    isBusy.value = true;
     pcieSlotsStore.getPcieSlotsInfo({ uri: value }).finally(() => {
       eventBus.emit('hardware-status-pcie-slots-complete');
       isBusy.value = false;

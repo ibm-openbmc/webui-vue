@@ -23,9 +23,10 @@
       :fields="tableHeaders"
       :filter="searchFilterInput"
       show-empty
-      :empty-text="$t('global.table.emptyMessage')"
+      :empty-text="
+        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
+      "
       :empty-filtered-text="$t('global.table.emptySearchMessage')"
-      :busy="isBusy"
       @filtered="onFiltered"
     >
       <template #head(identifyLed)="row">
@@ -181,7 +182,7 @@ const { t } = useI18n();
 const globalStore = stores.GlobalStore();
 const assemblyStore = stores.AssemblyStore();
 
-const isBusy = ref(true);
+const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
 
 const fields = reactive([
@@ -224,6 +225,7 @@ const fields = reactive([
 ]);
 
 onBeforeMount(() => {
+  isBusy.value = true;
   assemblyStore.getAssemblyInfo({ uri: props.chassis }).finally(() => {
     // Emit initial data fetch complete to parent component
     eventBus.emit('hardware-status-assembly-complete');
@@ -291,6 +293,7 @@ const tableHeaders = computed(() => {
 watch(
   () => props.chassis,
   (value) => {
+    isBusy.value = true;
     assemblyStore.getAssemblyInfo({ uri: value }).finally(() => {
       // Emit initial data fetch complete to parent component
       eventBus.emit('hardware-status-assembly-complete');

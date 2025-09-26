@@ -7,8 +7,9 @@
       sticky-header="75vh"
       :items="chassis"
       :fields="fields"
-      :empty-text="$t('global.table.emptyMessage')"
-      :busy="isBusy"
+      :empty-text="
+        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
+      "
     >
       <!-- Expand chevron icon -->
       <template #cell(expandRow)="row">
@@ -126,7 +127,7 @@ import useToast from '@/components/Composables/useToastComposable';
 
 const { successToast, errorToast } = useToast();
 const { t } = useI18n();
-const isBusy = ref(true);
+const isBusy = ref(false);
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 
@@ -168,6 +169,7 @@ const fields = reactive([
 ]);
 
 onBeforeMount(() => {
+  isBusy.value = true;
   chassisStore.fetchGetChassisInfo().finally(() => {
     // Emit initial data fetch complete to parent component
     eventBus.emit('hardware-status-chassis-complete');

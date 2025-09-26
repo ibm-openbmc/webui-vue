@@ -48,12 +48,15 @@
           hover
           sticky-header="75vh"
           :sort-by="[{ key: 'clientID', order: 'asc' }]"
-          :busy="isBusy"
           show-empty
           :fields="fields"
           :items="allConnections"
           :filter="searchFilterInput"
-          :empty-text="$t('global.table.emptyMessage')"
+          :empty-text="
+            isBusy
+              ? $t('global.table.loading')
+              : $t('global.table.emptyMessage')
+          "
           :per-page="
             itemPerPage === 0 ? allConnections.length || 1 : itemPerPage
           "

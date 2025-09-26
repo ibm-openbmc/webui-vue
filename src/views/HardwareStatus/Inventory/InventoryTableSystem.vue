@@ -7,8 +7,9 @@
       sticky-header="75vh"
       :items="systems"
       :fields="fields"
-      :empty-text="$t('global.table.emptyMessage')"
-      :busy="isBusy"
+      :empty-text="
+        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
+      "
     >
       <!-- Expand chevron icon -->
       <template #cell(expandRow)="row">
@@ -136,7 +137,7 @@ const { t } = useI18n();
 
 const systemStore = stores.SystemStore();
 
-const isBusy = ref(true);
+const isBusy = ref(false);
 const fields = reactive([
   {
     key: 'expandRow',
@@ -163,6 +164,7 @@ const fields = reactive([
 ]);
 
 onBeforeMount(() => {
+  isBusy.value = true;
   systemStore.getSystem().finally(() => {
     eventBus.emit('hardware-status-system-complete');
     isBusy.value = false;
