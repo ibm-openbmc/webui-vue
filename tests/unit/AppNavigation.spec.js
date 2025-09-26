@@ -35,6 +35,7 @@ vi.mock('@/components/AppNavigation/AppNavigationData', () => {
     ],
   });
 });
+
 describe('AppNavigation.vue', () => {
   let wrapper;
   let globalStore;
@@ -67,12 +68,15 @@ describe('AppNavigation.vue', () => {
       },
     });
   });
+
   it('should exist', () => {
     expect(wrapper.exists()).toBe(true);
   });
+
   it('should render correctly', () => {
     expect(wrapper.find('.nav-container').exists()).toBe(true);
   });
+
   it('should render with nav-container open', () => {
     wrapper.vm.isNavigationOpen = true;
     expect(wrapper.element).toMatchSnapshot();
