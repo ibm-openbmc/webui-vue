@@ -1,5 +1,4 @@
 @use 'sass:math';
-// @import "/node_modules/bootstrap/scss/variables";
 .b-table-sticky-header {
   max-height: 75vh;
   min-height: 100px;
@@ -14,17 +13,6 @@
             left: -3px !important;
             top: 38% !important;
           }
-          // svg {
-          //   background-position: left calc(1.5rem / 2) center !important;
-          //   padding-left: calc(1.2rem + 0.65em) !important;
-          //   &:focus {
-          //     outline: none;
-          //     box-shadow: inset 0 0 0 2px $primary !important;
-          //   }
-          //   &:hover {
-          //     background-color: $light;
-          //   }
-          // }
           vertical-align: middle;
           border-top: 1px solid $gray-300;
           border-bottom: 1px solid $gray-300;
@@ -132,17 +120,6 @@
       padding-left: calc(50px + (#{$table-cell-padding-y} * 2));
       padding-right: calc(50px + (#{$table-cell-padding-y} * 2));
     }
-    // dl {
-    //   margin: 0;
-    // }
-    // dt {
-    //   float: left;
-    //   clear: left;
-    //   margin-right: math.div($spacer, 2);
-    // }
-    // dd {
-    //   line-height: 1.2;
-    // }
   }
 
   .table-row-expand {
