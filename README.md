@@ -1,4 +1,3 @@
-<!-- Work Requird -->
 # webui-vue
 
 webui-vue is a web-based user interface for the OpenBMC firmware stack built on
@@ -49,7 +48,7 @@ roadmap
 
 
 ## Documentation
-The documentation for coding standards and components is located in the `docs` directory. It is created using the [VuePress](https://vuepress.vuejs.org/) static site generator. Information about how to write documentation can be found on the [VuePress website](https://vuepress.vuejs.org/).
+The documentation for coding standards and components is located in the `docs` directory. It is created using the [VitePress](https://vitepress.dev/guide/using-vue) static site generator. Information about how to write documentation can be found on the [VitePress website](https://vitepress.dev/guide/using-vue).
 
 ## Recommended IDE Setup
 
