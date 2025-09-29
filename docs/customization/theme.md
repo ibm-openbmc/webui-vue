@@ -1,6 +1,6 @@
 # Theme customization
 Customization of the application requires knowledge of Sass and CSS. It also
-will require becoming familiar with the Bootstrap and Bootstrap-Vue component
+will require becoming familiar with the Bootstrap and Bootstrap-vue-next component
 libraries. This section outlines the global options and variables that can be
 removed or updated to meet organizational brand guidelines.
 
@@ -10,11 +10,6 @@ customization needs. This includes customization of the state store, routing,
 application navigation, and theming.
 
 [Read more in the Build Customization section](/customization/build)
-
-<!-- ### Configuring environment specific builds
-The complete instructions can be found in the `env` directory in a file called
-env.md or by viewing the [Configuring environment specific builds
-page](./env.md) -->
 
 ## Bootstrap Sass Options
 The Bootstrap Sass options are global styling toggles. The naming convention for
@@ -37,7 +32,7 @@ some custom forms for validation states.
 
 ## Bootstrap Sass Variables
 These are global variables that Bootstrap defines in the
-`/node_modules/bootstrap/scss/variables.scss` helper file. Adding a variable
+`/node_modules/bootstrap/scss/_variables.scss` helper file. Adding a variable
 listed in this file to the `/src/assets/styles/bmc/helpers/_variables.scss` file
 will override the Bootstrap defined value.
 
@@ -163,10 +158,10 @@ gray variable values.
 [Learn more about Bootstrap
 colors](https://getbootstrap.com/docs/4.0/getting-started/theming/#color)
 
-### Bootstrap Color Functions
+<!-- ### Bootstrap Color Functions
 - `color('<color map key>)`
 - `theme-color('<theme color map key>)`
-- `gray('<gray color palette key'>)`
+- `gray('<gray color palette key'>)` -->
 
 
 #### Example
@@ -174,7 +169,7 @@ colors](https://getbootstrap.com/docs/4.0/getting-started/theming/#color)
 .some-selector {
   color: color("blue");
   background: theme-color("light");
-  border: 1px solid gray("900")
+  border: 1px solid $gray-900;
 }
 ```
 

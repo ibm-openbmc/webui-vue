@@ -33,7 +33,7 @@ main {
   padding-right: $spacer;
 
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px theme-color('primary');
+    box-shadow: inset 0 0 0 2px theme-color-light($info);
     outline: none;
   }
 

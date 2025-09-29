@@ -14,46 +14,47 @@ modifications to the Web UI.
 ## Setup
 
 1. Create a `.env.<ENV_NAME>` file in the project root
-2. Add `NODE_ENV=production` key value pair in the file
-3. Add `VUE_APP_ENV_NAME` key with the value set to the new environment name
+2. Add `VITE_CUSTOM_ENV=production` key value pair in the file
+3. Add `VITE_APP_ENV_NAME` key with the value set to the new environment name
 
 Example `.env.ibm`:
 
 ```
-NODE_ENV=production
-VUE_APP_ENV_NAME=ibm
+VITE_CUSTOM_ENV=production
+VITE_APP_ENV_NAME=ibm
 ```
 
 ## Store
 
 :::tip
-[Vuex store modules](https://vuex.vuejs.org/guide/modules.html) contain the
+[Pinia store core concepts](https://pinia.vuejs.org/core-concepts/) contain the
 application's API calls.
 :::
 
-1. If making customizations to the default store, add `CUSTOM_STORE=true` key
+1. If making customizations to the default store, add `VITE_CUSTOM_STORE=true` key
    value pair to the new .env file.
 2. Create a `<ENV_NAME>.js` file in `src/env/store`
    :::danger
-   The filename needs to match the `VUE_APP_ENV_NAME` value defined in the
+   The filename needs to match the `VITE_APP_ENV_NAME` value defined in the
    .env file. The store import in `src/main.js` will resolve to this new
    file.
    :::
 3. Import the base store
 4. Import environment specific store modules
-5. Use the [Vuex](https://vuex.vuejs.org/api/#registermodule) `registerModule`
-   and `unregisterModule` instance methods to add/remove store modules
+5. Assign the Objects required to the base store.
 6. Add default export
 
 Example `src/env/store/ibm.js`:
 
 ```
-import store from '@/store; //@ aliases to src directory
-import HmcStore from './Hmc/HmcStore';
+import stores from '@/store; //@ aliases to src directory
+import DumpsStore from '../../store/modules/Logs/DumpsStore.js';
 
-store.registerModule('hmc', HmcStore);
+Object.assign(stores, {
+  DumpsStore: DumpsStore,
+});
 
-export default store;
+export default stores;
 ```
 
 ## Router
@@ -63,11 +64,11 @@ export default store;
 accessible in the UI.
 :::
 
-1. If making customizations to the default router, add `CUSTOM_ROUTER=true` key
+1. If making customizations to the default router, add `VITE_CUSTOM_ROUTER=true` key
    value pair to the new .env file.
 2. Create a `<ENV_NAME>.js` file in `src/env/router`
    :::danger
-   The filename needs to match the `VUE_APP_ENV_NAME` value defined in the
+   The filename needs to match the `VITE_APP_ENV_NAME` value defined in the
    .env file. The routes import in `src/router/index.js` will resolve to this
    new file.
    :::
@@ -86,17 +87,17 @@ application routes which is not always the same as what is visible in the app
 navigation. This configuration will make customizations to the rendered markup
 in src/components/AppNavigation/AppNavigation.vue.
 
-1. If making customizations to the app navigation, add `CUSTOM_APP_NAV=true` key
+1. If making customizations to the app navigation, add `VITE_CUSTOM_APP_NAV=true` key
    value pair to the new .env file.
 2. Create a `<ENV_NAME>.js` file in `src/env/components/AppNavigation`
    :::danger
-   The filename needs to match the `VUE_APP_ENV_NAME` value defined in the
-   .env file. The AppNavigationMixin import in
+   The filename needs to match the `VITE_APP_ENV_NAME` value defined in the
+   .env file. The AppNavigationData import in
    `src/components/AppNavigation/AppNavigation.vue` will resolve to this new
    file.
    :::
 3. Your custom mixin should follow a very similar structure to the default
-   AppNavigationMixin.js file. It should include a data property named
+   AppNavigationData.js file. It should include a data property named
    `navigationItems` that should be an array of of navigation objects. Each
    navigation object should have an `id` and `label` property defined.
    Optionally it can include `icon`, `route`, or `children` properties.
@@ -109,11 +110,11 @@ in src/components/AppNavigation/AppNavigation.vue.
 allows for easy visual customizations.
 :::
 
-1. If making customizations to the default styles, add `CUSTOM_STYLES=true` key
+1. If making customizations to the default styles, add `VITE_CUSTOM_STYLES=true` key
    value pair to the new .env file.
 2. Create a `_<ENV_NAME>.scss` partial in `src/env/assets/styles`
    :::danger
-   The filename needs to match the `VUE_APP_ENV_NAME` value defined in the
+   The filename needs to match the `VITE_APP_ENV_NAME` value defined in the
    .env file. The webpack sass loader will attempt to import a file with this
    name.
    :::
@@ -136,8 +137,8 @@ $success: lime;
 
 ## Local development
 
-1. Add the same `VUE_APP_ENV_NAME` key value pair to your
-   `env.development.local` file.
+1. Add the same `VITE_APP_ENV_NAME` key value pair to your
+   `env.local` file.
 2. Use serve script
    ```
    npm run serve
@@ -158,5 +159,5 @@ npm run build -- --mode ibm
 pass env variable directly to script
 
 ```
-VUE_APP_ENV_NAME=ibm npm run build
+VITE_APP_ENV_NAME=ibm npm run build
 ```

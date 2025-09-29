@@ -182,11 +182,11 @@ set color highlights for some pseudo-elements like `: hover`.
 // This function is usually used to get a lighter
 // theme variant color to use as a background color
 @function theme-color-light($variant) {
-  @return theme-color-level($variant, -11.3);
+  @return color-level($variant, -11.3);
 }
 
 @function theme-color-dark($variant) {
-  @return theme-color-level($variant, 2);
+  @return color-level($variant, 2);
 }
 ```
 
@@ -194,21 +194,21 @@ set color highlights for some pseudo-elements like `: hover`.
 
 ```scss{8-10,16}
 .b-table-sort-icon-left {
-    background-position: left calc(1.5rem / 2) center !important;
-    padding-left: calc(1.2rem + 0.65em) !important;
-    &:focus {
-      outline: none;
-      box-shadow: inset 0 0 0 2px theme-color('primary') !important;
-    }
-    &:hover {
-      background-color: theme-color-dark('light');
-    }
+  background-position: left calc(1.5rem / 2) center !important;
+  padding-left: calc(1.2rem + 0.65em) !important;
+  &:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px $primary !important;
+  }
+  &:hover {
+    background-color: theme-color-dark($light);
+  }
 }
 
 &.alert-info {
-border-left-color: theme-color("info");
-background-color: theme-color-light("info");
-fill: theme-color("info");
+  border-left-color: $info;
+  background-color: theme-color-light($info);
+  fill: $info;
 }
 ```
 
