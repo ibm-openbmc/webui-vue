@@ -129,9 +129,10 @@ netbase
 net-snmp
 npm-axios
 npm-bootstrap
-npm-bootstrap-vue
-npm-carbon
-npm-core-js
+npm-bootstrap-vue-next
+npm-buffer
+npm-@carbon/motion
+npm-@carbon/themes
 npm-date-fns
 npm-date-fns-tz
 npm-js-cookie
@@ -139,11 +140,15 @@ npm-json-bigint
 npm-lodash
 npm-n64
 npm-novnc
+npm-pinia
+npm-tiny-emitter
+npm-vitejs/plugin-basic-ssl
 npm-vue
+npm-vue-axios
 npm-vue-i18n
 npm-vuelidate
 npm-vue-router
-npm-vuex
+npm-vue3-cookies
 npm-xterm
 npm-xterm-addon-attach
 npm-xterm-addon-fit
@@ -278,6 +283,8 @@ Separately Licensed Code under the Apache License Version 2.0
 
 biosconfig-manager
 bmcweb
+npm-@carbon/motion
+npm-@carbon/themes
 clear-once
 croserver
 dbus-broker
@@ -4034,20 +4041,25 @@ ncurses
 net-snmp
 npm-axios
 npm-bootstrap
-npm-bootstrap-vue
-npm-carbon
-npm-core-js
+npm-bootstrap-vue-next
+npm-buffer
+npm-@carbon/motion
+npm-@carbon/themes
 npm-date-fns
 npm-date-fns-tz
 npm-js-cookie
 npm-json-bigint
 npm-lodash
 npm-n64
+npm-pinia
+npm-tiny-emitter
+npm-vitejs/plugin-basic-ssl
 npm-vue
+npm-vue-axios
 npm-vue-i18n
 npm-vuelidate
 npm-vue-router
-npm-vuex
+npm-vue3-cookies
 npm-xterm
 npm-xterm-addon-attach
 npm-xterm-addon-fit
@@ -4106,7 +4118,7 @@ The Program includes some or all of the following licensed to the licensee as
 Separately Licensed Code under the Mozilla Public License Version 2.0
 
 ca-certificates
-npm-novnc
+npm-@novnc/novnc
 
 ---------------------------------------------------------------------------
 Start of Mozilla Public License Version 2.0
