@@ -145,8 +145,44 @@ const isBusy = ref(true);
 const disableSubmitButton = ref(false);
 const languages = ref([
   {
+    value: 'de',
+    text: 'German',
+  },
+  {
     value: 'en-US',
     text: 'English',
+  },
+  {
+    value: 'es',
+    text: 'Español',
+  },
+  {
+    value: 'fr',
+    text: 'French',
+  },
+  {
+    value: 'it',
+    text: 'Italian',
+  },
+  {
+    value: 'ja',
+    text: 'Japanese',
+  },
+  {
+    value: 'ko',
+    text: 'Korean',
+  },
+  {
+    value: 'pt-BR',
+    text: 'Brazilian Portuguese',
+  },
+  {
+    value: 'zh-CN',
+    text: '简体中文 - Chinese simplified',
+  },
+  {
+    value: 'zh-TW',
+    text: '繁体中文 - Chinese traditional',
   },
 ]);
 
