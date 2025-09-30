@@ -96,6 +96,7 @@ columns and add the following props to the `<BTable>` component:
     :fields="fields"
   />
 </template>
+
 <script setup>
 import { ref } from 'vue';
 
@@ -124,9 +125,7 @@ const fields = ref([
 
 To add an expandable row in the table, add a column for the expand button in the
 fields array. Include the tdClass `table-row-expand` to ensure icon rotation is
-handled. Use the built in [cell
-slot](https://bootstrap-vue.org/docs/components/table#comp-ref-BTable-slots) to
-target the expand button column and add a button with the chevron icon.
+handled.
 
 Include the
 [useTableRowExpandComposable](https://github.com/ibm-openbmc/webui-vue/blob/1060-vue3/src/components/Composables/useTableRowExpandComposable.js).
@@ -175,6 +174,7 @@ format the expanded row content. The slot has access to the row `item` property.
     </template>
   </BTable>
 </template>
+
 <script setup>
 import { ref } from 'vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
@@ -253,6 +253,7 @@ if there are no search matches.
   />
   </BContainer>
 </template>
+
 <script setup>
 import { ref, computed } from 'vue';
 import Search from '@/components/Global/Search';
@@ -312,6 +313,7 @@ component will emit a `@click-table-action` with the event value.
     </template>
   </BTable>
 </template>
+
 <script>
 import { ref } from 'vue';
 import IconDelete from '@carbon/icons-vue/es/trash-can/20';
@@ -390,6 +392,7 @@ from the useTableFilterComposable to show the filtered table data.
     />
   </b-container>
 </template>
+
 <script setup>
 import { ref, computed } from 'vue';
 import TableFilter from '@/components/Global/TableFilter.vue';
@@ -491,6 +494,7 @@ To add table batch actions:
     </BTable>
   </b-container>
 </template>
+
 <script>
 import { ref } from 'vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
@@ -602,6 +606,7 @@ To add table pagination:
     </BRow>
   </BContainer>
 </template>
+
 <script>
 import { ref } from 'vue';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';

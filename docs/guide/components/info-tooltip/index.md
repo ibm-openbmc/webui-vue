@@ -1,6 +1,6 @@
 # InfoTooltip
 
-The `InfoTooltip` is a custom component that uses a Bootstrap-vue tooltip with
+The `InfoTooltip` is a custom component that uses a Bootstrap-vue-next tooltip with
 an info icon. This custom component requires a title property containing the
 tooltip text to display to the user.
 

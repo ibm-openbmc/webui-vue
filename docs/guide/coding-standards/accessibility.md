@@ -41,9 +41,9 @@ The OpenBMC Web UI developers should test their development pages using one of
 the tools listed in the tools section below. If using Chrome, the Lighthouse
 application comes bundled with the browser and also includes testing for
 performance and best practices. If there is an issue that is created when using
-a Bootstrap-Vue component, we can [create an issue in the Bootstrap-vue
-repo](https://github.com/bootstrap-vue/bootstrap-vue/issues/new/choose).
-Contributing to the Bootstrap-Vue open-source library, when possible, is
+a Bootstrap-Vue-next component, we can [create an issue in the Bootstrap-vue-next
+repo](https://github.com/bootstrap-vue-next/bootstrap-vue-next/issues/new/choose).
+Contributing to the Bootstrap-Vue-next open-source library, when possible, is
 strongly encouraged.
 
 ## Tools

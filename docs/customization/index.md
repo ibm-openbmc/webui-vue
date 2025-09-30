@@ -366,6 +366,6 @@ You might notice that there is an HTML element, `<h2>`, used in the example. Thi
 [Learn more about single file components](https://vuejs.org/v2/guide/single-file-components.html)
 
 Customization of the application requires knowledge of Sass and CSS. It also
-will require becoming familiar with the Bootstrap and Bootstrap-Vue component
+will require becoming familiar with the Bootstrap and Bootstrap-Vue-next component
 libraries. This section outlines the global options and variables that can be
 removed or updated to meet organizational brand guidelines.

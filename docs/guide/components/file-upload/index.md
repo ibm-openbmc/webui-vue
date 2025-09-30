@@ -1,6 +1,6 @@
 # FormFile
 
-`FormFile` is a custom component wrapper around the Bootstrap-vue Form File
+`FormFile` is a custom component wrapper around the Bootstrap-vue-next Form File
 component. The purpose of this component is to upload files to the BMC.
 
 To use this component:

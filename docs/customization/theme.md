@@ -140,7 +140,7 @@ UI `theme-color` map has the same keys as the Bootstrap `theme-color` map with
 custom values.
 
 The `theme-color` map is used heavily throughout the application. The
-Bootstrap-Vue components `variant` prop also utilizes the `theme-color` map.
+Bootstrap-Vue-next components `variant` prop also utilizes the `theme-color` map.
 This map is the key to customizing the application's color palette. Take a look
 at the [color guidelines](/guide/guidelines/colors) to better understand default
 theme-colors map.
@@ -158,17 +158,12 @@ gray variable values.
 [Learn more about Bootstrap
 colors](https://getbootstrap.com/docs/4.0/getting-started/theming/#color)
 
-<!-- ### Bootstrap Color Functions
-- `color('<color map key>)`
-- `theme-color('<theme color map key>)`
-- `gray('<gray color palette key'>)` -->
-
 
 #### Example
 ```SCSS
 .some-selector {
   color: color("blue");
-  background: theme-color("light");
+  background-color: $light;
   border: 1px solid $gray-900;
 }
 ```

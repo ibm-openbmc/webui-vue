@@ -55,16 +55,29 @@ node node_modules/vue-i18n-extract/bin/vue-i18n-extract.js -v 'src/**/*.?(js|vue
 pluralization.](https://vue-i18n.intlify.dev/guide/essentials/pluralization.html#custom-pluralization)
 
 ```json
-"modal": {
-  "deleteDump": "Delete dump | Delete dumps"
+"toast": {
+   "errorDelete": "Error deleting %{count} record. | Error deleting %{count} records."
 }
 ```
 
 ```JS
-this.$bvModal
-  .msgBoxConfirm(this.$tc('pageDumps.modal.deleteDumpConfirmation'), {
-   title: this.$tc('pageDumps.modal.deleteDump'),
-   okTitle: this.$tc('pageDumps.modal.deleteDump'),
-   cancelTitle: this.$t('global.action.cancel'),
-  })
+...
+...
+
+state: () => ({
+    allDumps: [],
+}),
+
+async deleteAllDumps() {
+  const totalDumpCount = this.allDumps.length;
+    ...
+
+      .catch((error) => {
+        console.log(error);
+        throw new Error(
+          i18n.global.t('pageDumps.toast.errorDeleteDump', totalDumpCount),
+        );
+      });
+},
+
 ```

@@ -37,5 +37,5 @@ documented in [Customization](/customization/).
 
 ## Components
 The [components section](components/) is a guide to using both custom Vue
-components and components from the Bootstrap-Vue library.
+components and components from the Bootstrap-Vue-next library.
 

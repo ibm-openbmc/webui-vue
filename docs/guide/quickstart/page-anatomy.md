@@ -8,8 +8,8 @@ When creating a new page, each template consists of at least 3 components:
 - `<page-title>`
 - `<page-section>`
 
-Learn more about the [page title](/guide/components/page-title) and [page
-section](/guide/components/page-section) components.
+Learn more about the [page title](/guide/components/page-title/index.md) and [page
+section](/guide/components/page-section/index.md) components.
 
 ```vue
 <template>
@@ -65,9 +65,12 @@ The final SFC will look like this.
     </page-section>
   </BContainer>
 </template>
-<script>
+
+<script setup>
 import PageTitle from '@/components/Global/PageTitle';
 import PageSection from '@/components/Global/PageSection';
+
+</script>
 
 <style lang="scss" scoped>
     .example-class {

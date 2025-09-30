@@ -5,7 +5,7 @@ values, along with additional blue, green, red, and yellow color variables used
 as accent colors for components. The `.scss` component files use these accent
 colors to override default styles set by the Bootstrap library.
 
-- [Learn more about theme customization](/customization/theme/)
+- [Learn more about theme customization](/customization/theme.md)
 - [Open an issue in the OpenBMC webui-vue
   repo](https://github.com/ibm-openbmc/webui-vue/tree/1060-vue3) to request a
   change
@@ -37,7 +37,7 @@ maps](https://getbootstrap.com/docs/4.0/getting-started/theming/#all-colors).
 <colors-all/>
 
 ## Theme Colors
-The theme colors are keys in the `theme-colors` map. Bootstrap-Vue has a variant
+The theme colors are keys in the `theme-colors` map. Bootstrap has a variant
 prop that accepts any of the `theme-colors` keys to set the theme of a
 component.
 

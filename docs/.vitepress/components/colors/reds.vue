@@ -21,12 +21,14 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 const colors = ref([
-        {
-          variable: 'red-500',
-          hex: '#da1416'
-        }
-      ])
+  {
+    variable: 'red-500',
+    hex: '#da1416'
+  }
+]);
 </script>
 
 <style lang="scss" scoped>

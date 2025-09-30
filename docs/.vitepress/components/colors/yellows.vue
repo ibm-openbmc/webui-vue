@@ -20,7 +20,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
+
 const colors = ref([
         {
           variable: 'yellow-500',
