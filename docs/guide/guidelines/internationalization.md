@@ -64,18 +64,17 @@ pluralization.](https://vue-i18n.intlify.dev/guide/essentials/pluralization.html
 ...
 ...
 
-state: () => ({
-    allDumps: [],
-}),
-
-async deleteAllDumps() {
-  const totalDumpCount = this.allDumps.length;
+async clearAllEntries(data) {
+    ...
     ...
 
       .catch((error) => {
-        console.log(error);
-        throw new Error(
-          i18n.global.t('pageDumps.toast.errorDeleteDump', totalDumpCount),
+          console.log(error);
+          throw new Error(
+          i18n.global.t(
+            'pageDeconfigurationRecords.toast.errorDelete',
+            data.length,
+          ),
         );
       });
 },
