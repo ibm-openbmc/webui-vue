@@ -62,6 +62,7 @@
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredSensors.length)"
+          class="no-scroll-sticky"
         >
           <!-- Checkbox column -->
           <template #head(checkbox)>
@@ -87,7 +88,10 @@
             >
             </BFormCheckbox>
           </template>
-
+          <template #head(status)="row">
+            {{ row.label }}
+            <info-tooltip :title="$t('pageSensors.table.statusTooltip')" />
+          </template>
           <template #cell(status)="{ value }">
             <status-icon :status="statusIconValue(value)" /> {{ value }}
           </template>
@@ -135,6 +139,7 @@ import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import { SensorsStore } from '@/store/modules/HardwareStatus/SensorsStore';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Search from '@/components/Global/Search.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
