@@ -42,7 +42,6 @@
           sort-icon-left
           hover
           no-sort-reset
-          sticky-header="75vh"
           sort-by="status"
           show-empty
           :no-border-collapse="true"
@@ -78,6 +77,10 @@
             </b-form-checkbox>
           </template>
 
+          <template #head(status)="row">
+            {{ row.label }}
+            <info-tooltip :title="$t('pageSensors.table.statusTooltip')" />
+          </template>
           <template #cell(status)="{ value }">
             <status-icon :status="statusIcon(value)" /> {{ value }}
           </template>
@@ -129,6 +132,7 @@
 </template>
 
 <script>
+import InfoTooltip from '@/components/Global/InfoTooltip';
 import PageTitle from '@/components/Global/PageTitle';
 import Search from '@/components/Global/Search';
 import StatusIcon from '@/components/Global/StatusIcon';
@@ -156,6 +160,7 @@ import SearchFilterMixin, {
 export default {
   name: 'Sensors',
   components: {
+    InfoTooltip,
     PageTitle,
     Search,
     StatusIcon,
