@@ -254,21 +254,6 @@
         </BRow>
       </BContainer>
     </BForm>
-    <BButton variant="secondary" data-test-id="userManagement-button-cancel">
-      {{ $t('global.action.cancel') }}
-    </BButton>
-    <BButton
-      form="form-user"
-      data-test-id="userManagement-button-submit"
-      variant="primary"
-    >
-      <template v-if="newUser">
-        {{ $t('pageUserManagement.addUser') }}
-      </template>
-      <template v-else>
-        {{ $t('global.action.save') }}
-      </template>
-    </BButton>
   </BModal>
 </template>
 
