@@ -60,9 +60,9 @@
               : $t('global.table.emptyMessage')
           "
           :empty-filtered-text="$t('global.table.emptySearchMessage')"
+          class="no-scroll-sticky"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredSensors.length)"
-          class="no-scroll-sticky"
         >
           <!-- Checkbox column -->
           <template #head(checkbox)>
@@ -89,7 +89,38 @@
             </BFormCheckbox>
           </template>
           <template #head(status)="row">
-            {{ row.label }}
+            <span style="cursor: pointer" @click="row.toggleSorting">
+              <svg
+                :style="{
+                  opacity: row.field.thAttr['aria-sort'] === 'none' ? 0.5 : 1,
+                }"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                :class="{
+                  bi: true,
+                  'bi-arrow-up-short':
+                    row.field.thAttr['aria-sort'] === 'ascending',
+                  'bi-arrow-down-short':
+                    row.field.thAttr['aria-sort'] === 'descending',
+                }"
+                viewBox="0 0 16 16"
+                aria-hidden=""
+              >
+                <path
+                  v-if="row.field.thAttr['aria-sort'] === 'descending'"
+                  fill-rule="evenodd"
+                  d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"
+                ></path>
+                <path
+                  v-else
+                  fill-rule="evenodd"
+                  d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"
+                ></path>
+              </svg>
+              {{ row.label }}
+            </span>
             <info-tooltip :title="$t('pageSensors.table.statusTooltip')" />
           </template>
           <template #cell(status)="{ value }">

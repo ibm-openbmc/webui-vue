@@ -73,7 +73,7 @@ $toolbar-height: 46px;
 .toolbar-container {
   width: 100%;
   position: relative;
-  z-index: $zindex-dropdown + 1;
+  z-index: $zindex-dropdown - 1;
 }
 
 .toolbar-content {
