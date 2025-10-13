@@ -1456,6 +1456,7 @@
       "lowerWarning": "Lower warning",
       "name": "Name",
       "status": "Status",
+      "statusTooltip": "Status indicates the sensor status.  It does not reflect the hardware status of the inventory item.",
       "upperCritical": "Upper critical",
       "upperWarning": "Upper warning",
       "filter": {
