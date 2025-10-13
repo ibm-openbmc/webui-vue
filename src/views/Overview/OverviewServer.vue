@@ -150,7 +150,7 @@ eventBus.on('okAssetTag', (value) => {
 });
 const saveAssetTag = (modalFormData) => {
   startLoader();
-  systemStore
+  return systemStore
     .saveAssetTag(modalFormData)
     .then(global.getSystemInfo())
     .then((message) => successToast(message))
