@@ -152,9 +152,11 @@ const saveAssetTag = (modalFormData) => {
   startLoader();
   return systemStore
     .saveAssetTag(modalFormData)
-    .then(global.getSystemInfo())
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message))
-    .finally(() => endLoader());
+    .finally(() => {
+      global.getSystemInfo();
+      endLoader();
+    });
 };
 </script>
