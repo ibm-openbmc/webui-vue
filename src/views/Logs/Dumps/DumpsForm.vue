@@ -44,12 +44,12 @@
               {{ $t('pageDumps.form.password') }}
               <info-tooltip :title="$t('pageDumps.form.passwordTooltip')" />
             </template>
-            <input-password-toggle>
+            <input-password-toggle @update-pass-view="updatePasswordType">
               <BForm-input
                 id="password"
                 v-model="resourcePasswordValue"
                 autocomplete="off"
-                type="password"
+                :type="inputType"
               >
               </BForm-input>
             </input-password-toggle>
@@ -111,6 +111,7 @@ const dumpTypeOptions = ref([]);
 const taskProgress = ref('');
 const modalConfirmation = ref(false);
 const modalPartition = ref(false);
+const inputType = ref('password');
 
 onBeforeMount(() => {
   checkForUserData();
@@ -358,5 +359,8 @@ const createSystemDump = (dumpType) => {
       }),
     )
     .catch(({ message }) => errorToast(message));
+};
+const updatePasswordType = (passwordType) => {
+  inputType.value = passwordType;
 };
 </script>
