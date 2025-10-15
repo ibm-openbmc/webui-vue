@@ -52,8 +52,8 @@ const FabricAdaptersStore = {
               if (memberResponse.data?.Links?.PCIeDevices.length > 0) {
                 res.data.Slots.map((singleSlot) => {
                   if (
-                    singleSlot.Links?.PCIeDevice[0]['@odata.id'] ===
-                    memberResponse.data?.Links?.PCIeDevices[0]['@odata.id']
+                    singleSlot.Links?.PCIeDevice?.[0]?.['@odata.id'] ===
+                    memberResponse.data?.Links?.PCIeDevices?.[0]?.['@odata.id']
                   ) {
                     tempFabricAdapters.push(memberResponse.data);
                     commit('setFabricAdaptersInfo', tempFabricAdapters);
