@@ -174,7 +174,7 @@ const loginPageDetails = computed(() => {
   return authenticationStore.loginPageDetailsGetter;
 });
 
-const login = () => {
+const login = async () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
   disableSubmitButton.value = true;
@@ -189,14 +189,13 @@ const login = () => {
       globalStore.languagePreference = i18n.global.locale.value;
       return authenticationStore.checkPasswordChangeRequired(username);
     })
-    .then((passwordChangeRequired) => {
+    .then(async (passwordChangeRequired) => {
       if (passwordChangeRequired) {
         router.push('/change-password');
       } else {
-        Promise.all([
-          globalStore.getCurrentUser(userInfo.username),
-          globalStore.getSystemInfo(),
-        ])
+        globalStore.getCurrentUser(userInfo.username);
+        await globalStore
+          .getSystemInfo()
           .then(() => {
             router.push('/');
           })

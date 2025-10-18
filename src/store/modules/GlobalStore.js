@@ -148,7 +148,7 @@ export const GlobalStore = defineStore('global', {
         .catch((error) => console.log(error));
     },
     async getSystemInfo() {
-      api
+      return await api
         .get('/redfish/v1/Systems/system')
         .then(
           ({
@@ -177,6 +177,7 @@ export const GlobalStore = defineStore('global', {
             } else {
               this.serverStatus = serverStateMapper(PowerState);
             }
+            return Promise.resolve();
           },
         )
         .catch((error) => {

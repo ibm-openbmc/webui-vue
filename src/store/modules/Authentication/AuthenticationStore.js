@@ -50,12 +50,6 @@ export const AuthenticationStore = defineStore('authentication', {
           throw new Error(error);
         });
     },
-    getUserInfo(username) {
-      return api
-        .get(`/redfish/v1/AccountService/Accounts/${username}`)
-        .then(({ data }) => data)
-        .catch((error) => console.log(error));
-    },
     unauthlogin() {
       this.unauthError = true;
     },
