@@ -183,10 +183,10 @@ const login = () => {
   authenticationStore
     .login({ username, password })
     .then(() => {
-      localStorage.setItem('storedLanguage', i18n.locale);
+      localStorage.setItem('storedLanguage', i18n.global.locale.value);
       localStorage.setItem('storedUsername', username);
       globalStore.username = username;
-      globalStore.languagePreference = i18n.locale;
+      globalStore.languagePreference = i18n.global.locale.value;
       return authenticationStore.checkPasswordChangeRequired(username);
     })
     .then((passwordChangeRequired) => {

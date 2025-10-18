@@ -12,11 +12,16 @@ function loadLocaleMessages() {
   });
   return messages;
 }
+const supportedLocales = ['en-US'];
+const storedLanguage = window.localStorage.getItem('storedLanguage');
+const defaultLocale = supportedLocales.includes(storedLanguage)
+  ? storedLanguage
+  : 'en-US';
 
 const i18n = createI18n({
   legacy: false,
   // Get default locale from local storage
-  locale: window.localStorage.getItem('storedLanguage'),
+  locale: defaultLocale,
   // Locales that don't exist will fallback to English
   fallbackLocale: 'en-US',
   // Falling back to fallbackLocale generates two console warnings
