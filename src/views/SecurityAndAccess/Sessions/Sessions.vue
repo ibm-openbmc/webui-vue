@@ -97,6 +97,7 @@
             <table-row-action
               v-for="(action, index) in row.item.actions"
               :key="index"
+              class="buttonStyle"
               :value="action.value"
               :title="action.title"
               :row-data="row.item"
@@ -324,8 +325,8 @@ const toggleAll = (checked) => {
 </script>
 
 <style lang="scss" scoped>
-#table-session-logs {
-  td .btn-link {
+.buttonStyle {
+  :deep(.btn-link) {
     width: auto !important;
   }
 }
