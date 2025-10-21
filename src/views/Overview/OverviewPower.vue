@@ -39,6 +39,9 @@
           <dd v-else-if="powerPerformanceMode === 'PowerSaving'">
             {{ $t('pageOverview.powerPerformanceModes.powerSaving') }}
           </dd>
+          <dd v-else>
+            {{ powerPerformanceMode }}
+          </dd>
         </dl>
       </b-col>
     </BRow>
