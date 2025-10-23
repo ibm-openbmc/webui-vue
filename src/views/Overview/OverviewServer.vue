@@ -44,7 +44,7 @@
 
 <script setup>
 import i18n from '@/i18n';
-import { computed, ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import useToast from '@/components/Composables/useToastComposable';
@@ -74,6 +74,8 @@ onBeforeRouteLeave(() => {
 });
 
 onBeforeMount(() => {
+  eventBus.on('okAssetTag', okAssetTagHandler);
+
   Promise.all([
     global.getServiceLogin(),
     bootSettingsStore.fetchBiosAttributes(),
@@ -82,6 +84,10 @@ onBeforeMount(() => {
   ]).finally(() => {
     eventBus.emit('overview-server-complete');
   });
+});
+
+onBeforeUnmount(() => {
+  eventBus.off('okAssetTag', okAssetTagHandler);
 });
 
 const systems = computed(() => {
@@ -145,9 +151,9 @@ const initAssetTagModal = () => {
   eventBus.emit('openmodal-true');
 };
 
-eventBus.on('okAssetTag', (value) => {
+const okAssetTagHandler = (value) => {
   saveAssetTag(value);
-});
+};
 const saveAssetTag = (modalFormData) => {
   startLoader();
   return systemStore
