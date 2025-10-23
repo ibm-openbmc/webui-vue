@@ -190,7 +190,7 @@ const saveIpv6Address = (modalFormData) => {
   startLoader();
   if (ipAddress.value !== '') {
     //Edit selected row
-    const selectedRow = { Address: ipAddress, PrefixLength: 0 };
+    const selectedRow = { Address: ipAddress.value, PrefixLength: 0 };
     const editRow = modalData.concat(selectedRow);
     networkStore
       .updateIpv6Address(editRow)

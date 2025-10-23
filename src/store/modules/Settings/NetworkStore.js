@@ -402,7 +402,7 @@ export const NetworkStore = defineStore('network', {
           this.getEthernetDataAfterDelay();
         })
         .then(() => {
-          return i18n.globalt('pageNetwork.toast.successSaveNetworkSettings', {
+          return i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
             setting: i18n.global.t('pageNetwork.ipv6'),
           });
         })

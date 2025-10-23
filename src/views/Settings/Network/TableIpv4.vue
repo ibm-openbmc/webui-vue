@@ -45,8 +45,11 @@
         sticky-header="75vh"
         :fields="ipv4TableFields"
         :items="form.ipv4TableItems"
-        :empty-text="$t('global.table.emptyMessage')"
-        :busy="isTablesDisabled"
+        :empty-text="
+          isTablesDisabled
+            ? $t('global.table.loading')
+            : $t('global.table.emptyMessage')
+        "
         class="mb-0"
         show-empty
       >

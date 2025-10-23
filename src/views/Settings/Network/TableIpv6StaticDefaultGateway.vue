@@ -22,8 +22,11 @@
         sticky-header="75vh"
         :fields="ipv6DefaultGatewayTableFields"
         :items="form.ipv6DefaultGatewayTableItems"
-        :empty-text="$t('global.table.emptyMessage')"
-        :busy="isTablesDisabled"
+        :empty-text="
+          isTablesDisabled
+            ? $t('global.table.loading')
+            : $t('global.table.emptyMessage')
+        "
         class="mb-0"
         show-empty
       >
