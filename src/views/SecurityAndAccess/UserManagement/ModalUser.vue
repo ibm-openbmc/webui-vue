@@ -403,6 +403,9 @@ function handleSubmit() {
   let userData = {};
 
   if (newUser.value) {
+    if(!notReadyOnly.value && form.value.privilege === null) {
+      form.value.privilege = 'ReadOnly';
+    }
     v$.value.$touch();
     if (v$.value.$invalid) return;
     userData.username = form.value.username;
