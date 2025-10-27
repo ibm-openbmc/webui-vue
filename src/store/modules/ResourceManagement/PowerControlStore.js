@@ -24,6 +24,7 @@ export const PowerControlStore = defineStore('powerControl', {
     powerPerformanceModeValuesGetter: (state) =>
       state.powerPerformanceModeValues,
     idlePowerSaverDataGetter: (state) => state.idlePowerSaverData,
+    oemModeGetter: (state) => state.powerPerformanceMode === 'OEM',
   },
   actions: {
     async getPowerControl() {

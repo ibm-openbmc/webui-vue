@@ -336,18 +336,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Add new certificate",
+    "adminResetCertificate": "Admin reset certificate",
+    "bmcShell": "BMC shell ACF certificate",
     "caCertificate": "CA Certificate",
     "deleteCertificate": "Delete certificate",
     "generateCsr": "Generate CSR",
     "httpsCertificate": "HTTPS Certificate",
     "ldapCertificate": "LDAP Certificate",
     "replaceCertificate": "Replace certificate",
+    "resourceDump": "Resource dump ACF certificate",
     "serviceLoginCertificate": "Service login Certificate",
     "alert": {
       "certificateExpiredMessage": "%{certificate} has expired. Consider replacing it with a new certificate.",
       "certificateExpiringMessage": "%{certificate} is expiring soon. Consider replacing it with a new certificate.",
       "certificatesExpiredMessage": "Some certificates have expired. Consider replacing them with new certificates.",
-      "certificatesExpiringMessage": "Some certificates are expiring soon. Consider replacing them with new certificates."
+      "certificatesExpiringMessage": "Some certificates are expiring soon. Consider replacing them with new certificates.",
+      "targetedAcfMessage": "BMC shell and Resource dump ACF certificates will not be listed in the table. System has to be powered on to upload Resource dump ACF certificate."
     },
     "modal": {
       "alternateName": "Alternate name",
@@ -369,6 +373,7 @@
       "keyBitLength": "Key bit length",
       "keyCurveId": "Key curve ID",
       "keyPairAlgorithm": "Key pair algorithm",
+      "mismatchError": "Uploaded certificate does not match selected Certificate type.",
       "privateKey": "Private key",
       "state": "State"
     },
@@ -406,7 +411,8 @@
       "message": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit ",
       "messageText": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit Profile Settings",
       "messageNtp": "If NTP is selected but an NTP server is not given or the given NTP server is not reachable, then time.google.com will be used.",
-      "messagePowerOff": "The server must be powered off to change date and time to manual or NTP."
+      "messagePowerOff": "The server must be powered off to change date and time to manual or NTP.",
+      "mfaMessage": "Changing date and time will affect MFA users."
     },
     "configureSettings": "Configure settings",
     "viewDynamicNtp": "View Dynamic NTP servers",
@@ -479,7 +485,7 @@
       "errorConfiguringProcessorCore": "Error Configuring Processor Core",
       "errorConfiguringDIMM": "Error Configuring Memory DIMM",
       "errorDeconfiguringProcessorCore": "Error Deconfiguring Processor Core",
-      "errorDeconfiguringDIMM" : "Error Deconfiguring Memory DIMM"
+      "errorDeconfiguringDIMM": "Error Deconfiguring Memory DIMM"
     },
     "table": {
       "deconfigurationType": "Deconfiguration Type",
@@ -507,6 +513,7 @@
   },
   "pageDeconfigurationRecords": {
     "additionalDataUri": "Download additional data",
+    "alertPowerOff": "Deconfiguration records can be deleted only when the system is powered off.",
     "clearAll": "Clear all records",
     "fatal": "Fatal",
     "manual": "Manual",
@@ -528,7 +535,7 @@
       "confirmMessage": "Clearing all deconfiguration records will attempt to reconfigure all hardware in the selected node(s). These changes will take effect on the next boot.",
       "deleteAllMessage": "Are you sure you want to delete all records? This action cannot be undone.",
       "deleteAllTitle": "Delete all records",
-      "deleteMessage": "Are you sure you want to delete %{count} records? This action cannot be undone. | Are you sure you want to delete %{count} records? This action cannot be undone.",
+      "deleteMessage": "Are you sure you want to delete %{count} record? This action cannot be undone. | Are you sure you want to delete %{count} records? This action cannot be undone.",
       "deleteTitle": "Delete record | Delete records",
       "goBack": "Go back",
       "continue": "Continue"
@@ -552,9 +559,11 @@
     "severityValues": {
       "fatal": "Fatal",
       "predictive": "Predictive",
-      "manual": "Manual"
+      "manual": "Manual",
+      "spare": "Spare"
     },
     "toast": {
+      "clearAllInfo": "A core guard record was not deleted as it might be associated with Spare core. This record can only be cleared separately. | Core guard records were not deleted as it might be associated with Spare core. Each of these records can only be cleared separately.",
       "errorDelete": "Error deleting %{count} record. | Error deleting %{count} records.",
       "errorResolveEntries": "Error resolving %{count} record. | Error resolving %{count} records.",
       "errorStartDownload": "Error starting download.",
@@ -685,8 +694,10 @@
     },
     "toast": {
       "errorDelete": "Error deleting %{count} log. | Error deleting %{count} logs.",
+      "errorDeleteGuardRecord": "Log cannot be deleted as it is associated with a guard record. Please manually clear the guard or replace the part. | Logs with guard records were not deleted. Please manually clear the guard or replace the part.",
       "errorLogStatusUpdate": "Error updating log status.",
       "errorResolveLogs": "Error resolving %{count} log. | Error resolving %{count} logs.",
+      "errorResolveLogsGuardRecord": "Log cannot be resolved as it is associated with a guard record. Please manually clear the guard or replace the part. | Logs with guard records were not resolved. Please manually clear the guard or replace the part.",
       "errorUnresolveLogs": "Error unresolving %{count} log. | Error unresolving %{count} logs.",
       "infoStartDownload": "Download might take several minutes to complete.",
       "successDelete": "Successfully deleted %{count} log. | Successfully deleted %{count} logs.",
@@ -778,8 +789,6 @@
         "imageFile": "Image file",
         "manageAccessKeys": "Manage access keys",
         "startUpdate": "Start update",
-        "tftpServer": "TFTP server",
-        "tftpServerInfo": "<server_ip>/<file_name>.tar",
         "workstation": "Workstation"
       }
     },
@@ -1125,15 +1134,18 @@
     "model": "Model",
     "password": "Password",
     "serialNumber": "Serial number",
-    "uploadServiceLoginCertificate": "Upload service login certificate",
+    "totpTooltip": "Enter the TOTP when the user is enrolled in MFA and MFA has not been bypassed.",
+    "uploadAcfCertificate": "Upload ACF certificate",
     "username": "Username",
     "alert": {
       "unauthorizedMessage": "User unauthorized",
       "message": "Invalid username or password"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "Add new service login certificate",
-      "certificateFile": "Certificate File"
+      "addNewAcfCertificate": "Add new ACF certificate",
+      "certificateFile": "Certificate File",
+      "login": "Log In",
+      "register": "Register"
     }
   },
   "pageMemory": {
@@ -1209,6 +1221,7 @@
     "useDns": "Use DNS servers",
     "useDomainName": "Use domain name",
     "useNtp": "Use NTP servers",
+    "lldp": "LLDP",
     "modal": {
       "confirmDeleteIpv4": "Are you sure you want to delete '%{address}'?",
       "confirmDeleteIpv6": "Are you sure you want to delete '%{address}'?",
@@ -1445,6 +1458,12 @@
       "message3": "The system will attempt to exit Safe Mode on the next power on attempt. To reboot the server, visit",
       "message3Link": "server power operations"
     },
+    "oemMode": {
+      "primary": "Custom mode",
+      "message1": "System is currently in a custom mode.",
+      "message2": "Change mode by selecting an option below."
+    },
+    "nonIdlePowerSaverMode": "Idle power saver is not supported in current mode.",
     "delayTimeValidation": {
       "delayTimeRange": "Value must be between %{min} and %{max}.",
       "enterDelayTime": "Value cannot be less than delay time to exit.",
@@ -1455,18 +1474,27 @@
       "content": "Enabling any of the power saver modes will cause changes in processor frequencies, changes in processor utilization, changes in power consumption, and performance to vary.",
       "subTitle": "Are you sure?",
       "titleMaximumPerformance": "Enable maximum performance mode",
-      "titlePowerSaving": "Enable power saving mode",
-      "titleStatic": "Enable static mode"
+      "titleEfficiencyFavorPower": "Enable energy efficient mode",
+      "titlePowerSaving": "Enable maximum energy saver mode"
     },
     "selectMode": {
-      "maximumPerformance": "Maximum performance",
-      "powerSaving": "Power saving",
-      "static": "Static"
+      "maximumPerformance": {
+        "primary": "Maximum performance",
+        "secondary": "Maximum performance"
+      },
+      "energyEfficient": {
+        "primary": "Energy efficient",
+        "secondary": "Efficiency favor power"
+      },
+      "maximumEnergySaver": {
+        "primary": "Maximum energy saver",
+        "secondary": "Power saver"
+      }
     },
     "tableRoles": {
-      "descMaximumPerformance": "Processor frequency will vary. This mode allows the system to reach the maximum frequency by taking advantage of the thermal and power headroom provided by idle cores, lower workloads, and favorable environmental conditions.",
-      "descPowerSaving": "Processor frequency is set to a fixed minimum value, reducing the power consumption of the system while still delivering predictable performance.",
-      "descStatic": "Processor frequency is set to a fixed value that can run normal workloads under normal environmental conditions.",
+      "descMaximumPerformance": "Processor frequency will vary. This mode allows systems to reach the maximum-frequency value by taking advantage of thermal and energy headroom provided by idle cores, lower workloads, and favorable environmental conditions.",
+      "descEnergyEfficient": "Processor frequency will vary. This mode allows systems to reach mid-frequency values by taking advantage of thermal and energy headroom provided by idle cores, lower workloads, and favorable environmental conditions.",
+      "descMaximumEnergySaver": "Processors are set to a fixed low-frequency value regardless of workload and environment temperatures, reducing energy consumption while still delivering predictable performance.",
       "description": "Description",
       "setting": "Setting"
     },
@@ -1867,7 +1895,12 @@
     "accountPolicySettings": "Account policy settings",
     "addUser": "Add user",
     "deleteUser": "Delete user | Delete users",
+    "disableMfaBypassWarning": "You will be logged out if your MFA bypass value is disabled.",
     "editUser": "Edit user",
+    "enableMfaInfo": "You will be logged out after successfully enabling MFA TOTP Authentication.",
+    "enableMfaWarning": "You need to MFA bypass yourself to enable MFA TOTP Authentication",
+    "mfaTimeMatch": "To update, visit ",
+    "mfaTotpAuthentication": "MFA TOTP authentication",
     "viewPrivilegeRoleDescriptions": "View privilege role descriptions",
     "modal": {
       "accountLocked": "Account locked",
@@ -1878,24 +1911,38 @@
       "clickSaveToUnlockAccount": "Click \"Save\" to unlock account",
       "confirmUserPassword": "Confirm user password",
       "deleteConfirmMessage": "Are you sure you want to delete user '%{user}'? This action cannot be undone.",
+      "enableMfa": "Enable MFA",
+      "helptext": "Steps",
+      "helptextStep1": "1. Scan the QR code or enter the secret key into the authenticator app.",
+      "helptextStep2": "2. Enter the TOTP generated by the app into the TOTP field and Login.",
+      "helptextStep2EnableMfa": "2. Enter the TOTP generated by the app into the TOTP field and Validate.",
+      "hmcWarning": "MFA bypassed user must be used for HMC connection.",
       "manual": "Manual",
       "maxFailedLoginAttempts": "Max failed login attempts",
+      "mfaInfoAlert": "Enable/Disable MFA at system level will affect all local users of the system.",
       "noSpecialCharactersExceptUnderscore": "No special characters except underscore",
+      "otp": "TOTP",
       "passwordMustBeBetween": "Password must be between %{min} – %{max} characters",
       "passwordsDoNotMatch": "Passwords do not match",
       "privilege": "Privilege",
+      "secretKey": "Secret key",
       "timeoutDurationSeconds": "Timeout duration (seconds)",
       "unlock": "Unlock",
       "username": "Username",
       "userPassword": "User password",
       "userUnlockMethod": "User unlock method",
+      "validate": "Validate",
       "zeroLoginAttempts": "If `0`, then account shall never be locked."
     },
     "table": {
       "administrator": "Administrator",
+      "clear": "Clear",
+      "mfaByPass": "MFA bypass",
       "privilege": "Privilege",
       "readOnly": "Read only",
       "serviceAgent": "Service agent",
+      "secretKey": "Secret key",
+      "secretKeyTooltip": "If the secret key is cleared, that user will be prompted to re-register the secret key during the login process.",
       "status": "Status",
       "username": "Username"
     },
@@ -1913,20 +1960,32 @@
       "errorBatchDelete": "Error deleting %{count} user. | Error deleting %{count} users.",
       "errorBatchDisable": "Error disabling %{count} user. | Error disabling %{count} users.",
       "errorBatchEnable": "Error enabling %{count} user. | Error enabling %{count} users.",
+      "errorClearSecretKey": "Error clearing Secret key",
       "errorCreateUser": "Error creating user '%{username}'.",
       "errorCreateUserMaxUsers": "Error creating user '%{username}' because this system has reached the maximum amount of allowable users.",
       "errorCreateUserPasswordNotAccepted": "Error creating user '%{username}' because the password was not accepted.",
       "errorDeleteUser": "Error deleting user '%{username}'.",
+      "errorDisableMfa": "Error disabling Multi factor authentication.",
+      "errorDisableMfaBypass": "Error disabling MFA bypass.",
+      "errorEnableMfa": "Error enabling Multi factor authentication.",
+      "errorEnableMfaAuto": "Error enabling MFA TOTP Authentication. Please verify BMC time and the browser's time to successfully verify TOTP.",
+      "errorEnableMfaBypass": "Error enabling MFA bypass.",
       "errorLoadAccountSettings": "Error loading account settings",
       "errorLoadUsers": "Error loading users.",
+      "errorOtp": "Invalid TOTP",
       "errorSaveSettings": "Error saving account settings.",
       "errorUpdateUser": "Error updating user '%{username}'.",
       "errorUpdateUserPasswordNotAccepted": "Error updating user '%{username}' because the password was not accepted.",
       "successBatchDelete": "Successfully deleted %{count} user. | Successfully deleted %{count} users.",
       "successBatchDisable": "Successfully disabled %{count} user. | Successfully disabled %{count} users.",
       "successBatchEnable": "Successfully enabled %{count} user. | Successfully enabled %{count} users.",
+      "successClearSecretKey": "Successfully cleared Secret key",
       "successCreateUser": "Created user '%{username}'.",
       "successDeleteUser": "Deleted user '%{username}'.",
+      "successDisableMfa": "Successfully disabled Multi factor authentication.",
+      "successDisableMfaBypass": "Successfully disabled MFA bypass.",
+      "successEnableMfa": "Successfully enabled Multi factor authentication.",
+      "successEnableMfaBypass": "Successfully enabled MFA bypass.",
       "successSaveSettings": "Successfully saved account settings.",
       "successUpdateUser": "Updated user '%{username}'."
     }

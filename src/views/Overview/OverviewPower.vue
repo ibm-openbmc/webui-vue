@@ -18,7 +18,7 @@
           <dd v-else>{{ powerCapValue }} W</dd>
         </dl>
       </BCol>
-      <b-col sm="6">
+      <BCol sm="6">
         <dl>
           <dt>{{ $t('pagePower.idlePower') }}</dt>
           <dd v-if="idlePowerSaverData && idlePowerSaverData.Enabled">
@@ -30,20 +30,20 @@
             <status-icon status="danger" />
             {{ $t('pageOverview.safeMode') }}
           </dd>
-          <dd v-else-if="powerPerformanceMode === 'Static'">
-            {{ $t('pageOverview.powerPerformanceModes.static') }}
-          </dd>
           <dd v-else-if="powerPerformanceMode === 'MaximumPerformance'">
             {{ $t('pageOverview.powerPerformanceModes.maximumPerformance') }}
           </dd>
-          <dd v-else-if="powerPerformanceMode === 'PowerSaving'">
-            {{ $t('pageOverview.powerPerformanceModes.powerSaving') }}
+          <dd v-else-if="powerPerformanceMode === 'EfficiencyFavorPower'">
+            {{ $t('pagePower.selectMode.energyEfficient.primary') }}
           </dd>
-          <dd v-else>
-            {{ powerPerformanceMode }}
+          <dd v-else-if="powerPerformanceMode === 'PowerSaving'">
+            {{ $t('pagePower.selectMode.maximumEnergySaver.primary') }}
+          </dd>
+          <dd v-else-if="powerPerformanceMode === 'OEM'">
+            {{ $t('pagePower.oemMode.primary') }}
           </dd>
         </dl>
-      </b-col>
+      </BCol>
     </BRow>
   </overview-card>
 </template>

@@ -2,11 +2,24 @@
   <div>
     <page-section :section-title="$t('pagePower.idlePower')">
       <BRow>
+        <BCol sm="8" md="8" xl="6">
+          <alert
+            v-if="nonIdlePowerSaverMode && !loading"
+            variant="info"
+            class="mb-4"
+          >
+            <p class="mb-0">
+              {{ $t('pagePower.nonIdlePowerSaverMode') }}
+            </p></alert
+          >
+        </BCol>
+      </BRow>
+      <BRow>
         <BCol sm="8" md="6" xl="12">
           <BFormGroup class="form-group">
             <BFormCheckbox
               v-model="idlePowerSaver.isIdlePowerSaverEnabled"
-              :disabled="loading || safeMode"
+              :disabled="isDisabled"
               data-test-id="power-checkbox-toggleIdlePower"
               name="idle-power-saver"
             >
@@ -22,7 +35,7 @@
         @submit.prevent="saveIdlePowerSaverData"
         @reset.prevent="resetIdlePowerSaverData"
       >
-        <BFormGroup :disabled="loading || safeMode">
+        <BFormGroup :disabled="isDisabled">
           <div class="fw-bold mb-2">{{ $t('pagePower.toEnter') }}</div>
           <BRow>
             <BCol sm="8" md="6" xl="4">
@@ -179,7 +192,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import Alert from '@/components/Global/Alert.vue';
+import { ref, computed, onBeforeMount, watch } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { between, minValue, maxValue } from '@vuelidate/validators';
@@ -197,8 +211,16 @@ const { getValidationState } = useVuelidateComposable();
 
 const powerControlStore = stores.PowerControlStore();
 
-defineProps({
+const props = defineProps({
   safeMode: {
+    type: Boolean,
+    default: null,
+  },
+  oemMode: {
+    type: Boolean,
+    default: null,
+  },
+  nonIdlePowerSaverMode: {
     type: Boolean,
     default: null,
   },
@@ -224,13 +246,16 @@ onBeforeRouteLeave(() => {
 onBeforeMount(() => {
   startLoader();
   powerControlStore.getIdlePowerSaverData().finally(() => {
-    setIdlePowerSaveFormValues(idlePowerSaverData.value);
     endLoader();
   });
 });
 
 const idlePowerSaverData = computed(() => {
   return powerControlStore.idlePowerSaverDataGetter;
+});
+
+const isDisabled = computed(() => {
+  return loading.value || props.safeMode || props.nonIdlePowerSaverMode;
 });
 
 const rules = computed(() => ({
@@ -259,6 +284,12 @@ const rules = computed(() => ({
 }));
 
 const v$ = useVuelidate(rules, { idlePowerSaver });
+
+watch(idlePowerSaverData, (newValue) => {
+  if (!props.safeMode) {
+    setIdlePowerSaveFormValues(newValue);
+  }
+});
 
 function setIdlePowerSaveFormValues(data) {
   idlePowerSaver.value.isIdlePowerSaverEnabled = data?.Enabled;

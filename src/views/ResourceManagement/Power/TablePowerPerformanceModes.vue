@@ -28,16 +28,16 @@ const fields = ref([
 
 const items = ref([
   {
-    setting: i18n.global.t('pagePower.selectMode.static'),
-    description: i18n.global.t('pagePower.tableRoles.descStatic'),
-  },
-  {
-    setting: i18n.global.t('pagePower.selectMode.powerSaving'),
-    description: i18n.global.t('pagePower.tableRoles.descPowerSaving'),
-  },
-  {
-    setting: i18n.global.t('pagePower.selectMode.maximumPerformance'),
+    setting: i18n.global.t('pagePower.selectMode.maximumPerformance.primary'),
     description: i18n.global.t('pagePower.tableRoles.descMaximumPerformance'),
+  },
+  {
+    setting: i18n.global.t('pagePower.selectMode.energyEfficient.primary'),
+    description: i18n.global.t('pagePower.tableRoles.descEnergyEfficient'),
+  },
+  {
+    setting: i18n.global.t('pagePower.selectMode.maximumEnergySaver.primary'),
+    description: i18n.global.t('pagePower.tableRoles.descMaximumEnergySaver'),
   },
 ]);
 </script>

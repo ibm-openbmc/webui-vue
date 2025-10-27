@@ -27,7 +27,11 @@
     </BRow>
     <power-cap :safe-mode="safeMode" />
     <power-performance-modes :safe-mode="safeMode" />
-    <power-idle-saver :safe-mode="safeMode" />
+    <power-idle-saver
+      :oem-mode="oemMode"
+      :safe-mode="safeMode"
+      :non-idle-power-saver-mode="nonIdlePowerSaverMode"
+    />
   </BContainer>
 </template>
 
@@ -45,6 +49,7 @@ import stores from '@/store';
 const { hideLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
+const powerControlStore = stores.PowerControlStore();
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -56,5 +61,13 @@ onBeforeMount(() => {
 
 const safeMode = computed(() => {
   return globalStore.safeModeGetter;
+});
+
+const oemMode = computed(() => {
+  return powerControlStore.oemModeGetter;
+});
+
+const nonIdlePowerSaverMode = computed(() => {
+  return powerControlStore.idlePowerSaverDataGetter ? false : true;
 });
 </script>
