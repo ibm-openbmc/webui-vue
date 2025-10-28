@@ -71,3 +71,12 @@ const nonIdlePowerSaverMode = computed(() => {
   return powerControlStore.idlePowerSaverDataGetter ? false : true;
 });
 </script>
+
+<style lang="scss" scoped>
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+</style>

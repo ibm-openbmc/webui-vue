@@ -6,7 +6,7 @@
           <alert v-if="oemMode" variant="info" class="mb-4">
             <p class="mb-0">
               <b>{{ $t('pagePower.oemMode.message1') }} </b
-              >{{ $t('pagePower.oemMode.message2') }}
+              >{{ ' ' + $t('pagePower.oemMode.message2') }}
             </p></alert
           >
         </BCol>
