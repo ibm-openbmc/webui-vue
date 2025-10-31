@@ -41,6 +41,9 @@
               :data="batchExportData"
               :file-name="exportFileNameByDate()"
             />
+            <b-button variant="primary" @click="onBatchAction('delete')">
+              <icon-delete /> {{ $t('global.action.delete') }}
+            </b-button>
           </template>
         </table-toolbar>
         <BTable
@@ -54,6 +57,7 @@
           show-empty
           sticky-header="75vh"
           sort-desc.sync="status"
+          :actions="batchActions"
           :fields="fields"
           :items="filteredLogs"
           :empty-text="
@@ -161,15 +165,18 @@
             <p class="mb-0">{{ $filters.formatDate(value) }}</p>
             <p class="mb-0">{{ $filters.formatTime(value) }}</p>
           </template>
+          <!-- Severity column -->
           <template #cell(severity)="{ value }">
             {{
               value === 'Critical'
                 ? $t('pageDeconfigurationRecords.severityValues.fatal')
-                : value === 'Warning'
-                  ? $t('pageDeconfigurationRecords.severityValues.predictive')
-                  : value === 'OK'
-                    ? $t('pageDeconfigurationRecords.severityValues.manual')
-                    : '--'
+                : value === 'Spare'
+                  ? $t('pageDeconfigurationRecords.severityValues.spare')
+                  : value === 'Warning'
+                    ? $t('pageDeconfigurationRecords.severityValues.predictive')
+                    : value === 'Manual'
+                      ? $t('pageDeconfigurationRecords.severityValues.manual')
+                      : '--'
             }}
           </template>
           <!-- Status column -->
@@ -183,6 +190,21 @@
           </template>
           <template #cell(filterByStatus)="{ value }">
             {{ value }}
+          </template>
+          <!-- Actions column -->
+          <template #cell(actions)="row">
+            <table-row-action
+              v-for="(action, index) in batchActions"
+              :key="index"
+              :value="action.value"
+              :title="action.title"
+              :row-data="row.item"
+              @click-table-action="onTableRowAction(action.value, row.item.uri)"
+            >
+              <template #icon>
+                <icon-delete v-if="action.value === 'delete'" />
+              </template>
+            </table-row-action>
           </template>
         </BTable>
       </BCol>
@@ -226,6 +248,30 @@
         {{ $t('pageDeconfigurationRecords.modal.deleteAllMessage') }}
       </p>
     </BModal>
+    <BModal
+      v-model="openModal2"
+      :title="
+        $t(
+          'pageDeconfigurationRecords.modal.deleteTitle',
+          { count: count },
+          count,
+        )
+      "
+      :ok-title="$t('global.action.delete')"
+      ok-variant="danger"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="handleOk2"
+    >
+      <p>
+        {{
+          $t(
+            'pageDeconfigurationRecords.modal.deleteMessage',
+            { count: count },
+            count,
+          )
+        }}
+      </p>
+    </BModal>
   </BContainer>
 </template>
 
@@ -249,6 +295,7 @@ import PageTitle from '@/components/Global/PageTitle.vue';
 import TableFilter from '@/components/Global/TableFilter.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableToolbarExport from '@/components/Global/TableToolbarExport.vue';
+import TableRowAction from '@/components/Global/TableRowAction.vue';
 import stores from '@/store';
 import { onBeforeRouteLeave } from 'vue-router';
 import eventBus from '@/eventBus';
@@ -315,6 +362,12 @@ const fields = ref([
     label: i18n.global.t('pageDeconfigurationRecords.table.status'),
     sortable: false,
   },
+  {
+    key: 'actions',
+    sortable: false,
+    label: '',
+    tdClass: 'text-right text-nowrap',
+  },
 ]);
 const tableFilters = ref([
   {
@@ -333,7 +386,16 @@ const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
 const openModal = ref(false);
+const openModal2 = ref(false);
 const isAllSelected = ref(false);
+const batchActions = ref([
+  {
+    value: 'delete',
+    title: i18n.global.t('global.action.delete'),
+  },
+]);
+const count = ref(0);
+const urival = ref();
 
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
@@ -390,6 +452,17 @@ const handleOk = () => {
     .then((message) => Toast.successToast(message))
     .catch(({ message }) => Toast.errorToast(message));
 };
+const handleOk2 = () => {
+  openModal2.value = false;
+  deleteRecords(urival.value);
+};
+const deleteRecords = async (uri) => {
+  deconfigurationRecoredsStore
+    .deleteRecords(uri)
+    .then((message) => Toast.successToast(message))
+    .catch(({ message }) => Toast.errorToast(message))
+    .finally(() => eventBus.emit('clear-selected'));
+};
 const downloadLog = (uri, date) => {
   startLoader();
   deconfigurationRecoredsStore
@@ -432,6 +505,20 @@ const toggleAll = (checked) => {
     singleRecord.isSelected = checked;
   });
   isAllSelected.value = checked;
+};
+const onTableRowAction = (action, uri) => {
+  if (action === 'delete') {
+    count.value = 1;
+    urival.value = [uri];
+    openModal2.value = true;
+  }
+};
+const onBatchAction = (action) => {
+  if (action === 'delete') {
+    count.value = selectedRowsLists.value.length;
+    urival.value = selectedRowsLists.value.map((row) => row.uri);
+    openModal2.value = true;
+  }
 };
 </script>
 

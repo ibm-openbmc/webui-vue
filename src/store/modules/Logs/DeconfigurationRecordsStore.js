@@ -51,9 +51,8 @@ export const DeconfigurationRecordsStore = defineStore(
               allMembers.map(async (log) => {
                 const {
                   Id,
-                  Severity,
+                  MessageArgs,
                   Created,
-                  Message,
                   Name,
                   AdditionalDataURI,
                   AdditionalData = AdditionalDataURI
@@ -72,7 +71,7 @@ export const DeconfigurationRecordsStore = defineStore(
                 return {
                   additionalDataUri: AdditionalDataURI,
                   date: new Date(Created),
-                  description: Message,
+                  description: MessageArgs[1],
                   filterByStatus: AdditionalData?.Resolved
                     ? 'Resolved'
                     : 'Unresolved',
@@ -82,7 +81,7 @@ export const DeconfigurationRecordsStore = defineStore(
                   srcDetails: AdditionalData?.EventId,
                   status: AdditionalData?.Resolved, //true or false
                   uri: log['@odata.id'],
-                  severity: Severity,
+                  severity: MessageArgs[0],
                   location: LocationCode,
                   eventID: eventId,
                   isSelected: false,
@@ -160,6 +159,27 @@ export const DeconfigurationRecordsStore = defineStore(
             throw new Error(
               i18n.global.t(
                 'pageDeconfigurationRecords.toast.errorStartDownload',
+              ),
+            );
+          });
+      },
+      async deleteRecords(uris = []) {
+        const promises = uris.map((uri) => api.delete(uri));
+        return await api
+          .all(promises)
+          .then(() => this.getDeconfigurationRecordInfo())
+          .then(() =>
+            i18n.global.t(
+              'pageDeconfigurationRecords.toast.successDelete',
+              uris.length,
+            ),
+          )
+          .catch((error) => {
+            console.log(error);
+            throw new Error(
+              i18n.global.t(
+                'pageDeconfigurationRecords.toast.errorDelete',
+                uris.length,
               ),
             );
           });

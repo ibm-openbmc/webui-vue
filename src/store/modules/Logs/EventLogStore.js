@@ -148,12 +148,6 @@ export const EventLogStore = defineStore('eventLog', {
         .post(
           '/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.ClearLog',
         )
-        .then(() => {
-          return i18n.global.t(
-            'pageEventLogs.toast.successDelete',
-            data.length,
-          );
-        })
         .catch((error) => {
           console.log(error);
           throw new Error(
@@ -162,9 +156,17 @@ export const EventLogStore = defineStore('eventLog', {
         });
     },
     async deleteEventLogs(uris = []) {
+      let guardEntries = [];
       const promises = uris.map((uri) =>
         api.delete(uri).catch((error) => {
           console.log(error);
+          if (
+            error.response.data?.error?.code?.endsWith(
+              'PropertyValueExternalConflict',
+            )
+          ) {
+            guardEntries.push(error.response.data);
+          }
           return error;
         }),
       );
@@ -187,6 +189,13 @@ export const EventLogStore = defineStore('eventLog', {
             }
 
             if (errorCount) {
+              if (guardEntries.length > 0) {
+                const message = i18n.global.t(
+                  'pageEventLogs.toast.errorDeleteGuardRecord',
+                  guardEntries.length,
+                );
+                toastMessages.push({ type: 'error', message });
+              }
               const message = i18n.global.t(
                 'pageEventLogs.toast.errorDelete',
                 errorCount,
@@ -199,9 +208,17 @@ export const EventLogStore = defineStore('eventLog', {
         );
     },
     async resolveEventLogs(logs) {
+      let guardEntries = [];
       const promises = logs.map((log) =>
         api.patch(log.uri, { Resolved: true }).catch((error) => {
           console.log(error);
+          if (
+            error.response.data?.error?.code?.endsWith(
+              'PropertyValueExternalConflict',
+            )
+          ) {
+            guardEntries.push(error.response.data);
+          }
           return error;
         }),
       );
@@ -222,6 +239,13 @@ export const EventLogStore = defineStore('eventLog', {
               toastMessages.push({ type: 'success', message });
             }
             if (errorCount) {
+              if (guardEntries.length > 0) {
+                const message = i18n.global.t(
+                  'pageEventLogs.toast.errorResolveLogsGuardRecord',
+                  guardEntries.length,
+                );
+                toastMessages.push({ type: 'error', message });
+              }
               const message = i18n.global.t(
                 'pageEventLogs.toast.errorResolveLogs',
                 errorCount,
