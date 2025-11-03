@@ -230,7 +230,6 @@ const batchActions = ref([
 ]);
 
 onBeforeRouteLeave(() => {
-  eventBus.emit('clear-selected');
   hideLoader();
 });
 

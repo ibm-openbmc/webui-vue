@@ -70,6 +70,7 @@
           hover
           sticky-header="75vh"
           show-empty
+          :sort-by="[{ key: 'id', order: 'asc' }]"
           :fields="fields"
           :items="filteredLogs"
           :empty-text="
@@ -81,8 +82,6 @@
           :per-page="perPage === 0 ? filteredLogs.length || 1 : perPage"
           :current-page="currentPage"
           :filter="searchFilter"
-          :sort-by="sortBy"
-          @sort-changed="onSortChanged"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredLogs.length)"
         >
@@ -348,7 +347,6 @@ export default {
   beforeRouteLeave(to, from, next) {
     // Hide loader if the user navigates to another page
     // before request is fulfilled.
-    eventBus.emit('clear-selected');
     useLoadingBar().hideLoader();
     next();
   },
@@ -443,7 +441,6 @@ export default {
         useTableSelectableComposable().tableHeaderCheckboxModel,
       tableHeaderCheckboxIndeterminate:
         useTableSelectableComposable().tableHeaderCheckboxIndeterminate,
-      sortBy: [{ key: 'id', order: 'asc' }],
     };
   },
   computed: {
@@ -828,9 +825,6 @@ export default {
         table,
         tableHeaderCheckboxModel,
       );
-    },
-    onSortChanged(ctx) {
-      this.sortBy = ctx.sortBy;
     },
   },
 };
