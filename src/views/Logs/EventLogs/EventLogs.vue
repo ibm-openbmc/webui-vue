@@ -81,6 +81,8 @@
           :per-page="perPage === 0 ? filteredLogs.length || 1 : perPage"
           :current-page="currentPage"
           :filter="searchFilter"
+          :sort-by="sortBy"
+          @sort-changed="onSortChanged"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredLogs.length)"
         >
@@ -441,6 +443,7 @@ export default {
         useTableSelectableComposable().tableHeaderCheckboxModel,
       tableHeaderCheckboxIndeterminate:
         useTableSelectableComposable().tableHeaderCheckboxIndeterminate,
+      sortBy: [{ key: 'id', order: 'asc' }],
     };
   },
   computed: {
@@ -825,6 +828,9 @@ export default {
         table,
         tableHeaderCheckboxModel,
       );
+    },
+    onSortChanged(ctx) {
+      this.sortBy = ctx.sortBy;
     },
   },
 };
