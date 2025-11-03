@@ -41,9 +41,9 @@
               :data="batchExportData"
               :file-name="exportFileNameByDate()"
             />
-            <b-button variant="primary" @click="onBatchAction('delete')">
+            <BButton variant="primary" @click="onBatchAction('delete')">
               <icon-delete /> {{ $t('global.action.delete') }}
-            </b-button>
+            </BButton>
           </template>
         </table-toolbar>
         <BTable
