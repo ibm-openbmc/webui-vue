@@ -170,6 +170,7 @@ const tableHeaderCheckboxIndeterminateValue = ref(
 );
 
 onBeforeRouteLeave(() => {
+  eventBus.emit('clear-selected');
   hideLoader();
 });
 

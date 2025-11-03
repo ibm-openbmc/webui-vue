@@ -347,6 +347,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     // Hide loader if the user navigates to another page
     // before request is fulfilled.
+    eventBus.emit('clear-selected');
     useLoadingBar().hideLoader();
     next();
   },

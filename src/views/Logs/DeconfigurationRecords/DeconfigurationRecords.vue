@@ -337,6 +337,7 @@ const openModal = ref(false);
 const isAllSelected = ref(false);
 
 onBeforeRouteLeave(() => {
+  eventBus.emit('clear-selected');
   isBusy.value = false;
   hideLoader();
 });
