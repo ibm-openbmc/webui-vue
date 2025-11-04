@@ -91,7 +91,6 @@
             selectable
             no-select-on-click
             responsive="md"
-            :sort-by="[{ key: 'dateTime', order: 'asc' }]"
             sticky-header="75vh"
             :fields="fields"
             :items="filteredDumps"

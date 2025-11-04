@@ -53,7 +53,6 @@
           hover
           show-empty
           sticky-header="75vh"
-          :sort-by="[{ key: 'id', order: 'asc' }]"
           sort-desc.sync="status"
           :fields="fields"
           :items="filteredLogs"
