@@ -98,7 +98,6 @@ export const DeconfigurationRecordsStore = defineStore(
           .post(
             '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Actions/LogService.ClearLog',
           )
-          .then(() => this.getDeconfigurationRecordInfo())
           .then(() =>
             i18n.global.t(
               'pageDeconfigurationRecords.toast.successDelete',

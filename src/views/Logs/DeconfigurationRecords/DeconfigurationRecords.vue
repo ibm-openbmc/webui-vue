@@ -9,6 +9,11 @@
       to="/settings/hardware-deconfiguration"
       class="deconfig-records-title"
     />
+    <alert v-if="!isServerOff()" variant="info" class="mb-4">
+      <p>
+        {{ $t('pageDeconfigurationRecords.alertPowerOff') }}
+      </p>
+    </alert>
     <BRow>
       <BCol class="text-right">
         <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
@@ -41,7 +46,11 @@
               :data="batchExportData"
               :file-name="exportFileNameByDate()"
             />
-            <BButton variant="primary" @click="onBatchAction('delete')">
+            <BButton
+              variant="primary"
+              :disabled="!isServerOff()"
+              @click="onBatchAction('delete')"
+            >
               <icon-delete /> {{ $t('global.action.delete') }}
             </BButton>
           </template>
@@ -198,6 +207,7 @@
               :key="index"
               :value="action.value"
               :title="action.title"
+              :enabled="isServerOff()"
               :row-data="row.item"
               @click-table-action="onTableRowAction(action.value, row.item.uri)"
             >
@@ -296,6 +306,7 @@ import TableFilter from '@/components/Global/TableFilter.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableToolbarExport from '@/components/Global/TableToolbarExport.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
+import Alert from '@/components/Global/Alert.vue';
 import stores from '@/store';
 import { onBeforeRouteLeave } from 'vue-router';
 import eventBus from '@/eventBus';
@@ -446,10 +457,42 @@ const clearAllEntries = () => {
 };
 const handleOk = () => {
   openModal.value = false;
+  let totalEntries = [...allEntries.value];
+  let deletedEntries = 0;
   deconfigurationRecoredsStore
     .clearAllEntries(allEntries.value)
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message));
+    .then(
+      startLoader(),
+      deconfigurationRecoredsStore
+        .getDeconfigurationRecordInfo()
+        .finally(() => {
+          deletedEntries = totalEntries.length - allEntries.value.length;
+          if (allEntries.value.length > 0) {
+            Toast.errorToast(
+              i18n.global.t(
+                'pageDeconfigurationRecords.toast.clearAllInfo',
+                allEntries.value.length,
+              ),
+            );
+            Toast.errorToast(
+              i18n.global.t(
+                'pageDeconfigurationRecords.toast.errorDelete',
+                allEntries.value.length,
+              ),
+            );
+          }
+          if (deletedEntries > 0) {
+            Toast.successToast(
+              i18n.global.t(
+                'pageDeconfigurationRecords.toast.successDelete',
+                deletedEntries,
+              ),
+            );
+          }
+          endLoader();
+        }),
+    )
+    .catch(({ message }) => Toast.errorToast(message), endLoader());
 };
 const handleOk2 = () => {
   openModal2.value = false;
