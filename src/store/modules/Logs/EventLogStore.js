@@ -304,9 +304,21 @@ export const EventLogStore = defineStore('eventLog', {
         })
         .catch((error) => {
           console.log(error);
-          const message = i18n.global.t(
-            'pageEventLogs.toast.errorLogStatusUpdate',
-          );
+          if (
+            error.response.data?.error?.code?.endsWith(
+              'PropertyValueExternalConflict',
+            )
+          ) {
+            const message =
+              i18n.global.t('pageEventLogs.toast.errorLogStatusUpdate') +
+              '\n' +
+              i18n.global.t(
+                'pageEventLogs.toast.errorResolveLogsGuardRecord',
+                1,
+              );
+            throw new Error(message);
+          }
+          const message = i18n.tc('pageEventLogs.toast.errorLogStatusUpdate');
           throw new Error(message);
         });
     },
