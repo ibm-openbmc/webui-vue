@@ -581,13 +581,13 @@ export default {
               deletedEntries = totalEntries.length - this.allLogs.length;
               if (this.allLogs.length > 0) {
                 this.toast.errorToast(
-                  this.$tc(
+                  this.$t(
                     'pageEventLogs.toast.errorDeleteGuardRecord',
                     this.allLogs.length,
                   ),
                 );
                 this.toast.errorToast(
-                  this.$tc(
+                  this.$t(
                     'pageEventLogs.toast.errorDelete',
                     this.allLogs.length,
                   ),
@@ -595,7 +595,7 @@ export default {
               }
               if (deletedEntries > 0) {
                 this.toast.successToast(
-                  this.$tc('pageEventLogs.toast.successDelete', deletedEntries),
+                  this.$t('pageEventLogs.toast.successDelete', deletedEntries),
                 );
               }
               useLoadingBar().endLoader();
@@ -605,7 +605,10 @@ export default {
             ({ message }) => this.toast.errorToast(message),
             useLoadingBar().endLoader(),
           )
-          .finally(() => (this.openModal = false));
+          .finally(() => {
+            eventBus.emit('clear-selected');
+            this.openModal = false;
+          });
       } else {
         if (this.selectedRows.length === this.allLogs.length) {
           let totalEntries = [...this.allLogs];
@@ -619,14 +622,14 @@ export default {
               setTimeout(() => {
                 deletedEntries = totalEntries.length - this.allLogs.length;
                 if (this.allLogs.length > 0) {
-                  this.errorToast(
-                    this.$tc(
+                  this.toast.errorToast(
+                    this.$t(
                       'pageEventLogs.toast.errorDeleteGuardRecord',
                       this.allLogs.length,
                     ),
                   );
-                  this.errorToast(
-                    this.$tc(
+                  this.toast.errorToast(
+                    this.$t(
                       'pageEventLogs.toast.errorDelete',
                       this.allLogs.length,
                     ),
@@ -634,7 +637,7 @@ export default {
                 }
                 if (deletedEntries > 0) {
                   this.toast.successToast(
-                    this.$tc(
+                    this.$t(
                       'pageEventLogs.toast.successDelete',
                       deletedEntries,
                     ),
@@ -647,7 +650,10 @@ export default {
               ({ message }) => this.toast.errorToast(message),
               useLoadingBar().endLoader(),
             )
-            .finally(() => (this.openModal = false));
+            .finally(() => {
+              eventBus.emit('clear-selected');
+              this.openModal = false;
+            });
         } else {
           this.deleteLogs(this.uris);
         }

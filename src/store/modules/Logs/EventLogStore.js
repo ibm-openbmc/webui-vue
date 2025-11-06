@@ -318,7 +318,9 @@ export const EventLogStore = defineStore('eventLog', {
               );
             throw new Error(message);
           }
-          const message = i18n.tc('pageEventLogs.toast.errorLogStatusUpdate');
+          const message = i18n.global.t(
+            'pageEventLogs.toast.errorLogStatusUpdate',
+          );
           throw new Error(message);
         });
     },
