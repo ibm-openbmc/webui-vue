@@ -123,7 +123,8 @@ const submitForm = () => {
     startLoader();
     licenseStore
       .activateLicense(licenseKey.value)
-      .then((success) => successToast(success).then(() => fetchInfo()))
+      .then((success) => successToast(success))
+      .then(() => fetchInfo())
       .catch(({ message }) => errorToast(message))
       .finally(() => endLoader());
   }
