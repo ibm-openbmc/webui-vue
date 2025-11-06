@@ -44,7 +44,6 @@
           no-select-on-click
           hover
           sticky-header="75vh"
-          :sort-by="[{ key: 'status', order: 'asc' }]"
           show-empty
           :no-border-collapse="true"
           :items="filteredSensors"

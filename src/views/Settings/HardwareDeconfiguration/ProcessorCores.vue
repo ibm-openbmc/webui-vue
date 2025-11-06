@@ -26,7 +26,6 @@
           sort-icon-left
           hover
           no-sort-reset
-          :sort-by="[{ key: 'status', order: 'asc' }]"
           show-empty
           sticky-header="75vh"
           :no-border-collapse="true"

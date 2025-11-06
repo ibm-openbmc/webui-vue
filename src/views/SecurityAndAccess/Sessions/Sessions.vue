@@ -47,7 +47,6 @@
           no-select-on-click
           hover
           sticky-header="75vh"
-          :sort-by="[{ key: 'clientID', order: 'asc' }]"
           show-empty
           :fields="fields"
           :items="allConnections"
