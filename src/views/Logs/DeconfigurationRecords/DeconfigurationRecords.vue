@@ -409,6 +409,7 @@ const count = ref(0);
 const urival = ref();
 
 onBeforeRouteLeave(() => {
+  eventBus.emit('clear-selected');
   isBusy.value = false;
   hideLoader();
 });

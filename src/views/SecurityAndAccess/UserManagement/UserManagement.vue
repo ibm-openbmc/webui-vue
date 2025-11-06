@@ -158,6 +158,7 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import stores from '@/store';
 
 onBeforeRouteLeave(() => {
+  eventBus.emit('clear-selected');
   hideLoader();
 });
 

@@ -70,7 +70,6 @@
           hover
           sticky-header="75vh"
           show-empty
-          :sort-by="[{ key: 'id', order: 'asc' }]"
           :fields="fields"
           :items="filteredLogs"
           :empty-text="
@@ -347,6 +346,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     // Hide loader if the user navigates to another page
     // before request is fulfilled.
+    eventBus.emit('clear-selected');
     useLoadingBar().hideLoader();
     next();
   },

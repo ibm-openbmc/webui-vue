@@ -248,6 +248,7 @@ const tableFilters = ref([
 ]);
 
 onBeforeRouteLeave(() => {
+  eventBus.emit('clear-selected');
   hideLoader();
 });
 
