@@ -76,7 +76,7 @@ const hideLoadingBar = () => {
 <style lang="scss" scoped>
 .progress {
   position: relative;
-  top:0px;
+  top: 0px;
   left: 0;
   right: 0;
   bottom: -0.4rem;
