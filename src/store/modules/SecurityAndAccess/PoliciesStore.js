@@ -291,8 +291,7 @@ export const PoliciesStore = defineStore('policies', {
       return await api
         .patch('/redfish/v1/Systems/system/Bios/Settings', {
           Attributes: {
-            hb_secure_ver_lockin_enabled:
-              updatedSvle === 'Enabled' ? 'Disabled' : 'Enabled',
+            hb_secure_ver_lockin_enabled: updatedSvle,
           },
         })
         .then(() => {
