@@ -373,6 +373,7 @@ const changeVtpmState = (state) => {
     });
 };
 const changeSvleState = (state) => {
+  console.log('state', state);
   Policies.saveSvleState(state ? 'Enabled' : 'Disabled')
     .then((message) => {
       Toast.successToast(message);
