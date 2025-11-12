@@ -230,10 +230,34 @@ const filteredLogsByDate = computed(() => {
   );
 });
 const filteredLogs = computed(() => {
-  if (auditLogsStore.allAuditLogsGetter) {
-    return getFilteredTableData(filteredLogsByDate.value, activeFilters.value);
+  if (!auditLogsStore.allAuditLogsGetter) return [];
+
+  let data = getFilteredTableData(
+    filteredLogsByDate.value,
+    activeFilters.value,
+  );
+
+  if (searchFilterInput.value) {
+    const search = searchFilterInput.value.toLowerCase();
+
+    data = data.filter((item) => {
+      const searchableFields = [
+        item.auditId,
+        item.operation,
+        item.message,
+        item.account,
+        item.addr,
+        item.res,
+        item.date ? new Date(item.date).toLocaleString() : '',
+      ];
+      return searchableFields.some((field) =>
+        String(field || '')
+          .toLowerCase()
+          .includes(search),
+      );
+    });
   }
-  return [];
+  return data;
 });
 const allLogs = computed(() => {
   return auditLogsStore.allAuditLogsGetter.map((auditLogs) => {
