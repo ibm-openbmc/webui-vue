@@ -5,6 +5,7 @@ import { defineStore } from 'pinia';
 export const SystemParametersStore = defineStore('systemParameters', {
   state: () => ({
     state: {
+      registryEntries: [],
       rpdPolicyOptions: [],
       rpdFeatureOptions: [],
       aggressivePrefetch: false,
@@ -22,6 +23,7 @@ export const SystemParametersStore = defineStore('systemParameters', {
     },
   }),
   getters: {
+    registryEntriesGetter: (state) => state.registryEntries,
     aggressivePrefetchGetter: (state) => state.aggressivePrefetch,
     frequencyMaxGetter: (state) => state.frequencyCap?.frequencyMax,
     frequencyMinGetter: (state) => state.frequencyCap?.frequencyMin,
@@ -43,138 +45,67 @@ export const SystemParametersStore = defineStore('systemParameters', {
     rpdScheduledRunDurationGetter: (state) => state.rpdScheduledRunDuration,
   },
   actions: {
-    async getAggressivePrefetch() {
+    async getBiosAttributesRegistry() {
       return await api
         .get(
           '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
         )
-        .then(({ data: { RegistryEntries } }) => {
-          const aggressivePrefetch = RegistryEntries.Attributes.filter(
+        .then((response) => {
+          this.registryEntries = response.data['RegistryEntries'];
+          const aggressivePrefetch = this.registryEntries.Attributes.filter(
             (Attribute) =>
               Attribute.AttributeName == 'hb_proc_favor_aggressive_prefetch',
           );
           let aggressivePrefetchValue = aggressivePrefetch[0].CurrentValue;
-          let modeValue = aggressivePrefetchValue == 'Enabled' ? true : false;
-          this.aggressivePrefetch = modeValue;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getRpdPolicy() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const rpdPolicy = RegistryEntries.Attributes.filter(
+          let aggressivePrefetchModeValue =
+            aggressivePrefetchValue == 'Enabled' ? true : false;
+          this.aggressivePrefetch = aggressivePrefetchModeValue;
+          const rpdPolicy = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_policy',
           );
           let rpdPolicyValue = rpdPolicy[0].CurrentValue;
           this.rpdPolicy = rpdPolicyValue;
           this.pvmRpdPolicy = rpdPolicyValue;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getRpdPolicyCurrent() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const rpdPolicyCurr = RegistryEntries.Attributes.filter(
+          const rpdPolicyCurr = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_feature_current',
           );
           let rpdPolicyCurrValue = rpdPolicyCurr[0].CurrentValue;
           this.rpdPolicyCurrent = rpdPolicyCurrValue;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getRpdFeature() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const rpdFeature = RegistryEntries.Attributes.filter(
+          const rpdFeature = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_feature',
           );
           let rpdFeatureValue = rpdFeature[0].CurrentValue;
           this.rpdFeature = rpdFeatureValue;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getImmediateTestRequested() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const immediateTestRequested = RegistryEntries.Attributes.filter(
+          const immediateTestRequested = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_immediate_test',
           );
           let immediateTestRequestedValue =
             immediateTestRequested[0].CurrentValue;
-          let modeValue =
+          let immediateTestRequestedModeValue =
             immediateTestRequestedValue == 'Enabled' ? true : false;
-          this.immediateTestRequested = modeValue;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getGuardOnError() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const immediateTestRequested = RegistryEntries.Attributes.filter(
+          this.immediateTestRequested = immediateTestRequestedModeValue;
+          const guardOnError = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_guard_policy',
           );
-          let immediateTestRequestedValue =
-            immediateTestRequested[0].CurrentValue;
-          let modeValue =
-            immediateTestRequestedValue == 'Enabled' ? true : false;
-          this.guardOnError = modeValue;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getRpdPolicyOptions() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const rpdPolicy = RegistryEntries.Attributes.filter(
+          let guardOnErrorCurr = guardOnError[0].CurrentValue;
+          let guardOnErrorModeValue =
+            guardOnErrorCurr == 'Enabled' ? true : false;
+          this.guardOnError = guardOnErrorModeValue;
+          const rpdPolicyOps = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_policy',
           );
-          let rpdPolicyOptions = rpdPolicy[0].Value.map(
+          let rpdPolicyOptions = rpdPolicyOps[0].Value.map(
             ({ ValueName }) => ValueName,
           );
           this.rpdPolicyOptions = rpdPolicyOptions;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getRpdFeatureOptions() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const rpdPolicy = RegistryEntries.Attributes.filter(
+          const rpdFeatureOps = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_feature',
           );
-          let rpdFeatureOptions = rpdPolicy[0].Value.map(
+          let rpdFeatureOptions = rpdFeatureOps[0].Value.map(
             ({ ValueName }) => ValueName,
           );
           this.rpdFeatureOptions = rpdFeatureOptions;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getRpdScheduledRun() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const rpdScheduledRun = RegistryEntries.Attributes.filter(
+          const rpdScheduledRun = this.registryEntries.Attributes.filter(
             (Attribute) => Attribute.AttributeName == 'pvm_rpd_scheduled_tod',
           );
           let RpdScheduledRunValue = rpdScheduledRun[0].CurrentValue;
@@ -183,21 +114,21 @@ export const SystemParametersStore = defineStore('systemParameters', {
           const hourString = hours.toString().padStart(2, '0');
           const minuteString = minutes.toString().padStart(2, '0');
           this.rpdScheduledRun = `${hourString}:${minuteString}`;
-        })
-        .catch((error) => console.log(error));
-    },
-    async getRpdScheduledRunDuration() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const rpdScheduledRunDuration = RegistryEntries.Attributes.filter(
-            (Attribute) =>
-              Attribute.AttributeName == 'pvm_rpd_scheduled_duration',
-          );
+          const rpdScheduledRunDuration =
+            this.registryEntries.Attributes.filter(
+              (Attribute) =>
+                Attribute.AttributeName == 'pvm_rpd_scheduled_duration',
+            );
           let rpdScheduledRunValue = rpdScheduledRunDuration[0].CurrentValue;
           this.rpdScheduledRunDuration = rpdScheduledRunValue;
+          const lateralCastOutMode = this.registryEntries.Attributes.filter(
+            (Attribute) =>
+              Attribute.AttributeName == 'hb_lateral_cast_out_mode',
+          );
+          let lateralCastOutModeValue = lateralCastOutMode[0].CurrentValue;
+          let lateralCastModeValue =
+            lateralCastOutModeValue == 'Enabled' ? true : false;
+          this.lateralCastOutMode = lateralCastModeValue;
         })
         .catch((error) => console.log(error));
     },
@@ -238,7 +169,7 @@ export const SystemParametersStore = defineStore('systemParameters', {
         )
         .then(() => {
           this.rpdPolicy = updatedRpdPolicyValue.Attributes.pvm_rpd_policy;
-          this.getRpdPolicy();
+          this.getBiosAttributesRegistry();
           return i18n.global.t(
             'pageSystemParameters.toast.successSavingRpdPolicy',
           );
@@ -365,22 +296,6 @@ export const SystemParametersStore = defineStore('systemParameters', {
             i18n.global.t('pageSystemParameters.toast.errorSavingRpdRun'),
           );
         });
-    },
-    async getLateralCastOutMode() {
-      return await api
-        .get(
-          '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-        )
-        .then(({ data: { RegistryEntries } }) => {
-          const lateralCastOutMode = RegistryEntries.Attributes.filter(
-            (Attribute) =>
-              Attribute.AttributeName == 'hb_lateral_cast_out_mode',
-          );
-          let lateralCastOutModeValue = lateralCastOutMode[0].CurrentValue;
-          let modeValue = lateralCastOutModeValue == 'Enabled' ? true : false;
-          this.lateralCastOutMode = modeValue;
-        })
-        .catch((error) => console.log(error));
     },
     async saveLateralCastOutMode(lateralCastOutModeValue) {
       let updatedModeValue = lateralCastOutModeValue ? 'Enabled' : 'Disabled';

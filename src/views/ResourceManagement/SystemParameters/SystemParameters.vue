@@ -29,19 +29,7 @@ const global = stores.GlobalStore();
 
 onBeforeMount(() => {
   startLoader();
-  Promise.all([
-    systemParametersStore.getLateralCastOutMode(),
-    systemParametersStore.getAggressivePrefetch(),
-    systemParametersStore.getImmediateTestRequested(),
-    systemParametersStore.getGuardOnError(),
-    systemParametersStore.getRpdPolicyOptions(),
-    systemParametersStore.getRpdFeatureOptions(),
-    systemParametersStore.getRpdPolicy(),
-    systemParametersStore.getRpdPolicyCurrent(),
-    systemParametersStore.getRpdFeature(),
-    systemParametersStore.getRpdScheduledRun(),
-    systemParametersStore.getRpdScheduledRunDuration(),
-  ]).finally(() => endLoader());
+  systemParametersStore.getBiosAttributesRegistry().finally(() => endLoader());
 });
 
 const serverStatus = computed(() => {
