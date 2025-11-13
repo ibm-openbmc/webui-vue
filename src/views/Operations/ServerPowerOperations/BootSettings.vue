@@ -9,20 +9,6 @@
       @is-linux-kvm-valid="linuxKvmValue"
       @updated-attributes="updateAttributeKeys"
     />
-    <BButton
-      variant="primary"
-      type="submit"
-      class="mb-3"
-      :disabled="
-        !isLinuxKvmValid
-          ? form.attributes.pvm_default_os_type === 'Linux KVM'
-            ? true
-            : false
-          : false
-      "
-    >
-      {{ $t('global.action.save') }}
-    </BButton>
   </BForm>
 </template>
 

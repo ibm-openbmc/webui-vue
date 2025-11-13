@@ -363,6 +363,20 @@
         </BFormGroup>
       </BCol>
     </BRow>
+    <b-button
+      variant="primary"
+      type="submit"
+      class="mb-3"
+      :disabled="
+        !isLinuxKvmValid
+          ? form.attributes.pvm_default_os_type === 'Linux KVM'
+            ? true
+            : false
+          : false
+      "
+    >
+      {{ $t('global.action.save') }}
+    </b-button>
     <BRow class="mb-3">
       <BCol xl="10">
         <BButton v-b-toggle.collapse-role-table variant="link">
@@ -782,6 +796,11 @@ const ibmiConsoleItems = ref([
     ),
   },
 ]);
+
+const form = ref({
+  attributes: bootSettingsStore.getBiosAttributes,
+  attributeValues: bootSettingsStore.getAttributeValues,
+});
 
 onBeforeMount(() => {
   bootSettingsStore.fetchLocationCodes();
