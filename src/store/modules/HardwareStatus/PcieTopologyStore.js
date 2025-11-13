@@ -779,7 +779,7 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore', {
             if (slot?.pcieDevice) {
               row.linkSpeed = slot?.pcieDevice?.PCIeInterface?.PCIeType;
               row.linkWidth =
-                slot?.pcieDevice?.PCIeInterface?.LanesInUse === -1
+                slot?.pcieDevice?.PCIeInterface?.LanesInUse === null
                   ? 'unknown'
                   : slot?.pcieDevice?.PCIeInterface?.LanesInUse;
               if (
