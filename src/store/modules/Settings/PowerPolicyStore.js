@@ -14,27 +14,36 @@ export const PowerPolicyStore = defineStore('powerPolicy', {
   actions: {
     async getPowerRestorePolicies() {
       return await api
-        .get('/redfish/v1/JsonSchemas/ComputerSystem/ComputerSystem.json')
-        .then(
-          ({
-            data: {
-              definitions: { PowerRestorePolicyTypes = {} },
-            },
-          }) => {
-            let powerPoliciesData = PowerRestorePolicyTypes.enum.map(
-              (powerState) => {
-                let desc = `${i18n.global.t(
-                  `pagePowerRestorePolicy.policies.${powerState}`,
-                )} - ${PowerRestorePolicyTypes.enumDescriptions[powerState]}`;
-                return {
-                  state: powerState,
-                  desc,
-                };
+        .get('/redfish/v1/JsonSchemas/ComputerSystem')
+        .then(async (response) => {
+          if (
+            response.data?.Location.length > 0 &&
+            response.data?.Location[0].Uri
+          ) {
+            return await api.get(response.data?.Location[0].Uri).then(
+              ({
+                data: {
+                  definitions: { PowerRestorePolicyTypes = {} },
+                },
+              }) => {
+                let powerPoliciesData = PowerRestorePolicyTypes.enum.map(
+                  (powerState) => {
+                    let desc = `${i18n.global.t(
+                      `pagePowerRestorePolicy.policies.${powerState}`,
+                    )} - ${
+                      PowerRestorePolicyTypes.enumDescriptions[powerState]
+                    }`;
+                    return {
+                      state: powerState,
+                      desc,
+                    };
+                  },
+                );
+                this.powerRestorePolicies = powerPoliciesData;
               },
             );
-            this.powerRestorePolicies = powerPoliciesData;
-          },
-        );
+          }
+        });
     },
     async getPowerRestoreCurrentPolicy() {
       return await api

@@ -160,6 +160,7 @@
                         },
                       )
                     }}
+                    {{ powerPolicy + 'qqwwwwwwwwwww' }}
                   </div>
                 </BCol>
                 <BCol v-else-if="currentOperatingMode === manualMode" sm="5">
