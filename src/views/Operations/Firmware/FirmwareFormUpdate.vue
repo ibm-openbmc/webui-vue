@@ -2,69 +2,26 @@
   <div>
     <div class="form-background p-3">
       <BForm @submit.prevent="onSubmitUpload">
-        <BFormGroup
-          v-if="isTftpUploadAvailable && tftpServer"
-          :label="$t('pageFirmware.form.updateFirmware.fileSource')"
-          :disabled="isPageDisabled"
-        >
-          <BFormRadio v-model="isWorkstationSelected" :value="true">
-            {{ $t('pageFirmware.form.updateFirmware.workstation') }}
-          </BFormRadio>
-          <BFormRadio v-model="isWorkstationSelected" :value="false">
-            {{ $t('pageFirmware.form.updateFirmware.tftpServer') }}
-            <span
-              ><info-tooltip
-                :title="$t('pageFirmware.form.updateFirmware.tftpServerInfo')"
-              >
-                <icon-info /> </info-tooltip
-            ></span>
-          </BFormRadio>
-        </BFormGroup>
-
         <!-- Workstation Upload -->
-        <template v-if="isWorkstationSelected">
-          <BFormGroup
-            :label="$t('pageFirmware.form.updateFirmware.imageFile')"
-            label-for="image-file"
+        <BFormGroup
+          :label="$t('pageFirmware.form.updateFirmware.imageFile')"
+          label-for="image-file"
+        >
+          <FormFile
+            id="image-file"
+            :disabled="isPageDisabled"
+            accept=".tar"
+            :state="getValidationState(v$.file)"
+            aria-describedby="image-file-help-block"
+            @input="onFileUpload($event)"
           >
-            <FormFile
-              id="image-file"
-              :disabled="isPageDisabled"
-              accept=".tar"
-              :state="getValidationState(v$.file)"
-              aria-describedby="image-file-help-block"
-              @input="onFileUpload"
-            >
-              <template #invalid>
-                <BFormInvalidFeedback role="alert">
-                  {{ $t('global.form.required') }}
-                </BFormInvalidFeedback>
-              </template>
-            </FormFile>
-          </BFormGroup>
-        </template>
-
-        <!-- TFTP Server Upload -->
-        <template v-if="tftpServer">
-          <BFormGroup
-            :label="$t('pageFirmware.form.updateFirmware.fileAddress')"
-            label-for="tftp-address"
-          >
-            <BFormInput
-              id="tftp-address"
-              v-model="tftpFileAddress"
-              type="text"
-              :state="getValidationState(v$.tftpFileAddress)"
-              :disabled="isPageDisabled"
-              @input="v$.tftpFileAddress.$touch()"
-            ></BFormInput>
-            <BFormInvalidFeedback role="alert">
-              <template v-if="!v$.tftpFileAddress.required">
-                {{ $t('global.form.fieldRequired') }}
-              </template>
-            </BFormInvalidFeedback>
-          </BFormGroup>
-        </template>
+            <template #invalid>
+              <BFormInvalidFeedback role="alert">
+                {{ $t('global.form.required') }}
+              </BFormInvalidFeedback>
+            </template>
+          </FormFile>
+        </BFormGroup>
         <BButton
           data-test-id="firmware-button-startUpdate"
           type="submit"
@@ -84,14 +41,13 @@
 <script setup>
 import { ref, computed, watch, onBeforeMount } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { requiredIf } from '@vuelidate/validators';
+import { required } from '@vuelidate/validators';
 import i18n from '@/i18n';
 import useLoadingBar, {
   loading,
 } from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
-import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import IconInfo from '@carbon/icons-vue/es/information/16';
 import FormFile from '@/components/Global/FormFile.vue';
 import ModalUpdateFirmware from './FirmwareModalUpdateFirmware.vue';
@@ -116,13 +72,10 @@ defineProps({
   },
 });
 
-const isWorkstationSelected = ref(true);
 const file = ref(null);
-const tftpFileAddress = ref(null);
 const isServerPowerOffRequired = ref(
   import.meta.env.VITE_APP_SERVER_OFF_REQUIRED === 'true',
 );
-const tftpServer = ref(import.meta.env.VITE_APP_TFTP_SERVER === 'true');
 
 onBeforeMount(() => {
   bmcStore.getBmcInfo();
@@ -137,32 +90,14 @@ const bootProgress = computed(() => {
   return globalStore.bootProgressGetter;
 });
 
-const isTftpUploadAvailable = computed(() => {
-  return firmwareStore.isTftpUploadAvailable;
-});
-
 const rules = computed(() => ({
   file: {
-    requiredIf: requiredIf(function () {
-      return isWorkstationSelected.value;
-    }),
-  },
-  tftpFileAddress: {
-    requiredIf: requiredIf(function () {
-      return !isWorkstationSelected.value;
-    }),
+    required: required,
   },
 }));
 
 const v$ = useVuelidate(rules, {
   file,
-  tftpFileAddress,
-});
-
-watch(isWorkstationSelected, () => {
-  v$.value.$reset();
-  file.value = null;
-  tftpFileAddress.value = null;
 });
 
 watch(loading, (value) => {
@@ -188,11 +123,7 @@ function updateFirmware() {
         },
       );
     }
-    if (isWorkstationSelected.value) {
-      dispatchWorkstationUpload(activateFirmware);
-    } else {
-      dispatchTftpUpload(activateFirmware);
-    }
+    dispatchWorkstationUpload(activateFirmware);
   };
 
   // Step 2 - Activation
@@ -309,18 +240,6 @@ function dispatchWorkstationUpload(activateFirmware) {
   firmwareStore
     .uploadFirmware(file.value)
     .then(async ({ data }) => {
-      activateFirmware(data);
-    })
-    .catch(({ message }) => {
-      endLoader();
-      errorToast(message);
-    });
-}
-
-function dispatchTftpUpload(activateFirmware) {
-  firmwareStore
-    .uploadFirmwareTFTP(tftpFileAddress.value)
-    .then(({ data }) => {
       activateFirmware(data);
     })
     .catch(({ message }) => {
