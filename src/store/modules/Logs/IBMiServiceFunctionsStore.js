@@ -21,7 +21,7 @@ export const IBMiServiceFunctionsStore = defineStore('ibmiServiceFunctions', {
     async executeServiceFunction(value) {
       return await api
         .post(
-          '/redfish/v1/Systems/system/Actions/Oem/OemComputerSystem.ExecutePanelFunction',
+          '/redfish/v1/Systems/system/Actions/Oem/IBM/IBMComputerSystem.ExecutePanelFunction',
           {
             FuncNo: value,
           },
