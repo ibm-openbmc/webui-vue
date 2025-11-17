@@ -20,7 +20,7 @@ export const ChassisStore = defineStore('chassisStore', {
           LocationIndicatorActive,
           Name,
           Location,
-          Oem,
+          Version,
         } = chassis;
 
         return {
@@ -31,7 +31,7 @@ export const ChassisStore = defineStore('chassisStore', {
           identifyLed: LocationIndicatorActive,
           uri: chassis['@odata.id'],
           locationNumber: Location?.PartLocation?.ServiceLabel,
-          firmwareVersion: Oem?.OpenBMC?.FirmwareVersion,
+          firmwareVersion: Version,
         };
       });
     },
