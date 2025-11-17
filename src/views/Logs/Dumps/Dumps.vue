@@ -256,6 +256,7 @@ const tableFilters = ref([
       'Hardware Dump Entry',
       'Hostboot Dump Entry',
       'SBE Dump Entry',
+      'OCMB SBE Dump Entry',
       'Resource Dump Entry',
       'System Dump Entry',
     ],
