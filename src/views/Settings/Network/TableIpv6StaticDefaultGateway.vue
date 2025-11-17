@@ -2,52 +2,49 @@
   <div>
     <page-section :section-title="$t('pageNetwork.ipv6StaticDefaultGateway')">
       <BRow>
-        <BCol class="text-right">
-          <BButton
-            variant="primary"
-            :disabled="isTablesDisabled"
-            @click="initIpv6DefaultGatewayModal()"
+        <BCol lg="6">
+          <div class="text-right">
+            <BButton
+              variant="primary"
+              :disabled="isTablesDisabled"
+              @click="initIpv6DefaultGatewayModal()"
+            >
+              <icon-add />
+              {{ $t('pageNetwork.table.addIpv6StaticDefaultGateway') }}
+            </BButton>
+          </div>
+          <BTable
+            responsive="md"
+            hover
+            sticky-header="75vh"
+            :fields="ipv6DefaultGatewayTableFields"
+            :items="form.ipv6DefaultGatewayTableItems"
+            :empty-text="$t('global.table.emptyMessage')"
+            :busy="isTablesDisabled"
+            class="mb-0"
+            show-empty
           >
-            <icon-add />
-            {{ $t('pageNetwork.table.addIpv6StaticDefaultGateway') }}
-          </BButton>
+            <template #cell(actions)="{ item }">
+              <table-row-action
+                v-for="(action, actionIndex) in item.actions"
+                :key="actionIndex"
+                :value="action.value"
+                :title="action.title"
+                :enabled="action.enabled"
+                @click-table-action="
+                  onIpv6DefaultGatewayTableAction(action, $event, item)
+                "
+              >
+                <template #icon>
+                  <icon-edit v-if="action.value === 'edit'" />
+                  <icon-trashcan v-if="action.value === 'delete'" />
+                </template>
+              </table-row-action>
+            </template>
+          </BTable>
         </BCol>
       </BRow>
-      <BTable
-        responsive="md"
-        hover
-        selectable
-        no-select-on-click
-        sort-icon-left
-        sticky-header="75vh"
-        :fields="ipv6DefaultGatewayTableFields"
-        :items="form.ipv6DefaultGatewayTableItems"
-        :empty-text="
-          isTablesDisabled
-            ? $t('global.table.loading')
-            : $t('global.table.emptyMessage')
-        "
-        class="mb-0"
-        show-empty
-      >
-        <template #cell(actions)="{ item }">
-          <table-row-action
-            v-for="(action, actionIndex) in item.actions"
-            :key="actionIndex"
-            :value="action.value"
-            :title="action.title"
-            :enabled="action.enabled"
-            @click-table-action="
-              onIpv6DefaultGatewayTableAction(action, $event, item)
-            "
-          >
-            <template #icon>
-              <icon-edit v-if="action.value === 'edit'" />
-              <icon-trashcan v-if="action.value === 'delete'" />
-            </template>
-          </table-row-action>
-        </template>
-      </BTable>
+      
     </page-section>
     <BModal
       v-model="openModal"
@@ -123,10 +120,6 @@ const ipv6DefaultGatewayTableFields = ref([
     key: 'Address',
     label: i18n.global.t('pageNetwork.table.ipAddress'),
   },
-  {
-    key: 'PrefixLength',
-    label: i18n.global.t('pageNetwork.table.prefixLength'),
-  },
   { key: 'actions', label: '', tdClass: 'text-right' },
 ]);
 
@@ -164,7 +157,6 @@ const getipv6DefaultGatewayTableItems = () => {
   form.value.ipv6DefaultGatewayTableItems = addresses.map((ipv6) => {
     return {
       Address: ipv6.Address,
-      PrefixLength: ipv6.PrefixLength,
       actions: [
         {
           value: 'edit',
@@ -201,10 +193,9 @@ const openDeleteIpv6DefaultGatewayTableRowModal = (item) => {
   const newIpv6Array = form.value.ipv6DefaultGatewayTableItems
     .filter((row) => row.Address !== item.Address)
     .map((ipv6) => {
-      const { Address, PrefixLength } = ipv6;
+      const { Address } = ipv6;
       return {
         Address,
-        PrefixLength,
       };
     });
   const addressIp = item.Address;

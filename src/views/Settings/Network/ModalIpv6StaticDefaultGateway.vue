@@ -13,7 +13,7 @@
   >
     <BForm id="form-ipv6-default-gateway" @submit.prevent="handleSubmit">
       <BRow>
-        <BCol sm="6">
+        <BCol>
           <BFormGroup
             :label="$t('pageNetwork.modal.ipAddress')"
             label-for="ipAddress"
@@ -35,38 +35,6 @@
             </BFormInvalidFeedback>
           </BFormGroup>
         </BCol>
-        <BCol sm="6">
-          <BFormGroup
-            :label="$t('pageNetwork.modal.prefixLength')"
-            label-for="prefixLength"
-          >
-            <BFormInput
-              id="prefixLength"
-              v-model="form.prefixLength"
-              type="number"
-              :state="getValidationState(v$.form.prefixLength)"
-              @blur="v$.form.prefixLength.$touch()"
-            />
-            <BFormInvalidFeedback role="alert">
-              <template v-if="v$.form.prefixLength.required.$invalid">
-                {{ $t('global.form.fieldRequired') }}
-              </template>
-              <template
-                v-if="
-                  v$.form.prefixLength.minValue.$invalid ||
-                  v$.form.prefixLength.maxValue.$invalid
-                "
-              >
-                {{
-                  $t('global.form.valueMustBeBetween', {
-                    min: 0,
-                    max: 128,
-                  })
-                }}
-              </template>
-            </BFormInvalidFeedback>
-          </BFormGroup>
-        </BCol>
       </BRow>
     </BForm>
   </BModal>
@@ -76,7 +44,7 @@
 import { ref, computed, watch } from 'vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
-import { required, minValue, maxValue, helpers } from '@vuelidate/validators';
+import { required, helpers } from '@vuelidate/validators';
 import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
@@ -89,10 +57,6 @@ eventBus.on('modal-add-ipv6-default-gateway', () => {
 });
 
 const props = defineProps({
-  prefixLength: {
-    type: Number,
-    default: 0,
-  },
   ipAddress: {
     type: String,
     default: '',
@@ -105,7 +69,6 @@ const props = defineProps({
 
 const form = ref({
   ipAddress: '',
-  prefixLength: 0,
 });
 
 const rules = computed(() => ({
@@ -115,11 +78,6 @@ const rules = computed(() => ({
       pattern: helpers.regex(
         /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/,
       ),
-    },
-    prefixLength: {
-      required,
-      minValue: minValue(0),
-      maxValue: maxValue(128),
     },
   },
 }));
@@ -135,19 +93,11 @@ watch(
   },
 );
 
-watch(
-  () => props.prefixLength,
-  () => {
-    form.value.prefixLength = props.prefixLength;
-  },
-);
-
 const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
   emit('ok', {
     Address: form.value.ipAddress,
-    PrefixLength: Number(form.value.prefixLength),
   });
   closeModal();
 };

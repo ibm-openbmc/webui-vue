@@ -429,9 +429,9 @@ export const NetworkStore = defineStore('network', {
           return {}; // if address doesn't match then skip address, no change
         }
       });
-      const filteredAddress = newIpv6StaticDefaultGatewayAddress.filter(
-        (item) => item.PrefixLength !== 0,
-      );
+      let filteredAddress = [];
+      const newAddress = newIpv6StaticDefaultGatewayAddress[0];
+      filteredAddress.push(newAddress);
       const updatedIpv6Array = {
         IPv6StaticDefaultGateways: [...updatedIpv6, ...filteredAddress],
       };
