@@ -147,6 +147,26 @@ export const GlobalStore = defineStore('global', {
         })
         .catch((error) => console.log(error));
     },
+    async getSafeMode() {
+      return api
+        .get('/redfish/v1/Systems/system/Processors?$expand=.($levels=2)')
+        .then(({ data }) => {
+          this.safeMode = false;
+          for (let member of data.Members) {
+            if (
+              member?.Throttled &&
+              member?.ThrottleCauses.includes('ManagementDetectedFault')
+            ) {
+              this.safeMode = true;
+              break;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return Promise.reject(error);
+        });
+    },
     async getSystemInfo() {
       return await api
         .get('/redfish/v1/Systems/system')
@@ -157,9 +177,6 @@ export const GlobalStore = defineStore('global', {
               Model,
               PowerState,
               SerialNumber,
-              Oem: {
-                IBM: { SafeMode },
-              },
               Status: { State } = {},
             },
           } = {}) => {
@@ -167,7 +184,6 @@ export const GlobalStore = defineStore('global', {
             this.serialNumber = SerialNumber;
             this.modelType = Model;
             localStorage.setItem('storedModelType', Model);
-            this.safeMode = SafeMode;
             if (State === 'Quiesced' || State === 'InTest') {
               // OpenBMC's host state interface is mapped to 2 Redfish
               // properties "Status""State" and "PowerState". Look first
@@ -177,6 +193,7 @@ export const GlobalStore = defineStore('global', {
             } else {
               this.serverStatus = serverStateMapper(PowerState);
             }
+            this.getSafeMode();
             return Promise.resolve();
           },
         )
