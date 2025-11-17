@@ -104,7 +104,7 @@ export const ResourceMemoryStore = defineStore('resourceMemory', {
             );
           if (dynamicIoDrawerDefaultCapacity.length > 0) {
             let dynamicIoDrawerAttachmentDefaultCapacity =
-              dynamicIoDrawerDefaultCapacity[0].DefaultValue;
+              dynamicIoDrawerDefaultCapacity[0].UpperBound;
             this.dynamicIoDrawerDefaultCapacity =
               dynamicIoDrawerAttachmentDefaultCapacity;
           }
