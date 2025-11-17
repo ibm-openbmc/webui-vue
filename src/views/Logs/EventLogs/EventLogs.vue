@@ -599,7 +599,7 @@ export default {
                 );
               }
               useLoadingBar().endLoader();
-            }, 5000);
+            }, 8000);
           })
           .catch(
             ({ message }) => this.toast.errorToast(message),
@@ -644,7 +644,7 @@ export default {
                   );
                 }
                 useLoadingBar().endLoader();
-              }, 5000);
+              }, 8000);
             })
             .catch(
               ({ message }) => this.toast.errorToast(message),
