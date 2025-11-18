@@ -22,7 +22,7 @@
                 <network-interface-settings :tab-index="tabIndex" />
                 <!-- IPV4 table -->
                 <table-ipv-4 :tab-index="tabIndex" />
-                <!-- Static DNS table -->
+                <!-- IPV6 table -->
                 <div v-if="isIpv6Valid">
                   <table-ipv-6 :tab-index="tabIndex" />
                 </div>
@@ -30,6 +30,31 @@
                 <table-ipv6-static-default-gateway :tab-index="tabIndex" />
                 <!-- Static DNS table -->
                 <table-dns :tab-index="tabIndex" />
+                <!-- LLDP -->
+                <page-section :section-title="$t('pageNetwork.lldp')">
+                  <BRow>
+                    <BCol lg="2" md="6">
+                      <dl>
+                        <dd>
+                          <BFormCheckbox
+                            id="useLLDPSwitch"
+                            v-model="lldpState"
+                            data-test-id="networkSettings-switch-useNtp"
+                            switch
+                            @update:model-value="changeLLDPState"
+                          >
+                            <span v-if="lldpState">
+                              {{ $t('global.status.enabled') }}
+                            </span>
+                            <span v-else>{{
+                              $t('global.status.disabled')
+                            }}</span>
+                          </BFormCheckbox>
+                        </dd>
+                      </dl>
+                    </BCol>
+                  </BRow>
+                </page-section>
               </BTab>
               <template #empty>
                 <div class="text-center text-muted">
@@ -122,6 +147,7 @@ onMounted(() => {
     prefixLengthIpv6StaticDefaultGateway.value = item.PrefixLength;
   });
   networkStore.setSelectedTabIndex(0);
+  networkStore.getLLDPData();
 });
 
 const network = computed(() => {
@@ -132,6 +158,15 @@ const isIpv6Valid = computed(() => {
   const ipv6 = network.value[tabIndex.value].ipv6;
   if (ipv6 === undefined || ipv6 === null || ipv6.length === 0) return false;
   else return true;
+});
+
+const lldpState = computed({
+  get() {
+    return networkStore?.lldpEnabledStateGetter?.[tabIndex.value]?.lldpEnabled;
+  },
+  set(newValue) {
+    networkStore.lldpEnabledStateGetter[tabIndex.value].lldpEnabled = newValue;
+  },
 });
 
 watch(network, () => {
@@ -274,5 +309,12 @@ const setEndLoaderAfterDelay = () => {
   setTimeout(() => {
     endLoader();
   }, 15000);
+};
+
+const changeLLDPState = (state) => {
+  networkStore
+    .saveLLDPState(state)
+    .then((message) => successToast(message))
+    .catch(({ message }) => errorToast(message));
 };
 </script>

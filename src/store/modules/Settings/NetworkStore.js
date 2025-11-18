@@ -8,6 +8,7 @@ export const NetworkStore = defineStore('network', {
     dhcpEnabledState: false,
     ipv6DhcpEnabledState: false,
     ipv6AutoConfigEnabled: false,
+    lldpEnabledState: [],
     networkSettings: [],
     selectedInterfaceId: '', // which tab is selected
     selectedInterfaceIndex: 0, // which tab is selected
@@ -15,6 +16,7 @@ export const NetworkStore = defineStore('network', {
   }),
   getters: {
     dhcpEnabledStateGetter: (state) => state.dhcpEnabledState,
+    lldpEnabledStateGetter: (state) => state.lldpEnabledState,
     ipv6DhcpEnabledStateGetter: (state) => state.ipv6DhcpEnabledState,
     ipv6AutoConfigEnabledGetter: (state) => state.ipv6AutoConfigEnabled,
     networkSettingsGetter: (state) => state.networkSettings,
@@ -46,6 +48,12 @@ export const NetworkStore = defineStore('network', {
     setNtpState(ntpState) {
       this.networkSettings[this.selectedInterfaceIndex].useNtpEnabled =
         ntpState;
+    },
+    setLLDPEnabledState(lldpData) {
+      this.lldpEnabledState = lldpData.map((data) => {
+        const { LLDPEnabled } = data;
+        return { lldpEnabled: LLDPEnabled };
+      });
     },
     async setNetworkSettings(data) {
       this.networkSettings = data.map(({ data }) => {
@@ -121,6 +129,31 @@ export const NetworkStore = defineStore('network', {
         })
         .catch((error) => {
           console.log('Network Data:', error);
+        });
+    },
+    async getLLDPData() {
+      return await api
+        .get('/redfish/v1/Managers/bmc/DedicatedNetworkPorts')
+        .then((response) =>
+          response.data.Members.map(
+            (ethernetInterface) => ethernetInterface['@odata.id'],
+          ),
+        )
+        .then((ethernetInterfaceIds) => {
+          return api.all(
+            ethernetInterfaceIds.map((lldpInterface1) =>
+              api.get(lldpInterface1),
+            ),
+          );
+        })
+        .then((lldpIntrfc) => {
+          const lldpData = lldpIntrfc.map(
+            (lldpInterface2) => lldpInterface2?.data?.Ethernet,
+          );
+          this.setLLDPEnabledState(lldpData);
+        })
+        .catch((error) => {
+          console.log('Error:', error);
         });
     },
     async getEthernetDataAfterDelay() {
@@ -260,6 +293,55 @@ export const NetworkStore = defineStore('network', {
           throw new Error(
             i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
               setting: i18n.global.t('pageNetwork.dhcp'),
+            }),
+          );
+        });
+    },
+    async saveLLDPState(lldpState) {
+      const lldpData = this.lldpEnabledStateGetter.map((item, idx) => {
+        if (idx === this.selectedInterfaceIndex) {
+          return {
+            ...item,
+            LLDPEnabled: lldpState,
+          };
+        }
+        return item;
+      });
+      this.setLLDPEnabledState(lldpData);
+      const data = {
+        Ethernet: {
+          LLDPEnabled: lldpState,
+        },
+      };
+      return api
+        .patch(
+          `/redfish/v1/Managers/bmc/DedicatedNetworkPorts/${this.selectedInterfaceId}`,
+          data,
+        )
+        .then(() => {
+          this.getLLDPData();
+        })
+        .then(() => {
+          return i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.lldp'),
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          const lldpData = this.lldpEnabledStateGetter.map((item, idx) => {
+            if (idx === this.selectedInterfaceId) {
+              return {
+                ...item,
+                LLDPEnabled: !lldpState,
+              };
+            }
+            return item;
+          });
+          this.setLLDPEnabledState(lldpData);
+          this.getLLDPData();
+          throw new Error(
+            i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+              setting: i18n.global.t('pageNetwork.lldp'),
             }),
           );
         });
