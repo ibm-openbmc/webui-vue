@@ -276,10 +276,13 @@ const filteredRows = computed(() => {
 });
 const filteredSensors = computed(() => {
   if (sensorsStore.sensorsGetter) {
-    return getFilteredTableData(
-      sensorsStore.sensorsGetter,
-      activeFiltersRows.value,
+    const allowedKeys = fields.value.map((item) => item.key);
+    const result = sensorsStore.sensorsGetter.map((obj) =>
+      Object.fromEntries(
+        Object.entries(obj).filter(([key]) => allowedKeys.includes(key)),
+      ),
     );
+    return getFilteredTableData(result, activeFiltersRows.value);
   }
   return [];
 });
