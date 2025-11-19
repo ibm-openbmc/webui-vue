@@ -160,7 +160,6 @@
                         },
                       )
                     }}
-                    {{ powerPolicy + 'qqwwwwwwwwwww' }}
                   </div>
                 </BCol>
                 <BCol v-else-if="currentOperatingMode === manualMode" sm="5">
@@ -364,7 +363,7 @@
         </BFormGroup>
       </BCol>
     </BRow>
-    <b-button
+    <BButton
       variant="primary"
       type="submit"
       class="mb-3"
@@ -377,7 +376,7 @@
       "
     >
       {{ $t('global.action.save') }}
-    </b-button>
+    </BButton>
     <BRow class="mb-3">
       <BCol xl="10">
         <BButton v-b-toggle.collapse-role-table variant="link">
