@@ -20,7 +20,6 @@
             :fields="ipv6DefaultGatewayTableFields"
             :items="form.ipv6DefaultGatewayTableItems"
             :empty-text="$t('global.table.emptyMessage')"
-            :busy="isTablesDisabled"
             class="mb-0"
             show-empty
           >
