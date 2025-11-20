@@ -275,16 +275,28 @@ const filteredRows = computed(() => {
     : filteredSensors.value.length;
 });
 const filteredSensors = computed(() => {
-  if (sensorsStore.sensorsGetter) {
+  if (!sensorsStore.sensorsGetter) return [];
+
+  let data = getFilteredTableData(
+    sensorsStore.sensorsGetter,
+    activeFiltersRows.value,
+  );
+
+  if (searchFilterInput.value) {
+    const search = searchFilterInput.value.toLowerCase();
     const allowedKeys = fields.value.map((item) => item.key);
-    const result = sensorsStore.sensorsGetter.map((obj) =>
-      Object.fromEntries(
-        Object.entries(obj).filter(([key]) => allowedKeys.includes(key)),
-      ),
-    );
-    return getFilteredTableData(result, activeFiltersRows.value);
+    data = data.filter((item) => {
+      const searchableFields = allowedKeys
+        .filter((key) => key in item)
+        .map((key) => item[key]);
+      return searchableFields.some((field) =>
+        String(field || '')
+          .toLowerCase()
+          .includes(search),
+      );
+    });
   }
-  return [];
+  return data;
 });
 
 function toggleAll(checked) {
