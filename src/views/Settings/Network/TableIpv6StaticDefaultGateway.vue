@@ -43,7 +43,6 @@
           </BTable>
         </BCol>
       </BRow>
-      
     </page-section>
     <BModal
       v-model="openModal"
