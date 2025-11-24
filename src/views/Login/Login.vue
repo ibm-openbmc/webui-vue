@@ -109,11 +109,11 @@
       @click="initModalUploadCertificate"
     >
       <icon-upload />
-      {{ t('pageLogin.uploadServiceLoginCertificate') }}
+      {{ t('pageLogin.uploadAcfCertificate') }}
     </BButton>
 
     <!-- Modals -->
-    <modal-upload-certificate @ok="onModalOk" />
+    <modal-upload-certificate @ok="addNewCertificate" />
     <modal-otp-generate></modal-otp-generate>
   </div>
 </template>
@@ -240,14 +240,10 @@ const login = async () => {
 const initModalUploadCertificate = () => {
   eventBus.emit('upload-login-certificate');
 };
-const onModalOk = ({ file }) => {
-  addNewCertificate(file);
-};
 const updatePasswordType = (type) => {
   passwordType.value = type;
 };
-const addNewCertificate = (file) => {
-  const type = 'ServiceLogin Certificate';
+const addNewCertificate = ({ type, file }) => {
   certificatesStore
     .addNewACFCertificateOnLoginPage({
       file,

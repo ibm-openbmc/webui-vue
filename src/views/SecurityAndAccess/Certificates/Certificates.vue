@@ -306,7 +306,11 @@ const onModalOk = ({ addNew, file, type, location }) => {
 };
 const addNewCertificate = (file, type) => {
   startLoader();
-  if (type === 'ServiceLogin Certificate') {
+  if (
+    type === 'ServiceLogin Certificate' ||
+    type === 'BMC shell ACF certificate' ||
+    type === 'Resource dump ACF certificate'
+  ) {
     certificate
       .addNewACFCertificate({ file, type })
       .then((success) => toast.successToast(success))

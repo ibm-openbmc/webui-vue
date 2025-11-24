@@ -30,6 +30,24 @@ export const CERTIFICATE_TYPES = [
     label: i18n.global.t('pageCertificates.serviceLoginCertificate'),
     limit: 1,
   },
+  {
+    type: 'BMC shell ACF certificate',
+    location: '/redfish/v1/AccountService/Accounts/service',
+    label: i18n.global.t('pageCertificates.bmcShell'),
+    limit: 100, // This limit doesn't affect this certificate type
+  },
+  {
+    type: 'Resource dump ACF certificate',
+    location: '/redfish/v1/AccountService/Accounts/service',
+    label: i18n.global.t('pageCertificates.resourceDump'),
+    limit: 100, // This limit doesn't affect this certificate type
+  },
+  {
+    type: 'Admin reset certificate',
+    location: '/redfish/v1/AccountService/Accounts/service',
+    label: i18n.global.t('pageCertificates.adminResetCertificate'),
+    limit: 100, // This limit doesn't affect this certificate type
+  },
 ];
 const getCertificateProp = (type, prop) => {
   const certificate = CERTIFICATE_TYPES.find(

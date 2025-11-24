@@ -382,7 +382,10 @@ const form = ref({ ...initialFormState });
 const certificateOptions = CERTIFICATE_TYPES.reduce((arr, cert) => {
   if (
     cert.type === 'TrustStore Certificate' ||
-    cert.type === 'ServiceLogin Certificate'
+    cert.type === 'ServiceLogin Certificate' ||
+    cert.type === 'Admin reset certificate' ||
+    cert.type === 'BMC shell ACF certificate' ||
+    cert.type === 'Resource dump ACF certificate'
   )
     return arr;
   arr.push({
