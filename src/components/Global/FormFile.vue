@@ -1,6 +1,6 @@
 <template>
   <div class="custom-form-file-container">
-    <label>
+    <label class="label-class">
       <BFormFile
         :id="id"
         v-model="file"
@@ -114,6 +114,14 @@ eventBus.on('clear-file', () => {
       box-shadow: inset 0 0 0 2px $primary;
     }
   }
+}
+.clear-selected-file :deep(.btn) {
+  position: absolute;
+  right: 0px;
+}
+.label-class {
+  height: 56px;
+  width: 90px;
 }
 .custom-form-file-container {
   word-break: break-all;
