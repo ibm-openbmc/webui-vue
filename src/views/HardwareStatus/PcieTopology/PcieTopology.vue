@@ -417,13 +417,26 @@ const filteredRows = computed(() => {
     : filteredEntries.value.length;
 });
 const filteredEntries = computed(() => {
-  if (pcieTopologyStore.entriesGetter) {
-    return getFilteredTableData(
-      pcieTopologyStore.entriesGetter,
-      activeFiltersRows.value,
-    );
+  if (!pcieTopologyStore.entriesGetter) return [];
+  let data = getFilteredTableData(
+    pcieTopologyStore.entriesGetter,
+    activeFiltersRows.value,
+  );
+  if (searchFilterInput.value) {
+    const search = searchFilterInput.value.toLowerCase();
+    const allowedKeys = fields.map((item) => item.key);
+    data = data.filter((item) => {
+      const searchableFields = allowedKeys
+        .filter((key) => key in item)
+        .map((key) => item[key]);
+      return searchableFields.some((field) =>
+        String(field || '')
+          .toLowerCase()
+          .includes(search),
+      );
+    });
   }
-  return [];
+  return data;
 });
 const tableIsBusy = computed(() => {
   if (!globalStore.isInPhypStandby) return false;

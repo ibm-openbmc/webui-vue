@@ -310,10 +310,26 @@ const filteredDumpsByDate = computed(() => {
   );
 });
 const filteredDumps = computed(() => {
-  return getFilteredTableData(
+  if (!filteredDumpsByDate.value) return [];
+  let data = getFilteredTableData(
     filteredDumpsByDate.value,
     activeFiltersRows.value,
   );
+  if (searchFilterInput.value) {
+    const search = searchFilterInput.value.toLowerCase();
+    const allowedKeys = fields.value.map((item) => item.key);
+    data = data.filter((item) => {
+      const searchableFields = allowedKeys
+        .filter((key) => key in item)
+        .map((key) => item[key]);
+      return searchableFields.some((field) =>
+        String(field || '')
+          .toLowerCase()
+          .includes(search),
+      );
+    });
+  }
+  return data;
 });
 const hmcManaged = computed(() => {
   return resourceMemory.hmcManagedGetter;

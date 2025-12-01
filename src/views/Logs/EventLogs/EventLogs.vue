@@ -466,10 +466,26 @@ export default {
       );
     },
     filteredLogs() {
-      return useTableFilter().getFilteredTableData(
+      if (!this.filteredLogsByDate) return [];
+      let data = useTableFilter().getFilteredTableData(
         this.filteredLogsByDate,
         this.activeFilters,
       );
+      if (this.searchFilter) {
+        const search = this.searchFilter.toLowerCase();
+        const allowedKeys = this.fields.map((item) => item.key);
+        data = data.filter((item) => {
+          const searchableFields = allowedKeys
+            .filter((key) => key in item)
+            .map((key) => item[key]);
+          return searchableFields.some((field) =>
+            String(field || '')
+              .toLowerCase()
+              .includes(search),
+          );
+        });
+      }
+      return data;
     },
   },
   created() {

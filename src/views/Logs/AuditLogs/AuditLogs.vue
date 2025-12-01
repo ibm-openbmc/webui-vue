@@ -230,16 +230,26 @@ const filteredLogsByDate = computed(() => {
   );
 });
 const filteredLogs = computed(() => {
-  if (auditLogsStore.allAuditLogsGetter) {
+  if (!auditLogsStore.allAuditLogsGetter) return [];
+  let data = getFilteredTableData(
+    auditLogsStore.allAuditLogsGetter,
+    activeFilters.value,
+  );
+  if (searchFilterInput.value) {
+    const search = searchFilterInput.value.toLowerCase();
     const allowedKeys = fields.value.map((item) => item.key);
-    const result = filteredLogsByDate.value.map((obj) =>
-      Object.fromEntries(
-        Object.entries(obj).filter(([key]) => allowedKeys.includes(key)),
-      ),
-    );
-    return getFilteredTableData(result, activeFilters.value);
+    data = data.filter((item) => {
+      const searchableFields = allowedKeys
+        .filter((key) => key in item)
+        .map((key) => item[key]);
+      return searchableFields.some((field) =>
+        String(field || '')
+          .toLowerCase()
+          .includes(search),
+      );
+    });
   }
-  return [];
+  return data;
 });
 const allLogs = computed(() => {
   return auditLogsStore.allAuditLogsGetter.map((auditLogs) => {
