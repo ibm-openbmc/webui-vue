@@ -201,6 +201,7 @@ const searchFilterInput = ref('');
 const activeFilters = ref([]);
 const filterStartDate = ref(null);
 const filterEndDate = ref(null);
+const expandColumn = ref(['auditId', 'message']);
 
 onMounted(() => {
   startLoader();
@@ -239,9 +240,10 @@ const filteredLogs = computed(() => {
     const search = searchFilterInput.value.toLowerCase();
     const allowedKeys = fields.value.map((item) => item.key);
     data = data.filter((item) => {
-      const searchableFields = allowedKeys
-        .filter((key) => key in item)
-        .map((key) => item[key]);
+      const searchableFields = [
+        ...allowedKeys.filter((key) => key in item).map((key) => item[key]),
+        ...expandColumn.value.map((key) => item[key]),
+      ];
       return searchableFields.some((field) =>
         String(field || '')
           .toLowerCase()

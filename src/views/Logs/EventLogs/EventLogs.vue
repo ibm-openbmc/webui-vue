@@ -441,6 +441,7 @@ export default {
         useTableSelectableComposable().tableHeaderCheckboxModel,
       tableHeaderCheckboxIndeterminate:
         useTableSelectableComposable().tableHeaderCheckboxIndeterminate,
+      expandColumn: ['eventId', 'name', 'type', 'modifiedDate'],
     };
   },
   computed: {
@@ -475,9 +476,11 @@ export default {
         const search = this.searchFilter.toLowerCase();
         const allowedKeys = this.fields.map((item) => item.key);
         data = data.filter((item) => {
-          const searchableFields = allowedKeys
-            .filter((key) => key in item)
-            .map((key) => item[key]);
+          const searchableFields = [
+            ...allowedKeys.filter((key) => key in item).map((key) => item[key]),
+            ...this.expandColumn.map((key) => item[key]),
+            this.resolutionValue(item),
+          ];
           return searchableFields.some((field) =>
             String(field || '')
               .toLowerCase()

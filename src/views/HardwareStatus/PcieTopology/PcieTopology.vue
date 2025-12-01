@@ -400,6 +400,13 @@ const batchActions = reactive([
   },
 ]);
 const searchTotalFilteredRows = ref(0);
+const expandColumn = ref([
+  'linkPropertiesSpeed',
+  'linkPropertiesWidth',
+  'linkPropertiesType',
+  'pcieBridge.locationNumber',
+  'ioSlots[0].locationNumber',
+]);
 
 onBeforeMount(() => {
   globalStore.getBootProgress().then(() => {
@@ -426,9 +433,10 @@ const filteredEntries = computed(() => {
     const search = searchFilterInput.value.toLowerCase();
     const allowedKeys = fields.map((item) => item.key);
     data = data.filter((item) => {
-      const searchableFields = allowedKeys
-        .filter((key) => key in item)
-        .map((key) => item[key]);
+      const searchableFields = [
+        ...allowedKeys.filter((key) => key in item).map((key) => item[key]),
+        ...expandColumn.value.map((path) => get(item, path)),
+      ];
       return searchableFields.some((field) =>
         String(field || '')
           .toLowerCase()
@@ -493,6 +501,12 @@ function onFilterChange({ activeFilters }) {
 }
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
+}
+function get(obj, path) {
+  return path
+    .replace(/\[(\d+)\]/g, '.$1')
+    .split('.')
+    .reduce((o, k) => (o ? o[k] : undefined), obj);
 }
 </script>
 
