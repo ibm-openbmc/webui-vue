@@ -257,17 +257,31 @@ const filteredRows = computed(() => {
 });
 
 const allConnections = computed(() => {
-  return sessionsStore.allConnectionsGetter.map((session) => {
-    return {
-      ...session,
-      actions: [
-        {
-          value: 'disconnect',
-          title: i18n.global.t('pageSessions.action.disconnect'),
-        },
-      ],
-    };
-  });
+  if (!sessionsStore.allConnectionsGetter) return [];
+  let data = sessionsStore.allConnectionsGetter.map((session) => ({
+    ...session,
+    actions: [
+      {
+        value: 'disconnect',
+        title: i18n.global.t('pageSessions.action.disconnect'),
+      },
+    ],
+  }));
+  if (searchFilterInput.value) {
+    const search = searchFilterInput.value.toLowerCase();
+    const allowedKeys = fields.value.map((item) => item.key);
+    data = data.filter((item) => {
+      const searchableFields = allowedKeys
+        .filter((key) => key in item)
+        .map((key) => item[key]);
+      return searchableFields.some((field) =>
+        String(field || '')
+          .toLowerCase()
+          .includes(search),
+      );
+    });
+  }
+  return data;
 });
 
 const onFiltered = (filteredItems) => {
