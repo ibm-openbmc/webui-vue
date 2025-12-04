@@ -435,7 +435,7 @@ const filteredEntries = computed(() => {
     data = data.filter((item) => {
       const searchableFields = [
         ...allowedKeys.filter((key) => key in item).map((key) => item[key]),
-        ...expandColumn.value.map((path) => get(item, path)),
+        ...expandColumn.value.map((path) => getPath(item, path)),
       ];
       return searchableFields.some((field) =>
         String(field || '')
@@ -502,7 +502,7 @@ function onFilterChange({ activeFilters }) {
 function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
-function get(obj, path) {
+function getPath(obj, path) {
   return path
     .replace(/\[(\d+)\]/g, '.$1')
     .split('.')
