@@ -406,8 +406,13 @@ export default {
         ? this.searchTotalFilteredRows
         : this.filteredEntries.length;
     },
-    entries() {
-      return this.$store.getters['pcieTopology/entries'];
+    entries: {
+      get() {
+        return this.$store.getters['pcieTopology/entries'];
+      },
+      set(newValue) {
+        this.$store.commit('pcieTopology/setEntries', newValue);
+      },
     },
     filteredEntries() {
       return this.getFilteredTableData(this.entries, this.activeFilters);
@@ -430,6 +435,7 @@ export default {
   methods: {
     checkIfInPhypStandby(checkCounter = 0) {
       checkCounter++;
+      if (checkCounter > 50) return;
       if (this.isInPhypStandby) {
         this.startLoader();
         this.$store.dispatch('pcieTopology/refreshPage').then(() => {
@@ -438,7 +444,10 @@ export default {
             this.endLoader();
           });
         });
+        return;
       } else {
+        this.$store.dispatch('global/getBootProgress');
+        this.entries = [];
         setTimeout(() => {
           this.checkIfInPhypStandby(checkCounter);
         }, 6000);
