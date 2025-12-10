@@ -126,8 +126,6 @@
                 :key="index"
                 :value="action.value"
                 :title="action.title"
-                :download-location="row.item.data"
-                :export-name="exportFileName(row)"
                 @click-table-action="onTableRowAction($event, row.item)"
               >
                 <template #icon>
@@ -351,10 +349,30 @@ const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
   filterStartDate.value = fromDate;
   filterEndDate.value = toDate;
 };
+const downloadDumpFile = (blobs, currRow) => {
+  blobs.forEach((blob, index) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = exportFileName(currRow);
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+};
 const onTableRowAction = (action, dump) => {
   if (action === 'delete') {
     openModal.value = true;
     dumpVal.value = dump;
+  } else if (action === 'download') {
+    const dumpBlobList = [];
+    dumps
+      .downloadDumpData(dump.data)
+      .then((blob) => {
+        dumpBlobList.push(blob);
+      })
+      .finally(() => {
+        downloadDumpFile(dumpBlobList, dump);
+      });
   }
 };
 const handleOk = () => {
@@ -376,7 +394,7 @@ const onClearSearch = () => {
   searchFilterInput.value = '';
 };
 const exportFileName = (row) => {
-  let filename = row.item.dumpType + '_' + row.item.id;
+  let filename = row.dumpType + '_' + row.id;
   filename = filename.replace(RegExp(' ', 'g'), '_');
   return filename;
 };

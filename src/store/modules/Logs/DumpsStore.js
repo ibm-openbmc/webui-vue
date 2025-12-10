@@ -276,6 +276,11 @@ export const DumpsStore = defineStore('dumps', {
           );
         });
     },
+    async downloadDumpData(uri) {
+      return await api.get(uri, { responseType: 'blob' }).then((response) => {
+        return response.data;
+      });
+    },
   },
 });
 
