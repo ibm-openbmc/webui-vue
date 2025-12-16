@@ -349,15 +349,13 @@ const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
   filterStartDate.value = fromDate;
   filterEndDate.value = toDate;
 };
-const downloadDumpFile = (blobs, currRow) => {
-  blobs.forEach((blob, index) => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = exportFileName(currRow);
-    a.click();
-    URL.revokeObjectURL(url);
-  });
+const downloadDumpFile = (blob, currRow) => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = exportFileName(currRow);
+  a.click();
+  URL.revokeObjectURL(url);
 };
 const onTableRowAction = (action, dump) => {
   if (action === 'delete') {
@@ -366,7 +364,7 @@ const onTableRowAction = (action, dump) => {
   } else if (action === 'download') {
     successToast(i18n.global.t('pageDumps.toast.successStartDownload'));
     dumps.downloadDumpData(dump.data).then((blob) => {
-      downloadDumpFile([blob], dump);
+      downloadDumpFile(blob, dump);
     });
   }
 };
