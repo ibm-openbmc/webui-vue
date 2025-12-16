@@ -364,15 +364,10 @@ const onTableRowAction = (action, dump) => {
     openModal.value = true;
     dumpVal.value = dump;
   } else if (action === 'download') {
-    const dumpBlobList = [];
-    dumps
-      .downloadDumpData(dump.data)
-      .then((blob) => {
-        dumpBlobList.push(blob);
-      })
-      .finally(() => {
-        downloadDumpFile(dumpBlobList, dump);
-      });
+    successToast(i18n.global.t('pageDumps.toast.successStartDownload'));
+    dumps.downloadDumpData(dump.data).then((blob) => {
+      downloadDumpFile([blob], dump);
+    });
   }
 };
 const handleOk = () => {
@@ -394,9 +389,7 @@ const onClearSearch = () => {
   searchFilterInput.value = '';
 };
 const exportFileName = (row) => {
-  let filename = row.dumpType + '_' + row.id;
-  filename = filename.replace(RegExp(' ', 'g'), '_');
-  return filename;
+  return (row.dumpType + '_' + row.id).replace(RegExp(' ', 'g'), '_');
 };
 </script>
 

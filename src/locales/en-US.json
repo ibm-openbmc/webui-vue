@@ -650,7 +650,8 @@
       "successStartDump": "The dump will take some time to complete.",
       "successStartResourceDumpTitle": "Resource dump started",
       "successStartSystemDumpTitle": "System dump started",
-      "successSavePartitionDumpInfo": "Partition and Retry partition dump will be listed as Resource Dump Entry"
+      "successSavePartitionDumpInfo": "Partition and Retry partition dump will be listed as Resource Dump Entry",
+      "successStartDownload":"Download might take several seconds to complete."
     }
   },
   "pageEventLogs": {
