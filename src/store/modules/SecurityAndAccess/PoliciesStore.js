@@ -14,6 +14,7 @@ export const PoliciesStore = defineStore('policies', {
       tpmPolicyEnabled: false,
       usbFirmwareUpdatePolicyEnabled: false,
       hostUsbEnabled: 'Enabled',
+      basicAuthEnabled: true,
     };
   },
   getters: {
@@ -27,6 +28,7 @@ export const PoliciesStore = defineStore('policies', {
     getUsbFirmwareUpdatePolicyEnable: (state) =>
       state.usbFirmwareUpdatePolicyEnabled,
     getHostUsbEnabled: (state) => state.hostUsbEnabled,
+    basicAuthEnabledGetter: (state) => state.basicAuthEnabled,
   },
   actions: {
     async getNetworkProtocolStatusAfterDelay() {
@@ -60,6 +62,15 @@ export const PoliciesStore = defineStore('policies', {
         .then((response) => {
           this.acfUploadEnablement =
             response?.data?.Oem?.IBM?.ACF?.AllowUnauthACFUpload;
+        })
+        .catch((error) => console.log(error));
+    },
+    async getBasicAuth() {
+      return await api
+        .get('/redfish/v1/AccountService')
+        .then((response) => {
+          this.basicAuthEnabled =
+            response?.data?.Oem?.OpenBMC?.AuthMethods?.BasicAuth;
         })
         .catch((error) => console.log(error));
     },
@@ -331,6 +342,30 @@ export const PoliciesStore = defineStore('policies', {
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.hostUsb'),
+            }),
+          );
+        });
+    },
+    async saveBasicAuthEnabled(updatedBasicAuth) {
+      this.basicAuthEnabled = updatedBasicAuth;
+      return await api
+        .patch('/redfish/v1/AccountService', {
+          Oem:{OpenBMC:{AuthMethods:{BasicAuth: updatedBasicAuth}}}
+        })
+        .then(() => {
+          return i18n.global.t(
+            'pagePolicies.toast.successNetworkPolicyUpdate',
+            {
+              policy: i18n.global.t('pagePolicies.basicAuth'),
+            },
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+          this.basicAuthEnabled = !updatedBasicAuth;
+          throw new Error(
+            i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+              policy: i18n.global.t('pagePolicies.basicAuth'),
             }),
           );
         });

@@ -243,6 +243,33 @@
             </BFormCheckbox>
           </BCol>
         </BRow>
+        <BRow class="section-divider">
+          <BCol class="d-flex align-items-center justify-content-between">
+            <dl class="mt-3 mr-3 w-75">
+              <dt>
+                {{ $t('pagePolicies.basicAuth') }}
+              </dt>
+              <dd>
+                {{ $t('pagePolicies.basicAuthDescription') }}
+              </dd>
+            </dl>
+            <BFormCheckbox
+              id="basicAuthSwitch"
+              v-model="Policies.basicAuthEnabled"
+              data-test-id="policies-toggle-basic-auth"
+              switch
+              @update:model-value="changeBasicAuthState"
+            >
+              <span class="visually-hidden">
+                {{ $t('pagePolicies.basicAuth') }}
+              </span>
+              <span v-if="Policies.basicAuthEnabled">
+                {{ $t('global.status.enabled') }}
+              </span>
+              <span v-else>{{ $t('global.status.disabled') }}</span>
+            </BFormCheckbox>
+          </BCol>
+        </BRow>
       </BCol>
     </BRow>
     <BModal
@@ -300,6 +327,7 @@ onMounted(() => {
     Policies.getUsbFirmwareUpdatePolicyEnabled(),
     Policies.getUnauthenticatedACFUploadEnablement(),
     Policies.getTpmPolicy(),
+    Policies.getBasicAuth(),
     UserManagement.getUsers(),
     checkForUserData(),
   ]).finally(() => {
@@ -334,6 +362,15 @@ const changeUsbFirmwareUpdatePolicyState = (state) => {
 };
 const changeHostUsbState = (state) => {
   Policies.saveHostUsbEnabled(state ? 'Enabled' : 'Disabled')
+    .then((message) => {
+      Toast.successToast(message);
+    })
+    .catch(({ message }) => {
+      Toast.errorToast(message);
+    });
+};
+const changeBasicAuthState = (state) => {
+  Policies.saveBasicAuthEnabled(state)
     .then((message) => {
       Toast.successToast(message);
     })
