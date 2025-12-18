@@ -1379,7 +1379,7 @@
   "pagePolicies": {
     "acfUploadEnablement": "Unauthenticated ACF upload enablement",
     "acfUploadEnablementDescription": "Allow unauthenticated users to upload ACFs.",
-    "basicAuth": "Admin control to disable Basic Auth",
+    "basicAuth": "Basic Authentication",
     "basicAuthDescription": "This allows the BMC admin to disable the HTTP Basic Authentication method, so the BMC HTTPS interface will not accept authentication via the Basic Auth method.",
     "hostTpm": "Host TPM",
     "hostTpmDescription": "Enable to ensure the system only boots when the TPM is functional.",
