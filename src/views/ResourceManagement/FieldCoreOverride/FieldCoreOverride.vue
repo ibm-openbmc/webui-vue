@@ -7,9 +7,9 @@
     <BRow>
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-5">
-          <p class="mb-0 fw-bold">
+          <h5 class="mb-0 fw-bold">
             {{ $t('pageFieldCoreOverride.alert.title') }}
-          </p>
+          </h5>
           <p>
             {{ $t('pageFieldCoreOverride.alert.description') }}
           </p>

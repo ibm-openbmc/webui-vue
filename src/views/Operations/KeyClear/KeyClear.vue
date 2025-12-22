@@ -8,9 +8,9 @@
       <BRow>
         <BCol md="8" xl="6">
           <alert variant="info" class="mb-4">
-            <div class="title">
+            <h5 class="title">
               {{ $t('pageKeyClear.alert.title') }}
-            </div>
+            </h5>
             <div>
               {{ $t('pageKeyClear.alert.description') }}
             </div>

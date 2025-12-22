@@ -4,9 +4,9 @@
     <BRow v-if="serverStatus === 'off'">
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-5">
-          <p class="mb-0 fw-bold">
+          <h5 class="mb-0 fw-bold">
             {{ $t('pageCapacityOnDemand.alert.title') }}
-          </p>
+          </h5>
           <p>
             {{ $t('pageCapacityOnDemand.alert.description') }}
           </p>

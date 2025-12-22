@@ -4,9 +4,9 @@
     <BRow>
       <BCol md="8" xl="6">
         <alert variant="warning" class="mb-4">
-          <div class="fw-bold">
+          <h5 class="fw-bold">
             {{ $t('pageSessions.alert.heading') }}
-          </div>
+          </h5>
           <div>
             {{ $t('pageSessions.alert.message') }}
           </div>

@@ -5,9 +5,9 @@
         <!-- Running image -->
         <BCard>
           <template #header>
-            <p class="fw-bold m-0">
+            <h5 class="fw-bold m-0">
               {{ $t('pageFirmware.cardTitleRunning') }}
-            </p>
+            </h5>
           </template>
           <dl class="mb-0">
             <dt>{{ $t('pageFirmware.cardBodyVersion') }}</dt>
@@ -26,9 +26,9 @@
         <!-- Backup image -->
         <BCard>
           <template #header>
-            <p class="fw-bold m-0">
+            <h5 class="fw-bold m-0">
               {{ $t('pageFirmware.cardTitleBackup') }}
-            </p>
+            </h5>
           </template>
           <dl>
             <dt>{{ $t('pageFirmware.cardBodyVersion') }}</dt>

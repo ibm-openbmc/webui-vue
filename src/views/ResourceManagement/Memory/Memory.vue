@@ -4,9 +4,9 @@
     <BRow>
       <BCol md="8" xl="6">
         <alert v-if="isSectionEditable()" variant="warning" class="mb-4">
-          <div class="fw-bold">
+          <h5 class="fw-bold">
             {{ $t('pageMemory.alert.heading') }}
-          </div>
+          </h5>
           <div>
             {{ $t('pageMemory.alert.message2') }}
           </div>

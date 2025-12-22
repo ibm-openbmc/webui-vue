@@ -8,9 +8,9 @@
     <BRow>
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-4">
-          <div class="fw-bold">
+          <h5 class="fw-bold">
             {{ $t('pageConcurrentMaintenance.alert.title') }}
-          </div>
+          </h5>
           <div>
             {{ $t('pageConcurrentMaintenance.alert.message') }}
           </div>

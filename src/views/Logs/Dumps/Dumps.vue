@@ -4,9 +4,9 @@
     <BRow v-if="selectedDumpType">
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-4">
-          <div class="fw-bold">
+          <h5 class="fw-bold">
             {{ $t(`pageDumps.alert.${selectedDumpType}DumpHeading`) }}
-          </div>
+          </h5>
           <p>
             {{ $t(`pageDumps.alert.${selectedDumpType}DumpMessage`) }}
             <span v-if="selectedDumpType === 'bmc'">
