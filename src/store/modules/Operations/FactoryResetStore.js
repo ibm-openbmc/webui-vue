@@ -7,7 +7,7 @@ export const FactoryResetStore = defineStore('factoryReset', {
     async resetToDefaults() {
       return await api
         .post('/redfish/v1/Managers/bmc/Actions/Manager.ResetToDefaults', {
-          ResetToDefaultsType: 'ResetAll',
+          ResetType: 'ResetAll',
         })
         .then(() => {
           return i18n.global.t('pageFactoryReset.toast.resetToDefaultsSuccess');

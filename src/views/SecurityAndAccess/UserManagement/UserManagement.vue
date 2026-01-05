@@ -412,7 +412,7 @@ const allUsers = computed(() => {
       user.RoleId.includes(role),
     )[0];
 
-    if (userDescription) user.Description = userDescription;
+    if (userDescription) user.RoleId = userDescription;
 
     return user;
   });
@@ -427,13 +427,13 @@ watch(allUsers, (users) => {
   tableItems.value = users.map((user) => ({
     username: user.UserName,
     privilege:
-      user.Description === 'Administrator'
+      user.RoleId === 'Administrator'
         ? i18n.global.t('pageUserManagement.table.administrator')
-        : user.Description === 'ReadOnly'
+        : user.RoleId === 'ReadOnly'
           ? i18n.global.t('pageUserManagement.table.readOnly')
-          : user.Description === 'ServiceAgent'
+          : user.RoleId === 'OemIBMServiceAgent'
             ? i18n.global.t('pageUserManagement.table.serviceAgent')
-            : user.Description,
+            : user.RoleId,
     status: user.Locked
       ? i18n.global.t('global.status.locked')
       : user.Enabled
