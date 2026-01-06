@@ -71,6 +71,7 @@ export const DumpsStore = defineStore('dumps', {
                 value: 'delete',
               },
             ],
+            blobDownload: null,
           }));
         })
         .catch((error) => console.log(error));
@@ -275,6 +276,11 @@ export const DumpsStore = defineStore('dumps', {
             i18n.global.t('pageDumps.toast.errorDeleteDump', totalDumpCount),
           );
         });
+    },
+    async downloadDumpData(uri) {
+      return await api.get(uri, { responseType: 'blob' }).then((response) => {
+        return response.data;
+      });
     },
   },
 });

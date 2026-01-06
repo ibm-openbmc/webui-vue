@@ -126,8 +126,8 @@
                 :key="index"
                 :value="action.value"
                 :title="action.title"
-                :download-location="row.item.data"
-                :export-name="exportFileName(row)"
+                :download-location="row.item.blobDownload"
+                :export-name="exportFileName(row.item)"
                 @click-table-action="onTableRowAction($event, row.item)"
               >
                 <template #icon>
@@ -292,17 +292,18 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   startLoader();
-  Promise.all([
+
+  await Promise.all([
     dumps.getAllDumps(),
     userManagement.getUsers(),
     resourceMemory.getHmcManaged(),
     global.getBootProgress(),
-  ]).finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
+  ]);
+  await prefetchDumpBlobs();
+  endLoader();
+  isBusy.value = false;
 });
 
 onMounted(() => {
@@ -373,6 +374,17 @@ const onTableRowAction = (action, dump) => {
     dumpVal.value = dump;
   }
 };
+const prefetchDumpBlobs = () => {
+  Promise.allSettled(
+    allDumps.value.map(
+      async (dump) =>
+        await dumps.downloadDumpData(dump.data).then((blob) => {
+          dump.blobDownload = URL.createObjectURL(blob);
+          console.log('dump.blobDownload', dump.blobDownload);
+        }),
+    ),
+  );
+};
 const handleOk = () => {
   openModal.value = false;
   dumps.deleteDumps([dumpVal.value]).then((messages) => {
@@ -392,11 +404,8 @@ const onClearSearch = () => {
   searchFilterInput.value = '';
 };
 const exportFileName = (row) => {
-  let filename = row.item.dumpType + '_' + row.item.id;
-  filename = filename.replace(RegExp(' ', 'g'), '_');
-  return filename;
+  return (row.dumpType + '_' + row.id).replace(RegExp(' ', 'g'), '_');
 };
-
 watch(
   () => filteredDumps,
   (item) => {
