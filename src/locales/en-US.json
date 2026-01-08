@@ -403,6 +403,8 @@
     "confirmNewPassword": "Confirm new password",
     "goBack": "Go back",
     "newPassword": "New password",
+    "passwordMustContain": "Password must contain at least two of: lowercase letter, uppercase letter, number, special character",
+    "passwordMustContainMin": "Password must contain at least 8 characters",
     "username": "Username"
   },
   "pageDateTime": {
