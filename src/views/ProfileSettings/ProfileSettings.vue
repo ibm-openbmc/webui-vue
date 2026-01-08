@@ -72,6 +72,16 @@
                       })
                     }}
                   </template>
+                  <template
+                    v-else-if="
+                      v$.form.newPassword.$errors.length > 0
+                        ? v$.form.newPassword.$errors[0].$validator ===
+                          'hasTwoCharacterGroups'
+                        : false
+                    "
+                  >
+                    {{ $t('pageProfileSettings.passwordMustContain') }}
+                  </template>
                 </BFormInvalidFeedback>
               </input-password-toggle>
             </BFormGroup>
@@ -214,11 +224,24 @@ const timezone = computed(() => {
   return localOffset();
 });
 
+const hasTwoCharacterGroups = (value) => {
+  if (!value) return true;
+
+  let count = 0;
+  if (/[a-z]/.test(value)) count++;
+  if (/[A-Z]/.test(value)) count++;
+  if (/[0-9]/.test(value)) count++;
+  if (/[^a-zA-Z0-9]/.test(value)) count++;
+
+  return count >= 2;
+};
+
 const rules = computed(() => ({
   form: {
     newPassword: {
       minLength: minLength(passwordRequirements.value.minLength),
       maxLength: maxLength(passwordRequirements.value.maxLength),
+      hasTwoCharacterGroups,
     },
     confirmPassword: {
       sameAsPassword: sameAs(form.value.newPassword),

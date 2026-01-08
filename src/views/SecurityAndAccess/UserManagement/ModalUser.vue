@@ -207,6 +207,16 @@
                       })
                     }}
                   </template>
+                  <template
+                    v-else-if="
+                      v$.form.password.$errors.length > 0
+                        ? v$.form.password.$errors[0].$validator ===
+                          'hasTwoCharacterGroups'
+                        : false
+                    "
+                  >
+                    {{ $t('pageUserManagement.modal.passwordMustContain') }}
+                  </template>
                 </BFormInvalidFeedback>
               </input-password-toggle>
             </BFormGroup>
@@ -390,6 +400,18 @@ watch(
   },
 );
 
+const hasTwoCharacterGroups = (value) => {
+  if (!value) return true;
+
+  let count = 0;
+  if (/[a-z]/.test(value)) count++;
+  if (/[A-Z]/.test(value)) count++;
+  if (/[0-9]/.test(value)) count++;
+  if (/[^a-zA-Z0-9]/.test(value)) count++;
+
+  return count >= 2;
+};
+
 const rules = computed(() => ({
   form: {
     status: {
@@ -409,6 +431,7 @@ const rules = computed(() => ({
       }),
       minLength: minLength(props.passwordRequirements.minLength),
       maxLength: maxLength(props.passwordRequirements.maxLength),
+      hasTwoCharacterGroups,
     },
     passwordConfirmation: {
       required: requiredIf(function () {

@@ -35,6 +35,25 @@
               <template v-if="v$.form.password.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
+              <template
+                v-if="
+                  v$.form.password.$errors.length > 0
+                    ? v$.form.password.$errors[0].$validator === 'minLength'
+                    : false
+                "
+              >
+                {{ $t('pageChangePassword.passwordMustContainMin') }}
+              </template>
+              <template
+                v-if="
+                  v$.form.password.$errors.length > 0
+                    ? v$.form.password.$errors[0].$validator ===
+                      'hasTwoCharacterGroups'
+                    : false
+                "
+              >
+                {{ $t('pageChangePassword.passwordMustContain') }}
+              </template>
             </BFormInvalidFeedback>
           </input-password-toggle>
         </BFormGroup>
@@ -86,7 +105,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import stores from '@/store';
-import { required, sameAs } from '@vuelidate/validators';
+import { required, sameAs, minLength } from '@vuelidate/validators';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import Alert from '@/components/Global/Alert.vue';
@@ -112,9 +131,25 @@ const changePasswordError = ref(false);
 const inputType = ref('password');
 const confirmPasswordType = ref('password');
 
+const hasTwoCharacterGroups = (value) => {
+  if (!value) return true;
+
+  let count = 0;
+  if (/[a-z]/.test(value)) count++;
+  if (/[A-Z]/.test(value)) count++;
+  if (/[0-9]/.test(value)) count++;
+  if (/[^a-zA-Z0-9]/.test(value)) count++;
+
+  return count >= 2;
+};
+
 const rules = computed(() => ({
   form: {
-    password: { required },
+    password: {
+      required,
+      minLength: minLength(8),
+      hasTwoCharacterGroups,
+    },
     passwordConfirm: {
       required,
       sameAsPassword: sameAs(form.value.password),
