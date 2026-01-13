@@ -301,6 +301,7 @@ onBeforeMount(async () => {
     resourceMemory.getHmcManaged(),
     global.getBootProgress(),
   ]);
+  await nextTick();
   await prefetchDumpBlobs();
   endLoader();
   isBusy.value = false;
@@ -374,15 +375,12 @@ const onTableRowAction = (action, dump) => {
     dumpVal.value = dump;
   }
 };
-const prefetchDumpBlobs = () => {
-  Promise.allSettled(
-    allDumps.value.map(
-      async (dump) =>
-        await dumps.downloadDumpData(dump.data).then((blob) => {
-          dump.blobDownload = URL.createObjectURL(blob);
-          console.log('dump.blobDownload', dump.blobDownload);
-        }),
-    ),
+const prefetchDumpBlobs = async () => {
+  return Promise.allSettled(
+    allDumps.value.map(async (dump) => {
+      const blob = await dumps.downloadDumpData(dump.data);
+      dump.blobDownload = URL.createObjectURL(blob);
+    }),
   );
 };
 const handleOk = () => {
