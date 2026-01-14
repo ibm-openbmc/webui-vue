@@ -413,7 +413,7 @@ watch(
         .forEach((svg) => {
           svg.setAttribute('aria-hidden', 'true');
         });
-      if (!item.length) {
+      if (item.length === 0) {
         document
           .querySelector('tr.b-table-empty-slot td[scope]')
           .removeAttribute('scope');
