@@ -191,7 +191,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount, onMounted, watch, nextTick } from 'vue';
+import {
+  ref,
+  computed,
+  onBeforeMount,
+  onMounted,
+  watch,
+  nextTick,
+  onBeforeUnmount,
+} from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
@@ -309,6 +317,13 @@ onBeforeMount(async () => {
 
 onMounted(() => {
   eventBus.on('updateDumpInfo', updateDumpInfo);
+});
+
+onBeforeUnmount(() => {
+  allDumps.value.map((dump) => {
+    URL.revokeObjectURL(dump.blobDownload);
+    dump.blobDownload = null;
+  });
 });
 
 const filteredRows = computed(() => {
