@@ -30,7 +30,7 @@
       v-else-if="value === 'download' && downloadLocation !== ''"
       class="align-bottom btn-icon-only py-0 btn-link"
       :download="`${exportName}`"
-      :href="`${downloadLocation}`"
+      :href="`/api${downloadLocation}`"
       :title="title"
     >
       <slot name="icon" />
