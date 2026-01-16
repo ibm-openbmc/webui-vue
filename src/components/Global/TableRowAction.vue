@@ -29,7 +29,7 @@
     <b-link
       v-else-if="value === 'download' && downloadLocation !== ''"
       class="align-bottom btn-icon-only py-0 btn-link"
-      :download="`${exportName}.txt`"
+      :download="`${exportName}`"
       :href="`${downloadLocation}`"
       :title="title"
     >
