@@ -42,7 +42,7 @@ export const DumpsStore = defineStore('dumps', {
           const systemDumpEntries = response[1].data?.Members || [];
           const allDumps = [...bmcDumpEntries, ...systemDumpEntries];
           this.allDumps = allDumps.map((dump) => ({
-            data: `${dump.AdditionalDataURI}`,
+            data: dump.AdditionalDataURI,
             dateTime: new Date(dump.Created),
             dumpType:
               dump.Name === 'System Dump Entry'
