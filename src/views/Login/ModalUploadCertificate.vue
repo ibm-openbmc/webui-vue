@@ -20,7 +20,7 @@
           @input="v$.form.certificateType.$touch()"
         >
         </BFormSelect>
-        <BFormInvalidFeedback role="alert">
+        <BFormInvalidFeedback role="alert" class="text-style">
           <template v-if="!v$.form.certificateType.required">
             {{ $t('global.form.fieldRequired') }}
           </template>
@@ -29,6 +29,7 @@
       <BFormGroup :label="$t('pageLogin.modal.certificateFile')">
         <FormFile
           id="certificate-file"
+          accept='.acf'
           :state="getValidationState(v$.form.file)"
           @input="onFileUpload"
         >
@@ -36,12 +37,14 @@
             <BFormInvalidFeedback
               v-if="v$.form.file.required?.$invalid"
               role="alert"
+              class="text-style"
             >
               {{ $t('global.form.fieldRequired') }}
             </BFormInvalidFeedback>
             <BFormInvalidFeedback
               v-else-if="v$.form.file.fileMatchesType?.$invalid"
               role="alert"
+              class="text-style"
             >
               {{ $t('pageCertificates.modal.mismatchError') }}
             </BFormInvalidFeedback>
@@ -231,3 +234,8 @@ function onOk(bvModalEvt) {
   handleSubmit();
 }
 </script>
+<style lang="scss" scoped>
+.text-style {
+  width: clamp(12px, 80vw, 466px);
+}
+</style>

@@ -44,7 +44,7 @@
             @update:model-value="v$.form.certificateType.$touch()"
           >
           </BFormSelect>
-          <BFormInvalidFeedback role="alert">
+          <BFormInvalidFeedback role="alert" class="text-style">
             <template v-if="!v$.form.certificateType.required">
               {{ $t('global.form.fieldRequired') }}
             </template>
@@ -64,6 +64,7 @@
             <BFormInvalidFeedback
               v-if="v$.form.file.required.$invalid"
               role="alert"
+              class="text-style"
             >
               {{ $t('global.form.required') }}
             </BFormInvalidFeedback>
@@ -75,6 +76,7 @@
                 v$.form.file.fileMatchesType.$invalid
               "
               role="alert"
+              class="text-style"
             >
               {{ $t('pageCertificates.modal.mismatchError') }}
             </BFormInvalidFeedback>
@@ -304,3 +306,8 @@ const onOk = (bvModalEvt) => {
   handleSubmit();
 };
 </script>
+<style lang="scss" scoped>
+.text-style {
+  width: clamp(12px, 80vw, 466px);
+}
+</style>
