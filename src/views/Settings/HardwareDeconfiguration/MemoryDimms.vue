@@ -42,11 +42,12 @@
           </template>
           <template #cell(settings)="row">
             <BFormCheckbox
+              :key="row.item.uri"
               v-model="row.item.settings"
               name="switch"
               switch
               :disabled="!isServerOff || isBusy || isReadOnlyUser"
-              @change="toggleSettingsSwitch(row)"
+              @update:model-value="toggleSettingsSwitch(row, $event)"
             >
               <span v-if="row.item.settings">
                 {{ $t('pageDeconfigurationHardware.configure') }}
