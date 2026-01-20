@@ -60,12 +60,12 @@
             @input="v$.password.$touch()"
           >
           </BFormInput>
+          <BFormInvalidFeedback id="password-required" role="alert">
+            <template v-if="v$.password.required">
+              {{ t('global.form.fieldRequired') }}
+            </template>
+          </BFormInvalidFeedback>
         </input-password-toggle>
-        <BFormInvalidFeedback id="password-required" role="alert">
-          <template v-if="v$.password.required">
-            {{ t('global.form.fieldRequired') }}
-          </template>
-        </BFormInvalidFeedback>
       </div>
       <div v-if="isGlobalMfaEnabled" class="login-form__section mb-3">
         <label>TOTP</label>
