@@ -270,6 +270,8 @@
         />
       </b-col>
     </b-row>
+    <!-- Modals -->
+    <modal-pel-info :pel-data="pelData" />
   </b-container>
 </template>
 
@@ -310,6 +312,7 @@ import TableRowExpandMixin, {
 import SearchFilterMixin, {
   searchFilter,
 } from '@/components/Mixins/SearchFilterMixin';
+import ModalPelInfo from '../Modals/ModalPelInfo';
 
 export default {
   components: {
@@ -318,6 +321,7 @@ export default {
     IconChevron,
     IconDownload,
     InfoTooltip,
+    ModalPelInfo,
     PageTitle,
     Search,
     StatusIcon,
@@ -427,6 +431,7 @@ export default {
       selectedRows: selectedRows,
       tableHeaderCheckboxModel: tableHeaderCheckboxModel,
       tableHeaderCheckboxIndeterminate: tableHeaderCheckboxIndeterminate,
+      pelData: [],
     };
   },
   computed: {
@@ -487,6 +492,8 @@ export default {
   },
   methods: {
     downloadFile(pelJsonInfo) {
+      this.pelData = pelJsonInfo;
+      this.$bvModal.show('modal-pel-info');
       let date = new Date();
       date =
         date.toISOString().slice(0, 10) +
