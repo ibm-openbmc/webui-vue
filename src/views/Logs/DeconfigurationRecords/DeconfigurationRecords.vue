@@ -70,11 +70,6 @@
           :actions="batchActions"
           :fields="fields"
           :items="filteredLogs"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
           :current-page="currentPageNo"
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
           @row-selected="onRowSelected($event, filteredLogs.length)"
@@ -221,6 +216,23 @@
                 <icon-delete v-if="action.value === 'delete'" />
               </template>
             </table-row-action>
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span
+              v-else-if="
+                filteredLogs &&
+                filteredLogs.length === 0 &&
+                allEntries.length > 0
+              "
+            >
+              {{ $t('global.table.emptySearchMessage') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>

@@ -94,12 +94,6 @@
             sticky-header="75vh"
             :fields="fields"
             :items="filteredDumps"
-            :empty-text="
-              isBusy
-                ? $t('global.table.loading')
-                : $t('global.table.emptyMessage')
-            "
-            :empty-filtered-text="$t('global.table.emptySearchMessage')"
             :per-page="
               itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage
             "
@@ -141,6 +135,17 @@
                   />
                 </template>
               </table-row-action>
+            </template>
+            <template #empty>
+              <span v-if="isBusy">
+                {{ $t('global.table.loading') }}
+              </span>
+              <span v-else-if="searchFilterInput || activeFiltersRows.length">
+                {{ $t('global.table.emptySearchMessage') }}
+              </span>
+              <span v-else>
+                {{ $t('global.table.emptyMessage') }}
+              </span>
             </template>
           </BTable>
         </page-section>

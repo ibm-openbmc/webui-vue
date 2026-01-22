@@ -52,11 +52,6 @@
           :fields="fields"
           :items="allConnections"
           :filter="searchFilterInput"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
           :per-page="
             itemPerPage === 0 ? allConnections.length || 1 : itemPerPage
           "
@@ -110,6 +105,17 @@
               :data-test-id="`sessions-button-disconnect-${row.index}`"
               @click-table-action="onTableRowAction($event, row.item)"
             ></table-row-action>
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else-if="searchFilterInput">
+              {{ $t('global.table.emptySearchMessage') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>

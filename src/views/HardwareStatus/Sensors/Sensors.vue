@@ -54,12 +54,6 @@
           "
           :current-page="currentPageNo"
           :filter="searchFilterInput"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
-          :empty-filtered-text="$t('global.table.emptySearchMessage')"
           class="no-scroll-sticky"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredSensors.length)"
@@ -136,6 +130,17 @@
           </template>
           <template #cell(currentValue)="data">
             {{ dataFormatter(data.value) }} {{ data.item.units }}
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else-if="searchFilterInput || activeFiltersRows.length">
+              {{ $t('global.table.emptySearchMessage') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>

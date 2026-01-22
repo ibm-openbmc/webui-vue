@@ -67,12 +67,6 @@
           sort-by="id"
           :fields="fields"
           :filter="searchFilterInput"
-          :empty-text="
-            tableIsBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
-          :empty-filtered-text="$t('global.table.emptySearchMessage')"
           :items="filteredEntries"
           :per-page="
             itemPerPage === 0 ? filteredEntries.length || 1 : itemPerPage
@@ -245,6 +239,17 @@
           <template #cell(actions)="{ item }">
             <span class="identifyLedStyle" @click="openIdentifyLedsModal(item)">
               {{ i18n.global.t('pagePcieTopology.identifyLed') }}
+            </span>
+          </template>
+          <template #empty>
+            <span v-if="tableIsBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else-if="searchFilterInput || activeFiltersRows.length">
+              {{ $t('global.table.emptySearchMessage') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
             </span>
           </template>
         </BTable>

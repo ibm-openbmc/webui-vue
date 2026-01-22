@@ -73,12 +73,6 @@
           show-empty
           :fields="fields"
           :items="filteredLogs"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
-          :empty-filtered-text="$t('global.table.emptySearchMessage')"
           :per-page="perPage === 0 ? filteredLogs.length || 1 : perPage"
           :current-page="currentPage"
           :filter="searchFilter"
@@ -262,6 +256,24 @@
                 />
               </template>
             </table-row-action>
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span
+              v-else-if="
+                searchFilter ||
+                activeFilters.length ||
+                filterStartDate ||
+                filterEndDate
+              "
+            >
+              {{ $t('global.table.emptySearchMessage') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </b-table>
       </b-col>
