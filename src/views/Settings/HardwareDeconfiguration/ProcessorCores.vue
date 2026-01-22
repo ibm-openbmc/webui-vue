@@ -300,4 +300,3 @@ watch(
   text-align: right;
 }
 </style>
-
