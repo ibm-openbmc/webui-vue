@@ -15,13 +15,23 @@ const api = Axios.create({
   withCredentials: true,
 });
 
-const constructUrl = (path) => {
+(() => {
   if (import.meta.env.DEV) {
-    const basePath = '/api'; // The base path for your API
-    return `${basePath}${path}`;
-  } else {
-    return `${path}`;
+    api.defaults.baseURL = '/api';
+    return;
   }
+
+  const segs = window.location.pathname.split('/').filter(Boolean);
+  const first = segs[0];
+
+  const looksLikeProxyId =
+    first && first !== '#' && first !== 'login' && first !== 'redfish';
+
+  api.defaults.baseURL = looksLikeProxyId ? `/${first}` : '';
+})();
+
+const constructUrl = (path) => {
+  return path?.startsWith('/') ? path : `/${path}`;
 };
 
 api.interceptors.response.use(undefined, (error) => {
