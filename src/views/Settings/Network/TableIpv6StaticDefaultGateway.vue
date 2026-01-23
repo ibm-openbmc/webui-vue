@@ -7,6 +7,7 @@
             <BButton
               variant="primary"
               :disabled="isTablesDisabled"
+              data-test-id="add-static-default-gateway"
               @click="initIpv6DefaultGatewayModal()"
             >
               <icon-add />
@@ -35,8 +36,14 @@
                 "
               >
                 <template #icon>
-                  <icon-edit v-if="action.value === 'edit'" />
-                  <icon-trashcan v-if="action.value === 'delete'" />
+                  <icon-edit
+                    v-if="action.value === 'edit'"
+                    data-test-id="edit-static-default-gateway"
+                  />
+                  <icon-trashcan
+                    v-if="action.value === 'delete'"
+                    data-test-id="delete-static-default-gateway"
+                  />
                 </template>
               </table-row-action>
             </template>
