@@ -31,7 +31,7 @@
           <icon-delete /> {{ $t('global.action.deleteAll') }}
         </b-button>
         <b-button
-          variant="primary"
+          :variant="allLogs.length === 0 ? 'light' : 'primary'"
           :class="{ disabled: allLogs.length === 0 }"
           @click="downloadEventLogs('all')"
         >

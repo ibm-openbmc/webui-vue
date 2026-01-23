@@ -25,7 +25,7 @@
           <icon-delete /> {{ $t('global.action.clearAll') }}
         </BButton>
         <BButton
-          variant="primary"
+          :variant="allEntries.length === 0 ? 'light' : 'primary'"
           :class="{ disabled: allEntries.length === 0 }"
           :download="exportFileNameByDate()"
           :href="href"

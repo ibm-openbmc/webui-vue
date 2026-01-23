@@ -24,7 +24,7 @@
     <BRow>
       <BCol class="text-right">
         <BButton
-          variant="primary"
+          :variant="allLogs.length === 0 ? 'light' : 'primary'"
           :class="{ disabled: allLogs.length === 0 }"
           @click="downloadEventLogs('all')"
         >
