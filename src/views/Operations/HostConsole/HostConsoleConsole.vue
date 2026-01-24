@@ -99,7 +99,6 @@ watch(checkingServerStatus, async (value) => {
 
 function openTerminal() {
   const token = authenticationStore.token;
-
   ws.value = new WebSocket(buildWsUrl('/console0'), [token]);
 
   // Refer https://github.com/xtermjs/xterm.js/ for xterm implementation and addons.

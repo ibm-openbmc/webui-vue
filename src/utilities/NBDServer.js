@@ -33,13 +33,10 @@ const NBD_STATE_WAIT_OPTION = 4;
 const NBD_STATE_TRANSMISSION = 5;
 
 function normalizeWsEndpoint(endpoint) {
-  // If endpoint is already absolute ws(s)://..., leave it alone
   if (typeof endpoint === 'string' && /^wss?:\/\//i.test(endpoint)) {
     return endpoint;
   }
 
-  // Otherwise treat it as a path and build a proxy-aware ws URL
-  // Supports: "/nbd/..." or "nbd/..."
   const path = typeof endpoint === 'string' ? endpoint : '';
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return buildWsUrl(cleanPath);
