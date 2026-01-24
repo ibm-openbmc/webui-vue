@@ -157,6 +157,7 @@ import useSearchFilterComposable from '../../../components/Composables/useSearch
 import { ref, onMounted, computed } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import stores from '../../../store';
+import { buildUrlNewTab } from '@/utilities/url';
 
 const {
   clearSelectedRows,
@@ -310,7 +311,7 @@ const generateSrcWords = (data) => {
 };
 const openConsoleWindow = () => {
   window.open(
-    `${window.location.origin}/#/console/post-codes`,
+    buildUrlNewTab(`/#/console/post-codes`),
     '_blank',
     'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=200,height=200',
   );

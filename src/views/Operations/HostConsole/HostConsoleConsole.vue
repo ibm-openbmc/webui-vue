@@ -41,7 +41,7 @@ import { throttle } from 'lodash';
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import stores from '@/store';
-import { buildWsUrl } from '@/utilities/url';
+import { buildWsUrl, buildUrlNewTab } from '@/utilities/url';
 
 defineProps({
   isFullWindow: {
@@ -157,7 +157,7 @@ function openTerminal() {
 
 function openConsoleWindow() {
   window.open(
-    `${window.location.origin}/#/console/host-console-console`,
+    buildUrlNewTab(`/#/console/host-console-console`),
     '_blank',
     'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550',
   );

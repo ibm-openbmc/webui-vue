@@ -45,7 +45,7 @@ import { throttle } from 'lodash';
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import stores from '@/store';
-import { buildWsUrl } from '@/utilities/url';
+import { buildWsUrl, buildUrlNewTab } from '@/utilities/url';
 
 const props = defineProps({
   isFullWindow: {
@@ -176,7 +176,7 @@ const openTerminal = (selectedConsole = props.consoleType) => {
 const openConsoleWindow = () => {
   sessionStorage.setItem('storedConsoleType', props.consoleType);
   window.open(
-    `${window.location.origin}/#/console/service-login-consoles`,
+    buildUrlNewTab(`/#/console/service-login-consoles`),
     '_blank',
     'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=550',
   );

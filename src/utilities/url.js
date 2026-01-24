@@ -17,3 +17,10 @@ export function buildWsUrl(path) {
   const host = window.location.host;
   return `${scheme}://${host}${prefix}${cleanPath}`;
 }
+
+export function buildUrlNewTab(path) {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  const prefix = getProxyPrefix();
+  const host = window.location.host;
+  return `https://${host}${prefix}${cleanPath}`;
+}
