@@ -45,6 +45,7 @@ import { throttle } from 'lodash';
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import stores from '@/store';
+import { buildWsUrl } from '@/utilities/url';
 
 const props = defineProps({
   isFullWindow: {
@@ -118,9 +119,7 @@ watch(checkingServerStatus, (value) => {
 
 const openTerminal = (selectedConsole = props.consoleType) => {
   const token = authenticationStore.token;
-  let host = window.location.origin.replace('https://', '');
-  host = host.replace(/\/$/, '');
-  ws.value = new WebSocket(`wss://${host}/${selectedConsole}`, [token]);
+  ws.value = new WebSocket(buildWsUrl(`/${selectedConsole}`), [token]);
 
   // Refer https://github.com/xtermjs/xterm.js/ for xterm implementation and addons.
 

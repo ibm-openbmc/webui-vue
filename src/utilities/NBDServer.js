@@ -1,3 +1,5 @@
+import { buildWsUrl } from '@/utilities/url';
+
 /* handshake flags */
 const NBD_FLAG_FIXED_NEWSTYLE = 0x1;
 const NBD_FLAG_NO_ZEROES = 0x2;
@@ -30,6 +32,19 @@ const NBD_STATE_WAIT_CFLAGS = 3;
 const NBD_STATE_WAIT_OPTION = 4;
 const NBD_STATE_TRANSMISSION = 5;
 
+function normalizeWsEndpoint(endpoint) {
+  // If endpoint is already absolute ws(s)://..., leave it alone
+  if (typeof endpoint === 'string' && /^wss?:\/\//i.test(endpoint)) {
+    return endpoint;
+  }
+
+  // Otherwise treat it as a path and build a proxy-aware ws URL
+  // Supports: "/nbd/..." or "nbd/..."
+  const path = typeof endpoint === 'string' ? endpoint : '';
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return buildWsUrl(cleanPath);
+}
+
 export default class NBDServer {
   constructor(endpoint, file, id, token) {
     this.socketStarted = () => {};
@@ -37,7 +52,7 @@ export default class NBDServer {
     this.errorReadingFile = () => {};
     this.file = file;
     this.id = id;
-    this.endpoint = endpoint;
+    this.endpoint = normalizeWsEndpoint(endpoint);
     this.ws = null;
     this.state = NBD_STATE_UNKNOWN;
     this.msgbuf = null;
@@ -52,25 +67,25 @@ export default class NBDServer {
       this.socketStarted();
     };
     this.stop = function () {
-      if (this.ws.readyState == 1) {
+      if (this.ws && this.ws.readyState == 1) {
         this.ws.close();
         this.state = NBD_STATE_UNKNOWN;
       }
     };
     this._on_ws_error = function (ev) {
-      console.log(`${endpoint} error: ${ev.error}`);
+      console.log(`${this.endpoint} error: ${ev?.error}`);
       console.log(JSON.stringify(ev));
     };
     this._on_ws_close = function (ev) {
       console.log(
-        `${endpoint} closed with code: ${ev.code} + reason: ${ev.reason}`,
+        `${this.endpoint} closed with code: ${ev.code} + reason: ${ev.reason}`,
       );
       console.log(JSON.stringify(ev));
       this.socketClosed(ev.code);
     };
     /* websocket event handlers */
     this._on_ws_open = function () {
-      console.log(endpoint + ' opened');
+      console.log(this.endpoint + ' opened');
       this.client = {
         flags: 0,
       };
@@ -150,22 +165,22 @@ export default class NBDServer {
         return 0;
       }
       switch (opt) {
-        case NBD_OPT_EXPORT_NAME:
+        case NBD_OPT_EXPORT_NAME: {
           var n = 10;
           if (!(this.client.flags & NBD_FLAG_NO_ZEROES)) n += 124;
           var resp = new ArrayBuffer(n);
           var view = new DataView(resp, 0, 10);
           /* export size. */
           var size = this.file.size;
-          // eslint-disable-next-line prettier/prettier
-          view.setUint32(0, Math.floor(size / (2 ** 32)));
+          view.setUint32(0, Math.floor(size / 2 ** 32));
           view.setUint32(4, size & 0xffffffff);
           /* transmission flags: read-only */
           view.setUint16(8, NBD_FLAG_HAS_FLAGS | NBD_FLAG_READ_ONLY);
           this.ws.send(resp);
           this.state = NBD_STATE_TRANSMISSION;
           break;
-        default:
+        }
+        default: {
           console.log('handle_option: Unsupported option: ' + opt);
           /* reject other options */
           var resp1 = new ArrayBuffer(20);
@@ -176,6 +191,7 @@ export default class NBDServer {
           view1.setUint32(12, NBD_REP_ERR_UNSUP);
           view1.setUint32(16, 0);
           this.ws.send(resp1);
+        }
       }
       return 16 + len;
     };
@@ -209,14 +225,8 @@ export default class NBDServer {
         offset_lsB: view.getUint32(20),
         length: view.getUint32(24),
       };
-      /* we don't support writes, so nothing needs the data at present */
-      /* req.data = buf.slice(28); */
       var err = 0;
       var consumed = 28;
-      /* the command handlers return 0 on success, and send their
-       * own response. Otherwise, a non-zero error code will be
-       * used as a simple error response
-       */
       switch (req.type) {
         case NBD_CMD_READ:
           err = this._handle_cmd_read(req);
@@ -225,8 +235,6 @@ export default class NBDServer {
           err = this._handle_cmd_disconnect(req);
           break;
         case NBD_CMD_WRITE:
-          /* we also need length bytes of data to consume a write
-           * request */
           if (buf.byteLength < 28 + req.length) {
             return 0;
           }
@@ -253,8 +261,7 @@ export default class NBDServer {
     };
     this._handle_cmd_read = function (req) {
       var offset;
-      // eslint-disable-next-line prettier/prettier
-      offset = (req.offset_msB * 2 ** 32) + req.offset_lsB;
+      offset = req.offset_msB * 2 ** 32 + req.offset_lsB;
       if (offset > Number.MAX_SAFE_INTEGER) return ENOSPC;
       if (offset + req.length > Number.MAX_SAFE_INTEGER) return ENOSPC;
       if (offset + req.length > file.size) return ENOSPC;

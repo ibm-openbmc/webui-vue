@@ -1,6 +1,7 @@
 import JSONbig from 'json-bigint';
 import stores from '@/store';
 import { serverStateMapper } from '../modules/GlobalStore';
+import { buildWsUrl } from '@/utilities/url';
 /**
  * WebSocketPlugin will allow us to get new data from the server
  * without having to poll for changes on the frontend.
@@ -39,9 +40,7 @@ export const initWebSocket = () => {
 
   const token = authenticationStore.token;
 
-  var host = window.location.origin.replace('https://', '');
-  host = host.replace(/\/$/, '');
-  ws = new WebSocket(`wss://${host}/subscribe`, [token]);
+  ws = new WebSocket(buildWsUrl('/subscribe'), [token]);
   ws.onopen = () => {
     ws.send(JSON.stringify(data));
   };
