@@ -235,7 +235,7 @@ export const BootSettingsStore = defineStore('bootSettings', {
     async standbyToRuntime() {
       // Action not tested. Remove this comment once the action is tested and verified.
       return await api
-        .post('redfish/v1/Systems/hypervisor/Actions/ComputerSystem.Reset', {
+        .post('/redfish/v1/Systems/hypervisor/Actions/ComputerSystem.Reset', {
           ResetType: 'On',
         })
         .then(() => {
