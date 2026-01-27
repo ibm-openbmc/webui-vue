@@ -137,9 +137,10 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>net-snmp</p></td><td><p>BSD-3-Clause, MIT</p></td></tr>
 <tr><td><p>npm-axios</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-bootstrap</p></td><td><p>MIT</p></td></tr>
-<tr><td><p>npm-bootstrap-vue</p></td><td><p>MIT</p></td></tr>
-<tr><td><p>npm-carbon</p></td><td><p>MIT</p></td></tr>
-<tr><td><p>npm-core-js</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-bootstrap-vue-next</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-buffer</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-carbon-motion</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-carbon-themes</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-date-fns</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-date-fns-tz</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-js-cookie</p></td><td><p>MIT</p></td></tr>
@@ -147,13 +148,17 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>npm-lodash</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-n64</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-novnc</p></td><td><p>MPL-2.0</p></td></tr>
+<tr><td><p>npm-pinia</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-qrcode</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-tiny-emitter</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-totp-generator</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vitejs-plugin-basic-ssl</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vue-axios</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue-i18n</p></td><td><p>MIT</p></td></tr>
-<tr><td><p>npm-vuelidate</p></td><td><p>MIT</p></td></tr>
-<tr><td><p>npm-vue-router</p></td><td><p>MIT</p></td></tr>
-<tr><td><p>npm-vuex</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vuelidate-core</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vuelidate-validators</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vue3-cookies</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm-addon-attach</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm-addon-fit</p></td><td><p>MIT</p></td></tr>
