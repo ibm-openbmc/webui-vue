@@ -245,7 +245,7 @@
             <span v-if="tableIsBusy">
               {{ $t('global.table.loading') }}
             </span>
-            <span v-else-if="searchFilterInput || activeFiltersRows.length">
+            <span v-else-if="searchFilterInput">
               {{ $t('global.table.emptySearchMessage') }}
             </span>
             <span v-else>

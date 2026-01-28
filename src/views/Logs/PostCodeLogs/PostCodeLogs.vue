@@ -98,14 +98,7 @@
             <span v-if="isBusy">
               {{ $t('global.table.loading') }}
             </span>
-            <span
-              v-else-if="
-                searchFilterInputVal ||
-                activeFiltersData.length ||
-                filterStartDate ||
-                filterEndDate
-              "
-            >
+            <span v-else-if="searchFilterInputVal">
               {{ $t('global.table.emptySearchMessage') }}
             </span>
             <span v-else>

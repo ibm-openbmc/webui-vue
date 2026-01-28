@@ -221,15 +221,6 @@
             <span v-if="isBusy">
               {{ $t('global.table.loading') }}
             </span>
-            <span
-              v-else-if="
-                filteredLogs &&
-                filteredLogs.length === 0 &&
-                allEntries.length > 0
-              "
-            >
-              {{ $t('global.table.emptySearchMessage') }}
-            </span>
             <span v-else>
               {{ $t('global.table.emptyMessage') }}
             </span>
