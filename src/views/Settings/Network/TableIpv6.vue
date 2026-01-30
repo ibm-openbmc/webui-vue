@@ -52,6 +52,7 @@
           <BButton
             variant="primary"
             :disabled="isTablesDisabled"
+            data-test-id="add-static-ipv6"
             @click="initIpv6Modal()"
           >
             <icon-add />
@@ -86,8 +87,14 @@
             @click-table-action="onIpv6TableAction(action, $event, item)"
           >
             <template #icon>
-              <icon-edit v-if="action.value === 'edit'" />
-              <icon-trashcan v-if="action.value === 'delete'" />
+              <icon-edit
+                v-if="action.value === 'edit'"
+                data-test-id="edit-static-ipv6"
+              />
+              <icon-trashcan
+                v-if="action.value === 'delete'"
+                data-test-id="delete-static-ipv6"
+              />
             </template>
           </table-row-action>
         </template>
