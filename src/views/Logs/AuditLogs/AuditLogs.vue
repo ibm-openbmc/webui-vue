@@ -243,9 +243,9 @@ const filteredLogsByDate = computed(() => {
   );
 });
 const filteredLogs = computed(() => {
-  if (!auditLogsStore.allAuditLogsGetter) return [];
+  if (!filteredLogsByDate.value) return [];
   let data = getFilteredTableData(
-    auditLogsStore.allAuditLogsGetter,
+    filteredLogsByDate.value,
     activeFilters.value,
   );
   if (searchFilterInput.value) {
