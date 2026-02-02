@@ -29,7 +29,7 @@
       <BFormGroup :label="$t('pageLogin.modal.certificateFile')">
         <FormFile
           id="certificate-file"
-          accept='.acf'
+          accept=".acf"
           :state="getValidationState(v$.form.file)"
           @input="onFileUpload"
         >
