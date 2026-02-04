@@ -170,6 +170,7 @@ import useVuelidateComposable from '@/components/Composables/useVuelidateComposa
 import { useVuelidate } from '@vuelidate/core';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useLocalTimezoneLabelComposable from '../../components/Composables/useLocalTimezoneLabelComposable';
+import usePasswordValidationComposable from '@/components/Composables/usePasswordValidationComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import stores from '@/store';
@@ -179,6 +180,7 @@ const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 const { startLoader, endLoader } = useLoadingBar();
 const { localOffset } = useLocalTimezoneLabelComposable();
+const { hasTwoCharacterGroups } = usePasswordValidationComposable();
 
 const global = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
@@ -223,18 +225,6 @@ const passwordRequirements = computed(() => {
 const timezone = computed(() => {
   return localOffset();
 });
-
-const hasTwoCharacterGroups = (value) => {
-  if (!value) return true;
-
-  let count = 0;
-  if (/[a-z]/.test(value)) count++;
-  if (/[A-Z]/.test(value)) count++;
-  if (/[0-9]/.test(value)) count++;
-  if (/[^a-zA-Z0-9]/.test(value)) count++;
-
-  return count >= 2;
-};
 
 const rules = computed(() => ({
   form: {

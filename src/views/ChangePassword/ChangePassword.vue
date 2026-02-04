@@ -107,6 +107,7 @@ import { ref, computed } from 'vue';
 import stores from '@/store';
 import { required, sameAs, minLength } from '@vuelidate/validators';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import usePasswordValidationComposable from '@/components/Composables/usePasswordValidationComposable';
 import { useVuelidate } from '@vuelidate/core';
 import Alert from '@/components/Global/Alert.vue';
 import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
@@ -121,6 +122,7 @@ const authenticationStore = stores.AuthenticationStore();
 
 const router = useRouter();
 const { getValidationState } = useVuelidateComposable();
+const { hasTwoCharacterGroups } = usePasswordValidationComposable();
 
 const form = ref({
   password: '',
@@ -130,18 +132,6 @@ const username = ref(global.usernameGetter);
 const changePasswordError = ref(false);
 const inputType = ref('password');
 const confirmPasswordType = ref('password');
-
-const hasTwoCharacterGroups = (value) => {
-  if (!value) return true;
-
-  let count = 0;
-  if (/[a-z]/.test(value)) count++;
-  if (/[A-Z]/.test(value)) count++;
-  if (/[0-9]/.test(value)) count++;
-  if (/[^a-zA-Z0-9]/.test(value)) count++;
-
-  return count >= 2;
-};
 
 const rules = computed(() => ({
   form: {
