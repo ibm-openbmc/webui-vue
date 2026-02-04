@@ -600,7 +600,7 @@ watch(
       if (!logs.length) {
         document
           .querySelector('tr.b-table-empty-slot td[scope]')
-          .removeAttribute('scope');
+          ?.removeAttribute('scope');
       }
     });
   },
