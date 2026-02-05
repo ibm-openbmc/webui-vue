@@ -35,6 +35,25 @@
               <template v-if="v$.form.password.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
+              <template
+                v-if="
+                  v$.form.password.$errors.length > 0
+                    ? v$.form.password.$errors[0].$validator === 'minLength'
+                    : false
+                "
+              >
+                {{ $t('pageChangePassword.passwordMustContainMin') }}
+              </template>
+              <template
+                v-if="
+                  v$.form.password.$errors.length > 0
+                    ? v$.form.password.$errors[0].$validator ===
+                      'hasTwoCharacterGroups'
+                    : false
+                "
+              >
+                {{ $t('global.passwordValidation.passwordMustContain') }}
+              </template>
             </BFormInvalidFeedback>
           </input-password-toggle>
         </BFormGroup>
@@ -86,8 +105,9 @@
 <script setup>
 import { ref, computed } from 'vue';
 import stores from '@/store';
-import { required, sameAs } from '@vuelidate/validators';
+import { required, sameAs, minLength } from '@vuelidate/validators';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import usePasswordValidationComposable from '@/components/Composables/usePasswordValidationComposable';
 import { useVuelidate } from '@vuelidate/core';
 import Alert from '@/components/Global/Alert.vue';
 import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
@@ -102,6 +122,7 @@ const authenticationStore = stores.AuthenticationStore();
 
 const router = useRouter();
 const { getValidationState } = useVuelidateComposable();
+const { hasTwoCharacterGroups } = usePasswordValidationComposable();
 
 const form = ref({
   password: '',
@@ -114,7 +135,11 @@ const confirmPasswordType = ref('password');
 
 const rules = computed(() => ({
   form: {
-    password: { required },
+    password: {
+      required,
+      minLength: minLength(8),
+      hasTwoCharacterGroups,
+    },
     passwordConfirm: {
       required,
       sameAsPassword: sameAs(form.value.password),

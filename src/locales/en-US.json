@@ -65,7 +65,8 @@
       "message4": "4. Not contain a dictionary word",
       "message5": "5. Not contain sequential characters",
       "message6": "6. Must be 20 characters or less if used for IPMI",
-      "message7": "7. Must contain any two from lowercase letters, uppercase letters, digits and other characters"
+      "message7": "7. Must contain any two from lowercase letters, uppercase letters, digits and other characters",
+      "passwordMustContain": "Password must contain at least two of: lowercase letter, uppercase letter, number, special character"
     },
     "status": {
       "absent": "Absent",
@@ -403,6 +404,7 @@
     "confirmNewPassword": "Confirm new password",
     "goBack": "Go back",
     "newPassword": "New password",
+    "passwordMustContainMin": "Password must contain at least 8 characters",
     "username": "Username"
   },
   "pageDateTime": {

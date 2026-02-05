@@ -207,6 +207,16 @@
                       })
                     }}
                   </template>
+                  <template
+                    v-else-if="
+                      v$.form.password.$errors.length > 0
+                        ? v$.form.password.$errors[0].$validator ===
+                          'hasTwoCharacterGroups'
+                        : false
+                    "
+                  >
+                    {{ $t('global.passwordValidation.passwordMustContain') }}
+                  </template>
                 </BFormInvalidFeedback>
               </input-password-toggle>
             </BFormGroup>
@@ -278,6 +288,7 @@ import {
 } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import usePasswordValidationComposable from '@/components/Composables/usePasswordValidationComposable';
 import InfoTooltipPassword from '@/components/Global/InfoTooltipPassword.vue';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
 import Alert from '@/components/Global/Alert.vue';
@@ -285,6 +296,7 @@ import stores from '@/store';
 import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
+const { hasTwoCharacterGroups } = usePasswordValidationComposable();
 
 const globalStore = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
@@ -409,6 +421,7 @@ const rules = computed(() => ({
       }),
       minLength: minLength(props.passwordRequirements.minLength),
       maxLength: maxLength(props.passwordRequirements.maxLength),
+      hasTwoCharacterGroups,
     },
     passwordConfirmation: {
       required: requiredIf(function () {
