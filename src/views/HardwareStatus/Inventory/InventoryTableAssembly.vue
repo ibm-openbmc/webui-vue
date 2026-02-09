@@ -23,10 +23,6 @@
       :fields="tableHeaders"
       :filter="searchFilterInput"
       show-empty
-      :empty-text="
-        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
-      "
-      :empty-filtered-text="$t('global.table.emptySearchMessage')"
       @filtered="onFiltered"
     >
       <template #head(identifyLed)="row">
@@ -146,6 +142,17 @@
             </BCol>
           </BRow>
         </BContainer>
+      </template>
+      <template #empty>
+        <span v-if="isBusy">
+          {{ $t('global.table.loading') }}
+        </span>
+        <span v-else-if="searchFilterInput">
+          {{ $t('global.table.emptySearchMessage') }}
+        </span>
+        <span v-else>
+          {{ $t('global.table.emptyMessage') }}
+        </span>
       </template>
     </BTable>
   </page-section>

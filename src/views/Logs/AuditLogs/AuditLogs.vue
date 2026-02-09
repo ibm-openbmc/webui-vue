@@ -50,12 +50,6 @@
           show-empty
           :fields="fields"
           :items="filteredLogs"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
-          :empty-filtered-text="$t('global.table.emptySearchMessage')"
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
           :current-page="currentPageNo"
           :filter="searchFilterInput"
@@ -102,6 +96,17 @@
           <template #cell(date)="{ value }">
             <p class="mb-0">{{ $filters.formatDate(value) }}</p>
             <p class="mb-0">{{ $filters.formatTime(value) }}</p>
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else-if="searchFilterInput">
+              {{ $t('global.table.emptySearchMessage') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>

@@ -37,12 +37,6 @@
           "
           :current-page="currentPageNo"
           :filter="searchFilterInput"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
-          :empty-filtered-text="$t('global.table.emptySearchMessage')"
           @filtered="onFiltered"
           @row-selected="onRowSelected($event, filteredCores.length)"
         >
@@ -70,6 +64,14 @@
                 $t('pageDeconfigurationHardware.deconfigure')
               }}</span>
             </BFormCheckbox>
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </b-table>
       </BCol>

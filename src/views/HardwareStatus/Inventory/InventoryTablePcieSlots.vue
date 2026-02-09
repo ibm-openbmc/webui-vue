@@ -30,10 +30,6 @@
       :fields="fields"
       :sort-desc="false"
       :filter="searchFilterInput"
-      :empty-text="
-        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
-      "
-      :empty-filtered-text="$t('global.table.emptySearchMessage')"
       class="no-scroll-sticky"
       @filtered="onFiltered"
     >
@@ -72,6 +68,17 @@
             </b-col>
           </b-row>
         </b-container>
+      </template>
+      <template #empty>
+        <span v-if="isBusy">
+          {{ $t('global.table.loading') }}
+        </span>
+        <span v-else-if="searchFilterInput">
+          {{ $t('global.table.emptySearchMessage') }}
+        </span>
+        <span v-else>
+          {{ $t('global.table.emptyMessage') }}
+        </span>
       </template>
     </b-table>
   </page-section>

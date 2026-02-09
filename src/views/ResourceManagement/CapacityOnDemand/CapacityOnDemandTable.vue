@@ -10,7 +10,6 @@
           :no-border-collapse="true"
           :items="items"
           :fields="fields"
-          :empty-text="$t('global.table.emptyMessage')"
         >
           <template #cell(settings)="{ value }">
             <div v-if="value == 'AIX allowed'">
@@ -150,6 +149,14 @@
               $t('pageCapacityOnDemand.qualified')
             }}</span>
           </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
+          </template>
         </BTable>
       </page-section>
     </BCol>
@@ -176,6 +183,13 @@ const fields = ref([
     label: i18n.global.t('pageCapacityOnDemand.table.bitCapabilityStatus'),
   },
 ]);
+
+const props = defineProps({
+  isBusy: {
+    type: Boolean,
+    default: true,
+  },
+});
 
 const items = computed(() => {
   const vetCapabilities = licenseStore.vetCapabilities;

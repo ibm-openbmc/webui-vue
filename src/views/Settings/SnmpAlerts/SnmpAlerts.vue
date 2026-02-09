@@ -32,7 +32,6 @@
           hover
           :fields="fields"
           :items="tableItems"
-          :empty-text="$t('global.table.emptyMessage')"
           @row-selected="onRowSelected($event, tableItems.length)"
         >
           <!-- Checkbox column -->
@@ -80,6 +79,14 @@
                 <icon-trashcan v-if="action.value === 'delete'" />
               </template>
             </table-row-action>
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>
@@ -139,6 +146,7 @@ const deleteType = ref('');
 const deleteMessage = ref('');
 const tableRef = ref(null);
 const isAllSelected = ref(false);
+const isBusy = ref(true);
 
 const fields = ref([
   {
@@ -186,7 +194,10 @@ onBeforeMount(() => {
 
 onMounted(() => {
   startLoader();
-  snmpAlertsStore.getSnmpDetails().finally(() => endLoader());
+  snmpAlertsStore.getSnmpDetails().finally(() => {
+    endLoader();
+    isBusy.value = false;
+  });
 });
 
 const allSnmpDetails = computed(() => {

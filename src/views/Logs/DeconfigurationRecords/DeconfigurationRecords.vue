@@ -57,11 +57,6 @@
           sort-desc.sync="status"
           :fields="fields"
           :items="filteredLogs"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
           :current-page="currentPageNo"
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
           @row-selected="onRowSelected($event, filteredLogs.length)"
@@ -184,6 +179,14 @@
           </template>
           <template #cell(filterByStatus)="{ value }">
             {{ value }}
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>

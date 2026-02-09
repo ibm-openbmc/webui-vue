@@ -69,11 +69,6 @@
         sticky-header="75vh"
         :fields="ipv6TableFields"
         :items="form.ipv6TableItems"
-        :empty-text="
-          isTablesDisabled
-            ? $t('global.table.loading')
-            : $t('global.table.emptyMessage')
-        "
         class="mb-0"
         show-empty
       >
@@ -97,6 +92,14 @@
               />
             </template>
           </table-row-action>
+        </template>
+        <template #empty>
+          <span v-if="isTablesDisabled">
+            {{ $t('global.table.loading') }}
+          </span>
+          <span v-else>
+            {{ $t('global.table.emptyMessage') }}
+          </span>
         </template>
       </BTable>
     </page-section>

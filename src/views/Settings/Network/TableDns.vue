@@ -17,7 +17,6 @@
           sticky-header="75vh"
           :fields="dnsTableFields"
           :items="form.dnsStaticTableItems"
-          :empty-text="$t('global.table.emptyMessage')"
           class="mb-0"
           show-empty
         >
@@ -35,6 +34,14 @@
                 <icon-trashcan v-if="action.value === 'delete'" />
               </template>
             </table-row-action>
+          </template>
+          <template #empty>
+            <span v-if="isTablesDisabled">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>
@@ -94,6 +101,10 @@ onBeforeMount(() => {
 
 const network = computed(() => {
   return networkStore.networkSettingsGetter;
+});
+
+const isTablesDisabled = computed(() => {
+  return networkStore.isTableBusyGetter;
 });
 
 // Watch for change in tab index
