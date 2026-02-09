@@ -7,9 +7,6 @@
       :items="items"
       :fields="fields"
       show-empty
-      :empty-text="
-        isBusy ? $t('global.table.loading') : $t('global.table.emptyMessage')
-      "
     >
       <!-- Expand chevron icon -->
       <template #cell(expandRow)="row">
@@ -124,6 +121,14 @@
             </b-col>
           </b-row>
         </b-container>
+      </template>
+      <template #empty>
+        <span v-if="isBusy">
+          {{ $t('global.table.loading') }}
+        </span>
+        <span v-else>
+          {{ $t('global.table.emptyMessage') }}
+        </span>
       </template>
     </b-table>
   </page-section>

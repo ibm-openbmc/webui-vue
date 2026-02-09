@@ -86,11 +86,6 @@
           hover
           :fields="fields"
           :items="tableItems"
-          :empty-text="
-            isBusy
-              ? $t('global.table.loading')
-              : $t('global.table.emptyMessage')
-          "
           @row-selected="onRowSelected($event, tableItems.length)"
         >
           <!-- Checkbox column -->
@@ -191,6 +186,14 @@
                 />
               </template>
             </table-row-action>
+          </template>
+          <template #empty>
+            <span v-if="isBusy">
+              {{ $t('global.table.loading') }}
+            </span>
+            <span v-else>
+              {{ $t('global.table.emptyMessage') }}
+            </span>
           </template>
         </BTable>
       </BCol>
