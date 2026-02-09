@@ -350,7 +350,7 @@ export const PoliciesStore = defineStore('policies', {
       this.basicAuthEnabled = updatedBasicAuth;
       return await api
         .patch('/redfish/v1/AccountService', {
-          Oem:{OpenBMC:{AuthMethods:{BasicAuth: updatedBasicAuth}}}
+          Oem: { OpenBMC: { AuthMethods: { BasicAuth: updatedBasicAuth } } },
         })
         .then(() => {
           return i18n.global.t(
