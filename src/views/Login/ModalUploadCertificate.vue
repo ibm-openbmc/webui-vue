@@ -190,11 +190,11 @@ function handleSubmit() {
           return;
         }
       } else if (decoded.includes('adminreset')) {
-        if (this.form.certificateType === 'Admin reset certificate') {
-          this.fileTypeMismatch = false;
+        if (form.value.certificateType === 'Admin reset certificate') {
+          fileTypeMismatch.value = false;
         } else {
-          this.fileTypeMismatch = true;
-          this.$v.form.file.$touch();
+          fileTypeMismatch.value = true;
+          v$.value.form.file.$touch();
           return;
         }
       } else {
