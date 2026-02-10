@@ -90,6 +90,7 @@ const quickLinks = reactive([
     linkText: i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
   },
 ]);
+const isBusy = ref(true);
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -98,7 +99,10 @@ onBeforeRouteLeave(() => {
 onMounted(() => {
   startLoader();
   Promise.all([licenseStore.getLicenses(), systemStore.getSystem()]).finally(
-    () => endLoader(),
+    () => {
+      endLoader();
+      isBusy.value = false;
+    },
   );
 });
 
