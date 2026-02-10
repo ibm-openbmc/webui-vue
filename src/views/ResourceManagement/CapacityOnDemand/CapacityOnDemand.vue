@@ -34,7 +34,7 @@
     <capacity-on-demand-order-info ref="orderInfo" />
 
     <!-- VET capabilities section -->
-    <capacity-on-demand-table ref="vetCapabilities" />
+    <capacity-on-demand-table ref="vetCapabilities" :is-busy="isBusy" />
   </BContainer>
 </template>
 
