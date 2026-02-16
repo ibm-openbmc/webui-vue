@@ -223,7 +223,7 @@ onMounted(() => {
   ]).finally(() => {
     endLoader();
     isBusy.value = false;
-    userRoleId.value = ref(global.username);
+    userRoleId.value = global.currentUser?.RoleId;
   });
 });
 

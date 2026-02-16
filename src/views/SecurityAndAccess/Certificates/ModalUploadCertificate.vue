@@ -137,7 +137,7 @@ const certificateOptions = computed(() => {
       if (certificate.type === 'Admin reset certificate') {
         return false;
       }
-      if (certificate.type === 'ServiceLogin Certificate' && isNotAdmin) {
+      if (certificate.type === 'ServiceLogin Certificate' && isNotAdmin.value) {
         return certificate.type !== 'ServiceLogin Certificate';
       }
       return certificate === certificate;
