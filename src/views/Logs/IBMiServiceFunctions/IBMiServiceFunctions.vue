@@ -190,7 +190,7 @@ onBeforeMount(() => {
   isLoading.value = true;
   Promise.all([
     globalStore.getBootProgress(),
-    ibmiServiceFunctionsStore.getAvailableServiceFunctions,
+    ibmiServiceFunctionsStore.getAvailableServiceFunctions(),
     bootSettingsStore.fetchBiosAttributes(),
   ]).finally(() => {
     isLoading.value = false;
