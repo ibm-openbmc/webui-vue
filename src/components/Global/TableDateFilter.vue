@@ -198,7 +198,7 @@ const emitChange = () => {
 
 :deep(.dp-input) {
   border: none;
-  border-bottom: 1px solid #8d8d8d;
+  border-bottom: 1px solid #3ac4bf !important;
   border-radius: 0;
   padding: 0.5rem 2.5rem 0.5rem 0.5rem;
   font-size: 0.875rem;

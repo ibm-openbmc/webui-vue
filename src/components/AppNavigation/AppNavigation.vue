@@ -6,20 +6,16 @@
       <nav ref="nav" :aria-label="$t('appNavigation.primaryNavigation')">
         <BNav vertical class="mb-4">
           <template v-for="(navItem, index) in navigationItems">
-            <!-- Navigation items with no children -->
-            <BNavItem
-              v-if="!navItem.children"
-              :key="index"
-              :href="`#${navItem.route}`"
-              :data-test-id="`nav-item-${navItem.id}`"
-              class="nav-nochild"
-              :class="{
-                'router-link-exact-active': isRouteActive(navItem.route),
-              }"
-            >
-              <component :is="navItem.icon" />
-              {{ navItem.label }}
-            </BNavItem>
+            <li v-if="!navItem.children" :key="index" class="nav-item">
+              <router-link
+                :to="navItem.route"
+                :data-test-id="`nav-item-${navItem.id}`"
+                class="nav-link"
+              >
+                <component :is="navItem.icon" />
+                {{ navItem.label }}
+              </router-link>
+            </li>
             <!-- Navigation items with children -->
             <li v-else :key="`${navItem.id}`" class="nav-item">
               <BButton
@@ -199,35 +195,10 @@ svg {
     color: $white;
   }
 }
-.nav-nochild {
-  :deep(a.router-link-exact-active),
-  &.router-link-exact-active :deep(a) {
-    position: relative;
-    background-color: $secondary;
-    color: $light;
-    cursor: default;
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 4px;
-      background-color: $primary;
-    }
-  }
-  &:hover {
-    background-color: #dadada;
-    color: $light;
-  }
-  :deep(a) {
-    color: $secondary;
-  }
-}
 .nav-link--current {
   font-weight: $headings-font-weight;
-  background-color: $secondary;
-  color: $light;
+  background-color: $primary;
+  color: $white;
   cursor: default;
   box-shadow: none;
   &::before {
@@ -237,33 +208,12 @@ svg {
     bottom: 0;
     left: 0;
     width: 4px;
-    background-color: $primary;
+    background-color: $blue;
   }
   &:hover,
   &:focus {
-    background-color: $secondary;
-    color: $light;
-  }
-}
-.nav-items--current {
-  font-weight: $headings-font-weight;
-  background-color: $secondary;
-  color: $light;
-  cursor: default;
-  box-shadow: none;
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 4px;
     background-color: $primary;
-  }
-  &:hover,
-  &:focus {
-    background-color: $secondary;
-    color: $light;
+    color: $white;
   }
 }
 .nav-container {

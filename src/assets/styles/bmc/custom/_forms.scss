@@ -110,11 +110,11 @@ div[role='group'] {
 }
 
 .form-check .form-check-input {
-  border-color: $gray-500;
+  border-color: #36b6ec;
   cursor: pointer !important;
   &:checked {
     background-color: $black !important;
-    border-color: $black !important;
+    border-color: #36b6ec;
   }
 }
 

@@ -41,6 +41,8 @@
                     "
                     @input="v$.licenseKey.$touch()"
                   />
+                  <BFormInvalidFeedback role="alert">
+                    {{ $t('global.form.invalidCharacterLength') }}
                   </BFormInvalidFeedback>
                 </BInputGroup>
               </BFormGroup>
