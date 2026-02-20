@@ -121,7 +121,7 @@ const certificateTypes = computed(() => {
 const certificateOptions = computed(() => {
   const filteredCertificates = certificateTypes.value
     .filter((certificate) => {
-      if (certificate.type === 'ServiceLogin Certificate' && isNotAdmin) {
+      if (certificate.type === 'ServiceLogin Certificate' && isNotAdmin.value) {
         return certificate.type !== 'ServiceLogin Certificate';
       }
       return certificate === certificate;
