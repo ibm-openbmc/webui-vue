@@ -563,7 +563,7 @@ export const UserManagementStore = defineStore('userManagment', {
       const currentUsername = localStorage.getItem('storedUsername');
       return api
         .post(
-          `redfish/v1/AccountService/Accounts/${currentUsername}/Actions/ManagerAccount.GenerateSecretKey`,
+          `/redfish/v1/AccountService/Accounts/${currentUsername}/Actions/ManagerAccount.GenerateSecretKey`,
         )
         .then(({ data }) => {
           this.secretKeyInfo = data?.SecretKey;
