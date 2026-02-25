@@ -38,7 +38,7 @@
                 v-model="form.groupPrivilege"
                 :options="accountRoles"
                 :state="getValidationState(vv$.form.groupPrivilege)"
-                @input="vv$.form.groupPrivilege.$touch()"
+                @change="vv$.form.groupPrivilege.$touch()"
               >
                 <template v-if="!roleGroup" #first>
                   <b-form-select-option :value="null" disabled>
