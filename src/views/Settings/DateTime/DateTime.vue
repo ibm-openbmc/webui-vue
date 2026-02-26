@@ -6,8 +6,8 @@
         <alert variant="info" class="mb-4">
           <span class="no-underline-link">
             {{ $t('pageDateTime.alert.message') }}
-            <BLink to="/profile-settings">
-              {{ $t('pageDateTime.alert.link') }}</BLink
+            <router-link to="/profile-settings">
+              {{ $t('pageDateTime.alert.link') }}</router-link
             >
           </span>
         </alert>

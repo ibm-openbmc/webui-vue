@@ -15,7 +15,7 @@
           <span v-if="exportButton">{{ $t('global.action.exportAll') }}</span>
         </BButton>
         <span v-if="exportButton || downloadButton" class="ps-2 pe-2">|</span>
-        <BLink :to="to">{{ $t('pageOverview.viewMore') }}</BLink>
+        <router-link :to="to">{{ $t('pageOverview.viewMore') }}</router-link>
       </div>
     </div>
     <slot></slot>

@@ -4,9 +4,9 @@
       <page-section :section-title="$t('pageCapacityOnDemand.orderInfo.title')">
         <p class="no-underline-link">
           {{ $t('pageCapacityOnDemand.orderInfo.description.message') }}
-          <BLink to="/logs/dumps">
+          <router-link to="/logs/dumps">
             {{ $t('pageCapacityOnDemand.orderInfo.description.link') }}
-          </BLink>
+          </router-link>
         </p>
         <b-card bg-variant="light" border-variant="light" class="mb-4">
           <!-- System information -->
