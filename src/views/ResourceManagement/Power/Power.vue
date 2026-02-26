@@ -12,14 +12,14 @@
           </p>
           <p>
             {{ $t('pagePower.alert.message2') }}
-            <BLink to="/logs/event-logs">
-              {{ $t('pagePower.alert.message2Link') }}</BLink
+            <router-link to="/logs/event-logs">
+              {{ $t('pagePower.alert.message2Link') }}</router-link
             >
           </p>
           <p>
             {{ $t('pagePower.alert.message3') }}
-            <BLink to="/operations/server-power-operations">
-              {{ $t('pagePower.alert.message3Link') }}</BLink
+            <router-link to="/operations/server-power-operations">
+              {{ $t('pagePower.alert.message3Link') }}</router-link
             >
           </p>
         </alert>

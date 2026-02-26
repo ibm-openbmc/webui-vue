@@ -15,9 +15,9 @@
             </BCol>
             <BCol>
               <div>
-                <BLink to="/operations/server-power-operations">
+                <router-link to="/operations/server-power-operations">
                   {{ $t('pagePowerRestorePolicy.alert.changeServerOpMode') }}
-                </BLink>
+                </router-link>
               </div>
             </BCol>
           </BRow>

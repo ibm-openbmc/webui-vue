@@ -3,7 +3,7 @@
     <h1>{{ title }}</h1>
     <p v-if="description">
       {{ description }}
-      <BLink v-if="link" :to="to"> {{ link }} </BLink>
+      <router-link v-if="link" :to="to"> {{ link }} </router-link>
     </p>
   </div>
 </template>
