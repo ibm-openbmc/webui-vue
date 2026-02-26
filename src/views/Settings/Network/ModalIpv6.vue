@@ -58,7 +58,7 @@
               >
                 {{
                   $t('global.form.valueMustBeBetween', {
-                    min: 0,
+                    min: 1,
                     max: 128,
                   })
                 }}
@@ -117,7 +117,7 @@ const rules = computed(() => ({
     },
     prefixLength: {
       required,
-      minValue: minValue(0),
+      minValue: minValue(1),
       maxValue: maxValue(128),
     },
   },
