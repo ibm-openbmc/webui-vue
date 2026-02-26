@@ -138,7 +138,7 @@
                 :options="privilegeTypes"
                 data-test-id="userManagement-select-privilege"
                 :state="getValidationState(v$.form.privilege)"
-                @input="v$.form.privilege.$touch()"
+                @change="v$.form.privilege.$touch()"
               >
                 <template #first>
                   <BFormSelectOption :value="null" disabled>
