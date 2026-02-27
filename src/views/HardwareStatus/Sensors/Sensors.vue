@@ -74,17 +74,19 @@
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
-              v-model="row.item.isSelected"
+              :model-value="row.item.isSelected"
               :label="`Select-row-for-sensor-${row.item.name}`"
               label-class="visually-hidden"
               aria-label="checkbox"
-              @change="
-                toggleSelectRow(
-                  tableRef,
-                  row.index,
-                  row.item.isSelected,
-                  row.item,
-                )
+              @update:model-value="
+                (checked) => {
+                  if (checked) {
+                    selectedSensors.add(row.item.name);
+                  } else {
+                    selectedSensors.delete(row.item.name);
+                  }
+                  toggleSelectRow(tableRef, row.index, checked, row.item);
+                }
               "
             >
               <span class="visually-hidden">checkbox</span>
@@ -182,7 +184,7 @@
 import { ref, onMounted, computed, onBeforeMount, watch, nextTick } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
-import { SensorsStore } from '@/store/modules/HardwareStatus/SensorsStore';
+import { useSensors } from '@/api/composables/useSensors';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Search from '@/components/Global/Search.vue';
@@ -214,7 +216,31 @@ const { statusIconValue } = useDataFormatterGlobal();
 const { getFilteredTableData } = useTableFilterComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
-const sensorsStore = SensorsStore();
+const {
+  sensors: sensorsFromQuery,
+  isLoading: isSensorsLoading,
+  isError,
+  refetch: refetchSensors,
+} = useSensors();
+
+defineExpose({
+  refetch: refetchSensors,
+});
+
+// Track selection state separately to avoid circular dependencies
+const selectedSensors = ref(new Set());
+
+// Computed property that merges sensor data with selection state
+const sensorsData = computed(() => {
+  if (!sensorsFromQuery.value) {
+    return [];
+  }
+
+  return sensorsFromQuery.value.map((sensor) => ({
+    ...sensor,
+    isSelected: selectedSensors.value.has(sensor.name),
+  }));
+});
 
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
@@ -223,7 +249,7 @@ const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
 const tableRef = ref(null);
 const searchTotalFilteredRows = ref(0);
 const activeFiltersRows = ref([]);
-const isBusy = ref(true);
+const isBusy = computed(() => isSensorsLoading.value);
 const isAllSelected = ref(false);
 const searchFilterInput = ref('');
 
@@ -276,20 +302,34 @@ onBeforeRouteLeave(() => {
 
 onBeforeMount(() => {
   eventBus.on('clear-selected', () => {
-    sensorsStore?.sensors?.map((singleSensor) => {
-      singleSensor.isSelected = false;
-    });
+    selectedSensors.value.clear();
     clearSelectedRows(tableRef);
   });
 });
 
-onMounted(() => {
-  startLoader();
-  sensorsStore.getAllSensors().finally(() => {
-    isBusy.value = false;
-    endLoader();
-  });
-});
+watch(
+  () => isSensorsLoading.value,
+  (loading) => {
+    if (loading) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+// Stop the loading bar and log the error when sensor fetch fails
+watch(
+  () => isError.value,
+  (hasError) => {
+    if (hasError) {
+      endLoader();
+    }
+  },
+);
+
+onMounted(() => {});
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
@@ -297,12 +337,9 @@ const filteredRows = computed(() => {
     : filteredSensors.value.length;
 });
 const filteredSensors = computed(() => {
-  if (!sensorsStore.sensorsGetter) return [];
+  if (!sensorsData.value) return [];
 
-  let data = getFilteredTableData(
-    sensorsStore.sensorsGetter,
-    activeFiltersRows.value,
-  );
+  let data = getFilteredTableData(sensorsData.value, activeFiltersRows.value);
 
   if (searchFilterInput.value) {
     const search = searchFilterInput.value.toLowerCase();
@@ -336,9 +373,13 @@ watch(
 );
 
 function toggleAll(checked) {
-  sensorsStore?.sensors?.map((singleSensor) => {
-    singleSensor.isSelected = checked;
-  });
+  if (checked) {
+    sensorsData.value.forEach((sensor) => {
+      selectedSensors.value.add(sensor.name);
+    });
+  } else {
+    selectedSensors.value.clear();
+  }
   isAllSelected.value = checked;
 }
 function onFilterChange({ activeFilters }) {

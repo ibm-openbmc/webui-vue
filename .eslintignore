@@ -1,0 +1,13 @@
+# TypeScript files - ESLint not configured for TS yet
+*.ts
+*.d.ts
+
+# Build output
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Configuration
+*.config.js
