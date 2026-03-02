@@ -35,45 +35,13 @@ export const ControlStore = defineStore('control', {
   state: () => ({
     isOperationInProgress: false,
     lastPowerOperationTime: null,
-    lastBmcRebootTime: null,
     displayInfoToast: false,
   }),
   getters: {
     getIsOperationInProgress: (state) => state.isOperationInProgress,
     getLastPowerOperationTime: (state) => state.lastPowerOperationTime,
-    getLastBmcRebootTime: (state) => state.lastBmcRebootTime,
   },
   actions: {
-    // /**
-    //  * Watch for serverStatus changes in GlobalStore module
-    //  * to set isOperationInProgress state
-    //  * Stop watching status changes and resolve Promise when
-    //  * serverStatus value matches passed argument or after 5 minutes
-    //  * @param {string} serverStatus
-    //  * @returns {Promise}
-    //  */
-    // async checkForServerStatus(serverStatus) {
-    //   const global = GlobalStore();
-    //   return new Promise((resolve) => {
-    //     const timer = setTimeout(() => {
-    //       resolve();
-    //       clearSub();
-    //     }, 300000 /*5mins*/);
-    //     const clearSub = global.$subscribe(
-    //       ({ events }) => {
-    //         if (
-    //           events.key === 'serverStatus' &&
-    //           events.newValue === serverStatus
-    //         ) {
-    //           resolve();
-    //           clearSub();
-    //           clearTimeout(timer);
-    //         }
-    //       },
-    //       { detached: true }
-    //     );
-    //   });
-    // },
     async fetchLastPowerOperationTime() {
       return await api
         .get('/redfish/v1/Systems/system')
@@ -85,29 +53,6 @@ export const ControlStore = defineStore('control', {
           }
         })
         .catch((error) => console.log(error));
-    },
-    fetchLastBmcRebootTime() {
-      return api
-        .get('/redfish/v1/Managers/bmc')
-        .then((response) => {
-          const lastBmcReset = response.data.LastResetTime;
-          const lastBmcRebootTime = new Date(lastBmcReset);
-          this.lastBmcRebootTime = lastBmcRebootTime;
-        })
-        .catch((error) => console.log(error));
-    },
-    async rebootBmc() {
-      const data = { ResetType: 'GracefulRestart' };
-      return await api
-        .post('/redfish/v1/Managers/bmc/Actions/Manager.Reset', data)
-        .then(() => this.fetchLastBmcRebootTime())
-        .then(() => i18n.global.t('pageRebootBmc.toast.successRebootStart'))
-        .catch((error) => {
-          console.log(error);
-          throw new Error(
-            i18n.global.t('pageRebootBmc.toast.errorRebootStart'),
-          );
-        });
     },
     async powerOps(value) {
       await checkForServerStatus(value);

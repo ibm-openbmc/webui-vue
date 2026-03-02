@@ -57,54 +57,64 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, watch, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
+import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
+import { useRebootBmc } from '@/api/composables/useRebootBmc';
 import stores from '@/store';
 
 const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
-const controlStore = stores.ControlStore();
 const bootSettingsStore = stores.BootSettingsStore();
+
+const { lastBmcRebootTime, isFetching, isError, rebootBmc } = useRebootBmc();
 
 const openModal = ref(false);
 
+onBeforeMount(() => {
+  // Pre-fetch BIOS attributes so the modal opens instantly on click
+  bootSettingsStore.fetchBiosAttributes();
+});
+
+// Manage loading bar based on query fetching state
+watch(isFetching, (fetching) => {
+  if (fetching) {
+    startLoader();
+  } else {
+    endLoader();
+  }
+});
+
+// Stop the loading bar when the BMC manager fetch fails
+watch(isError, (hasError) => {
+  if (hasError) {
+    endLoader();
+  }
+});
+
 onBeforeRouteLeave(() => {
   hideLoader();
-});
-
-onBeforeMount(() => {
-  startLoader();
-  controlStore.fetchLastBmcRebootTime().finally(() => {
-    endLoader();
-  });
-});
-
-const lastBmcRebootTime = computed(() => {
-  return controlStore.getLastBmcRebootTime;
 });
 
 const systemDumpActive = computed(() => {
   return bootSettingsStore.getSystemDumpActive;
 });
 
-function rebootBmc() {
-  controlStore
-    .rebootBmc()
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message));
-}
-
 function onClick() {
-  bootSettingsStore.fetchBiosAttributes().then(() => {
-    openModal.value = true;
-  });
+  openModal.value = true;
 }
 
 function handleOK() {
   openModal.value = false;
-  rebootBmc();
+  rebootBmc()
+    .then(() =>
+      successToast(i18n.global.t('pageRebootBmc.toast.successRebootStart')),
+    )
+    .catch(() =>
+      errorToast(i18n.global.t('pageRebootBmc.toast.errorRebootStart')),
+    );
 }
 </script>

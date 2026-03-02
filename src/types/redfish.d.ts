@@ -243,6 +243,34 @@ export interface StorageCollection extends ResourceCollection {
   Members: (ODataId | Storage)[];
 }
 
+export interface Manager extends Resource {
+  ManagerType?: string;
+  UUID?: string;
+  Model?: string;
+  FirmwareVersion?: string;
+  PowerState?: 'On' | 'Off' | 'PoweringOn' | 'PoweringOff';
+  Status: Status;
+  DateTime?: string;
+  DateTimeLocalOffset?: string;
+  LastResetTime?: string;
+  ServiceEntryPointUUID?: string;
+  Actions?: {
+    '#Manager.Reset'?: {
+      target?: string;
+      'ResetType@Redfish.AllowableValues'?: string[];
+    };
+  };
+  Links?: {
+    ManagerForServers?: ODataId[];
+    ManagerForChassis?: ODataId[];
+    ManagerInChassis?: ODataId;
+  };
+}
+
+export interface ManagerCollection extends ResourceCollection {
+  Members: (ODataId | Manager)[];
+}
+
 // Expanded collection response type
 export interface ExpandedCollection<T extends Resource> extends ResourceCollection {
   Members: T[];
