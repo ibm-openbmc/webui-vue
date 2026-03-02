@@ -747,7 +747,7 @@
  </tr>
  <tr>
  <td>
- <p>npm-bootstrap-vue</p>
+ <p>npm-bootstrap-vue-next</p>
  </td>
  <td>
  <p>MIT,</p>
@@ -755,7 +755,23 @@
  </tr>
  <tr>
  <td>
- <p>npm-carbon</p>
+ <p>npm-buffer</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <p>npm-carbon-motion</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <p>npm-carbon-themes</p>
  </td>
  <td>
  <p>MIT,</p>
@@ -827,7 +843,55 @@
  </tr>
  <tr>
  <td>
+ <p>npm-pinia</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <p>npm-qrcode</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <p>npm-tiny-emitter</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <p>npm-totp-generator</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <p>npm-vitejs-plugin-basic-ssl</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
  <p>npm-vue</p>
+ </td>
+ <td>
+ <p>MIT,</p>
+ </td>
+ </tr>
+ <tr>
+ <td>
+ <p>npm-vue-axios</p>
  </td>
  <td>
  <p>MIT,</p>
@@ -843,7 +907,7 @@
  </tr>
  <tr>
  <td>
- <p>npm-vuelidate</p>
+ <p>npm-vuelidate-core</p>
  </td>
  <td>
  <p>MIT,</p>
@@ -851,7 +915,7 @@
  </tr>
  <tr>
  <td>
- <p>npm-vue-router</p>
+ <p>npm-vuelidate-validators</p>
  </td>
  <td>
  <p>MIT,</p>
@@ -859,7 +923,7 @@
  </tr>
  <tr>
  <td>
- <p>npm-vuex</p>
+ <p>npm-vue3-cookies</p>
  </td>
  <td>
  <p>MIT,</p>
