@@ -1,6 +1,5 @@
 import { computed } from 'vue';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
-// @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
 import type { Manager } from '@/types/redfish';
 

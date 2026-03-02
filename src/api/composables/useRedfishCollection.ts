@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/vue-query';
-// @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
 import type { ResourceCollection, Resource, ExpandedCollection } from '@/types/redfish';
 

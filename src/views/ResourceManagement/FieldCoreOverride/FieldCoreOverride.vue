@@ -23,28 +23,44 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from 'vue';
+import { watch, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
 import stores from '@/store';
+import { useFieldCoreOverride } from '@/api/composables/useFieldCoreOverride';
 import CurrentConfiguration from './FieldCoreOverrideInfo.vue';
 import ChangeConfiguration from './FieldCoreOverrideConfiguration.vue';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 const systemStore = stores.SystemStore();
-const fieldCoreOverrideStore = stores.FieldCoreOverrideStore();
 const licenseStore = stores.LicenseStore();
+
+const { isFetching, isError } = useFieldCoreOverride();
 
 onBeforeMount(() => {
   startLoader();
-  Promise.all([
-    licenseStore.getLicenses(),
-    systemStore.getSystem(),
-    fieldCoreOverrideStore.getBiosAttributes(),
-  ]).finally(() => endLoader());
+  Promise.all([licenseStore.getLicenses(), systemStore.getSystem()]).finally(
+    () => endLoader(),
+  );
+});
+
+// Manage loading bar for BIOS query fetching state
+watch(isFetching, (fetching) => {
+  if (fetching) {
+    startLoader();
+  } else {
+    endLoader();
+  }
+});
+
+// Stop the loading bar when the BIOS fetch fails
+watch(isError, (hasError) => {
+  if (hasError) {
+    endLoader();
+  }
 });
 
 onBeforeRouteLeave(() => {

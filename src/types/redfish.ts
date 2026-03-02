@@ -243,6 +243,32 @@ export interface StorageCollection extends ResourceCollection {
   Members: (ODataId | Storage)[];
 }
 
+export interface Manager extends Resource {
+  ManagerType?: string;
+  ServiceEntryPointUUID?: string;
+  UUID?: string;
+  Model?: string;
+  Status: Status;
+  DateTime?: string;
+  DateTimeLocalOffset?: string;
+  FirmwareVersion?: string;
+  LastResetTime?: string;
+  PowerState?: 'On' | 'Off' | 'PoweringOn' | 'PoweringOff';
+  Links?: {
+    ManagerForServers?: ODataId[];
+    ManagerForChassis?: ODataId[];
+    ManagerInChassis?: ODataId;
+  };
+  EthernetInterfaces?: ODataId;
+  NetworkProtocol?: ODataId;
+  LogServices?: ODataId;
+  VirtualMedia?: ODataId;
+}
+
+export interface ManagerCollection extends ResourceCollection {
+  Members: (ODataId | Manager)[];
+}
+
 // Expanded collection response type
 export interface ExpandedCollection<T extends Resource> extends ResourceCollection {
   Members: T[];
