@@ -55,45 +55,28 @@
 import { ref, computed, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { requiredIf, minValue } from '@vuelidate/validators';
+import i18n from '@/i18n';
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
 import stores from '@/store';
+import { useFieldCoreOverride } from '@/api/composables/useFieldCoreOverride';
 
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
 const systemStore = stores.SystemStore();
-const fieldCoreOverrideStore = stores.FieldCoreOverrideStore();
-const licenseStore = stores.LicenseStore();
 
-const inputEnableFieldCoreOverride = ref(
-  fieldCoreOverrideStore.isEnabledGetter,
-);
-const inputConfiguredCores = ref(
-  fieldCoreOverrideStore.configuredCoresGetter || null,
-);
+const { configuredCores, isEnabled, setFieldCoreOverride } =
+  useFieldCoreOverride();
+
+const inputEnableFieldCoreOverride = ref(isEnabled.value);
+const inputConfiguredCores = ref(configuredCores.value || null);
 const minimumValue = ref(1);
 
-const configuredCores = computed(() => {
-  return fieldCoreOverrideStore.configuredCoresGetter;
-});
-
-const processorInfo = computed(() => {
-  return licenseStore.licensesGetter;
-});
-
-const isFieldCoreOverrideEnabled = computed(() => {
-  return fieldCoreOverrideStore.isEnabledGetter;
-});
-
-const systems = computed(() => {
-  return systemStore.getSystems;
-});
-
-const maxConfiguredCores = computed(() => {
-  return systems.value?.[0]?.processorSummaryCoreCount;
-});
+const maxConfiguredCores = computed(
+  () => systemStore.getSystems?.[0]?.processorSummaryCoreCount,
+);
 
 const rules = computed(() => ({
   inputConfiguredCores: {
@@ -104,19 +87,13 @@ const rules = computed(() => ({
   },
 }));
 
-const v$ = useVuelidate(rules, {
-  inputConfiguredCores,
-});
+const v$ = useVuelidate(rules, { inputConfiguredCores });
 
 watch(configuredCores, (value) => {
-  if (value < 1) {
-    inputConfiguredCores.value = null;
-  } else {
-    inputConfiguredCores.value = value;
-  }
+  inputConfiguredCores.value = value < 1 ? null : value;
 });
 
-watch(isFieldCoreOverrideEnabled, (value) => {
+watch(isEnabled, (value) => {
   inputEnableFieldCoreOverride.value = value;
 });
 
@@ -129,10 +106,17 @@ watch(inputEnableFieldCoreOverride, (value) => {
 const submitForm = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
-  fieldCoreOverrideStore
-    .setFieldCoreOverride(inputConfiguredCores.value)
-    .then((success) => successToast(success))
-    .catch(({ message }) => errorToast(message));
+  setFieldCoreOverride(inputConfiguredCores.value)
+    .then(() =>
+      successToast(
+        i18n.global.t('pageFieldCoreOverride.toast.configurationChangeSuccess'),
+      ),
+    )
+    .catch(() =>
+      errorToast(
+        i18n.global.t('pageFieldCoreOverride.toast.configurationChangeError'),
+      ),
+    );
 };
 </script>
 

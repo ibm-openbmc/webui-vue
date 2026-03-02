@@ -15,9 +15,9 @@
           </p>
           <p class="mb-0">
             {{ $t('pageFieldCoreOverride.configuredCores') }}:
-            {{ isFieldCoreOverrideEnabled ? configuredCores : '--' }}
+            {{ isEnabled ? configuredCores : '--' }}
             <info-tooltip
-              v-if="isFieldCoreOverridePending"
+              v-if="isPending"
               :title="$t('pageFieldCoreOverride.scheduledForNextReboot')"
             >
               <icon-time />
@@ -36,36 +36,18 @@ import IconTime from '@carbon/icons-vue/es/time/16';
 import PageSection from '@/components/Global/PageSection.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import stores from '@/store';
+import { useFieldCoreOverride } from '@/api/composables/useFieldCoreOverride';
 
 const systemStore = stores.SystemStore();
-const fieldCoreOverrideStore = stores.FieldCoreOverrideStore();
 const licenseStore = stores.LicenseStore();
 
-const systems = computed(() => {
-  return systemStore.getSystems;
-});
+const { configuredCores, isEnabled, isPending } = useFieldCoreOverride();
 
-const processorInfo = computed(() => {
-  return licenseStore.licensesGetter;
-});
+const totalInstalledCores = computed(
+  () => systemStore.getSystems?.[0]?.processorSummaryCoreCount,
+);
 
-const configuredCores = computed(() => {
-  return fieldCoreOverrideStore.configuredCoresGetter;
-});
-
-const isFieldCoreOverrideEnabled = computed(() => {
-  return fieldCoreOverrideStore.isEnabledGetter;
-});
-
-const isFieldCoreOverridePending = computed(() => {
-  return fieldCoreOverrideStore.isPendingGetter;
-});
-
-const totalInstalledCores = computed(() => {
-  return systems.value?.[0]?.processorSummaryCoreCount;
-});
-
-const licensedCores = computed(() => {
-  return processorInfo.value?.PermProcs?.MaxAuthorizedDevices;
-});
+const licensedCores = computed(
+  () => licenseStore.licensesGetter?.PermProcs?.MaxAuthorizedDevices,
+);
 </script>
