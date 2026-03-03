@@ -25,7 +25,7 @@
           <icon-delete /> {{ $t('global.action.clearAll') }}
         </BButton>
         <BButton
-          variant="primary"
+          :variant="allEntries.length === 0 ? 'light' : 'primary'"
           :class="{ disabled: allEntries.length === 0 }"
           :download="exportFileNameByDate()"
           :href="href"
@@ -157,6 +157,7 @@
             <BFormCheckbox
               v-model="row.item.isSelected"
               aria-label="checkbox"
+              :name="'switch-' + row.item.id"
               @change="
                 toggleSelectRowById(
                   tableDeconfigurationRecordsRef,
@@ -166,6 +167,7 @@
                 )
               "
             >
+              <span class="visually-hidden">checkbox</span>
             </BFormCheckbox>
           </template>
           <!-- Date column -->
@@ -245,6 +247,7 @@
         <b-pagination
           v-model="currentPageNo"
           class="b-pagination"
+          :tabindex="currentPageNo - 1"
           first-number
           last-number
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
@@ -590,13 +593,18 @@ const onBatchAction = (action) => {
 
 watch(
   () => filteredLogs,
-  () => {
+  (logs) => {
     nextTick(() => {
       document
         .querySelectorAll('.b-table-sortable-column svg')
         .forEach((svg) => {
           svg.setAttribute('aria-hidden', 'true');
         });
+      if (!logs.length) {
+        document
+          .querySelector('tr.b-table-empty-slot td[scope]')
+          ?.removeAttribute('scope');
+      }
     });
   },
   { deep: true },

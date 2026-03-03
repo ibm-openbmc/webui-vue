@@ -24,7 +24,7 @@
     <BRow>
       <BCol class="text-right">
         <BButton
-          variant="primary"
+          :variant="allLogs.length === 0 ? 'light' : 'primary'"
           :class="{ disabled: allLogs.length === 0 }"
           @click="downloadEventLogs('all')"
         >
@@ -131,6 +131,7 @@
         <BPagination
           v-model="currentPageNo"
           class="b-pagination"
+          :tabindex="currentPageNo - 1"
           first-number
           last-number
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"

@@ -221,6 +221,17 @@ watch(
   },
 );
 
+watch(
+  () => form.value.ipv4TableItems,
+  (item) => {
+    if (!item.length) {
+      document
+        .querySelector('tr.b-table-empty-slot td[scope]')
+        ?.removeAttribute('scope');
+    }
+  },
+);
+
 watch(network, () => {
   getIpv4TableItems();
 });

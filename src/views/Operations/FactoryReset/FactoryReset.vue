@@ -24,6 +24,8 @@
             <BFormRadioGroup
               id="factory-reset-options"
               v-model="resetOption"
+              role="radio"
+              aria-checked="true"
               stacked
             >
               <BFormRadio

@@ -3,11 +3,11 @@
     <BRow>
       <BCol class="d-flex align-items-center justify-content-between">
         <dl class="mt-3 mr-3 w-75">
-          <dt id="rpd-policy-label">
+          <dt id="rpd-feature-label">
             {{ $t('pageSystemParameters.rpdFeature') }}
             <info-tooltip :title="$t('pageSystemParameters.rpdFeatureInfo')" />
           </dt>
-          <dd id="rpd-policy-description">
+          <dd id="rpd-feature-description">
             {{ $t('pageSystemParameters.rpdFeatureDescription') }}
           </dd>
         </dl>

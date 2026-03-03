@@ -228,7 +228,7 @@
               <BFormGroup
                 :label="$t('pageMemory.slotCountForNode0')"
                 label-for="input-dynamic-io-adapter-drawer-capacity"
-                aria-label=""
+                aria-label="slot-count-for-node0-io-drawer-capacity"
                 class="mb-3"
               >
                 <BFormInput

@@ -200,13 +200,18 @@ const chassis = computed(() => {
 
 watch(
   () => chassis,
-  () => {
+  (chas) => {
     nextTick(() => {
       document
         .querySelectorAll('.b-table-sortable-column svg')
         .forEach((svg) => {
           svg.setAttribute('aria-hidden', 'true');
         });
+      if (!chas.length) {
+        document
+          .querySelector('tr.b-table-empty-slot td[scope]')
+          ?.removeAttribute('scope');
+      }
     });
   },
   { deep: true },

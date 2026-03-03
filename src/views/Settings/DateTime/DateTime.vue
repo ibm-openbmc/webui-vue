@@ -161,7 +161,7 @@
                   <BFormInput
                     id="input-manual-time"
                     v-model="form.manual.time"
-                    aria-label="time-input"
+                    aria-label="24-hour time (UTC)"
                     :state="getValidationState(v$.form.manual.time)"
                     :disabled="ntpOptionSelected"
                     data-test-id="dateTime-input-manualTime"

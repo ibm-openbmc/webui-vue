@@ -30,6 +30,8 @@
           <BFormRadioGroup
             v-model="currentPowerRestorePolicy"
             :disabled="isOperatingModeManual"
+            role="radio"
+            aria-checked="true"
             :options="options"
             name="power-restore-policy"
             stacked

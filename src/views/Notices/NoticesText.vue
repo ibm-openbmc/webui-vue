@@ -36,7 +36,7 @@ license agreement.
 
 The Program includes the following licensed Separately as Other Internal Licensed Code:
 
-<table class="notice-table">
+<table role="none" class="notice-table">
 <tbody>
 <tr><td><p>Package</p></td><td><p>Licenses</p></td></tr>
 <tr><td><p>audit</p></td><td><p>GPL-2.0-or-later, LGPL-2.0-or-later</p></td></tr>

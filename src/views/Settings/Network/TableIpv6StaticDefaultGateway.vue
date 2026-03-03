@@ -167,6 +167,17 @@ watch(
   },
 );
 
+watch(
+  () => form.value.ipv6DefaultGatewayTableItems,
+  (item) => {
+    if (!item.length) {
+      document
+        .querySelector('tr.b-table-empty-slot td[scope]')
+        ?.removeAttribute('scope');
+    }
+  },
+);
+
 watch(network, () => {
   getipv6DefaultGatewayTableItems();
 });

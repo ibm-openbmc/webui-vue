@@ -29,6 +29,8 @@
                 id="key-clear-options"
                 v-model="keyOption"
                 stacked
+                role="radio"
+                aria-checked="true"
               >
                 <BFormRadio class="radioButton" value="NONE">
                   {{ $t('pageKeyClear.form.none') }}
