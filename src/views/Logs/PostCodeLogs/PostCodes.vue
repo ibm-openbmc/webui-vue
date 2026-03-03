@@ -22,10 +22,7 @@ export default {
     postCodes: {
       get() {
         if (this.postCodeValue) {
-          let big = U64(this.postCodeValue, 10);
-          big.toString();
-          let bytearray = big.toLE(Buffer);
-          let finalConvertedCode = bytearray.toString();
+          let finalConvertedCode = this.postCodeValue;
           // Filter out all non readable values and all 00000000
           // Yes, whitespaces for 'STANDBY ' and 'RUNTIME ' must be there
           if (finalConvertedCode === '00000000') {

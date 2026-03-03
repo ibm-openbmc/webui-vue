@@ -48,27 +48,35 @@ export const initWebSocket = () => {
     console.error(event);
   };
   ws.onmessage = (event) => {
-    var data = JSONbig.parse(event.data);
-    const eventInterface = data.interface;
-    const path = data.path;
-    if (eventInterface === 'xyz.openbmc_project.State.Boot.Raw') {
-      if (path === '/xyz/openbmc_project/state/boot/raw0') {
-        const { properties: { Value } = {} } = data;
-        if (Value) {
-          if (Array.isArray(Value) && Value.length) {
-            var finalValue = Value[0].c.join('');
+    try {
+      var data = JSONbig.parse(event.data);
+      const eventInterface = data.interface;
+      const path = data.path;
+      if (eventInterface === 'xyz.openbmc_project.State.Boot.Raw') {
+        if (path === '/xyz/openbmc_project/state/boot/raw0') {
+          const { properties: { Value } = {} } = data;
+
+          if (Value) {
+            if (Array.isArray(Value) && Value.length) {
+              const primaryPostCode = Value[0];
+              if (Array.isArray(primaryPostCode)) {
+                const finalValue = String.fromCharCode(...primaryPostCode);
+                globalStore.postCodeValue = finalValue;
+              }
+            }
           }
-          globalStore.postCodeValue = finalValue;
         }
       }
-    }
-    if (eventInterface === 'xyz.openbmc_project.State.Host') {
-      const { properties: { CurrentHostState } = {} } = data;
-      if (CurrentHostState) {
-        globalStore.serverStatus = serverStateMapper(CurrentHostState);
+      if (eventInterface === 'xyz.openbmc_project.State.Host') {
+        const { properties: { CurrentHostState } = {} } = data;
+        if (CurrentHostState) {
+          globalStore.serverStatus = serverStateMapper(CurrentHostState);
+        }
+      } else if (path === '/xyz/openbmc_project/logging') {
+        eventLogStore.getEventLogData();
       }
-    } else if (path === '/xyz/openbmc_project/logging') {
-      eventLogStore.getEventLogData();
+    } catch (error) {
+      console.error('WebSocket message parse error:', error);
     }
   };
 };
