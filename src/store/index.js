@@ -23,7 +23,6 @@ import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore';
 import AuditLogsStore from './modules/Logs/AuditLogsStore';
 import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
-import KeyClearStore from './modules/Operations/KeyClearStore';
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore';
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
 import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
@@ -125,9 +124,6 @@ Object.assign(stores, {
 });
 Object.assign(stores, {
   FactoryResetStore: FactoryResetStore,
-});
-Object.assign(stores, {
-  KeyClearStore: KeyClearStore,
 });
 Object.assign(stores, {
   NetworkSettingsStore: NetworkSettingsStore,
