@@ -243,6 +243,16 @@ export interface StorageCollection extends ResourceCollection {
   Members: (ODataId | Storage)[];
 }
 
+export interface Session extends Resource {
+  UserName?: string;
+  ClientOriginIPAddress?: string;
+  Context?: string;
+}
+
+export interface SessionCollection extends ResourceCollection {
+  Members: (ODataId | Session)[];
+}
+
 // Expanded collection response type
 export interface ExpandedCollection<T extends Resource> extends ResourceCollection {
   Members: T[];

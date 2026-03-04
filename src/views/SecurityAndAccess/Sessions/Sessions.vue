@@ -76,16 +76,23 @@
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
-              v-model="sessionsStore.allConnections[row.index].isSelected"
+              :model-value="selectedSessions.has(row.item.uri)"
               aria-label="checkbox"
               :data-test-id="`sessions-checkbox-selectRow-${row.index}`"
-              @change="
-                toggleSelectRow(
-                  tableSessionsRef,
-                  row.index,
-                  sessionsStore.allConnections[row.index].isSelected,
-                  row.item,
-                )
+              @update:model-value="
+                (checked) => {
+                  if (checked) {
+                    selectedSessions.add(row.item.uri);
+                  } else {
+                    selectedSessions.delete(row.item.uri);
+                  }
+                  toggleSelectRow(
+                    tableSessionsRef,
+                    row.index,
+                    checked,
+                    row.item,
+                  );
+                }
               "
             >
               <span class="visually-hidden">checkbox</span>
@@ -168,21 +175,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
-import stores from '@/store';
+import { ref, computed, watch, onBeforeMount, onBeforeUnmount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
+import { useSessions } from '@/api/composables/useSessions';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useToastComposable from '@/components/Composables/useToastComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import Alert from '@/components/Global/Alert.vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import useToastComposable from '@/components/Composables/useToastComposable';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
@@ -198,10 +205,17 @@ const {
 } = useTableSelectableComposable();
 const Toast = useToastComposable();
 
-const sessionsStore = stores.SessionsStore();
+const {
+  sessions: sessionsData,
+  isLoading,
+  isFetching,
+  disconnectSessions,
+} = useSessions();
+
+// Track selection state separately to avoid circular dependencies
+const selectedSessions = ref(new Set());
 
 const tableSessionsRef = ref(null);
-const isBusy = ref(true);
 const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
 const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
 const currentPageNo = ref(currentPage);
@@ -259,36 +273,32 @@ onBeforeRouteLeave(() => {
 
 onBeforeMount(() => {
   eventBus.on('clear-selected', () => {
-    sessionsStore?.allConnectionsGetter?.map((singleConnection) => {
-      singleConnection.isSelected = false;
-    });
+    selectedSessions.value.clear();
     clearSelectedRows(tableSessionsRef);
   });
 });
-onMounted(() => {
-  startLoader();
-  sessionsStore.getSessionsData().finally(() => {
-    isBusy.value = false;
-    endLoader();
-  });
+
+// Loading bar automatically shows/hides based on fetch state
+watch(
+  () => isLoading.value || isFetching.value,
+  (loading) => {
+    if (loading) startLoader();
+    else endLoader();
+  },
+  { immediate: true },
+);
+
+onBeforeUnmount(() => {
+  hideLoader();
 });
 
-const filteredRows = computed(() => {
-  return searchFilterInput.value
-    ? searchTotalFilteredRows.value
-    : allConnections.value.length;
-});
+const isBusy = computed(() => isLoading.value || isFetching.value);
 
 const allConnections = computed(() => {
-  if (!sessionsStore.allConnectionsGetter) return [];
-  let data = sessionsStore.allConnectionsGetter.map((session) => ({
+  if (!sessionsData.value) return [];
+  let data = sessionsData.value.map((session) => ({
     ...session,
-    actions: [
-      {
-        value: 'disconnect',
-        title: i18n.global.t('pageSessions.action.disconnect'),
-      },
-    ],
+    isSelected: selectedSessions.value.has(session.uri),
   }));
   if (searchFilterInput.value) {
     const search = searchFilterInput.value.toLowerCase();
@@ -307,6 +317,12 @@ const allConnections = computed(() => {
   return data;
 });
 
+const filteredRows = computed(() => {
+  return searchFilterInput.value
+    ? searchTotalFilteredRows.value
+    : allConnections.value.length;
+});
+
 const onFiltered = (filteredItems) => {
   searchTotalFilteredRows.value = filteredItems.length;
 };
@@ -316,21 +332,10 @@ const onChangeSearch = (event) => {
 const onClearSearch = () => {
   searchFilterInput.value = '';
 };
-const disconnectSessions = (uris) => {
-  sessionsStore.disconnectSessions(uris).then((messages) => {
-    messages.forEach(({ type, message }) => {
-      if (type === 'success') {
-        Toast.successToast(message);
-      } else if (type === 'error') {
-        Toast.errorToast(message);
-      }
-    });
-  });
-};
 const onTableRowAction = (action, { uri }) => {
   if (action === 'disconnect') {
     urisStore.value = uri;
-    selectedRowsNo.value = selectedRowsLists.value.map((row) => row.uri).length;
+    selectedRowsNo.value = 1;
     count.value = 1;
     openModal.value = true;
   }
@@ -347,16 +352,36 @@ const onBatchAction = (action) => {
 const handleOk = () => {
   openModal.value = false;
   if (selectedRowsNo.value > 1) {
-    disconnectSessions(urisStore.value);
+    disconnectSessions(urisStore.value).then((messages) => {
+      messages.forEach(({ type, message }) => {
+        if (type === 'success') {
+          Toast.successToast(message);
+        } else if (type === 'error') {
+          Toast.errorToast(message);
+        }
+      });
+    });
   } else {
-    disconnectSessions([urisStore.value]);
+    disconnectSessions([urisStore.value]).then((messages) => {
+      messages.forEach(({ type, message }) => {
+        if (type === 'success') {
+          Toast.successToast(message);
+        } else if (type === 'error') {
+          Toast.errorToast(message);
+        }
+      });
+    });
   }
   selectedRowsNo.value = 0;
 };
 const toggleAll = (checked) => {
-  sessionsStore?.allConnections?.map((singleConnection) => {
-    singleConnection.isSelected = checked;
-  });
+  if (checked) {
+    allConnections.value.forEach((session) => {
+      selectedSessions.value.add(session.uri);
+    });
+  } else {
+    selectedSessions.value.clear();
+  }
   isAllSelected.value = checked;
 };
 </script>
