@@ -288,8 +288,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { PoliciesStore } from '@/store/modules/SecurityAndAccess/PoliciesStore';
+import { ref, reactive, onMounted } from 'vue';
+import { usePolicies } from '@/api/composables/usePolicies';
 import { UserManagementStore } from '@/store/modules/SecurityAndAccess/UserManagementStore';
 import { GlobalStore } from '@/store/modules/GlobalStore';
 import useToastComposable from '@/components/Composables/useToastComposable';
@@ -302,7 +302,7 @@ import IconTime from '@carbon/icons-vue/es/time/16';
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
 
-const Policies = PoliciesStore();
+const Policies = reactive(usePolicies());
 const UserManagement = UserManagementStore();
 const Global = GlobalStore();
 
@@ -320,14 +320,7 @@ onBeforeRouteLeave(() => {
 onMounted(() => {
   startLoader();
   Promise.all([
-    Policies.getBiosStatus(),
-    setTimeout(() => {
-      Policies.getNetworkProtocolStatus();
-    }, 30000),
-    Policies.getUsbFirmwareUpdatePolicyEnabled(),
-    Policies.getUnauthenticatedACFUploadEnablement(),
-    Policies.getTpmPolicy(),
-    Policies.getBasicAuth(),
+    Policies.loadAllPolicies(),
     UserManagement.getUsers(),
     checkForUserData(),
   ]).finally(() => {
