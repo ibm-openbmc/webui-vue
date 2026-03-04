@@ -182,14 +182,14 @@ import eventBus from '@/eventBus';
 import { useSessions } from '@/api/composables/useSessions';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import useToastComposable from '@/components/Composables/useToastComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import Alert from '@/components/Global/Alert.vue';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useToastComposable from '@/components/Composables/useToastComposable';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
@@ -332,6 +332,7 @@ const onChangeSearch = (event) => {
 const onClearSearch = () => {
   searchFilterInput.value = '';
 };
+
 const onTableRowAction = (action, { uri }) => {
   if (action === 'disconnect') {
     urisStore.value = uri;
@@ -360,6 +361,7 @@ const handleOk = () => {
           Toast.errorToast(message);
         }
       });
+      eventBus.emit('clear-selected');
     });
   } else {
     disconnectSessions([urisStore.value]).then((messages) => {
@@ -370,6 +372,7 @@ const handleOk = () => {
           Toast.errorToast(message);
         }
       });
+      eventBus.emit('clear-selected');
     });
   }
   selectedRowsNo.value = 0;

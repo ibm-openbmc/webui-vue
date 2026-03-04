@@ -7,6 +7,7 @@ interface UseRedfishCollectionOptions {
   expandLevels?: number;
   select?: string[];
   enabled?: boolean;
+  staleTime?: number;
 }
 
 /**
@@ -22,6 +23,7 @@ export function useRedfishCollection<T extends Resource>(
     expandLevels = 1,
     select,
     enabled = true,
+    staleTime: staleTimeMs = 30 * 1000,
   } = options;
 
   return useQuery({
@@ -36,7 +38,7 @@ export function useRedfishCollection<T extends Resource>(
 
         if (data.Members && data.Members.length > 0) {
           const firstMember = data.Members[0];
-          
+
           if (typeof firstMember === 'object' && '@odata.id' in firstMember) {
             const keys = Object.keys(firstMember);
             if (keys.length > 1) {
@@ -64,7 +66,7 @@ export function useRedfishCollection<T extends Resource>(
       }
     },
     enabled,
-    staleTime: 30 * 1000,
+    staleTime: staleTimeMs,
     gcTime: 5 * 60 * 1000,
     // Don't retry client errors (4xx) — they won't succeed on retry.
     // Do retry transient server errors (5xx) and network failures.

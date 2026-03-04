@@ -46,6 +46,7 @@ export function useSessions() {
         refetch,
     } = useRedfishCollection<Session>('/redfish/v1/SessionService/Sessions', {
         expand: false,
+        staleTime: 0,
     });
 
     const sessions = computed<SessionDisplay[]>(() => {
