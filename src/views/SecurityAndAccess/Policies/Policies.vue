@@ -288,7 +288,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { usePolicies } from '@/api/composables/usePolicies';
 import { UserManagementStore } from '@/store/modules/SecurityAndAccess/UserManagementStore';
 import { GlobalStore } from '@/store/modules/GlobalStore';
@@ -302,7 +302,7 @@ import IconTime from '@carbon/icons-vue/es/time/16';
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
 
-const Policies = reactive(usePolicies());
+const Policies = usePolicies();
 const UserManagement = UserManagementStore();
 const Global = GlobalStore();
 
