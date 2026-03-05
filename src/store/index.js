@@ -21,7 +21,6 @@ import AssemblyStore from './modules/HardwareStatus/AssemblyStore';
 import PcieTopologyStore from './modules/HardwareStatus/PcieTopologyStore';
 import PostCodeLogsStore from './modules/Logs/PostCodeLogsStore';
 import AuditLogsStore from './modules/Logs/AuditLogsStore';
-import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore';
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
@@ -121,9 +120,6 @@ Object.assign(stores, {
 });
 Object.assign(stores, {
   AuditLogsStore: AuditLogsStore,
-});
-Object.assign(stores, {
-  FactoryResetStore: FactoryResetStore,
 });
 Object.assign(stores, {
   NetworkSettingsStore: NetworkSettingsStore,

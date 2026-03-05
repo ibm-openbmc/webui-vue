@@ -84,13 +84,14 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import stores from '@/store';
 import eventBus from '@/eventBus';
+import { useFactoryReset } from '@/api/composables/useFactoryReset';
 
 const toast = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
 const global = stores.GlobalStore();
 const authentication = stores.AuthenticationStore();
-const factoryReset = stores.FactoryResetStore();
+const factoryReset = useFactoryReset();
 
 const resetOption = ref('resetBios');
 
