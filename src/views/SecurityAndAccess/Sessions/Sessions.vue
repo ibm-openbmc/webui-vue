@@ -205,12 +205,7 @@ const {
 } = useTableSelectableComposable();
 const Toast = useToastComposable();
 
-const {
-  sessions: sessionsData,
-  isLoading,
-  isFetching,
-  disconnectSessions,
-} = useSessions();
+const sessionsStore = useSessions();
 
 // Track selection state separately to avoid circular dependencies
 const selectedSessions = ref(new Set());
@@ -280,7 +275,7 @@ onBeforeMount(() => {
 
 // Loading bar automatically shows/hides based on fetch state
 watch(
-  () => isLoading.value || isFetching.value,
+  () => sessionsStore.isLoading.value || sessionsStore.isFetching.value,
   (loading) => {
     if (loading) startLoader();
     else endLoader();
@@ -292,11 +287,13 @@ onBeforeUnmount(() => {
   hideLoader();
 });
 
-const isBusy = computed(() => isLoading.value || isFetching.value);
+const isBusy = computed(
+  () => sessionsStore.isLoading.value || sessionsStore.isFetching.value,
+);
 
 const allConnections = computed(() => {
-  if (!sessionsData.value) return [];
-  let data = sessionsData.value.map((session) => ({
+  if (!sessionsStore.sessions.value) return [];
+  let data = sessionsStore.sessions.value.map((session) => ({
     ...session,
     isSelected: selectedSessions.value.has(session.uri),
   }));
@@ -353,7 +350,7 @@ const onBatchAction = (action) => {
 const handleOk = () => {
   openModal.value = false;
   if (selectedRowsNo.value > 1) {
-    disconnectSessions(urisStore.value).then((messages) => {
+    sessionsStore.disconnectSessions(urisStore.value).then((messages) => {
       messages.forEach(({ type, message }) => {
         if (type === 'success') {
           Toast.successToast(message);
@@ -364,7 +361,7 @@ const handleOk = () => {
       eventBus.emit('clear-selected');
     });
   } else {
-    disconnectSessions([urisStore.value]).then((messages) => {
+    sessionsStore.disconnectSessions([urisStore.value]).then((messages) => {
       messages.forEach(({ type, message }) => {
         if (type === 'success') {
           Toast.successToast(message);

@@ -96,9 +96,9 @@ import useToast from '@/components/Composables/useToastComposable';
 import { useKeyClear } from '@/api/composables/useKeyClear';
 
 const { successToast, errorToast } = useToast();
-const { clearEncryptionKeys } = useKeyClear();
 
 const globalStore = stores.GlobalStore();
+const keyClear = useKeyClear();
 
 const keyOption = ref('NONE');
 const username = ref(globalStore.username);
@@ -110,7 +110,8 @@ function onKeyClearSubmit(valueSelected) {
   selectedKey.value = valueSelected;
 }
 const handleOK = () => {
-  clearEncryptionKeys(selectedKey.value)
+  keyClear
+    .clearEncryptionKeys(selectedKey.value)
     .then((message) => {
       openModal.value = false;
       successToast(message);
