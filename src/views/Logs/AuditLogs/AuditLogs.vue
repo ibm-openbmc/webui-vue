@@ -59,6 +59,7 @@
           <template #cell(expandRow)="row">
             <BButton
               variant="link"
+              :data-test-id="`audit-log-expand-${row.index}`"
               :aria-label="expandRowLabel"
               :title="expandRowLabel"
               :class="
