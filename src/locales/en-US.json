@@ -125,6 +125,12 @@
     "power": "Power",
     "profileSettings": "@:appPageTitle.profileSettings",
     "refresh": "Refresh",
+    "search": {
+      "placeholder": "Search...",
+      "ariaLabel": "Search",
+      "results": "{count} results found",
+      "noResults": "Not found"
+    },
     "skipToContent": "Skip to content",
     "titleHideNavigation": "Hide navigation",
     "titleProfile": "Show profile menu",

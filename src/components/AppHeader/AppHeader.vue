@@ -51,6 +51,8 @@
             <span class="ps-3">{{ serialNumber }}</span>
           </div>
         </BNavbarNav>
+        <!-- Search Bar -->
+        <AppHeaderSearch />
         <!-- Right aligned nav items -->
         <BNavbarNav class="ms-auto helper-menu">
           <BNavItem
@@ -117,6 +119,7 @@ import IconClose from '@carbon/icons-vue/es/close/20';
 import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
+import AppHeaderSearch from './AppHeaderSearch.vue';
 import useToast from '@/components/Composables/useToastComposable';
 import stores from '@/store';
 import i18n from '@/i18n';
