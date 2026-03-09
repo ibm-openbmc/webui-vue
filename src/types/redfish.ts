@@ -269,6 +269,16 @@ export interface ManagerCollection extends ResourceCollection {
   Members: (ODataId | Manager)[];
 }
 
+export interface Session extends Resource {
+  UserName?: string;
+  ClientOriginIPAddress?: string;
+  Context?: string;
+}
+
+export interface SessionCollection extends ResourceCollection {
+  Members: (ODataId | Session)[];
+}
+
 // Expanded collection response type
 export interface ExpandedCollection<T extends Resource> extends ResourceCollection {
   Members: T[];
