@@ -270,13 +270,12 @@ export const UserManagementStore = defineStore('userManagment', {
     async deleteUser(username) {
       return await api
         .delete(`/redfish/v1/AccountService/Accounts/${username}`)
-        .then(() =>
-          this.getUsers().then(() => {
-            return i18n.global.t('pageUserManagement.toast.successDeleteUser', {
-              username,
-            });
-          }),
-        )
+        .then(() => {
+          this.getUsers();
+          return i18n.global.t('pageUserManagement.toast.successDeleteUser', {
+            username,
+          });
+        })
         .catch((error) => {
           console.log(error);
           const message = i18n.global.t(
