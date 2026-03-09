@@ -51,10 +51,12 @@
             <span class="ps-3">{{ serialNumber }}</span>
           </div>
         </BNavbarNav>
-        <!-- Search Bar -->
-        <AppHeaderSearch />
         <!-- Right aligned nav items -->
         <BNavbarNav class="ms-auto helper-menu">
+          <!-- Search Bar -->
+          <li class="nav-item">
+            <AppHeaderSearch />
+          </li>
           <BNavItem
             to="/logs/event-logs"
             data-test-id="appHeader-container-health"

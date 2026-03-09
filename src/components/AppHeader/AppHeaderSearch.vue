@@ -1,13 +1,23 @@
 <template>
   <div class="app-header-search">
-    <div class="search-container" :class="{ 'search-active': isSearchActive }">
+    <div
+      class="search-container"
+      :class="{ 'search-expanded': isSearchActive }"
+    >
       <div class="search-input-wrapper">
-        <icon-search class="search-icon" />
+        <button
+          class="search-icon-button"
+          :aria-label="$t('appHeader.search.ariaLabel')"
+          @click="focusSearch"
+        >
+          <icon-search class="search-icon" />
+        </button>
         <input
           ref="searchInput"
           v-model="searchQuery"
           type="text"
           class="search-input"
+          :class="{ 'search-input-collapsed': !isSearchActive }"
           :placeholder="$t('appHeader.search.placeholder')"
           :aria-label="$t('appHeader.search.ariaLabel')"
           @focus="handleFocus"
@@ -19,7 +29,7 @@
           @keydown.esc="closeSearch"
         />
         <BButton
-          v-if="searchQuery"
+          v-if="searchQuery && isSearchActive"
           variant="link"
           class="clear-button"
           :aria-label="$t('global.ariaLabel.clearSearch')"
@@ -162,6 +172,11 @@ const filteredRoutes = computed(() => {
   return results;
 });
 
+// Focus search input
+const focusSearch = () => {
+  searchInput.value?.focus();
+};
+
 // Handle search input
 const handleSearch = () => {
   showResults.value = true;
@@ -253,11 +268,6 @@ watch(filteredRoutes, () => {
   position: relative;
   display: flex;
   align-items: center;
-  margin: 0 1rem;
-
-  @include media-breakpoint-down(lg) {
-    margin: 0 0.5rem;
-  }
 
   @include media-breakpoint-down(md) {
     display: none;
@@ -266,10 +276,10 @@ watch(filteredRoutes, () => {
 
 .search-container {
   position: relative;
-  width: 250px;
+  width: 48px; // Just icon width when collapsed
   transition: width 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
 
-  &.search-active {
+  &.search-expanded {
     width: 350px;
 
     @include media-breakpoint-down(lg) {
@@ -282,42 +292,77 @@ watch(filteredRoutes, () => {
   position: relative;
   display: flex;
   align-items: center;
-  background-color: #393939;
+  background-color: transparent;
   border: none;
-  border-bottom: 1px solid #393939;
+  border-bottom: 1px solid transparent;
   transition:
     background-color 110ms,
     border-color 110ms;
 
+  .search-expanded & {
+    background-color: #393939;
+    border-bottom-color: #393939;
+
+    &:hover {
+      background-color: #474747;
+      border-bottom-color: #474747;
+    }
+
+    &:focus-within {
+      background-color: #393939;
+      border-bottom-color: #fff;
+      outline: 2px solid #fff;
+      outline-offset: -2px;
+    }
+  }
+}
+
+.search-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 110ms;
+
   &:hover {
     background-color: #474747;
-    border-bottom-color: #474747;
   }
 
-  &:focus-within {
-    background-color: #393939;
-    border-bottom-color: #fff;
+  &:focus {
     outline: 2px solid #fff;
     outline-offset: -2px;
   }
 }
 
 .search-icon {
-  position: absolute;
-  left: 1rem;
   fill: #f4f4f4;
   pointer-events: none;
 }
 
 .search-input {
   width: 100%;
-  padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
   background: transparent;
   border: none;
   color: #f4f4f4;
   font-size: 0.875rem;
   line-height: 1.28572;
   outline: none;
+  opacity: 1;
+  transition: opacity 110ms;
+
+  &.search-input-collapsed {
+    opacity: 0;
+    width: 0;
+    padding: 0;
+    pointer-events: none;
+  }
 
   &::placeholder {
     color: #c6c6c6;
