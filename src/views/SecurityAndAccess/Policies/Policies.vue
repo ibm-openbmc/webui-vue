@@ -13,14 +13,14 @@
             </dl>
             <BFormCheckbox
               id="sshSwitch"
-              v-model="Policies.sshProtocolEnabled"
+              v-model="sshProtocolEnabled"
               data-test-id="policies-toggle-bmcShell"
               aria-labelledby="ssh-label"
               aria-describedby="ssh-description"
               switch
               @update:model-value="changeSshProtocolState"
             >
-              <span v-if="Policies.sshProtocolEnabled">
+              <span v-if="sshProtocolEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -37,14 +37,14 @@
             </dl>
             <BFormCheckbox
               id="ipmiSwitch"
-              v-model="Policies.ipmiProtocolEnabled"
+              v-model="ipmiProtocolEnabled"
               data-test-id="polices-toggle-networkIpmi"
               aria-labelledby="ipmi-label"
               aria-describedby="ipmi-description"
               switch
               @update:model-value="changeIpmiProtocolState"
             >
-              <span v-if="Policies.ipmiProtocolEnabled">
+              <span v-if="ipmiProtocolEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -61,13 +61,13 @@
             </dl>
             <BFormCheckbox
               id="host-tpm-policy"
-              v-model="Policies.tpmPolicyEnabled"
+              v-model="tpmPolicyEnabled"
               aria-labelledby="host-tpm-label"
               aria-describedby="host-tpm-description"
               switch
               @update:model-value="changeTpmPolicyState"
             >
-              <span v-if="Policies.tpmPolicyEnabled">
+              <span v-if="tpmPolicyEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -90,7 +90,7 @@
             </dl>
             <BFormCheckbox
               id="vtpmSwitch"
-              v-model="Policies.vtpmEnabled"
+              v-model="vtpmEnabled"
               data-test-id="policies-toggle-vtpm"
               switch
               @update:model-value="changeVtpmState"
@@ -98,7 +98,7 @@
               <span class="visually-hidden">
                 {{ $t('pagePolicies.vtpm') }}
               </span>
-              <span v-if="Policies.vtpmEnabled">
+              <span v-if="vtpmEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -120,7 +120,7 @@
             </dl>
             <BFormCheckbox
               id="rtadSwitch"
-              v-model="Policies.rtadEnabled"
+              v-model="rtadEnabled"
               data-test-id="policies-toggle-rtad"
               switch
               @update:model-value="changeRtadState"
@@ -128,7 +128,7 @@
               <span class="visually-hidden">
                 {{ $t('pagePolicies.rtad') }}
               </span>
-              <span v-if="Policies.rtadEnabled">
+              <span v-if="rtadEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -145,7 +145,7 @@
             </dl>
             <BFormCheckbox
               id="usbFirmwareUpdatePolicySwitch"
-              v-model="Policies.usbFirmwareUpdatePolicyEnabled"
+              v-model="usbFirmwareUpdatePolicyEnabled"
               data-test-id="policies-toggle-usbFirmwareUpdatePolicy"
               switch
               @update:model-value="changeUsbFirmwareUpdatePolicyState"
@@ -153,7 +153,7 @@
               <span class="visually-hidden">
                 {{ $t('pagePolicies.usbFirmwareUpdatePolicy') }}
               </span>
-              <span v-if="Policies.usbFirmwareUpdatePolicyEnabled">
+              <span v-if="usbFirmwareUpdatePolicyEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -170,7 +170,7 @@
             </dl>
             <BFormCheckbox
               id="svleSwitch"
-              v-model="Policies.svleEnabled"
+              v-model="svleEnabled"
               data-test-id="policies-toggle-svle"
               switch
               @update:model-value="changeSvleState"
@@ -178,7 +178,7 @@
               <span class="visually-hidden">
                 {{ $t('pagePolicies.secureVersion') }}
               </span>
-              <span v-if="Policies.svleEnabled">
+              <span v-if="svleEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -200,7 +200,7 @@
             </dl>
             <BFormCheckbox
               id="hostUsbSwitch"
-              v-model="Policies.hostUsbEnabled"
+              v-model="hostUsbEnabled"
               data-test-id="policies-toggle-hostUsb"
               switch
               @update:model-value="changeHostUsbState"
@@ -208,7 +208,7 @@
               <span class="visually-hidden">
                 {{ $t('pagePolicies.hostUsb') }}
               </span>
-              <span v-if="Policies.hostUsbEnabled">
+              <span v-if="hostUsbEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -228,7 +228,7 @@
             </dl>
             <BFormCheckbox
               id="unauthenticatedACFUploadEnablementSwitch"
-              v-model="Policies.unAuthenticatedACFUploadEnablementState"
+              v-model="unAuthenticatedACFUploadEnablementState"
               data-test-id="policies-toggle-unauthenticatedACFUploadEnablement"
               switch
               @update:model-value="changeUnauthenticatedACFUploadEnablement"
@@ -236,7 +236,7 @@
               <span class="visually-hidden">
                 {{ $t('pagePolicies.usbFirmwareUpdatePolicy') }}
               </span>
-              <span v-if="Policies.unAuthenticatedACFUploadEnablementState">
+              <span v-if="unAuthenticatedACFUploadEnablementState">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -255,7 +255,7 @@
             </dl>
             <BFormCheckbox
               id="basicAuthSwitch"
-              v-model="Policies.basicAuthEnabled"
+              v-model="basicAuthEnabled"
               data-test-id="policies-toggle-basic-auth"
               switch
               @update:model-value="changeBasicAuthState"
@@ -263,7 +263,7 @@
               <span class="visually-hidden">
                 {{ $t('pagePolicies.basicAuth') }}
               </span>
-              <span v-if="Policies.basicAuthEnabled">
+              <span v-if="basicAuthEnabled">
                 {{ $t('global.status.enabled') }}
               </span>
               <span v-else>{{ $t('global.status.disabled') }}</span>
@@ -302,7 +302,31 @@ import IconTime from '@carbon/icons-vue/es/time/16';
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
 
-const Policies = usePolicies();
+const {
+  sshProtocolEnabled,
+  ipmiProtocolEnabled,
+  rtadEnabled,
+  vtpmEnabled,
+  svleEnabled,
+  tpmPolicyEnabled,
+  usbFirmwareUpdatePolicyEnabled,
+  hostUsbEnabled,
+  acfUploadEnablement,
+  unAuthenticatedACFUploadEnablementState,
+  basicAuthEnabled,
+  loadAllPolicies,
+  saveSshProtocolState,
+  saveIpmiProtocolState,
+  saveTpmPolicy,
+  saveVtpmState,
+  saveRtadState,
+  saveSvleState,
+  saveHostUsbEnabled,
+  saveUsbFirmwareUpdatePolicyEnabled,
+  saveUnauthenticatedACFUploadEnablement,
+  saveBasicAuthEnabled,
+} = usePolicies();
+
 const UserManagement = UserManagementStore();
 const Global = GlobalStore();
 
@@ -320,12 +344,11 @@ onBeforeRouteLeave(() => {
 onMounted(() => {
   startLoader();
   Promise.all([
-    Policies.loadAllPolicies(),
+    loadAllPolicies(),
     UserManagement.getUsers(),
     checkForUserData(),
   ]).finally(() => {
-    Policies.unAuthenticatedACFUploadEnablementState =
-      Policies.acfUploadEnablement;
+    unAuthenticatedACFUploadEnablementState.value = acfUploadEnablement.value;
     setTimeout(() => {
       endLoader();
     }, 30000);
@@ -336,7 +359,7 @@ const currentUser = () => {
   return Global.currentUser;
 };
 const changeSshProtocolState = (state) => {
-  Policies.saveSshProtocolState(state)
+  saveSshProtocolState(state)
     .then((message) => {
       Toast.successToast(message);
     })
@@ -345,7 +368,7 @@ const changeSshProtocolState = (state) => {
     });
 };
 const changeUsbFirmwareUpdatePolicyState = (state) => {
-  Policies.saveUsbFirmwareUpdatePolicyEnabled(state)
+  saveUsbFirmwareUpdatePolicyEnabled(state)
     .then((message) => {
       Toast.successToast(message);
     })
@@ -354,7 +377,7 @@ const changeUsbFirmwareUpdatePolicyState = (state) => {
     });
 };
 const changeHostUsbState = (state) => {
-  Policies.saveHostUsbEnabled(state ? 'Enabled' : 'Disabled')
+  saveHostUsbEnabled(state ? 'Enabled' : 'Disabled')
     .then((message) => {
       Toast.successToast(message);
     })
@@ -363,7 +386,7 @@ const changeHostUsbState = (state) => {
     });
 };
 const changeBasicAuthState = (state) => {
-  Policies.saveBasicAuthEnabled(state)
+  saveBasicAuthEnabled(state)
     .then((message) => {
       Toast.successToast(message);
     })
@@ -372,7 +395,7 @@ const changeBasicAuthState = (state) => {
     });
 };
 const changeIpmiProtocolState = (state) => {
-  Policies.saveIpmiProtocolState(state)
+  saveIpmiProtocolState(state)
     .then((message) => {
       startLoader();
       setTimeout(() => {
@@ -385,7 +408,7 @@ const changeIpmiProtocolState = (state) => {
     });
 };
 const changeRtadState = (state) => {
-  Policies.saveRtadState(state ? 'Enabled' : 'Disabled')
+  saveRtadState(state ? 'Enabled' : 'Disabled')
     .then((message) => {
       Toast.successToast(message);
     })
@@ -394,7 +417,7 @@ const changeRtadState = (state) => {
     });
 };
 const changeVtpmState = (state) => {
-  Policies.saveVtpmState(state ? 'Enabled' : 'Disabled')
+  saveVtpmState(state ? 'Enabled' : 'Disabled')
     .then((message) => {
       Toast.successToast(message);
     })
@@ -403,7 +426,7 @@ const changeVtpmState = (state) => {
     });
 };
 const changeSvleState = (state) => {
-  Policies.saveSvleState(state ? 'Enabled' : 'Disabled')
+  saveSvleState(state ? 'Enabled' : 'Disabled')
     .then((message) => {
       Toast.successToast(message);
     })
@@ -412,7 +435,7 @@ const changeSvleState = (state) => {
     });
 };
 const changeTpmPolicyState = (state) => {
-  Policies.saveTpmPolicy(state)
+  saveTpmPolicy(state)
     .then((message) => {
       Toast.successToast(message);
     })
@@ -424,7 +447,7 @@ const changeUnauthenticatedACFUploadEnablement = (state) => {
   if (state) {
     modal.value = state;
   } else {
-    Policies.unAuthenticatedACFUploadEnablementState = !state;
+    unAuthenticatedACFUploadEnablementState.value = !state;
     uploadApi(state);
   }
 };
@@ -434,27 +457,27 @@ const onModalOk = () => {
 };
 const onModalCancel = () => {
   const stateCancel = modal.value;
-  Policies.unAuthenticatedACFUploadEnablementState = !stateCancel;
+  unAuthenticatedACFUploadEnablementState.value = !stateCancel;
 };
 
 const onModalHide = (event) => {
   if (event.trigger === 'backdrop' || event.trigger === 'close') {
     const stateCancel = modal.value;
-    Policies.unAuthenticatedACFUploadEnablementState = !stateCancel;
+    unAuthenticatedACFUploadEnablementState.value = !stateCancel;
   }
 };
 const uploadApi = (state) => {
-  Policies.saveUnauthenticatedACFUploadEnablement(state)
+  saveUnauthenticatedACFUploadEnablement(state)
     .then((message) => Toast.successToast(message))
     .then(() => {
-      Policies.unAuthenticatedACFUploadEnablementState = state;
+      unAuthenticatedACFUploadEnablementState.value = state;
     })
     .catch(({ message }) => Toast.errorToast(message));
 };
 const enableUpload = (state) => {
   state
     ? uploadApi(state)
-    : (Policies.unAuthenticatedACFUploadEnablementState = !state);
+    : (unAuthenticatedACFUploadEnablementState.value = !state);
 };
 const checkForUserData = () => {
   if (!currentUser) {
