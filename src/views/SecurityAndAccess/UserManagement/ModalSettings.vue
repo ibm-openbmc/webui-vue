@@ -36,7 +36,7 @@
                 @input="v$.form.lockoutThreshold.$touch()"
               />
               <BFormInvalidFeedback role="alert">
-                <template v-if="!v$.form.lockoutThreshold.required">
+                <template v-if="v$.form.lockoutThreshold.required.$invalid">
                   {{ $t('global.form.fieldRequired') }}
                 </template>
                 <template
