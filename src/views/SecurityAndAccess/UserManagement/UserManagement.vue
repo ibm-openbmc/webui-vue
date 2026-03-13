@@ -372,7 +372,7 @@ onBeforeMount(() => {
     userManagement.getAccountRoles(),
     userManagement.getUsers(),
     userManagement.checkCurrentUserMfaBypassed({
-      uri: currentUser.value['@odata.id'],
+      uri: currentUser?.value?.['@odata.id'],
     }),
   ]).finally(() => {
     endLoader();

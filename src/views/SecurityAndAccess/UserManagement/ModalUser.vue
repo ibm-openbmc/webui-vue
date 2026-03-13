@@ -355,8 +355,8 @@ const notService = computed(() => {
   return props.user?.RoleId !== 'OemIBMServiceAgent';
 });
 const notReadyOnly = computed(() => {
-  const cUser = globalStore.currentUserGetter;
-  const RoleId = cUser.RoleId;
+  const cUser = globalStore?.currentUserGetter;
+  const RoleId = cUser?.RoleId;
   return RoleId !== 'ReadOnly';
 });
 const currentUser = computed(() => {
