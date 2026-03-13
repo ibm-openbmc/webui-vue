@@ -12,15 +12,22 @@
         </dl>
       </BCol>
       <BCol v-if="canUseHostConsole" sm="6" lg="3" class="mb-2 mt-2">
-        <BButton
+        <router-link
+          v-slot="{ href, navigate }"
           to="/operations/host-console"
-          variant="secondary"
-          data-test-id="overviewQuickLinks-button-hostConsole"
-          class="d-flex justify-content-between align-items-center"
+          custom
         >
-          {{ $t('pageOverview.hostConsole') }}
-          <icon-arrow-right />
-        </BButton>
+          <BButton
+            :href="href"
+            variant="secondary"
+            data-test-id="overviewQuickLinks-button-hostConsole"
+            class="d-flex justify-content-between align-items-center"
+            @click="navigate"
+          >
+            {{ $t('pageOverview.hostConsole') }}
+            <icon-arrow-right />
+          </BButton>
+        </router-link>
       </BCol>
     </BRow>
   </BCard>
