@@ -3,6 +3,7 @@ import { useRedfishCollection } from './useRedfishCollection';
 // @ts-ignore - api.js is a JavaScript module
 import api, { getResponseCount } from '@/store/api';
 import type { Session } from '@/types/redfish';
+// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 
 export interface SessionDisplay {
