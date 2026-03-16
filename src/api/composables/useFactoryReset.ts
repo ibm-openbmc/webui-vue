@@ -1,5 +1,6 @@
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
+// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 
 /**

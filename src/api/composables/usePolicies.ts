@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
+// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 
 /**
@@ -309,6 +310,7 @@ export function usePolicies() {
     async function saveUnauthenticatedACFUploadEnablement(
         updatedAcfUploadEnablement: boolean,
     ): Promise<string> {
+        acfUploadEnablement.value = updatedAcfUploadEnablement;
         const oem = {
             Oem: {
                 IBM: {
@@ -328,6 +330,7 @@ export function usePolicies() {
             })
             .catch((error: Error) => {
                 console.log(error);
+                acfUploadEnablement.value = !updatedAcfUploadEnablement;
                 throw new Error(
                     i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                         policy: i18n.global.t('pagePolicies.acfUploadEnablement'),
