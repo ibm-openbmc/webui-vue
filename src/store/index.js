@@ -7,7 +7,6 @@ import FirmwareStore from './modules/Operations/FirmwareStore';
 import BootSettingsStore from './modules/Operations/BootSettingsStore';
 import ControlStore from './modules/Operations/ControlStore';
 import PowerControlStore from './modules/ResourceManagement/PowerControlStore';
-import PowerPolicyStore from './modules/Settings/PowerPolicyStore';
 import NetworkStore from './modules/Settings/NetworkStore';
 import EventLogStore from './modules/Logs/EventLogStore';
 import SystemStore from './modules/HardwareStatus/SystemStore';
@@ -25,7 +24,6 @@ import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore';
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
-import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
 import DateTimeStore from './modules/Settings/DateTimeStore';
 import ResourceMemoryStore from './modules/ResourceManagement/ResourceMemoryStore';
 import SystemParametersStore from './modules/ResourceManagement/SystemParametersStore';
@@ -72,12 +70,6 @@ Object.assign(stores, {
   PowerControlStore: PowerControlStore,
 });
 Object.assign(stores, {
-  PowerPolicyStore: PowerPolicyStore,
-});
-Object.assign(stores, {
-  PowerPolicyStore: PowerPolicyStore,
-});
-Object.assign(stores, {
   PowerSupplyStore: PowerSupplyStore,
 });
 Object.assign(stores, {
@@ -85,9 +77,6 @@ Object.assign(stores, {
 });
 Object.assign(stores, {
   EventLogStore: EventLogStore,
-});
-Object.assign(stores, {
-  SnmpAlertsStore: SnmpAlertsStore,
 });
 Object.assign(stores, {
   CertificatesStore: CertificatesStore,

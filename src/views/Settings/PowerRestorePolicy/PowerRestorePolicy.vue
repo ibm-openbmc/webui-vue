@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
@@ -60,12 +60,19 @@ import stores from '@/store';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
+import { usePowerRestorePolicy } from '@/api/composables/usePowerRestorePolicy';
 
-const Toast = useToastComposable();
+const { successToast, errorToast } = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
-const powerPolicy = stores.PowerPolicyStore();
 const bootSettings = stores.BootSettingsStore();
+
+const {
+  powerRestorePolicies,
+  powerRestoreCurrentPolicy,
+  isLoading,
+  setPowerRestorePolicy,
+} = usePowerRestorePolicy();
 
 const policyValue = ref(null);
 const options = ref([]);
@@ -76,20 +83,49 @@ onBeforeRouteLeave(() => {
 
 onMounted(() => {
   startLoader();
-  renderPowerRestoreSettings();
+  bootSettings.fetchBiosAttributes().finally(() => {
+    endLoader();
+  });
 });
 
-const powerRestorePolicies = computed(() => {
-  return powerPolicy.powerRestorePolicies;
-});
+// Watch for loading state changes
+watch(
+  () => isLoading.value,
+  (loading) => {
+    if (loading) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+// Watch for policies data and update options
+watch(
+  () => powerRestorePolicies.value,
+  (policies) => {
+    if (policies && policies.length > 0) {
+      options.value = policies.map((item) => ({
+        text: i18n.global.t(
+          `pagePowerRestorePolicy.policiesDesc.${item.state}`,
+        ),
+        value: item.state,
+      }));
+    }
+  },
+  { immediate: true },
+);
+
 const currentPowerRestorePolicy = computed({
   get() {
-    return powerPolicy.powerRestoreCurrentPolicy;
+    return powerRestoreCurrentPolicy.value;
   },
   set(policy) {
     policyValue.value = policy;
   },
 });
+
 const isOperatingModeManual = computed(() => {
   return (
     !bootSettings.biosAttributes?.pvm_system_operating_mode ||
@@ -97,32 +133,19 @@ const isOperatingModeManual = computed(() => {
   );
 });
 
-const renderPowerRestoreSettings = () => {
-  Promise.all([
-    bootSettings.fetchBiosAttributes(),
-    powerPolicy.getPowerRestorePolicies(),
-    powerPolicy.getPowerRestoreCurrentPolicy(),
-  ]).finally(() => {
-    options.value.length = 0;
-    (powerRestorePolicies.value.map((item) => {
-      options.value.push({
-        text: i18n.global.t(
-          `pagePowerRestorePolicy.policiesDesc.${item.state}`,
-        ),
-        value: `${item.state}`,
-      });
-    }),
-      endLoader());
-  });
-};
-const submitForm = () => {
+const submitForm = async () => {
   startLoader();
-  powerPolicy
-    .setPowerRestorePolicy(policyValue.value || currentPowerRestorePolicy.value)
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message))
-    .finally(() => {
-      renderPowerRestoreSettings();
-    });
+  try {
+    await setPowerRestorePolicy(
+      policyValue.value || currentPowerRestorePolicy.value,
+    );
+    successToast(
+      i18n.global.t('pagePowerRestorePolicy.toast.successSaveSettings'),
+    );
+  } catch (error) {
+    errorToast(error.message);
+  } finally {
+    endLoader();
+  }
 };
 </script>

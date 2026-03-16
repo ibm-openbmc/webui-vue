@@ -17,7 +17,7 @@
         <table-toolbar
           ref="toolbar"
           :table="tableRef"
-          :selected-items-count="selectedRowsValue.length"
+          :selected-items-count="selectedRowsList.length"
           :actions="tableToolbarActions"
           @clear-selected="clearSelectedRows(tableRef)"
           @batch-action="onBatchAction"
@@ -37,13 +37,11 @@
           <!-- Checkbox column -->
           <template #head(checkbox)>
             <BFormCheckbox
-              v-model="tableHeaderCheckboxModelValue"
+              v-model="tableHeaderCheckbox"
               aria-label="checkbox-head"
               data-test-id="snmpAlerts-checkbox-selectAll"
-              :indeterminate="tableHeaderCheckboxIndeterminateValue"
-              @change="
-                onChangeHeaderCheckbox(tableRef, tableHeaderCheckboxModel)
-              "
+              :indeterminate="tableHeaderCheckboxIndeterminated"
+              @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckbox)"
               @update:model-value="toggleAll"
             >
               <span class="visually-hidden">checkbox-head</span>
@@ -51,18 +49,18 @@
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
-              v-model="
-                snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected
-              "
+              :model-value="row.item.isSelected"
               aria-label="checkbox"
               :data-test-id="`snmpAlerts-checkbox-selectRow-${row.index}`"
-              @change="
-                toggleSelectRowByIpAddress(
-                  tableRef,
-                  row.index,
-                  snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected,
-                  row.item,
-                )
+              @update:model-value="
+                (checked) => {
+                  if (checked) {
+                    selectedSnmpAlerts.add(row.item.id);
+                  } else {
+                    selectedSnmpAlerts.delete(row.item.id);
+                  }
+                  toggleSelectRow(tableRef, row.index, checked, row.item);
+                }
               "
             >
               <span class="visually-hidden">checkbox</span>
@@ -113,7 +111,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, watch, nextTick } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
@@ -125,14 +123,14 @@ import TableRowAction from '@/components/Global/TableRowAction.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
-import stores from '../../../store';
+import { useSnmpAlerts } from '@/api/composables/useSnmpAlerts';
 import eventBus from '@/eventBus';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToastComposable();
 const {
   clearSelectedRows,
-  toggleSelectRowByIpAddress,
+  toggleSelectRow,
   onRowSelected,
   onChangeHeaderCheckbox,
   selectedRowsList,
@@ -140,9 +138,36 @@ const {
   tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
 
-const snmpAlertsStore = stores.SnmpAlertsStore();
+const {
+  snmpAlerts: snmpAlertsFromQuery,
+  isLoading: isSnmpAlertsLoading,
+  isError,
+  addDestination,
+  deleteDestination,
+  deleteMultipleDestinations,
+  refetch: refetchSnmpAlerts,
+} = useSnmpAlerts();
 
-const snmpToDelete = ref('');
+defineExpose({
+  refetch: refetchSnmpAlerts,
+});
+
+// Track selection state separately to avoid circular dependencies
+const selectedSnmpAlerts = ref(new Set());
+
+// Computed property that merges SNMP data with selection state
+const snmpAlertsData = computed(() => {
+  if (!snmpAlertsFromQuery.value) {
+    return [];
+  }
+
+  return snmpAlertsFromQuery.value.map((alert) => ({
+    ...alert,
+    isSelected: selectedSnmpAlerts.value.has(alert.id),
+  }));
+});
+
+const snmpToDelete = ref(null);
 const openDeleteModal = ref(false);
 const okTitle = ref('');
 const deleteTitle = ref('');
@@ -150,7 +175,9 @@ const deleteType = ref('');
 const deleteMessage = ref('');
 const tableRef = ref(null);
 const isAllSelected = ref(false);
-const isBusy = ref(true);
+const isBusy = computed(() => isSnmpAlertsLoading.value);
+const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
+const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
 
 const fields = ref([
   {
@@ -178,17 +205,26 @@ const fields = ref([
     tdAttr: { scope: null },
   },
 ]);
+
 const tableToolbarActions = ref([
   {
     value: 'delete',
     label: i18n.global.t('global.action.delete'),
   },
 ]);
-const selectedRowsValue = ref(selectedRowsList);
-const tableHeaderCheckboxModelValue = ref(tableHeaderCheckboxModel);
-const tableHeaderCheckboxIndeterminateValue = ref(
-  tableHeaderCheckboxIndeterminate,
-);
+
+const tableItems = computed(() => {
+  return snmpAlertsData.value.map((alert) => ({
+    ...alert,
+    actions: [
+      {
+        value: 'delete',
+        enabled: true,
+        title: i18n.global.t('pageSnmpAlerts.deleteDestination'),
+      },
+    ],
+  }));
+});
 
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
@@ -197,57 +233,49 @@ onBeforeRouteLeave(() => {
 
 onBeforeMount(() => {
   eventBus.on('clear-selected', () => {
-    snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
-      singleConnection.isSelected = false;
-    });
+    selectedSnmpAlerts.value.clear();
     clearSelectedRows(tableRef);
   });
 });
 
-onMounted(() => {
-  startLoader();
-  snmpAlertsStore.getSnmpDetails().finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
-});
+// Manage loading bar for query fetching state
+watch(
+  () => isSnmpAlertsLoading.value,
+  (loading) => {
+    if (loading) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
 
-const allSnmpDetails = computed(() => {
-  return snmpAlertsStore.allSnmpDetailsGetter;
-});
-const tableItems = computed(() => {
-  // transform destination data to table data
-  return allSnmpDetails.value.map((subscriptions) => {
-    const [destination, dataWithProtocol, dataWithoutProtocol] = [
-      subscriptions.Destination,
-      subscriptions.Destination.split('/')[2].split(':'),
-      subscriptions.Destination.split(':'),
-    ];
-    //condition to check if destination comes with protocol or not
-    const conditionForProtocolCheck = destination.includes('://');
-    const ip = conditionForProtocolCheck
-      ? dataWithProtocol[0]
-      : dataWithoutProtocol[0];
-    const port = conditionForProtocolCheck
-      ? dataWithProtocol[1]
-      : dataWithoutProtocol[1];
-    return {
-      ip: ip,
-      port: port,
-      id: subscriptions.Id,
-      actions: [
-        {
-          value: 'delete',
-          enabled: true,
-          title: i18n.global.t('pageSnmpAlerts.deleteDestination'),
-        },
-      ],
-      ...subscriptions,
-    };
-  });
-});
+// Stop the loading bar when fetch fails
+watch(
+  () => isError.value,
+  (hasError) => {
+    if (hasError) {
+      endLoader();
+    }
+  },
+);
 
-const onModalOk = ({ ipAddress, port }) => {
+watch(
+  () => tableItems.value,
+  () => {
+    nextTick(() => {
+      if (!tableItems.value.length) {
+        document
+          .querySelector('tr.b-table-empty-slot td[scope]')
+          ?.removeAttribute('scope');
+      }
+    });
+  },
+  { deep: true },
+);
+
+const onModalOk = async ({ ipAddress, port }) => {
   const protocolIpAddress = 'snmp://' + ipAddress;
   const destination = port ? protocolIpAddress + ':' + port : protocolIpAddress;
   const data = {
@@ -255,16 +283,22 @@ const onModalOk = ({ ipAddress, port }) => {
     SubscriptionType: 'SNMPTrap',
     Protocol: 'SNMPv2c',
   };
+
   startLoader();
-  snmpAlertsStore
-    .addDestination({ data })
-    .then((success) => successToast(success))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => endLoader());
+  try {
+    await addDestination(data);
+    successToast(i18n.global.t('pageSnmpAlerts.toast.successAddDestination'));
+  } catch (error) {
+    errorToast(error.message);
+  } finally {
+    endLoader();
+  }
 };
+
 const initModalAddDestination = () => {
   eventBus.emit('add-destination');
 };
+
 const initModalDeleteDestination = (destination) => {
   snmpToDelete.value = destination;
   openDeleteModal.value = true;
@@ -280,65 +314,90 @@ const initModalDeleteDestination = (destination) => {
   );
   deleteType.value = 'singleEntry';
 };
-const handleOk = (value) => {
+
+const handleOk = async (value) => {
   if (value === 'singleEntry') {
-    deleteDestination(snmpToDelete.value);
+    await deleteSingleDestination(snmpToDelete.value);
   } else {
     startLoader();
-    snmpAlertsStore
-      .deleteMultipleDestinations(selectedRowsValue.value)
-      .then((messages) => {
-        messages.forEach(({ type, message }) => {
-          if (type === 'success') successToast(message);
-          if (type === 'error') errorToast(message);
-        });
-      })
-      .finally(() => {
-        openDeleteModal.value = false;
-        eventBus.emit('clear-selected');
-        endLoader();
-      });
+    try {
+      const result = await deleteMultipleDestinations(selectedRowsList.value);
+
+      if (result.successCount > 0) {
+        successToast(
+          i18n.global.t(
+            'pageSnmpAlerts.toast.successBatchDelete',
+            result.successCount,
+          ),
+        );
+      }
+      if (result.errorCount > 0) {
+        errorToast(
+          i18n.global.t(
+            'pageSnmpAlerts.toast.errorBatchDelete',
+            result.errorCount,
+          ),
+        );
+      }
+    } catch (error) {
+      errorToast(error.message);
+    } finally {
+      openDeleteModal.value = false;
+      eventBus.emit('clear-selected');
+      endLoader();
+    }
   }
 };
-const deleteDestination = ({ id }) => {
+
+const deleteSingleDestination = async ({ id }) => {
   startLoader();
-  snmpAlertsStore
-    .deleteDestination(id)
-    .then((success) => successToast(success))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => {
-      openDeleteModal.value = false;
-      snmpToDelete.value = '';
-      endLoader();
-    });
+  try {
+    await deleteDestination(id);
+    successToast(
+      i18n.global.t('pageSnmpAlerts.toast.successDeleteDestination', { id }),
+    );
+  } catch (error) {
+    errorToast(error.message);
+  } finally {
+    openDeleteModal.value = false;
+    snmpToDelete.value = null;
+    endLoader();
+  }
 };
+
 const onBatchAction = (action) => {
   if (action === 'delete') {
     openDeleteModal.value = true;
     okTitle.value = i18n.global.t(
       'pageSnmpAlerts.deleteDestination',
-      selectedRowsValue.value.length,
+      selectedRowsList.value.length,
     );
     deleteMessage.value = i18n.global.t(
       'pageSnmpAlerts.modal.batchDeleteConfirmMessage',
-      selectedRowsValue.value.length,
+      selectedRowsList.value.length,
     );
     deleteTitle.value = i18n.global.t(
       'pageSnmpAlerts.modal.deleteSnmpDestinationTitle',
-      selectedRowsValue.value.length,
+      selectedRowsList.value.length,
     );
     deleteType.value = 'selectedEntries';
   }
 };
+
 const onTableRowAction = (action, row) => {
   if (action === 'delete') {
     initModalDeleteDestination(row);
   }
 };
+
 const toggleAll = (checked) => {
-  snmpAlertsStore?.allSnmpDetailsGetter?.map((singleConnection) => {
-    singleConnection.isSelected = checked;
-  });
+  if (checked) {
+    snmpAlertsData.value.forEach((alert) => {
+      selectedSnmpAlerts.value.add(alert.id);
+    });
+  } else {
+    selectedSnmpAlerts.value.clear();
+  }
   isAllSelected.value = checked;
 };
 </script>
