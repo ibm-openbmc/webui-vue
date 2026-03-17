@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
 import api from '@/store/api';
 import { useRedfishCollection, useRedfishResource } from './useRedfishCollection';
-import type { Resource, ODataId } from '@/types/redfish';
+import type { Resource, ODataId, ResourceCollection } from '@/types/redfish';
 
 // Re-export helpers for consistent imports across all composables
 export { useRedfishCollection, useRedfishResource };
@@ -138,5 +138,127 @@ export function useAllSubResources<T extends Resource>(
     error: computed(() => parentQuery.error.value || query.error.value),
     isError: computed(() => !!parentQuery.error.value || query.isError.value),
     refetch: refetchAll,
+  };
+}
+
+/**
+ * Helper function to navigate through Redfish paths to get a collection URL
+ * Example: Navigate from /redfish/v1/ → EventService → Subscriptions
+ * @param navigationPath Array of property names to navigate through
+ * @returns The final collection URL
+ */
+export async function navigateToCollection(navigationPath: string[]): Promise<string> {
+  let currentUrl = '/redfish/v1/';
+  
+  for (const property of navigationPath) {
+    const response = await api.get(currentUrl);
+    const data = response.data;
+    
+    if (!data[property]) {
+      throw new Error(`Property ${property} not found at ${currentUrl}`);
+    }
+    
+    const nextResource = data[property];
+    if (typeof nextResource === 'object' && '@odata.id' in nextResource) {
+      currentUrl = nextResource['@odata.id'];
+    } else {
+      throw new Error(`Invalid navigation path at ${property}`);
+    }
+  }
+  
+  return currentUrl;
+}
+
+/**
+ * Fetch a collection by navigating through a path
+ * Example: Fetch SNMP subscriptions via ['EventService', 'Subscriptions']
+ */
+export function useNavigatedCollection<T extends Resource>(
+  navigationPath: string[],
+  options: { enabled?: boolean; filter?: (item: T) => boolean } = {}
+) {
+  const { enabled = true, filter } = options;
+
+  return useQuery({
+    queryKey: ['redfish', 'navigatedCollection', ...navigationPath],
+    queryFn: async (): Promise<T[]> => {
+      const collectionUrl = await navigateToCollection(navigationPath);
+      const response = await api.get<ResourceCollection>(collectionUrl);
+      
+      const memberIds = response.data.Members?.map(
+        (member: any) => member['@odata.id']
+      ) || [];
+
+      if (memberIds.length === 0) {
+        return [];
+      }
+
+      // Try $expand first
+      try {
+        const expandResponse = await api.get(`${collectionUrl}?$expand=.($levels=1)`);
+        const expandedData = expandResponse.data;
+        
+        if (expandedData.Members && expandedData.Members.length > 0) {
+          const firstMember = expandedData.Members[0];
+          if (typeof firstMember === 'object' && Object.keys(firstMember).length > 1) {
+            const members = expandedData.Members as T[];
+            return filter ? members.filter(filter) : members;
+          }
+        }
+      } catch {
+        // $expand not supported, fall back to individual fetches
+      }
+
+      // Fallback: fetch each member individually
+      const memberResponses = await Promise.all(
+        memberIds.map((id: string) => api.get<T>(id))
+      );
+
+      const members = memberResponses.map((res) => res.data);
+      return filter ? members.filter(filter) : members;
+    },
+    enabled,
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    retry: (failureCount, error: any) => {
+      const status = error?.response?.status;
+      if (status && status >= 400 && status < 500) return false;
+      return failureCount < 2;
+    },
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
+  });
+}
+
+/**
+ * Fetch a property from all resources in a collection
+ * Example: Fetch PowerRestorePolicy from all Systems
+ */
+export function usePropertyFromCollection<T extends Resource, K extends keyof T>(
+  collectionPath: string,
+  propertyKey: K,
+  options: { enabled?: boolean; expand?: boolean } = {}
+) {
+  const { enabled = true, expand = false } = options;
+
+  const collectionQuery = useRedfishCollection<T>(collectionPath, { enabled, expand });
+
+  const propertyValue = computed(() => {
+    if (!collectionQuery.data.value || collectionQuery.data.value.length === 0) {
+      return null;
+    }
+    
+    // Return the property from the first resource (most common case)
+    // If multiple systems exist, this can be extended
+    const firstResource = collectionQuery.data.value[0];
+    return firstResource[propertyKey] ?? null;
+  });
+
+  return {
+    data: propertyValue,
+    allResources: collectionQuery.data,
+    isLoading: collectionQuery.isFetching,
+    error: collectionQuery.error,
+    isError: collectionQuery.isError,
+    refetch: collectionQuery.refetch,
   };
 }

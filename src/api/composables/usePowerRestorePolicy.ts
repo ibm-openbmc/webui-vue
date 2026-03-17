@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
+import { usePropertyFromCollection } from './useAllSubResources';
+import type { Resource } from '@/types/redfish';
 
 interface PowerRestorePolicyType {
   state: string;
@@ -12,6 +14,10 @@ interface PowerRestorePolicyType {
 interface PowerRestorePolicyData {
   currentPolicy: string | null;
   policies: PowerRestorePolicyType[];
+}
+
+interface SystemResource extends Resource {
+  PowerRestorePolicy?: string;
 }
 
 /**
@@ -71,29 +77,11 @@ export function usePowerRestorePolicy() {
       Math.min(1000 * 2 ** attemptIndex, 10000),
   });
 
-  // Fetch current power restore policy
-  const {
-    data: currentPolicy,
-    isLoading: isCurrentPolicyLoading,
-    isError: isCurrentPolicyError,
-    error: currentPolicyError,
-    refetch: refetchCurrentPolicy,
-  } = useQuery({
-    queryKey: ['redfish', 'powerRestorePolicy', 'current'],
-    queryFn: async (): Promise<string | null> => {
-      const response = await api.get('/redfish/v1/Systems/system');
-      return response.data.PowerRestorePolicy || null;
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
-  });
+  // Fetch current power restore policy from all systems
+  const currentPolicyQuery = usePropertyFromCollection<SystemResource, 'PowerRestorePolicy'>(
+    '/redfish/v1/Systems',
+    'PowerRestorePolicy'
+  );
 
   // Set power restore policy mutation
   const setPolicyMutation = useMutation({
@@ -117,12 +105,12 @@ export function usePowerRestorePolicy() {
 
   // Computed properties
   const powerRestorePolicies = computed(() => policiesData.value || []);
-  const powerRestoreCurrentPolicy = computed(() => currentPolicy.value || null);
+  const powerRestoreCurrentPolicy = computed(() => currentPolicyQuery.data.value || null);
   const isLoading = computed(
-    () => isPoliciesLoading.value || isCurrentPolicyLoading.value
+    () => isPoliciesLoading.value || currentPolicyQuery.isLoading.value
   );
   const isError = computed(
-    () => isPoliciesError.value || isCurrentPolicyError.value
+    () => isPoliciesError.value || currentPolicyQuery.isError.value
   );
 
   return {
@@ -132,10 +120,10 @@ export function usePowerRestorePolicy() {
     isLoading,
     isError,
     policiesError,
-    currentPolicyError,
+    currentPolicyError: currentPolicyQuery.error,
 
     // Actions
-    refetchCurrentPolicy,
+    refetchCurrentPolicy: currentPolicyQuery.refetch,
     setPowerRestorePolicy: setPolicyMutation.mutateAsync,
 
     // Mutation states

@@ -1,10 +1,12 @@
 import { computed } from 'vue';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
+import { useNavigatedCollection, navigateToCollection } from './useAllSubResources';
+import type { Resource } from '@/types/redfish';
 
-interface SnmpSubscription {
+interface SnmpSubscription extends Resource {
   '@odata.id': string;
   Id: string;
   Destination: string;
@@ -30,106 +32,66 @@ interface AddDestinationPayload {
 }
 
 /**
- * Get the SNMP alert subscription URL
- */
-async function getSnmpAlertUrl(): Promise<string> {
-  const rootResponse = await api.get('/redfish/v1/');
-  const eventServiceUrl = rootResponse.data.EventService['@odata.id'];
-  const eventServiceResponse = await api.get(eventServiceUrl);
-  const subscriptionsUrl = eventServiceResponse.data.Subscriptions['@odata.id'];
-  const subscriptionsResponse = await api.get(subscriptionsUrl);
-  return subscriptionsResponse.data['@odata.id'];
-}
-
-/**
  * Composable for fetching and managing SNMP alert destinations
  * Replaces SnmpAlertsStore with TanStack Query
  */
 export function useSnmpAlerts() {
   const queryClient = useQueryClient();
 
-  // Fetch all SNMP subscriptions
-  const {
-    data: snmpSubscriptions,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ['redfish', 'snmp', 'subscriptions'],
-    queryFn: async (): Promise<SnmpAlertData[]> => {
-      const snmpAlertUrl = await getSnmpAlertUrl();
-      const response = await api.get(snmpAlertUrl);
-      
-      const memberIds = response.data.Members.map(
-        (member: any) => member['@odata.id']
-      );
+  // Fetch all SNMP subscriptions using the navigated collection helper
+  const subscriptionsQuery = useNavigatedCollection<SnmpSubscription>(
+    ['EventService', 'Subscriptions'],
+    {
+      // Filter only SNMP subscriptions
+      filter: (item) => item.SubscriptionType === 'SNMPTrap',
+    }
+  );
 
-      if (memberIds.length === 0) {
-        return [];
+  // Transform subscriptions to table format
+  const snmpSubscriptions = computed<SnmpAlertData[]>(() => {
+    if (!subscriptionsQuery.data.value) {
+      return [];
+    }
+
+    return subscriptionsQuery.data.value.map((subscription: SnmpSubscription) => {
+      const destination = subscription.Destination;
+      const hasProtocol = destination.includes('://');
+      
+      let ip: string;
+      let port: string;
+      
+      if (hasProtocol) {
+        const parts = destination.split('/')[2].split(':');
+        ip = parts[0];
+        port = parts[1] || '';
+      } else {
+        const parts = destination.split(':');
+        ip = parts[0];
+        port = parts[1] || '';
       }
 
-      const memberResponses = await Promise.all(
-        memberIds.map((id: string) => api.get(id))
-      );
-
-      const allSubscriptions = memberResponses.map((res) => res.data);
-      
-      // Filter only SNMP subscriptions
-      const snmpSubscriptions = allSubscriptions.filter(
-        (item: SnmpSubscription) => item.SubscriptionType === 'SNMPTrap'
-      );
-
-      // Transform to table format
-      return snmpSubscriptions.map((subscription: SnmpSubscription) => {
-        const destination = subscription.Destination;
-        const hasProtocol = destination.includes('://');
-        
-        let ip: string;
-        let port: string;
-        
-        if (hasProtocol) {
-          const parts = destination.split('/')[2].split(':');
-          ip = parts[0];
-          port = parts[1] || '';
-        } else {
-          const parts = destination.split(':');
-          ip = parts[0];
-          port = parts[1] || '';
-        }
-
-        return {
-          '@odata.id': subscription['@odata.id'],
-          id: subscription.Id,
-          ip,
-          port,
-          Destination: subscription.Destination,
-          SubscriptionType: subscription.SubscriptionType,
-          Protocol: subscription.Protocol,
-          isSelected: false,
-        };
-      });
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+      return {
+        '@odata.id': subscription['@odata.id'],
+        id: subscription.Id,
+        ip,
+        port,
+        Destination: subscription.Destination,
+        SubscriptionType: subscription.SubscriptionType,
+        Protocol: subscription.Protocol,
+        isSelected: false,
+      };
+    });
   });
 
   // Add destination mutation
   const addDestinationMutation = useMutation({
     mutationFn: async (payload: AddDestinationPayload): Promise<void> => {
-      const snmpAlertUrl = await getSnmpAlertUrl();
+      const snmpAlertUrl = await navigateToCollection(['EventService', 'Subscriptions']);
       await api.post(snmpAlertUrl, payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['redfish', 'snmp', 'subscriptions'],
+        queryKey: ['redfish', 'navigatedCollection', 'EventService', 'Subscriptions'],
       });
     },
     onError: (error: any) => {
@@ -144,12 +106,12 @@ export function useSnmpAlerts() {
   // Delete single destination mutation
   const deleteDestinationMutation = useMutation({
     mutationFn: async (id: string): Promise<void> => {
-      const snmpAlertUrl = await getSnmpAlertUrl();
+      const snmpAlertUrl = await navigateToCollection(['EventService', 'Subscriptions']);
       await api.delete(`${snmpAlertUrl}/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['redfish', 'snmp', 'subscriptions'],
+        queryKey: ['redfish', 'navigatedCollection', 'EventService', 'Subscriptions'],
       });
     },
     onError: (error: any, id: string) => {
@@ -167,7 +129,7 @@ export function useSnmpAlerts() {
     mutationFn: async (
       destinations: SnmpAlertData[]
     ): Promise<{ successCount: number; errorCount: number }> => {
-      const snmpAlertUrl = await getSnmpAlertUrl();
+      const snmpAlertUrl = await navigateToCollection(['EventService', 'Subscriptions']);
       
       const results = await Promise.allSettled(
         destinations.map(({ id }) => api.delete(`${snmpAlertUrl}/${id}`))
@@ -184,23 +146,20 @@ export function useSnmpAlerts() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['redfish', 'snmp', 'subscriptions'],
+        queryKey: ['redfish', 'navigatedCollection', 'EventService', 'Subscriptions'],
       });
     },
   });
 
-  // Computed properties
-  const snmpAlerts = computed(() => snmpSubscriptions.value || []);
-
   return {
     // Data
-    snmpAlerts,
-    isLoading,
-    isError,
-    error,
+    snmpAlerts: snmpSubscriptions,
+    isLoading: subscriptionsQuery.isLoading,
+    isError: subscriptionsQuery.isError,
+    error: subscriptionsQuery.error,
     
     // Actions
-    refetch,
+    refetch: subscriptionsQuery.refetch,
     addDestination: addDestinationMutation.mutateAsync,
     deleteDestination: deleteDestinationMutation.mutateAsync,
     deleteMultipleDestinations: deleteMultipleDestinationsMutation.mutateAsync,
