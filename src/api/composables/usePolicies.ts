@@ -149,7 +149,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'], context.previousData);
             }
@@ -181,7 +182,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'], context.previousData);
             }
@@ -215,7 +217,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system'], context.previousData);
             }
@@ -248,7 +251,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
             }
@@ -281,7 +285,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
             }
@@ -314,7 +319,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
             }
@@ -347,7 +353,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
             }
@@ -379,7 +386,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc'], context.previousData);
             }
@@ -417,7 +425,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service'], context.previousData);
             }
@@ -450,7 +459,8 @@ export function usePolicies() {
             }));
             return { previousData };
         },
-        onError: (_err, _variables, context) => {
+        onError: (error, _variables, context) => {
+            console.log(error);
             if (context?.previousData) {
                 queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/AccountService'], context.previousData);
             }
