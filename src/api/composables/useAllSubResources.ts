@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
 import api from '@/store/api';
-import { useRedfishCollection } from './useRedfishCollection';
+import { useRedfishCollection, useRedfishResource } from './useRedfishCollection';
 import type { Resource, ODataId } from '@/types/redfish';
+
+// Re-export helpers for consistent imports across all composables
+export { useRedfishCollection, useRedfishResource };
 
 /**
  * Generic pattern for fetching nested resources from parent collections

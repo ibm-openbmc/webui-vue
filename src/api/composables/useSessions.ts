@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import { useRedfishCollection } from './useRedfishCollection';
+import { useRedfishCollection } from './useAllSubResources';
 // @ts-ignore - api.js is a JavaScript module
 import api, { getResponseCount } from '@/store/api';
 import type { Session } from '@/types/redfish';
