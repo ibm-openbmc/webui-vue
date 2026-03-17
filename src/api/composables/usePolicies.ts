@@ -140,15 +140,27 @@ export function usePolicies() {
                 ? i18n.global.t('pagePolicies.toast.successEnableBmcShell')
                 : i18n.global.t('pagePolicies.toast.successDisableBmcShell');
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
+        onMutate: async (protocolEnabled) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'], (old: any) => ({
+                ...old,
+                SSH: { ProtocolEnabled: protocolEnabled }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.ssh'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
         },
     });
 
@@ -160,18 +172,29 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.ipmi'),
             });
         },
-        onSuccess: () => {
-            // Refetch after 30 seconds
-            setTimeout(() => {
-                queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
-            }, 30000);
+        onMutate: async (protocolEnabled) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'], (old: any) => ({
+                ...old,
+                IPMI: { ProtocolEnabled: protocolEnabled }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.ipmi'),
                 })
             );
+        },
+        onSettled: () => {
+            setTimeout(() => {
+                queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
+            }, 30000);
         },
     });
 
@@ -183,15 +206,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.hostTpm'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system'] });
+        onMutate: async (protocolEnabled) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Systems/system']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system'], (old: any) => ({
+                ...old,
+                Boot: { ...old?.Boot, TrustedModuleRequiredToBoot: protocolEnabled }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.hostTpm'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system'] });
         },
     });
 
@@ -204,15 +239,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.vtpm'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        onMutate: async (updatedVtpm) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], (old: any) => ({
+                ...old,
+                Attributes: { ...old?.Attributes, pvm_vtpm: updatedVtpm }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.vtpm'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
         },
     });
 
@@ -225,15 +272,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.rtad'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        onMutate: async (updatedRtad) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], (old: any) => ({
+                ...old,
+                Attributes: { ...old?.Attributes, pvm_rtad: updatedRtad }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.rtad'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
         },
     });
 
@@ -246,15 +305,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.secureVersion'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        onMutate: async (updatedSvle) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], (old: any) => ({
+                ...old,
+                Attributes: { ...old?.Attributes, hb_secure_ver_lockin_enabled: updatedSvle }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.secureVersion'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
         },
     });
 
@@ -267,15 +338,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.hostUsb'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        onMutate: async (updatedHostUsb) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], (old: any) => ({
+                ...old,
+                Attributes: { ...old?.Attributes, hb_host_usb_enablement: updatedHostUsb }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Systems/system/Bios'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.hostUsb'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
         },
     });
 
@@ -287,15 +370,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.usbFirmwareUpdatePolicy'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc'] });
+        onMutate: async (updatedUsbCode) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc'], (old: any) => ({
+                ...old,
+                Oem: { ...old?.Oem, IBM: { ...old?.Oem?.IBM, USBCodeUpdateEnabled: updatedUsbCode } }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/Managers/bmc'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.usbFirmwareUpdatePolicy'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc'] });
         },
     });
 
@@ -313,15 +408,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.acfUploadEnablement'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service'] });
+        onMutate: async (updatedAcfUploadEnablement) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service'], (old: any) => ({
+                ...old,
+                Oem: { ...old?.Oem, IBM: { ...old?.Oem?.IBM, ACF: { AllowUnauthACFUpload: updatedAcfUploadEnablement } } }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.acfUploadEnablement'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service'] });
         },
     });
 
@@ -334,15 +441,27 @@ export function usePolicies() {
                 policy: i18n.global.t('pagePolicies.basicAuth'),
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService'] });
+        onMutate: async (updatedBasicAuth) => {
+            await queryClient.cancelQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService'] });
+            const previousData = queryClient.getQueryData(['redfish', 'resource', '/redfish/v1/AccountService']);
+            queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/AccountService'], (old: any) => ({
+                ...old,
+                Oem: { ...old?.Oem, OpenBMC: { ...old?.Oem?.OpenBMC, AuthMethods: { BasicAuth: updatedBasicAuth } } }
+            }));
+            return { previousData };
         },
-        onError: () => {
+        onError: (_err, _variables, context) => {
+            if (context?.previousData) {
+                queryClient.setQueryData(['redfish', 'resource', '/redfish/v1/AccountService'], context.previousData);
+            }
             throw new Error(
                 i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
                     policy: i18n.global.t('pagePolicies.basicAuth'),
                 })
             );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService'] });
         },
     });
 
