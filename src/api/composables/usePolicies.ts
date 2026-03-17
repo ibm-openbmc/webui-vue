@@ -1,367 +1,390 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
+import { useRedfishResource } from './useAllSubResources';
+import type { Resource } from '@/types/redfish';
+
+// Type definitions for the resources
+interface NetworkProtocol extends Resource {
+    SSH: { ProtocolEnabled: boolean };
+    IPMI: { ProtocolEnabled: boolean };
+}
+
+interface BiosAttributes extends Resource {
+    Attributes: {
+        pvm_rtad?: string;
+        pvm_vtpm?: string;
+        hb_secure_ver_lockin_enabled?: string;
+        hb_host_usb_enablement?: string;
+    };
+}
+
+interface SystemResource extends Resource {
+    Boot: { TrustedModuleRequiredToBoot: string };
+}
+
+interface ManagerResource extends Resource {
+    Oem: { IBM: { USBCodeUpdateEnabled: boolean } };
+}
+
+interface ServiceAccount extends Resource {
+    Oem?: { IBM?: { ACF?: { AllowUnauthACFUpload?: boolean } } };
+}
+
+interface AccountService extends Resource {
+    Oem?: { OpenBMC?: { AuthMethods?: { BasicAuth?: boolean } } };
+}
 
 /**
  * Composable for Policies page operations
  * Replaces PoliciesStore with a simple composable
  */
 export function usePolicies() {
-    // Reactive state for all policy toggles
-    const sshProtocolEnabled = ref(false);
-    const ipmiProtocolEnabled = ref(false);
-    const rtadEnabled = ref(false);
-    const vtpmEnabled = ref(false);
-    const svleEnabled = ref(false);
-    const tpmPolicyEnabled = ref(false);
-    const usbFirmwareUpdatePolicyEnabled = ref(false);
-    const hostUsbEnabled = ref(false);
-    const acfUploadEnablement = ref(false);
+    const queryClient = useQueryClient();
     const unAuthenticatedACFUploadEnablementState = ref(false);
-    const basicAuthEnabled = ref(true);
 
-    // ---------- Fetch functions ----------
+    // ---------- Fetch using useRedfishResource ----------
 
-    async function fetchNetworkProtocol() {
-        return await api
-            .get('/redfish/v1/Managers/bmc/NetworkProtocol')
-            .then((response: { data: { SSH: { ProtocolEnabled: boolean }; IPMI: { ProtocolEnabled: boolean } } }) => {
-                sshProtocolEnabled.value = response.data.SSH.ProtocolEnabled;
-                ipmiProtocolEnabled.value = response.data.IPMI.ProtocolEnabled;
-            })
-            .catch((error: Error) => console.log(error));
-    }
+    // Fetch Network Protocol
+    const networkProtocolQuery = useRedfishResource<NetworkProtocol>(
+        '/redfish/v1/Managers/bmc/NetworkProtocol'
+    );
 
-    async function fetchNetworkProtocolAfterDelay() {
-        setTimeout(() => {
-            fetchNetworkProtocol();
-        }, 30000);
-    }
+    const sshProtocolEnabled = computed(() =>
+        networkProtocolQuery.data.value?.SSH?.ProtocolEnabled ?? false
+    );
+    
+    const ipmiProtocolEnabled = computed(() =>
+        networkProtocolQuery.data.value?.IPMI?.ProtocolEnabled ?? false
+    );
 
-    async function fetchBiosStatus() {
-        return await api
-            .get('/redfish/v1/Systems/system/Bios')
-            .then((response: { data: { Attributes: Record<string, string> } }) => {
-                rtadEnabled.value =
-                    response.data.Attributes.pvm_rtad === 'Enabled' ? true : false;
-                vtpmEnabled.value =
-                    response.data.Attributes.pvm_vtpm === 'Enabled' ? true : false;
-                svleEnabled.value =
-                    response.data.Attributes.hb_secure_ver_lockin_enabled === 'Enabled'
-                        ? true
-                        : false;
-                hostUsbEnabled.value =
-                    response.data.Attributes.hb_host_usb_enablement === 'Enabled'
-                        ? true
-                        : false;
-            })
-            .catch((error: Error) => console.log(error));
-    }
+    // Fetch BIOS Status
+    const biosQuery = useRedfishResource<BiosAttributes>(
+        '/redfish/v1/Systems/system/Bios'
+    );
 
-    async function fetchTpmPolicy() {
-        return await api
-            .get('/redfish/v1/Systems/system')
-            .then((response: { data: { Boot: { TrustedModuleRequiredToBoot: string } } }) => {
-                tpmPolicyEnabled.value =
-                    response.data.Boot.TrustedModuleRequiredToBoot === 'Required';
-            })
-            .catch((error: Error) => console.log(error));
-    }
+    const rtadEnabled = computed(() =>
+        biosQuery.data.value?.Attributes?.pvm_rtad === 'Enabled'
+    );
+    
+    const vtpmEnabled = computed(() =>
+        biosQuery.data.value?.Attributes?.pvm_vtpm === 'Enabled'
+    );
+    
+    const svleEnabled = computed(() =>
+        biosQuery.data.value?.Attributes?.hb_secure_ver_lockin_enabled === 'Enabled'
+    );
+    
+    const hostUsbEnabled = computed(() =>
+        biosQuery.data.value?.Attributes?.hb_host_usb_enablement === 'Enabled'
+    );
 
-    async function fetchUsbFirmwareUpdatePolicy() {
-        return await api
-            .get('/redfish/v1/Managers/bmc')
-            .then((response: { data: { Oem: { IBM: { USBCodeUpdateEnabled: boolean } } } }) => {
-                usbFirmwareUpdatePolicyEnabled.value =
-                    response.data.Oem.IBM.USBCodeUpdateEnabled;
-            })
-            .catch((error: Error) => console.log(error));
-    }
+    // Fetch TPM Policy
+    const systemQuery = useRedfishResource<SystemResource>(
+        '/redfish/v1/Systems/system'
+    );
 
-    async function fetchAcfUploadEnablement() {
-        return await api
-            .get('/redfish/v1/AccountService/Accounts/service')
-            .then((response: { data: { Oem?: { IBM?: { ACF?: { AllowUnauthACFUpload?: boolean } } } } }) => {
-                acfUploadEnablement.value =
-                    response?.data?.Oem?.IBM?.ACF?.AllowUnauthACFUpload ?? false;
-            })
-            .catch((error: Error) => console.log(error));
-    }
+    const tpmPolicyEnabled = computed(() =>
+        systemQuery.data.value?.Boot?.TrustedModuleRequiredToBoot === 'Required'
+    );
 
-    async function fetchBasicAuth() {
-        return await api
-            .get('/redfish/v1/AccountService')
-            .then((response: { data: { Oem?: { OpenBMC?: { AuthMethods?: { BasicAuth?: boolean } } } } }) => {
-                basicAuthEnabled.value =
-                    response?.data?.Oem?.OpenBMC?.AuthMethods?.BasicAuth ?? true;
-            })
-            .catch((error: Error) => console.log(error));
-    }
+    // Fetch USB Firmware Update Policy
+    const managerQuery = useRedfishResource<ManagerResource>(
+        '/redfish/v1/Managers/bmc'
+    );
 
+    const usbFirmwareUpdatePolicyEnabled = computed(() =>
+        managerQuery.data.value?.Oem?.IBM?.USBCodeUpdateEnabled ?? false
+    );
+
+    // Fetch ACF Upload Enablement
+    const serviceAccountQuery = useRedfishResource<ServiceAccount>(
+        '/redfish/v1/AccountService/Accounts/service'
+    );
+
+    const acfUploadEnablement = computed(() =>
+        serviceAccountQuery.data.value?.Oem?.IBM?.ACF?.AllowUnauthACFUpload ?? false
+    );
+
+    // Fetch Basic Auth
+    const accountServiceQuery = useRedfishResource<AccountService>(
+        '/redfish/v1/AccountService'
+    );
+
+    const basicAuthEnabled = computed(() =>
+        accountServiceQuery.data.value?.Oem?.OpenBMC?.AuthMethods?.BasicAuth ?? true
+    );
+
+    // Refetch all policies
     async function loadAllPolicies() {
-        return Promise.all([
-            fetchBiosStatus(),
-            fetchNetworkProtocolAfterDelay(),
-            fetchUsbFirmwareUpdatePolicy(),
-            fetchAcfUploadEnablement(),
-            fetchTpmPolicy(),
-            fetchBasicAuth(),
+        await Promise.all([
+            biosQuery.refetch(),
+            networkProtocolQuery.refetch(),
+            managerQuery.refetch(),
+            serviceAccountQuery.refetch(),
+            systemQuery.refetch(),
+            accountServiceQuery.refetch(),
         ]);
     }
 
-    // ---------- Save functions ----------
+    // ---------- Save functions using mutations ----------
 
-    async function saveSshProtocolState(protocolEnabled: boolean): Promise<string> {
-        sshProtocolEnabled.value = protocolEnabled;
-        const ssh = {
-            SSH: { ProtocolEnabled: protocolEnabled },
-        };
-        return await api
-            .patch('/redfish/v1/Managers/bmc/NetworkProtocol', ssh)
-            .then(() => {
-                if (protocolEnabled) {
-                    return i18n.global.t('pagePolicies.toast.successEnableBmcShell');
-                } else {
-                    return i18n.global.t('pagePolicies.toast.successDisableBmcShell');
-                }
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                sshProtocolEnabled.value = !protocolEnabled;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.ssh'),
-                    }),
-                );
+    const saveSshMutation = useMutation({
+        mutationFn: async (protocolEnabled: boolean): Promise<string> => {
+            const ssh = { SSH: { ProtocolEnabled: protocolEnabled } };
+            await api.patch('/redfish/v1/Managers/bmc/NetworkProtocol', ssh);
+            return protocolEnabled
+                ? i18n.global.t('pagePolicies.toast.successEnableBmcShell')
+                : i18n.global.t('pagePolicies.toast.successDisableBmcShell');
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.ssh'),
+                })
+            );
+        },
+    });
+
+    const saveIpmiMutation = useMutation({
+        mutationFn: async (protocolEnabled: boolean): Promise<string> => {
+            const ipmi = { IPMI: { ProtocolEnabled: protocolEnabled } };
+            await api.patch('/redfish/v1/Managers/bmc/NetworkProtocol', ipmi);
+            return i18n.global.t('pagePolicies.toast.successIpmiNetworkPolicyUpdate', {
+                policy: i18n.global.t('pagePolicies.ipmi'),
             });
+        },
+        onSuccess: () => {
+            // Refetch after 30 seconds
+            setTimeout(() => {
+                queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc/NetworkProtocol'] });
+            }, 30000);
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.ipmi'),
+                })
+            );
+        },
+    });
+
+    const saveTpmMutation = useMutation({
+        mutationFn: async (protocolEnabled: boolean): Promise<string> => {
+            const data = { Boot: { TrustedModuleRequiredToBoot: protocolEnabled } };
+            await api.patch('/redfish/v1/Systems/system', data);
+            return i18n.global.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+                policy: i18n.global.t('pagePolicies.hostTpm'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.hostTpm'),
+                })
+            );
+        },
+    });
+
+    const saveVtpmMutation = useMutation({
+        mutationFn: async (updatedVtpm: string): Promise<string> => {
+            await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
+                Attributes: { pvm_vtpm: updatedVtpm },
+            });
+            return i18n.global.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+                policy: i18n.global.t('pagePolicies.vtpm'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.vtpm'),
+                })
+            );
+        },
+    });
+
+    const saveRtadMutation = useMutation({
+        mutationFn: async (updatedRtad: string): Promise<string> => {
+            await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
+                Attributes: { pvm_rtad: updatedRtad },
+            });
+            return i18n.global.t('pagePolicies.toast.successNextBootToast', {
+                policy: i18n.global.t('pagePolicies.rtad'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.rtad'),
+                })
+            );
+        },
+    });
+
+    const saveSvleMutation = useMutation({
+        mutationFn: async (updatedSvle: string): Promise<string> => {
+            await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
+                Attributes: { hb_secure_ver_lockin_enabled: updatedSvle },
+            });
+            return i18n.global.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+                policy: i18n.global.t('pagePolicies.secureVersion'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.secureVersion'),
+                })
+            );
+        },
+    });
+
+    const saveHostUsbMutation = useMutation({
+        mutationFn: async (updatedHostUsb: string): Promise<string> => {
+            await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
+                Attributes: { hb_host_usb_enablement: updatedHostUsb },
+            });
+            return i18n.global.t('pagePolicies.toast.successNextBootToast', {
+                policy: i18n.global.t('pagePolicies.hostUsb'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.hostUsb'),
+                })
+            );
+        },
+    });
+
+    const saveUsbFirmwareMutation = useMutation({
+        mutationFn: async (updatedUsbCode: boolean): Promise<string> => {
+            const oem = { Oem: { IBM: { USBCodeUpdateEnabled: updatedUsbCode } } };
+            await api.patch('/redfish/v1/Managers/bmc', oem);
+            return i18n.global.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+                policy: i18n.global.t('pagePolicies.usbFirmwareUpdatePolicy'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/Managers/bmc'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.usbFirmwareUpdatePolicy'),
+                })
+            );
+        },
+    });
+
+    const saveAcfUploadMutation = useMutation({
+        mutationFn: async (updatedAcfUploadEnablement: boolean): Promise<string> => {
+            const oem = {
+                Oem: {
+                    IBM: {
+                        ACF: { AllowUnauthACFUpload: updatedAcfUploadEnablement },
+                    },
+                },
+            };
+            await api.patch('/redfish/v1/AccountService/Accounts/service', oem);
+            return i18n.global.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+                policy: i18n.global.t('pagePolicies.acfUploadEnablement'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService/Accounts/service'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.acfUploadEnablement'),
+                })
+            );
+        },
+    });
+
+    const saveBasicAuthMutation = useMutation({
+        mutationFn: async (updatedBasicAuth: boolean): Promise<string> => {
+            await api.patch('/redfish/v1/AccountService', {
+                Oem: { OpenBMC: { AuthMethods: { BasicAuth: updatedBasicAuth } } },
+            });
+            return i18n.global.t('pagePolicies.toast.successNetworkPolicyUpdate', {
+                policy: i18n.global.t('pagePolicies.basicAuth'),
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['redfish', 'resource', '/redfish/v1/AccountService'] });
+        },
+        onError: () => {
+            throw new Error(
+                i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+                    policy: i18n.global.t('pagePolicies.basicAuth'),
+                })
+            );
+        },
+    });
+
+    // Wrapper functions to maintain API compatibility
+    async function saveSshProtocolState(protocolEnabled: boolean): Promise<string> {
+        return await saveSshMutation.mutateAsync(protocolEnabled);
     }
 
     async function saveIpmiProtocolState(protocolEnabled: boolean): Promise<string> {
-        ipmiProtocolEnabled.value = protocolEnabled;
-        const ipmi = {
-            IPMI: { ProtocolEnabled: protocolEnabled },
-        };
-        return await api
-            .patch('/redfish/v1/Managers/bmc/NetworkProtocol', ipmi)
-            .then(() => {
-                fetchNetworkProtocolAfterDelay();
-            })
-            .then(() => {
-                return i18n.global.t(
-                    'pagePolicies.toast.successIpmiNetworkPolicyUpdate',
-                    { policy: i18n.global.t('pagePolicies.ipmi') },
-                );
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                ipmiProtocolEnabled.value = !protocolEnabled;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.ipmi'),
-                    }),
-                );
-            });
+        return await saveIpmiMutation.mutateAsync(protocolEnabled);
     }
 
     async function saveTpmPolicy(protocolEnabled: boolean): Promise<string> {
-        tpmPolicyEnabled.value = protocolEnabled;
-        const data = {
-            Boot: { TrustedModuleRequiredToBoot: protocolEnabled },
-        };
-        return api
-            .patch('/redfish/v1/Systems/system', data)
-            .then(() => {
-                return i18n.global.t(
-                    'pagePolicies.toast.successNetworkPolicyUpdate',
-                    { policy: i18n.global.t('pagePolicies.hostTpm') },
-                );
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                tpmPolicyEnabled.value = !protocolEnabled;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.hostTpm'),
-                    }),
-                );
-            });
+        return await saveTpmMutation.mutateAsync(protocolEnabled);
     }
 
     async function saveVtpmState(updatedVtpm: string): Promise<string> {
-        vtpmEnabled.value = updatedVtpm === 'Enabled' ? true : false;
-        return await api
-            .patch('/redfish/v1/Systems/system/Bios/Settings', {
-                Attributes: { pvm_vtpm: updatedVtpm },
-            })
-            .then(() => {
-                return i18n.global.t(
-                    'pagePolicies.toast.successNetworkPolicyUpdate',
-                    { policy: i18n.global.t('pagePolicies.vtpm') },
-                );
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                vtpmEnabled.value = updatedVtpm === 'Enabled' ? false : true;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.vtpm'),
-                    }),
-                );
-            });
+        return await saveVtpmMutation.mutateAsync(updatedVtpm);
     }
 
     async function saveRtadState(updatedRtad: string): Promise<string> {
-        rtadEnabled.value = updatedRtad === 'Enabled' ? true : false;
-        return await api
-            .patch('/redfish/v1/Systems/system/Bios/Settings', {
-                Attributes: { pvm_rtad: updatedRtad },
-            })
-            .then(() => {
-                return i18n.global.t('pagePolicies.toast.successNextBootToast', {
-                    policy: i18n.global.t('pagePolicies.rtad'),
-                });
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                rtadEnabled.value = updatedRtad === 'Enabled' ? false : true;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.rtad'),
-                    }),
-                );
-            });
+        return await saveRtadMutation.mutateAsync(updatedRtad);
     }
 
     async function saveSvleState(updatedSvle: string): Promise<string> {
-        svleEnabled.value = updatedSvle === 'Enabled' ? true : false;
-        return await api
-            .patch('/redfish/v1/Systems/system/Bios/Settings', {
-                Attributes: { hb_secure_ver_lockin_enabled: updatedSvle },
-            })
-            .then(() => {
-                return i18n.global.t(
-                    'pagePolicies.toast.successNetworkPolicyUpdate',
-                    { policy: i18n.global.t('pagePolicies.secureVersion') },
-                );
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                svleEnabled.value = updatedSvle === 'Enabled' ? false : true;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.secureVersion'),
-                    }),
-                );
-            });
+        return await saveSvleMutation.mutateAsync(updatedSvle);
     }
 
     async function saveHostUsbEnabled(updatedHostUsb: string): Promise<string> {
-        hostUsbEnabled.value = updatedHostUsb === 'Enabled' ? true : false;
-        return await api
-            .patch('/redfish/v1/Systems/system/Bios/Settings', {
-                Attributes: { hb_host_usb_enablement: updatedHostUsb },
-            })
-            .then(() => {
-                return i18n.global.t('pagePolicies.toast.successNextBootToast', {
-                    policy: i18n.global.t('pagePolicies.hostUsb'),
-                });
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                hostUsbEnabled.value = updatedHostUsb === 'Enabled' ? false : true;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.hostUsb'),
-                    }),
-                );
-            });
+        return await saveHostUsbMutation.mutateAsync(updatedHostUsb);
     }
 
-    async function saveUsbFirmwareUpdatePolicyEnabled(
-        updatedUsbCode: boolean,
-    ): Promise<string> {
-        usbFirmwareUpdatePolicyEnabled.value = updatedUsbCode;
-        const oem = {
-            Oem: { IBM: { USBCodeUpdateEnabled: updatedUsbCode } },
-        };
-        return await api
-            .patch('/redfish/v1/Managers/bmc', oem)
-            .then(() => {
-                return i18n.global.t(
-                    'pagePolicies.toast.successNetworkPolicyUpdate',
-                    {
-                        policy: i18n.global.t('pagePolicies.usbFirmwareUpdatePolicy'),
-                    },
-                );
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                usbFirmwareUpdatePolicyEnabled.value = !updatedUsbCode;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.usbFirmwareUpdatePolicy'),
-                    }),
-                );
-            });
+    async function saveUsbFirmwareUpdatePolicyEnabled(updatedUsbCode: boolean): Promise<string> {
+        return await saveUsbFirmwareMutation.mutateAsync(updatedUsbCode);
     }
 
-    async function saveUnauthenticatedACFUploadEnablement(
-        updatedAcfUploadEnablement: boolean,
-    ): Promise<string> {
-        acfUploadEnablement.value = updatedAcfUploadEnablement;
-        const oem = {
-            Oem: {
-                IBM: {
-                    ACF: { AllowUnauthACFUpload: updatedAcfUploadEnablement },
-                },
-            },
-        };
-        return await api
-            .patch('/redfish/v1/AccountService/Accounts/service', oem)
-            .then(() => {
-                return i18n.global.t(
-                    'pagePolicies.toast.successNetworkPolicyUpdate',
-                    {
-                        policy: i18n.global.t('pagePolicies.acfUploadEnablement'),
-                    },
-                );
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                acfUploadEnablement.value = !updatedAcfUploadEnablement;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.acfUploadEnablement'),
-                    }),
-                );
-            });
+    async function saveUnauthenticatedACFUploadEnablement(updatedAcfUploadEnablement: boolean): Promise<string> {
+        return await saveAcfUploadMutation.mutateAsync(updatedAcfUploadEnablement);
     }
 
-    async function saveBasicAuthEnabled(
-        updatedBasicAuth: boolean,
-    ): Promise<string> {
-        basicAuthEnabled.value = updatedBasicAuth;
-        return await api
-            .patch('/redfish/v1/AccountService', {
-                Oem: { OpenBMC: { AuthMethods: { BasicAuth: updatedBasicAuth } } },
-            })
-            .then(() => {
-                return i18n.global.t(
-                    'pagePolicies.toast.successNetworkPolicyUpdate',
-                    { policy: i18n.global.t('pagePolicies.basicAuth') },
-                );
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                basicAuthEnabled.value = !updatedBasicAuth;
-                throw new Error(
-                    i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
-                        policy: i18n.global.t('pagePolicies.basicAuth'),
-                    }),
-                );
-            });
+    async function saveBasicAuthEnabled(updatedBasicAuth: boolean): Promise<string> {
+        return await saveBasicAuthMutation.mutateAsync(updatedBasicAuth);
     }
 
     return {
