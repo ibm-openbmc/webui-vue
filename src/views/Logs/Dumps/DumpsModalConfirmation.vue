@@ -4,6 +4,7 @@
     ref="modal"
     v-model="modal"
     :title="$t('pageDumps.modal.initiateSystemDump')"
+    data-test-id="dumps-modal-system-dump-confirmation"
     @show="resetForm"
   >
     <p>
@@ -20,6 +21,7 @@
     </p>
     <BFormCheckbox
       v-model="confirmed"
+      data-test-id="dumps-modal-confirmation-checkbox"
       @update:model-value="v$.confirmed.$touch()"
     >
       {{ $t('pageDumps.modal.initiateSystemDumpMessage4') }}
@@ -31,10 +33,18 @@
       {{ $t('global.form.required') }}
     </BFormInvalidFeedback>
     <template #footer="{ cancel }">
-      <BButton variant="secondary" @click="cancel()">
+      <BButton
+        variant="secondary"
+        data-test-id="dumps-modal-cancel-button"
+        @click="cancel()"
+      >
         {{ $t('global.action.cancel') }}
       </BButton>
-      <BButton variant="danger" @click="handleSubmit()">
+      <BButton
+        variant="danger"
+        data-test-id="dumps-modal-initiate-button"
+        @click="handleSubmit()"
+      >
         {{ $t('pageDumps.form.initiateDump') }}
       </BButton>
     </template>
