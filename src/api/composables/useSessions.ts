@@ -1,4 +1,5 @@
 import { computed } from 'vue';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { useRedfishCollection } from './useAllSubResources';
 // @ts-ignore - api.js is a JavaScript module
 import api, { getResponseCount } from '@/store/api';
@@ -38,6 +39,8 @@ function transformSessionData(session: Session): SessionDisplay {
  * Replaces the SessionsStore with TanStack Query
  */
 export function useSessions() {
+    const queryClient = useQueryClient();
+
     const {
         data: sessionsData,
         isLoading,
@@ -57,37 +60,49 @@ export function useSessions() {
         return sessionsData.value.map(transformSessionData);
     });
 
+    const disconnectSessionsMutation = useMutation({
+        mutationFn: async (uris: string[]): Promise<{ type: string; message: string }[]> => {
+            const promises = uris.map((uri) =>
+                api.delete(uri).catch((error: Error) => {
+                    console.log(error);
+                    return error;
+                }),
+            );
+
+            const responses = await api.all(promises);
+            const { successCount, errorCount } = getResponseCount(responses);
+            const toastMessages: { type: string; message: string }[] = [];
+
+            if (successCount) {
+                const message = i18n.global.t(
+                    'pageSessions.toast.successDelete',
+                    successCount,
+                );
+                toastMessages.push({ type: 'success', message });
+            }
+
+            if (errorCount) {
+                const message = i18n.global.t(
+                    'pageSessions.toast.errorDelete',
+                    errorCount,
+                );
+                toastMessages.push({ type: 'error', message });
+            }
+
+            return toastMessages;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['redfish', 'collection', '/redfish/v1/SessionService/Sessions'],
+            });
+        },
+        onError: (error: Error) => {
+            console.error('Error disconnecting sessions:', error);
+        },
+    });
+
     async function disconnectSessions(uris: string[]) {
-        const promises = uris.map((uri) =>
-            api.delete(uri).catch((error: Error) => {
-                console.log(error);
-                return error;
-            }),
-        );
-
-        const responses = await api.all(promises);
-        refetch();
-
-        const { successCount, errorCount } = getResponseCount(responses);
-        const toastMessages: { type: string; message: string }[] = [];
-
-        if (successCount) {
-            const message = i18n.global.t(
-                'pageSessions.toast.successDelete',
-                successCount,
-            );
-            toastMessages.push({ type: 'success', message });
-        }
-
-        if (errorCount) {
-            const message = i18n.global.t(
-                'pageSessions.toast.errorDelete',
-                errorCount,
-            );
-            toastMessages.push({ type: 'error', message });
-        }
-
-        return toastMessages;
+        return await disconnectSessionsMutation.mutateAsync(uris);
     }
 
     return {
@@ -98,5 +113,6 @@ export function useSessions() {
         isError,
         refetch,
         disconnectSessions,
+        isDisconnecting: disconnectSessionsMutation.isPending,
     };
 }
