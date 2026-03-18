@@ -89,7 +89,7 @@ eventBus.on('clear-file', () => {
 <style lang="scss" scoped>
 // Get mouse pointer on complete element
 .add-file-btn {
-  position: relative;
+  position: absolute;
   &.disabled {
     border-color: $gray-400;
     background-color: $gray-400;
