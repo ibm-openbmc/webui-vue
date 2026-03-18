@@ -312,6 +312,7 @@ import {
   watch,
   computed,
   onBeforeMount,
+  onBeforeUnmount,
   getCurrentInstance,
 } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -335,6 +336,7 @@ import {
   not,
 } from '@vuelidate/validators';
 import UserManagementStore from '../../../store/modules/SecurityAndAccess/UserManagementStore';
+import { useDateTime } from '@/api/composables/useDateTime';
 
 const { proxy } = getCurrentInstance();
 const { startLoader, hideLoader, endLoader } = useLoadingBar();
@@ -349,8 +351,17 @@ const formatTime = proxy.$filters.formatTime;
 const notSameAs = (value1, value2) => {
   return value2 ? value1 !== value2 : true;
 };
-const dateTimeStore = stores.DateTimeStore();
 const globalStore = stores.GlobalStore();
+
+// Use the new composable instead of Vuex store
+const {
+  ntpServers: ntpServersFromQuery,
+  isNtpProtocolEnabled: isNtpProtocolEnabledFromQuery,
+  networkSuppliedServers: networkSuppliedServersFromQuery,
+  isLoading: isDateTimeLoading,
+  isFetching: isDateTimeFetching,
+  updateDateTime: updateDateTimeAction,
+} = useDateTime();
 
 const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -382,11 +393,24 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
+// Loading bar automatically shows/hides based on fetch state
+watch(
+  () => isDateTimeLoading.value || isDateTimeFetching.value,
+  (loading) => {
+    if (loading) startLoader();
+    else endLoader();
+  },
+  { immediate: true },
+);
+
+onBeforeUnmount(() => {
+  hideLoader();
+});
+
 onMounted(() => {
   startLoader();
   Promise.all([
     globalStore.getBmcTime(),
-    dateTimeStore.getNtpData(),
     userManagementStore.getAccountSettings(),
   ]).finally(() => {
     showCollapse();
@@ -396,16 +420,13 @@ onMounted(() => {
 });
 
 const ntpServers = computed(() => {
-  return dateTimeStore.ntpServersGetter;
+  return ntpServersFromQuery.value;
 });
 const isNtpProtocolEnabled = computed(() => {
-  return dateTimeStore.isNtpProtocolEnabledGetter;
+  return isNtpProtocolEnabledFromQuery.value;
 });
 const networkSuppliedServers = computed(() => {
-  dateTimeStore.networkSuppliedServersGetter.map((server) =>
-    dhcpNtp.value.push(server),
-  );
-  return dhcpNtp.value;
+  return networkSuppliedServersFromQuery.value;
 });
 const bmcTime = computed(() => {
   return globalStore.bmcTimeGetter;
@@ -431,8 +452,9 @@ const serverStatus = computed(() => {
 const chunkedDhcpNtp = computed(() => {
   const chunkSize = 3;
   const result = [];
-  for (let i = 0; i < dhcpNtp.value.length; i += chunkSize) {
-    result.push(dhcpNtp.value.slice(i, i + chunkSize));
+  const servers = networkSuppliedServers.value;
+  for (let i = 0; i < servers.length; i += chunkSize) {
+    result.push(servers.slice(i, i + chunkSize));
   }
   return result;
 });
@@ -551,15 +573,14 @@ const submitForm = () => {
     setNtpValues();
   }
 
-  dateTimeStore
-    .updateDateTime(dateTimeForm)
+  updateDateTimeAction(dateTimeForm)
     .then((success) => {
       toast.successToast(success);
       if (!isNTPEnabled) return;
       // Shift address up if second address is empty
       // to avoid refreshing after delay when updating NTP
-      if (!form.value.ntp.secondAddress && form.value.ntp.thirdAddres) {
-        form.value.ntp.secondAddress = form.value.ntp.thirdAddres;
+      if (!form.value.ntp.secondAddress && form.value.ntp.thirdAddress) {
+        form.value.ntp.secondAddress = form.value.ntp.thirdAddress;
         form.value.ntp.thirdAddress = '';
       }
     })
@@ -589,22 +610,18 @@ const getUtcDate = (date, time) => {
   const datesArray = date.split('-');
   const timeArray = time.split(':');
   let utcDate = Date.UTC(
-    datesArray[0], // User input year
+    parseInt(datesArray[0]), // User input year
     //UTC expects zero-index month value 0-11 (January-December)
     //for reference https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC#Parameters
     parseInt(datesArray[1]) - 1, // User input month
-    datesArray[2], // User input day
-    timeArray[0], // User input hour
-    timeArray[1], // User input minute
+    parseInt(datesArray[2]), // User input day
+    parseInt(timeArray[0]), // User input hour
+    parseInt(timeArray[1]), // User input minute
   );
   return new Date(utcDate);
 };
 const showCollapse = () => {
-  if (networkSuppliedServers.value.length == 0) {
-    showDhcpNtpServers.value = false;
-  } else {
-    showDhcpNtpServers.value = true;
-  }
+  showDhcpNtpServers.value = networkSuppliedServers.value.length > 0;
 };
 </script>
 
