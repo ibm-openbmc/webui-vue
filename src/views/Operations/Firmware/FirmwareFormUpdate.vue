@@ -114,7 +114,7 @@ function updateFirmware() {
 
   // Step 1 - Upload
   const uploadFirmware = () => {
-    if (!isReadonly) {
+    if (!isReadonly()) {
       infoToast(
         i18n.global.t('pageFirmware.toast.updateFirmware.step1Message'),
         {
