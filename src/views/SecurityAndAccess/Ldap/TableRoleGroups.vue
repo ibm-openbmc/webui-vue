@@ -1,26 +1,26 @@
 <template>
   <div>
-    <b-row>
-      <b-col md="9">
+    <BRow>
+      <BCol md="9">
         <alert :show="isServiceEnabled === false" variant="info">
           {{ $t('pageLdap.tableRoleGroups.alertContent') }}
         </alert>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col class="text-right" md="9">
-        <b-button
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol class="text-right" md="9">
+        <BButton
           variant="primary"
           :disabled="!isServiceEnabled"
           @click="initRoleGroupModal(null)"
         >
           <icon-add />
           {{ $t('pageLdap.addRoleGroup') }}
-        </b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col md="9">
+        </BButton>
+      </BCol>
+    </BRow>
+    <BRow>
+      <BCol md="9">
         <table-toolbar
           ref="toolbar"
           :selected-items-count="selectedRowsList.length"
@@ -29,7 +29,7 @@
           @clear-selected="clearSelectedRows(tableRef)"
           @batch-action="onBatchAction"
         />
-        <b-table
+        <BTable
           ref="tableRef"
           responsive
           selectable
@@ -45,7 +45,7 @@
         >
           <!-- Checkbox column -->
           <template #head(checkbox)>
-            <b-form-checkbox
+            <BFormCheckbox
               v-model="tableHeaderCheckboxModel"
               aria-label="checkbox-head"
               :indeterminate="tableHeaderCheckboxIndeterminate"
@@ -56,24 +56,26 @@
               @update:model-value="toggleAll"
             >
               <span class="visually-hidden">checkbox-head</span>
-            </b-form-checkbox>
+            </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
-            <b-form-checkbox
-              v-model="ldapStore.enabledRoleGroups[row.index].isSelected"
+            <BFormCheckbox
+              :model-value="selectedSessions.has(row.item.groupName)"
               aria-label="checkbox"
               :disabled="!isServiceEnabled"
-              @change="
-                toggleSelectRowByGroupName(
-                  tableRef,
-                  row.index,
-                  ldapStore.enabledRoleGroups[row.index].isSelected,
-                  row.item,
-                )
+              @update:model-value="
+                (checked) => {
+                  if (checked) {
+                    selectedSessions.add(row.item.groupName);
+                  } else {
+                    selectedSessions.delete(row.item.groupName);
+                  }
+                  toggleSelectRow(tableRef, row.index, checked, row.item);
+                }
               "
             >
-              <span class="visually-hidden">checkbox-head</span>
-            </b-form-checkbox>
+              <span class="visually-hidden">checkbox</span>
+            </BFormCheckbox>
           </template>
 
           <!-- table actions column -->
@@ -83,7 +85,6 @@
               :key="index"
               :value="action.value"
               :enabled="action.enabled"
-              :title="action.title"
               @click-table-action="onTableRowAction($event, item)"
             >
               <template #icon>
@@ -106,9 +107,9 @@
               {{ $t('global.table.emptyMessage') }}
             </span>
           </template>
-        </b-table>
-      </b-col>
-    </b-row>
+        </BTable>
+      </BCol>
+    </BRow>
     <modal-add-role-group
       :role-group="activeRoleGroup"
       @ok="saveRoleGroup"
@@ -151,6 +152,7 @@
 </template>
 
 <script setup>
+import { ref, computed, watch, onBeforeMount, onMounted, nextTick } from 'vue';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
@@ -158,41 +160,52 @@ import Alert from '@/components/Global/Alert.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import ModalAddRoleGroup from './ModalAddRoleGroup.vue';
-import { onBeforeMount, onMounted, reactive } from 'vue';
-import useTableSelectableComposable from '../../../components/Composables/useTableSelectableComposable';
-import stores from '../../../store';
-import { computed, ref, watch, nextTick } from 'vue';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import useToastComposable from '@/components/Composables/useToastComposable';
+import { useLdap } from '@/api/composables/useLdap';
+import stores from '@/store';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
-import useToast from '@/components/Composables/useToastComposable';
 
 const { startLoader, endLoader } = useLoadingBar();
-const { successToast, errorToast } = useToast();
-const modal = ref(false);
-const deleteModal = ref(false);
-const deleteModalContent = ref('');
-const batchModal = ref(false);
-const ldapStore = stores.LdapStore();
-const tableRef = ref(null);
-const isAllSelected = ref(false);
-const userManagementStore = stores.UserManagementStore();
-const selectedRowsNo = ref(0);
-const count = ref(0);
+const { successToast, errorToast } = useToastComposable();
+
 const {
   clearSelectedRows,
+  toggleSelectRow,
   selectedRowsList,
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
   onChangeHeaderCheckbox,
-  toggleSelectRowByGroupName,
   onRowSelected,
 } = useTableSelectableComposable();
 
-const isBusy = ref(true);
+const userManagementStore = stores.UserManagementStore();
+
+const {
+  isServiceEnabled,
+  enabledRoleGroups,
+  isLoading,
+  isFetching,
+  addNewRoleGroup,
+  saveRoleGroup: saveRoleGroupApi,
+  deleteRoleGroup: deleteRoleGroupApi,
+} = useLdap();
+
+// Track selection state separately
+const selectedSessions = ref(new Set());
+
+const deleteModal = ref(false);
+const deleteModalContent = ref('');
+const batchModal = ref(false);
+const tableRef = ref(null);
+const isAllSelected = ref(false);
+const selectedRowsNo = ref(0);
+const count = ref(0);
 const activeRoleGroup = ref(null);
 
-const fields = reactive([
+const fields = ref([
   {
     key: 'checkbox',
     sortable: false,
@@ -222,7 +235,8 @@ const fields = reactive([
     tdAttr: { scope: null },
   },
 ]);
-const batchActions = reactive([
+
+const batchActions = ref([
   {
     value: 'delete',
     label: i18n.global.t('global.action.delete'),
@@ -231,74 +245,66 @@ const batchActions = reactive([
 
 onBeforeMount(() => {
   eventBus.on('clear-selected', () => {
-    ldapStore?.enabledRoleGroups?.map((enabledRoleGroup) => {
-      enabledRoleGroup.isSelected = false;
-    });
+    selectedSessions.value.clear();
     clearSelectedRows(tableRef);
   });
 });
 
 onMounted(() => {
-  userManagementStore.getAccountRoles().finally(() => {
-    isBusy.value = false;
-  });
+  userManagementStore.getAccountRoles();
 });
 
-const isServiceEnabled = computed(() => {
-  return ldapStore.isServiceEnabledGetter;
-});
-const enabledRoleGroups = computed(() => {
-  return ldapStore.enabledRoleGroups;
-});
+const isBusy = computed(() => isLoading.value || isFetching.value);
+
 const tableItems = computed(() => {
-  return enabledRoleGroups.value.map(({ LocalRole, RemoteGroup }) => {
-    return {
-      groupName: RemoteGroup,
-      groupPrivilege: LocalRole,
-      actions: [
-        {
-          value: 'edit',
-          enabled: isServiceEnabled.value,
-        },
-        {
-          value: 'delete',
-          enabled: isServiceEnabled.value,
-        },
-      ],
-    };
-  });
+  return enabledRoleGroups.value.map(({ LocalRole, RemoteGroup }) => ({
+    groupName: RemoteGroup,
+    groupPrivilege: LocalRole,
+    actions: [
+      {
+        value: 'edit',
+        enabled: isServiceEnabled.value,
+      },
+      {
+        value: 'delete',
+        enabled: isServiceEnabled.value,
+      },
+    ],
+  }));
 });
-const deleteRoleGroupBatchConfirmMessage = computed(() =>
-  i18n.global.t(
-    'pageLdap.modal.deleteRoleGroupBatchConfirmMessage',
-    selectedRowsList.value.length,
-  ),
-);
 
 function onBatchAction() {
-  selectedRowsNo.value = selectedRowsList.value.map((row) => row.uri).length;
+  selectedRowsNo.value = selectedRowsList.value.length;
   count.value = selectedRowsNo.value;
   batchModal.value = true;
 }
+
 function toggleAll(checked) {
-  ldapStore?.enabledRoleGroups?.map((enabledRoleGroup) => {
-    enabledRoleGroup.isSelected = checked;
-  });
+  if (checked) {
+    tableItems.value.forEach((item) => {
+      selectedSessions.value.add(item.groupName);
+    });
+  } else {
+    selectedSessions.value.clear();
+  }
   isAllSelected.value = checked;
 }
+
 function onModalDeleteBatch(deleteConfirmed) {
   if (deleteConfirmed) {
     startLoader();
-
-    ldapStore
-      .deleteRoleGroup({
-        roleGroups: selectedRowsList.value,
+    deleteRoleGroupApi({
+      roleGroups: selectedRowsList.value,
+    })
+      .then((message) => {
+        successToast(message);
+        eventBus.emit('clear-selected');
       })
-      .then((success) => successToast(success))
       .catch(({ message }) => errorToast(message))
       .finally(() => endLoader());
   }
 }
+
 function onTableRowAction(action, row) {
   switch (action) {
     case 'edit':
@@ -309,32 +315,44 @@ function onTableRowAction(action, row) {
       break;
   }
 }
+
 function initModalDeleteRole(roleGroup) {
   deleteModal.value = true;
   activeRoleGroup.value = roleGroup;
   deleteModalContent.value = roleGroup.groupName;
 }
-const onModalDelete = (deleteConfirmed) => {
+
+function onModalCancel() {
+  deleteModal.value = false;
+}
+
+function onModalHide() {
+  deleteModal.value = false;
+}
+
+function onModalDelete(deleteConfirmed) {
   if (deleteConfirmed) {
     startLoader();
-    ldapStore
-      .deleteRoleGroup({ roleGroups: [activeRoleGroup.value] })
-      .then((success) => successToast(success))
+    deleteRoleGroupApi({ roleGroups: [activeRoleGroup.value] })
+      .then((message) => {
+        successToast(message);
+        eventBus.emit('clear-selected');
+      })
       .catch(({ message }) => errorToast(message))
       .finally(() => endLoader());
   }
-};
+}
 
 watch(
-  () => tableItems,
-  (item) => {
+  () => tableItems.value,
+  () => {
     nextTick(() => {
       document
         .querySelectorAll('.b-table-sortable-column svg')
         .forEach((svg) => {
           svg.setAttribute('aria-hidden', 'true');
         });
-      if (!item.length) {
+      if (!tableItems.value.length) {
         document
           .querySelector('tr.b-table-empty-slot td[scope]')
           ?.removeAttribute('scope');
@@ -343,11 +361,12 @@ watch(
   },
   { deep: true },
 );
+
 function initRoleGroupModal(roleGroup) {
   activeRoleGroup.value = roleGroup;
-  modal.value = true;
   eventBus.emit('modal-role-group');
 }
+
 function saveRoleGroup({
   addNew,
   groupNamePreviously,
@@ -355,19 +374,20 @@ function saveRoleGroup({
   groupPrivilege,
 }) {
   activeRoleGroup.value = null;
-  const data = { groupName, groupPrivilege };
-  const saveData = { groupNamePreviously, groupName, groupPrivilege };
   startLoader();
+
   if (addNew) {
-    ldapStore
-      .addNewRoleGroup(data)
-      .then((success) => successToast(success))
+    addNewRoleGroup({ groupName, groupPrivilege })
+      .then((message) => successToast(message))
       .catch(({ message }) => errorToast(message))
       .finally(() => endLoader());
   } else {
-    ldapStore
-      .saveRoleGroup(saveData)
-      .then((success) => successToast(success))
+    saveRoleGroupApi({
+      groupNamePreviously,
+      groupName,
+      groupPrivilege,
+    })
+      .then((message) => successToast(message))
       .catch(({ message }) => errorToast(message))
       .finally(() => endLoader());
   }

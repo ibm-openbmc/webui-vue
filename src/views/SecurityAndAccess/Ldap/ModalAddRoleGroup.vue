@@ -1,5 +1,5 @@
 <template>
-  <b-modal
+  <BModal
     id="modal-role-group"
     v-model="modal"
     :title="
@@ -10,30 +10,30 @@
     @ok="onOk"
     @hidden="resetForm"
   >
-    <b-container>
-      <b-row>
-        <b-col sm="8">
-          <b-form id="role-group" @submit.prevent="handleSubmit">
-            <b-form-group
+    <BContainer>
+      <BRow>
+        <BCol sm="8">
+          <BForm id="role-group" @submit.prevent="handleSubmit">
+            <BFormGroup
               :label="$t('pageLdap.modal.groupName')"
               label-for="role-group-name"
             >
-              <b-form-input
+              <BFormInput
                 id="role-group-name"
                 v-model="form.groupName"
                 :state="getValidationState(vv$.form.groupName)"
                 @input="vv$.form.groupName.$touch()"
               />
-              <b-form-invalid-feedback role="alert">
+              <BFormInvalidFeedback role="alert">
                 {{ $t('global.form.fieldRequired') }}
-              </b-form-invalid-feedback>
-            </b-form-group>
+              </BFormInvalidFeedback>
+            </BFormGroup>
 
-            <b-form-group
+            <BFormGroup
               :label="$t('pageLdap.modal.groupPrivilege')"
               label-for="privilege"
             >
-              <b-form-select
+              <BFormSelect
                 id="privilege"
                 v-model="form.groupPrivilege"
                 :options="accountRoles"
@@ -41,46 +41,44 @@
                 @change="vv$.form.groupPrivilege.$touch()"
               >
                 <template v-if="!roleGroup" #first>
-                  <b-form-select-option :value="null" disabled>
+                  <BFormSelectOption :value="null" disabled>
                     {{ $t('global.form.selectAnOption') }}
-                  </b-form-select-option>
+                  </BFormSelectOption>
                 </template>
-              </b-form-select>
-              <b-form-invalid-feedback role="alert">
+              </BFormSelect>
+              <BFormInvalidFeedback role="alert">
                 {{ $t('global.form.fieldRequired') }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </b-form>
-        </b-col>
-      </b-row>
-    </b-container>
+              </BFormInvalidFeedback>
+            </BFormGroup>
+          </BForm>
+        </BCol>
+      </BRow>
+    </BContainer>
     <template #footer="{ cancel }">
-      <b-button variant="secondary" @click="cancel()">
+      <BButton variant="secondary" @click="cancel()">
         {{ $t('global.action.cancel') }}
-      </b-button>
-      <b-button form="role-group" type="submit" variant="primary" @click="onOk">
+      </BButton>
+      <BButton form="role-group" type="submit" variant="primary" @click="onOk">
         <template v-if="roleGroup">
           {{ $t('global.action.save') }}
         </template>
         <template v-else>
           {{ $t('global.action.add') }}
         </template>
-      </b-button>
+      </BButton>
     </template>
-  </b-modal>
+  </BModal>
 </template>
 
 <script setup>
 import { computed, ref, reactive, watch, nextTick } from 'vue';
 import { required, requiredIf } from '@vuelidate/validators';
-import stores from '../../../store';
-import useVuelidate from '@vuelidate/core';
+import { useVuelidate } from '@vuelidate/core';
+import stores from '@/store';
 import eventBus from '@/eventBus';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
-import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
 
 const { getValidationState } = useVuelidateComposable();
-const { hideLoader, startLoader, endLoader, loading } = useLoadingBar();
 
 const userManagementStore = stores.UserManagementStore();
 
@@ -118,7 +116,7 @@ const accountRoles = computed(() => {
 watch(
   () => props.roleGroup,
   (value) => {
-    if (value === null) return;
+    if (value === null || value === undefined) return;
     form.groupName = value.groupName;
     form.groupPrivilege = value.groupPrivilege;
   },
@@ -132,17 +130,17 @@ const ruless = computed(() => ({
     groupPrivilege: modal.value ? { required } : {},
   },
 }));
+
 const vv$ = useVuelidate(ruless, { form });
 
 const emit = defineEmits(['ok']);
+
 function handleSubmit() {
   vv$.value.$touch();
   if (vv$.value.$invalid) return;
   emit('ok', {
     addNew: !props.roleGroup,
-    groupNamePreviously: props.roleGroup?.groupName
-      ? props.roleGroup?.groupName
-      : null,
+    groupNamePreviously: props.roleGroup?.groupName || null,
     groupName: form.groupName,
     groupPrivilege: form.groupPrivilege,
   });
@@ -161,6 +159,7 @@ function resetForm() {
   vv$.value.$reset();
   eventBus.emit('hidden');
 }
+
 function onOk(bvModalEvt) {
   // prevent modal close
   bvModalEvt.preventDefault();

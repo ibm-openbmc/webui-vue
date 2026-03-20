@@ -1,6 +1,5 @@
 import GlobalStore from './modules/GlobalStore';
 import AuthenticationStore from './modules/Authentication/AuthenticationStore';
-import LdapStore from './modules/SecurityAndAccess/LdapStore';
 import UserManagementStore from './modules/SecurityAndAccess/UserManagementStore';
 import CertificatesStore from './modules/SecurityAndAccess/CertificatesStore';
 import FirmwareStore from './modules/Operations/FirmwareStore';
@@ -38,9 +37,6 @@ Object.assign(stores, {
 });
 Object.assign(stores, {
   AuthenticationStore: AuthenticationStore,
-});
-Object.assign(stores, {
-  LdapStore: LdapStore,
 });
 Object.assign(stores, {
   UserManagementStore: UserManagementStore,
