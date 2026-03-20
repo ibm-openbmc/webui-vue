@@ -287,9 +287,10 @@ const onModalOk = async ({ ipAddress, port }) => {
   startLoader();
   try {
     await addDestination(data);
+    await refetchSnmpAlerts();
     successToast(i18n.global.t('pageSnmpAlerts.toast.successAddDestination'));
   } catch (error) {
-    errorToast(error.message);
+    errorToast(i18n.global.t('pageSnmpAlerts.toast.errorAddDestination'));
   } finally {
     endLoader();
   }
@@ -323,6 +324,7 @@ const handleOk = async (value) => {
     try {
       const result = await deleteMultipleDestinations(selectedRowsList.value);
 
+      await refetchSnmpAlerts();
       if (result.successCount > 0) {
         successToast(
           i18n.global.t(
@@ -340,7 +342,7 @@ const handleOk = async (value) => {
         );
       }
     } catch (error) {
-      errorToast(error.message);
+      errorToast(i18n.global.t('pageSnmpAlerts.toast.errorBatchDelete'));
     } finally {
       openDeleteModal.value = false;
       eventBus.emit('clear-selected');
@@ -353,11 +355,12 @@ const deleteSingleDestination = async ({ id }) => {
   startLoader();
   try {
     await deleteDestination(id);
+    await refetchSnmpAlerts();
     successToast(
       i18n.global.t('pageSnmpAlerts.toast.successDeleteDestination', { id }),
     );
   } catch (error) {
-    errorToast(error.message);
+    errorToast(i18n.global.t('pageSnmpAlerts.toast.errorDeleteDestination'));
   } finally {
     openDeleteModal.value = false;
     snmpToDelete.value = null;
