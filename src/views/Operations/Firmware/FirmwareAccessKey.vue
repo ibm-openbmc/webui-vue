@@ -22,16 +22,13 @@
 
 <script setup>
 import { computed } from 'vue';
-import stores from '@/store';
+import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
-const licenseStore = stores.LicenseStore();
-
-const firmwareAccessKeyInfo = computed(() => {
-  return licenseStore.firmwareAccessKeyInfo;
-});
+// Use the new VueQuery composable
+const { licenses, firmwareAccessKeyInfo } = useCapacityOnDemand();
 
 const hasLicenses = computed(() => {
-  return !Object.keys(licenseStore.licensesGetter).length;
+  return !Object.keys(licenses.value).length;
 });
 </script>
 

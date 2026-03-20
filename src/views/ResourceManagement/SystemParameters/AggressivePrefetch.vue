@@ -31,11 +31,12 @@
 import { computed } from 'vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
-import stores from '@/store';
+import { useSystemParameters } from '@/api/composables/useSystemParameters';
+import i18n from '@/i18n';
 
 const Toast = useToastComposable();
 
-const systemParametersStore = stores.SystemParametersStore();
+const { aggressivePrefetch, saveAggressivePrefetch } = useSystemParameters();
 
 defineProps({
   safeMode: {
@@ -46,17 +47,25 @@ defineProps({
 
 const aggressivePrefetchState = computed({
   get() {
-    return systemParametersStore.aggressivePrefetch;
+    return aggressivePrefetch.value;
   },
   set(newValue) {
-    systemParametersStore.aggressivePrefetch = newValue;
+    return newValue;
   },
 });
 
-const changeAggressivePrefetchState = (state) => {
-  systemParametersStore
-    .saveAggressivePrefetch(state)
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message));
+const changeAggressivePrefetchState = async (state) => {
+  try {
+    await saveAggressivePrefetch(state);
+    Toast.successToast(
+      i18n.global.t(
+        'pageSystemParameters.toast.successSavingAggressivePrefetch',
+      ),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingAggressivePrefetch'),
+    );
+  }
 };
 </script>

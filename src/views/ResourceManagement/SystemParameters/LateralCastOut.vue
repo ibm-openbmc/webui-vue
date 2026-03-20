@@ -13,7 +13,7 @@
         </dl>
         <BFormCheckbox
           id="lateral-cast-out-switch"
-          v-model="systemParametersStore.lateralCastOutMode"
+          v-model="lateralCastOutModeState"
           aria-labelledby="lateral-cast-out-switch"
           aria-describedby="lateral-cast-out-description"
           switch
@@ -30,14 +30,15 @@
 </template>
 
 <script setup>
-import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import stores from '@/store';
 import { computed } from 'vue';
+import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
+import { useSystemParameters } from '@/api/composables/useSystemParameters';
+import i18n from '@/i18n';
 
 const Toast = useToastComposable();
 
-const systemParametersStore = stores.SystemParametersStore();
+const { lateralCastOutMode, saveLateralCastOutMode } = useSystemParameters();
 
 defineProps({
   safeMode: {
@@ -48,17 +49,23 @@ defineProps({
 
 const lateralCastOutModeState = computed({
   get() {
-    return systemParametersStore.lateralCastOutModeGetter;
+    return lateralCastOutMode.value;
   },
   set(newValue) {
     return newValue;
   },
 });
 
-const changeLateralCastOutState = (state) => {
-  systemParametersStore
-    .saveLateralCastOutMode(state)
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message));
+const changeLateralCastOutState = async (state) => {
+  try {
+    await saveLateralCastOutMode(state);
+    Toast.successToast(
+      i18n.global.t('pageSystemParameters.toast.successSavingLateralCastOut'),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingLateralCastOut'),
+    );
+  }
 };
 </script>

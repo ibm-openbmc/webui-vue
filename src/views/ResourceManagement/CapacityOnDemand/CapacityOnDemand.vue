@@ -34,19 +34,21 @@
     <capacity-on-demand-order-info ref="orderInfo" />
 
     <!-- VET capabilities section -->
-    <capacity-on-demand-table ref="vetCapabilities" :is-busy="isBusy" />
+    <capacity-on-demand-table
+      ref="vetCapabilitiesRef"
+      :is-busy="isBusy"
+      :vet-capabilities="vetCapabilities"
+    />
   </BContainer>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, reactive } from 'vue';
+import { ref, computed, reactive, watch } from 'vue';
 import i18n from '@/i18n';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import Alert from '@/components/Global/Alert.vue';
-import useLoadingBar, {
-  loading,
-} from '@/components/Composables/useLoadingBarComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -54,21 +56,24 @@ import CapacityOnDemandOrderInfo from './CapacityOnDemandOrderInfo.vue';
 import CapacityOnDemandAcvitation from './CapacityOnDemandActivation.vue';
 import CapacityOnDemandTable from './CapacityOnDemandTable.vue';
 import stores from '@/store';
+import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
 const { scrollToOffset } = useJumpLinkComposable();
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 const global = stores.GlobalStore();
-const licenseStore = stores.LicenseStore();
 const systemStore = stores.SystemStore();
+
+// Use the new VueQuery composable
+const { isFetching, isError, vetCapabilities } = useCapacityOnDemand();
 
 const activation = ref(null);
 const orderInfo = ref(null);
-const vetCapabilities = ref(null);
+const vetCapabilitiesRef = ref(null);
 const refs = {
   activation,
   orderInfo,
-  vetCapabilities,
+  vetCapabilities: vetCapabilitiesRef,
 };
 const quickLinks = reactive([
   {
@@ -90,25 +95,39 @@ const quickLinks = reactive([
     linkText: i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
   },
 ]);
-const isBusy = ref(true);
+
+// Manage loading bar for query fetching state
+watch(
+  isFetching,
+  (fetching) => {
+    if (fetching) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+// Stop the loading bar when the fetch fails
+watch(isError, (hasError) => {
+  if (hasError) {
+    endLoader();
+  }
+});
 
 onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-onMounted(() => {
-  startLoader();
-  Promise.all([licenseStore.getLicenses(), systemStore.getSystem()]).finally(
-    () => {
-      endLoader();
-      isBusy.value = false;
-    },
-  );
-});
+// Also fetch system data (not part of licenses composable)
+systemStore.getSystem();
 
 const serverStatus = computed(() => {
   return global.serverStatusGetter;
 });
+
+const isBusy = computed(() => isFetching.value);
 </script>
 <style lang="scss" scoped>
 a {

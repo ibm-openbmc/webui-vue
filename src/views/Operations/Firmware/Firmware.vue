@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar, {
   loading,
@@ -65,39 +65,50 @@ import HostCards from './FirmwareCardsHost.vue';
 import FormUpdate from './FirmwareFormUpdate.vue';
 import FirmwareAccessKey from './FirmwareAccessKey.vue';
 import stores from '@/store';
+import { useFirmware } from '@/api/composables/useFirmware';
+import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
-const firmwareStore = stores.FirmwareStore();
 const controlStore = stores.ControlStore();
-const licenseStore = stores.LicenseStore();
 
-const isServerPowerOffRequired = ref(
-  import.meta.env.VITE_APP_SERVER_OFF_REQUIRED === 'true',
-);
-const lowestSupportedFirmwareVersion = ref('');
-const showAlert = ref(false);
+// Use the new VueQuery composables
+const {
+  isSingleFileUploadEnabled,
+  lowestSupportedFirmwareVersion: lowestSupportedData,
+  isFetching,
+  isError,
+} = useFirmware();
+
+// Also fetch license data for access key
+useCapacityOnDemand();
+
+const isServerPowerOffRequired = ref('true');
 const isLoading = ref(loading.value);
+
+// Manage loading bar for query fetching state
+watch(
+  isFetching,
+  (fetching) => {
+    if (fetching) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+// Stop the loading bar when the fetch fails
+watch(isError, (hasError) => {
+  if (hasError) {
+    endLoader();
+  }
+});
 
 onBeforeRouteLeave(() => {
   hideLoader();
-});
-
-onBeforeMount(() => {
-  startLoader();
-  Promise.all([
-    licenseStore.getLicenses(),
-    firmwareStore.getFirmwareInformation(),
-    firmwareStore.getFirmwareBootSide(),
-    firmwareStore.getLowestSupportedFirmwareVersion().then(() => {
-      lowestSupportedFirmwareVersion.value =
-        firmwareStore.lowestSupportedFirmwareVersionGetter;
-    }),
-    firmwareStore.getLowestSupportedFirmwareVersion().then(() => {
-      showAlert.value = firmwareStore.showAlertGetter;
-    }),
-  ]).finally(() => endLoader());
 });
 
 const serverStatus = computed(() => {
@@ -108,8 +119,12 @@ const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
 });
 
-const isSingleFileUploadEnabled = computed(() => {
-  return firmwareStore.isSingleFileUploadEnabled;
+const lowestSupportedFirmwareVersion = computed(() => {
+  return lowestSupportedData.value?.version || '';
+});
+
+const showAlert = computed(() => {
+  return lowestSupportedData.value?.showAlert || false;
 });
 
 const isOperationInProgress = computed(() => {

@@ -146,46 +146,49 @@ import { computed } from 'vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import stores from '@/store';
+import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const licenseStore = stores.LicenseStore();
 const systemStore = stores.SystemStore();
 
-const processorInfo = computed(() => {
-  return licenseStore.processorInfo;
-});
-const memoryInfo = computed(() => {
-  return licenseStore.memoryInfo;
-});
-const firmwareAccessKeyInfo = computed(() => {
-  return licenseStore.firmwareAccessKeyInfo;
-});
-const aixAccessKeyInfo = computed(() => {
-  return licenseStore.aixAccessKeyInfo;
-});
+// Use the new VueQuery composable
+const {
+  licenses,
+  processorInfo,
+  memoryInfo,
+  firmwareAccessKeyInfo,
+  aixAccessKeyInfo,
+} = useCapacityOnDemand();
+
 const hasLicenses = computed(() => {
   // This logic checks to see if there are any licences in the store.
   // If there are none, the result is true, otherwise false.
-  return !Object.keys(licenseStore.licensesGetter).length;
+  return !Object.keys(licenses.value).length;
 });
+
 const processorLicensed = computed(() => {
-  return licenseStore.licensesGetter?.PermProcs?.MaxAuthorizedDevices;
+  return licenses.value?.PermProcs?.MaxAuthorizedDevices;
 });
+
 const apid = computed(() => {
-  return licenseStore.licensesGetter?.APID?.SerialNumber;
+  return licenses.value?.APID?.SerialNumber;
 });
+
 const systemCodPublicKey = computed(() => {
-  return licenseStore.licensesGetter?.APPublicKey?.SerialNumber;
+  return licenses.value?.APPublicKey?.SerialNumber;
 });
+
 const memoryLicensed = computed(() => {
-  return licenseStore.licensesGetter?.PermMem?.MaxAuthorizedDevices;
+  return licenses.value?.PermMem?.MaxAuthorizedDevices;
 });
+
 const systemInfo = computed(() => {
   return systemStore.getSystems?.[0] || {};
 });
+
 const systemAnchor = computed(() => {
-  return licenseStore.licensesGetter?.SystemAnchor?.SerialNumber;
+  return licenses.value?.SystemAnchor?.SerialNumber;
 });
 </script>
 

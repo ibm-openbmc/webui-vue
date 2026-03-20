@@ -40,16 +40,17 @@
 import { computed } from 'vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
-import stores from '@/store';
+import { useFirmware } from '@/api/composables/useFirmware';
 
-const firmwareStore = stores.FirmwareStore();
+// Use the new VueQuery composable
+const { activeHostFirmware, backupHostFirmware } = useFirmware();
 
 const running = computed(() => {
-  return firmwareStore.activeHostFirmware;
+  return activeHostFirmware.value;
 });
 
 const backup = computed(() => {
-  return firmwareStore.backupHostFirmware;
+  return backupHostFirmware.value;
 });
 
 const runningVersion = computed(() => {

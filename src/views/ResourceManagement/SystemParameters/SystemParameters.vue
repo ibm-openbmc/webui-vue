@@ -13,6 +13,8 @@
 </template>
 
 <script setup>
+import { watch, computed } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import LateralCastOut from './LateralCastOut.vue';
 import FrequencyCap from './FrequencyCap.vue';
@@ -20,16 +22,35 @@ import AggressivePrefetch from './AggressivePrefetch.vue';
 import RuntimeProcessorDiagnostic from './RuntimeProcessorDiagnostic.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import stores from '@/store';
-import { onBeforeMount, computed } from 'vue';
+import { useSystemParameters } from '@/api/composables/useSystemParameters';
 
-const { startLoader, endLoader } = useLoadingBar();
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
-const systemParametersStore = stores.SystemParametersStore();
 const global = stores.GlobalStore();
+const { isFetching, isError } = useSystemParameters();
 
-onBeforeMount(() => {
-  startLoader();
-  systemParametersStore.getBiosAttributesRegistry().finally(() => endLoader());
+// Manage loading bar for query fetching state
+watch(
+  isFetching,
+  (fetching) => {
+    if (fetching) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+// Stop the loading bar when the fetch fails
+watch(isError, (hasError) => {
+  if (hasError) {
+    endLoader();
+  }
+});
+
+onBeforeRouteLeave(() => {
+  hideLoader();
 });
 
 const serverStatus = computed(() => {

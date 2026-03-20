@@ -9,7 +9,11 @@
     <template #default>
       <p class="mb-0">{{ body }}</p>
       <p v-if="refreshAction">
-        <BLink class="d-inline-block mt-3" @click="handleRefresh">
+        <BLink
+          class="d-inline-block mt-3"
+          href="#"
+          @click.prevent="handleRefresh"
+        >
           {{ i18n.global.t('global.action.refresh') }}
         </BLink>
       </p>

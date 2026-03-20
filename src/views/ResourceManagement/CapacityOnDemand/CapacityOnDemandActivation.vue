@@ -82,13 +82,16 @@ import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import { useVuelidate } from '@vuelidate/core';
 import stores from '@/store';
+import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
 const { getValidationState } = useVuelidateComposable();
 const { successToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 
 const global = stores.GlobalStore();
-const licenseStore = stores.LicenseStore();
+
+// Use the new VueQuery composable
+const { licenses, activateLicense, isActivating } = useCapacityOnDemand();
 
 const licenseKey = ref('');
 const maxLengthVal = ref(34);
@@ -108,12 +111,13 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, { licenseKey });
 
 const isInPhypStandby = computed(() => {
-  return global.isInPhypStandby();
+  return global.isInPhypStandby;
 });
+
 const isActivationDisabled = computed(() => {
   if (
-    licenseStore.licensesGetter?.UAK?.Status?.State === 'Enabled' &&
-    isInPhypStandby
+    licenses.value?.UAK?.Status?.State === 'Enabled' &&
+    isInPhypStandby.value
   ) {
     return false;
   } else {
@@ -121,24 +125,24 @@ const isActivationDisabled = computed(() => {
   }
 });
 
-const submitForm = () => {
+const submitForm = async () => {
   v$.value.$touch();
   if (!v$.value.$invalid) {
     startLoader();
-    licenseStore
-      .activateLicense(licenseKey.value)
-      .then((success) => successToast(success))
-      .then(() => fetchInfo())
-      .catch(({ message }) => errorToast(message))
-      .finally(() => endLoader());
+    try {
+      const success = await activateLicense(licenseKey.value);
+      successToast(success);
+      fetchInfo();
+    } catch (error) {
+      errorToast(error.message);
+    } finally {
+      endLoader();
+    }
   }
 };
+
 const fetchInfo = () => {
-  Promise.all([
-    global.getSystemInfo(),
-    global.getBootProgress(),
-    licenseStore.getLicenses(),
-  ]);
+  Promise.all([global.getSystemInfo(), global.getBootProgress()]);
 };
 </script>
 

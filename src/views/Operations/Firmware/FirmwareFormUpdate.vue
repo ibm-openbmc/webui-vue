@@ -53,6 +53,7 @@ import FormFile from '@/components/Global/FormFile.vue';
 import ModalUpdateFirmware from './FirmwareModalUpdateFirmware.vue';
 import stores from '@/store';
 import eventBus from '@/eventBus';
+import { useFirmware } from '@/api/composables/useFirmware';
 
 const { errorToast, infoToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
@@ -60,7 +61,9 @@ const { getValidationState } = useVuelidateComposable();
 
 const globalStore = stores.GlobalStore();
 const bmcStore = stores.BmcStore();
-const firmwareStore = stores.FirmwareStore();
+
+// Use the new VueQuery composable
+const { uploadFirmware } = useFirmware();
 
 const emit = defineEmits(['loadingStatus']);
 
@@ -79,7 +82,6 @@ const isServerPowerOffRequired = ref(
 
 onBeforeMount(() => {
   bmcStore.getBmcInfo();
-  firmwareStore.getUpdateServiceSettings();
 });
 
 const bmcPowerState = computed(() => {
@@ -114,7 +116,7 @@ function updateFirmware() {
 
   // Step 1 - Upload
   const uploadFirmware = () => {
-    if (!isReadonly) {
+    if (!isReadonly()) {
       infoToast(
         i18n.global.t('pageFirmware.toast.updateFirmware.step1Message'),
         {
@@ -237,14 +239,13 @@ function updateFirmware() {
 }
 
 function dispatchWorkstationUpload(activateFirmware) {
-  firmwareStore
-    .uploadFirmware(file.value)
-    .then(async ({ data }) => {
+  uploadFirmware(file.value)
+    .then(async (data) => {
       activateFirmware(data);
     })
-    .catch(({ message }) => {
+    .catch((error) => {
       endLoader();
-      errorToast(message);
+      errorToast(error.message);
     });
 }
 

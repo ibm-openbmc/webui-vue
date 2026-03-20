@@ -169,9 +169,6 @@ import i18n from '@/i18n';
 import { forOwn } from 'lodash';
 import PageSection from '@/components/Global/PageSection.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
-import stores from '@/store';
-
-const licenseStore = stores.LicenseStore();
 
 const fields = ref([
   {
@@ -193,14 +190,17 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  vetCapabilities: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const items = computed(() => {
-  const vetCapabilities = licenseStore.vetCapabilities;
-
+  const capabilities = props.vetCapabilities;
   const items = [];
 
-  forOwn(vetCapabilities, (license) => {
+  forOwn(capabilities, (license) => {
     items.push({
       settings: license.Name,
       status: license.Status?.State,

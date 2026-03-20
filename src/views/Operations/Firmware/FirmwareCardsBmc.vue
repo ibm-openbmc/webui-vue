@@ -80,12 +80,21 @@ import ModalSwitchToRunning from './FirmwareModalSwitchToRunning.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import IconSwitch from '@carbon/icons-vue/es/arrows--horizontal/20';
 import stores from '@/store';
+import { useFirmware } from '@/api/composables/useFirmware';
 
 const { errorToast, infoToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
-const firmwareStore = stores.FirmwareStore();
+
+// Use the new VueQuery composable
+const {
+  activeBmcFirmware,
+  backupBmcFirmware,
+  firmwareBootSide,
+  isSingleFileUploadEnabled,
+  switchBmcFirmwareAndReboot,
+} = useFirmware();
 
 const emit = defineEmits(['loadingStatus']);
 
@@ -110,10 +119,6 @@ const bootProgress = computed(() => {
   return globalStore.bootProgressGetter;
 });
 
-const isSingleFileUploadEnabled = computed(() => {
-  return firmwareStore.isSingleFileUploadEnabled;
-});
-
 const sectionTitle = computed(() => {
   if (isSingleFileUploadEnabled.value) {
     return i18n.global.t('pageFirmware.sectionTitleBmcCardsCombined');
@@ -122,11 +127,11 @@ const sectionTitle = computed(() => {
 });
 
 const running = computed(() => {
-  return firmwareStore.activeBmcFirmware;
+  return activeBmcFirmware.value;
 });
 
 const backup = computed(() => {
-  return firmwareStore.backupBmcFirmware;
+  return backupBmcFirmware.value;
 });
 
 const runningVersion = computed(() => {
@@ -143,10 +148,6 @@ const backupStatus = computed(() => {
 
 const showBackupImageStatus = computed(() => {
   return backupStatus.value === 'Critical' || backupStatus.value === 'Warning';
-});
-
-const firmwareBootSide = computed(() => {
-  return firmwareStore.firmwareBootSideGetter;
 });
 
 const isReadonly = () => {
@@ -168,7 +169,7 @@ function switchToRunning() {
 
   // Step 1 - Switch firmware
   const switchFirmware = () => {
-    if (!isReadonly) {
+    if (!isReadonly()) {
       infoToast(
         i18n.global.t('pageFirmware.toast.switchToRunning.step1Message'),
         {
@@ -177,12 +178,11 @@ function switchToRunning() {
         },
       );
     }
-    firmwareStore
-      .switchBmcFirmwareAndReboot()
+    switchBmcFirmwareAndReboot()
       .then(async () => bmcReboot())
-      .catch(({ message }) => {
+      .catch((error) => {
         endLoader();
-        errorToast(message);
+        errorToast(error.message);
       });
   };
 

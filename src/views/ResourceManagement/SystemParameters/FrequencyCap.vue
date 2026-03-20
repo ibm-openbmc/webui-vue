@@ -104,22 +104,28 @@
 </template>
 
 <script setup>
-import { computed, ref, onBeforeMount } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { requiredIf, between, numeric } from '@vuelidate/validators';
-import stores from '@/store';
 import { useVuelidate } from '@vuelidate/core';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useSystemParameters } from '@/api/composables/useSystemParameters';
+import i18n from '@/i18n';
 
-const { startLoader, endLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
 const { getValidationState } = useVuelidateComposable();
 const Toast = useToastComposable();
 
-const systemParametersStore = stores.SystemParametersStore();
+const {
+  frequencyMax,
+  frequencyMin,
+  frequencyRequest: frequencyRequestData,
+  frequencyRequestCurrent,
+  frequencyRequestCurrentToggle,
+  saveFrequencyCap,
+} = useSystemParameters();
 
 defineProps({
   safeMode: {
@@ -128,84 +134,63 @@ defineProps({
   },
 });
 
-const isDisabled = ref(true);
 const frequencyValue = ref(0);
 
-onBeforeMount(() => {
-  startLoader();
-  systemParametersStore
-    .getFrequencyCap()
-    .then(() => {
-      frequencyValue.value = systemParametersStore.frequencyRequestGetter;
-    })
-    .finally(() => endLoader());
-});
-
-const frequencyMax = computed(() => systemParametersStore.frequencyMaxGetter);
-const frequencyMin = computed(() => systemParametersStore.frequencyMinGetter);
-const frequencyRequestCurrent = computed(
-  () => systemParametersStore.frequencyRequestCurrentGetter,
+// Sync frequencyValue with fetched data
+watch(
+  frequencyRequestData,
+  (value) => {
+    if (value !== null) frequencyValue.value = value;
+  },
+  { immediate: true },
 );
-const frequencyControl = computed({
-  get() {
-    return frequencyRequestCurrent.value > 0;
-  },
-  set(newValue) {
-    return newValue;
-  },
-});
-const frequencyRequestCurrentToggle = computed({
-  get() {
-    return systemParametersStore.frequencyRequestCurrentToggleGetter;
-  },
-  set(newValue) {
-    return newValue;
-  },
-});
+
 const rules = computed(() => ({
   frequencyValue: {
     requiredIf: requiredIf(frequencyRequestCurrentToggle),
     numeric,
     between: frequencyRequestCurrentToggle.value
-      ? between(frequencyMin.value, frequencyMax.value)
+      ? between(frequencyMin.value ?? 0, frequencyMax.value ?? 0)
       : true,
   },
 }));
 const v$ = useVuelidate(rules, { frequencyValue });
 
-const changeFrequencyRequestCurrent = (state) => {
-  if (state) {
-    frequencyValue.value = frequencyMax.value;
-    systemParametersStore
-      .saveFrequencyCap({
-        frequency: frequencyMax.value,
-        state: state,
-      })
-      .then((message) => Toast.successToast(message))
-      .catch(({ message }) => Toast.errorToast(message));
-  } else {
-    frequencyValue.value = 0;
-    systemParametersStore
-      .saveFrequencyCap({
-        frequency: 0,
-        state: state,
-      })
-      .then((message) => Toast.successToast(message))
-      .catch(({ message }) => Toast.errorToast(message));
+const changeFrequencyRequestCurrent = async (state) => {
+  try {
+    if (state) {
+      frequencyValue.value = frequencyMax.value ?? 0;
+      await saveFrequencyCap(frequencyMax.value ?? 0);
+    } else {
+      frequencyValue.value = 0;
+      await saveFrequencyCap(0);
+    }
+    Toast.successToast(
+      i18n.global.t('pageSystemParameters.toast.successSavingFrequencyCap'),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingFrequencyCap'),
+    );
   }
 };
-const saveFrequencyRequest = () => {
+
+const saveFrequencyRequest = async () => {
   if (v$.value.$invalid) {
     return;
   }
-  systemParametersStore
-    .newFrequencyCapRequest({
-      frequency: frequencyValue.value,
-      state: true,
-    })
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message));
+  try {
+    await saveFrequencyCap(frequencyValue.value);
+    Toast.successToast(
+      i18n.global.t('pageSystemParameters.toast.successSavingFrequencyCap'),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingFrequencyCap'),
+    );
+  }
 };
+
 const frequencyRequest = (value) => {
   frequencyValue.value = Number(value);
 };

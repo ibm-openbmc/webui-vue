@@ -214,22 +214,38 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
-import { helpers } from '@vuelidate/validators';
 import { minValue, maxValue } from '@vuelidate/validators';
+import { useSystemParameters } from '@/api/composables/useSystemParameters';
 import i18n from '@/i18n';
 
 const { getValidationState } = useVuelidateComposable();
 const { startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
 
-const systemParametersStore = stores.SystemParametersStore();
+const {
+  rpdPolicy: rpdPolicyData,
+  rpdFeature: rpdFeatureData,
+  rpdPolicyOptions,
+  rpdFeatureOptions,
+  rpdPolicyCurrent,
+  immediateTestRequested,
+  guardOnError,
+  rpdScheduledRun: rpdScheduledRunData,
+  rpdScheduledRunDuration: rpdScheduledRunDurationData,
+  saveRpdPolicy,
+  saveRpdFeature,
+  saveImmediateTestRequested,
+  saveGuardOnError,
+  saveRpdScheduledRun: saveRpdScheduledRunMutation,
+} = useSystemParameters();
+
 const global = stores.GlobalStore();
 
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -240,97 +256,102 @@ defineProps({
     default: null,
   },
 });
-const selectedOption = computed({
-  get() {
-    return systemParametersStore.rpdPolicy;
+
+// Local state for form inputs
+const selectedOption = ref('');
+const selectedFeatureOption = ref('');
+const rpdScheduledRun = ref('');
+const rpdScheduledRunDuration = ref(0);
+
+// Sync local state with fetched data
+watch(
+  rpdPolicyData,
+  (value) => {
+    if (value !== null) selectedOption.value = value;
   },
-  set(value) {
-    // Do something when the option is selected
-    // e.g. update the value in the store
-    systemParametersStore.rpdPolicy = value;
+  { immediate: true },
+);
+
+watch(
+  rpdFeatureData,
+  (value) => {
+    if (value !== null) selectedFeatureOption.value = value;
   },
-});
-const selectedFeatureOption = computed({
-  get() {
-    return systemParametersStore.rpdFeature;
+  { immediate: true },
+);
+
+watch(
+  rpdScheduledRunData,
+  (value) => {
+    if (value !== null) rpdScheduledRun.value = value;
   },
-  set(value) {
-    // Do something when the option is selected
-    // e.g. update the value in the store
-    systemParametersStore.rpdFeature = value;
+  { immediate: true },
+);
+
+watch(
+  rpdScheduledRunDurationData,
+  (value) => {
+    if (value !== null) rpdScheduledRunDuration.value = value;
   },
-});
+  { immediate: true },
+);
+
 const isRpdPolicyScheduled = computed(() => {
-  return systemParametersStore.pvmRpdPolicy === 'Scheduled';
+  return selectedOption.value === 'Scheduled';
 });
+
 const options = computed(() => {
-  if (systemParametersStore.rpdPolicyOptionsGetter) {
-    return systemParametersStore.rpdPolicyOptions.map((option) => ({
-      value: option,
-      text: option,
-    }));
-  } else {
-    return [];
-  }
+  return rpdPolicyOptions.value.map((option) => ({
+    value: option,
+    text: option,
+  }));
 });
+
 const rpdFeatOptions = computed(() => {
-  if (systemParametersStore.rpdFeatureOptionsGetter) {
-    return systemParametersStore.rpdFeatureOptionsGetter.map((option) => ({
-      value: option,
-      text: option,
-    }));
-  } else {
-    return [];
-  }
+  return rpdFeatureOptions.value.map((option) => ({
+    value: option,
+    text: option,
+  }));
 });
+
 const isRpdFeatureCurrentDisabled = computed(() => {
-  return systemParametersStore.rpdPolicyCurrent === 'Disabled';
+  return rpdPolicyCurrent.value === 'Disabled';
 });
-const aggressivePrefetchState = computed({
-  get() {
-    return systemParametersStore.aggressivePrefetch;
+
+// Local state for immediate UI update (optimistic update)
+const localImmediateTestRequested = ref(false);
+
+// Sync local state with server data
+watch(
+  immediateTestRequested,
+  (value) => {
+    if (value !== null) localImmediateTestRequested.value = value;
   },
-  set(newValue) {
-    systemParametersStore.aggressivePrefetch = newValue;
-  },
-});
+  { immediate: true },
+);
+
 const immediateTestRequestedState = computed({
   get() {
-    return systemParametersStore.immediateTestRequested;
+    return localImmediateTestRequested.value;
   },
   set(newValue) {
-    systemParametersStore.immediateTestRequested = newValue;
+    return newValue;
   },
 });
-const rpdScheduledRun = computed({
-  get() {
-    return systemParametersStore.rpdScheduledRun;
-  },
-  set(value) {
-    v$.value.$touch();
-    systemParametersStore.rpdScheduledRun = value;
-  },
-});
-const rpdScheduledRunDuration = computed({
-  get() {
-    return systemParametersStore.rpdScheduledRunDuration;
-  },
-  set(value) {
-    v$.value.$touch();
-    systemParametersStore.rpdScheduledRunDuration = value;
-  },
-});
+
 const guardOnErrorState = computed({
   get() {
-    return systemParametersStore.guardOnError;
+    return guardOnError.value;
   },
   set(newValue) {
-    systemParametersStore.guardOnError = newValue;
+    return newValue;
   },
 });
+
 const serverStatus = computed(() => {
   return global.serverStatusGetter;
 });
+
 const isServerOff = computed(() => {
   return serverStatus.value === 'off' ? true : false;
 });
@@ -347,70 +368,106 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, { rpdScheduledRun, rpdScheduledRunDuration });
 
-const updateImmediateTestRequestedState = (value) => {
-  startLoader();
-  Promise.all([
-    systemParametersStore.saveImmediateTestRequested({
-      value: value ? 'Enabled' : 'Disabled',
-    }),
-    setTimeout(() => {
-      systemParametersStore.getBiosAttributesRegistry;
-    }, 5000),
-  ])
-    .then((message) => {
-      if (value && isServerOff.value) {
-        Toast.successToast(
-          i18n.global.t(
-            'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
-          ),
-        );
-      } else {
-        Toast.successToast(message[0]);
-      }
-    })
-    .catch(({ message }) => Toast.errorToast(message))
-    .finally(() => endLoader());
+const updateImmediateTestRequestedState = async (value) => {
+  // Optimistic update for immediate UI response
+  localImmediateTestRequested.value = value;
+
+  try {
+    await saveImmediateTestRequested(value ? 'Enabled' : 'Disabled');
+
+    if (value && isServerOff.value) {
+      Toast.successToast(
+        i18n.global.t(
+          'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
+        ),
+      );
+    } else if (value) {
+      Toast.successToast(
+        i18n.global.t(
+          'pageSystemParameters.toast.successStartingDiagnosticTestRun',
+        ),
+      );
+    } else {
+      Toast.successToast(
+        i18n.global.t(
+          'pageSystemParameters.toast.successStoppingDiagnosticTestRun',
+        ),
+      );
+    }
+  } catch (error) {
+    // Revert optimistic update on error
+    localImmediateTestRequested.value = !value;
+
+    if (value) {
+      Toast.errorToast(
+        i18n.global.t(
+          'pageSystemParameters.toast.errorStartingDiagnosticTestRun',
+        ),
+      );
+    } else {
+      Toast.errorToast(
+        i18n.global.t(
+          'pageSystemParameters.toast.errorStoppingDiagnosticTestRun',
+        ),
+      );
+    }
+  }
 };
-const updateGuardOnErrorState = (state) => {
-  systemParametersStore
-    .saveGuardOnError(state)
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message));
+
+const updateGuardOnErrorState = async (state) => {
+  try {
+    await saveGuardOnError(state);
+    Toast.successToast(
+      i18n.global.t('pageSystemParameters.toast.successSavingGuardOnError'),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingGuardOnError'),
+    );
+  }
 };
-const updateRpdPolicy = () => {
-  startLoader();
-  let rpdPolicyValue = selectedOption.value;
-  systemParametersStore
-    .saveRpdPolicy(rpdPolicyValue)
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message))
-    .finally(() => {
-      endLoader();
-    });
+
+const updateRpdPolicy = async () => {
+  try {
+    await saveRpdPolicy(selectedOption.value);
+    Toast.successToast(
+      i18n.global.t('pageSystemParameters.toast.successSavingRpdPolicy'),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingRpdPolicy'),
+    );
+  }
 };
-const updateRpdFeature = () => {
-  startLoader();
-  let rpdFeatureValue = selectedFeatureOption.value;
-  systemParametersStore
-    .saveRpdFeature(rpdFeatureValue)
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message))
-    .finally(() => {
-      endLoader();
-    });
+
+const updateRpdFeature = async () => {
+  try {
+    await saveRpdFeature(selectedFeatureOption.value);
+    Toast.successToast(
+      i18n.global.t('pageSystemParameters.toast.successSavingRpdFeature'),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingRpdFeature'),
+    );
+  }
 };
-const updateRpdScheduledRun = (startTime, duration) => {
+
+const updateRpdScheduledRun = async (startTime, duration) => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
-  startLoader();
-  const [hours, minutes] = startTime.split(':');
-  const totalSeconds = (+hours * 60 + +minutes) * 60;
-  systemParametersStore
-    .saveRpdScheduledRun({ totalSeconds, duration, startTime })
-    .then((message) => Toast.successToast(message))
-    .catch(({ message }) => Toast.errorToast(message))
-    .finally(() => {
-      endLoader();
-    });
+
+  try {
+    const [hours, minutes] = startTime.split(':');
+    const totalSeconds = (+hours * 60 + +minutes) * 60;
+    await saveRpdScheduledRunMutation({ totalSeconds, duration });
+    Toast.successToast(
+      i18n.global.t('pageSystemParameters.toast.successSavingRpdRun'),
+    );
+  } catch (error) {
+    Toast.errorToast(
+      i18n.global.t('pageSystemParameters.toast.errorSavingRpdRun'),
+    );
+  }
 };
 </script>

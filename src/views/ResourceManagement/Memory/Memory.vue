@@ -114,21 +114,15 @@
                 type="number"
                 :disabled="!isSectionEditable()"
                 :state="getValidationState(v$.systemMemoryPageSetup)"
+                @update:model-value="v$.systemMemoryPageSetup.$touch()"
               ></BFormInput>
               <BFormInvalidFeedback role="alert">
-                <template
-                  v-if="
-                    !v$.systemMemoryPageSetup.minLength ||
-                    !v$.systemMemoryPageSetup.maxLength
-                  "
-                >
-                  {{
-                    $t('global.form.valueMustBeBetween', {
-                      min: 0,
-                      max: maxHugePageLimit,
-                    })
-                  }}
-                </template>
+                {{
+                  $t('global.form.valueMustBeBetween', {
+                    min: 0,
+                    max: maxHugePageLimit,
+                  })
+                }}
               </BFormInvalidFeedback>
               <BButton
                 variant="primary"
@@ -175,21 +169,15 @@
                 :max="21"
                 :state="getValidationState(v$.ioAdapterCapacity)"
                 :disabled="!isSectionEditable()"
+                @update:model-value="v$.ioAdapterCapacity.$touch()"
               ></BFormInput>
               <BFormInvalidFeedback role="alert">
-                <template
-                  v-if="
-                    !v$.ioAdapterCapacity.minLength ||
-                    !v$.ioAdapterCapacity.maxLength
-                  "
-                >
-                  {{
-                    $t('global.form.valueMustBeBetween', {
-                      min: 0,
-                      max: 21,
-                    })
-                  }}
-                </template>
+                {{
+                  $t('global.form.valueMustBeBetween', {
+                    min: 0,
+                    max: 21,
+                  })
+                }}
               </BFormInvalidFeedback>
             </BFormGroup>
             <BButton
@@ -221,7 +209,7 @@
             aria-label="update-io-drawer-attachment"
             @submit.prevent="updateDynamicAdapterCapacity()"
           >
-            <span v-if="dynamicIoDrawerCapacity === null">
+            <span v-if="dynamicIoDrawerCapacityData === null">
               {{ '--' }}
             </span>
             <span v-else>
@@ -240,25 +228,19 @@
                   :max="dynamicIoDrawerDefaultCapacity"
                   :state="getValidationState(v$.dynamicIoDrawerCapacity)"
                   :disabled="!isSectionEditable()"
+                  @update:model-value="v$.dynamicIoDrawerCapacity.$touch()"
                 ></BFormInput>
                 <BFormInvalidFeedback role="alert">
-                  <template
-                    v-if="
-                      !v$.dynamicIoDrawerCapacity.minLength ||
-                      !v$.dynamicIoDrawerCapacity.maxLength
-                    "
-                  >
-                    {{
-                      $t('global.form.valueMustBeBetween', {
-                        min: 0,
-                        max: dynamicIoDrawerDefaultCapacity,
-                      })
-                    }}
-                  </template>
+                  {{
+                    $t('global.form.valueMustBeBetween', {
+                      min: 0,
+                      max: dynamicIoDrawerDefaultCapacity,
+                    })
+                  }}
                 </BFormInvalidFeedback>
               </BFormGroup>
             </span>
-            <span v-if="dynamicIoDrawerCapacity !== null">
+            <span v-if="dynamicIoDrawerCapacityData !== null">
               <BButton
                 variant="primary"
                 type="submit"
@@ -388,10 +370,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeMount } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { minValue, maxValue } from '@vuelidate/validators';
-import { storeToRefs } from 'pinia';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
@@ -402,14 +384,36 @@ import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import stores from '@/store';
+import { useMemory } from '@/api/composables/useMemory';
 
-const { startLoader, endLoader } = useLoadingBar();
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { scrollToOffset } = useJumpLinkComposable();
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
 const globalStore = stores.GlobalStore();
-const resourceMemoryStore = stores.ResourceMemoryStore();
+
+// Use the new VueQuery composable
+const {
+  logicalMemorySize,
+  logicalMemorySizeOptions,
+  ioAdapterCapacity: ioAdapterCapacityData,
+  dynamicIoDrawerCapacity: dynamicIoDrawerCapacityData,
+  dynamicIoDrawerDefaultCapacity,
+  maxNumHugePages: maxHugePageLimit,
+  numHugePages: numHugePagesData,
+  memoryMirroringMode,
+  predictiveDynamicMemoryDeallocation,
+  isFetching,
+  isError,
+  saveLogicalMemorySize,
+  savePageSetup,
+  saveEnlargedCapacity,
+  saveDynamicCapacity,
+  saveActiveMemoryMirroringMode,
+  savePredictiveDynamicMemoryDeallocation,
+  isUpdating,
+} = useMemory();
 
 const logicalMemorySizeOption = ref(null);
 const inputSystemMemoryPageSetup = ref(null);
@@ -428,7 +432,7 @@ const refs = {
 };
 
 const form = ref({
-  logicalMemorySizeOption: resourceMemoryStore.logicalMemorySizeGetter,
+  logicalMemorySizeOption: null,
 });
 
 const quickLinks = ref([
@@ -472,26 +476,68 @@ const quickLinks = ref([
   },
 ]);
 
-onBeforeMount(() => {
-  startLoader();
-  Promise.all([
-    resourceMemoryStore.getMemorySizeOptions(),
-    resourceMemoryStore.getLogicalMemorySize(),
-    resourceMemoryStore.getIoAdapterCapacity(),
-    resourceMemoryStore.getNumHugePages(),
-    resourceMemoryStore.getMaxNumHugePages(),
-    resourceMemoryStore.getHmcManaged(),
-    resourceMemoryStore.getActiveMemoryMirroring(),
-    resourceMemoryStore.getPredictiveDynamicMemoryDeallocation(),
-  ]).finally(() => endLoader());
+// Manage loading bar for query fetching state
+watch(
+  isFetching,
+  (fetching) => {
+    if (fetching) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+// Stop the loading bar when the fetch fails
+watch(isError, (hasError) => {
+  if (hasError) {
+    endLoader();
+  }
 });
 
-const { logicalMemorySizeOptions, logicalMemorySize } =
-  storeToRefs(resourceMemoryStore);
+// Manage loading bar for mutation/update state
+watch(isUpdating, (updating) => {
+  if (updating) {
+    startLoader();
+  } else {
+    endLoader();
+  }
+});
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+// Local state for form inputs with validation
+const ioAdapterCapacity = ref(0);
+const dynamicIoDrawerCapacity = ref(0);
+const systemMemoryPageSetup = ref(0);
+
+// Sync local state with fetched data
+watch(ioAdapterCapacityData, (value) => {
+  if (value !== null) ioAdapterCapacity.value = value;
+});
+
+watch(dynamicIoDrawerCapacityData, (value) => {
+  if (value !== null) dynamicIoDrawerCapacity.value = value;
+});
+
+watch(numHugePagesData, (value) => {
+  if (value !== null) systemMemoryPageSetup.value = value;
+});
+
+watch(
+  logicalMemorySize,
+  (value) => {
+    if (value !== null) form.value.logicalMemorySizeOption = value;
+  },
+  { immediate: true },
+);
 
 const activeMemoryMirroringState = computed({
   get() {
-    return resourceMemoryStore.memoryMirroringModeGetter;
+    return memoryMirroringMode.value;
   },
   set(newValue) {
     return newValue;
@@ -500,57 +546,15 @@ const activeMemoryMirroringState = computed({
 
 const predictiveDynamicMemoryDeallocationState = computed({
   get() {
-    return resourceMemoryStore.predictiveDynamicMemoryDeallocationGetter;
+    return predictiveDynamicMemoryDeallocation.value;
   },
   set(newValue) {
     return newValue;
   },
 });
 
-const maxHugePageLimit = computed(() => {
-  return resourceMemoryStore.maxNumHugePagesGetter;
-});
-
-const dynamicIoDrawerDefaultCapacity = computed(() => {
-  return resourceMemoryStore.dynamicIoDrawerDefaultCapacityGetter;
-});
-
-const ioAdapterCapacity = computed({
-  get() {
-    return resourceMemoryStore.ioAdapterCapacityGetter;
-  },
-  set(value) {
-    v$.value.$touch();
-    resourceMemoryStore.ioAdapterCapacity = value;
-  },
-});
-
-const dynamicIoDrawerCapacity = computed({
-  get() {
-    return resourceMemoryStore.dynamicIoDrawerCapacityGetter;
-  },
-  set(value) {
-    v$.value.$touch();
-    resourceMemoryStore.dynamicIoDrawerCapacity = value;
-  },
-});
-
-const systemMemoryPageSetup = computed({
-  get() {
-    return resourceMemoryStore.numHugePagesGetter;
-  },
-  set(value) {
-    v$.value.$touch();
-    resourceMemoryStore.numHugePages = value;
-  },
-});
-
 const serverStatus = computed(() => {
   return globalStore.serverStatusGetter;
-});
-
-watch(logicalMemorySize, (value) => {
-  form.value.logicalMemorySizeOption = value;
 });
 
 const rules = computed(() => ({
@@ -563,11 +567,11 @@ const rules = computed(() => ({
   },
   dynamicIoDrawerCapacity: {
     minValue: minValue(0),
-    maxValue: maxValue(dynamicIoDrawerDefaultCapacity.value),
+    maxValue: maxValue(dynamicIoDrawerDefaultCapacity.value ?? 0),
   },
   systemMemoryPageSetup: {
     minValue: minValue(0),
-    maxValue: maxValue(maxHugePageLimit.value),
+    maxValue: maxValue(maxHugePageLimit.value ?? 0),
   },
 }));
 
@@ -586,68 +590,91 @@ function isSectionEditable() {
   return isServerOff();
 }
 
-function handleSubmit() {
-  startLoader();
-  let logicalMemorySize = form.value.logicalMemorySizeOption;
-  resourceMemoryStore
-    .saveSettings(logicalMemorySize)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => {
-      v$.value.form.$reset();
-      endLoader();
-    });
+async function handleSubmit() {
+  const size = form.value.logicalMemorySizeOption;
+  if (!size) return;
+
+  try {
+    await saveLogicalMemorySize(size);
+    successToast(i18n.global.t('pageMemory.toast.successSavingLogicalMemory'));
+    v$.value.form.$reset();
+  } catch (error) {
+    errorToast(i18n.global.t('pageMemory.toast.errorSavingLogicalMemory'));
+  }
 }
 
-function updatePageSetup() {
+async function updatePageSetup() {
   if (v$.value.$invalid) return;
-  startLoader();
-  resourceMemoryStore
-    .savePageSetup()
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => {
-      v$.value.form.$reset();
-      endLoader();
-    });
+
+  try {
+    await savePageSetup(systemMemoryPageSetup.value);
+    successToast(i18n.global.t('pageMemory.toast.successSavingPageSetup'));
+    v$.value.systemMemoryPageSetup.$reset();
+  } catch (error) {
+    errorToast(i18n.global.t('pageMemory.toast.errorSavingPageSetup'));
+  }
 }
 
-function updateAdapterCapacity() {
-  startLoader();
-  resourceMemoryStore
-    .saveEnlargedCapacity()
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => {
-      v$.value.form.$reset();
-      endLoader();
-    });
+async function updateAdapterCapacity() {
+  if (v$.value.ioAdapterCapacity.$invalid) return;
+
+  try {
+    await saveEnlargedCapacity(ioAdapterCapacity.value);
+    successToast(
+      i18n.global.t('pageMemory.toast.successSavingAdapterEnlargedCapacity'),
+    );
+    v$.value.ioAdapterCapacity.$reset();
+  } catch (error) {
+    errorToast(
+      i18n.global.t('pageMemory.toast.errorSavingAdapterEnlargedCapacity'),
+    );
+  }
 }
 
-function updateDynamicAdapterCapacity() {
-  startLoader();
-  resourceMemoryStore
-    .saveDynamicCapacity()
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => {
-      v$.value.form.$reset();
-      endLoader();
-    });
+async function updateDynamicAdapterCapacity() {
+  if (v$.value.dynamicIoDrawerCapacity.$invalid) return;
+
+  try {
+    await saveDynamicCapacity(dynamicIoDrawerCapacity.value);
+    successToast(
+      i18n.global.t('pageMemory.toast.successSavingAdapterDynamicCapacity'),
+    );
+    v$.value.dynamicIoDrawerCapacity.$reset();
+  } catch (error) {
+    errorToast(
+      i18n.global.t('pageMemory.toast.errorSavingAdapterDynamicCapacity'),
+    );
+  }
 }
 
-function changeActiveMemoryMirroringState(state) {
-  resourceMemoryStore
-    .saveActiveMemoryMirroringMode(state)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message));
+async function changeActiveMemoryMirroringState(state) {
+  try {
+    await saveActiveMemoryMirroringMode(state);
+    successToast(
+      i18n.global.t('pageMemory.toast.successSavingActiveMemoryMirroringMode'),
+    );
+  } catch (error) {
+    errorToast(
+      i18n.global.t('pageMemory.toast.errorSavingActiveMemoryMirroringMode'),
+    );
+  }
 }
 
-function changePredictiveDynamicMemoryDeallocationState(state) {
-  resourceMemoryStore
-    .savePredictiveDynamicMemoryDeallocation(state)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message));
+async function changePredictiveDynamicMemoryDeallocationState(state) {
+  try {
+    await savePredictiveDynamicMemoryDeallocation(state);
+    successToast(
+      i18n.global.t(
+        'pageMemory.toast.successSavingPredictiveDynamicMemoryDeallocation',
+      ),
+    );
+  } catch (error) {
+    errorToast(
+      i18n.global.t(
+        'pageMemory.toast.errorSavingPredictiveDynamicMemoryDeallocation',
+      ),
+    );
+  }
 }
 </script>
 
