@@ -149,5 +149,3 @@ export function useDateTime() {
         isUpdating: updateDateTimeMutation.isPending,
     };
 }
-
-// Made with Bob
