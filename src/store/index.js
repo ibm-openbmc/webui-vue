@@ -23,7 +23,6 @@ import AuditLogsStore from './modules/Logs/AuditLogsStore';
 import HardwareDeconfigurationStore from './modules/Settings/HardwareDeconfigurationStore';
 import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore';
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
-import DateTimeStore from './modules/Settings/DateTimeStore';
 import ResourceMemoryStore from './modules/ResourceManagement/ResourceMemoryStore';
 import SystemParametersStore from './modules/ResourceManagement/SystemParametersStore';
 import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsStore';
@@ -39,9 +38,6 @@ Object.assign(stores, {
 });
 Object.assign(stores, {
   AuthenticationStore: AuthenticationStore,
-});
-Object.assign(stores, {
-  DateTimeStore: DateTimeStore,
 });
 Object.assign(stores, {
   LdapStore: LdapStore,
