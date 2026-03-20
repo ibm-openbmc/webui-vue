@@ -2,6 +2,7 @@
   <BForm novalidate @submit.prevent="handleSubmit">
     <bios-settings
       v-if="form.attributes && form.attributeValues"
+      :key="componentKey"
       :attribute-values="form.attributeValues"
       :disabled="disabled"
       :is-in-phyp-standby="isInPhypStandby"
@@ -17,23 +18,15 @@ import eventBus from '@/eventBus';
 import i18n from '@/i18n';
 import BiosSettings from './BiosSettings.vue';
 import useToast from '@/components/Composables/useToastComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import stores from '@/store';
-import { useServerPowerOperations } from '@/api/composables/useServerPowerOperations';
 
+const { startLoader, endLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
 
 const globalStore = stores.GlobalStore();
+const bootSettingsStore = stores.BootSettingsStore();
 const resourceMemoryStore = stores.ResourceMemoryStore();
-
-// Use the new composable
-const {
-  biosAttributes,
-  attributeValues,
-  saveSettings,
-  isSavingBios,
-  refetchBios,
-  refetchBiosRegistry,
-} = useServerPowerOperations();
 
 const props = defineProps({
   isInPhypStandby: {
@@ -48,38 +41,44 @@ const props = defineProps({
 
 const emit = defineEmits('update-standby');
 
+const componentKey = ref(0);
 const isLinuxKvmValid = ref(true);
-const isSaving = ref(false);
 const form = ref({
-  attributes: biosAttributes.value,
-  attributeValues: attributeValues.value,
+  attributes: bootSettingsStore.getBiosAttributes,
+  attributeValues: bootSettingsStore.getAttributeValues,
 });
 
 onBeforeMount(() => {
-  Promise.all([refetchBios(), refetchBiosRegistry()]).finally(() => {
+  Promise.all([
+    bootSettingsStore.fetchBiosAttributes(),
+    bootSettingsStore.fetchAttributeValues(),
+  ]).finally(() => {
     eventBus.emit('server-power-operations-boot-settings-complete');
   });
 });
 
+const attributeValues = computed(() => {
+  return bootSettingsStore.getAttributeValues;
+});
+
+const biosAttributes = computed(() => {
+  return bootSettingsStore.getBiosAttributes;
+});
+
 const disabled = computed(() => {
-  return isSavingBios.value;
+  return bootSettingsStore.getDisabled;
 });
 
 const isAtleastPhypInStandby = computed(() => {
   return globalStore.isInPhypStandby;
 });
 
-// Only update form values from composable if not currently saving
 watch(attributeValues, function (value) {
-  if (!isSaving.value && value) {
-    form.value.attributeValues = value;
-  }
+  form.value.attributeValues = value;
 });
 
 watch(biosAttributes, function (value) {
-  if (!isSaving.value && value) {
-    form.value.attributes = value;
-  }
+  form.value.attributes = value;
 });
 
 watch(
@@ -100,13 +99,14 @@ function linuxKvmValue(value) {
 }
 
 function handleSubmit() {
-  isSaving.value = true;
+  startLoader();
   let settings;
   let biosSettings = form.value.attributes;
   settings = { biosSettings };
-
-  saveSettings(settings)
+  bootSettingsStore
+    .saveSettings(settings)
     .then((message) => {
+      componentKey.value += 1;
       let hmcManaged = resourceMemoryStore.hmcManagedGetter;
       if (!props.isUpdated) {
         if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
@@ -154,23 +154,21 @@ function handleSubmit() {
       }
       return new Promise((resolve) => {
         setTimeout(() => {
-          Promise.all([refetchBios(), refetchBiosRegistry()])
+          bootSettingsStore
+            .fetchAttributeValues()
             .catch((error) => console.log(error))
-            .finally(() => {
-              isSaving.value = false;
-              resolve();
-            });
+            .finally(resolve); // Resolve the promise after the setTimeout logic
         }, 5000);
       });
     })
     .catch(({ message }) => {
       errorToast(message);
-      isSaving.value = false;
     })
     .finally(() => {
       if (props.isUpdated) {
         emit('update-standby', props.isUpdated);
       }
+      endLoader();
     });
 }
 </script>

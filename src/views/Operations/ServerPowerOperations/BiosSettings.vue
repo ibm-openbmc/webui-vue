@@ -199,66 +199,64 @@
                   </div>
                 </BCol>
               </BRow>
-              <BFormRadioGroup v-model="attributeKeys[key]" :name="key" stacked>
-                <template v-for="(values, keys) of attriValuesArr">
-                  <template v-if="key === 'pvm_system_power_off_policy'">
-                    <BFormRadio
-                      :id="spaceFilter(values.value)"
-                      :key="values.value"
-                      :value="values.value"
-                      :aria-describedby="spaceFilter(values.value)"
-                      :disabled="disabled"
-                      class="mb-1"
-                    >
-                      <template v-if="values.value === 'Power Off'">{{
-                        $t('pageServerPowerOperations.biosSettings.powerOff')
-                      }}</template>
-                      <template v-if="values.value === 'Stay On'">{{
-                        $t('pageServerPowerOperations.biosSettings.stayOn')
-                      }}</template>
-                      <template v-if="values.value === 'Automatic'">{{
-                        $t('pageServerPowerOperations.biosSettings.automatic')
-                      }}</template>
-                    </BFormRadio>
-                    <small
-                      v-if="values.value === 'Power Off'"
-                      :id="values.value"
-                      :key="keys + '_label'"
-                      class="form-text text-muted ms-4 d-block"
-                    >
-                      {{
-                        $t(
-                          'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.powerOffHelperText',
-                        )
-                      }}
-                    </small>
-                    <small
-                      v-if="values.value === 'Automatic'"
-                      :id="values.value"
-                      :key="keys + '_label'"
-                      class="form-text text-muted ms-4 d-block"
-                    >
-                      {{
-                        $t(
-                          'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.automaticHelperText',
-                        )
-                      }}
-                    </small>
-                    <small
-                      v-if="values.value === 'Stay On'"
-                      :id="values.value"
-                      :key="keys + '_label'"
-                      class="form-text text-muted ms-4 d-block"
-                    >
-                      {{
-                        $t(
-                          'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.stayOnHelperText',
-                        )
-                      }}
-                    </small>
-                  </template>
+              <template v-for="(values, keys) of attriValuesArr">
+                <template v-if="key === 'pvm_system_power_off_policy'">
+                  <BFormRadio
+                    :id="spaceFilter(values.value)"
+                    :key="values.value"
+                    v-model="attributeKeys[key]"
+                    :value="values.value"
+                    :aria-describedby="spaceFilter(values.value)"
+                    :disabled="disabled"
+                  >
+                    <template v-if="values.value === 'Power Off'">{{
+                      $t('pageServerPowerOperations.biosSettings.powerOff')
+                    }}</template>
+                    <template v-if="values.value === 'Stay On'">{{
+                      $t('pageServerPowerOperations.biosSettings.stayOn')
+                    }}</template>
+                    <template v-if="values.value === 'Automatic'">{{
+                      $t('pageServerPowerOperations.biosSettings.automatic')
+                    }}</template>
+                  </BFormRadio>
+                  <BFormText
+                    v-if="values.value === 'Power Off'"
+                    :id="values.value"
+                    :key="keys"
+                    class="ms-4"
+                  >
+                    {{
+                      $t(
+                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.powerOffHelperText',
+                      )
+                    }}
+                  </BFormText>
+                  <BFormText
+                    v-if="values.value === 'Automatic'"
+                    :id="values.value"
+                    :key="keys"
+                    class="ms-4"
+                  >
+                    {{
+                      $t(
+                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.automaticHelperText',
+                      )
+                    }}
+                  </BFormText>
+                  <BFormText
+                    v-if="values.value === 'Stay On'"
+                    :id="values.value"
+                    :key="keys"
+                    class="ms-4"
+                  >
+                    {{
+                      $t(
+                        'pageServerPowerOperations.biosSettings.attributeValues.pvm_system_power_off_policy.stayOnHelperText',
+                      )
+                    }}
+                  </BFormText>
                 </template>
-              </BFormRadioGroup>
+              </template>
             </BFormGroup>
           </div>
         </BCol>
@@ -532,26 +530,11 @@ import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import utilitiesFunctions from '../../../components/Global/UtilitiesFunction';
 import stores from '@/store';
-import { useServerPowerOperations } from '@/api/composables/useServerPowerOperations';
 
 const globalStore = stores.GlobalStore();
 const bootSettingsStore = stores.BootSettingsStore();
 const resourceMemoryStore = stores.ResourceMemoryStore();
 const { spaceFilter } = utilitiesFunctions();
-
-// Use the new composable for data fetching
-const {
-  biosAttributes: biosAttributesFromComposable,
-  attributeValues: attributeValuesFromComposable,
-  powerRestorePolicyValue: powerPolicyFromComposable,
-  linuxKvmPercentageValue: linuxKvmPercentageValueFromComposable,
-  linuxKvmPercentageCurrentValue: linuxKvmPercentageCurrentValueFromComposable,
-  ibmiLoadSource,
-  ibmiAltLoadSource,
-  ibmiConsole,
-  locationCodes: locationCodesFromComposable,
-  refetchLocationCodes,
-} = useServerPowerOperations();
 
 defineProps({
   attributeValues: {
@@ -828,37 +811,17 @@ const ibmiConsoleItems = ref([
   },
 ]);
 
-// Don't use form.value - use composable values directly through computed properties
 const form = ref({
   attributes: bootSettingsStore.getBiosAttributes,
   attributeValues: bootSettingsStore.getAttributeValues,
 });
 
-// Local state for linux kvm percentage (writable)
-const linuxKvmPercentageLocal = ref(null);
-
-// Initialize linux kvm percentage from composable
-watch(
-  linuxKvmPercentageValueFromComposable,
-  (newVal) => {
-    if (
-      newVal !== undefined &&
-      newVal !== null &&
-      linuxKvmPercentageLocal.value === null
-    ) {
-      linuxKvmPercentageLocal.value = newVal;
-    }
-  },
-  { immediate: true },
-);
-
 onBeforeMount(() => {
-  refetchLocationCodes();
+  bootSettingsStore.fetchLocationCodes();
   setTimeout(() => {
     resourceMemoryStore.getHmcManaged();
   }, 5000);
-  currentOperatingMode.value =
-    attributeKeys.value?.['pvm_system_operating_mode'];
+  currentOperatingMode.value = attributeKeys.value['pvm_system_operating_mode'];
   if (currentOperatingMode.value === manualMode.value) {
     onChangeSystemOpsMode(manualMode.value);
   }
@@ -869,7 +832,7 @@ const hmcManaged = computed(() => {
 });
 
 const attributeKeys = computed(() => {
-  return biosAttributesFromComposable.value;
+  return bootSettingsStore.getBiosAttributes;
 });
 
 const isAtleastPhypInStandby = computed(() => {
@@ -881,19 +844,19 @@ const manualModeSelected = computed(() => {
 });
 
 const powerPolicy = computed(() => {
-  return powerPolicyFromComposable.value;
+  return bootSettingsStore.getPowerRestorePolicyValue;
 });
 
 const ibmiLoadSourceValue = computed(() => {
-  return ibmiLoadSource.value;
+  return bootSettingsStore.getIbmiLoadSourceValue;
 });
 
 const ibmiAltLoadSourceValue = computed(() => {
-  return ibmiAltLoadSource.value;
+  return bootSettingsStore.getIbmiAltLoadSourceValue;
 });
 
 const ibmiConsoleValue = computed(() => {
-  return ibmiConsole.value;
+  return bootSettingsStore.getIbmiConsoleValue;
 });
 
 const taggedSettingValues = computed(() => {
@@ -905,25 +868,24 @@ const taggedSettingValues = computed(() => {
 });
 
 const linuxKvmPercentageCurrentValue = computed(() => {
-  return linuxKvmPercentageCurrentValueFromComposable.value;
+  return bootSettingsStore.getLinuxKvmPercentageCurrentValue;
 });
 
 const linuxKvmPercentageInitialValue = computed(() => {
-  return linuxKvmPercentageValueFromComposable.value;
+  return bootSettingsStore.getLinuxKvmPercentageInitialValue;
 });
 
 const linuxKvmPercentageValue = computed({
   get() {
-    return linuxKvmPercentageLocal.value;
+    return bootSettingsStore.getLinuxKvmPercentageValue;
   },
   set(newValue) {
-    linuxKvmPercentageLocal.value = newValue;
     return newValue;
   },
 });
 
 const locationCodes = computed(() => {
-  return locationCodesFromComposable.value;
+  return bootSettingsStore.getLocationCodes;
 });
 
 const taggedSettingsOptions = computed(() => {
@@ -970,17 +932,14 @@ function changeLinuxKvmPercentageValue(value) {
   } else {
     isLinuxKvmValid.value = false;
   }
-  linuxKvmPercentageLocal.value = value;
+  bootSettingsStore.saveLinuxPercentageValue(value);
 }
 
 function changeTaggedSettingsValue(key, value) {
-  // Update local tagged settings
-  const settingIndex = taggedSettings.value.findIndex(
-    (setting) => setting.settingKey === key,
-  );
-  if (settingIndex !== -1) {
-    taggedSettings.value[settingIndex].settingValue = value;
-  }
+  bootSettingsStore.saveTaggedSettingsValue({
+    key,
+    value,
+  });
 }
 
 function validateLinuxKvmPercentage($event) {

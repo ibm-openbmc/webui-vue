@@ -111,7 +111,7 @@
           <page-section
             :section-title="$t('pageServerPowerOperations.operations')"
           >
-            <template v-if="shouldShowOperationInProgress">
+            <template v-if="isOperationInProgress">
               <alert variant="info">
                 {{ $t('pageServerPowerOperations.operationInProgress') }}
               </alert>
@@ -243,7 +243,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount, onBeforeUnmount, watch } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import eventBus from '@/eventBus';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -255,36 +255,17 @@ import BootSettings from './BootSettings.vue';
 import Alert from '@/components/Global/Alert.vue';
 import ArrowRight16 from '@carbon/icons-vue/es/arrow--right/16';
 import NetworkSettingsModal from './NetworkSettingsModal.vue';
+
 import stores from '@/store';
-import { useServerPowerOperations } from '@/api/composables/useServerPowerOperations';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
 
 const globalStore = stores.GlobalStore();
+const controlStore = stores.ControlStore();
 const bmcStore = stores.BmcStore();
 const bootSettingsStore = stores.BootSettingsStore();
 const resourceMemoryStore = stores.ResourceMemoryStore();
-
-// Use the new composable
-const {
-  lastPowerOperationTime,
-  biosAttributes: biosAttributesFromQuery,
-  systemDumpActive,
-  isOperationInProgress,
-  isLoading: isPowerOpsLoading,
-  isFetching: isPowerOpsFetching,
-  serverPowerOn: serverPowerOnAction,
-  serverSoftReboot: serverSoftRebootAction,
-  serverHardReboot: serverHardRebootAction,
-  serverSoftPowerOff: serverSoftPowerOffAction,
-  serverHardPowerOff: serverHardPowerOffAction,
-  standbyToRuntime: standbyToRuntimeAction,
-  refetchSystem,
-  refetchBios,
-  refetchBiosRegistry,
-  refetchLocationCodes,
-} = useServerPowerOperations();
 
 const openModal = ref(false);
 const phypStandby = ref(false);
@@ -301,45 +282,24 @@ const modalOptions = ref({
   cancelTitle: '',
 });
 const modalOption = ref('');
-const previousServerStatus = ref(null);
-const lastOperationType = ref(null); // Track last operation: 'powerOn', 'powerOff', 'reboot'
-let statusPollInterval = null;
 
 onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-onBeforeUnmount(() => {
-  // Clean up interval on component unmount
-  if (statusPollInterval) {
-    clearInterval(statusPollInterval);
-    statusPollInterval = null;
-  }
-});
-
-// Loading bar automatically shows/hides based on fetch state
-watch(
-  () => isPowerOpsLoading.value || isPowerOpsFetching.value,
-  (loading) => {
-    if (loading) startLoader();
-    else endLoader();
-  },
-  { immediate: true },
-);
-
 onBeforeMount(() => {
   startLoader();
   const bootSettingsPromise = new Promise((resolve) => {
     eventBus.on('server-power-operations-boot-settings-complete', () =>
-      resolve(null),
+      resolve(),
     );
   });
   Promise.all([
     globalStore.getHmcManaged(),
     bootSettingsStore.getOperatingModeSettings(),
+    controlStore.fetchLastPowerOperationTime(),
     bmcStore.getBmcInfo(),
     globalStore.getBootProgress(),
-    globalStore.getSystemInfo(),
     bootSettingsPromise,
   ]).finally(() => endLoader());
 });
@@ -375,71 +335,24 @@ const isIBMi = computed(() => {
 });
 
 const attributeKeys = computed(() => {
-  return biosAttributesFromQuery.value;
+  return bootSettingsStore.getBiosAttributes;
 });
 
 const serverStatus = computed(() => {
   return globalStore.serverStatusGetter;
 });
 
-// Computed to check if we should show operation in progress
-const shouldShowOperationInProgress = computed(() => {
-  if (!isOperationInProgress.value && !lastOperationType.value) {
-    return false;
-  }
-
-  // If operation is in progress, always show the message
-  if (isOperationInProgress.value) {
-    return true;
-  }
-
-  // If operation completed but server status doesn't match expected state, keep showing message
-  if (lastOperationType.value === 'powerOn' && serverStatus.value !== 'on') {
-    return true;
-  }
-  if (lastOperationType.value === 'powerOff' && serverStatus.value !== 'off') {
-    return true;
-  }
-
-  return false;
+const isOperationInProgress = computed(() => {
+  return controlStore.getIsOperationInProgress;
 });
 
-// Watch server status changes to reset operation in progress flag
-watch(
-  () => serverStatus.value,
-  (newStatus, oldStatus) => {
-    // If operation is in progress and server status changed to expected state, reset the flag
-    if (isOperationInProgress.value && oldStatus && newStatus !== oldStatus) {
-      isOperationInProgress.value = false;
-    }
+const lastPowerOperationTime = computed(() => {
+  return controlStore.getLastPowerOperationTime;
+});
 
-    // Clear last operation type when server reaches expected state
-    if (lastOperationType.value === 'powerOn' && newStatus === 'on') {
-      lastOperationType.value = null;
-    } else if (lastOperationType.value === 'powerOff' && newStatus === 'off') {
-      lastOperationType.value = null;
-    }
-  },
-);
-
-// Poll server status when operation is in progress
-watch(
-  () => shouldShowOperationInProgress.value,
-  (showInProgress) => {
-    if (showInProgress) {
-      // Poll every 3 seconds to check if server status has changed
-      statusPollInterval = setInterval(() => {
-        globalStore.getSystemInfo();
-      }, 3000);
-    } else {
-      // Clear interval when operation is no longer in progress
-      if (statusPollInterval) {
-        clearInterval(statusPollInterval);
-        statusPollInterval = null;
-      }
-    }
-  },
-);
+const systemDumpActive = computed(() => {
+  return bootSettingsStore.getSystemDumpActive;
+});
 
 function openNetworkSettings() {
   eventBus.emit('modal-network-settings');
@@ -462,7 +375,7 @@ function getRequiredResponses() {
   startLoader();
   Promise.all([
     bootSettingsStore.getOperatingModeSettings(),
-    refetchSystem(),
+    controlStore.fetchLastPowerOperationTime(),
     bmcStore.getBmcInfo(),
     globalStore.getBootProgress(),
     bootSettingsStore.fetchLocationCodes(),
@@ -481,8 +394,8 @@ function powerOn() {
     bmc.value.statusState === 'Enabled' &&
     bmc.value.health === 'OK'
   ) {
-    lastOperationType.value = 'powerOn';
-    serverPowerOnAction()
+    controlStore
+      .serverPowerOn()
       .then((response) => {
         if (response === true) {
           infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
@@ -490,7 +403,6 @@ function powerOn() {
       })
       .catch((error) => {
         console.log(error);
-        lastOperationType.value = null;
         errorToast(
           i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
         );
@@ -549,7 +461,8 @@ function shutdownServer() {
 function operationConfirm() {
   if (modalOption.value === 'reboot') {
     if (form.value.rebootOption === 'orderly') {
-      serverSoftRebootAction()
+      controlStore
+        .serverSoftReboot()
         .then((response) => {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
@@ -562,7 +475,8 @@ function operationConfirm() {
           console.log(error);
         });
     } else if (form.value.rebootOption === 'immediate') {
-      serverHardRebootAction()
+      controlStore
+        .serverHardReboot()
         .then((response) => {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
@@ -576,30 +490,29 @@ function operationConfirm() {
         });
     }
   } else if (modalOption.value === 'shutdown') {
-    lastOperationType.value = 'powerOff';
     if (form.value.shutdownOption === 'orderly') {
-      serverSoftPowerOffAction()
+      controlStore
+        .serverSoftPowerOff()
         .then((response) => {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
           }
         })
         .catch((error) => {
-          lastOperationType.value = null;
           errorToast(
             i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
           );
           console.log(error);
         });
     } else if (form.value.shutdownOption === 'immediate') {
-      serverHardPowerOffAction()
+      controlStore
+        .serverHardPowerOff()
         .then((response) => {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
           }
         })
         .catch((error) => {
-          lastOperationType.value = null;
           errorToast(
             i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
           );
@@ -610,7 +523,8 @@ function operationConfirm() {
 }
 
 function standbyToRuntime() {
-  standbyToRuntimeAction()
+  bootSettingsStore
+    .standbyToRuntime()
     .then((message) => {
       phypStandby.value = true;
       successToast(message);
