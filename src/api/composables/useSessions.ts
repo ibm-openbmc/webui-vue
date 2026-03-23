@@ -62,46 +62,42 @@ export function useSessions() {
 
     const disconnectSessionsMutation = useMutation({
         mutationFn: async (uris: string[]): Promise<{ type: string; message: string }[]> => {
-            try {
-                const promises = uris.map((uri) =>
-                    api.delete(uri).catch((error: Error) => {
-                        console.log(error);
-                        return error;
-                    }),
+            const promises = uris.map((uri) =>
+                api.delete(uri).catch((error: Error) => {
+                    console.log(error);
+                    return error;
+                }),
+            );
+
+            const responses = await api.all(promises);
+            const { successCount, errorCount } = getResponseCount(responses);
+            const toastMessages: { type: string; message: string }[] = [];
+
+            if (successCount) {
+                const message = i18n.global.t(
+                    'pageSessions.toast.successDelete',
+                    successCount,
                 );
-
-                const responses = await api.all(promises);
-                const { successCount, errorCount } = getResponseCount(responses);
-                const toastMessages: { type: string; message: string }[] = [];
-
-                if (successCount) {
-                    const message = i18n.global.t(
-                        'pageSessions.toast.successDelete',
-                        successCount,
-                    );
-                    toastMessages.push({ type: 'success', message });
-                }
-
-                if (errorCount) {
-                    const message = i18n.global.t(
-                        'pageSessions.toast.errorDelete',
-                        errorCount,
-                    );
-                    toastMessages.push({ type: 'error', message });
-                }
-
-                return toastMessages;
-            } catch (error) {
-                console.error('Error disconnecting sessions:', error);
-                throw new Error(
-                    i18n.global.t('pageSessions.toast.errorDelete', uris.length)
-                );
+                toastMessages.push({ type: 'success', message });
             }
+
+            if (errorCount) {
+                const message = i18n.global.t(
+                    'pageSessions.toast.errorDelete',
+                    errorCount,
+                );
+                toastMessages.push({ type: 'error', message });
+            }
+
+            return toastMessages;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['redfish', 'collection', '/redfish/v1/SessionService/Sessions'],
             });
+        },
+        onError: (error: Error) => {
+            console.error('Error disconnecting sessions:', error);
         },
     });
 

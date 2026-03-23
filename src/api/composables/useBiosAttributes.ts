@@ -187,5 +187,3 @@ export function useBiosAttributes() {
     isUpdating: updateBiosAttributesMutation.isPending,
   };
 }
-
-// Made with Bob

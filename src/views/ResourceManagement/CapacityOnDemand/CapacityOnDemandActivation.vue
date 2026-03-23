@@ -43,6 +43,7 @@
                     v-model="licenseKey"
                     class="input-form"
                     :maxlength="maxLength"
+                    :disabled="isActivationDisabled"
                     :state="getValidationState(v$.licenseKey)"
                     :placeholder="
                       $t('pageCapacityOnDemand.activation.placeholder')
@@ -55,7 +56,11 @@
                 </BInputGroup>
               </BFormGroup>
               <BCol align-self="baseline" class="ms-3">
-                <BButton variant="primary" type="submit">
+                <BButton
+                  variant="primary"
+                  :disabled="isActivationDisabled"
+                  type="submit"
+                >
                   {{ $t('global.action.activate') }}
                 </BButton>
               </BCol>
@@ -73,14 +78,12 @@ import { maxLength, minLength, required } from '@vuelidate/validators';
 import Alert from '@/components/Global/Alert.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
-import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import { useVuelidate } from '@vuelidate/core';
 import stores from '@/store';
 import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
 const { getValidationState } = useVuelidateComposable();
-const { successToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 
 const global = stores.GlobalStore();
@@ -125,11 +128,8 @@ const submitForm = async () => {
   if (!v$.value.$invalid) {
     startLoader();
     try {
-      const success = await activateLicense(licenseKey.value);
-      successToast(success);
+      await activateLicense(licenseKey.value);
       fetchInfo();
-    } catch (error) {
-      errorToast(error.message);
     } finally {
       endLoader();
     }

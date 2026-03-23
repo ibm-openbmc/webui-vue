@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import api from '@/store/api';
 // @ts-ignore - i18n is a JS module
 import i18n from '@/i18n';
+// @ts-ignore - useToast is a JS module
+import useToast from '@/components/Composables/useToastComposable';
 
 interface FirmwareItem {
   version: string;
@@ -62,6 +64,7 @@ interface SoftwareImageResponse {
  */
 export function useFirmware() {
   const queryClient = useQueryClient();
+  const { errorToast } = useToast();
 
   // Fetch BMC active firmware ID
   const {
@@ -253,45 +256,39 @@ export function useFirmware() {
   // Mutation: Set apply time to immediate
   const setApplyTimeImmediateMutation = useMutation({
     mutationFn: async (): Promise<void> => {
-      try {
-        const data = {
-          HttpPushUriOptions: {
-            HttpPushUriApplyTime: {
-              ApplyTime: 'Immediate',
-            },
+      const data = {
+        HttpPushUriOptions: {
+          HttpPushUriApplyTime: {
+            ApplyTime: 'Immediate',
           },
-        };
-        await api.patch('/redfish/v1/UpdateService', data);
-      } catch (error) {
-        console.log('Set apply time error:', error);
-        throw new Error(i18n.global.t('pageFirmware.toast.errorUploadFirmware'));
-      }
+        },
+      };
+      await api.patch('/redfish/v1/UpdateService', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'updateService', 'settings'],
       });
     },
+    onError: (error) => {
+      console.log('Set apply time error:', error);
+      errorToast(i18n.global.t('pageFirmware.toast.errorUploadFirmware'));
+    },
   });
 
   // Mutation: Upload firmware
   const uploadFirmwareMutation = useMutation({
     mutationFn: async (image: File): Promise<any> => {
-      try {
-        // Ensure ApplyTime is set to Immediate
-        if (applyTime.value !== 'Immediate') {
-          await setApplyTimeImmediateMutation.mutateAsync();
-        }
-
-        const response = await api.post('/redfish/v1/UpdateService/update', image, {
-          headers: { 'Content-Type': 'application/octet-stream' },
-        });
-        
-        return response.data;
-      } catch (error) {
-        console.log('Upload firmware error:', error);
-        throw new Error(i18n.global.t('pageFirmware.toast.errorUpdateFirmware'));
+      // Ensure ApplyTime is set to Immediate
+      if (applyTime.value !== 'Immediate') {
+        await setApplyTimeImmediateMutation.mutateAsync();
       }
+
+      const response = await api.post('/redfish/v1/UpdateService/update', image, {
+        headers: { 'Content-Type': 'application/octet-stream' },
+      });
+      
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -304,35 +301,38 @@ export function useFirmware() {
         queryKey: ['redfish', 'systems', 'system', 'bios', 'activeFirmware'],
       });
     },
+    onError: (error) => {
+      console.log('Upload firmware error:', error);
+      errorToast(i18n.global.t('pageFirmware.toast.errorUpdateFirmware'));
+    },
   });
 
   // Mutation: Switch BMC firmware and reboot
   const switchBmcFirmwareMutation = useMutation({
     mutationFn: async (): Promise<void> => {
-      try {
-        const backupLocation = backupBmcFirmware.value?.location;
-        if (!backupLocation) {
-          throw new Error('No backup firmware available');
-        }
-
-        const data = {
-          Links: {
-            ActiveSoftwareImage: {
-              '@odata.id': backupLocation,
-            },
-          },
-        };
-
-        await api.patch('/redfish/v1/Managers/bmc', data);
-      } catch (error) {
-        console.log('Switch firmware error:', error);
-        throw new Error(i18n.global.t('pageFirmware.toast.errorSwitchImages'));
+      const backupLocation = backupBmcFirmware.value?.location;
+      if (!backupLocation) {
+        throw new Error('No backup firmware available');
       }
+
+      const data = {
+        Links: {
+          ActiveSoftwareImage: {
+            '@odata.id': backupLocation,
+          },
+        },
+      };
+
+      await api.patch('/redfish/v1/Managers/bmc', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'managers', 'bmc', 'activeFirmware'],
       });
+    },
+    onError: (error) => {
+      console.log('Switch firmware error:', error);
+      errorToast(i18n.global.t('pageFirmware.toast.errorSwitchImages'));
     },
   });
 

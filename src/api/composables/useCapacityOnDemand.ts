@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import api from '@/store/api';
 // @ts-ignore - i18n is a JS module
 import i18n from '@/i18n';
+// @ts-ignore - useToast is a JS module
+import useToast from '@/components/Composables/useToastComposable';
 
 interface License {
   Id: string;
@@ -127,29 +129,28 @@ export function useCapacityOnDemand() {
   });
 
   // Mutation: Activate license
+  const { successToast, errorToast } = useToast();
+  
   const activateLicenseMutation = useMutation({
-    mutationFn: async (licenseKey: string): Promise<string> => {
-      try {
-        await api.post('/redfish/v1/LicenseService/Licenses', {
-          LicenseString: licenseKey,
-        });
-        return i18n.global.t('pageCapacityOnDemand.activation.toast.success');
-      } catch (error) {
-        console.log('Licenses', error);
-        throw new Error(
-          i18n.global.t('pageCapacityOnDemand.activation.toast.error')
-        );
-      }
+    mutationFn: async (licenseKey: string): Promise<void> => {
+      await api.post('/redfish/v1/LicenseService/Licenses', {
+        LicenseString: licenseKey,
+      });
     },
     onSuccess: () => {
+      successToast(i18n.global.t('pageCapacityOnDemand.activation.toast.success'));
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'licenseService', 'licenses'],
       });
     },
+    onError: (error) => {
+      console.log('Licenses', error);
+      errorToast(i18n.global.t('pageCapacityOnDemand.activation.toast.error'));
+    },
   });
 
   // Helper function to activate license
-  const activateLicense = async (licenseKey: string): Promise<string> => {
+  const activateLicense = async (licenseKey: string): Promise<void> => {
     return activateLicenseMutation.mutateAsync(licenseKey);
   };
 
