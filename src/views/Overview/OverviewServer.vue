@@ -7,9 +7,9 @@
       <BCol sm="6" lg="6">
         <dl>
           <dt>{{ $t('pageOverview.model') }}</dt>
-          <dd>{{ dataFormatter(serverModel) }}</dd>
+          <dd>{{ dataFormatter(modelType) }}</dd>
           <dt>{{ $t('pageOverview.serialNumber') }}</dt>
-          <dd>{{ dataFormatter(serverSerialNumber) }}</dd>
+          <dd>{{ dataFormatter(serialNumber) }}</dd>
           <dt>
             {{ $t('pageOverview.assetTag') }}
             <BButton variant="link" class="p-1" @click="initAssetTagModal()">
@@ -38,7 +38,7 @@
         </dl>
       </BCol>
     </BRow>
-    <modal-asset-tag v-modal="openModal" :tag="assetTag" />
+    <modal-asset-tag v-modal="openModal" :tag="assetTagValue" />
   </overview-card>
 </template>
 
@@ -48,15 +48,17 @@ import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import useToast from '@/components/Composables/useToastComposable';
-import useLoadingBar, {
-  loading,
-} from '@/components/Composables/useLoadingBarComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import IconEdit from '@carbon/icons-vue/es/edit/16';
 import { onBeforeRouteLeave } from 'vue-router';
 import stores from '@/store';
 import eventBus from '@/eventBus';
 import ModalAssetTag from './ModalAssetTag.vue';
+import {
+  useSystemInfo,
+  useUpdateAssetTag,
+} from '@/api/composables/useSystemInfo';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
@@ -65,6 +67,10 @@ const { dataFormatter } = useDataFormatterGlobal();
 const systemStore = stores.SystemStore();
 const global = stores.GlobalStore();
 const bootSettingsStore = stores.BootSettingsStore();
+
+// Use VueQuery composables for system info and asset tag updates
+const { assetTag, modelType, serialNumber } = useSystemInfo();
+const { updateAssetTagAsync, isUpdating } = useUpdateAssetTag();
 
 const openModal = ref(false);
 const serviceLoginStatus = ref(null);
@@ -90,18 +96,6 @@ onBeforeUnmount(() => {
   eventBus.off('okAssetTag', okAssetTagHandler);
 });
 
-const systems = computed(() => {
-  return systemStore.systems[0];
-});
-const serverModel = computed(() => {
-  return systems.value?.model;
-});
-const serverSerialNumber = computed(() => {
-  return systems.value?.serialNumber;
-});
-const server = computed(() => {
-  return systemStore.systems[0];
-});
 const serviceLogin = computed(() => {
   const date = new Date(global.bmcTime);
   const expirationDate = new Date(global.expirationDate);
@@ -119,18 +113,23 @@ const serviceLogin = computed(() => {
   }
   return serviceLoginStatus.value;
 });
+
 const biosAttributes = computed(() => {
   return bootSettingsStore.getBiosAttributes;
 });
+
 const operatingMode = computed(() => {
   return biosAttributes.value?.pvm_system_operating_mode;
 });
-const assetTag = computed(() => {
-  return global.assetTag;
+
+const assetTagValue = computed(() => {
+  return assetTag.value || global.assetTag;
 });
+
 const isReadOnlyUser = computed(() => {
   return global.isReadOnlyUserGetter;
 });
+
 const serviceLoginStatusIcon = computed(() => {
   switch (serviceLoginStatus.value) {
     case i18n.global.t('global.status.enabled'):
@@ -146,6 +145,7 @@ const setServiceLoginStatus = (value) => {
   serviceLoginStatus.value = value;
   return;
 };
+
 const initAssetTagModal = () => {
   openModal.value = true;
   eventBus.emit('openmodal-true');
@@ -154,15 +154,15 @@ const initAssetTagModal = () => {
 const okAssetTagHandler = (value) => {
   saveAssetTag(value);
 };
-const saveAssetTag = (modalFormData) => {
+
+const saveAssetTag = async (modalFormData) => {
   startLoader();
-  return systemStore
-    .saveAssetTag(modalFormData)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => {
-      global.getSystemInfo();
-      endLoader();
-    });
+  try {
+    await updateAssetTagAsync(modalFormData);
+  } catch (error) {
+    // Error toast is handled by the composable
+  } finally {
+    endLoader();
+  }
 };
 </script>

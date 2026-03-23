@@ -31,46 +31,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import { computed, onBeforeMount } from 'vue';
-import stores from '@/store';
-import eventBus from '@/eventBus';
+import { useOverviewEvents } from '@/api/composables/useOverview';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const eventLogStore = stores.EventLogStore();
+// Use VueQuery composable
+const { allEvents, criticalEvents, warningEvents } = useOverviewEvents();
 
-onBeforeMount(() => {
-  eventLogStore.getEventLogData().finally(() => {
-    eventBus.emit('overview-events-complete');
-  });
-});
-
-const eventLogData = computed(() => {
-  return eventLogStore.allEvents;
-});
-const criticalEvents = computed(() => {
-  return eventLogData.value
-    .filter(
-      (log) =>
-        log.severity === 'Critical' && log.filterByStatus === 'Unresolved',
-    )
-    .map((log) => {
-      return log;
-    });
-});
-const warningEvents = computed(() => {
-  return eventLogData.value
-    .filter(
-      (log) =>
-        log.severity === 'Warning' && log.filterByStatus === 'Unresolved',
-    )
-    .map((log) => {
-      return log;
-    });
-});
+const eventLogData = computed(() => allEvents.value);
 
 const exportFileNameByDate = () => {
   let date = new Date();

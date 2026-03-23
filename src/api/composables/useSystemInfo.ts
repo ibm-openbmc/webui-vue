@@ -1,7 +1,11 @@
 import { computed } from 'vue';
-import { useQuery } from '@tanstack/vue-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
+// @ts-ignore - i18n.js is a JavaScript module
+import i18n from '@/i18n';
+// @ts-ignore - useToast is a JS module
+import useToast from '@/components/Composables/useToastComposable';
 
 export const HOST_STATE = {
   on: 'xyz.openbmc_project.State.Host.HostState.Running',
@@ -177,5 +181,54 @@ export function useSystemInfo() {
     error,
     isError,
     refetch,
+  };
+}
+
+/**
+ * Composable for updating asset tag
+ * Provides mutation function with automatic cache invalidation
+ */
+export function useUpdateAssetTag() {
+  const queryClient = useQueryClient();
+  const { successToast, errorToast } = useToast();
+
+  const mutation = useMutation({
+    mutationFn: async (assetTagData: { AssetTag: string }) => {
+      await api.patch('/redfish/v1/Systems/system', assetTagData);
+      return assetTagData.AssetTag;
+    },
+    onSuccess: (newAssetTag) => {
+      successToast(i18n.global.t('pageOverview.toast.successSaveAssetTag'));
+      // Invalidate and refetch system info
+      queryClient.invalidateQueries({
+        queryKey: ['redfish', 'system', 'info'],
+      });
+
+      // Also clear sessionStorage cache
+      sessionStorage.removeItem(SYSTEM_INFO_STORAGE_KEY);
+
+      // Update the cache optimistically
+      queryClient.setQueryData(
+        ['redfish', 'system', 'info'],
+        (old: SystemInfo | undefined) => {
+          if (old) {
+            return { ...old, assetTag: newAssetTag };
+          }
+          return old;
+        },
+      );
+    },
+    onError: (error) => {
+      console.log('Asset Tag Error:', error);
+      errorToast(i18n.global.t('pageOverview.toast.errorSaveAssetTag'));
+    },
+  });
+
+  return {
+    updateAssetTag: mutation.mutate,
+    updateAssetTagAsync: mutation.mutateAsync,
+    isUpdating: computed(() => mutation.isPending.value),
+    isError: computed(() => mutation.isError.value),
+    error: mutation.error,
   };
 }

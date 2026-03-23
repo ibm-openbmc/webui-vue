@@ -25,39 +25,16 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import stores from '@/store';
-import eventBus from '@/eventBus';
+import {
+  useOverviewFirmware,
+  useOverviewLicense,
+} from '@/api/composables/useOverview';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const firmwareStore = stores.FirmwareStore();
-const licenseStore = stores.LicenseStore();
-
-onBeforeMount(() => {
-  Promise.all([
-    licenseStore.getLicenses(),
-    firmwareStore.getFirmwareInformation(),
-  ]).finally(() => {
-    eventBus.emit('overview-firmware-complete');
-  });
-});
-
-const backupBmcFirmware = computed(() => {
-  return firmwareStore.backupBmcFirmware;
-});
-const backupVersion = computed(() => {
-  return backupBmcFirmware.value?.version;
-});
-const activeBmcFirmware = computed(() => {
-  return firmwareStore.activeBmcFirmware;
-});
-const firmwareAccessKeyInfo = computed(() => {
-  return licenseStore.firmwareAccessKeyInfo;
-});
-const runningVersion = computed(() => {
-  return activeBmcFirmware.value?.version;
-});
+// Use VueQuery composables
+const { runningVersion, backupVersion } = useOverviewFirmware();
+const { firmwareAccessKeyInfo } = useOverviewLicense();
 </script>

@@ -10,12 +10,12 @@
           <dd>
             <BFormCheckbox
               id="identifyLedSwitch"
-              v-model="systems.locationIndicatorActive"
+              v-model="localLedState"
               data-test-id="overviewInventory-checkbox-identifyLed"
               switch
-              @change="toggleIdentifyLedSwitch(systems.locationIndicatorActive)"
+              @change="toggleIdentifyLedSwitch(localLedState)"
             >
-              <span v-if="systems.locationIndicatorActive">
+              <span v-if="localLedState">
                 {{ $t('global.status.on') }}
               </span>
               <span v-else>{{ $t('global.status.off') }}</span>
@@ -28,34 +28,42 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount } from 'vue';
+import { ref, watch } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useToast from '@/components/Composables/useToastComposable';
-import stores from '@/store';
-import eventBus from '@/eventBus';
+import i18n from '@/i18n';
+import {
+  useOverviewInventory,
+  useUpdateIdentifyLed,
+} from '@/api/composables/useOverview';
 
 const { successToast, errorToast } = useToast();
 
-const systemStore = stores.SystemStore();
+// Use VueQuery composables
+const { systems } = useOverviewInventory();
+const { updateIdentifyLedAsync } = useUpdateIdentifyLed();
 
-onBeforeMount(() => {
-  systemStore.getSystem().finally(() => {
-    eventBus.emit('overview-inventory-complete');
-  });
-});
+// Create a local ref that syncs with the query data
+const localLedState = ref(false);
 
-const systems = computed(() => {
-  let systemData = systemStore.systems[0];
-  return systemData ? systemData : {};
-});
+// Watch for changes in the query data and update local state
+watch(
+  () => systems.value?.locationIndicatorActive,
+  (newValue) => {
+    if (newValue !== undefined) {
+      localLedState.value = newValue;
+    }
+  },
+  { immediate: true },
+);
 
-const toggleIdentifyLedSwitch = (state) => {
-  systemStore
-    .changeIdentifyLedState(state)
-    .then((message) => successToast(message))
-    .catch(({ message }) => {
-      console.log(message);
-      errorToast(message);
-    });
+const toggleIdentifyLedSwitch = async (state) => {
+  try {
+    await updateIdentifyLedAsync(state);
+  } catch (error) {
+    // Error toast is handled by the composable
+    // Revert local state on error
+    localLedState.value = !state;
+  }
 };
 </script>

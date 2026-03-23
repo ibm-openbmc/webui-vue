@@ -64,7 +64,7 @@ const download = computed(() => {
   return `${props.fileName}.json`;
 });
 const href = computed(() => {
-  return `data:text/json;charset=utf-8,${dataForExport.value}`;
+  return `data:text/json;charset=utf-8,${encodeURIComponent(dataForExport.value)}`;
 });
 </script>
 

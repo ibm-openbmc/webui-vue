@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch } from 'vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
@@ -39,7 +39,20 @@ import OverviewEvents from './OverviewEvents.vue';
 import OverviewInventory from './OverviewInventory.vue';
 import OverviewDumps from './OverviewDumps.vue';
 import stores from '@/store';
-import eventBus from '@/eventBus';
+import { useSystemInfo } from '@/api/composables/useSystemInfo';
+import {
+  usePowerControl,
+  usePowerPerformanceMode,
+  useIdlePowerSaver,
+} from '@/api/composables/usePowerControl';
+import {
+  useOverviewFirmware,
+  useOverviewLicense,
+  useOverviewNetwork,
+  useOverviewEvents,
+  useOverviewInventory,
+  useOverviewQuickLinks,
+} from '@/api/composables/useOverview';
 
 const { startLoader, endLoader } = useLoadingBar();
 
@@ -47,43 +60,76 @@ const userManagementStore = stores.UserManagementStore();
 
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 
-onBeforeMount(() => {
-  startLoader();
-  const dumpsPromise = new Promise((resolve) => {
-    eventBus.on('overview-dumps-complete', () => resolve());
-  });
-  const eventsPromise = new Promise((resolve) => {
-    eventBus.on('overview-events-complete', () => resolve());
-  });
-  const firmwarePromise = new Promise((resolve) => {
-    eventBus.on('overview-firmware-complete', () => resolve());
-  });
-  const inventoryPromise = new Promise((resolve) => {
-    eventBus.on('overview-inventory-complete', () => resolve());
-  });
-  const networkPromise = new Promise((resolve) => {
-    eventBus.on('overview-network-complete', () => resolve());
-  });
-  const powerPromise = new Promise((resolve) => {
-    eventBus.on('overview-power-complete', () => resolve());
-  });
-  const quicklinksPromise = new Promise((resolve) => {
-    eventBus.on('overview-quicklinks-complete', () => resolve());
-  });
-  const serverPromise = new Promise((resolve) => {
-    eventBus.on('overview-server-complete', () => resolve());
-  });
+// Use VueQuery composables for all Overview data
+const { isLoading: isSystemInfoLoading, isError: isSystemInfoError } =
+  useSystemInfo();
+const { isPowerControlFetching, isPowerControlError } = usePowerControl();
+const { isPowerPerformanceFetching, isPowerPerformanceError } =
+  usePowerPerformanceMode();
+const { isIdlePowerSaverFetching, isIdlePowerSaverError } = useIdlePowerSaver();
+const { isLoading: isFirmwareLoading, isError: isFirmwareError } =
+  useOverviewFirmware();
+const { isLoading: isLicenseLoading, isError: isLicenseError } =
+  useOverviewLicense();
+const { isLoading: isNetworkLoading, isError: isNetworkError } =
+  useOverviewNetwork();
+const { isLoading: isEventsLoading, isError: isEventsError } =
+  useOverviewEvents();
+const { isLoading: isInventoryLoading, isError: isInventoryError } =
+  useOverviewInventory();
+const { isLoading: isQuickLinksLoading, isError: isQuickLinksError } =
+  useOverviewQuickLinks();
 
-  Promise.all([
-    dumpsPromise,
-    eventsPromise,
-    firmwarePromise,
-    inventoryPromise,
-    networkPromise,
-    powerPromise,
-    quicklinksPromise,
-    serverPromise,
-    userManagementStore.getUsers(),
-  ]).finally(() => endLoader());
-});
+// Track overall loading state
+const isAnyLoading = ref(false);
+
+// Watch all loading states
+watch(
+  [
+    isSystemInfoLoading,
+    isPowerControlFetching,
+    isPowerPerformanceFetching,
+    isIdlePowerSaverFetching,
+    isFirmwareLoading,
+    isLicenseLoading,
+    isNetworkLoading,
+    isEventsLoading,
+    isInventoryLoading,
+    isQuickLinksLoading,
+  ],
+  (loadingStates) => {
+    const loading = loadingStates.some((state) => state);
+
+    if (loading && !isAnyLoading.value) {
+      isAnyLoading.value = true;
+      startLoader();
+    } else if (!loading && isAnyLoading.value) {
+      isAnyLoading.value = false;
+      // Also wait for user management store
+      userManagementStore.getUsers().finally(() => endLoader());
+    }
+  },
+  { immediate: true },
+);
+
+// Stop the loading bar when any fetch fails
+watch(
+  [
+    isSystemInfoError,
+    isPowerControlError,
+    isPowerPerformanceError,
+    isIdlePowerSaverError,
+    isFirmwareError,
+    isLicenseError,
+    isNetworkError,
+    isEventsError,
+    isInventoryError,
+    isQuickLinksError,
+  ],
+  (errorStates) => {
+    if (errorStates.some((state) => state)) {
+      endLoader();
+    }
+  },
+);
 </script>

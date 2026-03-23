@@ -40,23 +40,12 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import stores from '@/store';
-import eventBus from '@/eventBus';
+import { useOverviewNetwork } from '@/api/composables/useOverview';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const networkStore = stores.NetworkStore();
-
-onBeforeMount(() => {
-  networkStore?.getEthernetData().finally(() => {
-    eventBus.emit('overview-network-complete');
-  });
-});
-
-const network = computed(() => {
-  return networkStore.networkSettings[0];
-});
+// Use VueQuery composable
+const { network } = useOverviewNetwork();
 </script>

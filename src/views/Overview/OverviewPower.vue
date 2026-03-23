@@ -49,39 +49,26 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount } from 'vue';
+import { computed } from 'vue';
 import OverviewCard from './OverviewCard.vue';
+import StatusIcon from '@/components/Global/StatusIcon.vue';
 import stores from '@/store';
-import eventBus from '@/eventBus';
+import {
+  usePowerControl,
+  usePowerPerformanceMode,
+  useIdlePowerSaver,
+} from '@/api/composables/usePowerControl';
 
-const powerControlStore = stores.PowerControlStore();
 const global = stores.GlobalStore();
 
-onBeforeMount(() => {
-  Promise.all([
-    powerControlStore.getPowerControl(),
-    powerControlStore.getPowerPerformanceMode(),
-    powerControlStore.getIdlePowerSaverData(),
-  ]).finally(() => {
-    eventBus.emit('overview-power-complete');
-  });
-});
+// Use VueQuery composables for power data
+const { powerConsumption, isPowerCapEnabled, powerCap } = usePowerControl();
+const { powerPerformanceMode } = usePowerPerformanceMode();
+const { idlePowerSaverData } = useIdlePowerSaver();
 
-const idlePowerSaverData = computed(() => {
-  return powerControlStore.idlePowerSaverData;
-});
-const isPowerCapEnabled = computed(() => {
-  return powerControlStore.isPowerCapEnabled;
-});
-const powerCapValue = computed(() => {
-  return powerControlStore.powerCap;
-});
-const powerConsumptionValue = computed(() => {
-  return powerControlStore.powerConsumption;
-});
-const powerPerformanceMode = computed(() => {
-  return powerControlStore.powerPerformanceMode;
-});
+const powerConsumptionValue = computed(() => powerConsumption.value);
+const powerCapValue = computed(() => powerCap.value);
+
 const safeMode = computed(() => {
   return global.safeMode;
 });

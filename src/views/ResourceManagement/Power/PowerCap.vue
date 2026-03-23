@@ -10,8 +10,8 @@
             </dt>
             <dd>
               {{
-                powerConsumption
-                  ? `${powerConsumption} W`
+                powerConsumptionValue
+                  ? `${powerConsumptionValue} W`
                   : $t('global.status.notAvailable')
               }}
             </dd>
@@ -21,7 +21,7 @@
 
       <BForm aria-label="power-cap" @submit.prevent="submitForm">
         <BFormGroup
-          :disabled="loading || safeMode || powerCapMin === 0"
+          :disabled="loading || safeMode || powerCapMinValue === 0"
           class="form-group"
           aria-label="power-cap-setting"
         >
@@ -33,7 +33,7 @@
                 aria-label="power-cap-setting-label"
               >
                 <BFormCheckbox
-                  v-model="isPowerCapEnabled"
+                  v-model="isPowerCapEnabledLocal"
                   data-test-id="power-checkbox-togglePowerCapField"
                   name="power-control-mode"
                 >
@@ -55,28 +55,28 @@
                 <BFormText id="power-help-text">
                   {{
                     $t('pagePower.powerCapLabelTextInfo', {
-                      min: dataFormatter(powerCapMin),
-                      max: dataFormatter(powerCapMax),
+                      min: dataFormatter(powerCapMinValue),
+                      max: dataFormatter(powerCapMaxValue),
                     })
                   }}
                 </BFormText>
 
                 <BFormInput
                   id="input-1"
-                  v-model="powerCap"
+                  v-model="powerCapLocal"
                   data-test-id="power-input-powerCap"
                   type="number"
                   aria-describedby="power-help-text"
                   :number="true"
-                  :state="getValidationState(v$.powerCap)"
-                  @update:model-value="v$.powerCap.$touch()"
+                  :state="getValidationState(v$.powerCapLocal)"
+                  @update:model-value="v$.powerCapLocal.$touch()"
                 ></BFormInput>
 
                 <BFormInvalidFeedback id="input-live-feedback" role="alert">
                   {{
                     $t('global.form.valueMustBeBetween', {
-                      min: powerCapMin,
-                      max: powerCapMax,
+                      min: powerCapMinValue,
+                      max: powerCapMaxValue,
                     })
                   }}
                 </BFormInvalidFeedback>
@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, between, numeric } from '@vuelidate/validators';
 import useLoadingBar, {
@@ -109,14 +109,12 @@ import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlo
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import stores from '@/store';
+import { usePowerControl } from '@/api/composables/usePowerControl';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 const { dataFormatter } = useDataFormatterGlobal();
 const { getValidationState } = useVuelidateComposable();
-
-const powerControlStore = stores.PowerControlStore();
 
 defineProps({
   safeMode: {
@@ -125,68 +123,63 @@ defineProps({
   },
 });
 
-onBeforeMount(() => {
-  startLoader();
-  powerControlStore.getPowerControl().finally(() => endLoader());
-});
+// Use VueQuery composable for power control
+const {
+  powerConsumption,
+  powerControlMode,
+  isPowerCapEnabled,
+  powerCap,
+  powerCapMin,
+  powerCapMax,
+  setPowerCap,
+} = usePowerControl();
 
-const powerConsumption = computed(() => {
-  return powerControlStore.powerConsumptionGetter;
-});
+// Local state for form
+const isPowerCapEnabledLocal = ref(false);
+const powerCapLocal = ref(null);
 
-const powerControlMode = computed(() => {
-  return powerControlStore.powerControlModeGetter;
-});
-
-const isPowerCapEnabled = computed({
-  get() {
-    return powerControlStore.isPowerCapEnabled;
+// Sync with composable data
+watch(
+  [isPowerCapEnabled, powerCap],
+  ([enabled, cap]) => {
+    isPowerCapEnabledLocal.value = enabled ?? false;
+    powerCapLocal.value = cap;
   },
-  set(value) {
-    const newValue = value === true ? 'Automatic' : 'Disabled';
-    powerControlStore.powerControlMode = newValue;
-  },
-});
+  { immediate: true },
+);
 
-const powerCap = computed({
-  get() {
-    return powerControlStore.powerCapGetter;
-  },
-  set(value) {
-    powerControlStore.powerCap = value;
-  },
-});
+const powerConsumptionValue = computed(() => powerConsumption.value);
+const powerCapMinValue = computed(() => powerCapMin.value ?? 0);
+const powerCapMaxValue = computed(() => powerCapMax.value ?? 0);
 
-const powerCapMin = computed(() => {
-  return powerControlStore.powerCapMinGetter;
-});
-
-const powerCapMax = computed(() => {
-  return powerControlStore.powerCapMaxGetter;
+const powerControlModeValue = computed(() => {
+  return isPowerCapEnabledLocal.value ? 'Automatic' : 'Disabled';
 });
 
 const rules = computed(() => ({
-  powerCap: {
+  powerCapLocal: {
     required,
     numeric,
-    betweenValue: between(powerCapMin.value, powerCapMax.value),
+    betweenValue: between(powerCapMinValue.value, powerCapMaxValue.value),
   },
 }));
 
-const v$ = useVuelidate(rules, { powerCap });
+const v$ = useVuelidate(rules, { powerCapLocal });
 
-function submitForm() {
+async function submitForm() {
   v$.value.$touch();
   if (v$.value.$invalid) return;
   startLoader();
 
-  powerControlStore
-    .setPowerControlAndCap({
-      powerControlMode: powerControlMode.value,
-      powerCap: powerCap.value,
-    })
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => endLoader());
+  try {
+    await setPowerCap({
+      powerControlMode: powerControlModeValue.value,
+      powerCap: powerCapLocal.value,
+    });
+  } catch (error) {
+    // Error toast is handled by the composable
+  } finally {
+    endLoader();
+  }
 }
 </script>

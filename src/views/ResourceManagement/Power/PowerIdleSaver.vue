@@ -33,7 +33,7 @@
         id="idle-power-saver"
         novalidate
         @submit.prevent="saveIdlePowerSaverData"
-        @reset.prevent="resetIdlePowerSaverData"
+        @reset.prevent="resetIdlePowerSaverDataHandler"
       >
         <BFormGroup aria-label="idle-power-saver-form" :disabled="isDisabled">
           <div class="fw-bold mb-2">{{ $t('pagePower.toEnter') }}</div>
@@ -196,7 +196,7 @@
 
 <script setup>
 import Alert from '@/components/Global/Alert.vue';
-import { ref, computed, onBeforeMount, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { between, minValue, maxValue } from '@vuelidate/validators';
@@ -206,13 +206,11 @@ import useLoadingBar, {
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
-import stores from '@/store';
+import { useIdlePowerSaver } from '@/api/composables/usePowerControl';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
-
-const powerControlStore = stores.PowerControlStore();
 
 const props = defineProps({
   safeMode: {
@@ -228,6 +226,10 @@ const props = defineProps({
     default: null,
   },
 });
+
+// Use VueQuery composable
+const { idlePowerSaverData, setIdlePowerSaver, resetIdlePowerSaver } =
+  useIdlePowerSaver();
 
 const delayTimeMin = ref(10); // TODO update once redfish provides min/max
 const delayTimeMax = ref(600);
@@ -246,16 +248,16 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-onBeforeMount(() => {
-  startLoader();
-  powerControlStore.getIdlePowerSaverData().finally(() => {
-    endLoader();
-  });
-});
-
-const idlePowerSaverData = computed(() => {
-  return powerControlStore.idlePowerSaverDataGetter;
-});
+// Sync form with composable data
+watch(
+  idlePowerSaverData,
+  (newValue) => {
+    if (!props.safeMode && newValue) {
+      setIdlePowerSaveFormValues(newValue);
+    }
+  },
+  { immediate: true },
+);
 
 const isDisabled = computed(() => {
   return loading.value || props.safeMode || props.nonIdlePowerSaverMode;
@@ -274,58 +276,64 @@ const rules = computed(() => ({
         utilizationThresholdMin.value,
         utilizationThresholdMax.value,
       ),
-      maxValue: maxValue(idlePowerSaver.value.exitUtilizationPercent),
+      maxValue: maxValue(idlePowerSaver.value.exitUtilizationPercent ?? 100),
     },
     exitUtilizationPercent: {
       between: between(
         utilizationThresholdMin.value,
         utilizationThresholdMax.value,
       ),
-      minValue: minValue(idlePowerSaver.value.enterUtilizationPercent),
+      minValue: minValue(idlePowerSaver.value.enterUtilizationPercent ?? 0),
     },
   },
 }));
 
 const v$ = useVuelidate(rules, { idlePowerSaver });
 
-watch(idlePowerSaverData, (newValue) => {
-  if (!props.safeMode) {
-    setIdlePowerSaveFormValues(newValue);
-  }
-});
-
 function setIdlePowerSaveFormValues(data) {
-  idlePowerSaver.value.isIdlePowerSaverEnabled = data?.Enabled;
-  idlePowerSaver.value.enterDwellTimeSeconds = data?.EnterDwellTimeSeconds;
-  idlePowerSaver.value.exitDwellTimeSeconds = data?.ExitDwellTimeSeconds;
-  idlePowerSaver.value.enterUtilizationPercent = data?.EnterUtilizationPercent;
-  idlePowerSaver.value.exitUtilizationPercent = data?.ExitUtilizationPercent;
+  idlePowerSaver.value.isIdlePowerSaverEnabled = data?.Enabled ?? null;
+  idlePowerSaver.value.enterDwellTimeSeconds =
+    data?.EnterDwellTimeSeconds ?? null;
+  idlePowerSaver.value.exitDwellTimeSeconds =
+    data?.ExitDwellTimeSeconds ?? null;
+  idlePowerSaver.value.enterUtilizationPercent =
+    data?.EnterUtilizationPercent ?? null;
+  idlePowerSaver.value.exitUtilizationPercent =
+    data?.ExitUtilizationPercent ?? null;
 }
 
-function saveIdlePowerSaverData() {
+async function saveIdlePowerSaverData() {
   v$.value.idlePowerSaver.$touch();
   if (v$.value.idlePowerSaver.$invalid) return;
   startLoader();
-  return powerControlStore
-    .setIdlePowerSaverData(idlePowerSaver.value)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => endLoader());
-}
 
-function resetIdlePowerSaverData() {
-  v$.value.idlePowerSaver.$touch();
-  if (v$.value.idlePowerSaver.$invalid) return;
-  startLoader();
-  return powerControlStore
-    .resetIdlePowerSaver()
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => {
-      powerControlStore.getIdlePowerSaverData().then(() => {
-        setIdlePowerSaveFormValues(idlePowerSaverData.value);
-      });
-      endLoader();
+  try {
+    await setIdlePowerSaver({
+      isIdlePowerSaverEnabled: idlePowerSaver.value.isIdlePowerSaverEnabled,
+      enterDwellTimeSeconds: idlePowerSaver.value.enterDwellTimeSeconds,
+      exitDwellTimeSeconds: idlePowerSaver.value.exitDwellTimeSeconds,
+      enterUtilizationPercent: idlePowerSaver.value.enterUtilizationPercent,
+      exitUtilizationPercent: idlePowerSaver.value.exitUtilizationPercent,
     });
+  } catch (error) {
+    // Error toast is handled by the composable
+  } finally {
+    endLoader();
+  }
+}
+
+async function resetIdlePowerSaverDataHandler() {
+  v$.value.idlePowerSaver.$touch();
+  if (v$.value.idlePowerSaver.$invalid) return;
+  startLoader();
+
+  try {
+    await resetIdlePowerSaver();
+    // Form will auto-update via watch on idlePowerSaverData
+  } catch (error) {
+    // Error toast is handled by the composable
+  } finally {
+    endLoader();
+  }
 }
 </script>
