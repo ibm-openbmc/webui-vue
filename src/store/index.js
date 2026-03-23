@@ -26,6 +26,8 @@ import NetworkSettingsStore from './modules/Operations/NetworkSettingsStore';
 import IBMiServiceFunctionsStore from './modules/Logs/IBMiServiceFunctionsStore';
 import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
 import DateTimeStore from './modules/Settings/DateTimeStore';
+import ResourceMemoryStore from './modules/ResourceManagement/ResourceMemoryStore';
+import SystemParametersStore from './modules/ResourceManagement/SystemParametersStore';
 import DeconfigurationRecordsStore from './modules/Logs/DeconfigurationRecordsStore';
 import ConcurrentMaintenanceStore from './modules/HardwareStatus/ConcurrentMaintenanceStore';
 import PcieSlotsStore from './modules/HardwareStatus/PcieSlotsStore';
@@ -96,9 +98,6 @@ Object.assign(stores, {
   MemoryStore: MemoryStore,
 });
 Object.assign(stores, {
-  ResourceMemoryStore: MemoryStore,
-});
-Object.assign(stores, {
   FanStore: FanStore,
 });
 Object.assign(stores, {
@@ -126,10 +125,16 @@ Object.assign(stores, {
   NetworkSettingsStore: NetworkSettingsStore,
 });
 Object.assign(stores, {
+  ResourceMemoryStore: ResourceMemoryStore,
+});
+Object.assign(stores, {
   HardwareDeconfigurationStore: HardwareDeconfigurationStore,
 });
 Object.assign(stores, {
   DeconfigurationRecordsStore: DeconfigurationRecordsStore,
+});
+Object.assign(stores, {
+  SystemParametersStore: SystemParametersStore,
 });
 Object.assign(stores, {
   FabricAdaptersStore: FabricAdaptersStore,
