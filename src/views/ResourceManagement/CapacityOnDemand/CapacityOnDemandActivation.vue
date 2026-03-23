@@ -43,7 +43,6 @@
                     v-model="licenseKey"
                     class="input-form"
                     :maxlength="maxLength"
-                    :disabled="isActivationDisabled"
                     :state="getValidationState(v$.licenseKey)"
                     :placeholder="
                       $t('pageCapacityOnDemand.activation.placeholder')
@@ -56,11 +55,7 @@
                 </BInputGroup>
               </BFormGroup>
               <BCol align-self="baseline" class="ms-3">
-                <BButton
-                  variant="primary"
-                  type="submit"
-                  :disabled="isActivationDisabled"
-                >
+                <BButton variant="primary" type="submit">
                   {{ $t('global.action.activate') }}
                 </BButton>
               </BCol>

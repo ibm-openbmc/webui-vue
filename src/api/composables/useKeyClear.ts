@@ -11,23 +11,24 @@ import i18n from '@/i18n';
 export function useKeyClear() {
     const clearKeysMutation = useMutation({
         mutationFn: async (selectedKey: string): Promise<string> => {
-            const selectedKeyForClearing = {
-                Attributes: { hb_key_clear_request: selectedKey },
-            };
-            await api.patch(
-                '/redfish/v1/Systems/system/Bios/Settings',
-                selectedKeyForClearing,
-            );
-            return i18n.global.t('pageKeyClear.toast.selectedKeyClearedSuccess');
+            try {
+                const selectedKeyForClearing = {
+                    Attributes: { hb_key_clear_request: selectedKey },
+                };
+                await api.patch(
+                    '/redfish/v1/Systems/system/Bios/Settings',
+                    selectedKeyForClearing,
+                );
+                return i18n.global.t('pageKeyClear.toast.selectedKeyClearedSuccess');
+            } catch (error) {
+                console.error('Key clear error:', error);
+                throw new Error(
+                    i18n.global.t('pageKeyClear.toast.selectedKeyClearedError'),
+                );
+            }
         },
         onSuccess: () => {
             // Key clear successful
-        },
-        onError: (error: Error) => {
-            console.error('Key clear error:', error);
-            throw new Error(
-                i18n.global.t('pageKeyClear.toast.selectedKeyClearedError'),
-            );
         },
     });
 

@@ -129,21 +129,22 @@ export function useCapacityOnDemand() {
   // Mutation: Activate license
   const activateLicenseMutation = useMutation({
     mutationFn: async (licenseKey: string): Promise<string> => {
-      await api.post('/redfish/v1/LicenseService/Licenses', {
-        LicenseString: licenseKey,
-      });
-      return i18n.global.t('pageCapacityOnDemand.activation.toast.success');
+      try {
+        await api.post('/redfish/v1/LicenseService/Licenses', {
+          LicenseString: licenseKey,
+        });
+        return i18n.global.t('pageCapacityOnDemand.activation.toast.success');
+      } catch (error) {
+        console.log('Licenses', error);
+        throw new Error(
+          i18n.global.t('pageCapacityOnDemand.activation.toast.error')
+        );
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'licenseService', 'licenses'],
       });
-    },
-    onError: (error) => {
-      console.log('License activation error:', error);
-      throw new Error(
-        i18n.global.t('pageCapacityOnDemand.activation.toast.error')
-      );
     },
   });
 

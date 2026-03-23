@@ -253,39 +253,45 @@ export function useFirmware() {
   // Mutation: Set apply time to immediate
   const setApplyTimeImmediateMutation = useMutation({
     mutationFn: async (): Promise<void> => {
-      const data = {
-        HttpPushUriOptions: {
-          HttpPushUriApplyTime: {
-            ApplyTime: 'Immediate',
+      try {
+        const data = {
+          HttpPushUriOptions: {
+            HttpPushUriApplyTime: {
+              ApplyTime: 'Immediate',
+            },
           },
-        },
-      };
-      await api.patch('/redfish/v1/UpdateService', data);
+        };
+        await api.patch('/redfish/v1/UpdateService', data);
+      } catch (error) {
+        console.log('Set apply time error:', error);
+        throw new Error(i18n.global.t('pageFirmware.toast.errorUploadFirmware'));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'updateService', 'settings'],
       });
     },
-    onError: (error) => {
-      console.log('Set apply time error:', error);
-      throw new Error(i18n.global.t('pageFirmware.toast.errorUploadFirmware'));
-    },
   });
 
   // Mutation: Upload firmware
   const uploadFirmwareMutation = useMutation({
     mutationFn: async (image: File): Promise<any> => {
-      // Ensure ApplyTime is set to Immediate
-      if (applyTime.value !== 'Immediate') {
-        await setApplyTimeImmediateMutation.mutateAsync();
-      }
+      try {
+        // Ensure ApplyTime is set to Immediate
+        if (applyTime.value !== 'Immediate') {
+          await setApplyTimeImmediateMutation.mutateAsync();
+        }
 
-      const response = await api.post('/redfish/v1/UpdateService/update', image, {
-        headers: { 'Content-Type': 'application/octet-stream' },
-      });
-      
-      return response.data;
+        const response = await api.post('/redfish/v1/UpdateService/update', image, {
+          headers: { 'Content-Type': 'application/octet-stream' },
+        });
+        
+        return response.data;
+      } catch (error) {
+        console.log('Upload firmware error:', error);
+        throw new Error(i18n.global.t('pageFirmware.toast.errorUpdateFirmware'));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -298,38 +304,35 @@ export function useFirmware() {
         queryKey: ['redfish', 'systems', 'system', 'bios', 'activeFirmware'],
       });
     },
-    onError: (error) => {
-      console.log('Upload firmware error:', error);
-      throw new Error(i18n.global.t('pageFirmware.toast.errorUpdateFirmware'));
-    },
   });
 
   // Mutation: Switch BMC firmware and reboot
   const switchBmcFirmwareMutation = useMutation({
     mutationFn: async (): Promise<void> => {
-      const backupLocation = backupBmcFirmware.value?.location;
-      if (!backupLocation) {
-        throw new Error('No backup firmware available');
-      }
+      try {
+        const backupLocation = backupBmcFirmware.value?.location;
+        if (!backupLocation) {
+          throw new Error('No backup firmware available');
+        }
 
-      const data = {
-        Links: {
-          ActiveSoftwareImage: {
-            '@odata.id': backupLocation,
+        const data = {
+          Links: {
+            ActiveSoftwareImage: {
+              '@odata.id': backupLocation,
+            },
           },
-        },
-      };
+        };
 
-      await api.patch('/redfish/v1/Managers/bmc', data);
+        await api.patch('/redfish/v1/Managers/bmc', data);
+      } catch (error) {
+        console.log('Switch firmware error:', error);
+        throw new Error(i18n.global.t('pageFirmware.toast.errorSwitchImages'));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'managers', 'bmc', 'activeFirmware'],
       });
-    },
-    onError: (error) => {
-      console.log('Switch firmware error:', error);
-      throw new Error(i18n.global.t('pageFirmware.toast.errorSwitchImages'));
     },
   });
 
