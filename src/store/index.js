@@ -2,11 +2,13 @@ import GlobalStore from './modules/GlobalStore';
 import AuthenticationStore from './modules/Authentication/AuthenticationStore';
 import UserManagementStore from './modules/SecurityAndAccess/UserManagementStore';
 import CertificatesStore from './modules/SecurityAndAccess/CertificatesStore';
+import LdapStore from './modules/SecurityAndAccess/LdapStore';
 import FirmwareStore from './modules/Operations/FirmwareStore';
 import BootSettingsStore from './modules/Operations/BootSettingsStore';
 import ControlStore from './modules/Operations/ControlStore';
 import PowerControlStore from './modules/ResourceManagement/PowerControlStore';
 import NetworkStore from './modules/Settings/NetworkStore';
+import DateTimeStore from './modules/Settings/DateTimeStore';
 import EventLogStore from './modules/Logs/EventLogStore';
 import SystemStore from './modules/HardwareStatus/SystemStore';
 import PowerSupplyStore from './modules/HardwareStatus/PowerSupplyStore';
@@ -63,10 +65,16 @@ Object.assign(stores, {
   NetworkStore: NetworkStore,
 });
 Object.assign(stores, {
+  DateTimeStore: DateTimeStore,
+});
+Object.assign(stores, {
   EventLogStore: EventLogStore,
 });
 Object.assign(stores, {
   CertificatesStore: CertificatesStore,
+});
+Object.assign(stores, {
+  LdapStore: LdapStore,
 });
 Object.assign(stores, {
   SystemStore: SystemStore,
