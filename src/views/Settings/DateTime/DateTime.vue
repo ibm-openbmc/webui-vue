@@ -320,7 +320,6 @@ import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
-import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useLocalTimezoneLabelComposable from '@/components/Composables/useLocalTimezoneLabelComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
@@ -343,7 +342,6 @@ const { startLoader, hideLoader, endLoader } = useLoadingBar();
 const userManagementStore = UserManagementStore();
 const { getValidationState } = useVuelidateComposable();
 const { localOffset } = useLocalTimezoneLabelComposable();
-const toast = useToastComposable();
 
 const formatDate = proxy.$filters.formatDate;
 const formatTime = proxy.$filters.formatTime;
@@ -574,8 +572,7 @@ const submitForm = () => {
   }
 
   updateDateTimeAction(dateTimeForm)
-    .then((success) => {
-      toast.successToast(success);
+    .then(() => {
       if (!isNTPEnabled) return;
       // Shift address up if second address is empty
       // to avoid refreshing after delay when updating NTP
@@ -597,8 +594,7 @@ const submitForm = () => {
         }, 20000);
       }
     })
-    .catch(({ message }) => {
-      toast.errorToast(message);
+    .catch(() => {
       v$.value.form.$reset();
       endLoader();
     });

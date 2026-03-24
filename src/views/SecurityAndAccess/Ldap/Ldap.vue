@@ -249,13 +249,11 @@ import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import TableRoleGroups from './TableRoleGroups.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
-import useToastComposable from '@/components/Composables/useToastComposable';
 import { useLdap } from '@/api/composables/useLdap';
 import stores from '@/store';
 
 const { getValidationState } = useVuelidateComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
-const { successToast, errorToast } = useToastComposable();
 
 const certificatesStore = stores.CertificatesStore();
 
@@ -432,18 +430,11 @@ function handleSubmit() {
   };
 
   startLoader();
-  saveAccountSettings(data)
-    .then((message) => {
-      successToast(message);
-    })
-    .catch(({ message }) => {
-      errorToast(message);
-    })
-    .finally(() => {
-      formLdap.bindPassword = '';
-      v$.value.formLdap.$reset();
-      endLoader();
-    });
+  saveAccountSettings(data).finally(() => {
+    formLdap.bindPassword = '';
+    v$.value.formLdap.$reset();
+    endLoader();
+  });
 }
 
 function onChangeServiceType() {

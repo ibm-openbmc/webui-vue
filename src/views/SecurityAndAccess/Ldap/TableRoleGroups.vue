@@ -167,14 +167,12 @@ import TableRowAction from '@/components/Global/TableRowAction.vue';
 import ModalAddRoleGroup from './ModalAddRoleGroup.vue';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import useToastComposable from '@/components/Composables/useToastComposable';
 import { useLdap } from '@/api/composables/useLdap';
 import stores from '@/store';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 
 const { startLoader, endLoader } = useLoadingBar();
-const { successToast, errorToast } = useToastComposable();
 
 const {
   clearSelectedRows,
@@ -303,11 +301,9 @@ function onModalDeleteBatch(deleteConfirmed) {
         groupName: row.groupName,
       })),
     })
-      .then((message) => {
-        successToast(message);
+      .then(() => {
         eventBus.emit('clear-selected');
       })
-      .catch(({ message }) => errorToast(message))
       .finally(() => endLoader());
   }
 }
@@ -343,11 +339,9 @@ function onModalDelete(deleteConfirmed) {
     deleteRoleGroupApi({
       roleGroups: [{ groupName: activeRoleGroup.value.groupName }],
     })
-      .then((message) => {
-        successToast(message);
+      .then(() => {
         eventBus.emit('clear-selected');
       })
-      .catch(({ message }) => errorToast(message))
       .finally(() => endLoader());
   }
 }
@@ -386,19 +380,13 @@ function saveRoleGroup({
   startLoader();
 
   if (addNew) {
-    addNewRoleGroup({ groupName, groupPrivilege })
-      .then((message) => successToast(message))
-      .catch(({ message }) => errorToast(message))
-      .finally(() => endLoader());
+    addNewRoleGroup({ groupName, groupPrivilege }).finally(() => endLoader());
   } else {
     saveRoleGroupApi({
       groupNamePreviously,
       groupName,
       groupPrivilege,
-    })
-      .then((message) => successToast(message))
-      .catch(({ message }) => errorToast(message))
-      .finally(() => endLoader());
+    }).finally(() => endLoader());
   }
 }
 </script>
