@@ -4,6 +4,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
+// @ts-ignore - useToast is a JS module
+import useToast from '@/components/Composables/useToastComposable';
 
 interface NTPData {
     NTPServers: string[];
@@ -27,6 +29,7 @@ export interface DateTimeFormData {
  */
 export function useDateTime() {
     const queryClient = useQueryClient();
+    const { errorToast } = useToast();
 
     const {
         data: ntpData,
@@ -128,7 +131,7 @@ export function useDateTime() {
         },
         onError: (error: Error) => {
             console.error('Error updating date/time:', error);
-            throw new Error(i18n.global.t('pageDateTime.toast.errorSaveDateTime'));
+            errorToast(i18n.global.t('pageDateTime.toast.errorSaveDateTime'));
         },
     });
 

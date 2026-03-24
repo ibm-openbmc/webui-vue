@@ -5,6 +5,8 @@ import { useRedfishResource } from './useAllSubResources';
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
+// @ts-ignore - useToast is a JS module
+import useToast from '@/components/Composables/useToastComposable';
 import type { Resource } from '@/types/redfish';
 // @ts-ignore - lodash types not installed
 import { find } from 'lodash';
@@ -65,6 +67,7 @@ export interface SaveAccountSettingsParams {
  */
 export function useLdap() {
     const queryClient = useQueryClient();
+    const { successToast, errorToast } = useToast();
 
     // Fetch Account Service
     const accountServiceQuery = useRedfishResource<AccountService>(
@@ -140,7 +143,7 @@ export function useLdap() {
         },
         onError: (error: Error) => {
             console.error('Save LDAP settings error:', error);
-            throw new Error(i18n.global.t('pageLdap.toast.errorSaveLdapSettings'));
+            errorToast(i18n.global.t('pageLdap.toast.errorSaveLdapSettings'));
         },
     });
 
@@ -166,7 +169,7 @@ export function useLdap() {
         },
         onError: (error: Error) => {
             console.error('Save Active Directory settings error:', error);
-            throw new Error(
+            errorToast(
                 i18n.global.t('pageLdap.toast.errorSaveActiveDirectorySettings')
             );
         },
@@ -232,7 +235,7 @@ export function useLdap() {
         },
         onError: (error: Error) => {
             console.error('Add role group error:', error);
-            throw new Error(i18n.global.t('pageLdap.toast.errorAddRoleGroup'));
+            errorToast(i18n.global.t('pageLdap.toast.errorAddRoleGroup'));
         },
     });
 
@@ -275,7 +278,7 @@ export function useLdap() {
         },
         onError: (error: Error) => {
             console.error('Save role group error:', error);
-            throw new Error(i18n.global.t('pageLdap.toast.errorSaveRoleGroup'));
+            errorToast(i18n.global.t('pageLdap.toast.errorSaveRoleGroup'));
         },
     });
 
@@ -287,10 +290,8 @@ export function useLdap() {
             roleGroups: Array<{ groupName: string }>;
         }): Promise<string> => {
             const data: any = {};
-            const currentRoleGroups = enabledRoleGroups.value;
-            const RemoteRoleMapping = currentRoleGroups.filter((group) => {
-                return !find(roleGroups, { groupName: group.RemoteGroup });
-            });
+            // For Redfish PATCH delete, we need to send [null, {}] for each item to delete
+            const RemoteRoleMapping = roleGroups.map(() => [null, {}]).flat();
 
             if (isActiveDirectoryEnabled.value) {
                 data.ActiveDirectory = { RemoteRoleMapping };
@@ -311,9 +312,7 @@ export function useLdap() {
         },
         onError: (error: Error) => {
             console.error('Delete role group error:', error);
-            throw new Error(
-                i18n.global.t('pageLdap.toast.errorDeleteRoleGroup', error)
-            );
+            errorToast(i18n.global.t('pageLdap.toast.errorDeleteRoleGroup'));
         },
     });
 

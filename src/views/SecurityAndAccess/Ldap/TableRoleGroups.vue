@@ -70,7 +70,12 @@
                   } else {
                     selectedSessions.delete(row.item.groupName);
                   }
-                  toggleSelectRow(tableRef, row.index, checked, row.item);
+                  toggleSelectRowByGroupName(
+                    tableRef,
+                    row.index,
+                    checked,
+                    row.item,
+                  );
                 }
               "
             >
@@ -173,7 +178,7 @@ const { successToast, errorToast } = useToastComposable();
 
 const {
   clearSelectedRows,
-  toggleSelectRow,
+  toggleSelectRowByGroupName,
   selectedRowsList,
   tableHeaderCheckboxModel,
   tableHeaderCheckboxIndeterminate,
@@ -294,7 +299,9 @@ function onModalDeleteBatch(deleteConfirmed) {
   if (deleteConfirmed) {
     startLoader();
     deleteRoleGroupApi({
-      roleGroups: selectedRowsList.value,
+      roleGroups: selectedRowsList.value.map((row) => ({
+        groupName: row.groupName,
+      })),
     })
       .then((message) => {
         successToast(message);
@@ -333,7 +340,9 @@ function onModalHide() {
 function onModalDelete(deleteConfirmed) {
   if (deleteConfirmed) {
     startLoader();
-    deleteRoleGroupApi({ roleGroups: [activeRoleGroup.value] })
+    deleteRoleGroupApi({
+      roleGroups: [{ groupName: activeRoleGroup.value.groupName }],
+    })
       .then((message) => {
         successToast(message);
         eventBus.emit('clear-selected');
