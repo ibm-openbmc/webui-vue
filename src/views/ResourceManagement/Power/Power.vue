@@ -56,13 +56,22 @@ const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const globalStore = stores.GlobalStore();
 
 // Use VueQuery composables for power data
-const { isPowerControlFetching, isPowerControlError } = usePowerControl();
+const { isPowerControlFetching, isPowerControlMutating, isPowerControlError } =
+  usePowerControl();
 
-const { oemMode, isPowerPerformanceFetching, isPowerPerformanceError } =
-  usePowerPerformanceMode();
+const {
+  oemMode,
+  isPowerPerformanceFetching,
+  isPowerPerformanceMutating,
+  isPowerPerformanceError,
+} = usePowerPerformanceMode();
 
-const { idlePowerSaverData, isIdlePowerSaverFetching, isIdlePowerSaverError } =
-  useIdlePowerSaver();
+const {
+  idlePowerSaverData,
+  isIdlePowerSaverFetching,
+  isIdlePowerSaverMutating,
+  isIdlePowerSaverError,
+} = useIdlePowerSaver();
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -76,38 +85,44 @@ const nonIdlePowerSaverMode = computed(() => {
   return idlePowerSaverData.value ? false : true;
 });
 
-// Manage loading bar for power control fetching
-watch(isPowerControlFetching, (fetching) => {
-  if (fetching) {
-    startLoader();
-  } else {
-    endLoader();
-  }
-});
-
-// Manage loading bar for power performance fetching
-watch(isPowerPerformanceFetching, (fetching) => {
-  if (fetching) {
-    startLoader();
-  } else {
-    endLoader();
-  }
-});
-
-// Manage loading bar for idle power saver fetching
-watch(isIdlePowerSaverFetching, (fetching) => {
-  if (fetching) {
-    startLoader();
-  } else {
-    endLoader();
-  }
-});
+// Manage loading bar for fetching state (initial data load)
+watch(
+  [
+    isPowerControlFetching,
+    isPowerPerformanceFetching,
+    isIdlePowerSaverFetching,
+  ],
+  ([controlFetching, performanceFetching, idleFetching]) => {
+    if (controlFetching || performanceFetching || idleFetching) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
 
 // Stop the loading bar when any fetch fails
 watch(
   [isPowerControlError, isPowerPerformanceError, isIdlePowerSaverError],
   ([controlError, performanceError, idleError]) => {
     if (controlError || performanceError || idleError) {
+      endLoader();
+    }
+  },
+);
+
+// Manage loading bar for mutation/update state (separate from fetching)
+watch(
+  [
+    isPowerControlMutating,
+    isPowerPerformanceMutating,
+    isIdlePowerSaverMutating,
+  ],
+  ([controlMutating, performanceMutating, idleMutating]) => {
+    if (controlMutating || performanceMutating || idleMutating) {
+      startLoader();
+    } else {
       endLoader();
     }
   },

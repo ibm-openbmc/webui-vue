@@ -106,18 +106,13 @@
 import { ref, computed, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, between, numeric } from '@vuelidate/validators';
-import useLoadingBar, {
-  loading,
-} from '@/components/Composables/useLoadingBarComposable';
-import useToast from '@/components/Composables/useToastComposable';
+import { loading } from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import { usePowerControl } from '@/api/composables/usePowerControl';
 
-const { startLoader, endLoader } = useLoadingBar();
-const { successToast, errorToast } = useToast();
 const { dataFormatter } = useDataFormatterGlobal();
 const { getValidationState } = useVuelidateComposable();
 
@@ -175,7 +170,6 @@ const v$ = useVuelidate(rules, { powerCapLocal });
 async function submitForm() {
   v$.value.$touch();
   if (v$.value.$invalid) return;
-  startLoader();
 
   try {
     await setPowerCap({
@@ -184,8 +178,6 @@ async function submitForm() {
     });
   } catch (error) {
     // Error toast is handled by the composable
-  } finally {
-    endLoader();
   }
 }
 </script>

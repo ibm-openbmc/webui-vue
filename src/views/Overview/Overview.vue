@@ -39,7 +39,10 @@ import OverviewEvents from './OverviewEvents.vue';
 import OverviewInventory from './OverviewInventory.vue';
 import OverviewDumps from './OverviewDumps.vue';
 import stores from '@/store';
-import { useSystemInfo } from '@/api/composables/useSystemInfo';
+import {
+  useSystemInfo,
+  useUpdateAssetTag,
+} from '@/api/composables/useSystemInfo';
 import {
   usePowerControl,
   usePowerPerformanceMode,
@@ -63,6 +66,7 @@ const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 // Use VueQuery composables for all Overview data
 const { isLoading: isSystemInfoLoading, isError: isSystemInfoError } =
   useSystemInfo();
+const { isUpdating: isAssetTagUpdating } = useUpdateAssetTag();
 const { isPowerControlFetching, isPowerControlError } = usePowerControl();
 const { isPowerPerformanceFetching, isPowerPerformanceError } =
   usePowerPerformanceMode();
@@ -111,6 +115,15 @@ watch(
   },
   { immediate: true },
 );
+
+// Watch mutation state separately
+watch(isAssetTagUpdating, (updating) => {
+  if (updating) {
+    startLoader();
+  } else {
+    endLoader();
+  }
+});
 
 // Stop the loading bar when any fetch fails
 watch(

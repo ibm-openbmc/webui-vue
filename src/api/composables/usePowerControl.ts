@@ -43,7 +43,7 @@ interface SetIdlePowerSaverParams {
  */
 export function usePowerControl() {
   const { successToast, errorToast } = useToast();
-  const { patchResource } = usePatchResource();
+  const { patchResource, isPending: isMutating } = usePatchResource();
 
   const {
     data: environmentMetrics,
@@ -122,6 +122,7 @@ export function usePowerControl() {
     powerCapMax: computed(() => powerControlData.value.powerCapMax),
     isPowerControlLoading,
     isPowerControlFetching,
+    isPowerControlMutating: isMutating,
     isPowerControlError,
     powerControlError,
     setPowerCap,
@@ -134,7 +135,7 @@ export function usePowerControl() {
  */
 export function usePowerPerformanceMode() {
   const { successToast, errorToast } = useToast();
-  const { patchResource } = usePatchResource();
+  const { patchResource, isPending: isMutating } = usePatchResource();
 
   const {
     data: systemPowerMode,
@@ -193,6 +194,7 @@ export function usePowerPerformanceMode() {
       () => powerPerformanceData.value.powerPerformanceMode === 'OEM',
     ),
     isPowerPerformanceFetching,
+    isPowerPerformanceMutating: isMutating,
     isPowerPerformanceError,
     powerPerformanceError,
     setPowerPerformanceMode,
@@ -205,7 +207,7 @@ export function usePowerPerformanceMode() {
  */
 export function useIdlePowerSaver() {
   const { successToast, errorToast } = useToast();
-  const { patchResource } = usePatchResource();
+  const { patchResource, isPending: isMutating } = usePatchResource();
 
   const {
     data: systemPowerMode,
@@ -292,6 +294,7 @@ export function useIdlePowerSaver() {
   return {
     idlePowerSaverData,
     isIdlePowerSaverFetching,
+    isIdlePowerSaverMutating: isMutating,
     isIdlePowerSaverError,
     idlePowerSaverError,
     refetch,

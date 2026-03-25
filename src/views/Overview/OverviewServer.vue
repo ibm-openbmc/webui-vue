@@ -47,7 +47,6 @@ import i18n from '@/i18n';
 import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import OverviewCard from './OverviewCard.vue';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
-import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import IconEdit from '@carbon/icons-vue/es/edit/16';
@@ -60,8 +59,7 @@ import {
   useUpdateAssetTag,
 } from '@/api/composables/useSystemInfo';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
-const { successToast, errorToast } = useToast();
+const { hideLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
 
 const systemStore = stores.SystemStore();
@@ -70,7 +68,7 @@ const bootSettingsStore = stores.BootSettingsStore();
 
 // Use VueQuery composables for system info and asset tag updates
 const { assetTag, modelType, serialNumber } = useSystemInfo();
-const { updateAssetTagAsync, isUpdating } = useUpdateAssetTag();
+const { updateAssetTagAsync } = useUpdateAssetTag();
 
 const openModal = ref(false);
 const serviceLoginStatus = ref(null);
@@ -156,13 +154,10 @@ const okAssetTagHandler = (value) => {
 };
 
 const saveAssetTag = async (modalFormData) => {
-  startLoader();
   try {
     await updateAssetTagAsync(modalFormData);
   } catch (error) {
     // Error toast is handled by the composable
-  } finally {
-    endLoader();
   }
 };
 </script>

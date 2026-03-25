@@ -103,21 +103,12 @@ import Alert from '@/components/Global/Alert.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import { ref, computed, watch } from 'vue';
 import eventBus from '@/eventBus';
-import useLoadingBar, {
-  loading,
-} from '@/components/Composables/useLoadingBarComposable';
-import useToast from '@/components/Composables/useToastComposable';
+import { loading } from '@/components/Composables/useLoadingBarComposable';
 import PageSection from '@/components/Global/PageSection.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import ModalPowerPerformanceModes from './ModalPowerPerformanceModes.vue';
 import TablePowerPerformanceModes from './TablePowerPerformanceModes.vue';
-import {
-  usePowerPerformanceMode,
-  useIdlePowerSaver,
-} from '@/api/composables/usePowerControl';
-
-const { startLoader, endLoader } = useLoadingBar();
-const { successToast, errorToast } = useToast();
+import { usePowerPerformanceMode } from '@/api/composables/usePowerControl';
 
 defineProps({
   safeMode: {
@@ -133,8 +124,6 @@ const {
   oemMode,
   setPowerPerformanceMode,
 } = usePowerPerformanceMode();
-
-const { refetch: refetchIdlePowerSaver } = useIdlePowerSaver();
 
 // Local state for form
 const powerPerformanceModeLocal = ref(null);
@@ -162,17 +151,13 @@ function setPowerPerformanceValue(data) {
 async function savePowerPerformanceMode() {
   if (!powerPerformanceModeLocal.value) return;
 
-  startLoader();
   try {
     await setPowerPerformanceMode(powerPerformanceModeLocal.value);
-    // Refetch idle power saver data after mode change
-    await refetchIdlePowerSaver();
+    // Idle power saver data will auto-refresh via query invalidation
   } catch (error) {
     // Error toast is handled by the composable
     // Reset to current value on error
     powerPerformanceModeLocal.value = powerPerformanceMode.value;
-  } finally {
-    endLoader();
   }
 }
 

@@ -200,16 +200,13 @@ import { ref, computed, watch } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { between, minValue, maxValue } from '@vuelidate/validators';
-import useLoadingBar, {
-  loading,
-} from '@/components/Composables/useLoadingBarComposable';
-import useToast from '@/components/Composables/useToastComposable';
+import { loading } from '@/components/Composables/useLoadingBarComposable';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import PageSection from '@/components/Global/PageSection.vue';
 import { useIdlePowerSaver } from '@/api/composables/usePowerControl';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
-const { successToast, errorToast } = useToast();
+const { hideLoader } = useLoadingBar();
 const { getValidationState } = useVuelidateComposable();
 
 const props = defineProps({
@@ -305,7 +302,6 @@ function setIdlePowerSaveFormValues(data) {
 async function saveIdlePowerSaverData() {
   v$.value.idlePowerSaver.$touch();
   if (v$.value.idlePowerSaver.$invalid) return;
-  startLoader();
 
   try {
     await setIdlePowerSaver({
@@ -317,23 +313,18 @@ async function saveIdlePowerSaverData() {
     });
   } catch (error) {
     // Error toast is handled by the composable
-  } finally {
-    endLoader();
   }
 }
 
 async function resetIdlePowerSaverDataHandler() {
   v$.value.idlePowerSaver.$touch();
   if (v$.value.idlePowerSaver.$invalid) return;
-  startLoader();
 
   try {
     await resetIdlePowerSaver();
     // Form will auto-update via watch on idlePowerSaverData
   } catch (error) {
     // Error toast is handled by the composable
-  } finally {
-    endLoader();
   }
 }
 </script>
