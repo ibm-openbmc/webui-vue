@@ -21,7 +21,12 @@
 
       <BForm aria-label="power-cap" @submit.prevent="submitForm">
         <BFormGroup
-          :disabled="loading || safeMode || powerCapMinValue === 0"
+          :disabled="
+            loading ||
+            safeMode ||
+            isPowerControlLoading ||
+            powerCapMinValue === 0
+          "
           class="form-group"
           aria-label="power-cap-setting"
         >
@@ -131,6 +136,7 @@ const {
   powerCap,
   powerCapMin,
   powerCapMax,
+  isPowerControlLoading,
   setPowerCap,
 } = usePowerControl();
 

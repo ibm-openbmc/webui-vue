@@ -1,11 +1,23 @@
 import { computed } from 'vue';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
-// @ts-ignore - api.js is a JavaScript module
-import api from '@/store/api';
+import { useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
 import useToast from '@/components/Composables/useToastComposable';
+import {
+  useRedfishCollection,
+  useRedfishResource,
+} from './useRedfishCollection';
+import { usePatchResource } from './usePatchResource';
+import type {
+  Manager,
+  FirmwareInventory,
+  License,
+  EthernetInterface,
+  EventLog,
+  System,
+  Account,
+} from '@/types/redfish';
 
 // ============================================================================
 // TYPES
@@ -62,71 +74,63 @@ interface CurrentUser {
  * Composable for fetching firmware information for Overview
  */
 export function useOverviewFirmware() {
+  // Get BMC manager to find active firmware
   const {
-    data: firmwareData,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['redfish', 'overview', 'firmware'],
-    queryFn: async (): Promise<FirmwareData> => {
-      // Get active BMC firmware ID from manager
-      const bmcResponse = await api.get('/redfish/v1/Managers/bmc');
-      const activeFirmwareId = bmcResponse.data?.Links?.ActiveSoftwareImage?.[
-        '@odata.id'
-      ]
-        ?.split('/')
-        .pop();
+    data: bmcManager,
+    isLoading: isBmcLoading,
+    isError: isBmcError,
+    error: bmcError,
+  } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc');
 
-      // Get all firmware inventory
-      const inventoryResponse = await api.get(
-        '/redfish/v1/UpdateService/FirmwareInventory',
-      );
-      const members = inventoryResponse.data?.Members || [];
+  // Get all firmware inventory
+  const {
+    data: firmwareInventory,
+    isLoading: isFirmwareLoading,
+    isError: isFirmwareError,
+    error: firmwareError,
+  } = useRedfishCollection<FirmwareInventory>(
+    '/redfish/v1/UpdateService/FirmwareInventory',
+    {
+      expand: false, // Disable expand for this endpoint
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  );
 
-      const bmcFirmware: FirmwareVersion[] = [];
+  const firmwareData = computed((): FirmwareData => {
+    if (!firmwareInventory.value || !bmcManager.value) {
+      return {
+        activeBmcFirmware: null,
+        backupBmcFirmware: null,
+      };
+    }
 
-      // Fetch each firmware item
-      const firmwarePromises = members.map((member: any) =>
-        api.get(member['@odata.id']),
-      );
-      const firmwareResponses = await Promise.all(firmwarePromises);
+    const activeFirmwareId = bmcManager.value.Links?.ActiveSoftwareImage?.[
+      '@odata.id'
+    ]
+      ?.split('/')
+      .pop();
 
-      firmwareResponses.forEach((response) => {
-        const fw = response.data;
-        const firmwareType = fw?.RelatedItem?.[0]?.['@odata.id']
+    const bmcFirmware: FirmwareVersion[] = firmwareInventory.value
+      .filter((fw) => {
+        const firmwareType = fw.RelatedItem?.[0]?.['@odata.id']
           ?.split('/')
           .pop();
+        return firmwareType === 'bmc';
+      })
+      .map((fw) => ({
+        version: fw.Version,
+        id: fw.Id,
+      }));
 
-        // Only collect BMC firmware
-        if (firmwareType === 'bmc') {
-          bmcFirmware.push({
-            version: fw.Version,
-            id: fw.Id,
-          });
-        }
-      });
+    const activeBmc =
+      bmcFirmware.find((fw) => fw.id === activeFirmwareId) || null;
+    const backupBmc =
+      bmcFirmware.find((fw) => fw.id !== activeFirmwareId) || null;
 
-      // Find active and backup firmware
-      const activeBmc =
-        bmcFirmware.find((fw: any) => fw.id === activeFirmwareId) || null;
-      const backupBmc =
-        bmcFirmware.find((fw: any) => fw.id !== activeFirmwareId) || null;
-
-      return {
-        activeBmcFirmware: activeBmc,
-        backupBmcFirmware: backupBmc,
-      };
-    },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    return {
+      activeBmcFirmware: activeBmc,
+      backupBmcFirmware: backupBmc,
+    };
   });
 
   return {
@@ -142,9 +146,9 @@ export function useOverviewFirmware() {
     backupVersion: computed(
       () => firmwareData.value?.backupBmcFirmware?.version ?? null,
     ),
-    isLoading,
-    isError,
-    error,
+    isLoading: computed(() => isBmcLoading.value || isFirmwareLoading.value),
+    isError: computed(() => isBmcError.value || isFirmwareError.value),
+    error: computed(() => bmcError.value || firmwareError.value),
   };
 }
 
@@ -153,48 +157,33 @@ export function useOverviewFirmware() {
  */
 export function useOverviewLicense() {
   const {
-    data: licenseData,
+    data: licenses,
     isLoading,
     isError,
     error,
-  } = useQuery({
-    queryKey: ['redfish', 'overview', 'license'],
-    queryFn: async (): Promise<LicenseData> => {
-      try {
-        const response = await api.get('/redfish/v1/LicenseService/Licenses');
-        const members = response.data?.Members || [];
-
-        // Fetch all licenses
-        const licensePromises = members.map((member: any) =>
-          api.get(member['@odata.id']),
-        );
-        const licenseResponses = await Promise.all(licensePromises);
-
-        // Find the UAK (Firmware Update Access Key) license
-        for (const licenseResponse of licenseResponses) {
-          const licenseData = licenseResponse.data;
-          if (licenseData.Id === 'UAK') {
-            const expirationDate = licenseData?.ExpirationDate;
-            return {
-              expirationDate: expirationDate ? new Date(expirationDate) : null,
-            };
-          }
-        }
-      } catch (error) {
-        console.log('License fetch error:', error);
-      }
-
-      return { expirationDate: null };
-    },
+  } = useRedfishCollection<License>('/redfish/v1/LicenseService/Licenses', {
     staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: false, // Don't retry if license service not available
+    enabled: true,
+  });
+
+  const licenseData = computed((): LicenseData => {
+    if (!licenses.value) {
+      return { expirationDate: null };
+    }
+
+    // Find the UAK (Firmware Update Access Key) license
+    const uakLicense = licenses.value.find((license) => license.Id === 'UAK');
+    if (uakLicense?.ExpirationDate) {
+      return {
+        expirationDate: new Date(uakLicense.ExpirationDate),
+      };
+    }
+
+    return { expirationDate: null };
   });
 
   return {
-    firmwareAccessKeyInfo: computed(() => ({
-      expirationDate: licenseData.value?.expirationDate ?? null,
-    })),
+    firmwareAccessKeyInfo: licenseData,
     isLoading,
     isError,
     error,
@@ -210,53 +199,41 @@ export function useOverviewLicense() {
  */
 export function useOverviewNetwork() {
   const {
-    data: networkData,
+    data: ethernetInterfaces,
     isLoading,
     isError,
     error,
-  } = useQuery({
-    queryKey: ['redfish', 'overview', 'network'],
-    queryFn: async (): Promise<NetworkData> => {
-      const response = await api.get(
-        '/redfish/v1/Managers/bmc/EthernetInterfaces',
-      );
-      const members = response.data?.Members || [];
+  } = useRedfishCollection<EthernetInterface>(
+    '/redfish/v1/Managers/bmc/EthernetInterfaces',
+    {
+      expand: false, // Disable expand for this endpoint
+      staleTime: 2 * 60 * 1000, // 2 minutes
+    },
+  );
 
-      if (members.length > 0) {
-        const ethResponse = await api.get(members[0]['@odata.id']);
-        const data = ethResponse.data;
-
-        // Filter IPv4Addresses to only include DHCP addresses
-        const dhcpAddresses = (data.IPv4Addresses || []).filter(
-          (ipv4: any) => ipv4.AddressOrigin === 'DHCP',
-        );
-
-        return {
-          hostname: data.HostName || null,
-          staticAddress: data.IPv4StaticAddresses?.[0]?.Address || null,
-          dhcpAddress: dhcpAddresses,
-        };
-      }
-
+  const networkData = computed((): NetworkData => {
+    if (!ethernetInterfaces.value || ethernetInterfaces.value.length === 0) {
       return {
         hostname: null,
         staticAddress: null,
         dhcpAddress: [],
       };
-    },
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    }
+
+    const firstInterface = ethernetInterfaces.value[0];
+    const dhcpAddresses = (firstInterface.IPv4Addresses || []).filter(
+      (ipv4) => ipv4.AddressOrigin === 'DHCP',
+    );
+
+    return {
+      hostname: firstInterface.HostName || null,
+      staticAddress: firstInterface.IPv4StaticAddresses?.[0]?.Address || null,
+      dhcpAddress: dhcpAddresses,
+    };
   });
 
   return {
-    network: computed(() => networkData.value ?? null),
+    network: networkData,
     isLoading,
     isError,
     error,
@@ -272,35 +249,27 @@ export function useOverviewNetwork() {
  */
 export function useOverviewEvents() {
   const {
-    data: eventsData,
+    data: eventLogs,
     isLoading,
     isError,
     error,
-  } = useQuery({
-    queryKey: ['redfish', 'overview', 'events'],
-    queryFn: async (): Promise<EventLogEntry[]> => {
-      const response = await api.get(
-        '/redfish/v1/Systems/system/LogServices/EventLog/Entries',
-      );
-      const members = response.data?.Members || [];
+  } = useRedfishCollection<EventLog>(
+    '/redfish/v1/Systems/system/LogServices/EventLog/Entries',
+    {
+      staleTime: 30 * 1000, // 30 seconds
+    },
+  );
 
-      return members.map((event: any) => ({
-        Id: event.Id,
-        Severity: event.Severity,
-        Resolved: event.Resolved,
-        filterByStatus: event.Resolved ? 'Resolved' : 'Unresolved',
-        ...event,
-      }));
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 2 * 60 * 1000, // 2 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+  const eventsData = computed((): EventLogEntry[] => {
+    if (!eventLogs.value) {
+      return [];
+    }
+
+    return eventLogs.value.map((event) => ({
+      ...event,
+      Severity: event.Severity || 'OK',
+      filterByStatus: event.Resolved ? 'Resolved' : 'Unresolved',
+    }));
   });
 
   const criticalEvents = computed(() => {
@@ -318,7 +287,7 @@ export function useOverviewEvents() {
   });
 
   return {
-    allEvents: computed(() => eventsData.value || []),
+    allEvents: eventsData,
     criticalEvents,
     warningEvents,
     isLoading,
@@ -336,32 +305,22 @@ export function useOverviewEvents() {
  */
 export function useOverviewInventory() {
   const {
-    data: inventoryData,
+    data: system,
     isLoading,
     isError,
     error,
-  } = useQuery({
-    queryKey: ['redfish', 'overview', 'inventory'],
-    queryFn: async (): Promise<SystemInventory> => {
-      const response = await api.get('/redfish/v1/Systems/system');
-      return {
-        locationIndicatorActive:
-          response.data?.LocationIndicatorActive ?? false,
-      };
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 2 * 60 * 1000, // 2 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+  } = useRedfishResource<System>('/redfish/v1/Systems/system', {
+    enabled: true,
+  });
+
+  const inventoryData = computed((): SystemInventory => {
+    return {
+      locationIndicatorActive: system.value?.LocationIndicatorActive ?? false,
+    };
   });
 
   return {
-    systems: computed(() => inventoryData.value ?? {}),
+    systems: inventoryData,
     isLoading,
     isError,
     error,
@@ -377,63 +336,41 @@ export function useOverviewInventory() {
  */
 export function useOverviewQuickLinks() {
   const {
-    data: bmcTimeData,
+    data: bmcManager,
     isLoading: isBmcTimeLoading,
     isError: isBmcTimeError,
-  } = useQuery({
-    queryKey: ['redfish', 'overview', 'bmc-time'],
-    queryFn: async (): Promise<BmcTimeData> => {
-      const response = await api.get('/redfish/v1/Managers/bmc');
-      const bmcDateTime = response.data?.DateTime;
-      return {
-        bmcTime: bmcDateTime ? new Date(bmcDateTime) : null,
-      };
-    },
-    staleTime: 10 * 1000, // 10 seconds
-    gcTime: 60 * 1000, // 1 minute
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+  } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc');
+
+  const bmcTimeData = computed((): BmcTimeData => {
+    const bmcDateTime = bmcManager.value?.DateTime;
+    return {
+      bmcTime: bmcDateTime ? new Date(bmcDateTime) : null,
+    };
   });
 
+  // Get username from localStorage (set during login)
+  const username = localStorage.getItem('storedUsername');
+
   const {
-    data: currentUserData,
+    data: currentUser,
     isLoading: isUserLoading,
     isError: isUserError,
-  } = useQuery({
-    queryKey: ['redfish', 'overview', 'current-user'],
-    queryFn: async (): Promise<CurrentUser> => {
-      // Get username from localStorage (set during login)
-      const username = localStorage.getItem('storedUsername');
-
-      if (!username) {
-        return { RoleId: null };
-      }
-
-      try {
-        const response = await api.get(
-          `/redfish/v1/AccountService/Accounts/${username}`,
-        );
-        return {
-          RoleId: response.data?.RoleId || null,
-        };
-      } catch (error) {
-        console.log('Error fetching current user:', error);
-        return { RoleId: null };
-      }
+  } = useRedfishResource<Account>(
+    `/redfish/v1/AccountService/Accounts/${username}`,
+    {
+      enabled: !!username,
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: false,
+  );
+
+  const currentUserData = computed((): CurrentUser => {
+    return {
+      RoleId: currentUser.value?.RoleId || null,
+    };
   });
 
   return {
     bmcTime: computed(() => bmcTimeData.value?.bmcTime ?? null),
-    currentUser: computed(() => currentUserData.value ?? {}),
+    currentUser: currentUserData,
     currentUserRole: computed(() => currentUserData.value?.RoleId ?? null),
     canUseHostConsole: computed(() => {
       const role = currentUserData.value?.RoleId;
@@ -451,27 +388,29 @@ export function useOverviewQuickLinks() {
 export function useUpdateIdentifyLed() {
   const queryClient = useQueryClient();
   const { successToast, errorToast } = useToast();
+  const { patchResource, isPending, isError, error } = usePatchResource();
 
-  const mutation = useMutation({
-    mutationFn: async (ledState: boolean) => {
-      await api.patch('/redfish/v1/Systems/system', {
-        LocationIndicatorActive: ledState,
-      });
-      return ledState;
-    },
-    onSuccess: (ledState) => {
-      if (ledState) {
-        successToast(
-          i18n.global.t('pageInventory.toast.successEnableIdentifyLed'),
-        );
-      } else {
-        successToast(
-          i18n.global.t('pageInventory.toast.successDisableIdentifyLed'),
-        );
-      }
-      // Invalidate inventory query to refetch
-      queryClient.invalidateQueries({
-        queryKey: ['redfish', 'overview', 'inventory'],
+  const updateIdentifyLed = async (ledState: boolean) => {
+    try {
+      await patchResource({
+        endpoint: '/redfish/v1/Systems/system',
+        field: 'LocationIndicatorActive',
+        value: ledState,
+        invalidateQueries: [
+          ['redfish', 'overview', 'inventory'],
+          ['redfish', 'resource', '/redfish/v1/Systems/system'],
+        ],
+        onSuccess: () => {
+          if (ledState) {
+            successToast(
+              i18n.global.t('pageInventory.toast.successEnableIdentifyLed'),
+            );
+          } else {
+            successToast(
+              i18n.global.t('pageInventory.toast.successDisableIdentifyLed'),
+            );
+          }
+        },
       });
 
       // Optimistically update the cache
@@ -484,9 +423,8 @@ export function useUpdateIdentifyLed() {
           return old;
         },
       );
-    },
-    onError: (error, ledState) => {
-      console.log('Identify LED Error:', error);
+    } catch (err) {
+      console.log('Identify LED Error:', err);
       if (ledState) {
         errorToast(i18n.global.t('pageInventory.toast.errorEnableIdentifyLed'));
       } else {
@@ -494,14 +432,15 @@ export function useUpdateIdentifyLed() {
           i18n.global.t('pageInventory.toast.errorDisableIdentifyLed'),
         );
       }
-    },
-  });
+      throw err;
+    }
+  };
 
   return {
-    updateIdentifyLed: mutation.mutate,
-    updateIdentifyLedAsync: mutation.mutateAsync,
-    isUpdating: computed(() => mutation.isPending.value),
-    isError: computed(() => mutation.isError.value),
-    error: mutation.error,
+    updateIdentifyLed,
+    updateIdentifyLedAsync: updateIdentifyLed,
+    isUpdating: isPending,
+    isError,
+    error,
   };
 }

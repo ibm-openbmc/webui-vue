@@ -1,40 +1,15 @@
 import { computed } from 'vue';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
-// @ts-ignore - api.js is a JavaScript module
-import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
 import useToast from '@/components/Composables/useToastComposable';
-
-interface PowerLimitWatts {
-  Reading?: number;
-  ControlMode?: string;
-  SetPoint?: number;
-  AllowableMin?: number;
-  AllowableMax?: number;
-}
-
-interface EnvironmentMetricsData {
-  PowerWatts?: {
-    Reading?: number;
-  };
-  PowerLimitWatts?: PowerLimitWatts;
-}
-
-interface IdlePowerSaver {
-  Enabled?: boolean;
-  EnterDwellTimeSeconds?: number;
-  ExitDwellTimeSeconds?: number;
-  EnterUtilizationPercent?: number;
-  ExitUtilizationPercent?: number;
-}
-
-interface SystemData {
-  PowerMode?: string;
-  'PowerMode@Redfish.AllowableValues'?: string[];
-  IdlePowerSaver?: IdlePowerSaver;
-}
+import { useRedfishResource } from './useRedfishCollection';
+import { usePatchResource } from './usePatchResource';
+import type {
+  EnvironmentMetrics,
+  SystemPowerMode,
+  IdlePowerSaver,
+} from '@/types/redfish';
 
 interface PowerControlData {
   powerConsumption: number | null;
@@ -67,87 +42,89 @@ interface SetIdlePowerSaverParams {
  * Replaces PowerControlStore.getPowerControl with TanStack Query
  */
 export function usePowerControl() {
-  const queryClient = useQueryClient();
   const { successToast, errorToast } = useToast();
+  const { patchResource } = usePatchResource();
 
   const {
-    data: powerControlData,
+    data: environmentMetrics,
+    isLoading: isPowerControlLoading,
     isFetching: isPowerControlFetching,
     isError: isPowerControlError,
     error: powerControlError,
-  } = useQuery({
-    queryKey: ['redfish', 'chassis', 'environment-metrics'],
-    queryFn: async (): Promise<PowerControlData> => {
-      const response = await api.get<EnvironmentMetricsData>(
-        '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
-      );
-      const data = response.data;
+  } = useRedfishResource<EnvironmentMetrics>(
+    '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
+  );
 
+  const powerControlData = computed<PowerControlData>(() => {
+    if (!environmentMetrics.value) {
       return {
-        powerConsumption: data.PowerWatts?.Reading ?? null,
-        powerControlMode: data.PowerLimitWatts?.ControlMode ?? null,
-        powerCap: data.PowerLimitWatts?.SetPoint ?? null,
-        powerCapMin: data.PowerLimitWatts?.AllowableMin ?? null,
-        powerCapMax: data.PowerLimitWatts?.AllowableMax ?? null,
+        powerConsumption: null,
+        powerControlMode: null,
+        powerCap: null,
+        powerCapMin: null,
+        powerCapMax: null,
       };
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    }
+
+    return {
+      powerConsumption: environmentMetrics.value.PowerWatts?.Reading ?? null,
+      powerControlMode:
+        environmentMetrics.value.PowerLimitWatts?.ControlMode ?? null,
+      powerCap: environmentMetrics.value.PowerLimitWatts?.SetPoint ?? null,
+      powerCapMin:
+        environmentMetrics.value.PowerLimitWatts?.AllowableMin ?? null,
+      powerCapMax:
+        environmentMetrics.value.PowerLimitWatts?.AllowableMax ?? null,
+    };
   });
 
-  const setPowerCapMutation = useMutation({
-    mutationFn: async (params: SetPowerCapParams): Promise<void> => {
-      const newPowerCap = {
-        PowerLimitWatts: {
+  const setPowerCap = async (params: SetPowerCapParams): Promise<void> => {
+    try {
+      await patchResource({
+        endpoint: '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
+        field: 'PowerLimitWatts',
+        value: {
           ControlMode: params.powerControlMode,
           SetPoint: params.powerCap,
         },
-      };
-      await api.patch(
-        '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
-        newPowerCap,
-      );
-    },
-    onSuccess: () => {
-      successToast(
-        i18n.global.t('pageServerPowerOperations.toast.successSaveSettings'),
-      );
-      queryClient.invalidateQueries({
-        queryKey: ['redfish', 'chassis', 'environment-metrics'],
+        invalidateQueries: [
+          [
+            'redfish',
+            'resource',
+            '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
+          ],
+        ],
+        onSuccess: () => {
+          successToast(
+            i18n.global.t(
+              'pageServerPowerOperations.toast.successSaveSettings',
+            ),
+          );
+        },
       });
-    },
-    onError: (error) => {
+    } catch (error) {
       console.log('Power Cap Error:', error);
       errorToast(
         i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
       );
-    },
-  });
+      throw error;
+    }
+  };
 
   return {
-    powerConsumption: computed(
-      () => powerControlData.value?.powerConsumption ?? null,
-    ),
-    powerControlMode: computed(
-      () => powerControlData.value?.powerControlMode ?? null,
-    ),
+    powerConsumption: computed(() => powerControlData.value.powerConsumption),
+    powerControlMode: computed(() => powerControlData.value.powerControlMode),
     isPowerCapEnabled: computed(
-      () => powerControlData.value?.powerControlMode === 'Automatic',
+      () => powerControlData.value.powerControlMode === 'Automatic',
     ),
-    powerCap: computed(() => powerControlData.value?.powerCap ?? null),
-    powerCapMin: computed(() => powerControlData.value?.powerCapMin ?? null),
-    powerCapMax: computed(() => powerControlData.value?.powerCapMax ?? null),
+    powerCap: computed(() => powerControlData.value.powerCap),
+    powerCapMin: computed(() => powerControlData.value.powerCapMin),
+    powerCapMax: computed(() => powerControlData.value.powerCapMax),
+    isPowerControlLoading,
     isPowerControlFetching,
     isPowerControlError,
     powerControlError,
-    setPowerCap: setPowerCapMutation.mutateAsync,
+    setPowerCap,
   };
 }
 
@@ -156,70 +133,69 @@ export function usePowerControl() {
  * Replaces PowerControlStore.getPowerPerformanceMode with TanStack Query
  */
 export function usePowerPerformanceMode() {
-  const queryClient = useQueryClient();
   const { successToast, errorToast } = useToast();
+  const { patchResource } = usePatchResource();
 
   const {
-    data: powerPerformanceData,
+    data: systemPowerMode,
     isFetching: isPowerPerformanceFetching,
     isError: isPowerPerformanceError,
     error: powerPerformanceError,
-  } = useQuery({
-    queryKey: ['redfish', 'systems', 'system', 'power-mode'],
-    queryFn: async (): Promise<PowerPerformanceData> => {
-      const response = await api.get<SystemData>('/redfish/v1/Systems/system');
-      const data = response.data;
+  } = useRedfishResource<SystemPowerMode>('/redfish/v1/Systems/system');
 
+  const powerPerformanceData = computed<PowerPerformanceData>(() => {
+    if (!systemPowerMode.value) {
       return {
-        powerPerformanceMode: data.PowerMode ?? null,
-        powerPerformanceModeValues:
-          data['PowerMode@Redfish.AllowableValues'] ?? null,
+        powerPerformanceMode: null,
+        powerPerformanceModeValues: null,
       };
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    }
+
+    return {
+      powerPerformanceMode: systemPowerMode.value.PowerMode ?? null,
+      powerPerformanceModeValues:
+        systemPowerMode.value['PowerMode@Redfish.AllowableValues'] ?? null,
+    };
   });
 
-  const setPowerPerformanceModeMutation = useMutation({
-    mutationFn: async (powerPerformanceMode: string): Promise<void> => {
-      const newData = { PowerMode: powerPerformanceMode };
-      await api.patch('/redfish/v1/Systems/system', newData);
-    },
-    onSuccess: () => {
-      successToast(
-        i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
-      );
-      queryClient.invalidateQueries({
-        queryKey: ['redfish', 'systems', 'system', 'power-mode'],
+  const setPowerPerformanceMode = async (
+    powerPerformanceMode: string,
+  ): Promise<void> => {
+    try {
+      await patchResource({
+        endpoint: '/redfish/v1/Systems/system',
+        field: 'PowerMode',
+        value: powerPerformanceMode,
+        invalidateQueries: [
+          ['redfish', 'resource', '/redfish/v1/Systems/system'],
+        ],
+        onSuccess: () => {
+          successToast(
+            i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
+          );
+        },
       });
-    },
-    onError: (error) => {
+    } catch (error) {
       console.log('Power Performance Mode Error:', error);
       errorToast(i18n.global.t('pagePower.toast.errorPowerPerformanceModes'));
-    },
-  });
+      throw error;
+    }
+  };
 
   return {
     powerPerformanceMode: computed(
-      () => powerPerformanceData.value?.powerPerformanceMode ?? null,
+      () => powerPerformanceData.value.powerPerformanceMode,
     ),
     powerPerformanceModeValues: computed(
-      () => powerPerformanceData.value?.powerPerformanceModeValues ?? null,
+      () => powerPerformanceData.value.powerPerformanceModeValues,
     ),
     oemMode: computed(
-      () => powerPerformanceData.value?.powerPerformanceMode === 'OEM',
+      () => powerPerformanceData.value.powerPerformanceMode === 'OEM',
     ),
     isPowerPerformanceFetching,
     isPowerPerformanceError,
     powerPerformanceError,
-    setPowerPerformanceMode: setPowerPerformanceModeMutation.mutateAsync,
+    setPowerPerformanceMode,
   };
 }
 
@@ -228,109 +204,99 @@ export function usePowerPerformanceMode() {
  * Replaces PowerControlStore.getIdlePowerSaverData with TanStack Query
  */
 export function useIdlePowerSaver() {
-  const queryClient = useQueryClient();
   const { successToast, errorToast } = useToast();
+  const { patchResource } = usePatchResource();
 
   const {
-    data: idlePowerSaverData,
+    data: systemPowerMode,
     isFetching: isIdlePowerSaverFetching,
     isError: isIdlePowerSaverError,
     error: idlePowerSaverError,
     refetch,
-  } = useQuery({
-    queryKey: ['redfish', 'systems', 'system', 'idle-power-saver'],
-    queryFn: async (): Promise<IdlePowerSaver | null> => {
-      const response = await api.get<SystemData>('/redfish/v1/Systems/system');
-      return response.data.IdlePowerSaver ?? null;
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+  } = useRedfishResource<SystemPowerMode>('/redfish/v1/Systems/system');
+
+  const idlePowerSaverData = computed<IdlePowerSaver | null>(() => {
+    return systemPowerMode.value?.IdlePowerSaver ?? null;
   });
 
-  const setIdlePowerSaverMutation = useMutation({
-    mutationFn: async (params: SetIdlePowerSaverParams): Promise<void> => {
-      const newData = {
-        IdlePowerSaver: {
+  const setIdlePowerSaver = async (
+    params: SetIdlePowerSaverParams,
+  ): Promise<void> => {
+    try {
+      await patchResource({
+        endpoint: '/redfish/v1/Systems/system',
+        field: 'IdlePowerSaver',
+        value: {
           Enabled: params.isIdlePowerSaverEnabled,
           EnterDwellTimeSeconds: params.enterDwellTimeSeconds,
           ExitDwellTimeSeconds: params.exitDwellTimeSeconds,
           EnterUtilizationPercent: params.enterUtilizationPercent,
           ExitUtilizationPercent: params.exitUtilizationPercent,
         },
-      };
-      await api.patch('/redfish/v1/Systems/system', newData);
-    },
-    onSuccess: () => {
-      successToast(i18n.global.t('pagePower.toast.successIdlePower'));
-      queryClient.invalidateQueries({
-        queryKey: ['redfish', 'systems', 'system', 'idle-power-saver'],
+        invalidateQueries: [
+          ['redfish', 'resource', '/redfish/v1/Systems/system'],
+        ],
+        onSuccess: () => {
+          successToast(i18n.global.t('pagePower.toast.successIdlePower'));
+        },
       });
-    },
-    onError: (error) => {
+    } catch (error) {
       console.log('Idle Power Saver Error:', error);
       errorToast(i18n.global.t('pagePower.toast.errorIdlePower'));
-    },
-  });
+      throw error;
+    }
+  };
 
-  const resetIdlePowerSaverMutation = useMutation({
-    mutationFn: async (): Promise<void> => {
-      const newData = {
-        IdlePowerSaver: {
-          ExitUtilizationPercent: 0,
+  const resetIdlePowerSaver = async (): Promise<void> => {
+    try {
+      await patchResource({
+        endpoint: '/redfish/v1/Systems/system',
+        field: 'IdlePowerSaver.ExitUtilizationPercent',
+        value: 0,
+        invalidateQueries: [
+          ['redfish', 'resource', '/redfish/v1/Systems/system'],
+        ],
+        onSuccess: () => {
+          successToast(i18n.global.t('pagePower.toast.successIdlePowerReset'));
         },
-      };
-      await api.patch('/redfish/v1/Systems/system', newData);
-    },
-    onSuccess: () => {
-      successToast(i18n.global.t('pagePower.toast.successIdlePowerReset'));
-      queryClient.invalidateQueries({
-        queryKey: ['redfish', 'systems', 'system', 'idle-power-saver'],
       });
-    },
-    onError: (error) => {
+    } catch (error) {
       console.log('Idle Power Saver Reset Error:', error);
       errorToast(i18n.global.t('pagePower.toast.errorIdlePowerReset'));
-    },
-  });
+      throw error;
+    }
+  };
 
-  const setIdlePowerSaverEnableMutation = useMutation({
-    mutationFn: async (enabled: boolean): Promise<void> => {
-      const newData = {
-        IdlePowerSaver: {
-          Enabled: enabled,
+  const setIdlePowerSaverEnable = async (enabled: boolean): Promise<void> => {
+    try {
+      await patchResource({
+        endpoint: '/redfish/v1/Systems/system',
+        field: 'IdlePowerSaver.Enabled',
+        value: enabled,
+        invalidateQueries: [
+          ['redfish', 'resource', '/redfish/v1/Systems/system'],
+        ],
+        onSuccess: () => {
+          successToast(
+            i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
+          );
         },
-      };
-      await api.patch('/redfish/v1/Systems/system', newData);
-    },
-    onSuccess: () => {
-      successToast(
-        i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
-      );
-      queryClient.invalidateQueries({
-        queryKey: ['redfish', 'systems', 'system', 'idle-power-saver'],
       });
-    },
-    onError: (error) => {
+    } catch (error) {
       console.log('Idle Power Saver Enable Error:', error);
       errorToast(i18n.global.t('pagePower.toast.errorPowerPerformanceModes'));
-    },
-  });
+      throw error;
+    }
+  };
 
   return {
-    idlePowerSaverData: computed(() => idlePowerSaverData.value ?? null),
+    idlePowerSaverData,
     isIdlePowerSaverFetching,
     isIdlePowerSaverError,
     idlePowerSaverError,
     refetch,
-    setIdlePowerSaver: setIdlePowerSaverMutation.mutateAsync,
-    resetIdlePowerSaver: resetIdlePowerSaverMutation.mutateAsync,
-    setIdlePowerSaverEnable: setIdlePowerSaverEnableMutation.mutateAsync,
+    setIdlePowerSaver,
+    resetIdlePowerSaver,
+    setIdlePowerSaverEnable,
   };
 }
