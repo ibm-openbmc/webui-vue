@@ -3,7 +3,11 @@
     <BRow>
       <BCol lg="6">
         <div class="text-right">
-          <BButton variant="primary" @click="initDnsModal()">
+          <BButton
+            variant="primary"
+            :disabled="isTablesDisabled"
+            @click="initDnsModal()"
+          >
             <icon-add />
             {{ $t('pageNetwork.table.addDnsAddress') }}
           </BButton>
@@ -53,17 +57,14 @@
 import { ref, computed, watch, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import useToast from '@/components/Composables/useToastComposable';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import PageSection from '@/components/Global/PageSection.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
-const { successToast, errorToast } = useToast();
-
-const networkStore = stores.NetworkStore();
+const { networkSettings, isTableBusy, editDnsAddress } = useNetwork();
 
 const props = defineProps({
   tabIndex: {
@@ -75,17 +76,6 @@ const props = defineProps({
 const form = ref({
   dnsStaticTableItems: [],
 });
-
-const actions = ref([
-  {
-    value: 'edit',
-    title: i18n.global.t('global.action.edit'),
-  },
-  {
-    value: 'delete',
-    title: i18n.global.t('global.action.delete'),
-  },
-]);
 
 const dnsTableFields = ref([
   {
@@ -108,11 +98,11 @@ onBeforeMount(() => {
 });
 
 const network = computed(() => {
-  return networkStore.networkSettingsGetter;
+  return networkSettings.value;
 });
 
 const isTablesDisabled = computed(() => {
-  return networkStore.isTableBusyGetter;
+  return isTableBusy.value;
 });
 
 // Watch for change in tab index
@@ -154,10 +144,7 @@ const deleteDnsTableRow = (index) => {
   const newDnsArray = form.value.dnsStaticTableItems.map((dns) => {
     return dns.address;
   });
-  networkStore
-    .editDnsAddress(newDnsArray)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message));
+  editDnsAddress(newDnsArray);
 };
 
 const initDnsModal = () => {

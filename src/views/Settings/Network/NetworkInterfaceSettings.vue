@@ -78,17 +78,19 @@
 
 <script setup>
 import { ref, computed, watch, onBeforeMount } from 'vue';
-import useToast from '@/components/Composables/useToastComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import PageSection from '@/components/Global/PageSection.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
-const { startLoader, endLoader } = useLoadingBar();
-const { successToast, errorToast } = useToast();
 const { dataFormatter } = useDataFormatterGlobal();
 
-const networkStore = stores.NetworkStore();
+const {
+  networkSettings,
+  isTableBusy,
+  saveDomainNameState,
+  saveDnsState,
+  saveNtpState,
+} = useNetwork();
 
 const props = defineProps({
   tabIndex: {
@@ -97,7 +99,7 @@ const props = defineProps({
   },
 });
 
-const selectedInterface = ref('');
+const selectedInterface = ref(0);
 const macAddress = ref('');
 
 onBeforeMount(() => {
@@ -105,28 +107,27 @@ onBeforeMount(() => {
 });
 
 const isDisabled = computed(() => {
-  return networkStore.isTableBusyGetter;
+  return isTableBusy.value;
 });
 
 const network = computed(() => {
-  return networkStore.networkSettingsGetter;
+  return networkSettings.value;
 });
 
 const dhcpState = computed(() => {
-  const ipv4Dhcp =
-    networkStore.networkSettingsGetter[selectedInterface.value].dhcpEnabled;
-  const ipv6Dhcp =
-    networkStore.networkSettingsGetter[selectedInterface.value]
-      .ipv6OperatingMode === 'Enabled'
-      ? true
-      : false;
-  return ipv4Dhcp || ipv6Dhcp ? true : false;
+  const currentInterface = network.value[selectedInterface.value];
+  if (!currentInterface) return false;
+
+  const ipv4Dhcp = currentInterface.dhcpEnabled;
+  const ipv6Dhcp = currentInterface.ipv6OperatingMode === 'Enabled';
+  return ipv4Dhcp || ipv6Dhcp;
 });
 
 const useDomainNameState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .useDomainNameEnabled;
+    return (
+      network.value[selectedInterface.value]?.useDomainNameEnabled || false
+    );
   },
   set(newValue) {
     return newValue;
@@ -135,8 +136,7 @@ const useDomainNameState = computed({
 
 const useDnsState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .useDnsEnabled;
+    return network.value[selectedInterface.value]?.useDnsEnabled || false;
   },
   set(newValue) {
     return newValue;
@@ -145,8 +145,7 @@ const useDnsState = computed({
 
 const useNtpState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .useNtpEnabled;
+    return network.value[selectedInterface.value]?.useNtpEnabled || false;
   },
   set(newValue) {
     return newValue;
@@ -162,45 +161,18 @@ watch(
 
 const getSettings = () => {
   selectedInterface.value = props.tabIndex;
-  macAddress.value = network.value[selectedInterface.value].macAddress;
+  macAddress.value = network.value[selectedInterface.value]?.macAddress || '';
 };
 
 const changeDomainNameState = (state) => {
-  networkStore
-    .saveDomainNameState(state)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  saveDomainNameState(state).catch(() => {});
 };
 
 const changeDnsState = (state) => {
-  networkStore
-    .saveDnsState(state)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  saveDnsState(state).catch(() => {});
 };
 
 const changeNtpState = (state) => {
-  networkStore
-    .saveNtpState(state)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  saveNtpState(state).catch(() => {});
 };
 </script>

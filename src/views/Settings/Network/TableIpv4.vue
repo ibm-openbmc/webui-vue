@@ -100,19 +100,20 @@
 import { ref, computed, watch, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import useToast from '@/components/Composables/useToastComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import PageSection from '@/components/Global/PageSection.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
-const { successToast, errorToast } = useToast();
-const { startLoader, endLoader } = useLoadingBar();
-
-const networkStore = stores.NetworkStore();
+const {
+  networkSettings,
+  selectedInterfaceIndex,
+  isTableBusy,
+  deleteIpv4Address,
+  saveDhcpEnabledState,
+} = useNetwork();
 
 const props = defineProps({
   tabIndex: {
@@ -192,21 +193,20 @@ onBeforeMount(() => {
 });
 
 const isTablesDisabled = computed(() => {
-  return networkStore.isTableBusyGetter;
+  return isTableBusy.value;
 });
 
 const network = computed(() => {
-  return networkStore.networkSettingsGetter;
+  return networkSettings.value;
 });
 
 const selectedInterface = computed(() => {
-  return networkStore.selectedInterfaceIndexGetter;
+  return selectedInterfaceIndex.value;
 });
 
 const dhcpEnabledState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .dhcpEnabled;
+    return networkSettings.value[selectedInterface.value]?.dhcpEnabled || false;
   },
   set(newValue) {
     return newValue;
@@ -338,27 +338,9 @@ const openChangeDhcpEnabledStateModal = (state) => {
 
 const operationConfirm = () => {
   if (modalValue.value === 'DeleteIpv4TableRow') {
-    networkStore
-      .deleteIpv4Address(modalPayload.value.newIpv4Array)
-      .then((message) => {
-        successToast(message);
-        startLoader();
-        setTimeout(() => {
-          endLoader();
-        }, 15000);
-      })
-      .catch(({ message }) => errorToast(message));
+    deleteIpv4Address(modalPayload.value.newIpv4Array).catch(() => {});
   } else if (modalValue.value === 'ChangeDhcpEnabledState') {
-    networkStore
-      .saveDhcpEnabledState(modalPayload.value.state)
-      .then((message) => {
-        successToast(message);
-        startLoader();
-        setTimeout(() => {
-          endLoader();
-        }, 15000);
-      })
-      .catch(({ message }) => errorToast(message));
+    saveDhcpEnabledState(modalPayload.value.state).catch(() => {});
   }
 };
 

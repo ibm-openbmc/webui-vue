@@ -38,12 +38,12 @@
             </dd>
           </dl>
         </BCol>
-        <b-col lg="2" md="6">
+        <BCol lg="2" md="6">
           <dl>
             <dt>{{ $t('pageNetwork.ipv6DefaultGateway') }}</dt>
             <dd>{{ ipv6DefaultGateway }}</dd>
           </dl>
-        </b-col>
+        </BCol>
       </BRow>
       <BRow>
         <BCol class="text-right">
@@ -121,19 +121,21 @@
 import { ref, computed, watch, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import useToast from '@/components/Composables/useToastComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import PageSection from '@/components/Global/PageSection.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
-const { successToast, errorToast } = useToast();
-const { startLoader, endLoader } = useLoadingBar();
-
-const networkStore = stores.NetworkStore();
+const {
+  networkSettings,
+  selectedInterfaceIndex,
+  isTableBusy,
+  deleteIpv6Address,
+  saveIpv6DhcpEnabledState,
+  saveIpv6AutoConfigState,
+} = useNetwork();
 
 const props = defineProps({
   tabIndex: {
@@ -157,17 +159,6 @@ const modalOptions = ref({
 const form = ref({
   ipv6TableItems: [],
 });
-
-const actions = ref([
-  {
-    value: 'edit',
-    title: i18n.global.t('global.action.edit'),
-  },
-  {
-    value: 'delete',
-    title: i18n.global.t('global.action.delete'),
-  },
-]);
 
 const ipv6TableFields = ref([
   {
@@ -198,32 +189,33 @@ const ipv6TableFields = ref([
 ]);
 
 onBeforeMount(() => {
-  getipv6TableItems();
+  getIpv6TableItems();
 });
 
 const isTablesDisabled = computed(() => {
-  return networkStore.isTableBusyGetter;
+  return isTableBusy.value;
 });
 
 const network = computed(() => {
-  return networkStore.networkSettingsGetter;
+  return networkSettings.value;
 });
 
 const selectedInterface = computed(() => {
-  return networkStore.selectedInterfaceIndexGetter;
+  return selectedInterfaceIndex.value;
 });
 
 const ipv6DefaultGateway = computed(() => {
-  return networkStore.networkSettingsGetter[selectedInterface.value]
-    .ipv6DefaultGateway;
+  return (
+    networkSettings.value[selectedInterface.value]?.ipv6DefaultGateway || ''
+  );
 });
 
 const dhcpEnabledState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .ipv6OperatingMode === 'Enabled'
-      ? true
-      : false;
+    return (
+      networkSettings.value[selectedInterface.value]?.ipv6OperatingMode ===
+      'Enabled'
+    );
   },
   set(newValue) {
     return newValue;
@@ -232,8 +224,10 @@ const dhcpEnabledState = computed({
 
 const ipv6AutoConfigState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .ipv6AutoConfigEnabled;
+    return (
+      networkSettings.value[selectedInterface.value]?.ipv6AutoConfigEnabled ||
+      false
+    );
   },
   set(newValue) {
     return newValue;
@@ -244,7 +238,7 @@ const ipv6AutoConfigState = computed({
 watch(
   () => props.tabIndex,
   () => {
-    getipv6TableItems();
+    getIpv6TableItems();
   },
 );
 
@@ -259,10 +253,10 @@ watch(
   },
 );
 watch(network, () => {
-  getipv6TableItems();
+  getIpv6TableItems();
 });
 
-const getipv6TableItems = () => {
+const getIpv6TableItems = () => {
   const index = props.tabIndex;
   const addresses = network.value[index].ipv6 || [];
   form.value.ipv6TableItems = addresses.map((ipv6) => {
@@ -335,42 +329,15 @@ const initIpv6Modal = () => {
 };
 
 const operationConfirm = () => {
-  networkStore
-    .deleteIpv6Address(modalPayload.value.newIpv6Array)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  deleteIpv6Address(modalPayload.value.newIpv6Array).catch(() => {});
 };
 
 const changeIpv6DhcpEnabledState = (state) => {
-  networkStore
-    .saveIpv6DhcpEnabledState(state)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  saveIpv6DhcpEnabledState(state).catch(() => {});
 };
 
 const changeIpv6AutoConfigState = (state) => {
-  networkStore
-    .saveIpv6AutoConfigState(state)
-    .then((success) => {
-      startLoader();
-      successToast(success);
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  saveIpv6AutoConfigState(state).catch(() => {});
 };
 </script>
 

@@ -17,30 +17,20 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { computed } from 'vue';
 import eventBus from '@/eventBus';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import IconEdit from '@carbon/icons-vue/es/edit/16';
 import PageSection from '@/components/Global/PageSection.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
 const { dataFormatter } = useDataFormatterGlobal();
 
-const networkStore = stores.NetworkStore();
+const { networkSettings } = useNetwork();
 
-const hostname = ref('');
-
-const network = computed(() => {
-  return networkStore.networkSettingsGetter;
+const hostname = computed(() => {
+  return networkSettings.value[0]?.hostname || '';
 });
-
-watch(network, () => {
-  getHostname();
-});
-
-const getHostname = () => {
-  hostname.value = network.value[0].hostname;
-};
 
 const initSettingsModal = () => {
   eventBus.emit('modal-hostname');

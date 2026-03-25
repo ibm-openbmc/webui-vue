@@ -108,13 +108,30 @@ import TableIpv4 from './TableIpv4.vue';
 import TableDns from './TableDns.vue';
 import TableIpv6 from './TableIpv6.vue';
 import TableIpv6StaticDefaultGateway from './TableIpv6StaticDefaultGateway.vue';
+import { useNetwork } from '@/api/composables/useNetwork';
 import stores from '@/store';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToast();
 
-const networkStore = stores.NetworkStore();
 const authenticationStore = stores.AuthenticationStore();
+
+const {
+  networkSettings,
+  lldpEnabledState,
+  isLoading,
+  isFetching,
+  refetchEthernet,
+  refetchLLDP,
+  setSelectedTabIndex,
+  setSelectedTabId,
+  updateIpv4Address,
+  updateIpv6Address,
+  updateIpv6StaticDefaultGatewayAddress,
+  saveDnsAddress: saveDnsAddressAction,
+  saveHostname: saveHostnameAction,
+  saveLLDPState,
+} = useNetwork();
 
 const currentHostname = ref('');
 const defaultGateway = ref('');
@@ -129,9 +146,18 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
+// Loading bar automatically shows/hides based on fetch state
+watch(
+  () => isLoading.value || isFetching.value,
+  (loading) => {
+    if (loading) startLoader();
+    else endLoader();
+  },
+  { immediate: true },
+);
+
 onBeforeMount(() => {
-  startLoader();
-  networkStore.getEthernetData().finally(() => endLoader());
+  refetchEthernet();
 });
 
 onMounted(() => {
@@ -142,174 +168,107 @@ onMounted(() => {
     ipAddressIpv6StaticDefaultGateway.value = item.Address;
     prefixLength.value = item.PrefixLength;
   });
-  networkStore.setSelectedTabIndex(0);
-  networkStore.getLLDPData();
+  setSelectedTabIndex(0);
+  // Set the initial tab ID when network settings are available
+  if (network.value.length > 0) {
+    setSelectedTabId(network.value[0].id);
+  }
+  refetchLLDP();
 });
 
 const network = computed(() => {
-  return networkStore.networkSettingsGetter;
+  return networkSettings.value;
 });
 
 const isIpv6Valid = computed(() => {
-  const ipv6 = network.value[tabIndex.value].ipv6;
+  const ipv6 = network.value[tabIndex.value]?.ipv6;
   if (ipv6 === undefined || ipv6 === null || ipv6.length === 0) return false;
   else return true;
 });
 
 const lldpState = computed({
   get() {
-    return networkStore?.lldpEnabledStateGetter?.[tabIndex.value]?.lldpEnabled;
+    return lldpEnabledState.value?.[tabIndex.value]?.lldpEnabled;
   },
   set(newValue) {
-    networkStore.lldpEnabledStateGetter[tabIndex.value].lldpEnabled = newValue;
+    if (lldpEnabledState.value?.[tabIndex.value]) {
+      lldpEnabledState.value[tabIndex.value].lldpEnabled = newValue;
+    }
   },
 });
 
-watch(network, () => {
+watch(network, (newNetwork) => {
   getModalInfo();
+  // Set the initial tab ID when network settings first become available
+  if (newNetwork.length > 0 && tabIndex.value === 0) {
+    setSelectedTabId(newNetwork[0].id);
+  }
 });
 
 const getModalInfo = () => {
-  defaultGateway.value =
-    networkStore.networkSettingsGetter[tabIndex.value].defaultGateway;
-
-  currentHostname.value =
-    networkStore.networkSettingsGetter[tabIndex.value].hostname;
+  defaultGateway.value = network.value[tabIndex.value]?.defaultGateway || '';
+  currentHostname.value = network.value[tabIndex.value]?.hostname || '';
 };
 
 const getTabIndex = (selectedIndex) => {
   tabIndex.value = selectedIndex;
-  networkStore.setSelectedTabIndex(tabIndex.value);
-  networkStore.setSelectedTabId(network.value[tabIndex.value].id);
+  setSelectedTabIndex(tabIndex.value);
+  setSelectedTabId(network.value[tabIndex.value].id);
   getModalInfo();
 };
 
 const saveIpv4Address = (modalFormData) => {
   const modalData = [modalFormData];
-  startLoader();
   if (ipAddress.value !== '') {
     //Edit selected row
     const selectedRow = { Address: ipAddress.value, Subnet: '' };
     const editRow = modalData.concat(selectedRow);
-    networkStore
-      .updateIpv4Address(editRow)
-      .then((message) => {
-        successToast(message);
-        setEndLoaderAfterDelay();
-      })
-      .catch(({ message }) => {
-        errorToast(message);
-        endLoader();
-      });
+    updateIpv4Address(editRow).catch(() => {});
   } else {
     // Add new address
-    networkStore
-      .updateIpv4Address(modalData)
-      .then((message) => {
-        successToast(message);
-        setEndLoaderAfterDelay();
-      })
-      .catch(({ message }) => {
-        errorToast(message);
-        endLoader();
-      });
+    updateIpv4Address(modalData).catch(() => {});
   }
 };
 
 const saveIpv6Address = (modalFormData) => {
   const modalData = [modalFormData];
-  startLoader();
   if (ipAddress.value !== '') {
     //Edit selected row
     const selectedRow = { Address: ipAddress.value, PrefixLength: 0 };
     const editRow = modalData.concat(selectedRow);
-    networkStore
-      .updateIpv6Address(editRow)
-      .then((message) => {
-        successToast(message);
-        setEndLoaderAfterDelay();
-      })
-      .catch(({ message }) => {
-        errorToast(message);
-        endLoader();
-      });
+    updateIpv6Address(editRow).catch(() => {});
   } else {
     // Add new address
-    networkStore
-      .updateIpv6Address(modalData)
-      .then((message) => {
-        successToast(message);
-        setEndLoaderAfterDelay();
-      })
-      .catch(({ message }) => {
-        errorToast(message);
-        endLoader();
-      });
+    updateIpv6Address(modalData).catch(() => {});
   }
 };
 
 const saveIpv6StaticDefaultGatewayAddress = (modalFormData) => {
   const modalData = [modalFormData];
-  startLoader();
   if (ipAddressIpv6StaticDefaultGateway.value !== '') {
     //Edit selected row
     const selectedRow = {
       Address: ipAddressIpv6StaticDefaultGateway.value,
     };
     const editRow = modalData.concat(selectedRow);
-    networkStore
-      .updateIpv6StaticDefaultGatewayAddress(editRow)
-      .then((message) => {
-        successToast(message);
-        setEndLoaderAfterDelay();
-      })
-      .catch(({ message }) => {
-        errorToast(message);
-        endLoader();
-      });
+    updateIpv6StaticDefaultGatewayAddress(editRow).catch(() => {});
   } else {
     // Add new address
-    networkStore
-      .updateIpv6StaticDefaultGatewayAddress(modalData)
-      .then((message) => {
-        successToast(message);
-        setEndLoaderAfterDelay();
-      })
-      .catch(({ message }) => {
-        errorToast(message);
-        endLoader();
-      });
+    updateIpv6StaticDefaultGatewayAddress(modalData).catch(() => {});
   }
 };
 
 const saveDnsAddress = (modalFormData) => {
-  startLoader();
-  networkStore
-    .saveDnsAddress(modalFormData)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message))
-    .finally(() => endLoader());
+  saveDnsAddressAction(modalFormData).catch(() => {});
 };
 
 const saveHostname = (modalFormData) => {
-  startLoader();
-  networkStore
-    .saveHostname(modalFormData)
+  saveHostnameAction(modalFormData)
     .then(() => authenticationStore.logout())
-    .catch(({ message }) => errorToast(message))
-    .finally(() => endLoader());
-};
-
-const setEndLoaderAfterDelay = () => {
-  setTimeout(() => {
-    endLoader();
-  }, 15000);
+    .catch(() => {});
 };
 
 const changeLLDPState = (state) => {
-  networkStore
-    .saveLLDPState(state)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message));
+  saveLLDPState(state);
 };
 </script>
