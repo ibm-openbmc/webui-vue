@@ -40,6 +40,7 @@
     "qrcode.vue": "3.6.0",
     "tiny-emitter": "2.1.0",
     "totp-generator": "1.0.0",
+    "v-calendar": "3.1.2",
     "vue": "^3.3.9",
     "vue-axios": "^3.5.2",
     "vue-i18n": "^9.2.2",
