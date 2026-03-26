@@ -7,6 +7,7 @@
             <dt>{{ $t('pageNetwork.dhcp') }}</dt>
             <dd>
               <BFormCheckbox
+                ref="dhcpCheckboxRef"
                 :key="componentKey"
                 v-model="dhcpEnabledState"
                 data-test-id="networkSettings-switch-dhcpEnabled"
@@ -122,6 +123,7 @@ const props = defineProps({
 });
 
 const componentKey = ref(0);
+const dhcpCheckboxRef = ref(null);
 
 const openModal = ref(false);
 
@@ -364,9 +366,15 @@ const operationConfirm = () => {
 
 const operationCancel = () => {
   if (modalValue.value === 'ChangeDhcpEnabledState') {
-    let onDhcpCancel = document.getElementById('dhcpSwitch');
-    onDhcpCancel.checked = !modalPayload.value.state;
-    // Manually refresh the checkbox in DOM
+    if (dhcpCheckboxRef.value) {
+      const inputElement = dhcpCheckboxRef.value.$el?.querySelector(
+        'input[type="checkbox"]',
+      );
+      if (inputElement) {
+        inputElement.checked = !modalPayload.value.state;
+      }
+    }
+    // Force component re-render to sync with the reverted state
     componentKey.value += 1;
   }
 };
