@@ -29,11 +29,15 @@
             >
               <BFormGroup
                 :label="$t('pageCapacityOnDemand.activation.srLabel')"
+                aria-label="form-group-activation"
                 label-for="input-license-key"
                 :label-sr-only="true"
                 class="mb-0 mr-0 form-group-activation"
               >
-                <BInputGroup class="input-group-activation">
+                <BInputGroup
+                  aria-label="input-group-activation"
+                  class="input-group-activation"
+                >
                   <BFormInput
                     id="input-license-key"
                     v-model="licenseKey"

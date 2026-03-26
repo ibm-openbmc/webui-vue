@@ -91,8 +91,16 @@ const dnsTableFields = ref([
   {
     key: 'address',
     label: i18n.global.t('pageNetwork.table.ipAddress'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
-  { key: 'actions', label: '', tdClass: 'text-right' },
+  {
+    key: 'actions',
+    label: '',
+    tdClass: 'text-right',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
+  },
 ]);
 
 onBeforeMount(() => {

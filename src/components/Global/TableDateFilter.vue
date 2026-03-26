@@ -5,8 +5,9 @@
         :label="$t('global.table.fromDate')"
         label-for="input-from-date"
         class="mr-3 my-0 w-100"
+        aria-label="from-date"
       >
-        <BInputGroup>
+        <BInputGroup aria-label="from-date-input">
           <BFormInput
             id="input-from-date"
             v-model="fromDate"
@@ -25,8 +26,9 @@
         :label="$t('global.table.toDate')"
         label-for="input-to-date"
         class="my-0 w-100"
+        aria-label="to-date"
       >
-        <BInputGroup>
+        <BInputGroup aria-label="to-date-input">
           <BFormInput
             id="input-to-date"
             v-model="toDate"

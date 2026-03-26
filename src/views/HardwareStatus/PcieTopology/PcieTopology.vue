@@ -282,7 +282,6 @@
             itemPerPage === 0 ? filteredEntries.length || 1 : itemPerPage
           "
           :total-rows="getTotalRowCount(filteredRows)"
-          aria-controls="table-event-logs"
         />
       </b-col>
     </b-row>
@@ -303,7 +302,15 @@ import TableFilter from '@/components/Global/TableFilter.vue';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import ModalReset from './ResetLinkModal.vue';
 import ModalLeds from './IdentifyLedsModal.vue';
-import { onBeforeMount, onMounted, reactive, ref, computed } from 'vue';
+import {
+  onBeforeMount,
+  onMounted,
+  reactive,
+  ref,
+  computed,
+  watch,
+  nextTick,
+} from 'vue';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import useTableFilter from '../../../components/Composables/useTableFilterComposable';
@@ -341,12 +348,16 @@ const fields = reactive([
     label: '',
     formatter: dataFormatter,
     tdClass: 'table-row-expand',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'id',
     label: i18n.global.t('pagePcieTopology.id'),
     formatter: dataFormatter,
     sortable: true,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'parentId',
@@ -354,6 +365,8 @@ const fields = reactive([
     formatter: dataFormatter,
     sortable: true,
     tdClass: 'text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'linkStatus',
@@ -361,6 +374,8 @@ const fields = reactive([
     formatter: dataFormatter,
     sortable: false,
     tdClass: 'text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'localPortLocation',
@@ -368,12 +383,16 @@ const fields = reactive([
     formatter: dataFormatter,
     sortable: false,
     tdClass: 'text-break',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'remotePortLocation',
     label: i18n.global.t('pagePcieTopology.remotePortLocation'),
     formatter: dataFormatter,
     sortable: false,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'actions',
@@ -381,6 +400,8 @@ const fields = reactive([
     formatter: dataFormatter,
     label: ' ',
     tdClass: 'text-right text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const tableFilters = reactive([
@@ -471,6 +492,21 @@ const isInPhypStandby = computed(() => {
 const isServiceUser = computed(() => {
   return globalStore.isServiceUser;
 });
+
+watch(
+  () => filteredEntries,
+  () => {
+    nextTick(() => {
+      document
+        .querySelectorAll('.b-table-sortable-column svg')
+        .forEach((svg) => {
+          console.log('For triggered');
+          svg.setAttribute('aria-hidden', 'true');
+        });
+    });
+  },
+  { deep: true },
+);
 
 function checkIfInPhypStandby(checkCounter = 0) {
   checkCounter++;

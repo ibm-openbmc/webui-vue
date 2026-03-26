@@ -18,9 +18,14 @@
         <BCol>
           <BForm
             id="form-power-saver"
+            aria-label="power-and-performance"
             @submit.prevent="handlePowerPerformanceSubmit"
           >
-            <BFormGroup class="form-group" :disabled="loading || safeMode">
+            <BFormGroup
+              aria-label="power-and-performance-form"
+              class="form-group"
+              :disabled="loading || safeMode"
+            >
               <BRow>
                 <BCol>
                   <BFormGroup

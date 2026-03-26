@@ -7,7 +7,6 @@
             <dt>{{ $t('pageNetwork.dhcp') }}</dt>
             <dd>
               <BFormCheckbox
-                id="dhcpIpv6Switch"
                 v-model="dhcpEnabledState"
                 switch
                 :disabled="isTablesDisabled"
@@ -26,7 +25,6 @@
             <dt>{{ $t('pageNetwork.ipv6AutoConfig') }}</dt>
             <dd>
               <BFormCheckbox
-                id="ipv6AutoConfigSwitch"
                 v-model="ipv6AutoConfigState"
                 switch
                 :disabled="isTablesDisabled"
@@ -175,16 +173,28 @@ const ipv6TableFields = ref([
   {
     key: 'Address',
     label: i18n.global.t('pageNetwork.table.ipAddress'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'PrefixLength',
     label: i18n.global.t('pageNetwork.table.prefixLength'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'AddressOrigin',
     label: i18n.global.t('pageNetwork.table.addressOrigin'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
-  { key: 'actions', label: '', tdClass: 'text-right' },
+  {
+    key: 'actions',
+    label: '',
+    tdClass: 'text-right',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
+  },
 ]);
 
 onBeforeMount(() => {

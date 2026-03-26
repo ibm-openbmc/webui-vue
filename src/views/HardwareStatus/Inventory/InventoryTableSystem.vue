@@ -131,7 +131,7 @@ import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
-import { computed, onBeforeMount, reactive, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import stores from '../../../store';
 import eventBus from '@/eventBus';
@@ -148,23 +148,31 @@ const fields = reactive([
     key: 'expandRow',
     label: '',
     tdClass: 'table-row-expand',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'name',
     label: t('pageInventory.table.name'),
     formatter: dataFormatter,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'health',
     label: t('pageInventory.table.health'),
     formatter: dataFormatter,
     tdClass: 'text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'status',
     label: t('pageUserManagement.table.status'),
     formatter: dataFormatter,
     tdClass: 'text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 
@@ -179,6 +187,20 @@ onBeforeMount(() => {
 const systems = computed(() => {
   return systemStore.systems;
 });
+
+watch(
+  () => systems,
+  () => {
+    nextTick(() => {
+      document
+        .querySelectorAll('.b-table-sortable-column svg')
+        .forEach((svg) => {
+          svg.setAttribute('aria-hidden', 'true');
+        });
+    });
+  },
+  { deep: true },
+);
 
 function getStatusTooltip(status) {
   switch (status) {

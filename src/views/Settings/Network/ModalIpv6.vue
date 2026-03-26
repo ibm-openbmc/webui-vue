@@ -14,13 +14,11 @@
     <BForm id="form-ipv6" @submit.prevent="handleSubmit">
       <BRow>
         <BCol sm="6">
-          <BFormGroup
-            :label="$t('pageNetwork.modal.ipAddress')"
-            label-for="ipAddress"
-          >
+          <BFormGroup :label="$t('pageNetwork.modal.ipAddress')">
             <BFormInput
               id="ipAddress"
               v-model="form.ipAddress"
+              aria-label="ip-address-input"
               type="text"
               :state="getValidationState(v$.form.ipAddress)"
               @input="v$.form.ipAddress.$touch()"
@@ -37,6 +35,7 @@
         </BCol>
         <BCol sm="6">
           <BFormGroup
+            aria-label="prefix-length"
             :label="$t('pageNetwork.modal.prefixLength')"
             label-for="prefixLength"
           >

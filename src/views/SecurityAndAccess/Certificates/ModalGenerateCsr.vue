@@ -19,11 +19,11 @@
                 <BCol lg="6">
                   <BFormGroup
                     :label="$t('pageCertificates.modal.certificateType')"
-                    label-for="certificate-type"
                   >
                     <BFormSelect
                       id="certificate-type"
                       v-model="form.certificateType"
+                      aria-label="certificate-type"
                       data-test-id="modalGenerateCsr-select-certificateType"
                       :options="certificateOptions"
                       :state="getValidationState(v$.form.certificateType)"
@@ -42,12 +42,14 @@
                 </BCol>
                 <BCol lg="6">
                   <BFormGroup
+                    aria-label="country-form-group"
                     :label="$t('pageCertificates.modal.country')"
                     label-for="country"
                   >
                     <BFormSelect
                       id="country"
                       v-model="form.country"
+                      aria-label="country"
                       data-test-id="modalGenerateCsr-select-country"
                       :options="countryOptions"
                       :state="getValidationState(v$.form.country)"
@@ -68,6 +70,7 @@
               <BRow>
                 <BCol lg="6">
                   <BFormGroup
+                    aria-label="state"
                     :label="$t('pageCertificates.modal.state')"
                     label-for="state"
                   >
@@ -85,6 +88,7 @@
                 </BCol>
                 <BCol lg="6">
                   <BFormGroup
+                    aria-label="city"
                     :label="$t('pageCertificates.modal.city')"
                     label-for="city"
                   >
@@ -104,6 +108,7 @@
               <BRow>
                 <BCol lg="6">
                   <BFormGroup
+                    aria-label="company-name"
                     :label="$t('pageCertificates.modal.companyName')"
                     label-for="company-name"
                   >
@@ -121,6 +126,7 @@
                 </BCol>
                 <BCol lg="6">
                   <BFormGroup
+                    aria-label="company-unit"
                     :label="$t('pageCertificates.modal.companyUnit')"
                     label-for="company-unit"
                   >
@@ -140,6 +146,7 @@
               <BRow>
                 <BCol lg="6">
                   <BFormGroup
+                    aria-label="common-name"
                     :label="$t('pageCertificates.modal.commonName')"
                     label-for="common-name"
                   >
@@ -156,7 +163,10 @@
                   </BFormGroup>
                 </BCol>
                 <BCol lg="6">
-                  <BFormGroup label-for="contact-person">
+                  <BFormGroup
+                    aria-label="contact-person"
+                    label-for="contact-person"
+                  >
                     <template #label>
                       {{ $t('pageCertificates.modal.contactPerson') }} -
                       <span class="form-text d-inline">
@@ -174,7 +184,10 @@
               </BRow>
               <BRow>
                 <BCol lg="6">
-                  <BFormGroup label-for="email-address">
+                  <BFormGroup
+                    aria-label="email-address"
+                    label-for="email-address"
+                  >
                     <template #label>
                       {{ $t('pageCertificates.modal.emailAddress') }} -
                       <span class="form-text d-inline">
@@ -192,7 +205,10 @@
               </BRow>
               <BRow>
                 <BCol lg="12">
-                  <BFormGroup label-for="alternate-name">
+                  <BFormGroup
+                    aria-label="alternate-name"
+                    label-for="alternate-name"
+                  >
                     <template #label>
                       {{ $t('pageCertificates.modal.alternateName') }} -
                       <span class="form-text d-inline">
@@ -205,6 +221,8 @@
                     <BFormTags
                       v-model="form.alternateName"
                       :remove-on-delete="true"
+                      aria-label="alternate-name-input"
+                      role="form"
                       :tag-pills="true"
                       input-id="alternate-name"
                       size="lg"
@@ -234,6 +252,7 @@
                     {{ $t('pageCertificates.modal.privateKey') }}
                   </p>
                   <BFormGroup
+                    aria-label="key-pair-algorithm"
                     :label="$t('pageCertificates.modal.keyPairAlgorithm')"
                     label-for="key-pair-algorithm"
                   >
@@ -261,6 +280,7 @@
                 <BCol lg="12">
                   <template v-if="v$.form.keyPairAlgorithm.$model === 'EC'">
                     <BFormGroup
+                      aria-label="key-curve-id"
                       :label="$t('pageCertificates.modal.keyCurveId')"
                       label-for="key-curve-id"
                     >
@@ -285,6 +305,7 @@
                   </template>
                   <template v-if="v$.form.keyPairAlgorithm.$model === 'RSA'">
                     <BFormGroup
+                      aria-label="key-bit-length"
                       :label="$t('pageCertificates.modal.keyBitLength')"
                       label-for="key-bit-length"
                     >

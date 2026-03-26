@@ -5,6 +5,7 @@
         <BFormGroup
           v-if="isTftpUploadAvailable && tftpServer"
           :label="$t('pageFirmware.form.updateFirmware.fileSource')"
+          aria-label="image-file"
           :disabled="isPageDisabled"
         >
           <BFormRadio v-model="isWorkstationSelected" :value="true">

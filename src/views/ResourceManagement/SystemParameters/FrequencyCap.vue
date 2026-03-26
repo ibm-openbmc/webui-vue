@@ -36,8 +36,17 @@
     <!-- Form -->
     <BRow class="section-divider">
       <BCol class="d-flex align-items-center justify-content-start col-6 mb-1">
-        <BForm class="form-width" @submit.prevent>
-          <BFormGroup id="input-group-1" label-for="input-1" class="mb-0 mr-0">
+        <BForm
+          aria-label="form-frequency-cap"
+          class="form-width"
+          @submit.prevent
+        >
+          <BFormGroup
+            id="input-group-1"
+            label-for="input-1"
+            aria-label="frequency-cap"
+            class="mb-0 mr-0"
+          >
             <BFormText
               v-show="frequencyRequestCurrentToggle"
               id="frequency-cap-help-text"
@@ -50,10 +59,14 @@
               }}
             </BFormText>
 
-            <BInputGroup class="mb-3 mr-0">
+            <BInputGroup
+              aria-label="frequency-cap-input-group"
+              class="mb-3 mr-0"
+            >
               <BFormInput
                 id="input-1"
                 v-model="frequencyValue"
+                aria-label="frequency-cap-input"
                 type="number"
                 aria-describedby="frequency-cap-help-text"
                 :disabled="!frequencyRequestCurrentToggle"

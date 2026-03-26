@@ -1,8 +1,12 @@
 <template>
-  <div :class="isFullWindow ? 'full-window-container' : 'terminal-container'">
+  <div
+    role="main"
+    aria-label="terminal"
+    :class="isFullWindow ? 'full-window-container' : 'terminal-container'"
+  >
     <BRow class="d-flex">
       <BCol class="d-flex flex-column justify-content-end">
-        <dl class="mb-2" sm="6" md="6">
+        <dl role="group" class="mb-2" sm="6" md="6">
           <dt class="d-inline fw-bold me-1">
             {{ $t('pageHostConsole.status') }}:
           </dt>
@@ -19,7 +23,7 @@
         </BButton>
       </BCol>
     </BRow>
-    <div id="terminal" ref="panel"></div>
+    <div id="terminal" ref="panel" role="log"></div>
   </div>
 </template>
 
@@ -125,6 +129,12 @@ function openTerminal() {
 
   term.open(panel.value);
   fitAddon.fit();
+
+  const xtermElement = panel.value.querySelector('.terminal.xterm');
+  if (xtermElement) {
+    xtermElement.setAttribute('role', 'application');
+    xtermElement.setAttribute('aria-label', 'host-console');
+  }
 
   resizeConsoleWindow.value = throttle(() => {
     fitAddon.fit();

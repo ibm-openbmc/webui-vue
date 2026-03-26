@@ -7,7 +7,6 @@
             <dt>{{ $t('pageNetwork.dhcp') }}</dt>
             <dd>
               <BFormCheckbox
-                id="dhcpSwitch"
                 :key="componentKey"
                 v-model="dhcpEnabledState"
                 data-test-id="networkSettings-switch-dhcpEnabled"
@@ -158,20 +157,34 @@ const ipv4TableFields = ref([
   {
     key: 'Address',
     label: i18n.global.t('pageNetwork.table.ipAddress'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'Gateway',
     label: i18n.global.t('pageNetwork.table.gateway'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'SubnetMask',
     label: i18n.global.t('pageNetwork.table.subnet'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'AddressOrigin',
     label: i18n.global.t('pageNetwork.table.addressOrigin'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
-  { key: 'actions', label: '', tdClass: 'text-right' },
+  {
+    key: 'actions',
+    label: '',
+    tdClass: 'text-right',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
+  },
 ]);
 
 onBeforeMount(() => {

@@ -127,6 +127,7 @@
           <template #head(checkbox)>
             <BFormCheckbox
               v-model="tableHeaderCheckbox"
+              aria-label="checkbox-head"
               :indeterminate="tableHeaderCheckboxIndeterminated"
               @change="
                 onChangeHeaderCheckbox(
@@ -136,11 +137,13 @@
               "
               @update:model-value="toggleAll"
             >
+              <span class="visually-hidden">checkbox-head</span>
             </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
               v-model="row.item.isSelected"
+              aria-label="checkbox"
               @change="
                 toggleSelectRowById(
                   tableDeconfigurationRecordsRef,
@@ -214,7 +217,6 @@
           last-number
           :per-page="itemPerPage === 0 ? filteredLogs.length || 1 : itemPerPage"
           :total-rows="getTotalRowCount(filteredLogs.length)"
-          aria-controls="table-event-logs"
         />
       </BCol>
     </BRow>
@@ -236,7 +238,7 @@
 <script setup>
 import { omit } from 'lodash';
 import i18n from '@/i18n';
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, watch, nextTick } from 'vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
@@ -284,39 +286,55 @@ const fields = ref([
     key: 'expandRow',
     label: '',
     tdClass: 'table-row-expand',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'checkbox',
     sortable: false,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'id',
     label: i18n.global.t('pageDeconfigurationRecords.table.id'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
     sortable: true,
   },
   {
     key: 'eventID',
     label: i18n.global.t('pageDeconfigurationRecords.table.eventId'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
     sortable: true,
   },
   {
     key: 'date',
     label: i18n.global.t('pageDeconfigurationRecords.table.date'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
     sortable: true,
   },
   {
     key: 'severity',
     label: i18n.global.t('pageDeconfigurationRecords.table.severity'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
     sortable: true,
   },
   {
     key: 'description',
     label: i18n.global.t('pageDeconfigurationRecords.table.resource'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
     sortable: false,
   },
   {
     key: 'status',
     label: i18n.global.t('pageDeconfigurationRecords.table.status'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
     sortable: false,
   },
 ]);

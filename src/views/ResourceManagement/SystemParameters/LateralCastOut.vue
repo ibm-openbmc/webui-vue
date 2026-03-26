@@ -14,7 +14,7 @@
         <BFormCheckbox
           id="lateral-cast-out-switch"
           v-model="systemParametersStore.lateralCastOutMode"
-          aria-labelledby="lateral-cast-out-label"
+          aria-labelledby="lateral-cast-out-switch"
           aria-describedby="lateral-cast-out-description"
           switch
           @update:model-value="changeLateralCastOutState"

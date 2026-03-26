@@ -3,7 +3,7 @@
     <page-section :section-title="$t('pagePower.idlePower')">
       <BRow>
         <BCol sm="8" md="6" xl="12">
-          <BFormGroup class="form-group">
+          <BFormGroup aria-label="enable-idle-power" class="form-group">
             <BFormCheckbox
               v-model="idlePowerSaver.isIdlePowerSaverEnabled"
               :disabled="loading || safeMode"
@@ -22,14 +22,17 @@
         @submit.prevent="saveIdlePowerSaverData"
         @reset.prevent="resetIdlePowerSaverData"
       >
-        <BFormGroup :disabled="loading || safeMode">
+        <BFormGroup
+          aria-label="idle-power-saver-form"
+          :disabled="loading || safeMode"
+        >
           <div class="fw-bold mb-2">{{ $t('pagePower.toEnter') }}</div>
           <BRow>
             <BCol sm="8" md="6" xl="4">
               <BFormGroup
                 id="input-group-1"
+                aria-label="delay-time-enter"
                 :label="$t('pagePower.delayTime')"
-                label-for="input-1"
               >
                 <BFormInput
                   id="input-1"
@@ -56,6 +59,7 @@
             <BCol sm="8" md="6" xl="4">
               <BFormGroup
                 id="input-group-2"
+                aria-label="utilization-threshold-enter"
                 :label="$t('pagePower.utilizationThreshold')"
                 label-for="input-2"
               >
@@ -96,6 +100,7 @@
             <BCol sm="8" md="6" xl="4">
               <BFormGroup
                 id="input-group-3"
+                aria-label="delay-time-exit"
                 :label="$t('pagePower.delayTime')"
                 label-for="input-3"
               >
@@ -124,6 +129,7 @@
             <BCol sm="8" md="6" xl="4">
               <BFormGroup
                 id="input-group-4"
+                aria-label="utilization-threshold-exit"
                 :label="$t('pagePower.utilizationThreshold')"
                 label-for="input-4"
               >

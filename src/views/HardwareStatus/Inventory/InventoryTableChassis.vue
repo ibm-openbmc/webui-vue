@@ -75,7 +75,7 @@
         <b-form-checkbox
           v-if="hasIdentifyLed(row.item.identifyLed)"
           v-model="row.item.identifyLed"
-          name="switch"
+          :name="'switch-' + row.item.id"
           switch
           @change="toggleIdentifyLedValue(row.item)"
         >
@@ -124,7 +124,7 @@ import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
-import { reactive, ref, computed, onBeforeMount } from 'vue';
+import { reactive, ref, computed, onBeforeMount, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import stores from '../../../store';
 import eventBus from '@/eventBus';
@@ -143,33 +143,45 @@ const fields = reactive([
     key: 'expandRow',
     label: '',
     tdClass: 'table-row-expand',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'id',
     label: t('pageInventory.table.id'),
     formatter: dataFormatter,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'health',
     label: t('pageInventory.table.health'),
     formatter: dataFormatter,
     tdClass: 'text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'status',
     label: t('pageUserManagement.table.status'),
     formatter: dataFormatter,
     tdClass: 'text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'locationNumber',
     label: t('pageInventory.table.locationNumber'),
     formatter: dataFormatter,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'identifyLed',
     label: t('pageInventory.table.identifyLed'),
     formatter: dataFormatter,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 
@@ -185,6 +197,20 @@ onBeforeMount(() => {
 const chassis = computed(() => {
   return chassisStore.chassis;
 });
+
+watch(
+  () => chassis,
+  () => {
+    nextTick(() => {
+      document
+        .querySelectorAll('.b-table-sortable-column svg')
+        .forEach((svg) => {
+          svg.setAttribute('aria-hidden', 'true');
+        });
+    });
+  },
+  { deep: true },
+);
 
 function toggleIdentifyLedValue(row) {
   chassisStore

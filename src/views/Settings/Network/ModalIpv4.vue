@@ -15,6 +15,7 @@
       <BRow>
         <BCol sm="6">
           <BFormGroup
+            aria-label="ip-address"
             :label="$t('pageNetwork.modal.ipAddress')"
             label-for="ipAddress"
           >
@@ -37,6 +38,7 @@
         </BCol>
         <BCol sm="6">
           <BFormGroup
+            aria-label="gateway"
             :label="$t('pageNetwork.modal.gateway')"
             label-for="gateway"
           >
@@ -61,6 +63,7 @@
       <BRow>
         <BCol sm="6">
           <BFormGroup
+            aria-label="subnet-mast"
             :label="$t('pageNetwork.modal.subnetMask')"
             label-for="subnetMask"
           >

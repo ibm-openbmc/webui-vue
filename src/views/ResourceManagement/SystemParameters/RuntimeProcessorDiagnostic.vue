@@ -15,9 +15,14 @@
     </BRow>
     <BRow>
       <BCol md="8" xl="6">
-        <BForm novalidate @submit.prevent="updateRpdFeature">
+        <BForm
+          aria-label="rpdfeature-form"
+          novalidate
+          @submit.prevent="updateRpdFeature"
+        >
           <BFormSelect
             v-model="selectedFeatureOption"
+            aria-label="rpdfeature-input"
             :options="rpdFeatOptions"
           ></BFormSelect>
           <BButton variant="primary" type="submit" class="mt-3 mb-3">
@@ -40,9 +45,14 @@
     </BRow>
     <BRow>
       <BCol md="8" xl="6">
-        <BForm novalidate @submit.prevent="updateRpdPolicy">
+        <BForm
+          aria-label="rpdPolicy-form"
+          novalidate
+          @submit.prevent="updateRpdPolicy"
+        >
           <BFormSelect
             v-model="selectedOption"
+            aria-label="rpdPolicy-input"
             :options="options"
             :disabled="isRpdFeatureCurrentDisabled"
           ></BFormSelect>
@@ -74,10 +84,11 @@
         <BForm>
           <BFormGroup
             :label="$t('pageSystemParameters.startTime')"
-            label-for="start-time"
+            aria-label="start-time"
+            label-for="input-rpd-scheduled-run"
             class="mb-3"
           >
-            <BInputGroup>
+            <BInputGroup aria-label="input-rpd-scheduled-run-input-group">
               <BFormInput
                 id="input-rpd-scheduled-run"
                 v-model="rpdScheduledRun"
@@ -94,7 +105,8 @@
           </BFormGroup>
           <BFormGroup
             :label="$t('pageSystemParameters.duration')"
-            label-for="duration"
+            aria-label="duration"
+            label-for="input-rpd-scheduled-run-duration"
             class="mb-3"
           >
             <BFormInput

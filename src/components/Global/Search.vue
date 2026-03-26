@@ -2,16 +2,21 @@
   <div class="search-global">
     <BFormGroup
       :label="$t('global.form.search')"
-      :label-for="`searchInput-${_uid}`"
+      :aria-label="`search-bar-${label}`"
+      :label-for="`searchInput-${label}`"
       label-class="invisible"
       class="mb-2"
     >
-      <BInputGroup size="md" class="align-items-center">
+      <BInputGroup
+        :aria-label="`${$t('global.form.search')}-${label}`"
+        size="md"
+        class="align-items-center"
+      >
         <BInputGroupText class="group-text">
           <icon-search class="search-icon" />
         </BInputGroupText>
         <BFormInput
-          :id="`searchInput-${_uid}`"
+          :id="`searchInput-${label}`"
           ref="searchInput"
           v-model="filter"
           class="search-input"
@@ -54,6 +59,10 @@ defineProps({
   isSearchDisabled: {
     type: Boolean,
     default: false,
+  },
+  label: {
+    type: String,
+    default: '',
   },
 });
 

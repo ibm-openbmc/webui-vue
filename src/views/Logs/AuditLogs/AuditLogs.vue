@@ -179,26 +179,38 @@ const fields = ref([
     key: 'expandRow',
     label: '',
     tdClass: 'table-row-expand',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'date',
     label: i18n.global.t('pageAuditLogs.table.eventTimeStamp'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'operation',
     label: i18n.global.t('pageAuditLogs.table.op'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'account',
     label: i18n.global.t('pageAuditLogs.table.acct'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'addr',
     label: i18n.global.t('pageAuditLogs.table.addr'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'res',
     label: i18n.global.t('pageAuditLogs.table.res'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const searchTotalFilteredRows = ref(0);

@@ -73,6 +73,7 @@
             <BFormGroup
               v-if="editDisabled"
               :label="$t('pageUserManagement.modal.username')"
+              aria-label="UserName"
               label-for="username"
             >
               <BFormText id="username-help-block">
@@ -163,6 +164,7 @@
               v-show="notService"
               :label="$t('pageUserManagement.modal.userPassword')"
               label-for="password"
+              aria-label="user-password"
             >
               <template #label>
                 {{ $t('pageUserManagement.modal.userPassword') }}
@@ -212,6 +214,7 @@
               v-show="notService"
               :label="$t('pageUserManagement.modal.confirmUserPassword')"
               label-for="password-confirmation"
+              aria-label="confirm-user-password"
             >
               <input-password-toggle
                 @update-pass-view="updateConfirmPasswordType"

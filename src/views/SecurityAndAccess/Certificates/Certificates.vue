@@ -173,27 +173,39 @@ const fields = ref([
   {
     key: 'certificate',
     label: i18n.global.t('pageCertificates.table.certificate'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'issuedBy',
     label: i18n.global.t('pageCertificates.table.issuedBy'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'issuedTo',
     label: i18n.global.t('pageCertificates.table.issuedTo'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'validFrom',
     label: i18n.global.t('pageCertificates.table.validFrom'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'validUntil',
     label: i18n.global.t('pageCertificates.table.validUntil'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'actions',
     label: '',
     tdClass: 'text-right text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 

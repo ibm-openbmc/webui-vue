@@ -38,6 +38,7 @@
           <template #head(checkbox)>
             <BFormCheckbox
               v-model="tableHeaderCheckboxModelValue"
+              aria-label="checkbox-head"
               data-test-id="snmpAlerts-checkbox-selectAll"
               :indeterminate="tableHeaderCheckboxIndeterminateValue"
               @change="
@@ -45,6 +46,7 @@
               "
               @update:model-value="toggleAll"
             >
+              <span class="visually-hidden">checkbox-head</span>
             </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
@@ -52,6 +54,7 @@
               v-model="
                 snmpAlertsStore.allSnmpDetailsGetter[row.index].isSelected
               "
+              aria-label="checkbox"
               :data-test-id="`snmpAlerts-checkbox-selectRow-${row.index}`"
               @change="
                 toggleSelectRowByIpAddress(
@@ -62,6 +65,7 @@
                 )
               "
             >
+              <span class="visually-hidden">checkbox</span>
             </BFormCheckbox>
           </template>
           <!-- table actions column -->
@@ -151,19 +155,27 @@ const isBusy = ref(true);
 const fields = ref([
   {
     key: 'checkbox',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'ip',
     label: i18n.global.t('pageSnmpAlerts.table.ipaddress'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'port',
     label: i18n.global.t('pageSnmpAlerts.table.port'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'actions',
     label: '',
     tdClass: 'text-end text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const tableToolbarActions = ref([

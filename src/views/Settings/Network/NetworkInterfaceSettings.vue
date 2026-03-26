@@ -19,7 +19,6 @@
             <dt>{{ $t('pageNetwork.useDomainName') }}</dt>
             <dd>
               <BFormCheckbox
-                id="useDomainNameSwitch"
                 v-model="useDomainNameState"
                 data-test-id="networkSettings-switch-useDomainName"
                 switch
@@ -39,7 +38,6 @@
             <dt>{{ $t('pageNetwork.useDns') }}</dt>
             <dd>
               <BFormCheckbox
-                id="useDnsSwitch"
                 v-model="useDnsState"
                 data-test-id="networkSettings-switch-useDns"
                 switch
@@ -59,7 +57,6 @@
             <dt>{{ $t('pageNetwork.useNtp') }}</dt>
             <dd>
               <BFormCheckbox
-                id="useNtpSwitch"
                 v-model="useNtpState"
                 data-test-id="networkSettings-switch-useNtp"
                 switch

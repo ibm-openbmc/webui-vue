@@ -23,7 +23,11 @@
           data-test-id="login-select-language"
         ></BFormSelect>
       </BFormGroup>
-      <BFormGroup label-for="username" :label="t('pageLogin.username')">
+      <BFormGroup
+        aria-label="username"
+        label-for="username"
+        :label="t('pageLogin.username')"
+      >
         <BFormInput
           id="username"
           v-model="userInfo.username"

@@ -14,12 +14,13 @@
           </BFormCheckbox>
           <BFormGroup
             :label="$t('pageFieldCoreOverride.configuredCores')"
+            aria-label="configured-cores-input"
             label-for="input-configured-cores"
           >
             <BFormText>
               {{ $t('global.form.mustBeAtLeast', { value: minimumValue }) }}
             </BFormText>
-            <BInputGroup>
+            <BInputGroup aria-label="enter-value">
               <BFormInput
                 id="input-configured-cores"
                 v-model.number="inputConfiguredCores"

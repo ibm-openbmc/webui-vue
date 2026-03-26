@@ -132,12 +132,35 @@ const ipv6DefaultGatewayTableFields = ref([
   {
     key: 'Address',
     label: i18n.global.t('pageNetwork.table.ipAddress'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'PrefixLength',
     label: i18n.global.t('pageNetwork.table.prefixLength'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
-  { key: 'actions', label: '', tdClass: 'text-right' },
+  {
+    key: 'actions',
+    label: '',
+    tdClass: 'text-right',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
+  },
+  {
+    key: 'PrefixLength',
+    label: i18n.global.t('pageNetwork.table.prefixLength'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
+  },
+  {
+    key: 'actions',
+    label: '',
+    tdClass: 'text-right',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
+  },
 ]);
 
 onBeforeMount(() => {

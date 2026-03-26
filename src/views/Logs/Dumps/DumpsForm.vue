@@ -27,7 +27,7 @@
         </BFormInvalidFeedback>
       </BFormGroup>
       <template v-if="selectedDumpType === 'resource'">
-        <BFormGroup label-for="resourceSelector">
+        <BFormGroup aria-label="resource-selector" label-for="resourceSelector">
           <template #label>
             {{ $t('pageDumps.form.resourceSelector') }}
             <info-tooltip
@@ -39,7 +39,7 @@
           </BForm-input>
         </BFormGroup>
         <template v-if="isServiceUser">
-          <BFormGroup label-for="password">
+          <BFormGroup aria-label="password" label-for="password">
             <template #label>
               {{ $t('pageDumps.form.password') }}
               <info-tooltip :title="$t('pageDumps.form.passwordTooltip')" />

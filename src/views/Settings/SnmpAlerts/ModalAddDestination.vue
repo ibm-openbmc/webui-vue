@@ -12,7 +12,7 @@
         <BRow>
           <BCol sm="6">
             <!-- Add new SNMP alert destination type -->
-            <BFormGroup label-for="ip-address">
+            <BFormGroup aria-label="ipAddress">
               <template #label>
                 {{ $t('pageSnmpAlerts.modal.ipaddressFqdn') }}
                 <info-tooltip
@@ -23,6 +23,7 @@
               <BFormInput
                 id="ip-Address"
                 v-model="form.ipAddress"
+                aria-label="ipAddress"
                 :state="getValidationState(v$.form.ipAddress)"
                 data-test-id="snmpAlerts-input-ipAddress"
                 type="text"
@@ -36,7 +37,7 @@
             </BFormGroup>
           </BCol>
           <BCol>
-            <BFormGroup label-for="port">
+            <BFormGroup aria-label="port" label-for="port">
               <template #label>
                 {{ $t('pageSnmpAlerts.modal.port') }} -
                 <span class="form-text d-inline">

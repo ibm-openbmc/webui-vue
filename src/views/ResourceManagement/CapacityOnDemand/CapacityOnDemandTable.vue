@@ -177,10 +177,14 @@ const fields = ref([
   {
     key: 'settings',
     label: i18n.global.t('pageCapacityOnDemand.table.setting'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'status',
     label: i18n.global.t('pageCapacityOnDemand.table.bitCapabilityStatus'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 

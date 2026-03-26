@@ -62,15 +62,22 @@
           <template #head(checkbox)>
             <BFormCheckbox
               v-model="tableHeaderCheckbox"
+              aria-label="checkbox-head"
+              label="Select-all-rows"
+              label-class="visually-hidden"
               :indeterminate="tableHeaderCheckboxIndeterminated"
               @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckbox)"
               @update:model-value="toggleAll"
             >
+              <span class="visually-hidden">checkbox-head</span>
             </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
               v-model="row.item.isSelected"
+              :label="`Select-row-for-sensor-${row.item.name}`"
+              label-class="visually-hidden"
+              aria-label="checkbox"
               @change="
                 toggleSelectRow(
                   tableRef,
@@ -80,6 +87,7 @@
                 )
               "
             >
+              <span class="visually-hidden">checkbox</span>
             </BFormCheckbox>
           </template>
           <template #head(status)="row">
@@ -171,7 +179,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, onMounted, computed, onBeforeMount, watch, nextTick } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import { SensorsStore } from '@/store/modules/HardwareStatus/SensorsStore';
@@ -224,21 +232,29 @@ const fields = ref([
     key: 'checkbox',
     sortable: false,
     label: '',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'name',
     sortable: true,
     label: i18n.global.t('pageSensors.table.name'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'status',
     sortable: true,
     label: i18n.global.t('pageSensors.table.status'),
     tdClass: 'text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'currentValue',
     label: i18n.global.t('pageSensors.table.currentValue'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const tableFilters = ref([
@@ -304,6 +320,20 @@ const filteredSensors = computed(() => {
   }
   return data;
 });
+
+watch(
+  () => filteredSensors,
+  () => {
+    nextTick(() => {
+      document
+        .querySelectorAll('.b-table-sortable-column svg')
+        .forEach((svg) => {
+          svg.setAttribute('aria-hidden', 'true');
+        });
+    });
+  },
+  { deep: true },
+);
 
 function toggleAll(checked) {
   sensorsStore?.sensors?.map((singleSensor) => {

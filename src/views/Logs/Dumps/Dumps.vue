@@ -125,8 +125,14 @@
                 @click-table-action="onTableRowAction($event, row.item)"
               >
                 <template #icon>
-                  <icon-download v-if="action.value === 'download'" />
-                  <icon-delete v-if="action.value === 'delete'" />
+                  <icon-download
+                    v-if="action.value === 'download'"
+                    aria-label="download"
+                  />
+                  <icon-delete
+                    v-if="action.value === 'delete'"
+                    aria-label="delete"
+                  />
                 </template>
               </table-row-action>
             </template>
@@ -170,7 +176,6 @@
             itemPerPage === 0 ? filteredDumps.length || 1 : itemPerPage
           "
           :total-rows="getTotalRowCount(filteredRows)"
-          aria-controls="table-dump-entries"
         />
       </BCol>
     </BRow>
@@ -190,7 +195,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount, onMounted } from 'vue';
+import { ref, computed, onBeforeMount, onMounted, watch, nextTick } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
@@ -229,27 +234,37 @@ const fields = ref([
     key: 'id',
     label: i18n.global.t('pageDumps.table.id'),
     sortable: true,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'dateTime',
     label: i18n.global.t('pageDumps.table.dateAndTime'),
     sortable: true,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'dumpType',
     label: i18n.global.t('pageDumps.table.dumpType'),
     sortable: true,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'size',
     label: i18n.global.t('pageDumps.table.size'),
     sortable: true,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'actions',
     sortable: false,
     label: '',
     tdClass: 'text-right text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const tableFilters = ref([
@@ -384,6 +399,20 @@ const exportFileName = (row) => {
   filename = filename.replace(RegExp(' ', 'g'), '_');
   return filename;
 };
+
+watch(
+  () => filteredDumps,
+  () => {
+    nextTick(() => {
+      document
+        .querySelectorAll('.b-table-sortable-column svg')
+        .forEach((svg) => {
+          svg.setAttribute('aria-hidden', 'true');
+        });
+    });
+  },
+  { deep: true },
+);
 </script>
 
 <style lang="scss" scoped>

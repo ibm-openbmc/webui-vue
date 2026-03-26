@@ -15,12 +15,13 @@
       <BRow>
         <BCol sm="6">
           <BFormGroup
+            aria-label="ip-address-ipv6-default-gateway"
             :label="$t('pageNetwork.modal.ipAddress')"
-            label-for="ipAddress"
           >
             <BFormInput
               id="ipAddress"
               v-model="form.ipAddress"
+              aria-label="ip-address-input"
               type="text"
               :state="getValidationState(v$.form.ipAddress)"
               @input="v$.form.ipAddress.$touch()"

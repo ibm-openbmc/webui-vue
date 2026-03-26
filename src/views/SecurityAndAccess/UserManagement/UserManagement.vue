@@ -44,6 +44,7 @@
           <template #head(checkbox)>
             <BFormCheckbox
               v-model="tableHeaderCheckboxModel"
+              aria-label="checkbox-head"
               data-test-id="userManagement-checkbox-tableHeaderCheckbox"
               :indeterminate="tableHeaderCheckboxIndeterminate"
               @change="
@@ -51,11 +52,13 @@
               "
               @update:model-value="toggleAll"
             >
+              <span class="visually-hidden">checkbox-head</span>
             </BFormCheckbox>
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
               v-model="userManagement.allUsers[row.index].isSelected"
+              aria-label="checkbox"
               data-test-id="userManagement-checkbox-toggleSelectRow"
               @change="
                 toggleSelectRowByUsername(
@@ -66,6 +69,7 @@
                 )
               "
             >
+              <span class="visually-hidden">checkbox</span>
             </BFormCheckbox>
           </template>
 
@@ -82,10 +86,12 @@
               <template #icon>
                 <icon-edit
                   v-if="action.value === 'edit'"
+                  aria-label="edit"
                   :data-test-id="`userManagement-tableRowAction-edit-${index}`"
                 />
                 <icon-trashcan
                   v-if="action.value === 'delete'"
+                  aria-label="delete"
                   :data-test-id="`userManagement-tableRowAction-delete-${index}`"
                 />
               </template>
@@ -192,23 +198,33 @@ const deleteMessage = ref('');
 const fields = ref([
   {
     key: 'checkbox',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'username',
     label: i18n.global.t('pageUserManagement.table.username'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'privilege',
     label: i18n.global.t('pageUserManagement.table.privilege'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'status',
     label: i18n.global.t('pageUserManagement.table.status'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'actions',
     label: '',
-    tdClass: 'text-right text-nowrap',
+    class: 'text-right text-nowrap',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const tableToolbarActions = ref([

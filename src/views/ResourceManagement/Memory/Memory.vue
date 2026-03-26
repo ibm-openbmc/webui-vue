@@ -38,7 +38,11 @@
       </BRow>
       <BRow>
         <BCol md="8" xl="6">
-          <BForm novalidate @submit.prevent="handleSubmit">
+          <BForm
+            novalidate
+            aria-label="memory-block-size"
+            @submit.prevent="handleSubmit"
+          >
             <BFormGroup
               :label="$t('pageMemory.memoryBlockSize')"
               label-for="logical-memory-size-option"
@@ -79,14 +83,18 @@
       </BRow>
       <BRow>
         <BCol md="8" xl="6">
-          <BForm @submit.prevent="updatePageSetup()">
+          <BForm
+            aria-label="memory-page-setup"
+            @submit.prevent="updatePageSetup()"
+          >
             <BFormGroup
               :label="$t('pageMemory.maxNumHugePages')"
               label-for="system-memory-page-setup"
               class="mb-3"
+              aria-label="max-huge-pass"
             >
               <BFormInput
-                id="max-huge page-memory"
+                id="system-memory-page-setup"
                 v-model.number="maxHugePageLimit"
                 data-test-id="max-huge page-memory"
                 :disabled="true"
@@ -94,12 +102,14 @@
             </BFormGroup>
             <BFormGroup
               :label="$t('pageMemory.requestedHugePageMemory')"
-              label-for="system-memory-page-setup"
+              label-for="input-system-memory-page-setup"
+              aria-label="system-memory-page-setup"
               class="mb-3"
             >
               <BFormInput
                 id="input-system-memory-page-setup"
                 v-model.number="systemMemoryPageSetup"
+                aria-label="Requested-huge-page-memory"
                 data-test-id="system-memory-page-setup"
                 type="number"
                 :disabled="!isSectionEditable()"
@@ -146,14 +156,18 @@
       </BRow>
       <BRow>
         <BCol md="8" xl="6">
-          <BForm @submit.prevent="updateAdapterCapacity()">
+          <BForm
+            aria-label="io-adapter-capacity"
+            @submit.prevent="updateAdapterCapacity()"
+          >
             <BFormGroup
               :label="$t('pageMemory.slotCountForNode0')"
               label-for="io-adapter-enlarged-capacity"
+              aria-label="slot-count-for-Node-0"
               class="mb-3"
             >
               <BFormInput
-                id="input-io-adapter-capacity"
+                id="io-adapter-enlarged-capacity"
                 v-model.number="ioAdapterCapacity"
                 data-test-id="io-adapter-capacity"
                 type="number"
@@ -203,14 +217,18 @@
       </BRow>
       <BRow>
         <BCol md="8" xl="6">
-          <BForm @submit.prevent="updateDynamicAdapterCapacity()">
+          <BForm
+            aria-label="update-io-drawer-attachment"
+            @submit.prevent="updateDynamicAdapterCapacity()"
+          >
             <span v-if="dynamicIoDrawerCapacity === null">
               {{ '--' }}
             </span>
             <span v-else>
               <BFormGroup
                 :label="$t('pageMemory.slotCountForNode0')"
-                label-for="dynamic-io-drawer-capacity"
+                label-for="input-dynamic-io-adapter-drawer-capacity"
+                aria-label=""
                 class="mb-3"
               >
                 <BFormInput

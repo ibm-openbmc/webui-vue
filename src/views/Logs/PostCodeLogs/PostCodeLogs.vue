@@ -159,7 +159,7 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import useTableSortComposable from '../../../components/Composables/useTableSortComposable';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch, nextTick } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import stores from '../../../store';
 import { buildUrlNewTab } from '@/utilities/url';
@@ -192,23 +192,33 @@ const fields = ref([
     key: 'expandRow',
     label: '',
     tdClass: 'table-row-expand',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'date',
     label: i18n.global.t('pagePostCodeLogs.table.created'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
     sortable: true,
   },
   {
     key: 'timeStampOffset',
     label: i18n.global.t('pagePostCodeLogs.table.timeStampOffset'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'bootCount',
     label: i18n.global.t('pagePostCodeLogs.table.bootCount'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'postCode',
     label: i18n.global.t('pagePostCodeLogs.table.postCode'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const activeFiltersData = ref([]);
@@ -354,6 +364,20 @@ const onChangeSearchInput = (event) => {
 const onClearSearchInput = () => {
   searchFilterInputVal.value = '';
 };
+
+watch(
+  () => filteredLogs,
+  () => {
+    nextTick(() => {
+      document
+        .querySelectorAll('.b-table-sortable-column svg')
+        .forEach((svg) => {
+          svg.setAttribute('aria-hidden', 'true');
+        });
+    });
+  },
+  { deep: true },
+);
 </script>
 
 <style lang="scss" scoped>

@@ -47,6 +47,7 @@
           <template #head(checkbox)>
             <b-form-checkbox
               v-model="tableHeaderCheckboxModel"
+              aria-label="checkbox-head"
               :indeterminate="tableHeaderCheckboxIndeterminate"
               :disabled="!isServiceEnabled"
               @change="
@@ -54,11 +55,13 @@
               "
               @update:model-value="toggleAll"
             >
+              <span class="visually-hidden">checkbox-head</span>
             </b-form-checkbox>
           </template>
           <template #cell(checkbox)="row">
             <b-form-checkbox
               v-model="ldapStore.enabledRoleGroups[row.index].isSelected"
+              aria-label="checkbox"
               :disabled="!isServiceEnabled"
               @change="
                 toggleSelectRowByGroupName(
@@ -69,6 +72,7 @@
                 )
               "
             >
+              <span class="visually-hidden">checkbox-head</span>
             </b-form-checkbox>
           </template>
 
@@ -157,7 +161,7 @@ import ModalAddRoleGroup from './ModalAddRoleGroup.vue';
 import { onBeforeMount, onMounted, reactive } from 'vue';
 import useTableSelectableComposable from '../../../components/Composables/useTableSelectableComposable';
 import stores from '../../../store';
-import { computed, ref } from 'vue';
+import { computed, ref, watch, nextTick } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 import useLoadingBar from '../../../components/Composables/useLoadingBarComposable';
@@ -192,22 +196,30 @@ const fields = reactive([
   {
     key: 'checkbox',
     sortable: false,
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'groupName',
     sortable: true,
     label: i18n.global.t('pageLdap.tableRoleGroups.groupName'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'groupPrivilege',
     sortable: true,
     label: i18n.global.t('pageLdap.tableRoleGroups.groupPrivilege'),
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
   {
     key: 'actions',
     sortable: false,
     label: '',
     tdClass: 'text-right',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
   },
 ]);
 const batchActions = reactive([
@@ -312,6 +324,20 @@ const onModalDelete = (deleteConfirmed) => {
       .finally(() => endLoader());
   }
 };
+
+watch(
+  () => tableItems,
+  () => {
+    nextTick(() => {
+      document
+        .querySelectorAll('.b-table-sortable-column svg')
+        .forEach((svg) => {
+          svg.setAttribute('aria-hidden', 'true');
+        });
+    });
+  },
+  { deep: true },
+);
 function initRoleGroupModal(roleGroup) {
   activeRoleGroup.value = roleGroup;
   modal.value = true;

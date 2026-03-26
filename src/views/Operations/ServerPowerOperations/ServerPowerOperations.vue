@@ -129,9 +129,14 @@
               <BRow>
                 <BCol sm="5">
                   <!-- Reboot server -->
-                  <BForm novalidate class="mb-5" @submit.prevent="rebootServer">
+                  <BForm
+                    novalidate
+                    class="mb-5"
+                    aria-label="reboot"
+                    @submit.prevent="rebootServer"
+                  >
                     <BFormGroup class="form-group">
-                      <label for="orderly-reboot">{{
+                      <label>{{
                         $t('pageServerPowerOperations.rebootServer')
                       }}</label>
                       <div id="orderly-reboot">
@@ -149,7 +154,11 @@
                 </BCol>
                 <!-- Shutdown server options -->
                 <BCol sm="5">
-                  <BForm novalidate @submit.prevent="shutdownServer">
+                  <BForm
+                    novalidate
+                    aria-label="shutdown-server-ops"
+                    @submit.prevent="shutdownServer"
+                  >
                     <BFormGroup
                       class="form-group"
                       :label="$t('pageServerPowerOperations.shutdownServer')"

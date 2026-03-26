@@ -86,6 +86,7 @@
       </BRow>
       <BForm novalidate @submit.prevent="submitForm">
         <BFormGroup
+          aria-label="configure-date-time-settings"
           label="Configure date and time"
           :disabled="loading || !isServerOff()"
           label-sr-only
@@ -100,16 +101,18 @@
           <BRow class="mt-3 ms-3">
             <BCol sm="6" lg="4" xl="3">
               <BFormGroup
+                aria-label="date-input-from"
                 :label="$t('pageDateTime.form.date')"
                 label-for="input-manual-date"
               >
                 <BFormText id="date-format-help">{{
                   $t('global.calendar.dateFormat')
                 }}</BFormText>
-                <BInputGroup>
+                <BInputGroup aria-label="date-input-group">
                   <BFormInput
                     id="input-manual-date"
                     v-model="form.manual.date"
+                    aria-label="date-input"
                     type="date"
                     :state="getValidationState(v$.form.manual.date)"
                     :disabled="ntpOptionSelected"
@@ -144,14 +147,16 @@
             </BCol>
             <BCol sm="6" lg="4" xl="3">
               <BFormGroup
+                aria-label="time-input-form"
                 :label="$t('pageDateTime.form.time.timezone', { timezone })"
                 label-for="input-manual-time"
               >
                 <BFormText id="time-format-help">HH:MM</BFormText>
-                <BInputGroup>
+                <BInputGroup aria-label="time-input-group">
                   <BFormInput
                     id="input-manual-time"
                     v-model="form.manual.time"
+                    aria-label="time-input"
                     :state="getValidationState(v$.form.manual.time)"
                     :disabled="ntpOptionSelected"
                     data-test-id="dateTime-input-manualTime"
@@ -193,10 +198,11 @@
           <BRow class="mt-3 ms-3">
             <BCol sm="6" lg="4" xl="3">
               <BFormGroup
+                aria-label="static-ntp-server-1-form-group"
                 :label="$t('pageDateTime.form.ntpServers.server1')"
                 label-for="input-ntp-1"
               >
-                <BInputGroup>
+                <BInputGroup aria-label="static-ntp-server-1-input-group">
                   <BFormInput
                     id="input-ntp-1"
                     v-model="form.ntp.firstAddress"
@@ -222,10 +228,11 @@
             </BCol>
             <BCol sm="6" lg="4" xl="3">
               <BFormGroup
+                aria-label="static-ntp-server-2-form-group"
                 :label="$t('pageDateTime.form.ntpServers.server2')"
                 label-for="input-ntp-2"
               >
-                <BInputGroup>
+                <BInputGroup aria-label="static-ntp-server-2-input-group">
                   <BFormInput
                     id="input-ntp-2"
                     v-model="form.ntp.secondAddress"
@@ -250,10 +257,11 @@
             </BCol>
             <BCol sm="6" lg="4" xl="3">
               <BFormGroup
+                aria-label="static-ntp-server-3-form-group"
                 :label="$t('pageDateTime.form.ntpServers.server3')"
                 label-for="input-ntp-3"
               >
-                <BInputGroup>
+                <BInputGroup aria-label="static-ntp-server-3-input-group">
                   <BFormInput
                     id="input-ntp-3"
                     v-model="form.ntp.thirdAddress"
@@ -597,9 +605,13 @@ const showCollapse = () => {
 }
 .no-underline-link {
   :deep(a) {
+    // For accessiblity compliance
+    color: #084298;
     text-decoration: none;
     &:hover {
       text-decoration: underline;
+      // For accessiblity compliance
+      color: #062c62;
     }
   }
 }

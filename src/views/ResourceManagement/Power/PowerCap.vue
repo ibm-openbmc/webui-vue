@@ -19,16 +19,18 @@
         </BCol>
       </BRow>
 
-      <BForm @submit.prevent="submitForm">
+      <BForm aria-label="power-cap" @submit.prevent="submitForm">
         <BFormGroup
           :disabled="loading || safeMode || powerCapMin === 0"
           class="form-group"
+          aria-label="power-cap-setting"
         >
           <BRow>
             <BCol sm="8" md="6" xl="12">
               <BFormGroup
                 :label="$t('pagePower.powerCapSettingLabel')"
                 class="form-group"
+                aria-label="power-cap-setting-label"
               >
                 <BFormCheckbox
                   v-model="isPowerCapEnabled"
@@ -47,6 +49,7 @@
                 id="input-group-1"
                 :label="$t('pagePower.powerCapLabel')"
                 label-for="input-1"
+                aria-label="power-cap-label"
                 class="form-group"
               >
                 <BFormText id="power-help-text">
