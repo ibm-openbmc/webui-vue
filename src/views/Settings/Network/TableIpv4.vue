@@ -338,9 +338,9 @@ const openChangeDhcpEnabledStateModal = (state) => {
 
 const operationConfirm = () => {
   if (modalValue.value === 'DeleteIpv4TableRow') {
-    deleteIpv4Address(modalPayload.value.newIpv4Array).catch(() => {});
+    deleteIpv4Address(modalPayload.value.newIpv4Array);
   } else if (modalValue.value === 'ChangeDhcpEnabledState') {
-    saveDhcpEnabledState(modalPayload.value.state).catch(() => {});
+    saveDhcpEnabledState(modalPayload.value.state);
   }
 };
 

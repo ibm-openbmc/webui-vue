@@ -329,15 +329,15 @@ const initIpv6Modal = () => {
 };
 
 const operationConfirm = () => {
-  deleteIpv6Address(modalPayload.value.newIpv6Array).catch(() => {});
+  deleteIpv6Address(modalPayload.value.newIpv6Array);
 };
 
 const changeIpv6DhcpEnabledState = (state) => {
-  saveIpv6DhcpEnabledState(state).catch(() => {});
+  saveIpv6DhcpEnabledState(state);
 };
 
 const changeIpv6AutoConfigState = (state) => {
-  saveIpv6AutoConfigState(state).catch(() => {});
+  saveIpv6AutoConfigState(state);
 };
 </script>
 

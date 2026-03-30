@@ -249,529 +249,493 @@ export function useNetwork() {
     }, delay);
   };
 
-  // Simplified mutation functions using usePatchResource
+  // Mutation functions using usePatchResource with onError pattern
   async function saveDomainNameState(domainState: boolean): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'DHCPv4.UseDomainName',
-        value: domainState,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.domainName'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save domain name state:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.domainName'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'DHCPv4.UseDomainName',
+      value: domainState,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.domainName'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save domain name state:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.domainName'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveDnsState(dnsState: boolean): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'DHCPv4.UseDNSServers',
-        value: dnsState,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.dns'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save DNS state:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.dns'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'DHCPv4.UseDNSServers',
+      value: dnsState,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.dns'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save DNS state:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.dns'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveNtpState(ntpState: boolean): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'DHCPv4.UseNTPServers',
-        value: ntpState,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.ntp'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save NTP state:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.ntp'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'DHCPv4.UseNTPServers',
+      value: ntpState,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ntp'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save NTP state:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ntp'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveDhcpEnabledState(dhcpState: boolean): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'DHCPv4.DHCPEnabled',
-        value: dhcpState,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.dhcp'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save DHCP enabled state:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.dhcp'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'DHCPv4.DHCPEnabled',
+      value: dhcpState,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.dhcp'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save DHCP enabled state:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.dhcp'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveLLDPState(lldpState: boolean): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/DedicatedNetworkPorts/${getCurrentInterfaceId()}`,
-        field: 'Ethernet.LLDPEnabled',
-        value: lldpState,
-        invalidateQueries: [lldpQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.lldp'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save LLDP state:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.lldp'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/DedicatedNetworkPorts/${getCurrentInterfaceId()}`,
+      field: 'Ethernet.LLDPEnabled',
+      value: lldpState,
+      invalidateQueries: [lldpQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.lldp'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save LLDP state:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.lldp'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveIpv6DhcpEnabledState(dhcpState: boolean): Promise<string> {
-    try {
-      const updatedDhcpState = dhcpState ? 'Enabled' : 'Disabled';
+    const updatedDhcpState = dhcpState ? 'Enabled' : 'Disabled';
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'DHCPv6.OperatingMode',
-        value: updatedDhcpState,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.dhcp'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save IPv6 DHCP enabled state:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.dhcp'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'DHCPv6.OperatingMode',
+      value: updatedDhcpState,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.dhcp'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save IPv6 DHCP enabled state:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.dhcp'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveIpv6AutoConfigState(
     ipv6AutoConfigState: boolean,
   ): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'StatelessAddressAutoConfig.IPv6AutoConfigEnabled',
-        value: ipv6AutoConfigState,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.ipv6AutoConfig'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save IPv6 auto-config state:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.ipv6AutoConfig'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'StatelessAddressAutoConfig.IPv6AutoConfigEnabled',
+      value: ipv6AutoConfigState,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv6AutoConfig'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save IPv6 auto-config state:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv6AutoConfig'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function updateIpv4Address(
     newIpv4Address: IPv4Address[],
   ): Promise<string> {
-    try {
-      const originalAddresses =
-        networkSettings.value[selectedInterfaceIndex.value].staticIpv4Addresses;
+    const originalAddresses =
+      networkSettings.value[selectedInterfaceIndex.value].staticIpv4Addresses;
 
-      const updatedIpv4 = originalAddresses.map((item) => {
-        const address = item.Address;
-        if (find(newIpv4Address, { Address: address })) {
-          return null;
-        } else {
-          return {};
-        }
-      });
+    const updatedIpv4 = originalAddresses.map((item) => {
+      const address = item.Address;
+      if (find(newIpv4Address, { Address: address })) {
+        return null;
+      } else {
+        return {};
+      }
+    });
 
-      const filteredAddress = newIpv4Address.filter(
-        (item) => item.Subnet !== '',
-      );
+    const filteredAddress = newIpv4Address.filter((item) => item.Subnet !== '');
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'IPv4StaticAddresses',
-        value: [...updatedIpv4, ...filteredAddress],
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.ipv4'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to update IPv4 address:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.ipv4'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'IPv4StaticAddresses',
+      value: [...updatedIpv4, ...filteredAddress],
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv4'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to update IPv4 address:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv4'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function updateIpv6Address(
     newIpv6Address: IPv6Address[],
   ): Promise<string> {
-    try {
-      const originalAddresses =
-        networkSettings.value[selectedInterfaceIndex.value].staticIpv6Addresses;
+    const originalAddresses =
+      networkSettings.value[selectedInterfaceIndex.value].staticIpv6Addresses;
 
-      const updatedIpv6 = originalAddresses.map((item) => {
-        const address = item.Address;
-        if (find(newIpv6Address, { Address: address })) {
-          return null;
-        } else {
-          return {};
-        }
-      });
+    const updatedIpv6 = originalAddresses.map((item) => {
+      const address = item.Address;
+      if (find(newIpv6Address, { Address: address })) {
+        return null;
+      } else {
+        return {};
+      }
+    });
 
-      const filteredAddress = newIpv6Address.filter(
-        (item) => item.PrefixLength !== 0,
-      );
+    const filteredAddress = newIpv6Address.filter(
+      (item) => item.PrefixLength !== 0,
+    );
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'IPv6StaticAddresses',
-        value: [...updatedIpv6, ...filteredAddress],
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.ipv6'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to update IPv6 address:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.ipv6'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'IPv6StaticAddresses',
+      value: [...updatedIpv6, ...filteredAddress],
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv6'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to update IPv6 address:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv6'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function updateIpv6StaticDefaultGatewayAddress(
     newIpv6StaticDefaultGatewayAddress: IPv6StaticDefaultGateway[],
   ): Promise<string> {
-    try {
-      const originalAddresses =
-        networkSettings.value[selectedInterfaceIndex.value]
-          .ipv6StaticDefaultGateways;
+    const originalAddresses =
+      networkSettings.value[selectedInterfaceIndex.value]
+        .ipv6StaticDefaultGateways;
 
-      const updatedIpv6 = originalAddresses.map((item) => {
-        const address = item.Address;
-        if (find(newIpv6StaticDefaultGatewayAddress, { Address: address })) {
-          return null;
-        } else {
-          return {};
-        }
-      });
+    const updatedIpv6 = originalAddresses.map((item) => {
+      const address = item.Address;
+      if (find(newIpv6StaticDefaultGatewayAddress, { Address: address })) {
+        return null;
+      } else {
+        return {};
+      }
+    });
 
-      const filteredAddress = [newIpv6StaticDefaultGatewayAddress[0]];
+    const filteredAddress = [newIpv6StaticDefaultGatewayAddress[0]];
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'IPv6StaticDefaultGateways',
-        value: [...updatedIpv6, ...filteredAddress],
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.ipv6StaticDefaultGateway'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to update IPv6 static default gateway:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.ipv6StaticDefaultGateway'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'IPv6StaticDefaultGateways',
+      value: [...updatedIpv6, ...filteredAddress],
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv6StaticDefaultGateway'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to update IPv6 static default gateway:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.ipv6StaticDefaultGateway'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function deleteIpv4Address(
     updatedIpv4Array: IPv4Address[],
   ): Promise<string> {
-    try {
-      const originalAddressArray =
-        networkSettings.value[selectedInterfaceIndex.value].staticIpv4Addresses;
+    const originalAddressArray =
+      networkSettings.value[selectedInterfaceIndex.value].staticIpv4Addresses;
 
-      // updatedIpv4Array contains addresses to KEEP, not delete
-      const newIpv4Array = originalAddressArray.map((item) => {
-        const address = item.Address;
-        if (find(updatedIpv4Array, { Address: address })) {
-          return {}; // Keep addresses that match the updated array
-        } else {
-          return null; // Delete addresses that do not match updated array
-        }
-      });
+    // updatedIpv4Array contains addresses to KEEP, not delete
+    const newIpv4Array = originalAddressArray.map((item) => {
+      const address = item.Address;
+      if (find(updatedIpv4Array, { Address: address })) {
+        return {}; // Keep addresses that match the updated array
+      } else {
+        return null; // Delete addresses that do not match updated array
+      }
+    });
 
-      // Ensure at least one element exists in the array (null or {})
-      const finalArray = newIpv4Array.length > 0 ? newIpv4Array : [null];
+    // Ensure at least one element exists in the array (null or {})
+    const finalArray = newIpv4Array.length > 0 ? newIpv4Array : [null];
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'IPv4StaticAddresses',
-        value: finalArray,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successDeletingIpv4Server'),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to delete IPv4 address:', error);
-      errorToast(i18n.global.t('pageNetwork.toast.errorDeletingIpv4Server'));
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'IPv4StaticAddresses',
+      value: finalArray,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successDeletingIpv4Server'),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to delete IPv4 address:', error);
+        errorToast(i18n.global.t('pageNetwork.toast.errorDeletingIpv4Server'));
+      },
+    });
+    return 'success';
   }
 
   async function deleteIpv6Address(
     updatedIpv6Array: IPv6Address[],
   ): Promise<string> {
-    try {
-      const originalAddressArray =
-        networkSettings.value[selectedInterfaceIndex.value].staticIpv6Addresses;
+    const originalAddressArray =
+      networkSettings.value[selectedInterfaceIndex.value].staticIpv6Addresses;
 
-      // updatedIpv6Array contains addresses to KEEP, not delete
-      const newIpv6Array = originalAddressArray.map((item) => {
-        const address = item.Address;
-        if (find(updatedIpv6Array, { Address: address })) {
-          return {}; // Keep addresses that match the updated array
-        } else {
-          return null; // Delete addresses that do not match updated array
-        }
-      });
+    // updatedIpv6Array contains addresses to KEEP, not delete
+    const newIpv6Array = originalAddressArray.map((item) => {
+      const address = item.Address;
+      if (find(updatedIpv6Array, { Address: address })) {
+        return {}; // Keep addresses that match the updated array
+      } else {
+        return null; // Delete addresses that do not match updated array
+      }
+    });
 
-      // Ensure at least one element exists in the array (null or {})
-      const finalArray = newIpv6Array.length > 0 ? newIpv6Array : [null];
+    // Ensure at least one element exists in the array (null or {})
+    const finalArray = newIpv6Array.length > 0 ? newIpv6Array : [null];
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'IPv6StaticAddresses',
-        value: finalArray,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successDeletingIpv6Server'),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to delete IPv6 address:', error);
-      errorToast(i18n.global.t('pageNetwork.toast.errorDeletingIpv6Server'));
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'IPv6StaticAddresses',
+      value: finalArray,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successDeletingIpv6Server'),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to delete IPv6 address:', error);
+        errorToast(i18n.global.t('pageNetwork.toast.errorDeletingIpv6Server'));
+      },
+    });
+    return 'success';
   }
 
   async function deleteIpv6StaticDefaultGatewayAddress(
     updatedIpv6Array: IPv6StaticDefaultGateway[],
   ): Promise<string> {
-    try {
-      const originalAddressArray =
-        networkSettings.value[selectedInterfaceIndex.value]
-          .ipv6StaticDefaultGateways;
+    const originalAddressArray =
+      networkSettings.value[selectedInterfaceIndex.value]
+        .ipv6StaticDefaultGateways;
 
-      // updatedIpv6Array contains addresses to KEEP, not delete
-      const newIpv6Array = originalAddressArray.map((item) => {
-        const address = item.Address;
-        if (find(updatedIpv6Array, { Address: address })) {
-          return {}; // Keep addresses that match the updated array
-        } else {
-          return null; // Delete addresses that do not match updated array
-        }
-      });
+    // updatedIpv6Array contains addresses to KEEP, not delete
+    const newIpv6Array = originalAddressArray.map((item) => {
+      const address = item.Address;
+      if (find(updatedIpv6Array, { Address: address })) {
+        return {}; // Keep addresses that match the updated array
+      } else {
+        return null; // Delete addresses that do not match updated array
+      }
+    });
 
-      // Ensure at least one element exists in the array (null or {})
-      const finalArray = newIpv6Array.length > 0 ? newIpv6Array : [null];
+    // Ensure at least one element exists in the array (null or {})
+    const finalArray = newIpv6Array.length > 0 ? newIpv6Array : [null];
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'IPv6StaticDefaultGateways',
-        value: finalArray,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t(
-              'pageNetwork.toast.successDeletingIpv6StaticDefaultGateway',
-            ),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to delete IPv6 static default gateway:', error);
-      errorToast(
-        i18n.global.t(
-          'pageNetwork.toast.errorDeletingIpv6StaticDefaultGateway',
-        ),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'IPv6StaticDefaultGateways',
+      value: finalArray,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t(
+            'pageNetwork.toast.successDeletingIpv6StaticDefaultGateway',
+          ),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to delete IPv6 static default gateway:', error);
+        errorToast(
+          i18n.global.t(
+            'pageNetwork.toast.errorDeletingIpv6StaticDefaultGateway',
+          ),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveHostname(hostname: { HostName: string }): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'HostName',
-        value: hostname.HostName,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-              setting: i18n.global.t('pageNetwork.network'),
-            }),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save hostname:', error);
-      errorToast(
-        i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.network'),
-        }),
-      );
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'HostName',
+      value: hostname.HostName,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.network'),
+          }),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to save hostname:', error);
+        errorToast(
+          i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
+            setting: i18n.global.t('pageNetwork.network'),
+          }),
+        );
+      },
+    });
+    return 'success';
   }
 
   async function saveDnsAddress(dnsForm: string[]): Promise<string> {
-    try {
-      const originalAddresses =
-        networkSettings.value[selectedInterfaceIndex.value].staticNameServers;
-      const newDnsArray = originalAddresses.concat(dnsForm);
+    const originalAddresses =
+      networkSettings.value[selectedInterfaceIndex.value].staticNameServers;
+    const newDnsArray = originalAddresses.concat(dnsForm);
 
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'StaticNameServers',
-        value: newDnsArray,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successAddingDnsServer'),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to save DNS address:', error);
-      errorToast(i18n.global.t('pageNetwork.toast.errorAddingDnsServer'));
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'StaticNameServers',
+      value: newDnsArray,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(i18n.global.t('pageNetwork.toast.successAddingDnsServer'));
+      },
+      onError: (error) => {
+        console.error('Failed to save DNS address:', error);
+        errorToast(i18n.global.t('pageNetwork.toast.errorAddingDnsServer'));
+      },
+    });
+    return 'success';
   }
 
   async function editDnsAddress(dnsTableData: string[]): Promise<string> {
-    try {
-      await patchResource({
-        endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
-        field: 'StaticNameServers',
-        value: dnsTableData,
-        invalidateQueries: [ethernetQueryKey],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pageNetwork.toast.successDeletingDnsServer'),
-          );
-        },
-      });
-      return 'success';
-    } catch (error) {
-      console.error('Failed to edit DNS address:', error);
-      errorToast(i18n.global.t('pageNetwork.toast.errorDeletingDnsServer'));
-      throw error;
-    }
+    await patchResource({
+      endpoint: `/redfish/v1/Managers/bmc/EthernetInterfaces/${getCurrentInterfaceId()}`,
+      field: 'StaticNameServers',
+      value: dnsTableData,
+      invalidateQueries: [ethernetQueryKey],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageNetwork.toast.successDeletingDnsServer'),
+        );
+      },
+      onError: (error) => {
+        console.error('Failed to edit DNS address:', error);
+        errorToast(i18n.global.t('pageNetwork.toast.errorDeletingDnsServer'));
+      },
+    });
+    return 'success';
   }
 
   // Set selected interface

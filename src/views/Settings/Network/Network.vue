@@ -223,10 +223,10 @@ const saveIpv4Address = (modalFormData) => {
     //Edit selected row
     const selectedRow = { Address: ipAddress.value, Subnet: '' };
     const editRow = modalData.concat(selectedRow);
-    updateIpv4Address(editRow).catch(() => {});
+    updateIpv4Address(editRow);
   } else {
     // Add new address
-    updateIpv4Address(modalData).catch(() => {});
+    updateIpv4Address(modalData);
   }
 };
 
@@ -236,10 +236,10 @@ const saveIpv6Address = (modalFormData) => {
     //Edit selected row
     const selectedRow = { Address: ipAddress.value, PrefixLength: 0 };
     const editRow = modalData.concat(selectedRow);
-    updateIpv6Address(editRow).catch(() => {});
+    updateIpv6Address(editRow);
   } else {
     // Add new address
-    updateIpv6Address(modalData).catch(() => {});
+    updateIpv6Address(modalData);
   }
 };
 
@@ -251,21 +251,19 @@ const saveIpv6StaticDefaultGatewayAddress = (modalFormData) => {
       Address: ipAddressIpv6StaticDefaultGateway.value,
     };
     const editRow = modalData.concat(selectedRow);
-    updateIpv6StaticDefaultGatewayAddress(editRow).catch(() => {});
+    updateIpv6StaticDefaultGatewayAddress(editRow);
   } else {
     // Add new address
-    updateIpv6StaticDefaultGatewayAddress(modalData).catch(() => {});
+    updateIpv6StaticDefaultGatewayAddress(modalData);
   }
 };
 
 const saveDnsAddress = (modalFormData) => {
-  saveDnsAddressAction(modalFormData).catch(() => {});
+  saveDnsAddressAction(modalFormData);
 };
 
 const saveHostname = (modalFormData) => {
-  saveHostnameAction(modalFormData)
-    .then(() => authenticationStore.logout())
-    .catch(() => {});
+  saveHostnameAction(modalFormData).then(() => authenticationStore.logout());
 };
 
 const changeLLDPState = (state) => {

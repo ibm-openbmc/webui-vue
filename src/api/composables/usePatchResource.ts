@@ -97,6 +97,9 @@ export function usePatchResource() {
    * @param params.onSuccess - Optional callback executed immediately after PATCH succeeds,
    *                           before query invalidation/refetch. Useful for showing success
    *                           messages tightly coupled to the PATCH operation.
+   * @param params.onError - Optional callback executed when PATCH fails, before query
+   *                         invalidation/refetch. Useful for showing error messages or
+   *                         logging errors specific to the operation.
    * @returns Promise that resolves with the response data
    * @throws Re-throws the error after rolling back the cache state
    */

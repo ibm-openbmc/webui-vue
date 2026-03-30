@@ -235,9 +235,7 @@ const openDeleteIpv6DefaultGatewayTableRowModal = (item) => {
 };
 
 const operationConfirm = () => {
-  deleteIpv6StaticDefaultGatewayAddress(modalPayload.value.newIpv6Array).catch(
-    () => {},
-  );
+  deleteIpv6StaticDefaultGatewayAddress(modalPayload.value.newIpv6Array);
 };
 
 const initIpv6DefaultGatewayModal = () => {

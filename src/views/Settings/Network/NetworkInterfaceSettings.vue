@@ -165,14 +165,14 @@ const getSettings = () => {
 };
 
 const changeDomainNameState = (state) => {
-  saveDomainNameState(state).catch(() => {});
+  saveDomainNameState(state);
 };
 
 const changeDnsState = (state) => {
-  saveDnsState(state).catch(() => {});
+  saveDnsState(state);
 };
 
 const changeNtpState = (state) => {
-  saveNtpState(state).catch(() => {});
+  saveNtpState(state);
 };
 </script>
