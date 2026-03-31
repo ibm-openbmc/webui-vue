@@ -147,6 +147,15 @@ export const UserManagementStore = defineStore('userManagment', {
           const errorMsg = error.response?.data?.error?.code;
 
           switch (true) {
+            case REGEX_MAPPINGS.resourceAlreadyExists.test(errorMsg):
+              throw new Error(
+                i18n.global.t(
+                  'pageUserManagement.toast.errorCreateUserAlreadyExists',
+                  {
+                    username,
+                  },
+                ),
+              );
             case REGEX_MAPPINGS.propertyValueFormatError.test(errorMsg):
               throw new Error(
                 i18n.global.t(
