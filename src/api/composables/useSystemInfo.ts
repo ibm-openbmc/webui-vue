@@ -183,37 +183,34 @@ export function useUpdateAssetTag() {
     const assetTag =
       typeof assetTagData === 'string' ? assetTagData : assetTagData.AssetTag;
 
-    try {
-      await patchResource({
-        endpoint: '/redfish/v1/Systems/system',
-        field: 'AssetTag',
-        value: assetTag,
-        invalidateQueries: [
-          ['redfish', 'system', 'info'],
-          ['redfish', 'resource', '/redfish/v1/Systems/system'],
-        ],
-        onSuccess: () => {
-          successToast(i18n.global.t('pageOverview.toast.successSaveAssetTag'));
-          // Also clear sessionStorage cache
-          sessionStorage.removeItem(SYSTEM_INFO_STORAGE_KEY);
-        },
-      });
-
-      // Update the cache optimistically
-      queryClient.setQueryData(
+    return patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'AssetTag',
+      value: assetTag,
+      invalidateQueries: [
         ['redfish', 'system', 'info'],
-        (old: SystemInfo | undefined) => {
-          if (old) {
-            return { ...old, assetTag };
-          }
-          return old;
-        },
-      );
-    } catch (err) {
-      console.log('Asset Tag Error:', err);
-      errorToast(i18n.global.t('pageOverview.toast.errorSaveAssetTag'));
-      throw err;
-    }
+        ['redfish', 'resource', '/redfish/v1/Systems/system'],
+      ],
+      onSuccess: () => {
+        successToast(i18n.global.t('pageOverview.toast.successSaveAssetTag'));
+        // Also clear sessionStorage cache
+        sessionStorage.removeItem(SYSTEM_INFO_STORAGE_KEY);
+        // Update the cache optimistically
+        queryClient.setQueryData(
+          ['redfish', 'system', 'info'],
+          (old: SystemInfo | undefined) => {
+            if (old) {
+              return { ...old, assetTag };
+            }
+            return old;
+          },
+        );
+      },
+      onError: (err) => {
+        console.log('Asset Tag Error:', err);
+        errorToast(i18n.global.t('pageOverview.toast.errorSaveAssetTag'));
+      },
+    });
   };
 
   return {

@@ -391,49 +391,48 @@ export function useUpdateIdentifyLed() {
   const { patchResource, isPending, isError, error } = usePatchResource();
 
   const updateIdentifyLed = async (ledState: boolean) => {
-    try {
-      await patchResource({
-        endpoint: '/redfish/v1/Systems/system',
-        field: 'LocationIndicatorActive',
-        value: ledState,
-        invalidateQueries: [
-          ['redfish', 'overview', 'inventory'],
-          ['redfish', 'resource', '/redfish/v1/Systems/system'],
-        ],
-        onSuccess: () => {
-          if (ledState) {
-            successToast(
-              i18n.global.t('pageInventory.toast.successEnableIdentifyLed'),
-            );
-          } else {
-            successToast(
-              i18n.global.t('pageInventory.toast.successDisableIdentifyLed'),
-            );
-          }
-        },
-      });
-
-      // Optimistically update the cache
-      queryClient.setQueryData(
+    return patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'LocationIndicatorActive',
+      value: ledState,
+      invalidateQueries: [
         ['redfish', 'overview', 'inventory'],
-        (old: any) => {
-          if (old) {
-            return { ...old, locationIndicatorActive: ledState };
-          }
-          return old;
-        },
-      );
-    } catch (err) {
-      console.log('Identify LED Error:', err);
-      if (ledState) {
-        errorToast(i18n.global.t('pageInventory.toast.errorEnableIdentifyLed'));
-      } else {
-        errorToast(
-          i18n.global.t('pageInventory.toast.errorDisableIdentifyLed'),
+        ['redfish', 'resource', '/redfish/v1/Systems/system'],
+      ],
+      onSuccess: () => {
+        if (ledState) {
+          successToast(
+            i18n.global.t('pageInventory.toast.successEnableIdentifyLed'),
+          );
+        } else {
+          successToast(
+            i18n.global.t('pageInventory.toast.successDisableIdentifyLed'),
+          );
+        }
+        // Optimistically update the cache
+        queryClient.setQueryData(
+          ['redfish', 'overview', 'inventory'],
+          (old: any) => {
+            if (old) {
+              return { ...old, locationIndicatorActive: ledState };
+            }
+            return old;
+          },
         );
-      }
-      throw err;
-    }
+      },
+      onError: (err) => {
+        console.log('Identify LED Error:', err);
+        if (ledState) {
+          errorToast(
+            i18n.global.t('pageInventory.toast.errorEnableIdentifyLed'),
+          );
+        } else {
+          errorToast(
+            i18n.global.t('pageInventory.toast.errorDisableIdentifyLed'),
+          );
+        }
+      },
+    });
   };
 
   return {

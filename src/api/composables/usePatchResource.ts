@@ -107,6 +107,7 @@ export function usePatchResource() {
     additionalFields,
     invalidateQueries,
     onSuccess,
+    onError,
   }: {
     endpoint: string;
     field: string;
@@ -114,6 +115,7 @@ export function usePatchResource() {
     additionalFields?: Record<string, any>;
     invalidateQueries?: Array<string | string[]>;
     onSuccess?: () => void;
+    onError?: (error: any) => void;
   }) => {
     // Store previous data for rollback on error
     const rollbackQueries: Array<{ queryKey: any; previousData: any }> = [];
@@ -154,6 +156,11 @@ export function usePatchResource() {
 
       return result;
     } catch (error) {
+      // Call onError callback if provided
+      if (onError) {
+        onError(error);
+      }
+
       // On error: Invalidate queries to force immediate refetch from server
       // This ensures the UI reverts to the actual server state
       if (invalidateQueries && invalidateQueries.length > 0) {

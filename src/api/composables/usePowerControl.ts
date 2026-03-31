@@ -79,36 +79,32 @@ export function usePowerControl() {
   });
 
   const setPowerCap = async (params: SetPowerCapParams): Promise<void> => {
-    try {
-      await patchResource({
-        endpoint: '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
-        field: 'PowerLimitWatts',
-        value: {
-          ControlMode: params.powerControlMode,
-          SetPoint: params.powerCap,
-        },
-        invalidateQueries: [
-          [
-            'redfish',
-            'resource',
-            '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
-          ],
+    return patchResource({
+      endpoint: '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
+      field: 'PowerLimitWatts',
+      value: {
+        ControlMode: params.powerControlMode,
+        SetPoint: params.powerCap,
+      },
+      invalidateQueries: [
+        [
+          'redfish',
+          'resource',
+          '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
         ],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t(
-              'pageServerPowerOperations.toast.successSaveSettings',
-            ),
-          );
-        },
-      });
-    } catch (error) {
-      console.log('Power Cap Error:', error);
-      errorToast(
-        i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
-      );
-      throw error;
-    }
+      ],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pageServerPowerOperations.toast.successSaveSettings'),
+        );
+      },
+      onError: (error) => {
+        console.log('Power Cap Error:', error);
+        errorToast(
+          i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+        );
+      },
+    });
   };
 
   return {
@@ -162,25 +158,23 @@ export function usePowerPerformanceMode() {
   const setPowerPerformanceMode = async (
     powerPerformanceMode: string,
   ): Promise<void> => {
-    try {
-      await patchResource({
-        endpoint: '/redfish/v1/Systems/system',
-        field: 'PowerMode',
-        value: powerPerformanceMode,
-        invalidateQueries: [
-          ['redfish', 'resource', '/redfish/v1/Systems/system'],
-        ],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
-          );
-        },
-      });
-    } catch (error) {
-      console.log('Power Performance Mode Error:', error);
-      errorToast(i18n.global.t('pagePower.toast.errorPowerPerformanceModes'));
-      throw error;
-    }
+    return patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'PowerMode',
+      value: powerPerformanceMode,
+      invalidateQueries: [
+        ['redfish', 'resource', '/redfish/v1/Systems/system'],
+      ],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
+        );
+      },
+      onError: (error) => {
+        console.log('Power Performance Mode Error:', error);
+        errorToast(i18n.global.t('pagePower.toast.errorPowerPerformanceModes'));
+      },
+    });
   };
 
   return {
@@ -224,71 +218,65 @@ export function useIdlePowerSaver() {
   const setIdlePowerSaver = async (
     params: SetIdlePowerSaverParams,
   ): Promise<void> => {
-    try {
-      await patchResource({
-        endpoint: '/redfish/v1/Systems/system',
-        field: 'IdlePowerSaver',
-        value: {
-          Enabled: params.isIdlePowerSaverEnabled,
-          EnterDwellTimeSeconds: params.enterDwellTimeSeconds,
-          ExitDwellTimeSeconds: params.exitDwellTimeSeconds,
-          EnterUtilizationPercent: params.enterUtilizationPercent,
-          ExitUtilizationPercent: params.exitUtilizationPercent,
-        },
-        invalidateQueries: [
-          ['redfish', 'resource', '/redfish/v1/Systems/system'],
-        ],
-        onSuccess: () => {
-          successToast(i18n.global.t('pagePower.toast.successIdlePower'));
-        },
-      });
-    } catch (error) {
-      console.log('Idle Power Saver Error:', error);
-      errorToast(i18n.global.t('pagePower.toast.errorIdlePower'));
-      throw error;
-    }
+    return patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'IdlePowerSaver',
+      value: {
+        Enabled: params.isIdlePowerSaverEnabled,
+        EnterDwellTimeSeconds: params.enterDwellTimeSeconds,
+        ExitDwellTimeSeconds: params.exitDwellTimeSeconds,
+        EnterUtilizationPercent: params.enterUtilizationPercent,
+        ExitUtilizationPercent: params.exitUtilizationPercent,
+      },
+      invalidateQueries: [
+        ['redfish', 'resource', '/redfish/v1/Systems/system'],
+      ],
+      onSuccess: () => {
+        successToast(i18n.global.t('pagePower.toast.successIdlePower'));
+      },
+      onError: (error) => {
+        console.log('Idle Power Saver Error:', error);
+        errorToast(i18n.global.t('pagePower.toast.errorIdlePower'));
+      },
+    });
   };
 
   const resetIdlePowerSaver = async (): Promise<void> => {
-    try {
-      await patchResource({
-        endpoint: '/redfish/v1/Systems/system',
-        field: 'IdlePowerSaver.ExitUtilizationPercent',
-        value: 0,
-        invalidateQueries: [
-          ['redfish', 'resource', '/redfish/v1/Systems/system'],
-        ],
-        onSuccess: () => {
-          successToast(i18n.global.t('pagePower.toast.successIdlePowerReset'));
-        },
-      });
-    } catch (error) {
-      console.log('Idle Power Saver Reset Error:', error);
-      errorToast(i18n.global.t('pagePower.toast.errorIdlePowerReset'));
-      throw error;
-    }
+    return patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'IdlePowerSaver.ExitUtilizationPercent',
+      value: 0,
+      invalidateQueries: [
+        ['redfish', 'resource', '/redfish/v1/Systems/system'],
+      ],
+      onSuccess: () => {
+        successToast(i18n.global.t('pagePower.toast.successIdlePowerReset'));
+      },
+      onError: (error) => {
+        console.log('Idle Power Saver Reset Error:', error);
+        errorToast(i18n.global.t('pagePower.toast.errorIdlePowerReset'));
+      },
+    });
   };
 
   const setIdlePowerSaverEnable = async (enabled: boolean): Promise<void> => {
-    try {
-      await patchResource({
-        endpoint: '/redfish/v1/Systems/system',
-        field: 'IdlePowerSaver.Enabled',
-        value: enabled,
-        invalidateQueries: [
-          ['redfish', 'resource', '/redfish/v1/Systems/system'],
-        ],
-        onSuccess: () => {
-          successToast(
-            i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
-          );
-        },
-      });
-    } catch (error) {
-      console.log('Idle Power Saver Enable Error:', error);
-      errorToast(i18n.global.t('pagePower.toast.errorPowerPerformanceModes'));
-      throw error;
-    }
+    return patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'IdlePowerSaver.Enabled',
+      value: enabled,
+      invalidateQueries: [
+        ['redfish', 'resource', '/redfish/v1/Systems/system'],
+      ],
+      onSuccess: () => {
+        successToast(
+          i18n.global.t('pagePower.toast.successPowerPerformanceModes'),
+        );
+      },
+      onError: (error) => {
+        console.log('Idle Power Saver Enable Error:', error);
+        errorToast(i18n.global.t('pagePower.toast.errorPowerPerformanceModes'));
+      },
+    });
   };
 
   return {
