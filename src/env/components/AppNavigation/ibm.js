@@ -275,12 +275,6 @@ const AppNavigationData = () => {
       route: '/notices',
       icon: IconDocument,
     },
-    {
-      id: 'documents',
-      label: i18n.global.t('appNavigation.documents'),
-      route: '/documents',
-      icon: IconDocument,
-    },
   ];
 
   const navigationData = ref([]);

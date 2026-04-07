@@ -1,4 +1,7 @@
 import enUS from '@/locales/en-US.json';
+import { hostConsoleSearchContent } from '@/views/Operations/HostConsole/HostConsoleSearchContent.js';
+import { firmwareSearchContent } from '@/views/Operations/Firmware/FirmwareSearchContent.js';
+import { ldapSearchContent } from '@/views/SecurityAndAccess/Ldap/LdapSearchContent.js';
 
 /**
  * Extract all text values from a nested object
@@ -69,6 +72,86 @@ function buildSearchIndex(routes) {
       .forEach((segment) => {
         searchableContent.add(segment.toLowerCase().replace(/-/g, ' '));
       });
+
+    // Add custom search content for specific routes
+    if (routeName === 'host-console') {
+      // Add description
+      if (hostConsoleSearchContent.description) {
+        searchableContent.add(
+          hostConsoleSearchContent.description.toLowerCase(),
+        );
+      }
+      // Add features
+      if (hostConsoleSearchContent.features) {
+        hostConsoleSearchContent.features.forEach((feature) => {
+          searchableContent.add(feature.toLowerCase());
+        });
+      }
+      // Add keywords
+      if (hostConsoleSearchContent.keywords) {
+        hostConsoleSearchContent.keywords.forEach((keyword) => {
+          searchableContent.add(keyword.toLowerCase());
+        });
+      }
+      // Add related terms
+      if (hostConsoleSearchContent.relatedTerms) {
+        hostConsoleSearchContent.relatedTerms.forEach((term) => {
+          searchableContent.add(term.toLowerCase());
+        });
+      }
+    }
+
+    // Add custom search content for Firmware page
+    if (routeName === 'firmware') {
+      // Add description
+      if (firmwareSearchContent.description) {
+        searchableContent.add(firmwareSearchContent.description.toLowerCase());
+      }
+      // Add features
+      if (firmwareSearchContent.features) {
+        firmwareSearchContent.features.forEach((feature) => {
+          searchableContent.add(feature.toLowerCase());
+        });
+      }
+      // Add keywords
+      if (firmwareSearchContent.keywords) {
+        firmwareSearchContent.keywords.forEach((keyword) => {
+          searchableContent.add(keyword.toLowerCase());
+        });
+      }
+      // Add related terms
+      if (firmwareSearchContent.relatedTerms) {
+        firmwareSearchContent.relatedTerms.forEach((term) => {
+          searchableContent.add(term.toLowerCase());
+        });
+      }
+    }
+
+    // Add custom search content for LDAP page
+    if (routeName === 'ldap') {
+      // Add description
+      if (ldapSearchContent.description) {
+        searchableContent.add(ldapSearchContent.description.toLowerCase());
+      }
+      // Add features
+      if (ldapSearchContent.features) {
+        ldapSearchContent.features.forEach((feature) => {
+          searchableContent.add(feature.toLowerCase());
+        });
+      }
+      // Add keywords
+      if (ldapSearchContent.keywords) {
+        ldapSearchContent.keywords.forEach((keyword) => {
+          searchableContent.add(keyword.toLowerCase());
+        });
+      }
+      // Add related terms
+      if (ldapSearchContent.relatedTerms) {
+        ldapSearchContent.relatedTerms.forEach((term) => {
+          searchableContent.add(term.toLowerCase());
+        });
+      }
+    }
 
     // Try to find related content in the localization file
     const possibleSections = [
