@@ -14,7 +14,7 @@ export const PoliciesStore = defineStore('policies', {
       tpmPolicyEnabled: false,
       usbFirmwareUpdatePolicyEnabled: false,
       hostUsbEnabled: 'Enabled',
-      basicAuthEnabled: true,
+      basicAuthEnabled: false,
     };
   },
   getters: {
@@ -70,7 +70,7 @@ export const PoliciesStore = defineStore('policies', {
         .get('/redfish/v1/AccountService')
         .then((response) => {
           this.basicAuthEnabled =
-            response?.data?.Oem?.OpenBMC?.AuthMethods?.BasicAuth;
+            response?.data?.HTTPBasicAuth === 'Enabled' ? true : false;
         })
         .catch((error) => console.log(error));
     },
@@ -347,10 +347,10 @@ export const PoliciesStore = defineStore('policies', {
         });
     },
     async saveBasicAuthEnabled(updatedBasicAuth) {
-      this.basicAuthEnabled = updatedBasicAuth;
+      this.basicAuthEnabled = updatedBasicAuth === 'Enabled' ? true : false;
       return await api
         .patch('/redfish/v1/AccountService', {
-          Oem: { OpenBMC: { AuthMethods: { BasicAuth: updatedBasicAuth } } },
+          HTTPBasicAuth: updatedBasicAuth,
         })
         .then(() => {
           return i18n.global.t(
@@ -362,7 +362,7 @@ export const PoliciesStore = defineStore('policies', {
         })
         .catch((error) => {
           console.log(error);
-          this.basicAuthEnabled = !updatedBasicAuth;
+          this.basicAuthEnabled = updatedBasicAuth === 'Enabled' ? false : true;
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.basicAuth'),

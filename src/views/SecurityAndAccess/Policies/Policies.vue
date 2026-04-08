@@ -370,7 +370,7 @@ const changeHostUsbState = (state) => {
     });
 };
 const changeBasicAuthState = (state) => {
-  Policies.saveBasicAuthEnabled(state)
+  Policies.saveBasicAuthEnabled(state ? 'Enabled' : 'Disabled')
     .then((message) => {
       Toast.successToast(message);
     })
