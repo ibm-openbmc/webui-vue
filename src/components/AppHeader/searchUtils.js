@@ -2,6 +2,37 @@ import enUS from '@/locales/en-US.json';
 import { hostConsoleSearchContent } from '@/views/Operations/HostConsole/HostConsoleSearchContent.js';
 import { firmwareSearchContent } from '@/views/Operations/Firmware/FirmwareSearchContent.js';
 import { ldapSearchContent } from '@/views/SecurityAndAccess/Ldap/LdapSearchContent.js';
+import { rebootBmcSearchContent } from '@/views/Operations/RebootBmc/RebootBmcSearchContent.js';
+import { serverPowerOperationsSearchContent } from '@/views/Operations/ServerPowerOperations/ServerPowerOperationsSearchContent.js';
+import { serviceLoginConsolesSearchContent } from '@/views/Operations/ServiceLoginConsoles/ServiceLoginConsolesSearchContent.js';
+import { memorySearchContent } from '@/views/ResourceManagement/Memory/MemorySearchContent.js';
+import { powerSearchContent } from '@/views/ResourceManagement/Power/PowerSearchContent.js';
+import { capacityOnDemandSearchContent } from '@/views/ResourceManagement/CapacityOnDemand/CapacityOnDemandSearchContent.js';
+import { fieldCoreOverrideSearchContent } from '@/views/ResourceManagement/FieldCoreOverride/FieldCoreOverrideSearchContent.js';
+import { systemParametersSearchContent } from '@/views/ResourceManagement/SystemParameters/SystemParametersSearchContent.js';
+import { inventorySearchContent } from '@/views/HardwareStatus/Inventory/InventorySearchContent.js';
+import { sensorsSearchContent } from '@/views/HardwareStatus/Sensors/SensorsSearchContent.js';
+import { hardwareDeconfigurationSearchContent } from '@/views/Settings/HardwareDeconfiguration/HardwareDeconfigurationSearchContent.js';
+import { pcieTopologySearchContent } from '@/views/HardwareStatus/PcieTopology/PcieTopologySearchContent.js';
+import { postCodeLogsSearchContent } from '@/views/Logs/PostCodeLogs/PostCodeLogsSearchContent.js';
+import { eventLogsSearchContent } from '@/views/Logs/EventLogs/EventLogsSearchContent.js';
+import { auditLogsSearchContent } from '@/views/Logs/AuditLogs/AuditLogsSearchContent.js';
+import { dumpsSearchContent } from '@/views/Logs/Dumps/DumpsSearchContent.js';
+import { deconfigurationRecordsSearchContent } from '@/views/Logs/DeconfigurationRecords/DeconfigurationRecordsSearchContent.js';
+import { dateTimeSearchContent } from '@/views/Settings/DateTime/DateTimeSearchContent.js';
+import { networkSearchContent } from '@/views/Settings/Network/NetworkSearchContent.js';
+import { powerRestorePolicySearchContent } from '@/views/Settings/PowerRestorePolicy/PowerRestorePolicySearchContent.js';
+import { snmpAlertsSearchContent } from '@/views/Settings/SnmpAlerts/SnmpAlertsSearchContent.js';
+import { factoryResetSearchContent } from '@/views/Operations/FactoryReset/FactoryResetSearchContent.js';
+import { sessionsSearchContent } from '@/views/SecurityAndAccess/Sessions/SessionsSearchContent.js';
+import { userManagementSearchContent } from '@/views/SecurityAndAccess/UserManagement/UserManagementSearchContent.js';
+import { certificatesSearchContent } from '@/views/SecurityAndAccess/Certificates/CertificatesSearchContent.js';
+import { policiesSearchContent } from '@/views/SecurityAndAccess/Policies/PoliciesSearchContent.js';
+import { keyClearSearchContent } from '@/views/Operations/KeyClear/KeyClearSearchContent.js';
+import { noticesSearchContent } from '@/views/Notices/NoticesSearchContent.js';
+import { profileSettingsSearchContent } from '@/views/ProfileSettings/ProfileSettingsSearchContent.js';
+import { concurrentMaintenanceSearchContent } from '@/views/HardwareStatus/ConcurrentMaintenance/ConcurrentMaintenanceSearchContent.js';
+import { ibmiServiceFunctionsSearchContent } from '@/views/Logs/IBMiServiceFunctions/IBMiServiceFunctionsSearchContent.js';
 
 /**
  * Extract all text values from a nested object
@@ -73,84 +104,69 @@ function buildSearchIndex(routes) {
         searchableContent.add(segment.toLowerCase().replace(/-/g, ' '));
       });
 
-    // Add custom search content for specific routes
-    if (routeName === 'host-console') {
-      // Add description
-      if (hostConsoleSearchContent.description) {
-        searchableContent.add(
-          hostConsoleSearchContent.description.toLowerCase(),
-        );
+    // Helper function to add search content
+    const addSearchContent = (content) => {
+      if (content.description) {
+        searchableContent.add(content.description.toLowerCase());
       }
-      // Add features
-      if (hostConsoleSearchContent.features) {
-        hostConsoleSearchContent.features.forEach((feature) => {
+      if (content.features) {
+        content.features.forEach((feature) => {
           searchableContent.add(feature.toLowerCase());
         });
       }
-      // Add keywords
-      if (hostConsoleSearchContent.keywords) {
-        hostConsoleSearchContent.keywords.forEach((keyword) => {
+      if (content.keywords) {
+        content.keywords.forEach((keyword) => {
           searchableContent.add(keyword.toLowerCase());
         });
       }
-      // Add related terms
-      if (hostConsoleSearchContent.relatedTerms) {
-        hostConsoleSearchContent.relatedTerms.forEach((term) => {
+      if (content.relatedTerms) {
+        content.relatedTerms.forEach((term) => {
           searchableContent.add(term.toLowerCase());
         });
       }
-    }
+    };
 
-    // Add custom search content for Firmware page
-    if (routeName === 'firmware') {
-      // Add description
-      if (firmwareSearchContent.description) {
-        searchableContent.add(firmwareSearchContent.description.toLowerCase());
-      }
-      // Add features
-      if (firmwareSearchContent.features) {
-        firmwareSearchContent.features.forEach((feature) => {
-          searchableContent.add(feature.toLowerCase());
-        });
-      }
-      // Add keywords
-      if (firmwareSearchContent.keywords) {
-        firmwareSearchContent.keywords.forEach((keyword) => {
-          searchableContent.add(keyword.toLowerCase());
-        });
-      }
-      // Add related terms
-      if (firmwareSearchContent.relatedTerms) {
-        firmwareSearchContent.relatedTerms.forEach((term) => {
-          searchableContent.add(term.toLowerCase());
-        });
-      }
-    }
+    // Map of route names to their search content
+    const routeSearchContentMap = {
+      'host-console': hostConsoleSearchContent,
+      firmware: firmwareSearchContent,
+      ldap: ldapSearchContent,
+      'reboot-bmc': rebootBmcSearchContent,
+      'server-power-operations': serverPowerOperationsSearchContent,
+      'service-login': serviceLoginConsolesSearchContent,
+      memory: memorySearchContent,
+      power: powerSearchContent,
+      'capacity-on-demand': capacityOnDemandSearchContent,
+      'field-core-override': fieldCoreOverrideSearchContent,
+      'system-parameters': systemParametersSearchContent,
+      inventory: inventorySearchContent,
+      sensors: sensorsSearchContent,
+      'hardware-deconfiguration': hardwareDeconfigurationSearchContent,
+      'pcie-topology': pcieTopologySearchContent,
+      'post-code-logs': postCodeLogsSearchContent,
+      'event-logs': eventLogsSearchContent,
+      'audit-logs': auditLogsSearchContent,
+      dumps: dumpsSearchContent,
+      'deconfiguration-records': deconfigurationRecordsSearchContent,
+      'date-time': dateTimeSearchContent,
+      network: networkSearchContent,
+      'power-restore-policy': powerRestorePolicySearchContent,
+      'snmp-alerts': snmpAlertsSearchContent,
+      'factory-reset': factoryResetSearchContent,
+      sessions: sessionsSearchContent,
+      'local-users': userManagementSearchContent,
+      certificates: certificatesSearchContent,
+      policies: policiesSearchContent,
+      'key-clear': keyClearSearchContent,
+      notices: noticesSearchContent,
+      'profile-settings': profileSettingsSearchContent,
+      'concurrent-maintenance': concurrentMaintenanceSearchContent,
+      'ibmi-service-functions': ibmiServiceFunctionsSearchContent,
+    };
 
-    // Add custom search content for LDAP page
-    if (routeName === 'ldap') {
-      // Add description
-      if (ldapSearchContent.description) {
-        searchableContent.add(ldapSearchContent.description.toLowerCase());
-      }
-      // Add features
-      if (ldapSearchContent.features) {
-        ldapSearchContent.features.forEach((feature) => {
-          searchableContent.add(feature.toLowerCase());
-        });
-      }
-      // Add keywords
-      if (ldapSearchContent.keywords) {
-        ldapSearchContent.keywords.forEach((keyword) => {
-          searchableContent.add(keyword.toLowerCase());
-        });
-      }
-      // Add related terms
-      if (ldapSearchContent.relatedTerms) {
-        ldapSearchContent.relatedTerms.forEach((term) => {
-          searchableContent.add(term.toLowerCase());
-        });
-      }
+    // Add custom search content if available for this route
+    if (routeSearchContentMap[routeName]) {
+      addSearchContent(routeSearchContentMap[routeName]);
     }
 
     // Try to find related content in the localization file

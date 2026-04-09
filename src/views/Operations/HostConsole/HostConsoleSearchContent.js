@@ -1,11 +1,3 @@
-/**
- * Host Console Search Content
- *
- * This file contains searchable keywords and descriptions for the Host Console page.
- * These terms will be indexed by the search utility to make the Host Console page
- * discoverable when users search in the header search bar.
- */
-
 export const hostConsoleSearchContent = {
   // Main description
   description:

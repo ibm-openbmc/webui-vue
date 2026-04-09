@@ -1,11 +1,3 @@
-/**
- * LDAP Search Content
- *
- * This file contains searchable keywords and descriptions for the LDAP page.
- * These terms will be indexed by the search utility to make the LDAP page
- * discoverable when users search in the header search bar.
- */
-
 export const ldapSearchContent = {
   // Main description
   description:

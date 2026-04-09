@@ -1,11 +1,3 @@
-/**
- * Firmware Search Content
- *
- * This file contains searchable keywords and descriptions for the Firmware page.
- * These terms will be indexed by the search utility to make the Firmware page
- * discoverable when users search in the header search bar.
- */
-
 export const firmwareSearchContent = {
   // Main description
   description:
