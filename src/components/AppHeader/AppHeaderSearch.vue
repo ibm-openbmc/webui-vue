@@ -62,24 +62,12 @@
               <icon-arrow-right class="result-icon" />
               <div class="result-text">
                 <div class="result-title">{{ route.title }}</div>
-                <div v-if="route.description" class="result-description">
-                  {{ route.description }}
-                </div>
-                <div
-                  v-if="
-                    route.matchedKeywords && route.matchedKeywords.length > 0
-                  "
-                  class="result-keywords"
-                >
-                  <span
-                    v-for="keyword in route.matchedKeywords"
-                    :key="keyword"
-                    class="keyword-badge"
-                  >
-                    {{ keyword }}
+                <div class="result-path">
+                  <span v-if="route.category" class="path-category">
+                    {{ route.category }} >
                   </span>
+                  <span class="path-page">{{ route.title }}</span>
                 </div>
-                <div class="result-path">{{ route.path }}</div>
               </div>
             </div>
           </li>
@@ -106,14 +94,37 @@ import IconSearch from '@carbon/icons-vue/es/search/20';
 import IconClose from '@carbon/icons-vue/es/close/20';
 import IconArrowRight from '@carbon/icons-vue/es/arrow--right/20';
 import { searchContent } from './searchUtils';
+import AppNavigationData from '@/components/AppNavigation/AppNavigationData.js';
 
 const router = useRouter();
+const { navigationItems } = AppNavigationData();
 
 const searchQuery = ref('');
 const isSearchActive = ref(false);
 const showResults = ref(false);
 const selectedIndex = ref(0);
 const searchInput = ref(null);
+
+// Helper function to get category name from route path
+const getCategoryFromPath = (path) => {
+  // Extract the first segment after the leading slash
+  const segments = path.split('/').filter((segment) => segment);
+  if (segments.length === 0) return null;
+
+  const firstSegment = segments[0];
+
+  // Map path segments to navigation categories
+  const categoryMap = {
+    logs: 'Logs',
+    'hardware-status': 'Hardware status',
+    operations: 'Operations',
+    settings: 'Settings',
+    'security-and-access': 'Security and access',
+    'resource-management': 'Resource management',
+  };
+
+  return categoryMap[firstSegment] || null;
+};
 
 // Create a map of route names to route objects for quick lookup
 const routeMap = computed(() => {
@@ -129,10 +140,12 @@ const routeMap = computed(() => {
       !route.path.includes('/console') &&
       !route.path.includes('/change-password')
     ) {
+      const category = getCategoryFromPath(route.path);
       map.set(route.name, {
         name: route.name,
         path: route.path,
         title: route.meta.title,
+        category: category,
       });
     }
   });
@@ -160,8 +173,6 @@ const filteredRoutes = computed(() => {
         return {
           ...route,
           score: result.score,
-          matchedKeywords: result.matchedTerms,
-          description: `Matched: ${result.matchedTerms.join(', ')}`,
         };
       }
       return null;
@@ -474,39 +485,22 @@ watch(filteredRoutes, () => {
   line-height: 1.28572;
 }
 
-.result-description {
-  font-size: 0.75rem;
-  color: #c6c6c6;
-  margin-bottom: 0.375rem;
-  line-height: 1.33333;
-}
-
-.result-keywords {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  margin-bottom: 0.375rem;
-}
-
-.keyword-badge {
-  display: inline-block;
-  padding: 0 0.5rem;
-  height: 1.5rem;
-  line-height: 1.5rem;
-  background-color: #393939;
-  color: #f4f4f4;
-  border-radius: 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 400;
-}
-
 .result-path {
   font-size: 0.75rem;
   color: #8d8d8d;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  margin-top: 0.25rem;
   line-height: 1.33333;
+}
+
+.path-category {
+  color: #a8a8a8;
+  font-weight: 400;
+  margin-right: 0.25rem;
+}
+
+.path-page {
+  color: #8d8d8d;
+  font-weight: 400;
 }
 
 .no-results {
