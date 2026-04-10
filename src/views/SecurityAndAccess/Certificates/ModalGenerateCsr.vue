@@ -235,7 +235,7 @@
                       "
                       placeholder=""
                       data-test-id="modalGenerateCsr-input-alternateName"
-                      add-button-variant="link-primary"
+                      add-button-variant="primary"
                     >
                       <template #add-button-text>
                         <icon-add /> {{ $t('global.action.add') }}
@@ -367,21 +367,21 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, requiredIf } from '@vuelidate/validators';
-import stores from '@/store';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
-import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore';
+import { CERTIFICATE_TYPES } from '@/api/composables/useCertificates';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import { useCertificates } from '@/api/composables/useCertificates';
 
 const { errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
-const uploadCertificate = stores.CertificatesStore();
+const { generateCsr: generateCsrAction } = useCertificates();
 
 const openCsrModal = ref(false);
 const initialFormState = {
@@ -400,7 +400,7 @@ const initialFormState = {
   keyBitLength: null,
 };
 const form = ref({ ...initialFormState });
-const certificateOptions = CERTIFICATE_TYPES.reduce((arr, cert) => {
+const certificateOptions = CERTIFICATE_TYPES.reduce((arr: Array<{ text: string; value: string }>, cert) => {
   if (
     cert.type === 'TrustStore Certificate' ||
     cert.type === 'ServiceLogin Certificate' ||
@@ -414,8 +414,8 @@ const certificateOptions = CERTIFICATE_TYPES.reduce((arr, cert) => {
     value: cert.type,
   });
   return arr;
-}, []);
-const countryOptions = COUNTRY_LIST.map((country) => ({
+}, [] as Array<{ text: string; value: string }>);
+const countryOptions = COUNTRY_LIST.map((country: any) => ({
   text: country.label,
   value: country.code,
 }));
@@ -456,15 +456,14 @@ const modal = ref(false);
 const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
-  uploadCertificate
-    .generateCsr(form.value)
-    .then(({ data: { CSRString } }) => {
+  generateCsrAction(form.value)
+    .then(({ CSRString }: { CSRString: string }) => {
       csrString.value = CSRString;
       modal.value = false;
       openCsrModal.value = true;
       v$.value.form.$reset();
     })
-    .catch(({ message }) => errorToast(message));
+    .catch(({ message }: { message: string }) => errorToast(message));
 };
 
 const resetCsr = () => {
@@ -478,16 +477,9 @@ const resetCsr = () => {
 };
 
 const resetForm = () => {
-  for (let key of Object.keys(form.value)) {
-    if (key === 'alternateName') {
-      form[key] = [];
-    } else {
-      form[key] = null;
-    }
-  }
   Object.assign(form.value, initialFormState);
 };
-const onOkGenerateCsrModal = (event) => {
+const onOkGenerateCsrModal = (event: any) => {
   // prevent modal close
   event.preventDefault();
   handleSubmit();
@@ -496,7 +488,7 @@ const onHiddenCsrStringModal = () => {
   csrString.value = '';
   resetCsr();
 };
-const copyCsrString = (bvModalEvt) => {
+const copyCsrString = (bvModalEvt: any) => {
   // prevent modal close
   bvModalEvt.preventDefault();
   navigator.clipboard.writeText(csrString.value).then(() => {
@@ -508,7 +500,7 @@ const copyCsrString = (bvModalEvt) => {
   });
 };
 
-const downloadCsr = (bvModalEvt) => {
+const downloadCsr = (bvModalEvt: any) => {
   // prevent modal close
   bvModalEvt.preventDefault();
   const dataUri = `data:text/plain;charset=utf-8,${encodeURIComponent(csrString.value)}`;

@@ -40,7 +40,7 @@
             id="certificate-type"
             v-model="form.certificateType"
             :options="certificateOptions"
-            :state="v$.form.certificateType"
+            :state="getValidationState(v$.form.certificateType)"
             @update:model-value="v$.form.certificateType.$touch()"
           >
           </BFormSelect>
@@ -87,19 +87,20 @@
   </BModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Alert from '@/components/Global/Alert.vue';
 import { required, requiredIf } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { computed, ref, watch } from 'vue';
-import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import FormFile from '@/components/Global/FormFile.vue';
 import eventBus from '@/eventBus';
+import { useCertificates } from '@/api/composables/useCertificates';
+import type { Certificate } from '@/api/composables/useCertificates';
 
 const { getValidationState } = useVuelidateComposable();
 
-const uploadCertificate = stores.CertificatesStore();
+const { availableUploadTypes } = useCertificates();
 
 const props = defineProps({
   certificate: {
@@ -123,13 +124,16 @@ eventBus.on('upload-certificate', () => {
   v$.value.form.file.$reset();
   modal.value = true;
 });
-const form = ref({
+const form = ref<{
+  certificateType: string | null;
+  file: File | null;
+}>({
   certificateType: null,
   file: null,
 });
 const fileTypeMismatch = ref(false);
 const certificateTypes = computed(() => {
-  return uploadCertificate.availableUploadTypesGetter;
+  return availableUploadTypes.value;
 });
 const certificateOptions = computed(() => {
   const filteredCertificates = certificateTypes.value
@@ -149,7 +153,7 @@ const certificateOptions = computed(() => {
       };
     });
   if (filteredCertificates.length === 1) {
-    form.value.certificateType === filteredCertificates?.[0]?.value;
+    form.value.certificateType = filteredCertificates?.[0]?.value;
   }
   return filteredCertificates;
 });
@@ -211,7 +215,7 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, { form });
 
 const emit = defineEmits(['ok']);
-function onFileUpload(uploadedfile) {
+function onFileUpload(uploadedfile: File) {
   form.value.file = uploadedfile;
   v$.value.form.file.$touch();
 }
@@ -229,7 +233,7 @@ const handleSubmit = () => {
 
     reader.onload = () => {
       try {
-        const base64String = reader.result;
+        const base64String = reader.result as string;
         const cleanBase64 = base64String.replace(/^data:.*;base64,/, '');
         const decoded = atob(cleanBase64);
         if (decoded.includes('resourcedump')) {
@@ -274,7 +278,7 @@ const handleSubmit = () => {
         console.error('Error during file processing:', error);
       }
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
   } else {
     emit('ok', {
       addNew: !props.certificate,
@@ -300,7 +304,7 @@ const resetForm = () => {
   eventBus.emit('clear-file');
   v$.value.$reset();
 };
-const onOk = (bvModalEvt) => {
+const onOk = (bvModalEvt: any) => {
   // prevent modal close
   bvModalEvt.preventDefault();
   handleSubmit();
