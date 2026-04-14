@@ -35,6 +35,180 @@ import { concurrentMaintenanceSearchContent } from '@/views/HardwareStatus/Concu
 import { ibmiServiceFunctionsSearchContent } from '@/views/Logs/IBMiServiceFunctions/IBMiServiceFunctionsSearchContent.js';
 
 /**
+ * Determine machine model type from model string
+ * @param {string} modelType - Model type string from store
+ * @returns {string} Machine type category (Everest, NotEverest, etc.)
+ */
+function getMachineType(modelType) {
+  if (!modelType || modelType === '--') {
+    return 'Unknown';
+  }
+  // Everest machines: 9043* or 8860*
+  if (modelType.startsWith('9043') || modelType.startsWith('8860')) {
+    return 'Everest';
+  }
+  return 'NotEverest';
+}
+
+/**
+ * Determine HMC management status
+ * @param {string} hmcManaged - HMC managed value from store
+ * @returns {string} HMC management status
+ */
+function getHmcStatus(hmcManaged) {
+  return hmcManaged === 'Enabled' ? 'HMCManaged' : 'NonHMCManaged';
+}
+
+/**
+ * Check if a route is accessible based on restrictions
+ * @param {Array} restrictTo - Array of restrictions from navigation config
+ * @param {string} roleId - Current user's role ID
+ * @param {string} machineType - Current machine type
+ * @param {string} hmcStatus - Current HMC management status
+ * @returns {boolean} True if route is accessible
+ */
+function isRouteAccessible(restrictTo, roleId, machineType, hmcStatus) {
+  // If no restrictions, route is accessible to all
+  if (!restrictTo || restrictTo.length === 0) {
+    return true;
+  }
+
+  // Check if any restriction matches current context
+  return restrictTo.some((restriction) => {
+    // Check role-based restrictions
+    if (restriction === roleId) return true;
+    // Check machine type restrictions
+    if (restriction === machineType) return true;
+    // Check HMC status restrictions
+    if (restriction === hmcStatus) return true;
+    return false;
+  });
+}
+
+/**
+ * Get base navigation structure with restrictions
+ * This accesses the raw navigation data before filtering
+ * @returns {Array} Base navigation array
+ */
+function getBaseNavigation() {
+  // Define base navigation inline for IBM environment
+  // This is a simplified version - in production, you might want to import this
+  const baseNavigation = [
+    {
+      id: 'overview',
+      children: [],
+    },
+    {
+      id: 'operations',
+      children: [
+        { id: 'server-power-operations', restrictTo: [] },
+        {
+          id: 'host-console',
+          restrictTo: ['Administrator', 'OemIBMServiceAgent'],
+        },
+        { id: 'service-login', restrictTo: ['OemIBMServiceAgent'] },
+        { id: 'firmware', restrictTo: [] },
+        { id: 'reboot-bmc', restrictTo: [] },
+      ],
+    },
+    {
+      id: 'resource-management',
+      children: [
+        { id: 'memory', restrictTo: [] },
+        { id: 'power', restrictTo: [] },
+        { id: 'capacity-on-demand', restrictTo: [] },
+        { id: 'field-core-override', restrictTo: [] },
+        { id: 'system-parameters', restrictTo: [] },
+      ],
+    },
+    {
+      id: 'hardware-status',
+      children: [
+        { id: 'inventory', restrictTo: [] },
+        { id: 'sensors', restrictTo: [] },
+        { id: 'hardware-deconfiguration', restrictTo: [] },
+        { id: 'pcie-topology', restrictTo: [] },
+        { id: 'concurrent-maintenance', restrictTo: ['Everest'] },
+      ],
+    },
+    {
+      id: 'logs',
+      children: [
+        { id: 'post-code-logs', restrictTo: [] },
+        { id: 'event-logs', restrictTo: [] },
+        { id: 'audit-logs', restrictTo: [] },
+        { id: 'dumps', restrictTo: [] },
+        { id: 'ibmi-service-functions', restrictTo: ['NonHMCManaged'] },
+        { id: 'deconfiguration-records', restrictTo: [] },
+      ],
+    },
+    {
+      id: 'settings',
+      children: [
+        { id: 'date-time', restrictTo: [] },
+        { id: 'network', restrictTo: [] },
+        { id: 'power-restore-policy', restrictTo: [] },
+        { id: 'snmp-alerts', restrictTo: [] },
+        { id: 'factory-reset', restrictTo: [] },
+      ],
+    },
+    {
+      id: 'security-and-access',
+      children: [
+        { id: 'sessions', restrictTo: [] },
+        { id: 'user-management', restrictTo: [] },
+        { id: 'ldap', restrictTo: [] },
+        { id: 'certificates', restrictTo: [] },
+        { id: 'policies', restrictTo: [] },
+        {
+          id: 'key-clear',
+          restrictTo: ['Administrator', 'OemIBMServiceAgent'],
+        },
+      ],
+    },
+    {
+      id: 'notices',
+      children: [],
+    },
+  ];
+
+  return baseNavigation;
+}
+
+/**
+ * Get navigation item restrictions from navigation data
+ * @param {string} routeName - Route name to look up
+ * @returns {Array|null} Array of restrictions or null if not found
+ */
+function getRouteRestrictions(routeName) {
+  const baseNavigation = getBaseNavigation();
+
+  // Normalize route name for comparison
+  const normalizedRouteName = routeName.toLowerCase().replace(/_/g, '-');
+
+  // Search through navigation items
+  for (const section of baseNavigation) {
+    if (section.children && section.children.length > 0) {
+      for (const child of section.children) {
+        // Normalize child id for comparison
+        const normalizedChildId = child.id?.toLowerCase().replace(/_/g, '-');
+
+        // Match by route id
+        if (normalizedChildId === normalizedRouteName) {
+          return child.restrictTo || [];
+        }
+      }
+    } else if (
+      section.id?.toLowerCase().replace(/_/g, '-') === normalizedRouteName
+    ) {
+      return section.restrictTo || [];
+    }
+  }
+
+  return null;
+}
+
+/**
  * Extract all text values from a nested object
  * @param {Object} obj - Object to extract text from
  * @param {Array} results - Array to store results
@@ -312,11 +486,16 @@ function calculateMatchScore(searchTerms, contentArray) {
 
 /**
  * Search through the index for matching pages with prioritization based on word matches
+ * Filters results based on machine type, HMC status, and user role
  * @param {string} query - Search query
  * @param {Array} routes - Array of route objects from the router
+ * @param {Object} filterContext - Context for filtering (optional)
+ * @param {string} filterContext.modelType - Current machine model type
+ * @param {string} filterContext.hmcManaged - HMC management status
+ * @param {string} filterContext.roleId - Current user's role ID
  * @returns {Array} Array of matching route names with relevance scores, sorted by match quality
  */
-export function searchContent(query, routes) {
+export function searchContent(query, routes, filterContext = {}) {
   if (!query || query.trim().length === 0) {
     return [];
   }
@@ -333,20 +512,61 @@ export function searchContent(query, routes) {
 
   const results = [];
 
+  // Determine machine type and HMC status
+  const machineType = getMachineType(filterContext.modelType);
+  const hmcStatus = getHmcStatus(filterContext.hmcManaged);
+  const roleId = filterContext.roleId;
+
+  // Debug logging (can be removed in production)
+  if (import.meta.env.DEV) {
+    console.log('Search Filter Context:', {
+      modelType: filterContext.modelType,
+      machineType,
+      hmcStatus,
+      roleId,
+    });
+  }
+
   // Calculate scores for each route
   Object.entries(searchIndex).forEach(([routeName, contentArray]) => {
     const matchResult = calculateMatchScore(searchTerms, contentArray);
 
     // Only include results that have at least one matched term
     if (matchResult.matchedCount > 0) {
-      results.push({
-        routeName,
-        score: matchResult.score,
-        matchedTerms: matchResult.matchedTerms,
-        matchedCount: matchResult.matchedCount,
-        totalTerms: searchTerms.length,
-        matchPercentage: matchResult.matchPercentage,
-      });
+      // Check if route is accessible based on restrictions
+      const restrictions = getRouteRestrictions(routeName);
+      let isAccessible = true;
+
+      if (restrictions !== null) {
+        isAccessible = isRouteAccessible(
+          restrictions,
+          roleId,
+          machineType,
+          hmcStatus,
+        );
+
+        // Debug logging for filtered routes
+        if (import.meta.env.DEV && !isAccessible) {
+          console.log(`Route "${routeName}" filtered out:`, {
+            restrictions,
+            machineType,
+            hmcStatus,
+            roleId,
+          });
+        }
+      }
+
+      // Only add to results if accessible
+      if (isAccessible) {
+        results.push({
+          routeName,
+          score: matchResult.score,
+          matchedTerms: matchResult.matchedTerms,
+          matchedCount: matchResult.matchedCount,
+          totalTerms: searchTerms.length,
+          matchPercentage: matchResult.matchPercentage,
+        });
+      }
     }
   });
 

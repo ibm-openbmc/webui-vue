@@ -95,8 +95,10 @@ import IconClose from '@carbon/icons-vue/es/close/20';
 import IconArrowRight from '@carbon/icons-vue/es/arrow--right/20';
 import { searchContent } from './searchUtils';
 import AppNavigationData from '@/components/AppNavigation/AppNavigationData.js';
+import stores from '@/store';
 
 const router = useRouter();
+const globalStore = stores.GlobalStore();
 const { navigationItems } = AppNavigationData();
 
 const searchQuery = ref('');
@@ -154,6 +156,7 @@ const routeMap = computed(() => {
 });
 
 // Filter routes based on search query using content-based search from en-US.json
+// Filters results based on machine type, HMC status, and user role
 const filteredRoutes = computed(() => {
   if (!searchQuery.value.trim()) {
     return [];
@@ -162,8 +165,22 @@ const filteredRoutes = computed(() => {
   // Get all routes from the router
   const allRoutes = router.getRoutes();
 
-  // Use the searchContent function from searchUtils (which uses en-US.json)
-  const searchResults = searchContent(searchQuery.value, allRoutes);
+  // Prepare filter context from global store
+  const filterContext = {
+    modelType: globalStore.modelTypeGetter,
+    hmcManaged: globalStore.hmcManagedGetter,
+    roleId: globalStore.currentUserGetter?.RoleId,
+  };
+
+  // Use the searchContent function from searchUtils with filtering
+  // This will automatically filter out routes that are not accessible
+  // based on machine type (e.g., Everest vs non-Everest),
+  // HMC management status, and user role
+  const searchResults = searchContent(
+    searchQuery.value,
+    allRoutes,
+    filterContext,
+  );
 
   // Map search results to route objects with additional metadata
   const results = searchResults
