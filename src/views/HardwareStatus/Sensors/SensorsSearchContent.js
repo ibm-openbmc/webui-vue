@@ -1,7 +1,7 @@
 export const sensorsSearchContent = {
   // Main description
   description:
-    'Monitor system sensors including temperature, voltage, fan speed, and power readings with critical and warning thresholds',
+    'Display sensor information including Name, Status, and Current value. Filter sensors by status values (OK, Warning, Critical) to monitor system health and performance.',
 
   // Feature descriptions
   features: [
@@ -15,6 +15,15 @@ export const sensorsSearchContent = {
     'Sensor status tracking',
     'Real-time sensor data',
     'Sensor health monitoring',
+    'Display sensor Name',
+    'Display sensor Status',
+    'Display Current value',
+    'Click Filter to apply status',
+    'Filter by OK status',
+    'Filter by Warning status',
+    'Filter by Critical status',
+    'Select status values',
+    'Apply status filters',
   ],
 
   // Searchable keywords
@@ -41,6 +50,24 @@ export const sensorsSearchContent = {
     'upper warning',
     'lower warning',
     'current value',
+    'sensor name',
+    'display name',
+    'display status',
+    'display current value',
+    'click filter',
+    'apply filter',
+    'filter status',
+    'status values',
+    'OK status',
+    'Warning status',
+    'Critical status',
+    'filter by OK',
+    'filter by Warning',
+    'filter by Critical',
+    'select status',
+    'available options',
+    'status filter',
+    'sensor filter',
   ],
 
   // Related terms
@@ -52,6 +79,15 @@ export const sensorsSearchContent = {
     'sensor data',
     'telemetry',
     'system health',
+    'status filtering',
+    'filter options',
+    'health status',
+    'sensor health',
+    'status selection',
+    'filter application',
+    'status display',
+    'value display',
+    'name display',
   ],
 };
 

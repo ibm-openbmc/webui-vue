@@ -1,7 +1,7 @@
 export const rebootBmcSearchContent = {
   // Main description
   description:
-    'Reboot the Baseboard Management Controller (BMC), view last reboot time, and manage BMC restart operations',
+    'Reboot the Baseboard Management Controller (BMC) on a server. The Reboot BMC window displays the Last BMC reboot information. When you reboot the BMC, your web browser loses contact with the BMC for several minutes. When the BMC is back online, you may need to log in again.',
 
   // Feature descriptions
   features: [
@@ -17,6 +17,14 @@ export const rebootBmcSearchContent = {
     'BMC service restart',
     'Controller reset operation',
     'BMC power cycle',
+    'Reboot BMC on server',
+    'Last BMC reboot information display',
+    'Web browser loses contact during reboot',
+    'BMC back online notification',
+    'Re-login after BMC reboot',
+    'Click Reboot BMC to restart',
+    'Confirm to restart BMC',
+    'Cancel BMC reboot operation',
   ],
 
   // Searchable keywords
@@ -54,6 +62,21 @@ export const rebootBmcSearchContent = {
     'baseboard controller',
     'BMC maintenance',
     'controller maintenance',
+    'reboot BMC on server',
+    'last BMC reboot information',
+    'loses contact',
+    'browser loses contact',
+    'BMC back online',
+    'log in again',
+    're-login',
+    'click reboot BMC',
+    'click confirm',
+    'cancel reboot',
+    'several minutes',
+    'BMC window',
+    'reboot information',
+    'restart the BMC',
+    'exit window',
   ],
 
   // Related terms
@@ -78,6 +101,16 @@ export const rebootBmcSearchContent = {
     'BMC availability',
     'controller availability',
     'service downtime',
+    'server BMC',
+    'BMC contact lost',
+    'browser disconnection',
+    'temporary unavailability',
+    'BMC recovery time',
+    'reboot confirmation dialog',
+    'cancel operation',
+    'confirm restart',
+    'BMC status window',
+    'last reboot timestamp',
   ],
 };
 

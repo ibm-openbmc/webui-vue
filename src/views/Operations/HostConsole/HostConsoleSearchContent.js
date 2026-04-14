@@ -1,7 +1,7 @@
 export const hostConsoleSearchContent = {
   // Main description
   description:
-    'Access and monitor the host system serial console output in real-time',
+    'View and control the server console over the network, independent of the operating system. View the status of the server console and open it in a new tab for better accessibility.',
 
   // Feature descriptions
   features: [
@@ -17,6 +17,14 @@ export const hostConsoleSearchContent = {
     'Text-based console',
     'Host system terminal',
     'Serial over LAN console',
+    'View and control server console',
+    'Network-based console access',
+    'Operating system independent console',
+    'View server console status',
+    'Open console in new tab',
+    'Display status in new window',
+    'Click Host console to access',
+    'Console status display',
   ],
 
   // Searchable keywords
@@ -52,6 +60,26 @@ export const hostConsoleSearchContent = {
     'serial output',
     'terminal access',
     'terminal viewer',
+    'view server console',
+    'control server console',
+    'console over network',
+    'network console',
+    'operating system independent',
+    'OS independent',
+    'independent of OS',
+    'view status',
+    'console status',
+    'server console status',
+    'status display',
+    'open in new tab',
+    'new tab',
+    'new window',
+    'display in new window',
+    'click host console',
+    'click open',
+    'open console',
+    'console new tab',
+    'status new window',
   ],
 
   // Related terms
@@ -67,6 +95,19 @@ export const hostConsoleSearchContent = {
     'system monitoring',
     'console redirection',
     'Web socket',
+    'network-based access',
+    'OS-independent access',
+    'platform independent',
+    'console control',
+    'server control',
+    'status monitoring',
+    'console window',
+    'separate window',
+    'tab management',
+    'window management',
+    'console interface',
+    'network interface',
+    'remote control',
   ],
 };
 

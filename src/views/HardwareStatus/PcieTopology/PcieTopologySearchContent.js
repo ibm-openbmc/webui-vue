@@ -1,7 +1,7 @@
 export const pcieTopologySearchContent = {
   // Main description
   description:
-    'View PCIe hardware topology, manage PCIe slots, identify LEDs, and reset PCIe links',
+    'Display PCIe topology information including Id, Parent ID, Link status, Local port location, and Remote port location. Filter PCIe topology data by applying selected filter criteria.',
 
   // Feature descriptions
   features: [
@@ -13,6 +13,14 @@ export const pcieTopologySearchContent = {
     'Hardware topology visualization',
     'PCIe device information',
     'Slot configuration',
+    'Display Id information',
+    'Display Parent ID',
+    'Display Link status',
+    'Display Local port location',
+    'Display Remote port location',
+    'Click Filter to apply selection',
+    'Apply selected filters',
+    'Filter PCIe topology data',
   ],
 
   // Searchable keywords
@@ -34,6 +42,25 @@ export const pcieTopologySearchContent = {
     'PCIe device',
     'slot information',
     'link status',
+    'Id',
+    'Parent ID',
+    'Link status',
+    'Local port location',
+    'Remote port location',
+    'display Id',
+    'display Parent ID',
+    'display Link status',
+    'display Local port',
+    'display Remote port',
+    'click filter',
+    'apply filter',
+    'selected filters',
+    'filter criteria',
+    'filter topology',
+    'topology data',
+    'port location',
+    'local port',
+    'remote port',
   ],
 
   // Related terms
@@ -44,6 +71,15 @@ export const pcieTopologySearchContent = {
     'PCIe configuration',
     'hardware layout',
     'device connections',
+    'topology information',
+    'parent identification',
+    'port identification',
+    'location information',
+    'filter application',
+    'data filtering',
+    'topology filtering',
+    'port details',
+    'link information',
   ],
 };
 
