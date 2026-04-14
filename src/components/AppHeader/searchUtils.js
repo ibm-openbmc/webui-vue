@@ -237,10 +237,84 @@ function buildSearchIndex(routes) {
 }
 
 /**
- * Search through the index for matching pages
+ * Calculate match score based on the number of matched words and match quality
+ * @param {Array} searchTerms - Array of search terms from the query
+ * @param {Array} contentArray - Array of searchable content for a route
+ * @returns {Object} Object containing score, matched terms count, and matched terms
+ */
+function calculateMatchScore(searchTerms, contentArray) {
+  const matchedTerms = new Set();
+  let exactMatchScore = 0;
+  let partialMatchScore = 0;
+  let phraseMatchBonus = 0;
+
+  // Join content array to check for phrase matches
+  const fullContent = contentArray.join(' ');
+  const searchPhrase = searchTerms.join(' ');
+
+  // Check if the entire search phrase exists in content (highest priority)
+  if (fullContent.includes(searchPhrase)) {
+    phraseMatchBonus = 1000 * searchTerms.length;
+  }
+
+  // Check each search term
+  searchTerms.forEach((term) => {
+    let termMatched = false;
+
+    contentArray.forEach((content) => {
+      if (content.includes(term)) {
+        termMatched = true;
+        const words = content.split(/\s+/);
+
+        // Exact word match (highest score per term)
+        if (words.includes(term)) {
+          exactMatchScore += 100;
+        }
+        // Starts with term (medium-high score)
+        else if (content.startsWith(term)) {
+          exactMatchScore += 50;
+        }
+        // Contains term anywhere (lower score)
+        else {
+          partialMatchScore += 20;
+        }
+      }
+    });
+
+    if (termMatched) {
+      matchedTerms.add(term);
+    }
+  });
+
+  // Calculate final score with word count multiplier
+  const matchedCount = matchedTerms.size;
+  const totalTerms = searchTerms.length;
+
+  // Base score from matches
+  const baseScore = exactMatchScore + partialMatchScore + phraseMatchBonus;
+
+  // Multiplier based on percentage of matched terms
+  // All terms matched = 10x multiplier
+  // Most terms matched = progressively lower multiplier
+  const matchPercentage = matchedCount / totalTerms;
+  const matchMultiplier = Math.pow(matchPercentage, 0.5) * 10;
+
+  // Final score prioritizes entries with more matched terms
+  const finalScore = baseScore * matchMultiplier + matchedCount * 500;
+
+  return {
+    score: finalScore,
+    matchedCount,
+    matchedTerms: Array.from(matchedTerms),
+    matchPercentage,
+  };
+}
+
+/**
+ * Search through the index for matching pages with prioritization based on word matches
  * @param {string} query - Search query
  * @param {Array} routes - Array of route objects from the router
- * @returns {Array} Array of matching route names with relevance scores
+ * @returns {Array} Array of matching route names with relevance scores, sorted by match quality
  */
 export function searchContent(query, routes) {
   if (!query || query.trim().length === 0) {
@@ -250,6 +324,7 @@ export function searchContent(query, routes) {
   // Build search index from current routes
   const searchIndex = buildSearchIndex(routes);
 
+  // Normalize and split search query into terms
   const searchTerms = query
     .toLowerCase()
     .trim()
@@ -258,36 +333,37 @@ export function searchContent(query, routes) {
 
   const results = [];
 
+  // Calculate scores for each route
   Object.entries(searchIndex).forEach(([routeName, contentArray]) => {
-    let score = 0;
-    const matchedTerms = new Set();
+    const matchResult = calculateMatchScore(searchTerms, contentArray);
 
-    searchTerms.forEach((term) => {
-      contentArray.forEach((content) => {
-        if (content.includes(term)) {
-          // Exact word match gets higher score
-          const words = content.split(/\s+/);
-          if (words.includes(term)) {
-            score += 10;
-          } else if (content.startsWith(term)) {
-            score += 5;
-          } else {
-            score += 2;
-          }
-          matchedTerms.add(term);
-        }
-      });
-    });
-
-    if (score > 0) {
+    // Only include results that have at least one matched term
+    if (matchResult.matchedCount > 0) {
       results.push({
         routeName,
-        score,
-        matchedTerms: Array.from(matchedTerms),
+        score: matchResult.score,
+        matchedTerms: matchResult.matchedTerms,
+        matchedCount: matchResult.matchedCount,
+        totalTerms: searchTerms.length,
+        matchPercentage: matchResult.matchPercentage,
       });
     }
   });
 
-  // Sort by score (highest first)
-  return results.sort((a, b) => b.score - a.score);
+  // Sort results by multiple criteria:
+  // 1. Primary: Number of matched terms (descending)
+  // 2. Secondary: Match score (descending)
+  // 3. Tertiary: Route name (alphabetically for consistency)
+  return results.sort((a, b) => {
+    // First, prioritize by number of matched terms
+    if (b.matchedCount !== a.matchedCount) {
+      return b.matchedCount - a.matchedCount;
+    }
+    // If same number of matches, sort by score
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    // If same score, sort alphabetically by route name
+    return a.routeName.localeCompare(b.routeName);
+  });
 }
