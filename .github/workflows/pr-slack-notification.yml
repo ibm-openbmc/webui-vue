@@ -13,7 +13,7 @@ jobs:
       - name: Send Slack Notification (Test Mode)
         if: github.event_name == 'workflow_dispatch'
         run: |
-          curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+          curl --fail -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
           -d '{
             "text": "🧪 Test Notification from GitHub Actions",
@@ -51,7 +51,7 @@ jobs:
       - name: Send Slack Notification (PR Mode)
         if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
         run: |
-          curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+          curl --fail -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
           -d '{
             "text": "Pull Request in ${{ github.repository }}",
