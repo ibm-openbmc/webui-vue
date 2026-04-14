@@ -11,12 +11,8 @@ jobs:
     
     steps:
       - name: Send Slack Notification (Test Mode)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && secrets.SLACK_WEBHOOK_URL != ''
         run: |
-          if [ -z "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
-            echo "Error: SLACK_WEBHOOK_URL is not set"
-            exit 1
-          fi
           curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
           -d '{
@@ -53,12 +49,8 @@ jobs:
           fi
       
       - name: Send Slack Notification (PR Mode)
-        if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+        if: github.event_name == 'pull_request' && github.event.pull_request.draft == false && secrets.SLACK_WEBHOOK_URL != ''
         run: |
-          if [ -z "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
-            echo "Error: SLACK_WEBHOOK_URL is not set"
-            exit 1
-          fi
           curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
           -d '{
