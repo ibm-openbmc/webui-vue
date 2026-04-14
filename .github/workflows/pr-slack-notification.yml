@@ -2,7 +2,7 @@ name: PR Slack Notification
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, ready_for_review, synchronize]
   workflow_dispatch:
 
 jobs:
@@ -36,30 +36,40 @@ jobs:
             ]
           }'
       
+      - name: Set notification header
+        if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+        id: header
+        run: |
+          if [ "${{ github.event.action }}" = "ready_for_review" ]; then
+            echo "text=✅ PR Ready for Review" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.action }}" = "synchronize" ]; then
+            echo "text=🔄 PR Updated" >> $GITHUB_OUTPUT
+          else
+            echo "text=🔔 New Pull Request" >> $GITHUB_OUTPUT
+          fi
+      
       - name: Send Slack Notification (PR Mode)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
         run: |
           curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
           -d '{
-            "text": "New Pull Request in ${{ github.repository }}",
+            "text": "Pull Request in ${{ github.repository }}",
             "blocks": [
               {
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text": "🔔 New Pull Request",
+                  "text": "${{ steps.header.outputs.text }}",
                   "emoji": true
                 }
               },
               {
-                "type": "context",
-                "elements": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "@ebmc-gui-squad"
-                  }
-                ]
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*👥 @ebmc-gui-squad, Please review*"
+                }
               },
               {
                 "type": "section",
