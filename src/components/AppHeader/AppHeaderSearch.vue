@@ -96,6 +96,7 @@ import IconArrowRight from '@carbon/icons-vue/es/arrow--right/20';
 import { searchContent } from './searchUtils';
 import AppNavigationData from '@/components/AppNavigation/AppNavigationData.js';
 import stores from '@/store';
+import eventBus from '@/eventBus';
 
 const router = useRouter();
 const globalStore = stores.GlobalStore();
@@ -107,25 +108,31 @@ const showResults = ref(false);
 const selectedIndex = ref(0);
 const searchInput = ref(null);
 
-// Helper function to get category name from route path
+// Helper function to get category name and ID from route path
 const getCategoryFromPath = (path) => {
   // Extract the first segment after the leading slash
   const segments = path.split('/').filter((segment) => segment);
-  if (segments.length === 0) return null;
+  if (segments.length === 0) return { name: null, id: null };
 
   const firstSegment = segments[0];
 
   // Map path segments to navigation categories
   const categoryMap = {
-    logs: 'Logs',
-    'hardware-status': 'Hardware status',
-    operations: 'Operations',
-    settings: 'Settings',
-    'security-and-access': 'Security and access',
-    'resource-management': 'Resource management',
+    logs: { name: 'Logs', id: 'logs' },
+    'hardware-status': { name: 'Hardware status', id: 'hardware-status' },
+    operations: { name: 'Operations', id: 'operations' },
+    settings: { name: 'Settings', id: 'settings' },
+    'security-and-access': {
+      name: 'Security and access',
+      id: 'security-and-access',
+    },
+    'resource-management': {
+      name: 'Resource management',
+      id: 'resource-management',
+    },
   };
 
-  return categoryMap[firstSegment] || null;
+  return categoryMap[firstSegment] || { name: null, id: null };
 };
 
 // Create a map of route names to route objects for quick lookup
@@ -142,12 +149,13 @@ const routeMap = computed(() => {
       !route.path.includes('/console') &&
       !route.path.includes('/change-password')
     ) {
-      const category = getCategoryFromPath(route.path);
+      const categoryInfo = getCategoryFromPath(route.path);
       map.set(route.name, {
         name: route.name,
         path: route.path,
         title: route.meta.title,
-        category: category,
+        category: categoryInfo.name,
+        categoryId: categoryInfo.id,
       });
     }
   });
@@ -251,6 +259,11 @@ const selectResult = () => {
 
 // Navigate to selected route
 const navigateToRoute = (route) => {
+  // Emit event to expand navigation section if route has a category
+  if (route.categoryId) {
+    eventBus.emit('expand-navigation-section', route.categoryId);
+  }
+
   router.push(route.path);
   clearSearch();
   searchInput.value?.blur();

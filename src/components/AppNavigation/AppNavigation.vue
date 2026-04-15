@@ -61,7 +61,14 @@
 //Do not change data import.
 //Exact match alias set to support
 //dotenv customizations.
-import { ref, watch, onMounted, computed } from 'vue';
+import {
+  ref,
+  watch,
+  onMounted,
+  computed,
+  nextTick,
+  onBeforeUnmount,
+} from 'vue';
 import AppNavigationData from './AppNavigationData';
 import { useRoute } from 'vue-router';
 import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
@@ -84,6 +91,11 @@ onMounted(() => {
   });
   checkForUserData();
   eventBus.on('toggle-navigation', toggleIsOpen);
+  eventBus.on('expand-navigation-section', expandNavigationSection);
+});
+
+onBeforeUnmount(() => {
+  eventBus.off('expand-navigation-section', expandNavigationSection);
 });
 
 const modelType = computed(() => {
@@ -113,6 +125,41 @@ const checkForUserData = () => {
 };
 const toggleIsOpen = () => {
   isNavigationOpen.value = !isNavigationOpen.value;
+};
+
+// Function to expand a navigation section by its ID
+const expandNavigationSection = (sectionId) => {
+  nextTick(() => {
+    // First, collapse all currently expanded sections
+    const allCollapseElements = document.querySelectorAll(
+      '.nav-item__nav.collapse.show',
+    );
+    allCollapseElements.forEach((element) => {
+      // Only collapse if it's not the target section
+      if (element.id !== sectionId) {
+        const button = document.querySelector(
+          `[aria-controls="${element.id}"]`,
+        );
+        if (button && !button.classList.contains('collapsed')) {
+          button.click();
+        }
+      }
+    });
+
+    // Then, expand the target section
+    const collapseElement = document.getElementById(sectionId);
+    if (collapseElement) {
+      // Check if the section is already expanded
+      const isExpanded = collapseElement.classList.contains('show');
+      if (!isExpanded) {
+        // Trigger the collapse to show
+        const button = document.querySelector(`[aria-controls="${sectionId}"]`);
+        if (button) {
+          button.click();
+        }
+      }
+    }
+  });
 };
 </script>
 
