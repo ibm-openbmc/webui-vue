@@ -259,9 +259,11 @@ const selectResult = () => {
 
 // Navigate to selected route
 const navigateToRoute = (route) => {
-  // Emit event to expand navigation section if route has a category
+  // Expand matching section routes, collapse all sections for top-level routes
   if (route.categoryId) {
     eventBus.emit('expand-navigation-section', route.categoryId);
+  } else {
+    eventBus.emit('collapse-navigation-sections');
   }
 
   router.push(route.path);
