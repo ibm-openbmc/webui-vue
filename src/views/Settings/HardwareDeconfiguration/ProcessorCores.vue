@@ -2,7 +2,11 @@
   <BContainer fluid="xl">
     <BRow class="align-items-end">
       <BCol sm="12" class="text-right">
-        <table-filter :filters="tableFilters" @filter-change="onFilterChange" />
+        <table-filter
+          :filters="tableFilters"
+          data-test-id="hardwareDeconfig-processorCores-filter"
+          @filter-change="onFilterChange"
+        />
       </BCol>
     </BRow>
     <BRow>
@@ -88,6 +92,7 @@
             id="pagination-item-per-page"
             v-model="itemPerPage"
             :options="itemsPerPageOptions"
+            data-test-id="hardwareDeconfig-processorCores-itemsPerPage"
           />
         </BFormGroup>
       </BCol>
