@@ -11,7 +11,7 @@ jobs:
     
     steps:
       - name: Send Slack Notification (Test Mode)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && secrets.SLACK_WEBHOOK_URL != ''
         run: |
           curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
