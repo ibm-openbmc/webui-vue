@@ -16,7 +16,7 @@ jobs:
           curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
           -H "Content-Type: application/json" \
           -d '{
-            "text": "🧪 Test Notification from GitHub Actions",
+            "text": "Test Notification from GitHub Actions",
             "blocks": [
               {
                 "type": "header",
