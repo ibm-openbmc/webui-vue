@@ -53,6 +53,10 @@
         </BNavbarNav>
         <!-- Right aligned nav items -->
         <BNavbarNav class="ms-auto helper-menu">
+          <!-- Search Bar -->
+          <li class="nav-item">
+            <AppHeaderSearch />
+          </li>
           <BNavItem
             to="/logs/event-logs"
             data-test-id="appHeader-container-health"
@@ -117,6 +121,7 @@ import IconClose from '@carbon/icons-vue/es/close/20';
 import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
+import AppHeaderSearch from './AppHeaderSearch.vue';
 import useToast from '@/components/Composables/useToastComposable';
 import { useSystemInfo } from '@/api/composables/useSystemInfo';
 import stores from '@/store';

@@ -61,7 +61,14 @@
 //Do not change data import.
 //Exact match alias set to support
 //dotenv customizations.
-import { ref, watch, onMounted, computed } from 'vue';
+import {
+  ref,
+  watch,
+  onMounted,
+  computed,
+  nextTick,
+  onBeforeUnmount,
+} from 'vue';
 import AppNavigationData from './AppNavigationData';
 import { useRoute } from 'vue-router';
 import IconChevronUp from '@carbon/icons-vue/es/chevron--up/16';
@@ -84,6 +91,13 @@ onMounted(() => {
   });
   checkForUserData();
   eventBus.on('toggle-navigation', toggleIsOpen);
+  eventBus.on('expand-navigation-section', expandNavigationSection);
+  eventBus.on('collapse-navigation-sections', collapseNavigationSections);
+});
+
+onBeforeUnmount(() => {
+  eventBus.off('expand-navigation-section', expandNavigationSection);
+  eventBus.off('collapse-navigation-sections', collapseNavigationSections);
 });
 
 const modelType = computed(() => {
@@ -113,6 +127,55 @@ const checkForUserData = () => {
 };
 const toggleIsOpen = () => {
   isNavigationOpen.value = !isNavigationOpen.value;
+};
+
+// Function to collapse all currently expanded navigation sections
+const collapseNavigationSections = () => {
+  nextTick(() => {
+    const expandedSections = document.querySelectorAll(
+      '.nav-item__nav.collapse.show',
+    );
+
+    expandedSections.forEach((element) => {
+      const button = document.querySelector(`[aria-controls="${element.id}"]`);
+      if (button && !button.classList.contains('collapsed')) {
+        button.click();
+      }
+    });
+  });
+};
+
+// Function to expand a navigation section by its ID
+const expandNavigationSection = (sectionId) => {
+  nextTick(() => {
+    // Collapse all sections except the one we want to expand
+    const expandedSections = document.querySelectorAll(
+      '.nav-item__nav.collapse.show',
+    );
+
+    expandedSections.forEach((element) => {
+      // Only collapse if it's not the section we want to expand
+      if (element.id !== sectionId) {
+        const button = document.querySelector(
+          `[aria-controls="${element.id}"]`,
+        );
+        if (button && !button.classList.contains('collapsed')) {
+          button.click();
+        }
+      }
+    });
+
+    const collapseElement = document.getElementById(sectionId);
+    if (collapseElement) {
+      const isExpanded = collapseElement.classList.contains('show');
+      if (!isExpanded) {
+        const button = document.querySelector(`[aria-controls="${sectionId}"]`);
+        if (button) {
+          button.click();
+        }
+      }
+    }
+  });
 };
 </script>
 

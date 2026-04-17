@@ -240,7 +240,7 @@ export const routes = [
         },
       },
       {
-        path: '/operations/key-clear',
+        path: '/security-and-access/key-clear',
         name: 'key-clear',
         component: KeyClear,
         meta: {

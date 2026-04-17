@@ -1,0 +1,83 @@
+export const serviceLoginConsolesSearchContent = {
+  // Main description
+  description:
+    'Access BMC and hypervisor service consoles for system administration and troubleshooting',
+
+  // Feature descriptions
+  features: [
+    'BMC console access',
+    'Hypervisor console access',
+    'Service console selection',
+    'Terminal emulation',
+    'Console status monitoring',
+    'Connection status display',
+    'Open console in new tab',
+    'Full window console mode',
+    'Service login interface',
+    'System administration console',
+    'Troubleshooting console',
+    'Remote console access',
+  ],
+
+  // Searchable keywords
+  keywords: [
+    'service',
+    'login',
+    'console',
+    'consoles',
+    'BMC',
+    'hypervisor',
+    'terminal',
+    'access',
+    'status',
+    'connection',
+    'service console',
+    'login console',
+    'BMC console',
+    'hypervisor console',
+    'service login',
+    'console access',
+    'terminal access',
+    'console status',
+    'connection status',
+    'select console',
+    'console type',
+    'new tab',
+    'full window',
+    'service access',
+    'admin console',
+    'administration console',
+    'system console',
+    'management console',
+    'remote console',
+    'service terminal',
+    'hypervisor terminal',
+    'BMC terminal',
+  ],
+
+  // Related terms
+  relatedTerms: [
+    'system administration',
+    'remote management',
+    'console management',
+    'service mode',
+    'maintenance console',
+    'diagnostic console',
+    'troubleshooting',
+    'system troubleshooting',
+    'remote access',
+    'secure console',
+    'terminal session',
+    'console session',
+    'service session',
+    'administrative access',
+    'privileged access',
+    'system maintenance',
+    'hypervisor management',
+    'BMC management',
+    'out-of-band console',
+    'service interface',
+  ],
+};
+
+export default serviceLoginConsolesSearchContent;

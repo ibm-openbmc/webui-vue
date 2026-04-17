@@ -264,7 +264,7 @@ const AppNavigationData = () => {
         {
           id: 'key-clear',
           label: i18n.global.t('appNavigation.keyClear'),
-          route: '/operations/key-clear',
+          route: '/security-and-access/key-clear',
           restrictTo: ['Administrator', 'OemIBMServiceAgent'],
         },
       ],
