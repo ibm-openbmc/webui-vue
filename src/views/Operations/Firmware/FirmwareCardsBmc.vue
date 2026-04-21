@@ -168,7 +168,7 @@ function switchToRunning() {
 
   // Step 1 - Switch firmware
   const switchFirmware = () => {
-    if (!isReadonly) {
+    if (!isReadonly()) {
       infoToast(
         i18n.global.t('pageFirmware.toast.switchToRunning.step1Message'),
         {
