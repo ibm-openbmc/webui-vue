@@ -38,7 +38,7 @@
             <img
               width="100px"
               class="header-logo"
-              src="@/assets/images/logo-header.svg"
+              src="/img/logo-header.svg"
               :alt="altLogo"
             />
             <!-- :src="getImageUrl()" -->
