@@ -655,6 +655,8 @@ function saveUser({ isNewUser, userData, mfaByPass }) {
               mfaByPass,
             });
           }
+          // Clear selection and reset header checkbox after user creation
+          clearSelectedRows(tableRef);
         })
         .catch(({ message }) => toast.errorToast(message))
         .finally(() => {
@@ -664,7 +666,11 @@ function saveUser({ isNewUser, userData, mfaByPass }) {
     } else {
       userManagement
         .updateUserfromUserManagement(userData)
-        .then((success) => toast.successToast(success))
+        .then((success) => {
+          toast.successToast(success);
+          // Clear selection and reset header checkbox after user update
+          clearSelectedRows(tableRef);
+        })
         .catch(({ message }) => toast.errorToast(message))
         .finally(() => {
           isBusy.value = false;
