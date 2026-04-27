@@ -30,10 +30,16 @@
         <BCol>
           <b-card no-body>
             <b-tabs content-class="mt-3" fill>
-              <b-tab :title="$t('pageDeconfigurationHardware.memoryDimms')">
+              <b-tab
+                :title="$t('pageDeconfigurationHardware.memoryDimms')"
+                data-test-id="hardwareDeconfig-tab-memoryDimms"
+              >
                 <memory-dimms />
               </b-tab>
-              <b-tab :title="$t('pageDeconfigurationHardware.processorCores')">
+              <b-tab
+                :title="$t('pageDeconfigurationHardware.processorCores')"
+                data-test-id="hardwareDeconfig-tab-processorCores"
+              >
                 <processor-cores />
               </b-tab>
             </b-tabs>
