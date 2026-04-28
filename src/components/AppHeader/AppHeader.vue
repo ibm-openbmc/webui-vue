@@ -53,20 +53,26 @@
         </BNavbarNav>
         <!-- Right aligned nav items -->
         <BNavbarNav class="ms-auto helper-menu">
-          <BNavItem
-            to="/logs/event-logs"
-            data-test-id="appHeader-container-health"
-          >
-            <status-icon :status="healthStatusIcon" />
-            {{ $t('appHeader.health') }}
-          </BNavItem>
-          <BNavItem
-            to="/operations/server-power-operations"
-            data-test-id="appHeader-container-power"
-          >
-            <status-icon :status="serverStatusIcon" />
-            {{ $t('appHeader.power') }}
-          </BNavItem>
+          <li class="nav-item">
+            <a
+              href="#/logs/event-logs"
+              class="nav-link"
+              data-test-id="appHeader-container-health"
+            >
+              <status-icon :status="healthStatusIcon" />
+              {{ $t('appHeader.health') }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#/operations/server-power-operations"
+              class="nav-link"
+              data-test-id="appHeader-container-power"
+            >
+              <status-icon :status="serverStatusIcon" />
+              {{ $t('appHeader.power') }}
+            </a>
+          </li>
           <!-- Using LI elements instead of BNavItem to support semantic button elements -->
           <li class="nav-item">
             <BButton
