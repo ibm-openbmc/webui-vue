@@ -37,10 +37,6 @@ const useTableSelectableComposable = () => {
           // Remove the object from the array
           selectedRowsList.value.splice(indexToRemove, 1);
         }
-        // Uncheck header checkbox when any row is unchecked
-        tableHeaderCheckboxModel.value = false;
-        tableHeaderCheckboxIndeterminate.value =
-          selectedRowsList.value.length > 0;
       } else {
         tableRef.selectRow(rowIndex);
       }
@@ -61,10 +57,6 @@ const useTableSelectableComposable = () => {
           // Remove the object from the array
           selectedRowsList.value.splice(indexToRemove, 1);
         }
-        // Uncheck header checkbox when any row is unchecked
-        tableHeaderCheckboxModel.value = false;
-        tableHeaderCheckboxIndeterminate.value =
-          selectedRowsList.value.length > 0;
       } else {
         tableRef.selectRow(rowIndex);
       }
@@ -85,10 +77,6 @@ const useTableSelectableComposable = () => {
           // Remove the object from the array
           selectedRowsList.value.splice(indexToRemove, 1);
         }
-        // Uncheck header checkbox when any row is unchecked
-        tableHeaderCheckboxModel.value = false;
-        tableHeaderCheckboxIndeterminate.value =
-          selectedRowsList.value.length > 0;
       } else {
         tableRef.selectRow(rowIndex);
       }
@@ -109,10 +97,6 @@ const useTableSelectableComposable = () => {
           // Remove the object from the array
           selectedRowsList.value.splice(indexToRemove, 1);
         }
-        // Uncheck header checkbox when any row is unchecked
-        tableHeaderCheckboxModel.value = false;
-        tableHeaderCheckboxIndeterminate.value =
-          selectedRowsList.value.length > 0;
       } else {
         tableRef.selectRow(rowIndex);
       }
@@ -133,10 +117,6 @@ const useTableSelectableComposable = () => {
           // Remove the object from the array
           selectedRowsList.value.splice(indexToRemove, 1);
         }
-        // Uncheck header checkbox when any row is unchecked
-        tableHeaderCheckboxModel.value = false;
-        tableHeaderCheckboxIndeterminate.value =
-          selectedRowsList.value.length > 0;
       } else {
         tableRef.selectRow(rowIndex);
       }
