@@ -65,12 +65,12 @@
                   <dd v-else>--</dd>
                 </dl>
                 <span class="no-underline-link">
-                  <b-link
+                  <router-link
                     class="d-inline-block mb-4 m-md-0"
                     to="/security-and-access/certificates"
                   >
                     {{ $t('pageLdap.form.manageSslCertificates') }}
-                  </b-link>
+                  </router-link>
                 </span>
               </b-col>
               <b-col md="9" lg="8" xl="9">

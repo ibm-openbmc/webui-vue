@@ -97,7 +97,7 @@
                 <span class="responsive-text">{{ username }}</span>
               </template>
               <BDropdownItem
-                to="/profile-settings"
+                href="#/profile-settings"
                 data-test-id="appHeader-link-profile"
                 >{{ $t('appHeader.profileSettings') }}
               </BDropdownItem>
