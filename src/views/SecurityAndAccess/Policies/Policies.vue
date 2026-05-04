@@ -270,6 +270,33 @@
             </BFormCheckbox>
           </BCol>
         </BRow>
+        <BRow class="section-divider">
+          <BCol class="d-flex align-items-center justify-content-between">
+            <dl class="mt-3 mr-3 w-75">
+              <dt>
+                {{ $t('pagePolicies.sendServiceAlerts') }}
+              </dt>
+              <dd>
+                {{ $t('pagePolicies.sendServiceAlertsDescription') }}
+              </dd>
+            </dl>
+            <BFormCheckbox
+              id="sendServiceAlertsSwitch"
+              v-model="Policies.sendServiceAlertsEnabled"
+              data-test-id="policies-toggle-send-service-alerts"
+              switch
+              @update:model-value="changeSendServiceAlertsState"
+            >
+              <span class="visually-hidden">
+                {{ $t('pagePolicies.sendServiceAlerts') }}
+              </span>
+              <span v-if="Policies.sendServiceAlertsEnabled">
+                {{ $t('global.status.enabled') }}
+              </span>
+              <span v-else>{{ $t('global.status.disabled') }}</span>
+            </BFormCheckbox>
+          </BCol>
+        </BRow>
       </BCol>
     </BRow>
     <BModal
@@ -328,6 +355,7 @@ onMounted(() => {
     Policies.getUnauthenticatedACFUploadEnablement(),
     Policies.getTpmPolicy(),
     Policies.getBasicAuth(),
+    Policies.getSendServiceAlerts(),
     UserManagement.getUsers(),
     checkForUserData(),
   ]).finally(() => {
@@ -462,6 +490,15 @@ const enableUpload = (state) => {
   state
     ? uploadApi(state)
     : (Policies.unAuthenticatedACFUploadEnablementState = !state);
+};
+const changeSendServiceAlertsState = (state) => {
+  Policies.saveSendServiceAlertsEnabled(state)
+    .then((message) => {
+      Toast.successToast(message);
+    })
+    .catch(({ message }) => {
+      Toast.errorToast(message);
+    });
 };
 const checkForUserData = () => {
   if (!currentUser) {

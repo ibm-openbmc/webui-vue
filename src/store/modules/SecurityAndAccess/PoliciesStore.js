@@ -15,6 +15,7 @@ export const PoliciesStore = defineStore('policies', {
       usbFirmwareUpdatePolicyEnabled: false,
       hostUsbEnabled: 'Enabled',
       basicAuthEnabled: false,
+      sendServiceAlertsEnabled: true,
     };
   },
   getters: {
@@ -29,6 +30,7 @@ export const PoliciesStore = defineStore('policies', {
       state.usbFirmwareUpdatePolicyEnabled,
     getHostUsbEnabled: (state) => state.hostUsbEnabled,
     basicAuthEnabledGetter: (state) => state.basicAuthEnabled,
+    getSendServiceAlertsEnabled: (state) => state.sendServiceAlertsEnabled,
   },
   actions: {
     async getNetworkProtocolStatusAfterDelay() {
@@ -366,6 +368,44 @@ export const PoliciesStore = defineStore('policies', {
           throw new Error(
             i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
               policy: i18n.global.t('pagePolicies.basicAuth'),
+            }),
+          );
+        });
+    },
+    async getSendServiceAlerts() {
+      return await api
+        .get('/redfish/v1/Systems/system')
+        .then((response) => {
+          this.sendServiceAlertsEnabled =
+            response?.data?.Oem?.IBM?.SendServiceAlerts || false;
+        })
+        .catch((error) => console.log(error));
+    },
+    async saveSendServiceAlertsEnabled(updatedSendServiceAlerts) {
+      this.sendServiceAlertsEnabled = updatedSendServiceAlerts;
+      const oem = {
+        Oem: {
+          IBM: {
+            SendServiceAlerts: updatedSendServiceAlerts,
+          },
+        },
+      };
+      return await api
+        .patch('/redfish/v1/Systems/system', oem)
+        .then(() => {
+          return i18n.global.t(
+            'pagePolicies.toast.successNetworkPolicyUpdate',
+            {
+              policy: i18n.global.t('pagePolicies.sendServiceAlerts'),
+            },
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+          this.sendServiceAlertsEnabled = !updatedSendServiceAlerts;
+          throw new Error(
+            i18n.global.t('pagePolicies.toast.errorNetworkPolicyUpdate', {
+              policy: i18n.global.t('pagePolicies.sendServiceAlerts'),
             }),
           );
         });

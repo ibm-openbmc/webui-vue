@@ -1407,7 +1407,9 @@
     },
     "acfUploadEnablementConfirmText": "Caution: Enabling this setting removes the physical system access requirement from the process to upload an Access Control File (ACF).  This would allow anyone who is authorized to request an ACF and has network access to ASMI to gain access to the admin account.  Do you want to proceed?",
     "vtpm": "VirtualTPM",
-    "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system."
+    "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system.",
+    "sendServiceAlerts": "Send Service Alerts",
+    "sendServiceAlertsDescription": "This property shall indicate whether service alerts should be sent when hardware isolation events occur. When set to 'true', service alerts will be sent. When set to 'false', service alerts will be suppressed."
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
