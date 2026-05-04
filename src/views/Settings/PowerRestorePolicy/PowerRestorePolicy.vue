@@ -3,7 +3,18 @@
     <page-title
       :title="$t('appPageTitle.powerRestorePolicy')"
       :description="$t('pagePowerRestorePolicy.description')"
-    />
+    >
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol>
         <alert v-if="isOperatingModeManual" variant="warning" class="mb-5">
@@ -48,14 +59,24 @@
     >
       {{ $t('global.action.save') }}
     </BButton>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
+import { searchContent } from './PowerRestorePolicySearchContent.js';
 import stores from '@/store';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
@@ -69,6 +90,24 @@ const bootSettings = stores.BootSettingsStore();
 
 const policyValue = ref(null);
 const options = ref([]);
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  switch (action) {
+    case 'select-always-on':
+      currentPowerRestorePolicy.value = 'AlwaysOn';
+      break;
+    case 'select-always-off':
+      currentPowerRestorePolicy.value = 'AlwaysOff';
+      break;
+    case 'select-last-state':
+      currentPowerRestorePolicy.value = 'LastState';
+      break;
+    default:
+      break;
+  }
+};
 
 onBeforeRouteLeave(() => {
   hideLoader();

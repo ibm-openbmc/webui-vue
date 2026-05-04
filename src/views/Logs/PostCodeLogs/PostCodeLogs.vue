@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.postCodeLogs')" />
+    <page-title :title="$t('appPageTitle.postCodeLogs')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol xl="12" class="text-right">
         <BButton variant="dark" type="button" @click="openConsoleWindow()">
@@ -137,16 +148,25 @@
         />
       </BCol>
     </BRow>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="postCodeLogsSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
 <script setup>
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import api from '@/store/api';
 import i18n from '@/i18n';
 import { omit } from 'lodash';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
@@ -164,6 +184,7 @@ import { ref, onMounted, computed, watch, nextTick } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import stores from '../../../store';
 import { buildUrlNewTab } from '@/utilities/url';
+import { postCodeLogsSearchContent } from './PostCodeLogsSearchContent.js';
 
 const {
   clearSelectedRows,
@@ -236,6 +257,7 @@ const tableHeaderCheckboxIndeterminateVal = ref(
   tableHeaderCheckboxIndeterminate,
 );
 const expandColumn = ref(['timeStampOffset']);
+const showHelpModal = ref(false);
 
 onMounted(() => {
   startLoader();
@@ -364,6 +386,23 @@ const onChangeSearchInput = (event) => {
 };
 const onClearSearchInput = () => {
   searchFilterInputVal.value = '';
+};
+
+const handleHelpAction = (action) => {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'open-console':
+      openConsoleWindow();
+      break;
+    case 'focus-search':
+      // Focus on search input if applicable
+      break;
+    case 'focus-date-filter':
+      // Focus on date filter
+      break;
+    default:
+      break;
+  }
 };
 
 watch(

@@ -3,7 +3,18 @@
     <page-title
       :title="$t('appPageTitle.factoryReset')"
       :description="$t('pageFactoryReset.description')"
-    />
+    >
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-4">
@@ -72,14 +83,24 @@
 
     <!-- Modals -->
     <modal-reset :reset-type="resetOption" @ok-confirm="onOkConfirm" />
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import Alert from '@/components/Global/Alert.vue';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import ModalReset from './FactoryResetModal.vue';
+import { searchContent } from './FactoryResetSearchContent.js';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import stores from '@/store';
@@ -93,6 +114,21 @@ const authentication = stores.AuthenticationStore();
 const factoryReset = stores.FactoryResetStore();
 
 const resetOption = ref('resetBios');
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  switch (action) {
+    case 'reset-bios':
+      resetOption.value = 'resetBios';
+      break;
+    case 'reset-all':
+      resetOption.value = 'resetToDefaults';
+      break;
+    default:
+      break;
+  }
+};
 
 onMounted(() => {
   hideLoader();

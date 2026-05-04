@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.dateTime')" />
+    <page-title :title="$t('appPageTitle.dateTime')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-4">
@@ -302,6 +313,13 @@
         </BFormGroup>
       </BForm>
     </page-section>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -317,14 +335,17 @@ import {
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useLocalTimezoneLabelComposable from '@/components/Composables/useLocalTimezoneLabelComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useVuelidate } from '@vuelidate/core';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import { searchContent } from './DateTimeSearchContent.js';
 import stores from '@/store';
 import eventBus from '@/eventBus';
 import {
@@ -377,6 +398,20 @@ const form = ref({
 const loading = ref('');
 const showDhcpNtpServers = ref(false);
 const dhcpNtp = ref([]);
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  switch (action) {
+    case 'configure-manual':
+      form.value.configurationSelected = 'manual';
+      break;
+    case 'configure-ntp':
+      form.value.configurationSelected = 'ntp';
+      break;
+    default:
+      break;
+  }
+};
+const showHelpModal = ref(false);
 
 onBeforeRouteLeave(() => {
   hideLoader();

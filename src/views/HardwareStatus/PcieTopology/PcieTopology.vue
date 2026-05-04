@@ -1,6 +1,17 @@
 <template>
   <b-container fluid="xl">
-    <page-title :title="$t('appPageTitle.pcieTopology')" />
+    <page-title :title="$t('appPageTitle.pcieTopology')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <b-row>
       <b-col md="8" xl="6">
         <alert v-if="isInPhypStandby" variant="info" class="mb-4">
@@ -290,13 +301,22 @@
     <!-- Modals -->
     <modal-reset :reset-type="resetOption" :reset-uri="resetLinkUri" />
     <modal-leds :selected-obj="selectedObj" />
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </b-container>
 </template>
 
 <script setup>
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableFilter from '@/components/Global/TableFilter.vue';
@@ -322,6 +342,7 @@ import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 import { BTable } from 'bootstrap-vue-next';
+import { searchContent } from './PcieTopologySearchContent.js';
 
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { getTotalRowCount, itemsPerPageOptions, currentPage, perPage } =
@@ -343,6 +364,13 @@ const selectedObj = ref({});
 const currentPageNo = ref(currentPage);
 const itemPerPage = ref(perPage);
 const fetched = ref(false);
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  // Add any specific actions if needed
+};
+
 const fields = reactive([
   {
     key: 'expandRow',

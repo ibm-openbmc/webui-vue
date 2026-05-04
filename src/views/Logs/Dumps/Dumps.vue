@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.dumps')" />
+    <page-title :title="$t('appPageTitle.dumps')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow v-if="selectedDumpType">
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-4">
@@ -192,6 +203,13 @@
         {{ $t('pageDumps.modal.deleteDumpConfirmation') }}
       </p>
     </BModal>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="dumpsSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -202,9 +220,11 @@ import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
 import IconDelete from '@carbon/icons-vue/es/trash-can/20';
 import IconDownload from '@carbon/icons-vue/es/download/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import DumpsForm from './DumpsForm.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
@@ -215,6 +235,7 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
 import stores from '@/store';
 import eventBus from '@/eventBus';
+import { dumpsSearchContent } from './DumpsSearchContent.js';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
@@ -292,6 +313,7 @@ const searchFilterInput = ref('');
 const searchTotalFilteredRows = ref(0);
 const openModal = ref(false);
 const dumpVal = ref();
+const showHelpModal = ref(false);
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -400,6 +422,23 @@ const exportFileName = (row) => {
   let filename = row.item.dumpType + '_' + row.item.id;
   filename = filename.replace(RegExp(' ', 'g'), '_');
   return filename;
+};
+
+const handleHelpAction = (action) => {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'initiate-bmc-dump':
+      // Focus on dump form if applicable
+      break;
+    case 'focus-search':
+      // Focus on search input if applicable
+      break;
+    case 'open-filter':
+      // Open filter modal
+      break;
+    default:
+      break;
+  }
 };
 
 watch(

@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.ibmiServiceFunctions')" />
+    <page-title :title="$t('appPageTitle.ibmiServiceFunctions')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol v-if="isIBMi && !isLoading" md="8">
         <BRow>
@@ -161,16 +172,26 @@
         </BRow>
       </BCol>
     </BRow>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="ibmiServiceFunctionsSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
 <script setup>
 import { ref, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import stores from '@/store';
 import Alert from '@/components/Global/Alert.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { ibmiServiceFunctionsSearchContent } from './IBMiServiceFunctionsSearchContent.js';
 
 const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
@@ -180,6 +201,7 @@ const ibmiServiceFunctionsStore = stores.IBMiServiceFunctionsStore();
 const bootSettingsStore = stores.BootSettingsStore();
 
 const isLoading = ref(false);
+const showHelpModal = ref(false);
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -231,6 +253,24 @@ const isFunctionDisabled = (value) => {
     return false;
   } else {
     return true;
+  }
+};
+
+const handleHelpAction = (action) => {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'refresh-status':
+      // Refresh function status
+      globalStore.getBootProgress();
+      ibmiServiceFunctionsStore.getAvailableServiceFunctions();
+      break;
+    case 'execute-function-21':
+      if (!isFunctionDisabled(21)) {
+        exceuteFunction(21);
+      }
+      break;
+    default:
+      break;
   }
 };
 </script>

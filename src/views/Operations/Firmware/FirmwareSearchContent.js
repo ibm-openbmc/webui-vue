@@ -3,6 +3,106 @@ export const firmwareSearchContent = {
   description:
     'View firmware versions of BMC and server including running and backup images. Switch between images to activate selected firmware. Update firmware by uploading files and manage access key expiration for firmware updates.',
 
+  // Help content
+  help: {
+    title: 'Firmware',
+    overview:
+      'The Firmware page allows you to view and manage firmware versions for both the BMC (Baseboard Management Controller) and the server. You can view running and backup images, switch between firmware images, update firmware by uploading new files, and manage access keys for firmware updates. This page provides comprehensive firmware management capabilities to keep your system up to date.',
+    sections: [
+      {
+        title: 'Viewing Firmware Versions',
+        content:
+          'The page displays firmware information for both BMC and server components. Each firmware type shows two images: the Running image (currently active firmware) and the Backup image (alternative firmware version). For each image, you can see the version number and current status. This allows you to track which firmware versions are installed and their operational state.',
+      },
+      {
+        title: 'Running Image',
+        content:
+          'The Running image represents the currently active firmware version on your system. This is the firmware that is currently executing and controlling the BMC or server operations. The version number and status are displayed, allowing you to verify which firmware is currently in use. The running image is the primary firmware that boots by default.',
+      },
+      {
+        title: 'Backup Image',
+        content:
+          "The Backup image is an alternative firmware version stored on the system. This provides a fallback option if you need to switch firmware versions. The backup image can be activated to become the running image, which is useful for testing new firmware or reverting to a previous version. You can switch to the backup image using the 'Switch to running' option.",
+      },
+      {
+        title: 'Switching Firmware Images',
+        content:
+          "To activate a different firmware image, click the 'Switch to running' button next to the desired image. This will open a confirmation dialog. Important: A BMC reboot is required to run the backup image. During the reboot process, the application might be unresponsive for several minutes. Click 'Switch images' to confirm the change or 'Cancel' to exit without making changes. After the switch, the selected image will become the new running image.",
+      },
+      {
+        title: 'Updating Firmware',
+        content:
+          "The Update firmware section allows you to upload and install new firmware files. To update firmware: 1) Click 'Add file' to select and upload a firmware file from your workstation. 2) Once the file is uploaded, click 'Start update' to begin the firmware update process. The system will process the uploaded firmware and install it. Ensure you have the correct firmware file for your system before uploading.",
+      },
+      {
+        title: 'Access Key Management',
+        content:
+          "The Access key expiration section displays the expiration date of the current access key used for firmware updates. Access keys provide security for firmware operations. When the key is approaching expiration or has expired, click 'Manage access key' to obtain a new access key. This ensures you can continue to perform firmware updates securely. Regular key renewal is recommended for maintaining system security.",
+      },
+      {
+        title: 'BMC Reboot Requirement',
+        content:
+          'When switching firmware images, a BMC reboot is required for the changes to take effect. During the reboot process: 1) Your web browser will lose contact with the BMC for several minutes. 2) The application will be unresponsive during this time. 3) When the BMC is back online, you may need to log in again. 4) The newly selected firmware image will be running. Plan firmware switches during maintenance windows to minimize disruption.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'What is the difference between running and backup images?',
+        answer:
+          'The running image is the currently active firmware that is executing on your system. The backup image is an alternative firmware version stored on the system that can be activated if needed. You can switch between them to change which firmware version is active.',
+      },
+      {
+        question: 'How do I switch to a different firmware version?',
+        answer:
+          "Click the 'Switch to running' button next to the firmware image you want to activate. Confirm the switch in the dialog that appears. Note that a BMC reboot is required, which will cause the application to be unresponsive for several minutes.",
+      },
+      {
+        question: 'What happens during a firmware image switch?',
+        answer:
+          'When you switch firmware images, the BMC will reboot to activate the selected image. During this process, your web browser will lose contact with the BMC for several minutes, and the application will be unresponsive. When the BMC comes back online, you may need to log in again.',
+      },
+      {
+        question: 'How do I update firmware to a new version?',
+        answer:
+          "To update firmware: 1) Click 'Add file' to upload a firmware file from your workstation. 2) Once uploaded, click 'Start update' to begin the firmware update process. Ensure you have the correct firmware file for your system before uploading.",
+      },
+      {
+        question: 'What is the access key and why does it expire?',
+        answer:
+          "The access key is a security credential used for firmware update operations. It expires periodically to maintain system security. When it expires or is approaching expiration, click 'Manage access key' to obtain a new key so you can continue performing firmware updates.",
+      },
+      {
+        question: 'Can I cancel a firmware image switch?',
+        answer:
+          "Yes, you can cancel a firmware image switch before confirming it. When the switch confirmation dialog appears, click 'Cancel' to exit without making any changes. However, once you click 'Switch images' and the BMC begins rebooting, the process cannot be cancelled.",
+      },
+    ],
+    quickActions: [
+      {
+        label: 'Switch to backup image',
+        action: 'switch-backup',
+        description: 'Activate the backup firmware image',
+      },
+      {
+        label: 'Upload firmware',
+        action: 'upload-firmware',
+        description: 'Add a new firmware file for update',
+      },
+      {
+        label: 'Manage access key',
+        action: 'manage-key',
+        description: 'Obtain a new access key',
+      },
+    ],
+    tips: [
+      'Always verify the firmware version before switching images',
+      'Plan firmware switches during maintenance windows to minimize disruption',
+      'Keep track of access key expiration dates to avoid update issues',
+      'Ensure you have the correct firmware file for your specific system model',
+      'The backup image provides a safety net for testing new firmware versions',
+    ],
+  },
+
   // Feature descriptions
   features: [
     'BMC firmware management',

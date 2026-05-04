@@ -5,6 +5,7 @@
       "add": "Add",
       "cancel": "Cancel",
       "clearAll": "Clear all",
+      "close": "Close",
       "confirm": "Confirm",
       "copy": "Copy",
       "delete": "Delete",
@@ -116,6 +117,25 @@
       "minMifMessage": "Minimum firmware level supported",
       "unAuthDescription": "The attempted action is not accessible from the logged in account. Contact your system administrator to check your privilege role.",
       "unAuthTitle": "Unauthorized"
+    },
+    "help": {
+      "title": "Help",
+      "searchPlaceholder": "Search help topics...",
+      "searchResults": "Search Results",
+      "noResults": "No results found",
+      "tryDifferentSearch": "Try a different search term",
+      "helpSections": "Help Topics",
+      "faqs": "Frequently Asked Questions",
+      "quickActions": "Quick Actions",
+      "tips": "Tips",
+      "allTopics": "All Topics",
+      "steps": "Steps",
+      "warning": "Warning",
+      "note": "Note",
+      "relevance": "relevance",
+      "hasWarning": "Has Warning",
+      "questionDetected": "Question detected",
+      "action": "Action"
     }
   },
   "appHeader": {
@@ -423,7 +443,7 @@
     "configureSettings": "Configure settings",
     "viewDynamicNtp": "View Dynamic NTP servers",
     "dhcpNtpInfoTooltip": "This section captures the DHCP supplied NTP server details",
-    "staticNtp":"Static NTP servers",
+    "staticNtp": "Static NTP servers",
     "form": {
       "date": "Date",
       "manual": "Manual",
@@ -1181,7 +1201,7 @@
     "alert": {
       "heading": "Applying changes",
       "message1": "System has to be powered off.",
-      "message2":  "Changes made will take effect on next reboot.",
+      "message2": "Changes made will take effect on next reboot.",
       "serverMustBePoweredOffTo": "Server must be powered off to:",
       "updateActiveMemoryMirroring": "Update active memory mirror mode",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",

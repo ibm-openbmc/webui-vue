@@ -158,6 +158,254 @@ export const systemParametersSearchContent = {
     'system maintenance',
     'processor exercisers',
   ],
+
+  // Help content for Help Modal NLP integration
+  help: {
+    title: 'System Parameters Help',
+    overview:
+      'The System Parameters page allows you to view or edit system parameters including lateral cast out, frequency cap (MHz), aggressive prefetch, runtime processor diagnostic (RPD) feature and policy, RPD scheduled run time, guard on error, and immediate test requests. Configure processor diagnostics with enabled, automatic (128GB memory), scheduled, or disabled modes.',
+
+    sections: [
+      {
+        id: 'lateral-cast-out',
+        title: 'Lateral Cast Out',
+        content:
+          'Control lateral cast out feature. Only change this value if instructed by your service provider as it might degrade system performance.',
+        keywords: ['lateral cast out', 'enable', 'disable', 'performance'],
+        steps: [
+          'Locate the Lateral cast out section',
+          'To disable Lateral cast out, set the option to Disabled',
+          'Click Save to apply changes',
+        ],
+        warning:
+          'Only change this value if instructed by your service provider as it might degrade system performance.',
+        note: 'By default, the Lateral cast out option is set to Enabled.',
+      },
+      {
+        id: 'frequency-cap',
+        title: 'Frequency Cap',
+        content:
+          'When enabled, prevents all processors in the system from exceeding the specified maximum operating frequency in MHz.',
+        keywords: ['frequency cap', 'MHz', 'maximum frequency', 'enable'],
+        steps: [
+          'To enable Frequency cap, set the option to Enabled',
+          'Enter the frequency cap value in MHz in the Frequency cap field',
+          'Click Save to save your changes',
+        ],
+        note: 'By default, the Frequency cap option is set to Disabled.',
+      },
+      {
+        id: 'aggressive-prefetch',
+        title: 'Aggressive Prefetch',
+        content:
+          'Control processor aggressive prefetch feature. Only change this value if instructed by service provider as it might degrade system performance.',
+        keywords: ['aggressive prefetch', 'processor', 'enable', 'disable'],
+        steps: [
+          'Locate the Aggressive prefetch section',
+          'To disable Aggressive prefetch, set the option to Disabled',
+          'Click Save to apply changes',
+        ],
+        warning:
+          'Only change this value if instructed by service provider as it might degrade system performance.',
+        note: 'By default, the Aggressive prefetch option is set to Enabled.',
+      },
+      {
+        id: 'rpd-feature',
+        title: 'Runtime Processor Diagnostic Feature',
+        content:
+          'Control whether the Runtime Processor Diagnostics (RPD) Feature will be configured on the system.',
+        keywords: [
+          'RPD',
+          'runtime processor diagnostic',
+          'feature',
+          'enable',
+          'automatic',
+        ],
+        steps: [
+          'Select the Runtime processor diagnostic feature from the following options:',
+          '  - Enabled: The RPD feature will be configured regardless of the amount of installed memory',
+          '  - Automatic: The RPD feature will be configured on systems with at least 128GB of installed memory and not configured on systems with less than 128GB',
+          '  - Disabled: The RPD feature will not be configured',
+          'Click "Update RPD feature" to save the RPD feature',
+          'The message "RPD feature saved successfully. Changes made will take effect on next reboot" will be displayed',
+        ],
+        note: 'Changes made will take effect on next reboot.',
+      },
+      {
+        id: 'rpd-policy',
+        title: 'Runtime Processor Diagnostic Policy',
+        content:
+          'Configure how and when runtime processor diagnostics are executed.',
+        keywords: [
+          'RPD policy',
+          'enabled',
+          'scheduled',
+          'disabled',
+          'periodic',
+        ],
+        steps: [
+          'Select the Runtime processor diagnostic policy from the following options:',
+          '  - Enabled: Run on each core to test them on periodic basis',
+          '  - Scheduled: Run sequentially on each core at the scheduled time each day for the specified duration (in minutes)',
+          '  - Disabled: No diagnostics or exercisers will be run',
+          'Click "Update RPD feature" to save the RPD policy',
+          'The message "RPD policy saved successfully." will be displayed',
+        ],
+      },
+      {
+        id: 'rpd-scheduled-run',
+        title: 'RPD Scheduled Run Time',
+        content:
+          'Configure the scheduled run time for processor diagnostics. Only used when RPD policy is set to "Scheduled".',
+        keywords: ['RPD', 'scheduled', 'time', 'duration', 'UTC'],
+        steps: [
+          'Enter the start time in the "Start time (24-hour time (UTC))" field',
+          'Enter the duration in the "Duration (minutes)" field',
+          'Click "Update RPD schedule run" to update the RPD schedule run',
+          'The message "Updated RPD schedule run successfully." will be displayed',
+        ],
+        note: 'Only used when RPD policy is set to "Scheduled". Time is in 24-hour UTC format.',
+      },
+      {
+        id: 'guard-on-error',
+        title: 'Guard on Error',
+        content:
+          'Control whether a processor core will be de-configured on error.',
+        keywords: ['guard on error', 'de-configured', 'error', 'enable'],
+        steps: [
+          'To enable Guard on error, set the option to Enabled',
+          'Click Save to apply changes',
+        ],
+        note: 'By default, the Guard on error option is set to Disabled.',
+      },
+      {
+        id: 'immediate-test',
+        title: 'Immediate Test Requested',
+        content:
+          'Override RPD policy and start diagnostic test run immediately. The button will be greyed out until the test completes.',
+        keywords: ['immediate test', 'run now', 'diagnostic', 'override'],
+        steps: [
+          'Click "Run now" to start the diagnostic test run immediately',
+          'The message "Diagnostic test run saved successfully, Tests will start once the system is powered on." will be displayed',
+          'The button will be greyed out until the test runs',
+          'To stop the test, click "Stop diagnostic test run"',
+          'The message "Diagnostic test run stopped successfully." will be displayed',
+        ],
+        note: 'Pressing Run now overrides the RPD policy and starts tests immediately when system is powered on.',
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'When should I change Lateral cast out settings?',
+        answer:
+          'Only change this value if instructed by your service provider as it might degrade system performance.',
+        keywords: ['lateral cast out', 'when', 'change', 'should I'],
+      },
+      {
+        question: 'What is the default state of Lateral cast out?',
+        answer: 'By default, the Lateral cast out option is set to Enabled.',
+        keywords: ['lateral cast out', 'default', 'state'],
+      },
+      {
+        question: 'What does Frequency cap do?',
+        answer:
+          'When enabled, Frequency cap prevents all processors in the system from exceeding the specified maximum operating frequency in MHz.',
+        keywords: ['frequency cap', 'what does', 'do'],
+      },
+      {
+        question: 'What are the RPD feature options?',
+        answer:
+          'Enabled (always configured), Automatic (configured on systems with at least 128GB memory), or Disabled (not configured).',
+        keywords: ['RPD', 'feature', 'options', 'what are'],
+      },
+      {
+        question: 'What does RPD policy "Enabled" mean?',
+        answer:
+          'Enabled means diagnostics run on each core to test them on a periodic basis.',
+        keywords: ['RPD policy', 'enabled', 'what does', 'mean'],
+      },
+      {
+        question: 'What does RPD policy "Scheduled" mean?',
+        answer:
+          'Scheduled means diagnostics run sequentially on each core at the scheduled time each day for the specified duration in minutes.',
+        keywords: ['RPD policy', 'scheduled', 'what does', 'mean'],
+      },
+      {
+        question: 'When is RPD scheduled run time used?',
+        answer:
+          'RPD scheduled run time is only used when RPD policy is set to "Scheduled".',
+        keywords: ['RPD', 'scheduled', 'when', 'used'],
+      },
+      {
+        question: 'What time format is used for RPD scheduling?',
+        answer: 'Start time uses 24-hour time format in UTC.',
+        keywords: ['time format', 'RPD', '24-hour', 'UTC'],
+      },
+      {
+        question: 'What does Guard on error do?',
+        answer:
+          'When enabled, Guard on error causes a processor core to be de-configured when an error occurs.',
+        keywords: ['guard on error', 'what does', 'do'],
+      },
+      {
+        question: 'What happens when I click "Run now"?',
+        answer:
+          'The RPD policy will be overridden and diagnostic test run will start immediately once the system is powered on. The button will be greyed out until the test runs.',
+        keywords: ['run now', 'what happens', 'immediate test'],
+      },
+      {
+        question: 'Can I stop a running diagnostic test?',
+        answer:
+          'Yes, click "Stop diagnostic test run" to stop the diagnostic test.',
+        keywords: ['stop', 'diagnostic', 'test', 'can I'],
+      },
+      {
+        question: 'When do RPD feature changes take effect?',
+        answer: 'Changes made to RPD feature will take effect on next reboot.',
+        keywords: ['RPD', 'when', 'take effect', 'reboot'],
+      },
+    ],
+
+    quickActions: [
+      {
+        label: 'Configure RPD feature',
+        description: 'Set runtime processor diagnostic feature',
+        action: 'configure-rpd-feature',
+      },
+      {
+        label: 'Configure RPD policy',
+        description: 'Set diagnostic policy',
+        action: 'configure-rpd-policy',
+      },
+      {
+        label: 'Schedule RPD run time',
+        description: 'Set scheduled diagnostic time',
+        action: 'schedule-rpd',
+      },
+      {
+        label: 'Run diagnostic now',
+        description: 'Start immediate diagnostic test',
+        action: 'run-diagnostic-now',
+      },
+    ],
+
+    tips: [
+      'Only change Lateral cast out if instructed by service provider',
+      'Only change Aggressive prefetch if instructed by service provider',
+      'Frequency cap prevents processors from exceeding specified MHz',
+      'RPD Automatic mode requires at least 128GB of installed memory',
+      'RPD feature changes take effect on next reboot',
+      'RPD Scheduled policy runs at specified time each day',
+      'Use 24-hour UTC format for RPD scheduled start time',
+      'Guard on error de-configures cores when errors occur',
+      'Run now button overrides RPD policy for immediate testing',
+      'Button is greyed out while diagnostic test is running',
+      'Stop diagnostic test run to cancel running tests',
+      'RPD policy Disabled means no diagnostics will run',
+    ],
+  },
 };
 
+export const searchContent = systemParametersSearchContent;
 export default systemParametersSearchContent;

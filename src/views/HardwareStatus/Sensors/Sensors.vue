@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.sensors')" />
+    <page-title :title="$t('appPageTitle.sensors')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
 
     <BRow class="align-items-end">
       <BCol sm="6" md="5" xl="4" class="searchStyle">
@@ -178,6 +189,13 @@
         />
       </BCol>
     </BRow>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -186,8 +204,10 @@ import { ref, onMounted, computed, onBeforeMount, watch, nextTick } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useSensors } from '@/api/composables/useSensors';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import Search from '@/components/Global/Search.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import TableFilter from '@/components/Global/TableFilter.vue';
@@ -200,6 +220,7 @@ import useTableFilterComposable from '@/components/Composables/useTableFilterCom
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import eventBus from '@/eventBus';
+import { searchContent } from './SensorsSearchContent.js';
 
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
@@ -253,6 +274,12 @@ const activeFiltersRows = ref([]);
 const isBusy = computed(() => isSensorsLoading.value);
 const isAllSelected = ref(false);
 const searchFilterInput = ref('');
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  // Add any specific actions if needed
+};
 
 const fields = ref([
   {

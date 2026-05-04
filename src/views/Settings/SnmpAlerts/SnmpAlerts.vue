@@ -3,7 +3,18 @@
     <page-title
       :title="$t('appPageTitle.snmpAlerts')"
       :description="$t('pageSnmpAlerts.pageDescription')"
-    />
+    >
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol xl="9" class="text-end">
         <BButton variant="primary" @click="initModalAddDestination">
@@ -109,6 +120,13 @@
         {{ deleteMessage }}
       </p>
     </BModal>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -117,8 +135,11 @@ import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import ModalAddDestination from './ModalAddDestination.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { searchContent } from './SnmpAlertsSearchContent.js';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
@@ -150,6 +171,18 @@ const deleteType = ref('');
 const deleteMessage = ref('');
 const tableRef = ref(null);
 const isAllSelected = ref(false);
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  switch (action) {
+    case 'add-destination':
+      initModalAddDestination();
+      break;
+    default:
+      break;
+  }
+};
 const isBusy = ref(true);
 
 const fields = ref([

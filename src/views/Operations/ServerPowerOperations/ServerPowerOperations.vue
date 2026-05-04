@@ -1,7 +1,18 @@
 <template>
   <div>
     <BContainer fluid="xl">
-      <page-title :title="$t('appPageTitle.serverPowerOperations')" />
+      <page-title :title="$t('appPageTitle.serverPowerOperations')">
+        <template #actions>
+          <BButton
+            variant="link"
+            class="btn-icon-only"
+            @click="showHelpModal = true"
+          >
+            <icon-help />
+            <span class="sr-only">{{ $t('global.help.title') }}</span>
+          </BButton>
+        </template>
+      </page-title>
       <BRow class="mb-4">
         <BCol sm="10">
           <page-section
@@ -239,6 +250,13 @@
         {{ modalMessage }}
       </p>
     </BModal>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="serverPowerOperationsSearchContent"
+      @action="handleHelpAction"
+    />
   </div>
 </template>
 
@@ -253,8 +271,11 @@ import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import BootSettings from './BootSettings.vue';
 import Alert from '@/components/Global/Alert.vue';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import ArrowRight16 from '@carbon/icons-vue/es/arrow--right/16';
 import NetworkSettingsModal from './NetworkSettingsModal.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { serverPowerOperationsSearchContent } from './ServerPowerOperationsSearchContent.js';
 
 import stores from '@/store';
 
@@ -282,6 +303,30 @@ const modalOptions = ref({
   cancelTitle: '',
 });
 const modalOption = ref('');
+const showHelpModal = ref(false);
+
+function handleHelpAction(action) {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'power-on':
+      if (serverStatus.value === 'off') {
+        powerOn();
+      }
+      break;
+    case 'reboot-server':
+      if (serverStatus.value === 'on') {
+        rebootServer();
+      }
+      break;
+    case 'shutdown-server':
+      if (serverStatus.value === 'on') {
+        shutdownServer();
+      }
+      break;
+    default:
+      break;
+  }
+}
 
 onBeforeRouteLeave(() => {
   hideLoader();

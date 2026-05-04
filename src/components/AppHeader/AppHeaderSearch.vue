@@ -39,6 +39,19 @@
         </BButton>
       </div>
 
+      <!-- NLP Intent Indicator -->
+      <div
+        v-if="parsedIntent && searchQuery && isSearchActive"
+        class="nlp-intent-indicator"
+      >
+        <span v-if="parsedIntent.isQuestion" class="intent-badge question">
+          ❓ Question detected
+        </span>
+        <span v-if="parsedIntent.action" class="intent-badge action">
+          Action: <strong>{{ parsedIntent.action }}</strong>
+        </span>
+      </div>
+
       <!-- Search Results Dropdown -->
       <div
         v-if="showResults && filteredRoutes.length > 0"
@@ -46,6 +59,9 @@
       >
         <div class="results-header">
           {{ $t('appHeader.search.results', { count: filteredRoutes.length }) }}
+          <span v-if="parsedIntent" class="nlp-enhanced-badge">
+            🧠 NLP Enhanced
+          </span>
         </div>
         <ul class="results-list" role="listbox">
           <li
@@ -94,6 +110,7 @@ import IconSearch from '@carbon/icons-vue/es/search/20';
 import IconClose from '@carbon/icons-vue/es/close/20';
 import IconArrowRight from '@carbon/icons-vue/es/arrow--right/20';
 import { searchContent } from './searchUtils';
+import { useNLPParser } from '@/components/Composables/useNLPParser';
 import AppNavigationData from '@/components/AppNavigation/AppNavigationData.js';
 import stores from '@/store';
 import eventBus from '@/eventBus';
@@ -107,6 +124,10 @@ const isSearchActive = ref(false);
 const showResults = ref(false);
 const selectedIndex = ref(0);
 const searchInput = ref(null);
+const parsedIntent = ref(null);
+
+// Initialize NLP parser
+const { parseQuery } = useNLPParser();
 
 // Helper function to get category name and ID from route path
 const getCategoryFromPath = (path) => {
@@ -213,6 +234,15 @@ const focusSearch = () => {
   searchInput.value?.focus();
 };
 
+// Parse query with NLP when user types
+watch(searchQuery, (newQuery) => {
+  if (newQuery && newQuery.trim().length > 2) {
+    parsedIntent.value = parseQuery(newQuery);
+  } else {
+    parsedIntent.value = null;
+  }
+});
+
 // Handle search input
 const handleSearch = () => {
   showResults.value = true;
@@ -276,6 +306,7 @@ const clearSearch = () => {
   searchQuery.value = '';
   showResults.value = false;
   selectedIndex.value = 0;
+  parsedIntent.value = null;
 };
 
 // Close search with Escape key
@@ -540,5 +571,68 @@ watch(filteredRoutes, () => {
   text-align: center;
   color: #c6c6c6;
   font-size: 0.875rem;
+}
+
+.nlp-intent-indicator {
+  position: absolute;
+  top: calc(100% + 0.125rem);
+  left: 0;
+  right: 0;
+  background-color: #393939;
+  padding: 0.5rem 1rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.75rem;
+  border-bottom: 1px solid #525252;
+  z-index: 999;
+}
+
+.intent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  line-height: 1.2;
+
+  &.question {
+    background-color: #0f62fe;
+    color: #ffffff;
+  }
+
+  &.action {
+    background-color: #24a148;
+    color: #ffffff;
+
+    strong {
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.nlp-enhanced-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  background-color: #0f62fe;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.search-results {
+  margin-top: 0;
+
+  .nlp-intent-indicator + & {
+    margin-top: 2.5rem;
+  }
 }
 </style>

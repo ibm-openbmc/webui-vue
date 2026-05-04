@@ -3,7 +3,18 @@
     <page-title
       :title="$t('appPageTitle.network')"
       :description="$t('pageNetwork.pageDescription')"
-    />
+    >
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <!-- Global settings for all interfaces -->
     <network-global-settings />
     <!-- Interface tabs -->
@@ -86,6 +97,13 @@
     />
     <modal-dns @ok="saveDnsAddress" />
     <modal-hostname :hostname="currentHostname" @ok="saveHostname" />
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -95,8 +113,11 @@ import { onBeforeRouteLeave } from 'vue-router';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageSection from '@/components/Global/PageSection.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { searchContent } from './NetworkSearchContent.js';
 import ModalHostname from './ModalHostname.vue';
 import ModalIpv4 from './ModalIpv4.vue';
 import ModalIpv6 from './ModalIpv6.vue';
@@ -123,6 +144,24 @@ const ipAddressIpv6 = ref('');
 const ipAddressIpv6StaticDefaultGateway = ref('');
 const prefixLength = ref(0);
 const subnet = ref('');
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  switch (action) {
+    case 'edit-hostname':
+      eventBus.emit('modal-hostname');
+      break;
+    case 'add-ipv4':
+      eventBus.emit('modal-ipv4');
+      break;
+    case 'add-ipv6':
+      eventBus.emit('modal-ipv6');
+      break;
+    default:
+      break;
+  }
+};
 const tabIndex = ref(0);
 
 onBeforeRouteLeave(() => {

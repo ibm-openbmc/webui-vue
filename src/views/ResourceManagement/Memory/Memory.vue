@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.memory')" />
+    <page-title :title="$t('appPageTitle.memory')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol md="8" xl="6">
         <alert v-if="isSectionEditable()" variant="warning" class="mb-4">
@@ -384,6 +395,13 @@
         </BCol>
       </BRow>
     </page-section>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -398,10 +416,13 @@ import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposabl
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import Alert from '@/components/Global/Alert.vue';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import stores from '@/store';
+import { searchContent } from './MemorySearchContent.js';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { scrollToOffset } = useJumpLinkComposable();
@@ -417,6 +438,12 @@ const inputIoAdapterCapacity = ref(null);
 const inputDynamicIoDrawerAttachmentCapacity = ref(null);
 const toggleActiveMemoryMirroring = ref(null);
 const togglePredictiveDynamicMemoryDeallocation = ref(null);
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  // Add any specific actions if needed
+};
 
 const refs = {
   logicalMemorySizeOption,

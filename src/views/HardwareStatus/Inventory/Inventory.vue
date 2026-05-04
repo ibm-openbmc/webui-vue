@@ -1,6 +1,17 @@
 <template>
   <b-container fluid="xl">
-    <page-title :title="$t('appPageTitle.inventory')" />
+    <page-title :title="$t('appPageTitle.inventory')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
 
     <!-- Service indicators -->
     <service-indicator />
@@ -172,12 +183,21 @@
         </b-card>
       </b-col>
     </b-row>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </b-container>
 </template>
 
 <script setup>
 import Alert from '@/components/Global/Alert.vue';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import TableSystem from './InventoryTableSystem.vue';
 import TablePowerSupplies from './InventoryTablePowerSupplies.vue';
 import TableDimmSlot from './InventoryTableDimmSlot.vue';
@@ -200,6 +220,7 @@ import eventBus from '@/eventBus';
 import { useI18n } from 'vue-i18n';
 import useJumpLinkComposable from '../../../components/Composables/useJumpLinkComposable';
 import { BLink } from 'bootstrap-vue-next';
+import { searchContent } from './InventorySearchContent.js';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { t } = useI18n();
@@ -210,6 +231,12 @@ const global = stores.GlobalStore();
 
 const isBusy = ref(false);
 const currentTab = ref(0);
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  // Add any specific actions if needed
+};
 
 const links = reactive([
   {

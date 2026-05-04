@@ -1,46 +1,37 @@
+/**
+ * Inventory and LEDs Search Content
+ * Provides searchable content for header search and help modal NLP integration
+ */
 export const inventorySearchContent = {
-  // Main description
+  // Main description for header search
   description:
     'View and edit hardware inventory preferences including system indicators (power status, identify LED, attention LED, lamp test), chassis, system, BMC manager, DIMM slots, fans, power supplies, processors, assemblies, PCIe slots, and fabric adapters. Manage LED indicators for all components with detailed hardware information.',
 
-  // Feature descriptions
+  // Feature descriptions for header search
   features: [
     'Hardware inventory viewing',
     'LED indicator management',
-    'Chassis information',
-    'Processor inventory',
-    'Memory module inventory',
-    'Fan inventory',
+    'System indicators display and control',
+    'Chassis information viewing',
+    'Processor inventory and details',
+    'Memory module (DIMM) inventory',
+    'Fan inventory and monitoring',
     'Power supply inventory',
     'BMC manager information',
-    'System information',
+    'System information display',
     'Component status monitoring',
-    'Service indicators',
-    'Identify LEDs',
-    'System indicators display',
-    'Power status display',
+    'Service indicators management',
+    'Identify LEDs control',
     'System identify LED control',
     'System attention LED control',
     'Lamp test control',
-    'Enable/disable identify LED',
-    'Successfully enabled LED messages',
-    'Chassis ID, Health, Status, Location number',
-    'View Name and Firmware version',
-    'System Serial number, Memory, Model, Processor count',
-    'BMC manager Description, Part number, Serial number',
-    'DIMM slot Capacity, Enabled status',
-    'Fan Spare part number, Model information',
-    'Power supply Firmware version',
-    'Processor Type, Total cores',
-    'Assembly Part number information',
-    'PCIe slots Slot type',
-    'Fabric Adapters Model, Serial number',
-    'Click arrow to expand details',
-    'FRU number (Spare part number)',
-    'CCIN (Model) information',
+    'Component health monitoring',
+    'Hardware specifications viewing',
+    'FRU information display',
+    'Assembly and adapter inventory',
   ],
 
-  // Searchable keywords
+  // Searchable keywords for header search
   keywords: [
     'inventory',
     'LED',
@@ -128,7 +119,7 @@ export const inventorySearchContent = {
     'edit preferences',
   ],
 
-  // Related terms
+  // Related terms for header search
   relatedTerms: [
     'hardware components',
     'system components',
@@ -160,6 +151,292 @@ export const inventorySearchContent = {
     'slot information',
     'assembly information',
   ],
+
+  // Help content for Help Modal NLP integration
+  help: {
+    title: 'Inventory and LEDs Help',
+    overview:
+      'The Inventory and LEDs page allows you to view and manage hardware inventory including system indicators, chassis, system, BMC manager, DIMM slots, fans, power supplies, processors, assemblies, PCIe slots, and fabric adapters. Control LED indicators for all components and view detailed hardware information.',
+
+    sections: [
+      {
+        id: 'system-indicators',
+        title: 'System Indicators',
+        content:
+          'View and control system indicators including Power status, System identify LED, System attention LED, and Lamp test.',
+        keywords: [
+          'system indicators',
+          'power status',
+          'identify',
+          'attention',
+          'lamp test',
+        ],
+        steps: [
+          'View the System indicators section at the top of the page',
+          'Set System identify LED to On to enable the system identify LED',
+          'Set System attention LED to On to enable the system attention LED',
+          'Set Lamp test to Off to disable the lamp test',
+        ],
+        note: 'By default, System identify LED and System attention LED are Off, and Lamp test is On.',
+      },
+      {
+        id: 'chassis-information',
+        title: 'Chassis Information',
+        content:
+          'View chassis information including ID, Health, Status, Location number, and Identify LED. Expand to view Name and Firmware version.',
+        keywords: ['chassis', 'ID', 'health', 'status', 'location', 'firmware'],
+        steps: [
+          'Locate the Chassis section',
+          'View ID, Health, Status, Location number, and Identify LED information',
+          'Click the arrow next to chassis to view Name and Firmware version',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off.',
+      },
+      {
+        id: 'system-information',
+        title: 'System Information',
+        content:
+          'View system information including Name, Health, and Status. Expand to view detailed specifications.',
+        keywords: ['system', 'name', 'health', 'status', 'memory', 'processor'],
+        steps: [
+          'Locate the System section',
+          'View Name, Health, and Status information',
+          'Click the arrow next to system to view Serial number, Total system memory, Model, Processor count, Power, Core count, and Asset tag information',
+        ],
+      },
+      {
+        id: 'bmc-manager',
+        title: 'BMC Manager',
+        content:
+          'View BMC manager information including Name, Health, Status, Location number, and Identify LED. Expand to view detailed specifications.',
+        keywords: ['BMC', 'manager', 'OpenBmc', 'identify LED', 'part number'],
+        steps: [
+          'Locate the BMC manager section',
+          'View Name, Health, Status, Location number, and Identify LED information',
+          'Click the arrow next to OpenBmc Manager to view Description, Part number, Serial number, Spare part number (FRU number), and Model (CCIN) information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+      {
+        id: 'dimm-slots',
+        title: 'DIMM Slots (Memory Modules)',
+        content:
+          'View memory module information including Name, Health, Status, Location number, and Identify LED. Expand to view detailed specifications.',
+        keywords: ['DIMM', 'memory', 'capacity', 'enabled', 'part number'],
+        steps: [
+          'Locate the DIMM slot section',
+          'View Name, Health, Status, Location number, and Identify LED information',
+          'Click the arrow next to Memory module to view Part number, Capacity MiB, Serial number, Enabled, Spare part number (FRU number), and Model (CCIN) information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+      {
+        id: 'fans',
+        title: 'Fans',
+        content:
+          'View fan information including Name, Health, Status, Location number, and Identify LED. Expand to view detailed specifications.',
+        keywords: ['fans', 'health', 'status', 'part number', 'serial number'],
+        steps: [
+          'Locate the Fans section',
+          'View Name, Health, Status, Location number, and Identify LED information',
+          'Click the arrow next to fan to view Name, Spare part number (FRU number), Serial number, Model (CCIN), and Part number information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+      {
+        id: 'power-supplies',
+        title: 'Power Supplies',
+        content:
+          'View power supply information including Name, Health, Status, Location number, and Identify LED. Expand to view detailed specifications.',
+        keywords: [
+          'power supply',
+          'health',
+          'status',
+          'firmware',
+          'part number',
+        ],
+        steps: [
+          'Locate the Power supplies section',
+          'View Name, Health, Status, Location number, and Identify LED information',
+          'Click the arrow next to powersupply to view Name, Spare part number (FRU number), Part number, Model (CCIN), Serial number, and Firmware version information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+      {
+        id: 'processors',
+        title: 'Processors',
+        content:
+          'View processor information including Name, Health, Status, Location number, and Identify LED. Expand to view detailed specifications.',
+        keywords: ['processor', 'cores', 'type', 'model', 'part number'],
+        steps: [
+          'Locate the Processors section',
+          'View Name, Health, Status, Location number, and Identify LED information',
+          'Click the arrow next to processor to view Name, Model (CCIN), Part number, Processor type, Serial number, Total cores, and Spare part number (FRU number) information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+      {
+        id: 'assemblies',
+        title: 'Assemblies',
+        content:
+          'View assembly information including Name, Health, Status, Part number, Location number, and Identify LED. Expand to view detailed specifications.',
+        keywords: [
+          'assemblies',
+          'connector',
+          'OpenCAPI',
+          'part number',
+          'model',
+        ],
+        steps: [
+          'Locate the Assemblies section',
+          'View Name, Health, Status, Part number, Location number, and Identify LED information',
+          'Click the arrow next to Connector for OpenCAPI Port to view Name, Model (CCIN), Serial number, and Spare part number (FRU number) information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+      {
+        id: 'pcie-slots',
+        title: 'PCIe Slots',
+        content:
+          'View PCIe slot information including Slot type, Location number, and Identify LED.',
+        keywords: ['PCIe', 'slots', 'slot type', 'location', 'identify LED'],
+        steps: [
+          'Locate the PCIe slots section',
+          'View Slot type, Location number, and Identify LED information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+      {
+        id: 'fabric-adapters',
+        title: 'Fabric Adapters',
+        content:
+          'View fabric adapter information including Name, Health, Status, Location number, and Identify LED. Expand to view detailed specifications.',
+        keywords: [
+          'fabric adapters',
+          'PCI adapter',
+          'model',
+          'part number',
+          'serial number',
+        ],
+        steps: [
+          'Locate the Fabric Adapters section',
+          'View Name, Health, Status, Location number, and Identify LED information',
+          'Click the arrow next to PCI adapter to view Model, Part number, Serial number, and Spare part number (FRU number) information',
+          'Click Identify LED to On to enable the identify LED',
+        ],
+        note: 'By default, the Identify LED is Off. The message "Successfully enabled Identify LED." is displayed when enabled.',
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'How do I enable the System identify LED?',
+        answer:
+          'In the System indicators section, set System identify LED to On. The message "Successfully enabled Identify LED." will be displayed.',
+        keywords: ['enable', 'system identify LED', 'how to'],
+      },
+      {
+        question: 'How do I enable the System attention LED?',
+        answer:
+          'In the System indicators section, set System attention LED to On. The message "Successfully enabled attention LED." will be displayed.',
+        keywords: ['enable', 'attention LED', 'how to'],
+      },
+      {
+        question: 'How do I disable the Lamp test?',
+        answer:
+          'In the System indicators section, set Lamp test to Off. The message "Successfully disabled lamp test." will be displayed.',
+        keywords: ['disable', 'lamp test', 'how to'],
+      },
+      {
+        question: 'What are the default LED states?',
+        answer:
+          'By default, System identify LED and System attention LED are Off, Lamp test is On, and all component Identify LEDs are Off.',
+        keywords: ['default', 'LED states', 'initial'],
+      },
+      {
+        question: 'How do I view detailed component information?',
+        answer:
+          'Click the arrow next to any component (chassis, system, BMC manager, memory module, fan, power supply, processor, assembly, or fabric adapter) to expand and view detailed information.',
+        keywords: ['view details', 'expand', 'arrow', 'how to'],
+      },
+      {
+        question: 'What is FRU number?',
+        answer:
+          'FRU (Field Replaceable Unit) number is the Spare part number used to identify replaceable hardware components.',
+        keywords: ['FRU', 'spare part number', 'what is'],
+      },
+      {
+        question: 'What is CCIN?',
+        answer:
+          'CCIN (Customer Card Identification Number) is the Model information used to identify specific hardware components.',
+        keywords: ['CCIN', 'model', 'what is'],
+      },
+      {
+        question: 'How do I enable Identify LED for a component?',
+        answer:
+          'Click Identify LED to On for the specific component. A success message will be displayed confirming the LED has been enabled.',
+        keywords: ['enable', 'identify LED', 'component', 'how to'],
+      },
+      {
+        question: 'What information is displayed for each component?',
+        answer:
+          'Each component displays Name, Health, Status, Location number, and Identify LED. Expandable components show additional details like Part number, Serial number, Model (CCIN), and Spare part number (FRU number).',
+        keywords: ['information', 'displayed', 'what is shown'],
+      },
+      {
+        question: 'Can I control multiple LEDs at once?',
+        answer:
+          'Each LED must be controlled individually. Set each Identify LED to On or Off as needed for each component.',
+        keywords: ['multiple', 'LEDs', 'control', 'can I'],
+      },
+    ],
+
+    quickActions: [
+      {
+        label: 'Enable System identify LED',
+        description: 'Turn on system identification LED',
+        action: 'enable-system-identify',
+      },
+      {
+        label: 'Enable System attention LED',
+        description: 'Turn on system attention LED',
+        action: 'enable-system-attention',
+      },
+      {
+        label: 'View chassis details',
+        description: 'Expand chassis information',
+        action: 'expand-chassis',
+      },
+      {
+        label: 'View system details',
+        description: 'Expand system information',
+        action: 'expand-system',
+      },
+    ],
+
+    tips: [
+      'Click the arrow next to any component to view detailed specifications',
+      'By default, all Identify LEDs are Off',
+      'Success messages confirm when LEDs are enabled or disabled',
+      'FRU number refers to Spare part number for replaceable components',
+      'CCIN refers to Model information for component identification',
+      'System indicators include Power status, Identify LED, Attention LED, and Lamp test',
+      'Each component can have its Identify LED controlled independently',
+      'Health and Status information helps monitor component condition',
+    ],
+  },
 };
 
 export default inventorySearchContent;
+
+// Made with Bob
+
+export const searchContent = inventorySearchContent;

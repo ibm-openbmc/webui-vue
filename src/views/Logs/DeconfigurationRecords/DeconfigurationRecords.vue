@@ -8,7 +8,18 @@
       :link="$t('pageDeconfigurationRecords.pageDescription.link')"
       to="/settings/hardware-deconfiguration"
       class="deconfig-records-title"
-    />
+    >
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <alert v-if="!isServerOff()" variant="info" class="mb-4">
       <p>
         {{ $t('pageDeconfigurationRecords.alertPowerOff') }}
@@ -291,12 +302,20 @@
         }}
       </p>
     </BModal>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="deconfigurationRecordsSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
 <script setup>
 import { omit } from 'lodash';
 import i18n from '@/i18n';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import { ref, computed, onBeforeMount, watch, nextTick } from 'vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
@@ -316,9 +335,11 @@ import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableToolbarExport from '@/components/Global/TableToolbarExport.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import Alert from '@/components/Global/Alert.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import stores from '@/store';
 import { onBeforeRouteLeave } from 'vue-router';
 import eventBus from '@/eventBus';
+import { deconfigurationRecordsSearchContent } from './DeconfigurationRecordsSearchContent.js';
 
 const {
   onRowSelected,
@@ -434,6 +455,7 @@ const batchActions = ref([
 ]);
 const count = ref(0);
 const urival = ref();
+const showHelpModal = ref(false);
 
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
@@ -588,6 +610,23 @@ const onBatchAction = (action) => {
     count.value = selectedRowsLists.value.length;
     urival.value = selectedRowsLists.value.map((row) => row.uri);
     openModal2.value = true;
+  }
+};
+
+const handleHelpAction = (action) => {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'open-filter':
+      // Open filter modal
+      break;
+    case 'export-all':
+      // Trigger export all
+      break;
+    case 'clear-filters':
+      activeFiltersRows.value = [];
+      break;
+    default:
+      break;
   }
 };
 

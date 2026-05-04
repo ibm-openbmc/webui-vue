@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.auditLogs')" />
+    <page-title :title="$t('appPageTitle.auditLogs')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
 
     <div class="section-divider mb-4 mt-4"></div>
     <BRow class="align-items-start">
@@ -140,6 +151,13 @@
         />
       </BCol>
     </BRow>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="auditLogsSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -148,7 +166,9 @@ import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import IconDownload from '@carbon/icons-vue/es/download/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import stores from '@/store/index.js';
 import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
 import Search from '@/components/Global/Search.vue';
@@ -159,6 +179,8 @@ import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlo
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
 import useTableRowExpandComposable from '@/components/Composables/useTableRowExpandComposable';
 import eventBus from '@/eventBus';
+import { auditLogsSearchContent } from './AuditLogsSearchContent.js';
+import TableCellCount from '@/components/Global/TableCellCount.vue';
 
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
@@ -220,6 +242,7 @@ const activeFilters = ref([]);
 const filterStartDate = ref(null);
 const filterEndDate = ref(null);
 const expandColumn = ref(['auditId', 'message']);
+const showHelpModal = ref(false);
 
 onMounted(() => {
   startLoader();
@@ -337,6 +360,23 @@ const downloadEventLogs = async (value) => {
       .finally(() => {
         endLoader();
       });
+  }
+};
+
+const handleHelpAction = (action) => {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'focus-search':
+      // Focus on search input if applicable
+      break;
+    case 'focus-date-filter':
+      // Focus on date filter
+      break;
+    case 'download-all':
+      downloadEventLogs('all');
+      break;
+    default:
+      break;
   }
 };
 </script>

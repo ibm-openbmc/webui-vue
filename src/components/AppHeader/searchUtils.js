@@ -1,4 +1,5 @@
 import enUS from '@/locales/en-US.json';
+import { useNLPParser } from '@/components/Composables/useNLPParser';
 import { hostConsoleSearchContent } from '@/views/Operations/HostConsole/HostConsoleSearchContent.js';
 import { firmwareSearchContent } from '@/views/Operations/Firmware/FirmwareSearchContent.js';
 import { ldapSearchContent } from '@/views/SecurityAndAccess/Ldap/LdapSearchContent.js';
@@ -485,7 +486,98 @@ function calculateMatchScore(searchTerms, contentArray) {
 }
 
 /**
+ * Enhance search terms with NLP-parsed intent
+ * @param {string} query - Original search query
+ * @param {Array} searchTerms - Basic search terms
+ * @returns {Object} Enhanced search context with NLP insights
+ */
+function enhanceSearchWithNLP(query, searchTerms) {
+  const { parseQuery } = useNLPParser();
+  const parsedIntent = parseQuery(query);
+
+  if (!parsedIntent) {
+    return { searchTerms, intent: null };
+  }
+
+  // Extract additional search terms from NLP parsing
+  const enhancedTerms = new Set(searchTerms);
+
+  // Add action-related terms
+  if (parsedIntent.action) {
+    enhancedTerms.add(parsedIntent.action);
+  }
+
+  // Add target nouns
+  if (parsedIntent.target && parsedIntent.target.length > 0) {
+    parsedIntent.target.forEach((noun) => enhancedTerms.add(noun));
+  }
+
+  // Add modifiers
+  if (parsedIntent.modifiers && parsedIntent.modifiers.length > 0) {
+    parsedIntent.modifiers.forEach((mod) => enhancedTerms.add(mod));
+  }
+
+  return {
+    searchTerms: Array.from(enhancedTerms),
+    intent: parsedIntent,
+  };
+}
+
+/**
+ * Calculate NLP-enhanced match score
+ * @param {Array} searchTerms - Array of search terms
+ * @param {Array} contentArray - Array of searchable content
+ * @param {Object} intent - Parsed NLP intent
+ * @returns {Object} Match result with enhanced scoring
+ */
+function calculateNLPEnhancedScore(searchTerms, contentArray, intent) {
+  // Get base match score
+  const baseMatch = calculateMatchScore(searchTerms, contentArray);
+
+  if (!intent) {
+    return baseMatch;
+  }
+
+  let nlpBonus = 0;
+
+  // Boost score if action matches content
+  if (intent.action) {
+    const actionMatches = contentArray.some((content) =>
+      content.includes(intent.action),
+    );
+    if (actionMatches) {
+      nlpBonus += 200;
+    }
+  }
+
+  // Boost score if target nouns match
+  if (intent.target && intent.target.length > 0) {
+    intent.target.forEach((noun) => {
+      const nounMatches = contentArray.some((content) =>
+        content.includes(noun),
+      );
+      if (nounMatches) {
+        nlpBonus += 150;
+      }
+    });
+  }
+
+  // Extra boost for questions
+  if (intent.isQuestion) {
+    nlpBonus += 100;
+  }
+
+  return {
+    ...baseMatch,
+    score: baseMatch.score + nlpBonus,
+    nlpEnhanced: true,
+    nlpBonus,
+  };
+}
+
+/**
  * Search through the index for matching pages with prioritization based on word matches
+ * Enhanced with NLP for better natural language understanding
  * Filters results based on machine type, HMC status, and user role
  * @param {string} query - Search query
  * @param {Array} routes - Array of route objects from the router
@@ -504,11 +596,14 @@ export function searchContent(query, routes, filterContext = {}) {
   const searchIndex = buildSearchIndex(routes);
 
   // Normalize and split search query into terms
-  const searchTerms = query
+  const basicSearchTerms = query
     .toLowerCase()
     .trim()
     .split(/\s+/)
     .filter((term) => term.length > 0);
+
+  // Enhance search with NLP parsing
+  const { searchTerms, intent } = enhanceSearchWithNLP(query, basicSearchTerms);
 
   const results = [];
 
@@ -527,9 +622,13 @@ export function searchContent(query, routes, filterContext = {}) {
     });
   }
 
-  // Calculate scores for each route
+  // Calculate scores for each route with NLP enhancement
   Object.entries(searchIndex).forEach(([routeName, contentArray]) => {
-    const matchResult = calculateMatchScore(searchTerms, contentArray);
+    const matchResult = calculateNLPEnhancedScore(
+      searchTerms,
+      contentArray,
+      intent,
+    );
 
     // Only include results that have at least one matched term
     if (matchResult.matchedCount > 0) {

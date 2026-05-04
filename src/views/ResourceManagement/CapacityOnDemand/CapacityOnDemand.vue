@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.capacityOnDemand')" />
+    <page-title :title="$t('appPageTitle.capacityOnDemand')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow v-if="serverStatus === 'off'">
       <BCol md="8" xl="6">
         <alert variant="info" class="mb-5">
@@ -35,15 +46,24 @@
 
     <!-- VET capabilities section -->
     <capacity-on-demand-table ref="vetCapabilities" :is-busy="isBusy" />
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="searchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, reactive } from 'vue';
 import i18n from '@/i18n';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import Alert from '@/components/Global/Alert.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 import useLoadingBar, {
   loading,
 } from '@/components/Composables/useLoadingBarComposable';
@@ -54,6 +74,7 @@ import CapacityOnDemandOrderInfo from './CapacityOnDemandOrderInfo.vue';
 import CapacityOnDemandAcvitation from './CapacityOnDemandActivation.vue';
 import CapacityOnDemandTable from './CapacityOnDemandTable.vue';
 import stores from '@/store';
+import { searchContent } from './CapacityOnDemandSearchContent.js';
 
 const { scrollToOffset } = useJumpLinkComposable();
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
@@ -65,6 +86,13 @@ const systemStore = stores.SystemStore();
 const activation = ref(null);
 const orderInfo = ref(null);
 const vetCapabilities = ref(null);
+const showHelpModal = ref(false);
+
+const handleHelpAction = (action) => {
+  showHelpModal.value = false;
+  // Add any specific actions if needed
+};
+
 const refs = {
   activation,
   orderInfo,

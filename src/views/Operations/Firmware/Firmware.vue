@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.firmware')" />
+    <page-title :title="$t('appPageTitle.firmware')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <alerts-server-power
       v-if="isServerPowerOffRequired"
       :is-server-off="isServerOff"
@@ -47,6 +58,13 @@
         </BCol>
       </BRow>
     </page-section>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="firmwareSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -64,7 +82,29 @@ import BmcCards from './FirmwareCardsBmc.vue';
 import HostCards from './FirmwareCardsHost.vue';
 import FormUpdate from './FirmwareFormUpdate.vue';
 import FirmwareAccessKey from './FirmwareAccessKey.vue';
+import IconHelp from '@carbon/icons-vue/es/help/20';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { firmwareSearchContent } from './FirmwareSearchContent.js';
 import stores from '@/store';
+
+const showHelpModal = ref(false);
+
+function handleHelpAction(action) {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'switch-backup':
+      // Trigger switch to backup image functionality if available
+      break;
+    case 'upload-firmware':
+      // Focus on firmware upload section
+      break;
+    case 'manage-key':
+      // Trigger manage access key functionality if available
+      break;
+    default:
+      break;
+  }
+}
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 

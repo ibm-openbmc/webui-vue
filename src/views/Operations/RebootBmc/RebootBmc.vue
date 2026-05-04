@@ -1,7 +1,18 @@
 <template>
   <div>
     <BContainer fluid="xl">
-      <page-title :title="$t('appPageTitle.rebootBmc')" />
+      <page-title :title="$t('appPageTitle.rebootBmc')">
+        <template #actions>
+          <BButton
+            variant="link"
+            class="btn-icon-only"
+            @click="showHelpModal = true"
+          >
+            <icon-help />
+            <span class="sr-only">{{ $t('global.help.title') }}</span>
+          </BButton>
+        </template>
+      </page-title>
       <BRow>
         <BCol md="8" lg="8" xl="6">
           <page-section>
@@ -53,6 +64,13 @@
         }}
       </p>
     </BModal>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="rebootBmcSearchContent"
+      @action="handleHelpAction"
+    />
   </div>
 </template>
 
@@ -61,7 +79,24 @@ import { ref, computed, onBeforeMount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
+import IconHelp from '@carbon/icons-vue/es/help/20';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { rebootBmcSearchContent } from './RebootBmcSearchContent.js';
 import stores from '@/store';
+
+const showHelpModal = ref(false);
+
+function handleHelpAction(action) {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'reboot-bmc':
+      // Trigger reboot BMC functionality
+      onClick();
+      break;
+    default:
+      break;
+  }
+}
 
 const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();

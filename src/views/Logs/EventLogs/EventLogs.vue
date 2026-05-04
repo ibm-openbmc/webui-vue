@@ -1,6 +1,17 @@
 <template>
   <b-container fluid="xl">
-    <page-title :title="$t('appPageTitle.eventLogs')" />
+    <page-title :title="$t('appPageTitle.eventLogs')">
+      <template #actions>
+        <b-button
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </b-button>
+      </template>
+    </page-title>
     <b-row class="align-items-start">
       <b-col sm="8" xl="6" class="d-sm-flex align-items-end mb-4 searchStyle">
         <search
@@ -300,6 +311,13 @@
         />
       </b-col>
     </b-row>
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="eventLogsSearchContent"
+      @action="handleHelpAction"
+    />
+
     <BModal
       v-model="openModal"
       :title="deleteTitle"
@@ -320,6 +338,7 @@ import IconDelete from '@carbon/icons-vue/es/trash-can/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import IconDownload from '@carbon/icons-vue/es/download/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 
 import PageTitle from '@/components/Global/PageTitle.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
@@ -330,6 +349,7 @@ import TableFilter from '@/components/Global/TableFilter.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
 
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableFilter from '../../../components/Composables/useTableFilterComposable';
@@ -342,6 +362,7 @@ import useTableRowExpandComposable from '../../../components/Composables/useTabl
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import { nextTick } from 'vue';
 import eventBus from '@/eventBus';
+import { eventLogsSearchContent } from './EventLogsSearchContent.js';
 
 import stores from '../../../store';
 
@@ -351,6 +372,7 @@ export default {
     IconTrashcan,
     IconChevron,
     IconDownload,
+    IconHelp,
     InfoTooltip,
     PageTitle,
     Search,
@@ -360,6 +382,7 @@ export default {
     TableRowAction,
     TableToolbar,
     TableDateFilter,
+    HelpModal,
   },
   beforeRouteLeave(to, from, next) {
     // Hide loader if the user navigates to another page
@@ -476,6 +499,8 @@ export default {
       tableHeaderCheckboxIndeterminate:
         useTableSelectableComposable().tableHeaderCheckboxIndeterminate,
       expandColumn: ['eventId', 'name', 'type', 'modifiedDate'],
+      showHelpModal: false,
+      eventLogsSearchContent,
     };
   },
   computed: {
@@ -794,6 +819,28 @@ export default {
     },
     onFiltered(filteredItems) {
       this.searchTotalFilteredRows = filteredItems.length;
+    },
+    handleHelpAction(action) {
+      // Handle quick actions from help modal
+      switch (action) {
+        case 'focus-search':
+          this.$refs.searchInput?.$el?.querySelector('input')?.focus();
+          break;
+        case 'open-filter':
+          // Trigger filter opening if applicable
+          break;
+        case 'focus-date-filter':
+          // Focus on date filter
+          break;
+        case 'download-all':
+          this.downloadEventLogs('all');
+          break;
+        case 'delete-all':
+          this.deleteAllLogs();
+          break;
+        default:
+          break;
+      }
     },
     resolveLogs() {
       stores
