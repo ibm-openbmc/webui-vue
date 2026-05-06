@@ -23,6 +23,7 @@ export function useHelpSearch(helpContent) {
     minMatchCharLength: 2,
     ignoreLocation: true,
     useExtendedSearch: false,
+    isCaseSensitive: false, // Ensure case-insensitive search
   };
 
   /**

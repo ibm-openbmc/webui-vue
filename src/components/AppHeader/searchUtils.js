@@ -423,9 +423,9 @@ function calculateMatchScore(searchTerms, contentArray) {
   let partialMatchScore = 0;
   let phraseMatchBonus = 0;
 
-  // Join content array to check for phrase matches
-  const fullContent = contentArray.join(' ');
-  const searchPhrase = searchTerms.join(' ');
+  // Join content array to check for phrase matches (case-insensitive)
+  const fullContent = contentArray.join(' ').toLowerCase();
+  const searchPhrase = searchTerms.join(' ').toLowerCase();
 
   // Check if the entire search phrase exists in content (highest priority)
   if (fullContent.includes(searchPhrase)) {
@@ -435,18 +435,20 @@ function calculateMatchScore(searchTerms, contentArray) {
   // Check each search term
   searchTerms.forEach((term) => {
     let termMatched = false;
+    const termLower = term.toLowerCase();
 
     contentArray.forEach((content) => {
-      if (content.includes(term)) {
+      const contentLower = content.toLowerCase();
+      if (contentLower.includes(termLower)) {
         termMatched = true;
-        const words = content.split(/\s+/);
+        const words = contentLower.split(/\s+/);
 
         // Exact word match (highest score per term)
-        if (words.includes(term)) {
+        if (words.includes(termLower)) {
           exactMatchScore += 100;
         }
         // Starts with term (medium-high score)
-        else if (content.startsWith(term)) {
+        else if (contentLower.startsWith(termLower)) {
           exactMatchScore += 50;
         }
         // Contains term anywhere (lower score)
