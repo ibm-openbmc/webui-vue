@@ -69,8 +69,8 @@
                 </dt>
                 <span>
                   {{ $t('pageUserManagement.mfaTimeMatch') }}
-                  <b-link to="/settings/date-time">
-                    {{ $t('appPageTitle.dateTime') }}</b-link
+                  <router-link to="/settings/date-time">
+                    {{ $t('appPageTitle.dateTime') }}</router-link
                   >
                 </span>
               </alert>

@@ -4,9 +4,9 @@
     :section-title="$t('pageInventory.pcieSlots')"
   >
     {{ $t('pageInventory.pcieTopologyLinkDescription') }}
-    <b-link to="/hardware-status/pcie-topology">{{
+    <router-link to="/hardware-status/pcie-topology">{{
       $t('pageInventory.pcieTopologyLink')
-    }}</b-link>
+    }}</router-link>
     <b-row class="align-items-end">
       <b-col sm="6" md="5" xl="4">
         <search

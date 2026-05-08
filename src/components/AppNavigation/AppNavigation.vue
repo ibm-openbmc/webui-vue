@@ -10,7 +10,7 @@
             <BNavItem
               v-if="!navItem.children"
               :key="index"
-              :to="navItem.route"
+              :href="`#${navItem.route}`"
               :data-test-id="`nav-item-${navItem.id}`"
               class="nav-nochild"
             >
@@ -30,15 +30,15 @@
               </BButton>
               <BCollapse :id="navItem.id" class="nav-item__nav">
                 <li>
-                  <router-link
+                  <a
                     v-for="(subNavItem, i) of navItem.children"
                     :key="i"
-                    :to="subNavItem.route"
+                    :href="`#${subNavItem.route}`"
                     :data-test-id="`nav-item-${subNavItem.id}`"
                     class="nav-link"
                   >
                     {{ subNavItem.label }}
-                  </router-link>
+                  </a>
                 </li>
               </BCollapse>
             </li>
