@@ -39,12 +39,39 @@ export const SessionsStore = defineStore('sessions', {
         });
     },
     async disconnectSessions(uris) {
-      const promises = uris.map((uri) =>
+      // Get the current session URI from localStorage (set during login)
+      const currentSessionUri = localStorage.getItem('currentSessionUri');
+
+      // Separate current session from others
+      let currentSession = null;
+      const otherSessions = [];
+
+      for (const uri of uris) {
+        if (currentSessionUri && uri === currentSessionUri) {
+          currentSession = uri;
+        } else {
+          otherSessions.push(uri);
+        }
+      }
+
+      // Disconnect other sessions first
+      const promises = otherSessions.map((uri) =>
         api.delete(uri).catch((error) => {
           console.log(error);
           return error;
         }),
       );
+
+      // If current session is in the list, disconnect it last
+      if (currentSession) {
+        promises.push(
+          api.delete(currentSession).catch((error) => {
+            console.log(error);
+            return error;
+          }),
+        );
+      }
+
       return await api
         .all(promises)
         .then((response) => {
