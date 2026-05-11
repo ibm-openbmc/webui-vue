@@ -393,12 +393,21 @@ export const PoliciesStore = defineStore('policies', {
       return await api
         .patch('/redfish/v1/Systems/system', oem)
         .then(() => {
-          return i18n.global.t(
-            'pagePolicies.toast.successNetworkPolicyUpdate',
-            {
-              policy: i18n.global.t('pagePolicies.sendServiceAlerts'),
-            },
-          );
+          if (updatedSendServiceAlerts) {
+            return i18n.global.t(
+              'pagePolicies.toast.successNetworkPolicyEnable',
+              {
+                policy: i18n.global.t('pagePolicies.sendServiceAlerts'),
+              },
+            );
+          } else {
+            return i18n.global.t(
+              'pagePolicies.toast.successNetworkPolicyDisable',
+              {
+                policy: i18n.global.t('pagePolicies.sendServiceAlerts'),
+              },
+            );
+          }
         })
         .catch((error) => {
           console.log(error);

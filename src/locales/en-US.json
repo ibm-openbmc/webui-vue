@@ -1403,7 +1403,9 @@
       "successEnableBmcShell": "Successfully enabled BMC shell (via SSH).",
       "successNetworkPolicyUpdate": "Successfully updated %{policy}.",
       "successIpmiNetworkPolicyUpdate": "Successfully updated %{policy}. The BMC normally takes about 30 seconds to change the state.",
-      "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
+      "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot.",
+      "successNetworkPolicyEnable": "Successfully enabled %{policy}.",
+      "successNetworkPolicyDisable": "Successfully disabled %{policy}."
     },
     "acfUploadEnablementConfirmText": "Caution: Enabling this setting removes the physical system access requirement from the process to upload an Access Control File (ACF).  This would allow anyone who is authorized to request an ACF and has network access to ASMI to gain access to the admin account.  Do you want to proceed?",
     "vtpm": "VirtualTPM",
