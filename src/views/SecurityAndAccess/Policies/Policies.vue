@@ -275,6 +275,11 @@
             <dl class="mt-3 mr-3 w-75">
               <dt>
                 {{ $t('pagePolicies.sendServiceAlerts') }}
+                <info-tooltip
+                  :title="$t('pagePolicies.sendServiceAlertsTooltip')"
+                >
+                  <icon-time />
+                </info-tooltip>
               </dt>
               <dd>
                 {{ $t('pagePolicies.sendServiceAlertsDescription') }}
