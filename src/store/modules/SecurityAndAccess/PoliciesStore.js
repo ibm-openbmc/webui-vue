@@ -377,7 +377,7 @@ export const PoliciesStore = defineStore('policies', {
         .get('/redfish/v1/Systems/system')
         .then((response) => {
           this.sendServiceAlertsEnabled =
-            response?.data?.Oem?.IBM?.SendServiceAlerts || true;
+            response?.data?.Oem?.IBM?.SendServiceAlerts;
         })
         .catch((error) => console.log(error));
     },

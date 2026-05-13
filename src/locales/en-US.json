@@ -1412,7 +1412,7 @@
     "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system.",
     "sendServiceAlerts": "Send Service Alerts",
     "sendServiceAlertsDescription": "This property shall indicate whether service alerts should be sent when hardware isolation events occur.",
-    "sendServiceAlertsTooltip": "Description"
+    "sendServiceAlertsTooltip": "Disabling service alerts till new failure is detected in next service check"
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
