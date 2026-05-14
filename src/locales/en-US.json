@@ -1412,7 +1412,9 @@
     "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system.",
     "sendServiceAlerts": "Send Service Alerts",
     "sendServiceAlertsDescription": "This property shall indicate whether service alerts should be sent when hardware isolation events occur.",
-    "sendServiceAlertsTooltip": "Disabling service alerts till new failure is detected in next service check"
+    "modal": {
+      "message": "Disabling Send Service Alert suppresses the Service Alert SRC (BD50F138). The underlying issue must still be addressed. \n\nNote: If a new issue is detected, Send Service Alert will automatically re-enable and alerts will resume."
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",

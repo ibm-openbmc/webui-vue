@@ -275,11 +275,6 @@
             <dl class="mt-3 mr-3 w-75">
               <dt>
                 {{ $t('pagePolicies.sendServiceAlerts') }}
-                <info-tooltip
-                  :title="$t('pagePolicies.sendServiceAlertsTooltip')"
-                >
-                  <icon-time />
-                </info-tooltip>
               </dt>
               <dd>
                 {{ $t('pagePolicies.sendServiceAlertsDescription') }}
@@ -316,6 +311,20 @@
     >
       {{ ModalContent }}
     </BModal>
+    <BModal
+      ref="sendServiceAlertsModalRef"
+      v-model="sendServiceAlertsModal"
+      :title="$t('global.status.warning')"
+      :cancel-title="$t('global.action.cancel')"
+      :ok-title="$t('global.action.confirm')"
+      @cancel="onSendServiceAlertsModalCancel"
+      @ok="onSendServiceAlertsModalOk"
+      @hide="onSendServiceAlertsModalHide"
+    >
+      <div style="white-space: pre-line">
+        {{ $t('pagePolicies.modal.message') }}
+      </div>
+    </BModal>
   </BContainer>
 </template>
 
@@ -344,6 +353,8 @@ const ModalContent = i18n.global.t(
   'pagePolicies.acfUploadEnablementConfirmText',
 );
 const myModalRef = ref(null);
+const sendServiceAlertsModal = ref(false);
+const sendServiceAlertsModalRef = ref(null);
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -497,14 +508,42 @@ const enableUpload = (state) => {
     : (Policies.unAuthenticatedACFUploadEnablementState = !state);
 };
 const changeSendServiceAlertsState = (state) => {
+  if (!state) {
+    sendServiceAlertsModal.value = true;
+  } else {
+    saveSendServiceAlertsState(state);
+  }
+};
+
+const saveSendServiceAlertsState = (state) => {
   Policies.saveSendServiceAlertsEnabled(state)
     .then((message) => {
       Toast.successToast(message);
     })
     .catch(({ message }) => {
       Toast.errorToast(message);
+      Policies.sendServiceAlertsEnabled = !state;
     });
 };
+
+const onSendServiceAlertsModalOk = () => {
+  saveSendServiceAlertsState(false);
+};
+
+const onSendServiceAlertsModalCancel = () => {
+  Policies.sendServiceAlertsEnabled = true;
+};
+
+const onSendServiceAlertsModalHide = (event) => {
+  if (
+    event.trigger === 'backdrop' ||
+    event.trigger === 'esc' ||
+    event.trigger === 'close'
+  ) {
+    Policies.sendServiceAlertsEnabled = true;
+  }
+};
+
 const checkForUserData = () => {
   if (!currentUser) {
     UserManagement.getUsers();
