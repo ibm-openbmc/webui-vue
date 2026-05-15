@@ -321,8 +321,9 @@
       @ok="onSendServiceAlertsModalOk"
       @hide="onSendServiceAlertsModalHide"
     >
-      <div style="white-space: pre-line">
-        {{ $t('pagePolicies.modal.message') }}
+      <div>
+        <p>{{ $t('pagePolicies.modal.message1') }}</p>
+        {{ $t('pagePolicies.modal.message2') }}
       </div>
     </BModal>
   </BContainer>

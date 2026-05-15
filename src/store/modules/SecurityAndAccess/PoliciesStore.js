@@ -383,7 +383,7 @@ export const PoliciesStore = defineStore('policies', {
     },
     async saveSendServiceAlertsEnabled(updatedSendServiceAlerts) {
       this.sendServiceAlertsEnabled = updatedSendServiceAlerts;
-      const oem = {
+      const sendServiceAlertRequestBody = {
         Oem: {
           IBM: {
             SendServiceAlerts: updatedSendServiceAlerts,
@@ -391,7 +391,7 @@ export const PoliciesStore = defineStore('policies', {
         },
       };
       return await api
-        .patch('/redfish/v1/Systems/system', oem)
+        .patch('/redfish/v1/Systems/system', sendServiceAlertRequestBody)
         .then(() => {
           if (updatedSendServiceAlerts) {
             return i18n.global.t(
