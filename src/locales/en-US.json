@@ -1404,11 +1404,19 @@
       "successEnableBmcShell": "Successfully enabled BMC shell (via SSH).",
       "successNetworkPolicyUpdate": "Successfully updated %{policy}.",
       "successIpmiNetworkPolicyUpdate": "Successfully updated %{policy}. The BMC normally takes about 30 seconds to change the state.",
-      "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot."
+      "successNextBootToast": "Applying changes to %{policy}. Changes made to %{policy} will take effect on next reboot.",
+      "successNetworkPolicyEnable": "Successfully enabled %{policy}.",
+      "successNetworkPolicyDisable": "Successfully disabled %{policy}."
     },
     "acfUploadEnablementConfirmText": "Caution: Enabling this setting removes the physical system access requirement from the process to upload an Access Control File (ACF).  This would allow anyone who is authorized to request an ACF and has network access to ASMI to gain access to the admin account.  Do you want to proceed?",
     "vtpm": "VirtualTPM",
-    "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system."
+    "vtpmDescription": "Enabling vTPM makes a TPM available to the guest operating system.",
+    "sendServiceAlerts": "Send Service Alerts",
+    "sendServiceAlertsDescription": "This property shall indicate whether service alerts should be sent when hardware isolation events occur.",
+    "modal": {
+      "message1": "Disabling Send Service Alert suppresses the Service Alert SRC (BD50F138). The underlying issue must still be addressed.",
+      "message2": "Note: If a new issue is detected, Send Service Alert will automatically re-enable and alerts will resume."
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
