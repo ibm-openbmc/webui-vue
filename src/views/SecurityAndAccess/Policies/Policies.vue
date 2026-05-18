@@ -243,6 +243,33 @@
             </BFormCheckbox>
           </BCol>
         </BRow>
+        <BRow class="section-divider">
+          <BCol class="d-flex align-items-center justify-content-between">
+            <dl class="mt-3 mr-3 w-75">
+              <dt>
+                {{ $t('pagePolicies.sendServiceAlerts') }}
+              </dt>
+              <dd>
+                {{ $t('pagePolicies.sendServiceAlertsDescription') }}
+              </dd>
+            </dl>
+            <BFormCheckbox
+              id="sendServiceAlertsSwitch"
+              v-model="Policies.sendServiceAlertsEnabled"
+              data-test-id="policies-toggle-send-service-alerts"
+              switch
+              @update:model-value="changeSendServiceAlertsState"
+            >
+              <span class="visually-hidden">
+                {{ $t('pagePolicies.sendServiceAlerts') }}
+              </span>
+              <span v-if="Policies.sendServiceAlertsEnabled">
+                {{ $t('global.status.enabled') }}
+              </span>
+              <span v-else>{{ $t('global.status.disabled') }}</span>
+            </BFormCheckbox>
+          </BCol>
+        </BRow>
       </BCol>
     </BRow>
     <BModal
@@ -256,6 +283,21 @@
       @hide="onModalHide"
     >
       {{ ModalContent }}
+    </BModal>
+    <BModal
+      ref="sendServiceAlertsModalRef"
+      v-model="sendServiceAlertsModal"
+      :title="$t('global.status.warning')"
+      :cancel-title="$t('global.action.cancel')"
+      :ok-title="$t('global.action.confirm')"
+      @cancel="onSendServiceAlertsModalCancel"
+      @ok="onSendServiceAlertsModalOk"
+      @hide="onSendServiceAlertsModalHide"
+    >
+      <div>
+        <p>{{ $t('pagePolicies.modal.message1') }}</p>
+        {{ $t('pagePolicies.modal.message2') }}
+      </div>
     </BModal>
   </BContainer>
 </template>
@@ -285,6 +327,8 @@ const ModalContent = i18n.global.t(
   'pagePolicies.acfUploadEnablementConfirmText',
 );
 const myModalRef = ref(null);
+const sendServiceAlertsModal = ref(false);
+const sendServiceAlertsModalRef = ref(null);
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -300,6 +344,7 @@ onMounted(() => {
     Policies.getUsbFirmwareUpdatePolicyEnabled(),
     Policies.getUnauthenticatedACFUploadEnablement(),
     Policies.getTpmPolicy(),
+    Policies.getSendServiceAlerts(),
     UserManagement.getUsers(),
     checkForUserData(),
   ]).finally(() => {
@@ -426,6 +471,43 @@ const enableUpload = (state) => {
     ? uploadApi(state)
     : (Policies.unAuthenticatedACFUploadEnablementState = !state);
 };
+const changeSendServiceAlertsState = (state) => {
+  if (!state) {
+    sendServiceAlertsModal.value = true;
+  } else {
+    saveSendServiceAlertsState(state);
+  }
+};
+
+const saveSendServiceAlertsState = (state) => {
+  Policies.saveSendServiceAlertsEnabled(state)
+    .then((message) => {
+      Toast.successToast(message);
+    })
+    .catch(({ message }) => {
+      Toast.errorToast(message);
+      Policies.sendServiceAlertsEnabled = !state;
+    });
+};
+
+const onSendServiceAlertsModalOk = () => {
+  saveSendServiceAlertsState(false);
+};
+
+const onSendServiceAlertsModalCancel = () => {
+  Policies.sendServiceAlertsEnabled = true;
+};
+
+const onSendServiceAlertsModalHide = (event) => {
+  if (
+    event.trigger === 'backdrop' ||
+    event.trigger === 'esc' ||
+    event.trigger === 'close'
+  ) {
+    Policies.sendServiceAlertsEnabled = true;
+  }
+};
+
 const checkForUserData = () => {
   if (!currentUser) {
     UserManagement.getUsers();
