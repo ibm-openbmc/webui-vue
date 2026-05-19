@@ -102,10 +102,38 @@
               </b-dropdown-item>
             </b-dropdown>
           </li>
+          <li class="nav-item notification-item">
+            <b-button
+              id="app-header-notification"
+              variant="link"
+              data-test-id="appHeader-button-notification"
+              @click="toggleNotificationPanel"
+            >
+              <icon-notification-new
+                v-if="hasUnviewedNotifications"
+                :title="$t('appHeader.titleNotifications')"
+              />
+              <icon-notification
+                v-else
+                :title="$t('appHeader.titleNotifications')"
+              />
+            </b-button>
+          </li>
         </b-navbar-nav>
       </b-navbar>
     </header>
     <loading-bar />
+    <transition name="slide-fade">
+      <notification-panel
+        v-if="isNotificationPanelOpen"
+        @close="closeNotificationPanel"
+      />
+    </transition>
+    <div
+      v-if="isNotificationPanelOpen"
+      class="notification-overlay"
+      @click="closeNotificationPanel"
+    ></div>
   </div>
 </template>
 
@@ -115,8 +143,11 @@ import IconAvatar from '@carbon/icons-vue/es/user--avatar/20';
 import IconClose from '@carbon/icons-vue/es/close/20';
 import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
+import IconNotification from '@carbon/icons-vue/es/notification/20';
+import IconNotificationNew from '@carbon/icons-vue/es/notification--new/20';
 import StatusIcon from '@/components/Global/StatusIcon';
 import LoadingBar from '@/components/Global/LoadingBar';
+import NotificationPanel from './NotificationPanel';
 
 export default {
   name: 'AppHeader',
@@ -125,8 +156,11 @@ export default {
     IconClose,
     IconMenu,
     IconRenew,
+    IconNotification,
+    IconNotificationNew,
     StatusIcon,
     LoadingBar,
+    NotificationPanel,
   },
   mixins: [BVToastMixin],
   props: {
@@ -138,6 +172,7 @@ export default {
   data() {
     return {
       isNavigationOpen: false,
+      isNotificationPanelOpen: false,
       altLogo: process.env.VUE_APP_COMPANY_NAME || 'Built on OpenBMC',
       headerText: 'ASMI',
     };
@@ -192,6 +227,9 @@ export default {
     username() {
       return this.$store.getters['global/username'];
     },
+    hasUnviewedNotifications() {
+      return this.$store.getters['global/hasUnviewedNotifications'];
+    },
   },
   watch: {
     isAuthorized(value) {
@@ -240,6 +278,12 @@ export default {
       return (
         location.origin + pathName + require('@/assets/images/logo-header.svg')
       );
+    },
+    toggleNotificationPanel() {
+      this.isNotificationPanelOpen = !this.isNotificationPanelOpen;
+    },
+    closeNotificationPanel() {
+      this.isNotificationPanelOpen = false;
     },
   },
 };
@@ -398,5 +442,29 @@ export default {
 
 .header-text {
   font-size: 22px;
+}
+
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>

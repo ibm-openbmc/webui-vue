@@ -48,6 +48,11 @@ const GlobalStore = {
     isAuthorized: true,
     hmcManaged: localStorage.getItem('storedHmcManagedValue') || null,
     isServiceLoginEnabled: false,
+    firmwareSwitchInProgress: false,
+    firmwareSwitchStartTime: null,
+    firmwareSwitchCurrentStep: 1,
+    completedOperations: [],
+    notificationsViewed: true,
   },
   getters: {
     bootProgress: (state) => state.bootProgress,
@@ -80,6 +85,13 @@ const GlobalStore = {
       state.currentUser?.RoleId === 'ReadOnly' || !state.currentUser,
     isAuthorized: (state) => state.isAuthorized,
     isServiceLoginEnabled: (state) => state.isServiceLoginEnabled,
+    firmwareSwitchInProgress: (state) => state.firmwareSwitchInProgress,
+    firmwareSwitchStartTime: (state) => state.firmwareSwitchStartTime,
+    firmwareSwitchCurrentStep: (state) => state.firmwareSwitchCurrentStep,
+    completedOperations: (state) => state.completedOperations,
+    notificationsViewed: (state) => state.notificationsViewed,
+    hasUnviewedNotifications: (state) =>
+      state.completedOperations.length > 0 && !state.notificationsViewed,
   },
   mutations: {
     setBootProgress: (state, bootProgress) =>
@@ -112,6 +124,49 @@ const GlobalStore = {
     },
     setServiceLoginEnabled: (state, isServiceLoginEnabled) =>
       (state.isServiceLoginEnabled = isServiceLoginEnabled),
+    setFirmwareSwitchInProgress: (state, payload) => {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+
+      state.firmwareSwitchInProgress = inProgress;
+      if (inProgress) {
+        state.firmwareSwitchStartTime = Date.now();
+        state.firmwareSwitchCurrentStep = 1;
+      } else {
+        // When operation completes successfully, add to completed operations
+        if (state.firmwareSwitchStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'firmware-switch',
+            title: 'Firmware Switch',
+            message: 'BMC firmware switched successfully',
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - state.firmwareSwitchStartTime,
+          };
+          state.completedOperations.unshift(operation);
+          // Keep only last 10 completed operations
+          if (state.completedOperations.length > 10) {
+            state.completedOperations = state.completedOperations.slice(0, 10);
+          }
+          // Mark notifications as unviewed when new operation completes
+          state.notificationsViewed = false;
+        }
+        state.firmwareSwitchStartTime = null;
+        state.firmwareSwitchCurrentStep = 1;
+      }
+    },
+    setFirmwareSwitchStep: (state, step) =>
+      (state.firmwareSwitchCurrentStep = step),
+    removeCompletedOperation: (state, operationId) => {
+      state.completedOperations = state.completedOperations.filter(
+        (op) => op.id !== operationId
+      );
+    },
+    markNotificationsAsViewed: (state) => {
+      state.notificationsViewed = true;
+    },
   },
   actions: {
     async getBmcTime({ commit }) {
