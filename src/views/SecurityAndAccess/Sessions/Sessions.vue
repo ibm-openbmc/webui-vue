@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.sessions')" />
+    <page-title :title="$t('appPageTitle.sessions')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol md="8" xl="6">
         <alert variant="warning" class="mb-4">
@@ -164,6 +175,13 @@
         }}
       </p>
     </BModal>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="sessionsSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -181,8 +199,28 @@ import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import Alert from '@/components/Global/Alert.vue';
+import IconHelp from '@carbon/icons-vue/es/help/20';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { sessionsSearchContent } from './SessionsSearchContent.js';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
+
+const showHelpModal = ref(false);
+
+function handleHelpAction(action) {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'disconnect-session':
+      // Focus on the table for session selection
+      break;
+    case 'search-sessions':
+      // Focus on search input
+      document.querySelector('input[type="search"]')?.focus();
+      break;
+    default:
+      break;
+  }
+}
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =

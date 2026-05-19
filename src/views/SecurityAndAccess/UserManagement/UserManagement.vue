@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.userManagement')" />
+    <page-title :title="$t('appPageTitle.userManagement')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow v-if="currentUser && (isAdminUser || isServiceUser)">
       <BCol>
         <span>{{ $t('pageUserManagement.mfaTotpAuthentication') }}</span>
@@ -234,6 +245,13 @@
         {{ deleteMessage }}
       </p>
     </BModal>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="userManagementSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -253,7 +271,10 @@ import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconSettings from '@carbon/icons-vue/es/settings/20';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { userManagementSearchContent } from './UserManagementSearchContent.js';
 import eventBus from '@/eventBus';
 import ModalUser from './ModalUser.vue';
 import ModalSettings from './ModalSettings.vue';
@@ -267,6 +288,36 @@ import useTableSelectableComposable from '@/components/Composables/useTableSelec
 import useToastComposable from '@/components/Composables/useToastComposable';
 import AuthenticationStore from '../../../store/modules/Authentication/AuthenticationStore';
 import { TOTP } from 'totp-generator';
+
+const showHelpModal = ref(false);
+
+function handleHelpAction(action) {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'add-user':
+      // Trigger add user modal
+      eventBus.emit('modal-user:open');
+      break;
+    case 'account-policy':
+      // Trigger account policy settings modal
+      eventBus.emit('modal-settings:open');
+      break;
+    case 'view-privileges': {
+      // Expand privilege role descriptions
+      const collapseElement = document.getElementById('collapse-role-table');
+      if (collapseElement && !collapseElement.classList.contains('show')) {
+        document
+          .querySelector(
+            '[data-test-id="userManagement-button-viewPrivilegeRoleDescriptions"]',
+          )
+          ?.click();
+      }
+      break;
+    }
+    default:
+      break;
+  }
+}
 import stores from '@/store';
 
 onBeforeRouteLeave(() => {

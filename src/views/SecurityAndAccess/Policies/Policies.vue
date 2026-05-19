@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.policies')" />
+    <page-title :title="$t('appPageTitle.policies')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <IconHelp />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol md="8">
         <BRow v-if="!modifySSHPolicyDisabled" class="section-divider">
@@ -284,6 +295,11 @@
     >
       {{ ModalContent }}
     </BModal>
+    <HelpModal
+      v-model="showHelpModal"
+      :help-content="policiesSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -298,6 +314,9 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import { onBeforeRouteLeave } from 'vue-router';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import IconTime from '@carbon/icons-vue/es/time/16';
+import IconHelp from '@carbon/icons-vue/es/help/20';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { policiesSearchContent } from './PoliciesSearchContent';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
@@ -312,6 +331,34 @@ const ModalContent = i18n.global.t(
   'pagePolicies.acfUploadEnablementConfirmText',
 );
 const myModalRef = ref(null);
+const showHelpModal = ref(false);
+
+const handleHelpAction = (actionId) => {
+  showHelpModal.value = false;
+  switch (actionId) {
+    case 'toggle-ssh': {
+      const sshSwitch = document.getElementById('sshSwitch');
+      if (sshSwitch) {
+        sshSwitch.click();
+      }
+      break;
+    }
+    case 'toggle-ipmi': {
+      const ipmiSwitch = document.getElementById('ipmiSwitch');
+      if (ipmiSwitch) {
+        ipmiSwitch.click();
+      }
+      break;
+    }
+    case 'toggle-basic-auth': {
+      const basicAuthSwitch = document.getElementById('basicAuthSwitch');
+      if (basicAuthSwitch) {
+        basicAuthSwitch.click();
+      }
+      break;
+    }
+  }
+};
 
 onBeforeRouteLeave(() => {
   hideLoader();

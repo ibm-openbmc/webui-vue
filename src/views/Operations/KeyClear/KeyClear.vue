@@ -4,7 +4,18 @@
       <page-title
         :title="$t('appPageTitle.keyClear')"
         :description="$t('pageKeyClear.description')"
-      />
+      >
+        <template #actions>
+          <BButton
+            variant="link"
+            class="btn-icon-only"
+            @click="showHelpModal = true"
+          >
+            <IconHelp />
+            <span class="sr-only">{{ $t('global.help.title') }}</span>
+          </BButton>
+        </template>
+      </page-title>
       <BRow>
         <BCol md="8" xl="6">
           <alert variant="info" class="mb-4">
@@ -86,6 +97,11 @@
     >
       <p>{{ $t('pageKeyClear.modal.clearAllMessage') }}</p>
     </BModal>
+    <HelpModal
+      v-model="showHelpModal"
+      :help-content="keyClearSearchContent"
+      @action="handleHelpAction"
+    />
   </div>
 </template>
 
@@ -95,6 +111,9 @@ import stores from '@/store';
 import Alert from '@/components/Global/Alert.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import useToast from '@/components/Composables/useToastComposable';
+import IconHelp from '@carbon/icons-vue/es/help/20';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { keyClearSearchContent } from './KeyClearSearchContent';
 
 const { successToast, errorToast } = useToast();
 
@@ -105,6 +124,33 @@ const keyOption = ref('NONE');
 const username = ref(globalStore.username);
 const openModal = ref(false);
 const selectedKey = ref('');
+const showHelpModal = ref(false);
+
+const handleHelpAction = (actionId) => {
+  showHelpModal.value = false;
+  switch (actionId) {
+    case 'select-clear-all': {
+      keyOption.value = 'ALL';
+      const clearAllRadio = document.querySelector(
+        'input[type="radio"][value="ALL"]',
+      );
+      if (clearAllRadio) {
+        clearAllRadio.focus();
+      }
+      break;
+    }
+    case 'select-hypervisor-key': {
+      keyOption.value = 'POWERVM_SYSKEY';
+      const hypervisorRadio = document.querySelector(
+        'input[type="radio"][value="POWERVM_SYSKEY"]',
+      );
+      if (hypervisorRadio) {
+        hypervisorRadio.focus();
+      }
+      break;
+    }
+  }
+};
 
 function onKeyClearSubmit(valueSelected) {
   openModal.value = true;

@@ -3,7 +3,18 @@
     <page-title
       :title="$t('appPageTitle.ldap')"
       :description="$t('pageLdap.pageDescription')"
-    />
+    >
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <page-section :section-title="$t('pageLdap.settings')">
       <b-form novalidate @submit.prevent="handleSubmit">
         <b-row>
@@ -233,6 +244,13 @@
     <page-section :section-title="$t('pageLdap.roleGroups')">
       <table-role-groups />
     </page-section>
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="ldapSearchContent"
+      @action="handleHelpAction"
+    />
   </b-container>
 </template>
 
@@ -241,12 +259,15 @@ import { find } from 'lodash';
 import { requiredIf } from '@vuelidate/validators';
 import IconView from '@carbon/icons-vue/es/view/20';
 import IconViewOff from '@carbon/icons-vue/es/view--off/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { ldapSearchContent } from './LdapSearchContent.js';
 import TableRoleGroups from './TableRoleGroups.vue';
 import stores from '../../../store';
 import { onBeforeMount, reactive } from 'vue';
@@ -256,6 +277,31 @@ import useVuelidateComposable from '@/components/Composables/useVuelidateComposa
 import { computed, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import useToast from '@/components/Composables/useToastComposable';
+
+const showHelpModal = ref(false);
+
+function handleHelpAction(action) {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'enable-ldap': {
+      // Enable LDAP authentication
+      if (!formLdap.ldapAuthenticationEnabled) {
+        formLdap.ldapAuthenticationEnabled = true;
+      }
+      break;
+    }
+    case 'add-role-group':
+      // Trigger add role group modal
+      // This would need to be implemented in TableRoleGroups component
+      break;
+    case 'save-settings':
+      // Trigger form submission
+      handleSubmit();
+      break;
+    default:
+      break;
+  }
+}
 
 const { t } = useI18n();
 const { getValidationState } = useVuelidateComposable();

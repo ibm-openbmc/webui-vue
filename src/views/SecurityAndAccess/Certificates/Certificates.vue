@@ -1,6 +1,17 @@
 <template>
   <BContainer fluid="xl">
-    <page-title :title="$t('appPageTitle.certificates')" />
+    <page-title :title="$t('appPageTitle.certificates')">
+      <template #actions>
+        <BButton
+          variant="link"
+          class="btn-icon-only"
+          @click="showHelpModal = true"
+        >
+          <icon-help />
+          <span class="sr-only">{{ $t('global.help.title') }}</span>
+        </BButton>
+      </template>
+    </page-title>
     <BRow>
       <BCol xl="11">
         <!-- Expired certificates banner -->
@@ -136,6 +147,13 @@
     </BModal>
 
     <modal-generate-csr />
+
+    <!-- Help Modal -->
+    <help-modal
+      v-model="showHelpModal"
+      :help-content="certificatesSearchContent"
+      @action="handleHelpAction"
+    />
   </BContainer>
 </template>
 
@@ -143,12 +161,15 @@
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconReplace from '@carbon/icons-vue/es/renew/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
+import IconHelp from '@carbon/icons-vue/es/help/20';
 import ModalGenerateCsr from './ModalGenerateCsr.vue';
 import ModalUploadCertificate from './ModalUploadCertificate.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import Alert from '@/components/Global/Alert.vue';
+import HelpModal from '@/components/Global/HelpModal.vue';
+import { certificatesSearchContent } from './CertificatesSearchContent.js';
 import stores from '@/store';
 import { ref, onMounted, computed } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -156,6 +177,28 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
+
+const showHelpModal = ref(false);
+
+function handleHelpAction(action) {
+  // Handle quick actions from help modal
+  switch (action) {
+    case 'generate-csr': {
+      // Trigger generate CSR modal
+      const generateCsrButton = document.querySelector(
+        '[data-test-id="certificates-button-generateCsr"]',
+      );
+      generateCsrButton?.click();
+      break;
+    }
+    case 'add-certificate':
+      // Trigger add certificate action
+      initModalUploadCertificate(null);
+      break;
+    default:
+      break;
+  }
+}
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const toast = useToastComposable();
