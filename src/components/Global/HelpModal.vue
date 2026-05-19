@@ -62,19 +62,9 @@
           <div class="d-flex justify-content-between align-items-start">
             <div class="flex-grow-1">
               <h6 class="mb-2">{{ result.title }}</h6>
-              <p class="mb-2 text-muted small">
-                {{ truncateText(result.content, 150) }}
+              <p class="mb-2 text-muted small" style="white-space: pre-wrap">
+                {{ result.content }}
               </p>
-              <BBadge
-                v-if="result.relevance"
-                :variant="getRelevanceBadge(result.relevance)"
-                class="me-2"
-              >
-                {{ result.relevance }} {{ $t('global.help.relevance') }}
-              </BBadge>
-              <BBadge v-if="result.warning" variant="warning">
-                {{ $t('global.help.hasWarning') }}
-              </BBadge>
             </div>
             <icon-arrow-right class="ms-2 text-muted" />
           </div>
@@ -95,15 +85,9 @@
               <h6 class="mb-2">
                 <icon-help class="me-2" />{{ result.question }}
               </h6>
-              <p class="mb-2 text-muted small">
-                {{ truncateText(result.answer, 150) }}
+              <p class="mb-2 text-muted small" style="white-space: pre-wrap">
+                {{ result.answer }}
               </p>
-              <BBadge
-                v-if="result.relevance"
-                :variant="getRelevanceBadge(result.relevance)"
-              >
-                {{ result.relevance }} {{ $t('global.help.relevance') }}
-              </BBadge>
             </div>
             <icon-arrow-right class="ms-2 text-muted" />
           </div>
@@ -379,14 +363,67 @@ const truncateText = (text, maxLength) => {
   background: white;
   z-index: 10;
   padding-bottom: 0.5rem;
+
+  :deep(.input-group) {
+    border: 1px solid #8d8d8d;
+    transition:
+      border-color 0.11s,
+      border-width 0.11s;
+
+    &:focus-within {
+      border: 2px solid #0f62fe;
+      outline: none;
+    }
+
+    .input-group-text {
+      background-color: #f4f4f4;
+      border: 0 !important;
+      padding: 0.75rem 1rem;
+    }
+
+    .form-control {
+      border: 0 !important;
+      background-color: #f4f4f4;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+
+      &:focus {
+        box-shadow: none !important;
+        background-color: #f4f4f4;
+        outline: 0 !important;
+        border: 0 !important;
+      }
+
+      &::placeholder {
+        color: #6f6f6f;
+      }
+    }
+
+    .btn {
+      border: 0 !important;
+      background-color: transparent;
+
+      &:focus {
+        box-shadow: none !important;
+        outline: 0 !important;
+        border: 0 !important;
+      }
+    }
+  }
 }
 
 .clear-button {
   padding: 0.375rem 0.75rem;
   border: none;
+  background-color: transparent;
 
   &:hover {
     background-color: transparent;
+  }
+
+  &:focus {
+    box-shadow: none;
+    outline: none;
   }
 }
 

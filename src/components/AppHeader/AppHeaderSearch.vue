@@ -39,19 +39,6 @@
         </BButton>
       </div>
 
-      <!-- NLP Intent Indicator -->
-      <div
-        v-if="parsedIntent && searchQuery && isSearchActive"
-        class="nlp-intent-indicator"
-      >
-        <span v-if="parsedIntent.isQuestion" class="intent-badge question">
-          ❓ Question detected
-        </span>
-        <span v-if="parsedIntent.action" class="intent-badge action">
-          Action: <strong>{{ parsedIntent.action }}</strong>
-        </span>
-      </div>
-
       <!-- Search Results Dropdown -->
       <div
         v-if="showResults && filteredRoutes.length > 0"
@@ -59,9 +46,6 @@
       >
         <div class="results-header">
           {{ $t('appHeader.search.results', { count: filteredRoutes.length }) }}
-          <span v-if="parsedIntent" class="nlp-enhanced-badge">
-            🧠 NLP Enhanced
-          </span>
         </div>
         <ul class="results-list" role="listbox">
           <li

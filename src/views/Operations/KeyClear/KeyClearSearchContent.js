@@ -55,36 +55,82 @@ export const keyClearSearchContent = {
         title: 'Physical Presence Requirement',
         content:
           'Key clear operations require physical presence verification to prevent unauthorized remote clearing of encryption keys. This security measure ensures that only someone with physical access to the system can perform these sensitive operations. You must be physically present at the system to complete the key clear process.',
+        keywords: [
+          'physical presence',
+          'security',
+          'verification',
+          'requirement',
+          'access',
+        ],
       },
       {
         title: 'System Reboot Requirement',
         content:
           'All key clear operations require a system reboot to take effect. The system will automatically reboot after the key clear operation is initiated. Ensure all critical workloads are stopped and data is saved before proceeding with a key clear operation.',
+        keywords: [
+          'reboot',
+          'restart',
+          'requirement',
+          'system reboot',
+          'automatic',
+        ],
       },
       {
         title: 'None (No Key Clear)',
         content:
           'Select this option if you do not want to perform a key clear operation. This is the default setting and indicates that no key clearing is requested. The system will maintain all existing encryption keys and security credentials.',
+        keywords: ['none', 'no clear', 'default', 'maintain', 'keep keys'],
       },
       {
         title: 'Clear All',
         content:
           "This option clears all encryption keys and sensitive data on the system. This includes:\n\n• All system encryption keys\n• Security credentials\n• Trusted Platform Module (TPM) data\n• All stored sensitive information\n\nUse this option when completely resetting the system's security state or preparing the system for transfer to another organization.",
+        keywords: [
+          'clear all',
+          'encryption keys',
+          'TPM',
+          'reset',
+          'security',
+          'credentials',
+        ],
       },
       {
         title: 'Clear Hypervisor System Key',
         content:
           'This option clears only the hypervisor system key while preserving other encryption keys and security data. The hypervisor system key is used to encrypt and protect hypervisor-specific data and configurations.\n\nUse this option when you need to reset hypervisor security without affecting other system keys.',
+        keywords: [
+          'hypervisor',
+          'system key',
+          'clear',
+          'hypervisor key',
+          'selective',
+        ],
       },
       {
         title: 'Clear All and Set Genesis IPL',
         content:
           'This option is available only for service users. It clears all encryption keys and sets the system to Genesis IPL (Initial Program Load) mode. Genesis IPL is a special boot mode used for system recovery and low-level diagnostics.\n\nThis option is typically used during:\n• System recovery procedures\n• Low-level troubleshooting\n• Factory restoration processes',
+        keywords: [
+          'Genesis IPL',
+          'service',
+          'recovery',
+          'boot mode',
+          'diagnostics',
+          'clear all',
+        ],
       },
       {
         title: 'Set Factory Default',
         content:
           'This option is available only for service users. It resets the system to factory default settings, including:\n\n• All configuration settings\n• Encryption keys\n• Security policies\n• User data (in some cases)\n\nThis is the most comprehensive reset option and should only be used when returning the system to factory state or during major system recovery operations.',
+        keywords: [
+          'factory default',
+          'factory reset',
+          'service',
+          'comprehensive',
+          'reset',
+          'restore',
+        ],
       },
     ],
     faqs: [

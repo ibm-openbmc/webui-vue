@@ -13,36 +13,94 @@ export const firmwareSearchContent = {
         title: 'Viewing Firmware Versions',
         content:
           'The page displays firmware information for both BMC and server components. Each firmware type shows two images: the Running image (currently active firmware) and the Backup image (alternative firmware version). For each image, you can see the version number and current status. This allows you to track which firmware versions are installed and their operational state.',
+        keywords: [
+          'view',
+          'firmware',
+          'version',
+          'BMC',
+          'server',
+          'running',
+          'backup',
+          'status',
+        ],
       },
       {
         title: 'Running Image',
         content:
           'The Running image represents the currently active firmware version on your system. This is the firmware that is currently executing and controlling the BMC or server operations. The version number and status are displayed, allowing you to verify which firmware is currently in use. The running image is the primary firmware that boots by default.',
+        keywords: [
+          'running',
+          'image',
+          'active',
+          'current',
+          'executing',
+          'primary',
+        ],
       },
       {
         title: 'Backup Image',
         content:
           "The Backup image is an alternative firmware version stored on the system. This provides a fallback option if you need to switch firmware versions. The backup image can be activated to become the running image, which is useful for testing new firmware or reverting to a previous version. You can switch to the backup image using the 'Switch to running' option.",
+        keywords: [
+          'backup',
+          'image',
+          'alternative',
+          'fallback',
+          'switch',
+          'revert',
+        ],
       },
       {
         title: 'Switching Firmware Images',
         content:
           "To activate a different firmware image, click the 'Switch to running' button next to the desired image. This will open a confirmation dialog. Important: A BMC reboot is required to run the backup image. During the reboot process, the application might be unresponsive for several minutes. Click 'Switch images' to confirm the change or 'Cancel' to exit without making changes. After the switch, the selected image will become the new running image.",
+        keywords: [
+          'switch',
+          'activate',
+          'change',
+          'reboot',
+          'switch to running',
+          'confirm',
+        ],
       },
       {
         title: 'Updating Firmware',
         content:
           "The Update firmware section allows you to upload and install new firmware files. To update firmware: 1) Click 'Add file' to select and upload a firmware file from your workstation. 2) Once the file is uploaded, click 'Start update' to begin the firmware update process. The system will process the uploaded firmware and install it. Ensure you have the correct firmware file for your system before uploading.",
+        keywords: [
+          'update',
+          'upload',
+          'firmware',
+          'add file',
+          'start update',
+          'install',
+        ],
       },
       {
         title: 'Access Key Management',
         content:
           "The Access key expiration section displays the expiration date of the current access key used for firmware updates. Access keys provide security for firmware operations. When the key is approaching expiration or has expired, click 'Manage access key' to obtain a new access key. This ensures you can continue to perform firmware updates securely. Regular key renewal is recommended for maintaining system security.",
+        keywords: [
+          'access key',
+          'expiration',
+          'manage',
+          'security',
+          'renewal',
+          'obtain',
+        ],
       },
       {
         title: 'BMC Reboot Requirement',
         content:
           'When switching firmware images, a BMC reboot is required for the changes to take effect. During the reboot process: 1) Your web browser will lose contact with the BMC for several minutes. 2) The application will be unresponsive during this time. 3) When the BMC is back online, you may need to log in again. 4) The newly selected firmware image will be running. Plan firmware switches during maintenance windows to minimize disruption.',
+        keywords: [
+          'reboot',
+          'BMC',
+          'restart',
+          'unresponsive',
+          'maintenance',
+          'downtime',
+        ],
       },
     ],
     faqs: [

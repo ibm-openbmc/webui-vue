@@ -64,46 +64,106 @@ export const policiesSearchContent = {
         title: 'BMC Shell (via SSH)',
         content:
           'Enable or disable SSH access to the BMC shell. When enabled, administrators can connect to the BMC using SSH for command-line management. Disable this policy if SSH access is not required for your security posture.',
+        keywords: [
+          'BMC shell',
+          'SSH',
+          'enable',
+          'disable',
+          'command-line',
+          'access',
+        ],
       },
       {
         title: 'Network IPMI (Out-of-Band IPMI)',
         content:
           'Control whether IPMI protocol is enabled for out-of-band management. IPMI provides remote management capabilities independent of the operating system. Note: Changes to this setting may take up to 30 seconds to apply.',
+        keywords: [
+          'IPMI',
+          'network',
+          'out-of-band',
+          'protocol',
+          'remote management',
+        ],
       },
       {
         title: 'TPM Policies',
         content:
           'Configure Trusted Platform Module settings:\n\n• Host TPM: Enable or disable the physical TPM on the host system for hardware-based security.\n\n• Virtual TPM (vTPM): Enable or disable virtual TPM functionality. This setting takes effect after the next system reboot.\n\nTPM provides hardware-based security features including secure key storage and cryptographic operations.',
+        keywords: [
+          'TPM',
+          'Trusted Platform Module',
+          'vTPM',
+          'virtual TPM',
+          'host TPM',
+          'security',
+        ],
       },
       {
         title: 'RTAD (Runtime Attestation)',
         content:
           'Enable or disable Runtime Attestation for system integrity verification. RTAD provides continuous monitoring and verification of system components during runtime. This setting takes effect after the next system reboot.',
+        keywords: [
+          'RTAD',
+          'runtime attestation',
+          'integrity',
+          'verification',
+          'monitoring',
+        ],
       },
       {
         title: 'USB Firmware Update Policy',
         content:
           'Control whether firmware updates can be performed via USB devices. Enable this policy to allow firmware updates from USB media. Disable it to prevent USB-based firmware updates for enhanced security.',
+        keywords: ['USB', 'firmware', 'update', 'USB firmware', 'policy'],
       },
       {
         title: 'Secure Version Lock-In (SVLE)',
         content:
           'Enable or disable secure version lock-in to prevent firmware downgrades. When enabled, the system will only accept firmware versions equal to or newer than the current version, protecting against rollback attacks.',
+        keywords: [
+          'SVLE',
+          'secure version',
+          'lock-in',
+          'downgrade',
+          'rollback',
+          'firmware',
+        ],
       },
       {
         title: 'Host USB Enablement',
         content:
           'Control USB port functionality on the host system. Enable to allow USB devices to be used with the host. Disable to prevent USB device access for security purposes. This setting takes effect after the next system reboot.',
+        keywords: [
+          'host USB',
+          'USB',
+          'enablement',
+          'USB port',
+          'device access',
+        ],
       },
       {
         title: 'Unauthenticated ACF Upload Enablement',
         content:
           'Control whether ACF (Access Control File) uploads are allowed without authentication. This setting is only visible to admin and service users.\n\nWarning: Enabling this policy reduces security by allowing unauthenticated file uploads. A confirmation dialog will appear when enabling this setting. Only enable if required for specific operational needs.',
+        keywords: [
+          'ACF',
+          'unauthenticated',
+          'upload',
+          'Access Control File',
+          'security',
+        ],
       },
       {
         title: 'Basic Authentication',
         content:
           'Enable or disable Basic Authentication for API access. Basic Authentication uses username and password credentials encoded in HTTP headers. While convenient, it is less secure than token-based authentication. Consider your security requirements before enabling.',
+        keywords: [
+          'basic auth',
+          'authentication',
+          'API',
+          'credentials',
+          'HTTP',
+        ],
       },
     ],
     faqs: [

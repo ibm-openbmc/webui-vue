@@ -13,36 +13,76 @@ export const sessionsSearchContent = {
         title: 'Important HMC Warning',
         content:
           'Warning: If an HMC is attached and active, disconnecting it from this page is not effective, as the HMC will automatically attempt to reconnect. To correctly disconnect a working HMC, you must initiate the disconnect operation from the HMC interface itself. Disconnecting an HMC session from this page will only provide a temporary disconnection before the HMC reconnects automatically.',
+        keywords: [
+          'HMC',
+          'warning',
+          'reconnect',
+          'disconnect',
+          'Hardware Management Console',
+        ],
       },
       {
         title: 'Viewing Session Information',
         content:
           'The sessions table displays all active connections to the BMC. For each session, you can view: 1) Client ID - A unique identifier for the session. 2) Username - The user account associated with the session. 3) IP Address - The network address from which the connection originated. This information helps you monitor who is currently connected to the system and from where.',
+        keywords: [
+          'view',
+          'session',
+          'Client ID',
+          'Username',
+          'IP Address',
+          'information',
+        ],
       },
       {
         title: 'Disconnecting a Single Session',
         content:
           'To disconnect an individual session: 1) Locate the session you want to disconnect in the table. 2) Click the "Disconnect" button in the Actions column for that session. 3) A confirmation dialog will appear. 4) Click "Disconnect" to confirm the operation or "Cancel" to exit without making changes. Note: This action cannot be reversed once completed. The user will be immediately logged out and will need to log in again to reconnect.',
+        keywords: ['disconnect', 'single', 'terminate', 'logout', 'individual'],
       },
       {
         title: 'Disconnecting Multiple Sessions',
         content:
           'To disconnect multiple sessions at once: 1) Select the checkbox next to each session you want to disconnect. You can also use the header checkbox to select all sessions. 2) Click the "Disconnect" button in the batch actions toolbar that appears. 3) A confirmation dialog will show the number of sessions to be disconnected. 4) Click "Disconnect" to confirm or "Cancel" to exit. All selected sessions will be terminated simultaneously.',
+        keywords: ['disconnect', 'multiple', 'batch', 'bulk', 'select all'],
       },
       {
         title: 'Search and Filter Sessions',
         content:
           'Use the search box to quickly find specific sessions by filtering the table based on Client ID, Username, or IP Address. Enter your search term and the table will automatically filter to show only matching sessions. Click the clear button (X) to remove the search filter and show all sessions again. The session count display shows how many sessions match your current filter.',
+        keywords: [
+          'search',
+          'filter',
+          'find',
+          'locate',
+          'Client ID',
+          'Username',
+          'IP',
+        ],
       },
       {
         title: 'Session Management Best Practices',
         content:
           'When managing sessions: 1) Verify the session details before disconnecting to ensure you are terminating the correct connection. 2) Be aware that disconnecting your own session will log you out. 3) For HMC sessions, use the HMC interface to properly disconnect rather than this page. 4) Disconnected users will need to log in again to reconnect. 5) Monitor active sessions regularly for security purposes. 6) Use batch disconnect carefully when terminating multiple sessions.',
+        keywords: [
+          'best practices',
+          'management',
+          'security',
+          'verify',
+          'monitor',
+        ],
       },
       {
         title: 'Understanding Session Types',
         content:
           'The sessions list may include different types of connections: 1) HMC Sessions - Hardware Management Console connections that manage the server. These will automatically reconnect if disconnected from this interface. 2) User Sessions - Individual user connections through the web interface or other management tools. 3) Service Sessions - Connections from automated tools or services. Each session type may behave differently when disconnected, with HMC sessions being the most persistent.',
+        keywords: [
+          'session types',
+          'HMC',
+          'user',
+          'service',
+          'connection types',
+        ],
       },
     ],
     faqs: [

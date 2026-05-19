@@ -13,41 +13,98 @@ export const ldapSearchContent = {
         title: 'LDAP Authentication Settings',
         content:
           'By default, LDAP authentication is disabled. To enable it, select the "Enable" checkbox in the LDAP authentication section. Once enabled, you can configure various LDAP settings including service type, server URI, bind credentials, and certificate information. LDAP authentication allows users from your directory service to access the BMC using their existing credentials, providing centralized user management.',
+        keywords: [
+          'LDAP',
+          'authentication',
+          'enable',
+          'disable',
+          'settings',
+          'configuration',
+        ],
       },
       {
         title: 'Secure LDAP Using SSL',
         content:
           'Secure LDAP using SSL encrypts the communication between the BMC and the LDAP server, protecting credentials and data in transit. Important: A CA certificate and an LDAP certificate are required to enable secure LDAP. By default, Secure LDAP using SSL is disabled. Select "Enable" to activate it. The page displays the CA Certificate valid until and LDAP Certificate valid until dates, allowing you to monitor certificate expiration and renew them before they expire.',
+        keywords: ['secure', 'SSL', 'certificate', 'CA', 'encryption', 'LDAPS'],
       },
       {
         title: 'Service Type Configuration',
         content:
           "Select the appropriate service type for your directory service: 1) OpenLDAP - For OpenLDAP directory servers. 2) Active Directory - For Microsoft Active Directory servers. The service type determines how the BMC communicates with your directory service and affects the authentication process. Choose the type that matches your organization's directory infrastructure.",
+        keywords: [
+          'service type',
+          'OpenLDAP',
+          'Active Directory',
+          'directory',
+          'AD',
+        ],
       },
       {
         title: 'Server and Bind Configuration',
         content:
           'Configure the connection to your LDAP server: 1) Server URI - Enter the LDAP server address (e.g., ldap://server.example.com or ldaps://server.example.com for SSL). 2) Bind DN - Enter the bind distinguished name (DN) used to authenticate to the LDAP server (e.g., cn=admin,dc=example,dc=com). 3) Bind password - Enter the password for the bind DN account. 4) Base DN - Enter the base DN where user searches begin (e.g., ou=users,dc=example,dc=com). These settings establish the connection between the BMC and your LDAP server.',
+        keywords: [
+          'server',
+          'URI',
+          'bind',
+          'DN',
+          'password',
+          'base DN',
+          'connection',
+        ],
       },
       {
         title: 'Optional LDAP Attributes',
         content:
           'Configure optional attributes to customize LDAP integration: 1) User ID attribute (optional) - Enter the LDAP attribute used as the user ID (e.g., uid, sAMAccountName). If not specified, the default attribute for your service type is used. 2) Group ID attribute (optional) - Enter the LDAP attribute used to identify groups (e.g., cn, groupName). This helps the BMC identify group memberships for role assignment. These optional fields allow you to adapt the LDAP integration to your directory schema.',
+        keywords: [
+          'attributes',
+          'user ID',
+          'group ID',
+          'uid',
+          'sAMAccountName',
+          'optional',
+        ],
       },
       {
         title: 'Role Groups Management',
         content:
           'Role groups map LDAP groups to BMC privileges, determining what users can do when they log in. The role groups table displays Group name and Group privilege for each configured group. Important: LDAP authentication must be enabled to modify role groups. To add a role group: 1) Click "Add role group". 2) Enter the LDAP group name (must match the group name in your directory). 3) Select the privilege level (Administrator, Operator, ReadOnly, or Callback). 4) Click "Add" to save or "Cancel" to exit. Users who are members of the LDAP group will receive the assigned privilege level when they log in.',
+        keywords: [
+          'role groups',
+          'groups',
+          'privileges',
+          'add',
+          'manage',
+          'mapping',
+        ],
       },
       {
         title: 'Privilege Levels',
         content:
           "Role groups can be assigned different privilege levels: 1) Administrator - Full access to all BMC functions including configuration and user management. 2) Operator - Can perform operations but cannot modify system configuration or manage users. 3) ReadOnly - View-only access to BMC information, cannot perform operations or modify settings. 4) Callback - Limited access for specific callback operations. Assign the minimum privilege level necessary for each group's responsibilities to maintain security.",
+        keywords: [
+          'privilege',
+          'Administrator',
+          'Operator',
+          'ReadOnly',
+          'Callback',
+          'access',
+        ],
       },
       {
         title: 'Saving LDAP Configuration',
         content:
           'After configuring LDAP settings, click "Save" to apply your changes. The system will validate the configuration and attempt to connect to the LDAP server. If successful, LDAP authentication will be enabled and users from your directory service can log in using their credentials. If there are errors, review your settings, especially the Server URI, Bind DN, Bind password, and Base DN. Ensure the LDAP server is accessible from the BMC and the bind credentials are correct.',
+        keywords: [
+          'save',
+          'apply',
+          'validate',
+          'configuration',
+          'connect',
+          'test',
+        ],
       },
     ],
     faqs: [

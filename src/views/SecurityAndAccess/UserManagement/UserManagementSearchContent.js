@@ -13,41 +13,99 @@ export const userManagementSearchContent = {
         title: 'MFA TOTP Authentication',
         content:
           'Multi-Factor Authentication (MFA) using Time-based One-Time Password (TOTP) provides an additional layer of security for user accounts. By default, MFA TOTP authentication is Disabled. To enable it, click the toggle switch to Enabled. Important: For HMC (Hardware Management Console) connections, an MFA-bypassed user account must be used, as HMC systems cannot provide TOTP codes. When MFA is enabled, users will need to provide a TOTP code in addition to their password when logging in.',
+        keywords: [
+          'MFA',
+          'TOTP',
+          'authentication',
+          'two-factor',
+          'HMC',
+          'security',
+        ],
       },
       {
         title: 'Viewing User Information',
         content:
           'The user table displays comprehensive information for each user account: 1) Username - The unique identifier for the user account. 2) Privilege - The access level assigned to the user (Administrator or ReadOnly). 3) Status - Whether the account is Enabled or Disabled. 4) MFA bypass - Indicates if the user is exempt from MFA requirements (important for HMC connections). 5) Secret key - The TOTP secret key used for MFA authentication. This information helps you monitor and manage all user accounts on the system.',
+        keywords: [
+          'view',
+          'user',
+          'username',
+          'privilege',
+          'status',
+          'MFA bypass',
+          'secret key',
+        ],
       },
       {
         title: 'Account Policy Settings',
         content:
           'Click "Account policy settings" to configure security policies for user accounts. You can set: 1) Max failed login attempts - Enter a value between 0 and 65,535. If set to 0, the account is never locked regardless of failed attempts. 2) User unlock method - Choose "Manual" (requires administrator intervention) or "Automatic after timeout" (unlocks automatically after specified duration). Note: If Manual is selected, the Timeout duration field is disabled. 3) Timeout duration (seconds) - Specify how long an account remains locked before automatic unlock (only applicable for Automatic unlock method). Click "Save" to apply changes or "Cancel" to exit without saving.',
+        keywords: [
+          'policy',
+          'settings',
+          'failed login',
+          'unlock',
+          'timeout',
+          'lockout',
+        ],
       },
       {
         title: 'Adding a New User',
         content:
           'To create a new user account: 1) Click "Add user" button. 2) In the Add user dialog, select "Enabled" or "Disabled" for Account status. 3) Enter the username in the Username field. 4) Enter and confirm the password in the User password and Confirm user password fields. 5) Select the privilege level from the Privilege list: "Administrator" (full access) or "ReadOnly" (view-only access). 6) Click "Add user" to create the account or "Cancel" to exit. Upon successful creation, the message "Successfully added user." is displayed.',
+        keywords: [
+          'add',
+          'create',
+          'new user',
+          'username',
+          'password',
+          'privilege',
+        ],
       },
       {
         title: 'Editing User Details',
         content:
           'To modify an existing user account: 1) Click the Edit icon (pencil) next to the user you want to modify. 2) In the Edit user window, you can change: Account status (Enabled/Disabled), User password (enter new password and confirm), and Privilege level (Administrator/ReadOnly). 3) Click "Save" to apply changes or "Cancel" to exit without saving. The message "Successfully updated user." is displayed when changes are saved successfully. Note: You cannot change the username of an existing account.',
+        keywords: [
+          'edit',
+          'modify',
+          'update',
+          'change',
+          'password',
+          'privilege',
+        ],
       },
       {
         title: 'Deleting a User',
         content:
           'To remove a user account: 1) Click the Delete icon (trash can) next to the user you want to remove. 2) A confirmation dialog appears. Important: This action cannot be reversed once completed. The user account and all associated data will be permanently deleted. 3) Click "Delete user" to confirm the deletion or "Cancel" to exit without deleting. Be careful when deleting user accounts, especially administrator accounts, to ensure you maintain access to the system.',
+        keywords: ['delete', 'remove', 'user', 'account', 'permanent'],
       },
       {
         title: 'Privilege Role Descriptions',
         content:
           'Click "View privilege role descriptions" to see detailed information about each privilege level: 1) Administrator - Full access to all BMC functions including user management, system configuration, and all operations. Can create, modify, and delete users. Can change all system settings. 2) ReadOnly - View-only access to BMC information. Cannot modify settings, create users, or perform operations. Useful for monitoring and auditing purposes. Choose the appropriate privilege level based on the user\'s responsibilities and required access level.',
+        keywords: [
+          'privilege',
+          'role',
+          'Administrator',
+          'ReadOnly',
+          'access',
+          'permissions',
+        ],
       },
       {
         title: 'Account Security Best Practices',
         content:
           "When managing user accounts: 1) Enable MFA TOTP authentication for enhanced security, except for HMC-connected accounts. 2) Use strong passwords that meet the system requirements. 3) Set appropriate failed login attempt limits to prevent brute force attacks. 4) Regularly review user accounts and remove unused accounts. 5) Assign the minimum privilege level necessary for each user's role. 6) For HMC connections, ensure at least one MFA-bypassed account exists. 7) Keep administrator accounts to a minimum. 8) Document user account purposes and owners for audit purposes.",
+        keywords: [
+          'best practices',
+          'security',
+          'MFA',
+          'password',
+          'brute force',
+          'audit',
+        ],
       },
     ],
     faqs: [

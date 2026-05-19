@@ -13,41 +13,85 @@ export const certificatesSearchContent = {
         title: 'Viewing Certificate Information',
         content:
           'The certificates table displays comprehensive information for each certificate: 1) Certificate - The certificate type (HTTPS, LDAP, CA, etc.). 2) Issued by - The organization or authority that issued the certificate. 3) Issued to - The entity the certificate was issued to. 4) Valid from - The date when the certificate becomes valid. 5) Valid until - The expiration date of the certificate. Monitor the "Valid until" dates to ensure certificates are renewed before expiration. Expired certificates will prevent secure connections.',
+        keywords: [
+          'view',
+          'certificate',
+          'issued by',
+          'issued to',
+          'valid',
+          'expiration',
+        ],
       },
       {
         title: 'Generating a Certificate Signing Request (CSR)',
         content:
           'To generate a CSR: 1) Click "Generate CSR" button. 2) Select Certificate type: HTTPS Certificate or LDAP Certificate. 3) Select Country/Region from the list. 4) Select Private key type: EC (Elliptic Curve) or RSA. 5) Enter State, City, Company name, and Company unit. 6) Enter Common name (typically the server hostname or domain). 7) Optionally enter Contact person, Email address, and Alternate name (you can add multiple alternate names separated by space). 8) Click "Generate CSR" to create the request or "Cancel" to exit. The message "Successfully generated CSR." is displayed. You can then submit the CSR to a Certificate Authority to obtain a signed certificate.',
+        keywords: [
+          'CSR',
+          'generate',
+          'certificate signing request',
+          'EC',
+          'RSA',
+          'private key',
+        ],
       },
       {
         title: 'Adding a New Certificate',
         content:
           'To add a new certificate: 1) Click "Add new certificate" button. Important: BMC shell and Resource Dump ACF certificates are not listed in the table. The system must be powered on to upload a Resource Dump ACF certificate. 2) Select Certificate type from the list: CA Certificate, BMC shell ACF certificate, or Resource dump ACF certificate. 3) Click "Add file" to browse and select the certificate file from your computer. 4) Click "Add" to upload the certificate or "Cancel" to exit. The message "Successfully added certificate." is displayed when the upload completes successfully.',
+        keywords: [
+          'add',
+          'upload',
+          'new certificate',
+          'CA',
+          'ACF',
+          'BMC shell',
+          'Resource Dump',
+        ],
       },
       {
         title: 'Replacing an Existing Certificate',
         content:
           'To replace a certificate: 1) Click the Replace icon (refresh/replace symbol) next to the certificate you want to replace. 2) In the Replace certificate dialog, click "Add file" to select the new certificate file. 3) Click "Replace" to upload and replace the certificate or "Cancel" to exit without changes. The message "Successfully added certificate." is displayed. Replacing a certificate updates it with a new version, typically when renewing an expiring certificate or updating to a certificate with different properties.',
+        keywords: ['replace', 'renew', 'update', 'certificate', 'refresh'],
       },
       {
         title: 'Deleting a Certificate',
         content:
           'To delete a certificate: 1) Click the Delete icon (trash can) next to the certificate you want to remove. 2) A confirmation dialog appears. 3) Click "Delete" to confirm the deletion or "Cancel" to exit without deleting. The message "Successfully deleted certificate." is displayed. Important: Deleting certain certificates (like HTTPS or LDAP certificates) may affect system functionality. Only delete certificates if you plan to replace them or no longer need the associated functionality.',
+        keywords: ['delete', 'remove', 'certificate', 'trash'],
       },
       {
         title: 'Certificate Types',
         content:
           'Different certificate types serve different purposes: 1) HTTPS Certificate - Secures web interface connections. Required for secure browser access to the BMC. 2) LDAP Certificate - Used for secure LDAP authentication when Secure LDAP is enabled. 3) CA Certificate - Certificate Authority certificate used to validate other certificates, particularly for LDAP. 4) BMC shell ACF certificate - Access Control File certificate for BMC shell access. 5) Resource Dump ACF certificate - Access Control File certificate for resource dump operations (requires system to be powered on for upload).',
+        keywords: ['types', 'HTTPS', 'LDAP', 'CA', 'ACF', 'certificate types'],
       },
       {
         title: 'Certificate Expiration Monitoring',
         content:
           'The page displays alerts for certificate status: 1) Expired certificates - Red/danger alert indicating one or more certificates have expired. Expired certificates prevent secure connections and must be replaced immediately. 2) Expiring certificates - Yellow/warning alert indicating certificates are approaching expiration. Plan to renew these certificates before they expire. 3) Valid certificates - No alert displayed. Regular monitoring of certificate expiration dates is essential for maintaining secure, uninterrupted access to the BMC.',
+        keywords: [
+          'expiration',
+          'expired',
+          'expiring',
+          'monitoring',
+          'alert',
+          'warning',
+        ],
       },
       {
         title: 'Certificate Best Practices',
         content:
           'When managing certificates: 1) Monitor expiration dates regularly and renew certificates before they expire. 2) Use strong private key types (RSA 2048-bit or higher, or EC). 3) Keep certificate files secure and backed up. 4) Use certificates from trusted Certificate Authorities for production systems. 5) Include appropriate alternate names (SANs) in certificates for all hostnames/IPs used to access the BMC. 6) Test new certificates in a non-production environment before deploying. 7) Document certificate renewal procedures and schedules. 8) Ensure the system is powered on before uploading Resource Dump ACF certificates.',
+        keywords: [
+          'best practices',
+          'security',
+          'backup',
+          'SAN',
+          'alternate names',
+          'renewal',
+        ],
       },
     ],
     faqs: [

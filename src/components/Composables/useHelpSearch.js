@@ -88,17 +88,21 @@ export function useHelpSearch(helpContent) {
   });
 
   /**
-   * Separate section results
+   * Separate section results (sorted by relevance - lower score is better)
    */
   const sectionResults = computed(() => {
-    return searchResults.value.filter((r) => r.type === 'section');
+    return searchResults.value
+      .filter((r) => r.type === 'section')
+      .sort((a, b) => a.score - b.score);
   });
 
   /**
-   * Separate FAQ results
+   * Separate FAQ results (sorted by relevance - lower score is better)
    */
   const faqResults = computed(() => {
-    return searchResults.value.filter((r) => r.type === 'faq');
+    return searchResults.value
+      .filter((r) => r.type === 'faq')
+      .sort((a, b) => a.score - b.score);
   });
 
   /**
