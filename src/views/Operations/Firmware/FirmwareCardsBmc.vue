@@ -147,6 +147,9 @@ export default {
       this.startLoader();
       this.$emit('loadingStatus', this.loading);
 
+      // Set firmware switch in progress
+      this.$store.commit('global/setFirmwareSwitchInProgress', true);
+
       // Step 1 - Switch firmware
       const switchFirmware = () => {
         if (!this.isReadonly) {
@@ -163,12 +166,17 @@ export default {
           .then(async () => bmcReboot())
           .catch(({ message }) => {
             this.endLoader();
+            this.$store.commit('global/setFirmwareSwitchInProgress', {
+              inProgress: false,
+              success: false,
+            });
             this.errorToast(message);
           });
       };
 
       // Step 2 - BMC Reboot
       const bmcReboot = () => {
+        this.$store.commit('global/setFirmwareSwitchStep', 2);
         this.infoToast(
           this.$t('pageFirmware.toast.switchToRunning.step2Message'),
           {
@@ -184,6 +192,10 @@ export default {
           // if this function runs more than 10 times, it won't run anymore
           if (checkCounter > 10) {
             this.endLoader();
+            this.$store.commit('global/setFirmwareSwitchInProgress', {
+              inProgress: false,
+              success: false,
+            });
             return this.errorToast(
               this.$t('pageFirmware.toast.errorSwitchImages')
             );
@@ -204,8 +216,13 @@ export default {
 
       // Step 3 - Firmware switch complete
       const step3 = () => {
+        this.$store.commit('global/setFirmwareSwitchStep', 3);
         setTimeout(() => {
           this.endLoader();
+          this.$store.commit('global/setFirmwareSwitchInProgress', {
+            inProgress: false,
+            success: true,
+          });
           return this.infoToast(
             this.$t('pageFirmware.toast.switchToRunning.step3Message'),
             {
