@@ -7,11 +7,19 @@
       @refresh="refresh"
     />
     <app-navigation class="app-navigation" />
-    <page-container class="app-content">
+    <page-container class="app-content" @contextmenu="handleContextMenu">
       <router-view ref="routerView" :key="routerKey" />
       <!-- Scroll to top button -->
       <button-back-to-top />
     </page-container>
+    <!-- Context Menu -->
+    <context-menu
+      :visible="contextMenu.visible.value"
+      :x="contextMenu.x.value"
+      :y="contextMenu.y.value"
+      @close="contextMenu.hide"
+      @action="contextMenu.handleAction"
+    />
   </div>
 </template>
 
@@ -21,12 +29,15 @@ import AppHeader from '@/components/AppHeader/AppHeader.vue';
 import AppNavigation from '@/components/AppNavigation/AppNavigation.vue';
 import PageContainer from '@/components/Global/PageContainer.vue';
 import ButtonBackToTop from '@/components/Global/ButtonBackToTop.vue';
+import ContextMenu from '@/components/Global/ContextMenu.vue';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
+import { useContextMenu } from '@/components/Composables/useContextMenu';
 import stores from '@/store';
 import { useRoute } from 'vue-router';
 import eventBus from '@/eventBus';
 
 const { setFocus } = useJumpLinkComposable();
+const contextMenu = useContextMenu();
 
 const global = stores.GlobalStore();
 
@@ -50,6 +61,10 @@ const refresh = () => {
   // Changing the component :key value will trigger
   // a component re-rendering and 'refresh' the view
   routerKey.value += 1;
+};
+
+const handleContextMenu = (event) => {
+  contextMenu.show(event);
 };
 </script>
 

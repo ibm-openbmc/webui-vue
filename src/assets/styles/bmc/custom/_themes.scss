@@ -1,0 +1,287 @@
+// Carbon Design System-inspired Themes
+// White theme (default/light mode)
+:root,
+[data-theme='light'] {
+  // Background colors
+  --background: #ffffff;
+  --background-hover: #e5e5e5;
+  --background-active: #c6c6c6;
+  --layer-01: #f4f4f4;
+  --layer-02: #ffffff;
+  --layer-03: #f4f4f4;
+  --layer-accent-01: #e0e0e0;
+  
+  // Border colors
+  --border-subtle: #e0e0e0;
+  --border-strong: #8d8d8d;
+  
+  // Text colors
+  --text-primary: #161616;
+  --text-secondary: #525252;
+  --text-placeholder: #a8a8a8;
+  --text-on-color: #ffffff;
+  --text-disabled: #c6c6c6;
+  
+  // Link colors
+  --link-primary: #0f62fe;
+  --link-primary-hover: #0043ce;
+  
+  // Icon colors
+  --icon-primary: #161616;
+  --icon-secondary: #525252;
+  --icon-disabled: #c6c6c6;
+  
+  // Button colors
+  --button-primary: #0f62fe;
+  --button-primary-hover: #0043ce;
+  --button-primary-active: #002d9c;
+  --button-secondary: #393939;
+  --button-secondary-hover: #4c4c4c;
+  --button-danger: #da1e28;
+  --button-danger-hover: #ba1b23;
+  
+  // Support colors
+  --support-error: #da1e28;
+  --support-success: #24a148;
+  --support-warning: #f1c21b;
+  --support-info: #0043ce;
+  
+  // Field colors
+  --field-01: #f4f4f4;
+  --field-02: #ffffff;
+  --field-hover: #e5e5e5;
+  
+  // Focus
+  --focus: #0f62fe;
+}
+
+// G100 theme (dark mode)
+[data-theme='dark'] {
+  // Background colors
+  --background: #161616;
+  --background-hover: #262626;
+  --background-active: #393939;
+  --layer-01: #262626;
+  --layer-02: #393939;
+  --layer-03: #525252;
+  --layer-accent-01: #393939;
+  
+  // Border colors
+  --border-subtle: #393939;
+  --border-strong: #6f6f6f;
+  
+  // Text colors
+  --text-primary: #f4f4f4;
+  --text-secondary: #c6c6c6;
+  --text-placeholder: #6f6f6f;
+  --text-on-color: #ffffff;
+  --text-disabled: #525252;
+  
+  // Link colors
+  --link-primary: #78a9ff;
+  --link-primary-hover: #a6c8ff;
+  
+  // Icon colors
+  --icon-primary: #f4f4f4;
+  --icon-secondary: #c6c6c6;
+  --icon-disabled: #525252;
+  
+  // Button colors
+  --button-primary: #0f62fe;
+  --button-primary-hover: #0043ce;
+  --button-primary-active: #002d9c;
+  --button-secondary: #6f6f6f;
+  --button-secondary-hover: #8d8d8d;
+  --button-danger: #da1e28;
+  --button-danger-hover: #ba1b23;
+  
+  // Support colors
+  --support-error: #ff8389;
+  --support-success: #42be65;
+  --support-warning: #f1c21b;
+  --support-info: #4589ff;
+  
+  // Field colors
+  --field-01: #262626;
+  --field-02: #393939;
+  --field-hover: #353535;
+  
+  // Focus
+  --focus: #0f62fe;
+}
+
+// Apply theme colors to body and main containers
+body {
+  background-color: var(--background) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#app {
+  background-color: var(--background) !important;
+  color: var(--text-primary) !important;
+  min-height: 100vh;
+}
+
+.app-container {
+  background-color: var(--background) !important;
+  min-height: 100vh;
+}
+
+.app-content {
+  background-color: var(--background) !important;
+  color: var(--text-primary) !important;
+  min-height: calc(100vh - 60px);
+}
+
+// Page container
+.page-container {
+  background-color: var(--background) !important;
+  color: var(--text-primary) !important;
+}
+
+// Navigation - minimal theme support without breaking existing behavior
+[data-theme='light'] .app-navigation,
+[data-theme='dark'] .app-navigation {
+  background-color: var(--layer-01);
+  
+  .nav-container {
+    background-color: var(--layer-01);
+  }
+  
+  nav {
+    background-color: var(--layer-01);
+  }
+  
+  .nav {
+    background-color: var(--layer-01);
+  }
+  
+  .nav-item {
+    .btn-link {
+      color: var(--text-primary);
+    }
+    
+    &__nav {
+      background-color: var(--layer-01);
+    }
+  }
+  
+  .nav-link {
+    color: var(--text-secondary);
+  }
+  
+  .nav-nochild a {
+    color: var(--text-primary);
+  }
+}
+
+// Header
+.app-header {
+  background-color: var(--layer-02) !important;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary) !important;
+}
+
+// Cards and containers
+.card {
+  background-color: var(--layer-01);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+// Forms
+.form-control,
+.form-select {
+  background-color: var(--field-01);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+  
+  &:focus {
+    border-color: var(--focus);
+    background-color: var(--field-01);
+  }
+  
+  &::placeholder {
+    color: var(--text-placeholder);
+  }
+}
+
+// Buttons
+.btn-primary {
+  background-color: var(--button-primary);
+  border-color: var(--button-primary);
+  
+  &:hover {
+    background-color: var(--button-primary-hover);
+    border-color: var(--button-primary-hover);
+  }
+}
+
+.btn-secondary {
+  background-color: var(--button-secondary);
+  border-color: var(--button-secondary);
+  color: var(--text-on-color);
+  
+  &:hover {
+    background-color: var(--button-secondary-hover);
+    border-color: var(--button-secondary-hover);
+  }
+}
+
+// Tables
+.table {
+  color: var(--text-primary);
+  
+  thead {
+    background-color: var(--layer-01);
+    border-color: var(--border-subtle);
+  }
+  
+  tbody {
+    background-color: var(--background);
+  }
+  
+  tr {
+    border-color: var(--border-subtle);
+    
+    &:hover {
+      background-color: var(--background-hover);
+    }
+  }
+}
+
+// Modals
+.modal-content {
+  background-color: var(--layer-01);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+.modal-header,
+.modal-footer {
+  border-color: var(--border-subtle);
+}
+
+// Dropdowns
+.dropdown-menu {
+  background-color: var(--layer-01);
+  border-color: var(--border-subtle);
+}
+
+.dropdown-item {
+  color: var(--text-primary);
+  
+  &:hover {
+    background-color: var(--background-hover);
+  }
+}
+
+// Links
+a {
+  color: var(--link-primary);
+  
+  &:hover {
+    color: var(--link-primary-hover);
+  }
+}
