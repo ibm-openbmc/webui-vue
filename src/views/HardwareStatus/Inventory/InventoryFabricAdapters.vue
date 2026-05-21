@@ -102,23 +102,6 @@
         }}
         <info-tooltip :title="getStatusTooltip(row.item.status)" />
       </template>
-      <!-- Toggle identify LED -->
-      <template #cell(identifyLed)="row">
-        <b-form-checkbox
-          v-if="hasIdentifyLed(row.item.identifyLed)"
-          v-model="row.item.identifyLed"
-          :name="'switch-' + row.item.id"
-          switch
-          :disabled="serverStatus"
-          @change="toggleIdentifyLedValue(row.item)"
-        >
-          <span v-if="row.item.identifyLed">
-            {{ $t('global.status.on') }}
-          </span>
-          <span v-else> {{ $t('global.status.off') }} </span>
-        </b-form-checkbox>
-        <div v-else>--</div>
-      </template>
       <template #row-details="{ item }">
         <b-container fluid>
           <BRow style="margin-left: 5px">
