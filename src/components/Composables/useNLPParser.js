@@ -2,9 +2,179 @@ import nlp from 'compromise';
 
 /**
  * Composable for parsing natural language queries
- * Uses Compromise.js for NLP understanding
+ * Uses Compromise.js for NLP understanding with enhanced synonym support
  */
 export function useNLPParser() {
+  /**
+   * Synonym dictionary for expanding search terms
+   */
+  const synonymMap = {
+    // Temperature related
+    temperature: [
+      'temp',
+      'thermal',
+      'heat',
+      'hot',
+      'cold',
+      'degrees',
+      'celsius',
+    ],
+
+    // Logs related
+    logs: [
+      'log',
+      'events',
+      'event',
+      'entries',
+      'records',
+      'history',
+      'logging',
+    ],
+
+    // Status related
+    status: ['state', 'condition', 'health', 'situation'],
+
+    // Severity related
+    critical: ['severe', 'urgent', 'emergency', 'serious', 'high priority'],
+    warning: ['warn', 'caution', 'alert', 'attention', 'moderate'],
+
+    // Actions
+    delete: ['remove', 'erase', 'clear', 'purge', 'clean', 'wipe'],
+    download: ['export', 'save', 'get', 'extract', 'backup', 'retrieve'],
+    filter: ['narrow', 'refine', 'select', 'choose', 'sort', 'search'],
+    view: ['see', 'show', 'display', 'look', 'check', 'browse', 'list'],
+    monitor: ['watch', 'track', 'observe', 'follow', 'supervise'],
+    configure: ['setup', 'set up', 'customize', 'adjust', 'config'],
+    manage: ['control', 'handle', 'administer', 'maintain', 'oversee'],
+
+    // Hardware
+    sensor: ['sensors', 'reading', 'readings', 'measurement', 'measurements'],
+    fan: ['fans', 'cooling', 'cooler', 'blower'],
+    power: ['psu', 'supply', 'supplies', 'wattage', 'watts'],
+    voltage: ['volts', 'volt', 'electrical'],
+
+    // Network
+    network: ['networking', 'net', 'connection', 'connectivity'],
+
+    // User management
+    user: ['users', 'account', 'accounts', 'login', 'credentials'],
+
+    // System
+    system: ['sys', 'machine', 'server', 'host'],
+  };
+
+  /**
+   * Expand a term with its synonyms
+   * @param {string} term - Term to expand
+   * @returns {Array} Array of term and its synonyms
+   */
+  function expandWithSynonyms(term) {
+    const termLower = term.toLowerCase();
+
+    // Check if term is a key or synonym
+    for (const [key, synonyms] of Object.entries(synonymMap)) {
+      if (synonyms.includes(termLower) || key === termLower) {
+        return [key, ...synonyms];
+      }
+    }
+
+    return [term];
+  }
+
+  /**
+   * Enhanced action mapping with more categories
+   */
+  const actionMap = {
+    // Viewing/Reading
+    view: [
+      'see',
+      'show',
+      'display',
+      'look',
+      'check',
+      'open',
+      'list',
+      'browse',
+      'view',
+      'viewing',
+    ],
+
+    // Searching/Finding
+    search: ['find', 'locate', 'lookup', 'query', 'search for', 'searching'],
+    filter: ['filter', 'narrow', 'refine', 'select', 'choose', 'filtering'],
+
+    // Creating/Adding
+    create: ['add', 'make', 'new', 'generate', 'create', 'insert', 'creating'],
+
+    // Modifying
+    edit: [
+      'change',
+      'modify',
+      'update',
+      'alter',
+      'configure',
+      'set',
+      'adjust',
+      'editing',
+    ],
+
+    // Deleting/Removing
+    delete: [
+      'delete',
+      'remove',
+      'clear',
+      'erase',
+      'purge',
+      'clean',
+      'deleting',
+    ],
+
+    // Downloading/Exporting
+    download: [
+      'download',
+      'export',
+      'save',
+      'backup',
+      'get',
+      'extract',
+      'downloading',
+    ],
+
+    // Monitoring
+    monitor: ['monitor', 'watch', 'track', 'observe', 'follow', 'monitoring'],
+
+    // Resolving/Fixing
+    resolve: [
+      'resolve',
+      'fix',
+      'mark',
+      'close',
+      'complete',
+      'address',
+      'resolving',
+    ],
+
+    // Managing
+    manage: [
+      'manage',
+      'control',
+      'handle',
+      'administer',
+      'maintain',
+      'managing',
+    ],
+
+    // Configuring
+    configure: [
+      'configure',
+      'setup',
+      'set up',
+      'customize',
+      'adjust settings',
+      'configuring',
+    ],
+  };
+
   /**
    * Parse natural language query to extract intent
    * @param {string} query - User's natural language query
@@ -15,7 +185,26 @@ export function useNLPParser() {
       return null;
     }
 
+    const queryLower = query.toLowerCase();
     const doc = nlp(query);
+
+    // Detect common query patterns
+    const patterns = {
+      howTo: /^how (do i|to|can i)/i,
+      whatIs: /^what (is|are|does)/i,
+      whereIs: /^where (is|are|can i)/i,
+      canI: /^can i/i,
+      showMe: /^show (me|all)/i,
+      findAll: /^(find|get|list) (all|my)/i,
+    };
+
+    let queryType = 'general';
+    for (const [type, pattern] of Object.entries(patterns)) {
+      if (pattern.test(queryLower)) {
+        queryType = type;
+        break;
+      }
+    }
 
     // Extract verbs (actions)
     const verbs = doc.verbs().out('array');
@@ -29,6 +218,10 @@ export function useNLPParser() {
     const adjectives = doc.adjectives().out('array');
     const modifiers = adjectives.map((a) => a.toLowerCase());
 
+    // Expand terms with synonyms
+    const expandedNouns = nouns.flatMap((noun) => expandWithSynonyms(noun));
+    const expandedVerbs = verbs.flatMap((verb) => expandWithSynonyms(verb));
+
     // Determine query type
     const isQuestion =
       query.includes('?') ||
@@ -40,18 +233,7 @@ export function useNLPParser() {
       query.toLowerCase().startsWith('can i') ||
       query.toLowerCase().startsWith('do i');
 
-    // Map common actions to help topics
-    const actionMap = {
-      delete: ['deleting', 'remove', 'clear', 'erase', 'purge'],
-      download: ['export', 'save', 'backup', 'get'],
-      filter: ['search', 'find', 'show', 'display', 'view', 'see'],
-      resolve: ['fix', 'mark', 'set', 'close', 'complete'],
-      view: ['see', 'show', 'display', 'look', 'check', 'open'],
-      create: ['add', 'make', 'new', 'generate'],
-      edit: ['change', 'modify', 'update', 'alter'],
-    };
-
-    // Find matching action category
+    // Find matching action category with better matching
     let actionCategory = action;
     for (const [category, synonyms] of Object.entries(actionMap)) {
       if (synonyms.includes(action) || action === category) {
@@ -60,15 +242,20 @@ export function useNLPParser() {
       }
     }
 
+    // Extract key phrases (2-3 word combinations)
+    const keyPhrases = extractKeyPhrases(query);
+
     return {
       original: query,
       action: actionCategory,
-      target,
+      target: expandedNouns,
       modifiers,
       isQuestion,
-      verbs,
-      nouns,
+      queryType,
+      verbs: expandedVerbs,
+      nouns: expandedNouns,
       adjectives,
+      keyPhrases,
     };
   };
 

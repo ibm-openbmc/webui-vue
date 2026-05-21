@@ -413,48 +413,60 @@ function buildSearchIndex(routes) {
 
 /**
  * Calculate match score based on the number of matched words and match quality
+ * Enhanced with better scoring for exact matches and phrase matching
  * @param {Array} searchTerms - Array of search terms from the query
  * @param {Array} contentArray - Array of searchable content for a route
+ * @param {Object} parsedIntent - Optional parsed NLP intent for synonym matching
  * @returns {Object} Object containing score, matched terms count, and matched terms
  */
-function calculateMatchScore(searchTerms, contentArray) {
+function calculateMatchScore(searchTerms, contentArray, parsedIntent = null) {
   const matchedTerms = new Set();
   let exactMatchScore = 0;
   let partialMatchScore = 0;
   let phraseMatchBonus = 0;
+  let synonymMatchScore = 0;
 
   // Join content array to check for phrase matches (case-insensitive)
   const fullContent = contentArray.join(' ').toLowerCase();
   const searchPhrase = searchTerms.join(' ').toLowerCase();
 
-  // Check if the entire search phrase exists in content (highest priority)
+  // 1. EXACT PHRASE MATCH (Highest priority)
   if (fullContent.includes(searchPhrase)) {
-    phraseMatchBonus = 1000 * searchTerms.length;
+    phraseMatchBonus = 2000 * searchTerms.length; // Increased from 1000
   }
 
-  // Check each search term
+  // 2. KEY PHRASE MATCHING (from NLP)
+  if (parsedIntent?.keyPhrases) {
+    parsedIntent.keyPhrases.forEach((phrase) => {
+      if (fullContent.includes(phrase.toLowerCase())) {
+        phraseMatchBonus += 1500;
+      }
+    });
+  }
+
+  // 3. INDIVIDUAL TERM MATCHING
   searchTerms.forEach((term) => {
     let termMatched = false;
     const termLower = term.toLowerCase();
 
     contentArray.forEach((content) => {
       const contentLower = content.toLowerCase();
-      if (contentLower.includes(termLower)) {
-        termMatched = true;
-        const words = contentLower.split(/\s+/);
+      const words = contentLower.split(/\s+/);
 
-        // Exact word match (highest score per term)
-        if (words.includes(termLower)) {
-          exactMatchScore += 100;
-        }
-        // Starts with term (medium-high score)
-        else if (contentLower.startsWith(termLower)) {
-          exactMatchScore += 50;
-        }
-        // Contains term anywhere (lower score)
-        else {
-          partialMatchScore += 20;
-        }
+      // Exact word match (very high score)
+      if (words.includes(termLower)) {
+        exactMatchScore += 200; // Increased from 100
+        termMatched = true;
+      }
+      // Starts with term (high score)
+      else if (words.some((word) => word.startsWith(termLower))) {
+        exactMatchScore += 100; // Increased from 50
+        termMatched = true;
+      }
+      // Contains term (medium score)
+      else if (contentLower.includes(termLower)) {
+        partialMatchScore += 30; // Increased from 20
+        termMatched = true;
       }
     });
 
@@ -463,27 +475,55 @@ function calculateMatchScore(searchTerms, contentArray) {
     }
   });
 
-  // Calculate final score with word count multiplier
+  // 4. SYNONYM MATCHING
+  if (parsedIntent) {
+    // Check if any expanded synonyms match
+    const allExpandedTerms = [
+      ...(parsedIntent.nouns || []),
+      ...(parsedIntent.verbs || []),
+    ];
+
+    allExpandedTerms.forEach((expandedTerm) => {
+      if (!searchTerms.includes(expandedTerm)) {
+        contentArray.forEach((content) => {
+          if (content.toLowerCase().includes(expandedTerm.toLowerCase())) {
+            synonymMatchScore += 50;
+          }
+        });
+      }
+    });
+  }
+
+  // 5. CALCULATE FINAL SCORE
   const matchedCount = matchedTerms.size;
   const totalTerms = searchTerms.length;
-
-  // Base score from matches
-  const baseScore = exactMatchScore + partialMatchScore + phraseMatchBonus;
-
-  // Multiplier based on percentage of matched terms
-  // All terms matched = 10x multiplier
-  // Most terms matched = progressively lower multiplier
   const matchPercentage = matchedCount / totalTerms;
-  const matchMultiplier = Math.pow(matchPercentage, 0.5) * 10;
 
-  // Final score prioritizes entries with more matched terms
-  const finalScore = baseScore * matchMultiplier + matchedCount * 500;
+  // Base score
+  const baseScore =
+    exactMatchScore + partialMatchScore + phraseMatchBonus + synonymMatchScore;
+
+  // Match percentage multiplier (exponential for better differentiation)
+  const matchMultiplier = Math.pow(matchPercentage, 0.3) * 15; // Adjusted
+
+  // Bonus for matching all terms
+  const allTermsBonus = matchPercentage === 1.0 ? 1000 : 0;
+
+  // Final score
+  const finalScore =
+    baseScore * matchMultiplier + matchedCount * 800 + allTermsBonus;
 
   return {
     score: finalScore,
     matchedCount,
     matchedTerms: Array.from(matchedTerms),
     matchPercentage,
+    breakdown: {
+      exact: exactMatchScore,
+      partial: partialMatchScore,
+      phrase: phraseMatchBonus,
+      synonym: synonymMatchScore,
+    },
   };
 }
 
@@ -526,15 +566,15 @@ function enhanceSearchWithNLP(query, searchTerms) {
 }
 
 /**
- * Calculate NLP-enhanced match score
+ * Calculate NLP-enhanced match score with context-aware boosting
  * @param {Array} searchTerms - Array of search terms
  * @param {Array} contentArray - Array of searchable content
  * @param {Object} intent - Parsed NLP intent
  * @returns {Object} Match result with enhanced scoring
  */
 function calculateNLPEnhancedScore(searchTerms, contentArray, intent) {
-  // Get base match score
-  const baseMatch = calculateMatchScore(searchTerms, contentArray);
+  // Get base match score with intent for synonym matching
+  const baseMatch = calculateMatchScore(searchTerms, contentArray, intent);
 
   if (!intent) {
     return baseMatch;
@@ -542,31 +582,57 @@ function calculateNLPEnhancedScore(searchTerms, contentArray, intent) {
 
   let nlpBonus = 0;
 
-  // Boost score if action matches content
-  if (intent.action) {
+  // 1. ACTION MATCH BONUS
+  if (intent.action && intent.action !== '') {
     const actionMatches = contentArray.some((content) =>
-      content.includes(intent.action),
+      content.toLowerCase().includes(intent.action),
     );
     if (actionMatches) {
-      nlpBonus += 200;
+      nlpBonus += 300; // Increased from 200
     }
   }
 
-  // Boost score if target nouns match
+  // 2. TARGET NOUN MATCH BONUS
   if (intent.target && intent.target.length > 0) {
     intent.target.forEach((noun) => {
       const nounMatches = contentArray.some((content) =>
-        content.includes(noun),
+        content.toLowerCase().includes(noun.toLowerCase()),
       );
       if (nounMatches) {
-        nlpBonus += 150;
+        nlpBonus += 200; // Increased from 150
       }
     });
   }
 
-  // Extra boost for questions
+  // 3. QUERY TYPE BONUS
+  const queryTypeBonus = {
+    howTo: 150,
+    whatIs: 100,
+    whereIs: 100,
+    canI: 120,
+    showMe: 130,
+    findAll: 140,
+  };
+
+  if (intent.queryType && queryTypeBonus[intent.queryType]) {
+    nlpBonus += queryTypeBonus[intent.queryType];
+  }
+
+  // 4. KEY PHRASE BONUS
+  if (intent.keyPhrases && intent.keyPhrases.length > 0) {
+    intent.keyPhrases.forEach((phrase) => {
+      const phraseMatches = contentArray.some((content) =>
+        content.toLowerCase().includes(phrase.toLowerCase()),
+      );
+      if (phraseMatches) {
+        nlpBonus += 250;
+      }
+    });
+  }
+
+  // 5. QUESTION BONUS
   if (intent.isQuestion) {
-    nlpBonus += 100;
+    nlpBonus += 150; // Increased from 100
   }
 
   return {
@@ -574,6 +640,7 @@ function calculateNLPEnhancedScore(searchTerms, contentArray, intent) {
     score: baseMatch.score + nlpBonus,
     nlpEnhanced: true,
     nlpBonus,
+    intent: intent.queryType,
   };
 }
 
