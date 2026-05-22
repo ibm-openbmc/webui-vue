@@ -1396,7 +1396,7 @@
     "secureVersionDescription": "Specifies whether the secure version lock-in functionality is enabled.",
     "ssh": "BMC shell (via SSH)",
     "sshDescription": "Allow access to shell sessions via SSH, through port 22 on the BMC.",
-    "usbFirmwareUpdatePolicy": "USB firmware update policy",
+    "usbFirmwareUpdatePolicy": "USB firmware update policy settings",
     "usbFirmwareUpdatePolicyDescription": "Enabling the USB Firmware Update Policy will enable the functionality to allow firmware updates through a USB key.",
     "toast": {
       "errorNetworkPolicyUpdate": "Error updating %{policy}.",
