@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Aggiungi nuovo certificato",
+    "adminResetCertificate": "Certificato di ripristino amministratore",
+    "bmcShell": "Certificato ACF BMC shell",
     "caCertificate": "Certificato CA",
     "deleteCertificate": "Elimina certificato",
     "generateCsr": "Genera CSR",
     "httpsCertificate": "Certificato HTTPS",
     "ldapCertificate": "Certificato LDAP",
     "replaceCertificate": "Sostituisci certificato",
+    "resourceDump": "Certificato ACF Resource dump",
     "serviceLoginCertificate": "Certificato di accesso al servizio",
     "alert": {
       "certificateExpiredMessage": "%{certificate} è scaduto. Prendere in considerazione la sua sostituzione con un nuovo certificato.",
       "certificateExpiringMessage": "%{certificate} scadrà a breve. Prendere in considerazione la sua sostituzione con un nuovo certificato.",
       "certificatesExpiredMessage": "Alcuni certificati sono scaduti. Prendere in considerazione la loro sostituzione con dei nuovi certificati.",
-      "certificatesExpiringMessage": "Alcuni certificati scadranno a breve. Prendere in considerazione la loro sostituzione con dei nuovi certificati."
+      "certificatesExpiringMessage": "Alcuni certificati scadranno a breve. Prendere in considerazione la loro sostituzione con dei nuovi certificati.",
+      "targetedAcfMessage": "I certificati ACF BMC shell e Resource dump non verranno elencati nella tabella. Il sistema deve essere acceso per caricare il certificato ACF Resource dump."
     },
     "modal": {
       "alternateName": "Nome alternativo",
@@ -368,6 +372,7 @@
       "keyBitLength": "Lunghezza in bit della chiave",
       "keyCurveId": "ID curva della chiave",
       "keyPairAlgorithm": "Algoritmo di coppia di chiavi",
+      "mismatchError": "Il certificato caricato non corrisponde al tipo di certificato selezionato.",
       "privateKey": "Chiave privata",
       "state": "Stato"
     },
@@ -470,7 +475,7 @@
     "totalCores": "Core totali",
     "alert": {
       "message": "È possibile configurare o annullare la configurazione dei dimm di memoria e dei core del processore solo quando il server è spento.",
-      "warning": "Se l'evento di memoria si è verificato in fase di esecuzione e il server non è ancora stato riavviato, la risorsa di memoria è ancora in uso. Una volta riavviato il server, la configurazione della risorsa di memoria viene annullata e non utilizzata."
+      "warning": "Se l'evento di memoria si è verificato in fase di esecuzione e il server non è ancora stato riavviato, la risorsa di memoria è ancora in uso. Una volta riavviato il server, la configurazione della risorsa di memoria verrà annullata e non sarà in uso."
     },
     "toast": {
       "deleteReqFailed": "La richiesta di eliminazione non è riuscita perché la risorsa richiesta non può essere eliminata.",
@@ -529,7 +534,7 @@
       "confirmMessage": "Con la cancellazione di tutti i record di annullamento della configurazione si tenterà di riconfigurare tutto l'hardware nei nodi selezionati. Queste modifiche verranno applicate al prossimo avvio.",
       "deleteAllMessage": "Eliminare tutti i record? Questa azione non può essere annullata.",
       "deleteAllTitle": "Elimina tutti i record",
-      "deleteMessage": "Siete sicuri di voler eliminare %{count} record? Questa azione non può essere annullata. | Eliminare %{count} record? L'azione non può essere annullata.",
+      "deleteMessage": "Si è sicuri di voler eliminare %{count} record? Questa azione non può essere annullata. | Si è sicuri di voler eliminare %{count} record? Questa azione non può essere annullata.",
       "deleteTitle": "Elimina record | Elimina record",
       "goBack": "Torna indietro",
       "continue": "Continua"
@@ -1128,15 +1133,15 @@
     "model": "Modello",
     "password": "Password",
     "serialNumber": "Numero di serie",
-    "totpTooltip": "Immettere la TOTP quando l'utente è iscritto all'MFA e l'MFA non è stato ignorato.",
-    "uploadServiceLoginCertificate": "Carica certificato di accesso al servizio",
+    "totpTooltip": "Immettere la TOTP quando l'utente è registrato a MFA e MFA non è stato ignorato.",
+    "uploadAcfCertificate": "Carica certificato ACF",
     "username": "Nome utente",
     "alert": {
       "unauthorizedMessage": "Utente non autorizzato",
       "message": "Nome utente o password non validi"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "Aggiungi nuovo certificato di accesso al servizio",
+      "addNewAcfCertificate": "Aggiungi nuovo certificato ACF",
       "certificateFile": "File di certificato",
       "login": "Esegui il login",
       "register": "Registrati"
@@ -1154,7 +1159,7 @@
     "maxNumHugePages": "Numero massimo pagine di grandi dimensioni",
     "memoryBlockSize": "Dimensione blocco di memoria",
     "predictiveDynamicMemoryDeallocationTitle": "Deallocazione memoria dinamica predittiva",
-    "predictiveDynamicMemoryDeallocationDescription": "L'Hypervisor rimuove dinamicamente dalla memoria le pagine di memoria che hanno rilevato guasti predittivi. Se questa opzione è disabilitata, l'annullamento dell'allocazione dinamica della memoria non avverrà per i guasti predittivi della memoria.",
+    "predictiveDynamicMemoryDeallocationDescription": "L'Hypervisor rimuove dinamicamente dalla memoria le pagine di memoria che hanno rilevato guasti predittivi. Se questa opzione è disabilitata, la deallocazione dinamica della memoria non avverrà per i guasti della memoria predittiva.",
     "requestedHugePageMemory": "Memoria con pagine di capacità elevata richiesta",
     "slotCountForNode0": "Conteggio slot per il nodo 0",
     "systemMemoryPageSetup": "Migliorare le prestazioni dell'applicazione impostando grandi dimensioni della pagina di memoria virtuale di 16 GB ciascuna.",
@@ -1457,7 +1462,7 @@
       "message1": "Il sistema è attualmente in modalità personalizzata.",
       "message2": "Cambiare modalità selezionando un'opzione tra quelle che seguono."
     },
-    "nonIdlePowerSaverMode": "Il risparmio energetico inattivo non è supportato nella modalità attuale.",
+    "nonIdlePowerSaverMode": "Il risparmio energetico per inattività non è supportato nella modalità corrente.",
     "delayTimeValidation": {
       "delayTimeRange": "Il valore deve essere compreso tra %{min} e %{max}.",
       "enterDelayTime": "Il valore non può essere inferiore al ritardo per uscire.",
@@ -1468,7 +1473,7 @@
       "content": "L'abilitazione di una qualsiasi delle modalità di risparmio energetico causerà modifiche nelle frequenze del processore, nell'utilizzo del processore e nel consumo di energia, nonché delle variazioni nelle prestazioni.",
       "subTitle": "Confermare l'operazione?",
       "titleMaximumPerformance": "Abilita modalità di prestazioni massime",
-      "titleEfficiencyFavorPower": "Abilitazione della modalità di efficienza energetica",
+      "titleEfficiencyFavorPower": "Abilita modalità di efficienza energetica",
       "titlePowerSaving": "Abilita la modalità di risparmio energetico massimo"
     },
     "selectMode": {
@@ -1573,6 +1578,7 @@
       "lowerWarning": "Avvertenza inferiore",
       "name": "Nome",
       "status": "Stato",
+      "statusTooltip": "Lo stato indica la condizione del sensore.  Non riflette lo stato hardware dell'articolo presente nell'inventario.",
       "upperCritical": "Critico superiore",
       "upperWarning": "Avvertenza superiore",
       "filter": {
@@ -1935,7 +1941,7 @@
       "readOnly": "Solo lettura",
       "serviceAgent": "Agent del servizio",
       "secretKey": "Chiave segreta",
-      "secretKeyTooltip": "Se la chiave segreta viene eliminata, all'utente verrà richiesto di registrarla nuovamente durante il processo di accesso.",
+      "secretKeyTooltip": "Se la chiave segreta viene cancellata, all'utente verrà richiesto di registrarla nuovamente durante il processo di accesso.",
       "status": "Stato",
       "username": "Nome utente"
     },
@@ -1961,7 +1967,7 @@
       "errorDisableMfa": "Errore nella disabilitazione dell'autenticazione a più fattori.",
       "errorDisableMfaBypass": "Errore nella disabilitazione del bypass della MFA.",
       "errorEnableMfa": "Errore nell'abilitazione dell'autenticazione a più fattori.",
-      "errorEnableMfaAuto": "Errore nell'attivazione dell'autenticazione TOTP MFA. Verificare l'ora del BMC e l'ora del browser per verificare con correttamente la TOTP.",
+      "errorEnableMfaAuto": "Errore durante l'abilitazione dell'autenticazione TOTP MFA. Verificare l'ora di BMC e l'ora del browser per verificare correttamente la TOTP.",
       "errorEnableMfaBypass": "Errore nell'attivazione del bypass MFA.",
       "errorLoadAccountSettings": "Errore di caricamento delle impostazioni dell'account",
       "errorLoadUsers": "Errore di caricamento degli utenti.",
@@ -1975,8 +1981,8 @@
       "successClearSecretKey": "Chiave segreta eliminata correttamente",
       "successCreateUser": "L'utente '%{username}' è stato creato.",
       "successDeleteUser": "L'Utente '%{username}' è stato eliminato.",
-      "successDisableMfa": "Autenticazione a più fattori correttamente disattivata.",
-      "successDisableMfaBypass": "Bypass MFA disattivato correttamente.",
+      "successDisableMfa": "Autenticazione a più fattori disabilitata correttamente.",
+      "successDisableMfaBypass": "Bypass MFA disabilitato correttamente.",
       "successEnableMfa": "Autenticazione a più fattori abilitata correttamente.",
       "successEnableMfaBypass": "Bypass MFA abilitato correttamente.",
       "successSaveSettings": "Impostazioni dell'account salvate correttamente.",

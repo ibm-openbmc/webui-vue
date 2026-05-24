@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Incluir novo certificado",
+    "adminResetCertificate": "Certificado de reconfiguração do administrador",
+    "bmcShell": "Certificado ACF do shell do BMC",
     "caCertificate": "Certificado de autoridade de certificação",
     "deleteCertificate": "Excluir certificado",
     "generateCsr": "Gerar CSR",
     "httpsCertificate": "Certificado HTTPS",
     "ldapCertificate": "Certificado LDAP",
     "replaceCertificate": "Substituir certificado",
+    "resourceDump": "Certificado ACF de dump de recurso",
     "serviceLoginCertificate": "Certificado de login de serviço",
     "alert": {
       "certificateExpiredMessage": "O %{certificate} expirou. Considere substituí-lo por um novo certificado.",
       "certificateExpiringMessage": "O %{certificate} está expirando em breve. Considere substituí-lo por um novo certificado.",
       "certificatesExpiredMessage": "Alguns certificados expiraram. Considere substituí-los por novos certificados.",
-      "certificatesExpiringMessage": "Alguns certificados estão expirando em breve. Considere substituí-los por novos certificados."
+      "certificatesExpiringMessage": "Alguns certificados estão expirando em breve. Considere substituí-los por novos certificados.",
+      "targetedAcfMessage": "Os certificados ACF do shell do BMC e de dump de recurso não serão listados na tabela. O sistema deve estar ligado para fazer upload do certificado ACF de dump de recurso."
     },
     "modal": {
       "alternateName": "Nome alternativo",
@@ -368,6 +372,7 @@
       "keyBitLength": "Comprimento do bit de chave",
       "keyCurveId": "ID da curva de chave",
       "keyPairAlgorithm": "Algoritmo de par de chaves",
+      "mismatchError": "O certificado transferido por upload não corresponde ao tipo de certificado selecionado.",
       "privateKey": "Chave privada",
       "state": "Estado"
     },
@@ -470,7 +475,7 @@
     "totalCores": "Total de núcleos",
     "alert": {
       "message": "Os dimms de memória e os núcleos de processador podem ser configurados ou desconfigurados apenas quando o servidor é desligado.",
-      "warning": "Se o evento de memória ocorreu em tempo de execução e o servidor ainda não foi reinicializado, o recurso de memória ainda está em uso. Ao reiniciar o servidor, o recurso de memória será desconfigurado e ficará sem uso."
+      "warning": "Se o evento de memória ocorreu em tempo de execução e o servidor ainda não tenha sido reinicializado, o recurso de memória ainda está em uso. Ao reinicializar o servidor, o recurso de memória será desconfigurado e ficará indisponível para uso."
     },
     "toast": {
       "deleteReqFailed": "A solicitação de exclusão falhou porque o recurso solicitado não pode ser excluído.",
@@ -529,7 +534,7 @@
       "confirmMessage": "A limpeza de todos os registros de desconfiguração tentará reconfigurar todo o hardware nos nós selecionados. Essas mudanças entrarão em vigor na próxima inicialização.",
       "deleteAllMessage": "Tem certeza de que deseja excluir todos os registros? Não é possível desfazer essa ação.",
       "deleteAllTitle": "Excluir todos os registros",
-      "deleteMessage": "Tem certeza de que deseja excluir o registro %{count}? Não é possível desfazer essa ação. | Tem certeza de que deseja excluir %{count} registros? Esta ação não pode ser desfeita.",
+      "deleteMessage": "Tem certeza de que deseja excluir %{count} registro? Esta ação não poderá ser desfeita. | Tem certeza de que deseja excluir %{count} registros? Esta ação não poderá ser desfeita.",
       "deleteTitle": "Excluir registro | Excluir registros",
       "goBack": "Voltar",
       "continue": "Continuar"
@@ -688,7 +693,7 @@
     },
     "toast": {
       "errorDelete": "Erro ao excluir %{count} log. | Erro ao excluir %{count} logs.",
-      "errorDeleteGuardRecord": "Não é possível excluir o log, pois ele está associado a um registro de proteção. Limpe manualmente a proteção ou substitua a peça. | Os logs com registros de proteção não foram excluídos. Limpe manualmente a proteção ou substitua a peça.",
+      "errorDeleteGuardRecord": "Não é possível excluir o log, pois ele está associado a um registro de proteção. Considere limpar manualmente a proteção ou substituir a peça. | Os logs com registros de proteção não foram excluídos. Limpe manualmente a proteção ou substitua a peça.",
       "errorLogStatusUpdate": "Erro ao atualizar o status do log.",
       "errorResolveLogs": "Erro ao resolver %{count} log. | Erro ao resolver %{count} logs.",
       "errorResolveLogsGuardRecord": "Não é possível resolver o log, pois ele está associado a um registro de proteção. Limpe manualmente a proteção ou substitua a peça. | Os logs com registros de proteção não foram resolvidos. Limpe manualmente a proteção ou substitua a peça.",
@@ -1128,15 +1133,15 @@
     "model": "Modelo",
     "password": "Senha",
     "serialNumber": "Número de série",
-    "totpTooltip": "Insira o TOTP quando o usuário estiver inscrito na MFA e a MFA não tiver sido ignorada.",
-    "uploadServiceLoginCertificate": "Fazer upload de certificado de login de serviço",
+    "totpTooltip": "Insira a senha TOTP quando o usuário estiver inscrito na MFA e o bypass da MFA não tiver sido aplicado.",
+    "uploadAcfCertificate": "Fazer upload do certificado ACF",
     "username": "Nome do usuário",
     "alert": {
       "unauthorizedMessage": "Usuário não autorizado",
       "message": "Nome do usuário ou senha inválidos"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "Incluir novo certificado de login de serviço",
+      "addNewAcfCertificate": "Incluir novo certificado ACF",
       "certificateFile": "Arquivo de certificado",
       "login": "Efetuar login",
       "register": "Registrar"
@@ -1169,7 +1174,7 @@
     "alert": {
       "heading": "Aplicar mudanças",
       "message1": "O sistema tem que ser desligado.",
-      "message2": "A mudanças feitas entrarão em vigor na próxima reinicialização.",
+      "message2": "A mudanças feitas serão efetivadas na próxima reinicialização.",
       "serverMustBePoweredOffTo": "O servidor deve ser desligado para:",
       "updateActiveMemoryMirroring": "Atualizar o modo de espelho de memória ativa",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1457,7 +1462,7 @@
       "message1": "O sistema está atualmente em um modo customizado.",
       "message2": "Altere o modo selecionando uma opção abaixo."
     },
-    "nonIdlePowerSaverMode": "A economia de energia inativa não é compatível com o modo atual.",
+    "nonIdlePowerSaverMode": "O recurso para economizar energia durante a inatividade não é suportado com o modo atual.",
     "delayTimeValidation": {
       "delayTimeRange": "O valor deve estar entre %{min} e %{max}.",
       "enterDelayTime": "Valor não pode ser menor que o tempo de atraso para sair.",
@@ -1468,7 +1473,7 @@
       "content": "A ativação de qualquer um dos modos de economia de energia fará com que as alterações nas frequências do processador, na utilização do processador, no consumo de energia e no desempenho variem.",
       "subTitle": "Tem certeza?",
       "titleMaximumPerformance": "Ativar o modo de desempenho máximo",
-      "titleEfficiencyFavorPower": "Ativar o modo de eficiência energética",
+      "titleEfficiencyFavorPower": "Ativar o modo de economia de energia",
       "titlePowerSaving": "Ativar o modo de economia máxima de energia"
     },
     "selectMode": {
@@ -1573,6 +1578,7 @@
       "lowerWarning": "Abaixar aviso",
       "name": "Nome",
       "status": "Status",
+      "statusTooltip": "O status indica a condição do sensor.  Ele não reflete o status de hardware do item de inventário.",
       "upperCritical": "Aumentar crítico",
       "upperWarning": "Aumentar aviso",
       "filter": {
@@ -1935,7 +1941,7 @@
       "readOnly": "Somente leitura",
       "serviceAgent": "Agente de serviço",
       "secretKey": "Chave secreta",
-      "secretKeyTooltip": "Se a chave secreta for apagada, o usuário será solicitado a registrar novamente a chave secreta durante o processo de login.",
+      "secretKeyTooltip": "Se a chave secreta for limpa, o usuário será solicitado a registrar novamente a chave secreta durante o processo de efetuar login.",
       "status": "Status",
       "username": "Nome do usuário"
     },
@@ -1961,7 +1967,7 @@
       "errorDisableMfa": "Erro ao desativar a autenticação de vários fatores.",
       "errorDisableMfaBypass": "Erro ao desativar o bypass da MFA.",
       "errorEnableMfa": "Erro ao ativar a autenticação de vários fatores.",
-      "errorEnableMfaAuto": "Erro ao ativar a autenticação MFA TOTP. Verifique a hora do BMC e o hora do navegador para verificar o TOTP com sucesso.",
+      "errorEnableMfaAuto": "Ocorreu erro ao ativar a autenticação MFA TOTP. Considere verificar o horário do BMC e o horário do navegador para verificar a TOTP (senha única com base em horário) com sucesso.",
       "errorEnableMfaBypass": "Erro ao ativar o bypass da MFA.",
       "errorLoadAccountSettings": "Erro ao carregar as configurações da conta",
       "errorLoadUsers": "Erro ao carregar usuários.",
@@ -1972,13 +1978,13 @@
       "successBatchDelete": "Sucesso ao excluir %{count} usuário. | Sucesso ao excluir %{count} usuários.",
       "successBatchDisable": "Sucesso ao desativar %{count} usuário. | Sucesso ao desativar %{count} usuários.",
       "successBatchEnable": "Sucesso ao ativar %{count} usuário. | Sucesso ao ativar %{count} usuários.",
-      "successClearSecretKey": "Chave secreta apagada com sucesso",
+      "successClearSecretKey": "A chave secreta foi limpa com sucesso",
       "successCreateUser": "Usuário '%{username}' criado.",
       "successDeleteUser": "Excluído o usuário '%{username}'.",
-      "successDisableMfa": "Desativação bem-sucedida da autenticação de vários fatores.",
-      "successDisableMfaBypass": "Desativação bem-sucedida do bypass da MFA.",
-      "successEnableMfa": "Ativação bem-sucedida da autenticação de vários fatores.",
-      "successEnableMfaBypass": "Ativação bem-sucedida do bypass da MFA.",
+      "successDisableMfa": "A autenticação de vários fatores (MFA) foi desativada com sucesso.",
+      "successDisableMfaBypass": "O bypass da MFA foi desativado com sucesso.",
+      "successEnableMfa": "A autenticação de vários fatores (MFA) foi ativada com sucesso.",
+      "successEnableMfaBypass": "O bypass da MFA foi ativado com sucesso.",
       "successSaveSettings": "Sucesso ao salvar as configurações da conta.",
       "successUpdateUser": "Usuário '%{username}' atualizado."
     }

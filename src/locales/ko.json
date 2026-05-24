@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "새 인증서 추가",
+    "adminResetCertificate": "관리자 인증서 재설정",
+    "bmcShell": "BMC 쉘 ACF 인증서",
     "caCertificate": "CA 인증서",
     "deleteCertificate": "인증서 삭제",
     "generateCsr": "CSR 생성",
     "httpsCertificate": "HTTPS 인증서",
     "ldapCertificate": "LDAP 인증서",
     "replaceCertificate": "인증서 교체",
+    "resourceDump": "리소스 덤프 ACF 인증서",
     "serviceLoginCertificate": "서비스 로그인 인증서",
     "alert": {
       "certificateExpiredMessage": "%{certificate}이(가) 만료되었습니다. 새 인증서로 이의 대체를 고려하십시오.",
       "certificateExpiringMessage": "%{certificate}이(가) 곧 만료됩니다. 새 인증서로 이의 대체를 고려하십시오.",
       "certificatesExpiredMessage": "일부 인증서가 만료되었습니다. 새 인증서로 이의 대체를 고려하십시오.",
-      "certificatesExpiringMessage": "일부 인증서가 곧 만료됩니다. 새 인증서로 이의 대체를 고려하십시오."
+      "certificatesExpiringMessage": "일부 인증서가 곧 만료됩니다. 새 인증서로 이의 대체를 고려하십시오.",
+      "targetedAcfMessage": "BMC 쉘 및 리소스 덤프 ACF 인증서는 테이블에 나열되지 않습니다. 시스템이 켜져 있어야 리소스 덤프 ACF 인증서를 업로드할 수 있습니다."
     },
     "modal": {
       "alternateName": "대체 이름",
@@ -368,6 +372,7 @@
       "keyBitLength": "키 비트 길이",
       "keyCurveId": "키 커브 ID",
       "keyPairAlgorithm": "키 쌍 알고리즘",
+      "mismatchError": "업로드된 인증서가 선택한 인증서 유형과 일치하지 않습니다.",
       "privateKey": "개인 키",
       "state": "상태"
     },
@@ -1129,14 +1134,14 @@
     "password": "비밀번호",
     "serialNumber": "일련 번호",
     "totpTooltip": "사용자가 MFA에 등록되어 있고 MFA가 우회되지 않은 경우 TOTP를 입력하십시오.",
-    "uploadServiceLoginCertificate": "서비스 로그인 인증서 업로드",
+    "uploadAcfCertificate": "ACF 인증서 업로드",
     "username": "사용자 이름",
     "alert": {
       "unauthorizedMessage": "사용자 권한 없음",
       "message": "올바르지 않은 사용자 이름 또는 비밀번호"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "새 서비스 로그인 인증서 추가",
+      "addNewAcfCertificate": "새 ACF 인증서 추가",
       "certificateFile": "인증서 파일",
       "login": "로그인",
       "register": "등록"
@@ -1573,6 +1578,7 @@
       "lowerWarning": "하위 경고",
       "name": "이름",
       "status": "상태",
+      "statusTooltip": "상태는 센서의 상태를 표시합니다.  해당 항목은 재고 품목의 하드웨어 상태를 반영하지 않습니다.",
       "upperCritical": "상위 위험",
       "upperWarning": "상위 경고",
       "filter": {
@@ -1976,9 +1982,9 @@
       "successCreateUser": "'%{username}' 사용자를 작성했습니다.",
       "successDeleteUser": "'%{username}' 사용자를 삭제했습니다.",
       "successDisableMfa": "다단계 인증을 사용 안함으로 설정했습니다.",
-      "successDisableMfaBypass": "MFA 바이패스를 사용 안함으로 설정했습니다.",
+      "successDisableMfaBypass": "MFA 우회 기능을 사용 안함으로 설정했습니다.",
       "successEnableMfa": "다단계 인증을 사용으로 설정했습니다.",
-      "successEnableMfaBypass": "MFA 바이패스를 사용으로 설정했습니다.",
+      "successEnableMfaBypass": "MFA 우회 기능을 사용으로 설정했습니다.",
       "successSaveSettings": "계정 설정을 저장했습니다.",
       "successUpdateUser": "'%{username}' 사용자를 업데이트했습니다."
     }

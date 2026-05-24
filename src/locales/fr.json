@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Ajouter un nouveau certificat",
+    "adminResetCertificate": "Réinitialisation du certificat par l'administrateur",
+    "bmcShell": "Certificat ACF de l'interpréteur de commandes BMC",
     "caCertificate": "Certificat de l'autorité de certification",
     "deleteCertificate": "Supprimer le certificat",
     "generateCsr": "Générer une demande de signature de certificat",
     "httpsCertificate": "Certificat HTTPS",
     "ldapCertificate": "Certificat LDAP",
     "replaceCertificate": "Remplacer le certificat",
+    "resourceDump": "Certificat ACF du cliché de ressource",
     "serviceLoginCertificate": "Certificat de connexion de service",
     "alert": {
       "certificateExpiredMessage": "Le certificat %{certificate} a expiré. Envisagez de le remplacer par un nouveau certificat.",
       "certificateExpiringMessage": "Le certificat %{certificate} arrive bientôt à expiration. Envisagez de le remplacer par un nouveau certificat.",
       "certificatesExpiredMessage": "Certains certificats ont expiré. Envisagez de les remplacer par de nouveaux certificats.",
-      "certificatesExpiringMessage": "Certains certificats expirent bientôt. Envisagez de les remplacer par de nouveaux certificats."
+      "certificatesExpiringMessage": "Certains certificats expirent bientôt. Envisagez de les remplacer par de nouveaux certificats.",
+      "targetedAcfMessage": "Les certificats AFC de l'interpréteur de commandes BMC et du cliché de ressource ne seront pas répertoriés dans le tableau. Le système doit être sous tension pour charger le certificat ACF du cliché de ressource."
     },
     "modal": {
       "alternateName": "Autre nom",
@@ -368,6 +372,7 @@
       "keyBitLength": "Longueur de bit de clé",
       "keyCurveId": "ID de courbe de clé",
       "keyPairAlgorithm": "Algorithme de paire de clés",
+      "mismatchError": "Le certificat chargé ne correspond pas au type de certificat sélectionné.",
       "privateKey": "Clé privée",
       "state": "Etat"
     },
@@ -470,7 +475,7 @@
     "totalCores": "Nombre total de coeurs",
     "alert": {
       "message": "Les coeurs de processeur et les barrettes DIMM de mémoire peuvent être configurés ou déconfigurés uniquement lorsque le serveur est hors tension.",
-      "warning": "Si l'événement de mémoire s'est produit au moment de l'exécution et que le serveur n'a pas encore été redémarré, la ressource mémoire est toujours en cours d'utilisation. Une fois le serveur redémarré, la ressource mémoire est déconfigurée et n'est plus utilisée."
+      "warning": "Si l'événement de mémoire s'est produit au moment de l'exécution et que le serveur n'a pas encore été réamorcé, la ressource mémoire est toujours en cours d'utilisation. Une fois le serveur réamorcé, la ressource mémoire est déconfigurée et elle n'est plus utilisée."
     },
     "toast": {
       "deleteReqFailed": "La demande de suppression a échoué car la ressource demandée ne peut pas être supprimée.",
@@ -529,7 +534,7 @@
       "confirmMessage": "La suppression de tous les enregistrements de déconfiguration entraînera une tentative de reconfiguration de tout le matériel sur le ou les noeuds sélectionnés. Ces modifications prendront effet à l'amorçage suivant.",
       "deleteAllMessage": "Voulez-vous vraiment supprimer tous les enregistrements ? Cette action est irréversible.",
       "deleteAllTitle": "Supprimer tous les enregistrements",
-      "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'enregistrement % {count} ? Cette action est irréversible. | Voulez-vous vraiment supprimer {count} % enregistrements ? Cette action est irréversible.",
+      "deleteMessage": "Voulez-vous vraiment supprimer %{count} enregistrement ? Cette action est irréversible. | Voulez-vous vraiment supprimer %{count} enregistrements ? Cette action est irréversible.",
       "deleteTitle": "Supprimer l'enregistrement | Supprimer les enregistrements",
       "goBack": "Retour",
       "continue": "Continuer"
@@ -688,7 +693,7 @@
     },
     "toast": {
       "errorDelete": "Erreur lors de la suppression d'%{count} journal. | Erreur lors de la suppression de %{count} journaux.",
-      "errorDeleteGuardRecord": "Le journal ne peut pas être supprimé, car il est associé à un enregistrement de protection. Veuillez effacer manuellement la protection ou remplacer la pièce. | Les journaux contenant des enregistrements de protection n'ont pas été supprimés. Veuillez supprimer manuellement la protection ou remplacer l'élément.",
+      "errorDeleteGuardRecord": "Le journal ne peut pas être supprimé car il est associé à un enregistrement protégé. Effacez manuellement la protection ou remplacer l'élément. | Les journaux contenant des enregistrements protégés n'ont pas été supprimés. Supprimez manuellement la protection ou remplacez l'élément.",
       "errorLogStatusUpdate": "Erreur lors de la mise à jour du statut de journal.",
       "errorResolveLogs": "Erreur lors de la résolution d'%{count} journal. | Erreur lors de la résolution de %{count} journaux.",
       "errorResolveLogsGuardRecord": "Le journal ne peut pas être traité, car il est associé à un enregistrement de protection. Veuillez effacer manuellement la protection ou remplacer la pièce. | Les journaux contenant des enregistrements de protection n'ont pas été traités. Veuillez supprimer manuellement la protection ou remplacer l'élément.",
@@ -1128,15 +1133,15 @@
     "model": "Modèle",
     "password": "Mot de passe",
     "serialNumber": "Numéro de série",
-    "totpTooltip": "Entrez le mot de passe à usage unique à durée limitée lorsque l'utilisateur est inscrit à MFA et que la fonction MFA n'a pas été ignorée.",
-    "uploadServiceLoginCertificate": "Envoyer par téléchargement le certificat de connexion de service",
+    "totpTooltip": "Entrez le mot de passe à usage unique et à durée limitée lorsque l'utilisateur est inscrit pour l'authentification multi-facteur et que l'authentification multi-facteur n'est pas ignorée.",
+    "uploadAcfCertificate": "Charger le certificat ACF",
     "username": "Nom d'utilisateur",
     "alert": {
       "unauthorizedMessage": "Utilisateur non autorisé",
       "message": "Nom d'utilisateur ou mot de passe non valide"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "Ajouter un nouveau certificat de connexion de service",
+      "addNewAcfCertificate": "Ajouter un nouveau certificat ACF",
       "certificateFile": "Fichier de certificat",
       "login": "Se connecter",
       "register": "Enregistrer"
@@ -1154,7 +1159,7 @@
     "maxNumHugePages": "Nombre maximal de pages très grandes",
     "memoryBlockSize": "Taille de bloc de mémoire",
     "predictiveDynamicMemoryDeallocationTitle": "Libération de la mémoire dynamique prédictive",
-    "predictiveDynamicMemoryDeallocationDescription": "L'hyperviseur supprime dynamiquement dans la mémoire les pages de mémoire qui ont détecté des défaillances prédictives. Si cette option est désactivée, la désallocation dynamique de la mémoire ne se produira pas pour les défaillances de mémoire prédictives.",
+    "predictiveDynamicMemoryDeallocationDescription": "L'hyperviseur supprime dynamiquement de la mémoire les pages de mémoire pour lesquelles des pannes sont anticipées. Si cette option est désactivée, la libération dynamique de la mémoire ne se produit pas pour les anticipations de pannes de mémoire.",
     "requestedHugePageMemory": "Mémoire de pages très volumineuses demandée",
     "slotCountForNode0": "Nombre d'emplacements pour le noeud 0",
     "systemMemoryPageSetup": "Améliorez les performances de l'application en définissant de grandes tailles de page de mémoire virtuelle de 16 Go chacune.",
@@ -1457,7 +1462,7 @@
       "message1": "Le système est actuellement en mode personnalisé.",
       "message2": "Changez de mode en sélectionnant une option ci-dessous."
     },
-    "nonIdlePowerSaverMode": "L'économiseur d'énergie en veille n'est pas pris en charge dans le mode actuel.",
+    "nonIdlePowerSaverMode": "L'économiseur d'énergie en mode veille n'est pas pris en charge dans le mode actuel.",
     "delayTimeValidation": {
       "delayTimeRange": "La valeur doit être comprise entre %{min} et %{max}.",
       "enterDelayTime": "La valeur ne peut pas être inférieure au délai de sortie.",
@@ -1573,6 +1578,7 @@
       "lowerWarning": "Seuil de prévention",
       "name": "Nom",
       "status": "Statut",
+      "statusTooltip": "Le statut indique l'état du capteur.  Il ne reflète pas l'état matériel de l'article d'inventaire.",
       "upperCritical": "Plafond critique",
       "upperWarning": "Plafond de prévention",
       "filter": {
@@ -1935,7 +1941,7 @@
       "readOnly": "Lecture seule",
       "serviceAgent": "Agent de service",
       "secretKey": "Clé secrète",
-      "secretKeyTooltip": "Si la clé secrète est effacée, l'utilisateur sera invité à l'enregistrer de nouveau lors de la connexion.",
+      "secretKeyTooltip": "Si la clé secrète est effacée, l'utilisateur est invité à la réenregistrer au cours du processus de connexion.",
       "status": "Statut",
       "username": "Nom d'utilisateur"
     },
@@ -1961,7 +1967,7 @@
       "errorDisableMfa": "Erreur lors de la désactivation de l'authentification multi-facteur.",
       "errorDisableMfaBypass": "Erreur lors de la désactivation de la non-prise en compte de MFA.",
       "errorEnableMfa": "Erreur lors de l'activation de l'authentification multi-facteur.",
-      "errorEnableMfaAuto": "Erreur lors de l'activation de l'authentification par mot de passe à usage temporaire à durée limitée MFA. Veuillez vérifier l'heure du BMC et celle du navigateur pour valider le mot de passe à usage temporaire à durée limitée.",
+      "errorEnableMfaAuto": "Erreur lors de l'activation de l'authentification multi-facteur par mot de passe à usage unique et à durée limitée. Vérifiez l'heure du contrôleur de gestion de la carte mère (BMC) et celle du navigateur pour valider le mot de passe à usage unique et à durée limitée.",
       "errorEnableMfaBypass": "Erreur lors de l'activation de la prise en compte de MFA.",
       "errorLoadAccountSettings": "Erreur lors du chargement des paramètres de compte",
       "errorLoadUsers": "Erreur lors du chargement des utilisateurs.",
@@ -1972,13 +1978,13 @@
       "successBatchDelete": "%{count} utilisateur a été supprimé. | %{count} utilisateurs ont été supprimés.",
       "successBatchDisable": "%{count} utilisateur a été désactivé. | %{count} utilisateurs ont été désactivés.",
       "successBatchEnable": "%{count} utilisateur a été activé. | %{count} utilisateurs ont été activés.",
-      "successClearSecretKey": "La clé secrète a été effacée correctement.",
+      "successClearSecretKey": "Clé secrète effacée",
       "successCreateUser": "Utilisateur '%{username}' créé.",
       "successDeleteUser": "Utilisateur '%{username}' supprimé.",
-      "successDisableMfa": "L'authentification multi-facteur a été désactivée correctement.",
-      "successDisableMfaBypass": "La non-prise en compte de MFA a été désactivée correctement.",
-      "successEnableMfa": "L'authentification multi-facteur a été activée correctement.",
-      "successEnableMfaBypass": "La non-prise en compte de MFA a été activée correctement.",
+      "successDisableMfa": "Authentification multi-facteur désactivée.",
+      "successDisableMfaBypass": "Contournement de l'authentification multi-facteur désactivé.",
+      "successEnableMfa": "Authentification multi-facteur activée.",
+      "successEnableMfaBypass": "Contournement de l'authentification multi-facteur activé.",
       "successSaveSettings": "Les paramètres de compte ont été sauvegardés.",
       "successUpdateUser": "Utilisateur '%{username}' mis à jour."
     }

@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Neues Zertifikat hinzufügen",
+    "adminResetCertificate": "Zertifikat für Rücksetzung durch Administrator",
+    "bmcShell": "ACF-Zertifikat für BMC-Shell",
     "caCertificate": "CA-Zertifikat",
     "deleteCertificate": "Zertifikat löschen",
     "generateCsr": "Zertifikatssignieranforderung generieren",
     "httpsCertificate": "HTTPS-Zertifikat",
     "ldapCertificate": "LDAP-Zertifikat",
     "replaceCertificate": "Zertifikat ersetzen",
+    "resourceDump": "ACF-Zertifikat für Ressourcenspeicherauszug",
     "serviceLoginCertificate": "Zertifikat für Serviceanmeldung",
     "alert": {
       "certificateExpiredMessage": "%{certificate} ist abgelaufen. Ersetzen Sie das Zertifikat gegebenenfalls durch ein neues Zertifikat.",
       "certificateExpiringMessage": "%{certificate} läuft bald ab. Ersetzen Sie das Zertifikat gegebenenfalls durch ein neues Zertifikat.",
       "certificatesExpiredMessage": "Einige Zertifikate sind abgelaufen. Ersetzen Sie sie gegebenenfalls durch neue Zertifikate.",
-      "certificatesExpiringMessage": "Einige Zertifikate laufen bald ab. Ersetzen Sie sie gegebenenfalls durch neue Zertifikate."
+      "certificatesExpiringMessage": "Einige Zertifikate laufen bald ab. Ersetzen Sie sie gegebenenfalls durch neue Zertifikate.",
+      "targetedAcfMessage": "Die ACF-Zertifikate für BMC-Shell und Ressourcenspeicherauszug werden nicht in der Tabelle aufgeführt. Das System muss eingeschaltet sein, um ACF-Zertifikate für den Ressourcenspeicherauszug hochzuladen."
     },
     "modal": {
       "alternateName": "Alternativer Name",
@@ -368,6 +372,7 @@
       "keyBitLength": "Bitlänge von Schlüssel",
       "keyCurveId": "Kurven-ID des Schlüssels",
       "keyPairAlgorithm": "Algorithmus für Schlüsselpaar",
+      "mismatchError": "Das hochgeladene Zertifikat stimmt nicht mit dem ausgewählten Zertifikatstyp überein.",
       "privateKey": "Privater Schlüssel",
       "state": "Status"
     },
@@ -529,7 +534,7 @@
       "confirmMessage": "Beim Löschen aller Dekonfigurationsdatensätze wird versucht, die gesamte Hardware in dem/den ausgewählten Knoten neu zu konfigurieren. Diese Änderungen werden beim nächsten Boot wirksam.",
       "deleteAllMessage": "Möchten Sie wirklich alle Datensätze löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
       "deleteAllTitle": "Alle Datensätze löschen",
-      "deleteMessage": "Sind Sie sicher, dass Sie den Datensatz % {count} löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden. | Möchten Sie%{count} Datensätze wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteMessage": "Möchten Sie %{count} Datensatz wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden. | Möchten Sie %{count} Datensätze wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
       "deleteTitle": "Datensatz löschen | Datensätze löschen",
       "goBack": "Zurück",
       "continue": "Weiter"
@@ -1129,14 +1134,14 @@
     "password": "Kennwort",
     "serialNumber": "Seriennummer",
     "totpTooltip": "Geben Sie den TOTP ein, wenn der Benutzer in der MFA registriert ist und die MFA nicht umgangen wurde.",
-    "uploadServiceLoginCertificate": "Serviceanmeldezertifikat hochladen",
+    "uploadAcfCertificate": "ACF-Zertifikat hochladen",
     "username": "Benutzername",
     "alert": {
       "unauthorizedMessage": "Benutzer nicht berechtigt",
       "message": "Benutzername oder Kennwort ungültig"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "Neues Serviceanmeldezertifikat hinzufügen",
+      "addNewAcfCertificate": "Neues ACF-Zertifikat hinzufügen",
       "certificateFile": "Zertifikatsdatei",
       "login": "Anmelden",
       "register": "Registrieren"
@@ -1457,7 +1462,7 @@
       "message1": "Das System befindet sich derzeit in einem benutzerdefinierten Modus.",
       "message2": "Wechseln Sie den Modus, indem Sie unten eine Option auswählen."
     },
-    "nonIdlePowerSaverMode": "Die Energiesparfunktion im Leerlauf wird im aktuellen Modus nicht unterstützt.",
+    "nonIdlePowerSaverMode": "Die Energiesparfunktion für Leerlauf wird im aktuellen Modus nicht unterstützt.",
     "delayTimeValidation": {
       "delayTimeRange": "Der Wert muss zwischen %{min} und %{max} liegen.",
       "enterDelayTime": "Wert darf nicht kleiner als die Verzögerungszeit zum Beenden sein.",
@@ -1573,6 +1578,7 @@
       "lowerWarning": "Untergrenze für Warnung",
       "name": "Name",
       "status": "Status",
+      "statusTooltip": "Der Status zeigt den Sensorstatus an.  Er bildet nicht den Hardwarestatus des Bestandsartikels ab.",
       "upperCritical": "Obergrenze für kritisch",
       "upperWarning": "Obergrenze für Warnung",
       "filter": {

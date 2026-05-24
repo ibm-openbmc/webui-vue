@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "新規認証の追加",
+    "adminResetCertificate": "管理者リセット証明書",
+    "bmcShell": "BMCシェルのACF証明書",
     "caCertificate": "CA 認証",
     "deleteCertificate": "認証の削除",
     "generateCsr": "CSR の生成",
     "httpsCertificate": "HTTPS認証",
     "ldapCertificate": "LDAP 認証",
     "replaceCertificate": "認証の置換",
+    "resourceDump": "リソース・ダンプのACF証明書",
     "serviceLoginCertificate": "サービスログイン認証",
     "alert": {
       "certificateExpiredMessage": "%{certificate} の有効期限が切れました。 新しい認証に置き換えることを検討してください。",
       "certificateExpiringMessage": "%{certificate} の有効期限がまもなく切れます。 新しい認証に置き換えることを検討してください。",
       "certificatesExpiredMessage": "一部の認証の有効期限が切れました。 それらを新しい認証に置き換えることを検討してください。",
-      "certificatesExpiringMessage": "一部の認証の有効期限がまもなく切れます。 それらを新しい認証に置き換えることを検討してください。"
+      "certificatesExpiringMessage": "一部の認証の有効期限がまもなく切れます。 それらを新しい認証に置き換えることを検討してください。",
+      "targetedAcfMessage": "BMCシェルおよびリソース・ダンプのACF証明書は表にはリストされません。 リソース・ダンプのACF証明書をアップロードするには、システムの電源を入れる必要があります。"
     },
     "modal": {
       "alternateName": "代替名",
@@ -368,6 +372,7 @@
       "keyBitLength": "鍵ビット長",
       "keyCurveId": "鍵曲線 ID",
       "keyPairAlgorithm": "鍵ペア・アルゴリズム",
+      "mismatchError": "アップロードされた証明書が選択した証明書タイプと一致していません。",
       "privateKey": "プライベート・キー",
       "state": "都道府県"
     },
@@ -470,7 +475,7 @@
     "totalCores": "合計スコア",
     "alert": {
       "message": "メモリー DIMM とプロセッサー・コアは、サーバーの電源がオフのときにのみ構成または構成解除できます。",
-      "warning": "メモリ・イベントが実行時に発生し、サーバーがまだリブートされていない場合、メモリ・リソースはまだ使用中です。 サーバーが再起動されると、メモリー・リソースは設定解除され、使用されなくなる。"
+      "warning": "メモリー・イベントが実行時に発生し、サーバーがまだリブートされていなければ、メモリー・リソースはまだ使用中の状態です。 サーバーがリブートされるとメモリー・リソースが構成解除された状態になり、使用中ではなくなります。"
     },
     "toast": {
       "deleteReqFailed": "要求されたリソースを削除できないため、削除要求は失敗しました。",
@@ -529,7 +534,7 @@
       "confirmMessage": "すべての構成解除レコードをクリアすると、選択したノード内のすべてのハードウェアの再構成が試行されます。 これらの変更は、次回のブート時に有効になります。",
       "deleteAllMessage": "すべてのレコードを削除してもよろしいですか? このアクションを元に戻すことはできません。",
       "deleteAllTitle": "すべてのレコードを削除",
-      "deleteMessage": "%{count} のレコードを削除してもよろしいですか？ このアクションを元に戻すことはできません。 | %{count} 個のレコードを削除してもよろしいですか? このアクションは元に戻せません。",
+      "deleteMessage": "%{count}個のレコードを削除しますか? このアクションを元に戻すことはできません。| %{count}個のレコードを削除しますか? このアクションを元に戻すことはできません。",
       "deleteTitle": "レコードの削除 | レコードの削除",
       "goBack": "戻る",
       "continue": "続行"
@@ -688,7 +693,7 @@
     },
     "toast": {
       "errorDelete": "%{count} ログの削除中にエラーが発生しました。 |%{count} ログの削除中にエラーが発生しました。",
-      "errorDeleteGuardRecord": "ログはガード記録に関連付けられているため、削除することはできません。 手動でガードを解除するか、部品を交換してください。| ガード記録のあるログが削除されませんでした。 手動でガードを解除するか、部品を交換してください。",
+      "errorDeleteGuardRecord": "ログはガード・レコードに関連付けられているため、削除することはできません。 手動でガードを解除するか、部品を交換してください。| ガード・レコードがあるログは削除されませんでした。 手動でガードを解除するか、部品を交換してください。",
       "errorLogStatusUpdate": "ログ状況の更新でエラーが発生しました。",
       "errorResolveLogs": "%{count} ログの解決中にエラーが発生しました。 |%{count} ログの解決中にエラーが発生しました。",
       "errorResolveLogsGuardRecord": "ログはガード記録に関連付けられているため、解決できません。 手動でガードを解除するか、部品を交換してください。| ガード記録のあるログが解決されませんでした。 手動でガードを解除するか、部品を交換してください。",
@@ -1128,15 +1133,15 @@
     "model": "モデル",
     "password": "パスワード",
     "serialNumber": "シリアル番号",
-    "totpTooltip": "ユーザが MFA に登録されており、MFA がバイパスされていない場合に TOTP を入力します。",
-    "uploadServiceLoginCertificate": "サービス・ログイン認証のアップロード",
+    "totpTooltip": "ユーザーがMFAに登録されており、MFAがバイパスされていない場合はTOTPを入力してください。",
+    "uploadAcfCertificate": "ACF証明書をアップロード",
     "username": "ユーザー名",
     "alert": {
       "unauthorizedMessage": "無許可のユーザー",
       "message": "ユーザー名またはパスワードが無効です"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "新規サービス・ログイン認証の追加",
+      "addNewAcfCertificate": "新しいACF証明書を追加",
       "certificateFile": "証明書ファイル",
       "login": "ログイン",
       "register": "レジスター"
@@ -1154,7 +1159,7 @@
     "maxNumHugePages": "ヒュージ・ページの最大数",
     "memoryBlockSize": "メモリー・ブロック・サイズ",
     "predictiveDynamicMemoryDeallocationTitle": "予測可能動的メモリーの割り当て解除",
-    "predictiveDynamicMemoryDeallocationDescription": "ハイパーバイザーは、予測された故障を検出したメモリページを動的にメモリから削除します。 このオプションが無効になっている場合、予測されたメモリーエラーに対して動的なメモリー解放は発生しません。",
+    "predictiveDynamicMemoryDeallocationDescription": "ハイパーバイザーは、予測できる障害を検出したメモリー・ページを動的にメモリーから削除します。 このオプションが無効になっていると、予測できるメモリー障害に対する動的メモリー割り当て解除は行われません。",
     "requestedHugePageMemory": "要求されるヒュージ・ページ・メモリー",
     "slotCountForNode0": "ノード 0 のスロット数",
     "systemMemoryPageSetup": "それぞれ 16 GB の大きな仮想メモリー・ページ・サイズを設定することにより、アプリケーションのパフォーマンスを向上します。",
@@ -1169,7 +1174,7 @@
     "alert": {
       "heading": "変更適用",
       "message1": "システムの電源をオフにしなければなりません。",
-      "message2": "加えられた変更は、次回の再起動時に有効になります。",
+      "message2": "行われた変更は、次回のリブート時に有効になります。",
       "serverMustBePoweredOffTo": "以下を行うには、サーバーの電源をオフにしてください。",
       "updateActiveMemoryMirroring": "アクティブ・メモリー・ミラー・モードの更新",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1457,7 +1462,7 @@
       "message1": "システムは現在カスタム・モードです。",
       "message2": "下記よりオプションを選択してモードを変更してください。"
     },
-    "nonIdlePowerSaverMode": "現在のモードでは、アイドル・パワー・セーバーはサポートされていません。",
+    "nonIdlePowerSaverMode": "現行モードでは、アイドル省電力はサポートされていません。",
     "delayTimeValidation": {
       "delayTimeRange": "値は %{min} と %{max} の間でなければなりません。",
       "enterDelayTime": "値は、終了するまでの遅延時間より小さくすることはできません。",
@@ -1468,7 +1473,7 @@
       "content": "いずれかの省電力モードを有効にすると、プロセッサー周波数の変化、プロセッサー使用率の変化、電力消費量の変化、パフォーマンスの変化が生じます。",
       "subTitle": "よろしいですか?",
       "titleMaximumPerformance": "最大パフォーマンス・モードの有効化",
-      "titleEfficiencyFavorPower": "エネルギー効率モードを有効にする",
+      "titleEfficiencyFavorPower": "エネルギー効率モードの有効化",
       "titlePowerSaving": "最大エネルギー節約モードを有効にする"
     },
     "selectMode": {
@@ -1573,6 +1578,7 @@
       "lowerWarning": "警告 (低)",
       "name": "名前",
       "status": "状況",
+      "statusTooltip": "ステータスはセンサーの状態を示します。  インベントリー項目のハードウェア状態を反映するものではありません。",
       "upperCritical": "上位クリティカル",
       "upperWarning": "上位の警告",
       "filter": {
@@ -1935,7 +1941,7 @@
       "readOnly": "読み取り専用",
       "serviceAgent": "サービス・エージェント",
       "secretKey": "秘密鍵",
-      "secretKeyTooltip": "秘密鍵がクリアされた場合、そのユーザーはログイン・プロセス中に秘密鍵を再登録するよう促される。",
+      "secretKeyTooltip": "秘密鍵がクリアされると、そのユーザーはログイン・プロセス中に秘密鍵を再登録するように要求されます。",
       "status": "状況",
       "username": "ユーザー名"
     },
@@ -1961,7 +1967,7 @@
       "errorDisableMfa": "多要素認証の無効化エラー。",
       "errorDisableMfaBypass": "MFA バイパスの無効化エラー。",
       "errorEnableMfa": "多要素認証の有効化エラー。",
-      "errorEnableMfaAuto": "MFA TOTP 認証の有効化エラー。 BMC の時刻とブラウザの時刻を確認し、TOTP の検証に成功してください。",
+      "errorEnableMfaAuto": "MFA TOTP認証を有効化中にエラーが発生しました。 TOTPを正常に検証するために、BMCの時刻とブラウザーの時刻を検証してください。",
       "errorEnableMfaBypass": "MFA バイパスの有効化エラー。",
       "errorLoadAccountSettings": "アカウント設定中にエラーが発生しました。",
       "errorLoadUsers": "ユーザーの読み込み中にエラーが発生しました。",
@@ -1972,13 +1978,13 @@
       "successBatchDelete": "%{count} 人のユーザーが正常に削除されました。 |%{count} 人のユーザーが正常に削除されました。",
       "successBatchDisable": "%{count} 人のユーザーが正常に無効化されました。 |%{count} 人のユーザーが正常に無効化されました。",
       "successBatchEnable": "%{count} 人のユーザーが正常に有効化されました。 |%{count} 人のユーザーが正常に有効化されました。",
-      "successClearSecretKey": "秘密鍵のクリアに成功",
+      "successClearSecretKey": "秘密鍵が正常にクリアされました",
       "successCreateUser": "ユーザー 「%{username}」が作成されました。",
       "successDeleteUser": "ユーザー「%{username}」が削除されました。",
-      "successDisableMfa": "多要素認証を無効にしました。",
-      "successDisableMfaBypass": "MFA バイパスの無効化に成功しました。",
-      "successEnableMfa": "多要素認証の有効化に成功しました。",
-      "successEnableMfaBypass": "MFA バイパスの有効化に成功しました。",
+      "successDisableMfa": "多要素認証が正常に無効になりました。",
+      "successDisableMfaBypass": "MFAバイパスが正常に無効になりました。",
+      "successEnableMfa": "多要素認証が正常に有効になりました。",
+      "successEnableMfaBypass": "MFAバイパスが正常に有効になりました。",
       "successSaveSettings": "アカウント設定が正常に保存されました。",
       "successUpdateUser": "ユーザー「%{username}」が更新されました。"
     }

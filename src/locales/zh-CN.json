@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "添加新证书",
+    "adminResetCertificate": "管理员重置证书",
+    "bmcShell": "BMC shell ACF证书",
     "caCertificate": "CA 证书",
     "deleteCertificate": "删除证书",
     "generateCsr": "生成 CSR",
     "httpsCertificate": "HTTPS 证书",
     "ldapCertificate": "LDAP 证书",
     "replaceCertificate": "替换证书",
+    "resourceDump": "资源转储ACF证书",
     "serviceLoginCertificate": "服务登录证书",
     "alert": {
       "certificateExpiredMessage": "%{certificate} 已到期。 请考虑将其替换为新证书。",
       "certificateExpiringMessage": "%{certificate} 即将到期。 请考虑将其替换为新证书。",
       "certificatesExpiredMessage": "某些证书已到期。 请考虑将其替换为新证书。",
-      "certificatesExpiringMessage": "某些证书即将到期。 请考虑将其替换为新证书。"
+      "certificatesExpiringMessage": "某些证书即将到期。 请考虑将其替换为新证书。",
+      "targetedAcfMessage": "BMC shell和资源转储ACF证书将不会在表中列出。 系统必须处于开机状态才能上传资源转储ACF证书。"
     },
     "modal": {
       "alternateName": "备用名称",
@@ -368,6 +372,7 @@
       "keyBitLength": "密钥位长度",
       "keyCurveId": "密钥曲线标识",
       "keyPairAlgorithm": "密钥对算法",
+      "mismatchError": "上传的证书与所选证书类型不符。",
       "privateKey": "专用密钥",
       "state": "省/自治区/直辖市"
     },
@@ -470,7 +475,7 @@
     "totalCores": "总核心数",
     "alert": {
       "message": "只有在服务器电源关闭时，才可以配置或取消配置内存 DIMM 和处理器核心。",
-      "warning": "如果在运行时发生内存事件，且服务器尚未重新引导，则内存资源仍在使用中。 重新引导服务器后，内存资源将被取消配置，不再使用。"
+      "warning": "如果在运行时发生内存事件且服务器尚未重新引导，则内存资源仍在使用中。 服务器重新引导后，内存资源将被取消配置，不再使用。"
     },
     "toast": {
       "deleteReqFailed": "删除请求失败，因为无法删除请求的资源。",
@@ -529,7 +534,7 @@
       "confirmMessage": "清除所有取消配置记录，将尝试对所选节点中的所有硬件进行重新配置。 这些更改将在下一次引导时生效。",
       "deleteAllMessage": "确定要删除所有记录吗？ 此操作无法撤销。",
       "deleteAllTitle": "删除所有记录",
-      "deleteMessage": "您确定要删除 %{count} 条记录吗？ 此操作无法撤销。| 确定要删除 %{count} 条记录吗？ 此操作无法撤销。",
+      "deleteMessage": "确定要删除 %{count} 条记录吗？ 此操作无法撤销。| 确定要删除 %{count} 条记录吗？ 此操作无法撤销。",
       "deleteTitle": "删除记录 | 删除记录",
       "goBack": "后退",
       "continue": "继续"
@@ -688,7 +693,7 @@
     },
     "toast": {
       "errorDelete": "删除 %{count} 日志时出错。| 删除 %{count} 个日志时出错。",
-      "errorDeleteGuardRecord": "无法删除日志，因为它与保护记录相关联。 请手动清除保护或更换部件。| 带有保护记录的日志未被删除。 请手动清除保护或更换部件。",
+      "errorDeleteGuardRecord": "无法删除日志，因为它与防护记录相关联。 请手动清除防护记录或更换部件。| 与防护记录关联的日志未被删除。 请手动清除防护记录或更换部件。",
       "errorLogStatusUpdate": "更新日志状态时出错。",
       "errorResolveLogs": "解决 %{count} 个日志时出错。| 解决 %{count} 个日志时出错。",
       "errorResolveLogsGuardRecord": "无法解析日志，因为它与保护记录相关联。 请手动清除保护或更换部件。| 未解析带有保护记录的日志。 请手动清除保护或更换部件。",
@@ -1128,15 +1133,15 @@
     "model": "模型",
     "password": "密码",
     "serialNumber": "序列号",
-    "totpTooltip": "当用户在 MFA 中注册且尚未绕过 MFA 时，输入 TOTP。",
-    "uploadServiceLoginCertificate": "上载服务登录证书",
+    "totpTooltip": "当用户已注册 MFA 且 MFA 未被绕过时，输入 TOTP。",
+    "uploadAcfCertificate": "上传ACF证书",
     "username": "用户名",
     "alert": {
       "unauthorizedMessage": "用户未经授权",
       "message": "用户名或密码无效"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "添加新的服务登录证书",
+      "addNewAcfCertificate": "添加新的ACF证书",
       "certificateFile": "证书文件",
       "login": "登录",
       "register": "注册"
@@ -1154,7 +1159,7 @@
     "maxNumHugePages": "最大超大页面数",
     "memoryBlockSize": "内存块大小",
     "predictiveDynamicMemoryDeallocationTitle": "预测性动态内存释放",
-    "predictiveDynamicMemoryDeallocationDescription": "系统管理程序将动态地从检测到预测故障的内存中移除内存页。 如果禁用了该选项，发生预测内存故障时将不会动态取消分配内存。",
+    "predictiveDynamicMemoryDeallocationDescription": "系统管理程序会动态地从内存中移除检测到预测性故障的内存页。 如果禁用此选项，则在出现预测性内存故障时不会发生动态内存释放。",
     "requestedHugePageMemory": "请求的超大页面内存",
     "slotCountForNode0": "节点 0 的插槽计数",
     "systemMemoryPageSetup": "通过设置每个 16GB 的大型虚拟内存页面大小来提高应用程序的性能。",
@@ -1169,7 +1174,7 @@
     "alert": {
       "heading": "应用更改",
       "message1": "必须关闭系统的电源。",
-      "message2": "所作的更改将在下次重新引导时生效。",
+      "message2": "所做的更改将在下次重新引导时生效。",
       "serverMustBePoweredOffTo": "必须关闭服务器电源以执行以下操作：",
       "updateActiveMemoryMirroring": "更新主动内存镜像方式",
       "updateIoAdapterEnlargedCapacity": "@:pageMemory.updateIoAdapterEnlargedCapacity",
@@ -1457,7 +1462,7 @@
       "message1": "系统当前处于定制方式。",
       "message2": "选择以下选项更改方式。"
     },
-    "nonIdlePowerSaverMode": "当前方式下不支持空闲省电功能。",
+    "nonIdlePowerSaverMode": "当前方式下不支持空闲省电模式。",
     "delayTimeValidation": {
       "delayTimeRange": "值必须介于 %{min} 到 %{max} 之间。",
       "enterDelayTime": "值不能小于退出延迟时间。",
@@ -1573,6 +1578,7 @@
       "lowerWarning": "下限警告",
       "name": "名称",
       "status": "状态",
+      "statusTooltip": "状态表示传感器的状态。  它不反映库存项目的硬件状态。",
       "upperCritical": "上临界",
       "upperWarning": "上限警告",
       "filter": {
@@ -1935,7 +1941,7 @@
       "readOnly": "只读",
       "serviceAgent": "服务代理程序",
       "secretKey": "私钥",
-      "secretKeyTooltip": "如果私钥被清除，登录过程中会提示该用户重新注册私钥。",
+      "secretKeyTooltip": "如果私钥被清除，该用户在登录过程中将被提示重新注册私钥。",
       "status": "状态",
       "username": "用户名"
     },
@@ -1961,7 +1967,7 @@
       "errorDisableMfa": "禁用多因子认证时出错。",
       "errorDisableMfaBypass": "禁用 MFA绕过时出错。",
       "errorEnableMfa": "启用多因子认证时出错。",
-      "errorEnableMfaAuto": "启用 MFA TOTP 认证时出错。 请验证 BMC 时间和浏览器时间，以成功认证 TOTP。",
+      "errorEnableMfaAuto": "启用 MFA TOTP 认证时出错。 请验证 BMC 时间和浏览器时间，以成功验证 TOTP。",
       "errorEnableMfaBypass": "启用 MFA 绕过时出错。",
       "errorLoadAccountSettings": "装入帐户设置时出错",
       "errorLoadUsers": "装入用户时出错。",

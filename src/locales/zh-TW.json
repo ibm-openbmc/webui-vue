@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "新增憑證",
+    "adminResetCertificate": "管理者重設憑證",
+    "bmcShell": "BMC Shell ACF 憑證",
     "caCertificate": "CA 憑證",
     "deleteCertificate": "刪除憑證",
     "generateCsr": "產生 CSR",
     "httpsCertificate": "HTTP 憑證",
     "ldapCertificate": "MCP 憑證",
     "replaceCertificate": "取代憑證",
+    "resourceDump": "資源傾出 ACF 憑證",
     "serviceLoginCertificate": "服務登入憑證",
     "alert": {
       "certificateExpiredMessage": "%{certificate} 已過期。 請考量將它取代為新憑證。",
       "certificateExpiringMessage": "%{certificate} 即將到期。 請考量將它取代為新憑證。",
       "certificatesExpiredMessage": "部分憑證已過期。 請考量將它們取代為新憑證。",
-      "certificatesExpiringMessage": "部分憑證即將到期。 請考量將它們取代為新憑證。"
+      "certificatesExpiringMessage": "部分憑證即將到期。 請考量將它們取代為新憑證。",
+      "targetedAcfMessage": "BMC Shell 與資源傾出的 ACF 憑證將不會列在表格中。 系統必須處於開機狀態，才能上傳資源傾出的 ACF 憑證。"
     },
     "modal": {
       "alternateName": "替代名稱",
@@ -368,6 +372,7 @@
       "keyBitLength": "金鑰位元長度",
       "keyCurveId": "金鑰曲線 ID",
       "keyPairAlgorithm": "金鑰組演算法",
+      "mismatchError": "上傳的憑證與所選取的憑證類型不符。",
       "privateKey": "私密金鑰",
       "state": "州（省）"
     },
@@ -470,7 +475,7 @@
     "totalCores": "核心總數",
     "alert": {
       "message": "只有在伺服器關閉電源時，才能配置或取消配置記憶體 DIMM 及處理器核心。",
-      "warning": "如果在執行時期發生記憶體事件，且伺服器尚未重新開機，則記憶體資源仍在使用中。 伺服器重新開機後，記憶體資源將會解除配置而不再使用。"
+      "warning": "如果在執行時期發生了記憶體事件且伺服器尚未重新開機，則該記憶體資源仍會在使用中。 伺服器重新開機後，該記憶體資源將會被取消配置且不再被使用。"
     },
     "toast": {
       "deleteReqFailed": "刪除要求失敗，因為無法刪除所要求的資源。",
@@ -529,7 +534,7 @@
       "confirmMessage": "清除所有取消配置記錄將嘗試重新配置所選節點中的所有硬體。 這些變更將在下一次啟動時生效。",
       "deleteAllMessage": "您確定要刪除所有記錄嗎？ 此動作無法復原。",
       "deleteAllTitle": "刪除所有記錄",
-      "deleteMessage": "您確定要刪除 %{count} 筆記錄嗎？ 此動作無法復原。| 您確定要刪除 %{count} 筆記錄嗎? 此動作無法復原。",
+      "deleteMessage": "您確定要刪除 %{count} 筆記錄嗎？ 此動作無法復原。| 您確定要刪除 %{count} 筆記錄嗎？ 此動作無法復原。",
       "deleteTitle": "刪除記錄 | 刪除記錄",
       "goBack": "返回",
       "continue": "繼續"
@@ -688,7 +693,7 @@
     },
     "toast": {
       "errorDelete": "刪除 %{count} 日誌時發生錯誤。 | 刪除 %{count} 日誌時發生錯誤。",
-      "errorDeleteGuardRecord": "由於日誌與保護記錄相關聯，因此無法刪除。 請手動清除保護或更換零件。| 未刪除有保護記錄的日誌。 請手動清除保護或更換零件。",
+      "errorDeleteGuardRecord": "無法刪除日誌，因為它與防護記錄相關聯。 請手動清除防護或更換零件。| 未刪除具有防護記錄的日誌。 請手動清除防護或更換零件。",
       "errorLogStatusUpdate": "更新日誌狀態時發生錯誤。",
       "errorResolveLogs": "解析 %{count} 日誌時發生錯誤。 | 解析 %{count} 個日誌時發生錯誤。",
       "errorResolveLogsGuardRecord": "由於日誌與保護記錄相關聯，因此無法解析。 請手動清除保護或更換零件。| 未解析有保護記錄的日誌。 請手動清除保護或更換零件。",
@@ -1128,15 +1133,15 @@
     "model": "模型",
     "password": "密碼",
     "serialNumber": "序號",
-    "totpTooltip": "當使用者已註冊 MFA 且未略過 MFA 時，請輸入 TOTP。",
-    "uploadServiceLoginCertificate": "上傳服務登入憑證",
+    "totpTooltip": "當使用者已註冊加入 MFA 且未略過 MFA 時，請輸入 TOTP。",
+    "uploadAcfCertificate": "上傳 ACF 憑證",
     "username": "使用者名稱",
     "alert": {
       "unauthorizedMessage": "使用者未獲授權",
       "message": "使用者名稱或密碼無效"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "新增服務登入憑證",
+      "addNewAcfCertificate": "新增 ACF 憑證",
       "certificateFile": "憑證檔案",
       "login": "登入",
       "register": "登錄"
@@ -1154,7 +1159,7 @@
     "maxNumHugePages": "巨型分頁數上限",
     "memoryBlockSize": "記憶體區塊大小",
     "predictiveDynamicMemoryDeallocationTitle": "預測性動態記憶體取消配置",
-    "predictiveDynamicMemoryDeallocationDescription": "Hypervisor 會動態移除偵測到預測故障的記憶體頁面。 如果停用此選項，則不會針對預測記憶體故障進行動態記憶體取消配置。",
+    "predictiveDynamicMemoryDeallocationDescription": "Hypervisor 會從偵測到預測性故障的記憶體中動態移除記憶體分頁。 若停用此選項，則不會針對預測性的記憶體故障進行動態記憶體取消配置。",
     "requestedHugePageMemory": "所要求的巨型分頁記憶體",
     "slotCountForNode0": "節點 0 的插槽計數",
     "systemMemoryPageSetup": "將大型虛擬記憶體分頁大小分別設為 16GB，以增進應用程式的效能。",
@@ -1457,7 +1462,7 @@
       "message1": "系統目前處於自訂模式。",
       "message2": "選擇下列選項以變更模式。"
     },
-    "nonIdlePowerSaverMode": "目前模式不支援閒置省電功能。",
+    "nonIdlePowerSaverMode": "閒置省電功能在目前的模式下不受支援。",
     "delayTimeValidation": {
       "delayTimeRange": "值必須介於 %{min} 和 %{max} 之間。",
       "enterDelayTime": "值不能小於要結束的延遲時間。",
@@ -1573,6 +1578,7 @@
       "lowerWarning": "下限警告",
       "name": "名稱",
       "status": "狀態",
+      "statusTooltip": "狀態指示感應器狀態。  它並未反映庫存項目的硬體狀態。",
       "upperCritical": "上限臨界",
       "upperWarning": "警告上限",
       "filter": {
@@ -1935,7 +1941,7 @@
       "readOnly": "唯讀",
       "serviceAgent": "服務代理程式",
       "secretKey": "秘密金鑰",
-      "secretKeyTooltip": "如果私密金鑰遭清除，則會提示該使用者在登入過程中重新登錄秘密金鑰。",
+      "secretKeyTooltip": "如果私密金鑰被清除，則會提示該使用者在登入過程中重新登錄秘密金鑰。",
       "status": "狀態",
       "username": "使用者名稱"
     },
@@ -1961,7 +1967,7 @@
       "errorDisableMfa": "停用多因子鑑別時發生錯誤。",
       "errorDisableMfaBypass": "停用 MFA 略過時發生錯誤。",
       "errorEnableMfa": "啟用多因子鑑別時發生錯誤。",
-      "errorEnableMfaAuto": "啟用 MFA TOTP 鑑別時發生錯誤。 請驗證 BMC 時間和瀏覽器的時間，以順利驗證 TOTP。",
+      "errorEnableMfaAuto": "啟用 MFA TOTP 鑑別時發生錯誤。 請驗證 BMC 時間和瀏覽器的時間以順利驗證 TOTP。",
       "errorEnableMfaBypass": "啟用 MFA 略過時發生錯誤。",
       "errorLoadAccountSettings": "載入帳戶設定時發生錯誤",
       "errorLoadUsers": "載入使用者時發生錯誤。",
@@ -1975,10 +1981,10 @@
       "successClearSecretKey": "已順利清除秘密金鑰",
       "successCreateUser": "已建立使用者 '%{username}'。",
       "successDeleteUser": "已刪除使用者 '%{username}'。",
-      "successDisableMfa": "已順利停用多因子鑑別。",
-      "successDisableMfaBypass": "已順利停用 MFA 略過。",
-      "successEnableMfa": "已順利啟用多因子鑑別。",
-      "successEnableMfaBypass": "已順利啟用 MFA 略過。",
+      "successDisableMfa": "已順利停用多因素鑑別。",
+      "successDisableMfaBypass": "已順利停用 MFA 略過功能。",
+      "successEnableMfa": "已順利啟用多因素鑑別。",
+      "successEnableMfaBypass": "已順利啟用 MFA 略過功能。",
       "successSaveSettings": "已順利儲存帳戶設定。",
       "successUpdateUser": "已更新使用者 '%{username}'。"
     }

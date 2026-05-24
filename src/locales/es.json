@@ -335,18 +335,22 @@
   },
   "pageCertificates": {
     "addNewCertificate": "Añadir certificado nuevo",
+    "adminResetCertificate": "Restablecimiento del certificado por parte del administrador",
+    "bmcShell": "Certificado ACF de shell BMC",
     "caCertificate": "Certificado de CA",
     "deleteCertificate": "Suprimir certificado",
     "generateCsr": "Generar CSR",
     "httpsCertificate": "Certificado HTTPS",
     "ldapCertificate": "Certificado LDAP",
     "replaceCertificate": "Sustituir certificado",
+    "resourceDump": "Certificado ACF de volcado de recursos",
     "serviceLoginCertificate": "Certificado de inicio de sesión de servicio",
     "alert": {
       "certificateExpiredMessage": "%{certificate} ha caducado. Considere la posibilidad de sustituirlo por un nuevo certificado.",
       "certificateExpiringMessage": "%{certificate} va a caducar pronto. Considere la posibilidad de sustituirlo por un nuevo certificado.",
       "certificatesExpiredMessage": "Algunos certificados han caducado. Considere la posibilidad de sustituirlos por certificados nuevos.",
-      "certificatesExpiringMessage": "Algunos certificados caducan pronto. Considere la posibilidad de sustituirlos por certificados nuevos."
+      "certificatesExpiringMessage": "Algunos certificados caducan pronto. Considere la posibilidad de sustituirlos por certificados nuevos.",
+      "targetedAcfMessage": "Los certificados de shell BMC y ACF de volcado de recursos no se incluirán en la tabla. El sistema debe estar encendido para cargar el certificado ACF de volcado de recursos."
     },
     "modal": {
       "alternateName": "Nombre alternativo",
@@ -368,6 +372,7 @@
       "keyBitLength": "Longitud de bits de clave",
       "keyCurveId": "ID de curva de claves",
       "keyPairAlgorithm": "Algoritmo de par de claves",
+      "mismatchError": "El certificado cargado no coincide con el tipo de certificado seleccionado.",
       "privateKey": "Clave privada",
       "state": "Estado (State)"
     },
@@ -470,7 +475,7 @@
     "totalCores": "Total de núcleos",
     "alert": {
       "message": "Los DIMM de memoria y los núcleos de procesador solo se pueden configurar o desconfigurar cuando el servidor está apagado.",
-      "warning": "Si el suceso de memoria ocurrió en tiempo de ejecución y el servidor aún no ha sido reiniciado, entonces el recurso de memoria aún está en uso. Una vez reiniciado el servidor, el recurso de memoria quedará desconfigurado y no se utilizará."
+      "warning": "Si el suceso de memoria ocurrió en tiempo de ejecución y el servidor aún no se ha reiniciado, entonces el recurso de memoria aún está en uso. Una vez reiniciado el servidor, el recurso de memoria quedará desconfigurado y no se utilizará."
     },
     "toast": {
       "deleteReqFailed": "La solicitud de supresión ha fallado porque el recurso solicitado no se puede suprimir.",
@@ -529,7 +534,7 @@
       "confirmMessage": "Al borrar todos los registros de desconfiguración se intentará volver a configurar todo el hardware del nodo o nodos seleccionados. Estos cambios entrarán en vigor en el próximo arranque.",
       "deleteAllMessage": "¿Está seguro de que desea suprimir todos los registros? Esta acción no se puede deshacer.",
       "deleteAllTitle": "Suprimir todos los registros",
-      "deleteMessage": "¿Está seguro de que desea suprimir %{count} registro? Esta acción no se puede deshacer. | ¿Está seguro de que desea suprimir %{count} registros? Esta acción no se puede deshacer.",
+      "deleteMessage": "¿Seguro que desea suprimir %{count} registro? Esta acción no se puede deshacer. | ¿Seguro que desea suprimir %{count} registros? Esta acción no se puede deshacer.",
       "deleteTitle": "Suprimir registro | Suprimir registros",
       "goBack": "Retroceder",
       "continue": "Continuar"
@@ -688,7 +693,7 @@
     },
     "toast": {
       "errorDelete": "Error al suprimir %{count} registro. | Error al suprimir %{count} registros.",
-      "errorDeleteGuardRecord": "El registro no puede borrarse, ya que está asociado a un registro de protección. Por favor, borre manualmente la protección o sustituya el componente. | Los registros con registros de guardia no se han suprimido. Limpie manualmente la protección o sustituya el componente.",
+      "errorDeleteGuardRecord": "El registro no puede borrarse, ya que está asociado a un registro de protección. Borre manualmente la protección o sustituya el componente. | Los registros con registros de guardia no se han suprimido. Borre manualmente la protección o sustituya el componente.",
       "errorLogStatusUpdate": "Error al actualizar el estado del registro.",
       "errorResolveLogs": "Error al resolver %{count} registro. | Error al resolver %{count} registros.",
       "errorResolveLogsGuardRecord": "El registro no puede resolverse porque está asociado a un registro de protección. Borre manualmente la protección o sustituya el componente. | Los registros con registros de protección no se resolvieron. Limpie manualmente la protección o sustituya el componente.",
@@ -1129,14 +1134,14 @@
     "password": "Contraseña",
     "serialNumber": "Número de serie",
     "totpTooltip": "Especifique el TOTP cuando el usuario esté inscrito en MFA y no se haya anulado MFA.",
-    "uploadServiceLoginCertificate": "Cargar certificado de inicio de sesión de servicio",
+    "uploadAcfCertificate": "Cargar certificado ACF",
     "username": "Nombre de usuario",
     "alert": {
       "unauthorizedMessage": "Usuario no autorizado",
       "message": "Nombre de usuario o contraseña no válidos"
     },
     "modal": {
-      "addNewServiceLoginCertificate": "Añadir nuevo certificado de inicio de sesión de servicio",
+      "addNewAcfCertificate": "Añadir nuevo certificado ACF",
       "certificateFile": "Archivo de certificado",
       "login": "Iniciar sesión",
       "register": "Registrarse"
@@ -1457,7 +1462,7 @@
       "message1": "El sistema está actualmente en modalidad personalizada.",
       "message2": "Cambie de modalidad seleccionando una opción a continuación."
     },
-    "nonIdlePowerSaverMode": "La modalidad de ahorro de energía en reposo no está soportada en la modalidad actual.",
+    "nonIdlePowerSaverMode": "La modalidad de ahorro de energía en reposo no se admite en la modalidad actual.",
     "delayTimeValidation": {
       "delayTimeRange": "El valor debe estar entre %{min} y %{max}.",
       "enterDelayTime": "El valor no puede ser menor que el tiempo de retardo para salir.",
@@ -1573,6 +1578,7 @@
       "lowerWarning": "Aviso bajo",
       "name": "Nombre",
       "status": "Estado",
+      "statusTooltip": "El estado indica la condición del sensor.  No refleja el estado del hardware del elemento del inventario.",
       "upperCritical": "Alto crítico",
       "upperWarning": "Aviso alto",
       "filter": {
@@ -1961,7 +1967,7 @@
       "errorDisableMfa": "Error al inhabilitar la autenticación multifactor.",
       "errorDisableMfaBypass": "Error al inhabilitar la anulación de MFA.",
       "errorEnableMfa": "Error al habilitar la autenticación multifactor.",
-      "errorEnableMfaAuto": "Error al habilitar la autenticación MFA TOTP. Por favor, verifique la hora del BMC y la hora del navegador para verificar correctamente TOTP.",
+      "errorEnableMfaAuto": "Error al habilitar la autenticación MFA TOTP. Verifique la hora del BMC y la hora del navegador para verificar correctamente TOTP.",
       "errorEnableMfaBypass": "Error al habilitar la anulación de MFA.",
       "errorLoadAccountSettings": "Error al cargar valores de cuenta",
       "errorLoadUsers": "Error al cargar usuarios.",
