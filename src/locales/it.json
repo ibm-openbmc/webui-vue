@@ -519,7 +519,7 @@
     "nextRebootInfoIcon": "@:global.status.nextReboot",
     "predictive": "Predittivo",
     "resolved": "Risolto",
-    "unresolved": "Risoluzione annullata",
+    "unresolved": "Non risolto",
     "pageDescription": {
       "description": "Selezionare un record per visualizzare o esportare i dettagli di deconfigurazione in un file .txt. Per visualizzare e modificare manualmente lo stato di configurazione di tutte le risorse hardware, visitare ",
       "decriptionText": "Selezionare un record per visualizzare o esportare i dettagli di annullamento della configurazione in un file .txt.",
@@ -657,8 +657,8 @@
     "bmcManager": "Gestore OpenBmc",
     "resolve": "Risolvi",
     "resolved": "Risolto",
-    "unresolve": "Annulla risoluzione",
-    "unresolved": "Risoluzione annullata",
+    "unresolve": "Annullamento della risoluzione",
+    "unresolved": "Non risolto",
     "modal": {
       "deleteAllMessage": "Eliminare tutti i log? Questa azione non può essere annullata.",
       "deleteAllTitle": "Elimina tutti i log",
@@ -697,11 +697,11 @@
       "errorLogStatusUpdate": "Errore di aggiornamento dello stato del log.",
       "errorResolveLogs": "Errore di risoluzione di %{count} log. | Errore di risoluzione di %{count} log.",
       "errorResolveLogsGuardRecord": "Il log non può essere risolto perché è associato a un record di protezione. Eliminare manualmente la protezione o sostituire la parte. | I log con record di protezione non sono stati risolti. Eliminare manualmente la protezione o sostituire la parte.",
-      "errorUnresolveLogs": "Errore di annullamento della risoluzione di %{count} log. | Errore di annullamento della risoluzione di %{count} log.",
+      "errorUnresolveLogs": "Errore durante l’annullamento della risoluzione di %{count} log. | Errore durante l’annullamento della risoluzione di %{count} log.",
       "infoStartDownload": "Il completamento del download potrebbe richiedere diversi minuti.",
       "successDelete": "%{count} log eliminato correttamente. | %{count} log eliminati correttamente.",
       "successResolveLogs": "%{count} log risolto correttamente. | %{count} log risolti correttamente.",
-      "successUnresolveLogs": "Annullamento della risoluzione di %{count} log eseguito correttamente. | Annullamento della risoluzione di %{count} log eseguito correttamente."
+      "successUnresolveLogs": "Annullamento della risoluzione di %{count} log riuscito. | Annullamento della risoluzione di %{count} log riuscito."
     }
   },
   "pageFactoryReset": {
