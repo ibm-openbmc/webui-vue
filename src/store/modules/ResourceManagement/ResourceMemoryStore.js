@@ -7,6 +7,8 @@ export const ResourceMemoryStore = defineStore('resourceMemory', {
     logicalMemorySizeOptions: [],
     logicalMemorySize: null,
     ioAdapterCapacity: null,
+    ioAdapterCapacityMin: null,
+    ioAdapterCapacityMax: null,
     dynamicIoDrawerCapacity: null,
     dynamicIoDrawerDefaultCapacity: null,
     maxNumHugePages: null,
@@ -19,6 +21,8 @@ export const ResourceMemoryStore = defineStore('resourceMemory', {
     logicalMemorySizeOptionsGetter: (state) => state.logicalMemorySizeOptions,
     logicalMemorySizeGetter: (state) => state.logicalMemorySize,
     ioAdapterCapacityGetter: (state) => state.ioAdapterCapacity,
+    ioAdapterCapacityMinGetter: (state) => state.ioAdapterCapacityMin,
+    ioAdapterCapacityMaxGetter: (state) => state.ioAdapterCapacityMax,
     dynamicIoDrawerCapacityGetter: (state) => state.dynamicIoDrawerCapacity,
     dynamicIoDrawerDefaultCapacityGetter: (state) =>
       state.dynamicIoDrawerDefaultCapacity,
@@ -84,6 +88,8 @@ export const ResourceMemoryStore = defineStore('resourceMemory', {
           );
           let ioEnlargedAdapterCapacity = ioAdapterCapacity[0].CurrentValue;
           this.ioAdapterCapacity = ioEnlargedAdapterCapacity;
+          this.ioAdapterCapacityMin = ioAdapterCapacity[0].LowerBound;
+          this.ioAdapterCapacityMax = ioAdapterCapacity[0].UpperBound;
 
           const dynamicIoDrawerCapacity = RegistryEntries.Attributes.filter(
             (Attribute) =>
