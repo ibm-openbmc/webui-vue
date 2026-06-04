@@ -171,8 +171,8 @@
                 v-model.number="ioAdapterCapacity"
                 data-test-id="io-adapter-capacity"
                 type="number"
-                :min="0"
-                :max="21"
+                :min="ioAdapterCapacityMin"
+                :max="ioAdapterCapacityMax"
                 :state="getValidationState(v$.ioAdapterCapacity)"
                 :disabled="!isSectionEditable()"
               ></BFormInput>
@@ -185,8 +185,8 @@
                 >
                   {{
                     $t('global.form.valueMustBeBetween', {
-                      min: 0,
-                      max: 21,
+                      min: ioAdapterCapacityMin,
+                      max: ioAdapterCapacityMax,
                     })
                   }}
                 </template>
@@ -515,6 +515,14 @@ const dynamicIoDrawerDefaultCapacity = computed(() => {
   return resourceMemoryStore.dynamicIoDrawerDefaultCapacityGetter;
 });
 
+const ioAdapterCapacityMin = computed(() => {
+  return resourceMemoryStore.ioAdapterCapacityMinGetter;
+});
+
+const ioAdapterCapacityMax = computed(() => {
+  return resourceMemoryStore.ioAdapterCapacityMaxGetter;
+});
+
 const ioAdapterCapacity = computed({
   get() {
     return resourceMemoryStore.ioAdapterCapacityGetter;
@@ -558,8 +566,8 @@ const rules = computed(() => ({
     logicalMemorySizeOption: {},
   },
   ioAdapterCapacity: {
-    minValue: minValue(0),
-    maxValue: maxValue(21),
+    minValue: minValue(ioAdapterCapacityMin.value),
+    maxValue: maxValue(ioAdapterCapacityMax.value),
   },
   dynamicIoDrawerCapacity: {
     minValue: minValue(0),
