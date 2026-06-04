@@ -62,12 +62,14 @@ import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import stores from '@/store';
+import i18n from '@/i18n';
 
-const { successToast, errorToast } = useToast();
+const { errorToast, infoToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
 const controlStore = stores.ControlStore();
 const bootSettingsStore = stores.BootSettingsStore();
+const globalStore = stores.GlobalStore();
 
 const openModal = ref(false);
 
@@ -90,10 +92,42 @@ const systemDumpActive = computed(() => {
   return bootSettingsStore.getSystemDumpActive;
 });
 
+const bootProgress = computed(() => {
+  return globalStore.bootProgressGetter;
+});
+
 function rebootBmc() {
   controlStore
     .rebootBmc()
-    .then((message) => successToast(message))
+    .then((message) => {
+      infoToast(message);
+      startLoader();
+
+      // Start checking BMC status after reboot
+      const timer = (checkCounter = 0) => {
+        checkCounter++;
+        // This counter goes up by 1 every time this function runs
+        // If the function successfully goes to last toast, it won't run anymore
+        // if this function runs more than 10 times, it won't run anymore
+        if (checkCounter > 10) {
+          endLoader();
+          return errorToast(message);
+        }
+        globalStore.getBootProgress().then(() => {
+          if (bootProgress.value) {
+            infoToast(
+              i18n.global.t('pageRebootBmc.toast.successRebootCompleted'),
+            );
+            endLoader();
+          } else {
+            setTimeout(() => {
+              timer(checkCounter);
+            }, 60000); // 1 minute
+          }
+        });
+      };
+      timer();
+    })
     .catch(({ message }) => errorToast(message));
 }
 
