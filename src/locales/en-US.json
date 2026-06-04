@@ -1574,7 +1574,8 @@
     },
     "toast": {
       "errorRebootStart": "Error rebooting BMC.",
-      "successRebootStart": "Rebooting BMC."
+      "successRebootStart": "BMC reboot started...please wait.",
+      "successRebootCompleted": "BMC reboot completed successfully."
     }
   },
   "pageSensors": {
