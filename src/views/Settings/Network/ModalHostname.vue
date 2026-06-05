@@ -4,6 +4,7 @@
     v-model="modal"
     :title="$t('pageNetwork.modal.editHostnameTitle')"
     :ok-title="$t('global.action.save')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >
