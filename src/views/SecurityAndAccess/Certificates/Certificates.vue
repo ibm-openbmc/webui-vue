@@ -63,7 +63,11 @@
         >
           <!-- Certificate -->
           <template #cell(certificate)="row">
-            {{ getCertificateLabel(row.item.certificate) }}
+            {{
+              row.item.certificate === 'ServiceLogin Certificate'
+                ? $t('pageCertificates.serviceLoginCertificate')
+                : row.item.certificate
+            }}
           </template>
           <template #cell(validFrom)="{ value }">
             {{ $filters.formatDate(value) }}
@@ -152,7 +156,6 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const toast = useToastComposable();
@@ -273,11 +276,6 @@ const expiringCertificateTypes = computed(() => {
     return acc;
   }, []);
 });
-
-const getCertificateLabel = (certificateType) => {
-  const certConfig = CERTIFICATE_TYPES.find((c) => c.type === certificateType);
-  return certConfig ? i18n.global.t(certConfig.labelKey) : certificateType;
-};
 
 const onTableRowAction = (event, rowItem) => {
   switch (event) {

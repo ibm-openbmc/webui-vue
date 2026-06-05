@@ -6,13 +6,13 @@ export const CERTIFICATE_TYPES = [
   {
     type: 'HTTPS Certificate',
     location: '/redfish/v1/Managers/bmc/NetworkProtocol/HTTPS/Certificates/',
-    labelKey: 'pageCertificates.httpsCertificate',
+    label: i18n.global.t('pageCertificates.httpsCertificate'),
     limit: 1,
   },
   {
     type: 'LDAP Certificate',
     location: '/redfish/v1/AccountService/LDAP/Certificates/',
-    labelKey: 'pageCertificates.ldapCertificate',
+    label: i18n.global.t('pageCertificates.ldapCertificate'),
     limit: 1,
   },
   {
@@ -21,31 +21,31 @@ export const CERTIFICATE_TYPES = [
     // Web UI will show 'CA Certificate' instead of
     // 'TrustStore Certificate' after user testing revealed
     // the term 'TrustStore Certificate' wasn't recognized/was unfamilar
-    labelKey: 'pageCertificates.caCertificate',
+    label: i18n.global.t('pageCertificates.caCertificate'),
     limit: 10,
   },
   {
     type: 'ServiceLogin Certificate',
     location: '/redfish/v1/AccountService/Accounts/service',
-    labelKey: 'pageCertificates.serviceLoginCertificate',
+    label: i18n.global.t('pageCertificates.serviceLoginCertificate'),
     limit: 1,
   },
   {
     type: 'BMC shell ACF certificate',
     location: '/redfish/v1/AccountService/Accounts/service',
-    labelKey: 'pageCertificates.bmcShell',
+    label: i18n.global.t('pageCertificates.bmcShell'),
     limit: 100, // This limit doesn't affect this certificate type
   },
   {
     type: 'Resource dump ACF certificate',
     location: '/redfish/v1/AccountService/Accounts/service',
-    labelKey: 'pageCertificates.resourceDump',
+    label: i18n.global.t('pageCertificates.resourceDump'),
     limit: 100, // This limit doesn't affect this certificate type
   },
   {
     type: 'Admin reset certificate',
     location: '/redfish/v1/AccountService/Accounts/service',
-    labelKey: 'pageCertificates.adminResetCertificate',
+    label: i18n.global.t('pageCertificates.adminResetCertificate'),
     limit: 100, // This limit doesn't affect this certificate type
   },
 ];
@@ -53,13 +53,7 @@ const getCertificateProp = (type, prop) => {
   const certificate = CERTIFICATE_TYPES.find(
     (certificate) => certificate.type === type,
   );
-  if (!certificate) return null;
-
-  // If requesting label, translate it dynamically at runtime
-  if (prop === 'label') {
-    return i18n.global.t(certificate.labelKey);
-  }
-  return certificate[prop];
+  return certificate ? certificate[prop] : null;
 };
 const convertFileToBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -138,7 +132,7 @@ export const CertificatesStore = defineStore('certificates', {
                 return {
                   type: Name,
                   location: data['@odata.id'],
-                  certificate: Name, // Store the type, not the translated label
+                  certificate: getCertificateProp(Name, 'label'),
                   issuedBy: Issuer.CommonName,
                   issuedTo: Subject.CommonName,
                   validFrom: new Date(ValidNotBefore),
