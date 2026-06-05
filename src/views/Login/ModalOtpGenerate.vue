@@ -11,6 +11,7 @@
     hide-header-close
     no-close-on-backdrop
     :ok-title="$t('pageLogin.modal.login')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="okFormSubmit"
     @cancel="resetForm"
     @hidden="resetForm"
