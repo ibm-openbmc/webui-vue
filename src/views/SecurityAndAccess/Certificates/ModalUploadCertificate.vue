@@ -97,6 +97,7 @@ import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import FormFile from '@/components/Global/FormFile.vue';
 import eventBus from '@/eventBus';
+import i18n from '@/i18n';
 
 const { getValidationState } = useVuelidateComposable();
 
@@ -143,9 +144,9 @@ const certificateOptions = computed(() => {
       }
       return certificate === certificate;
     })
-    .map(({ type, label }) => {
+    .map(({ type, labelKey }) => {
       return {
-        text: label,
+        text: i18n.global.t(labelKey),
         value: type,
       };
     });
