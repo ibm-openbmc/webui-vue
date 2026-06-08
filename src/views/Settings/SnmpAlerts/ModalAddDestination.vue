@@ -4,7 +4,6 @@
     v-model="modal"
     :title="$t('pageSnmpAlerts.modal.addSnmpDestinationTitle')"
     :ok-title="$t('pageSnmpAlerts.addDestination')"
-    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >

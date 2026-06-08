@@ -5,7 +5,6 @@
     :title="$t(`pageFactoryReset.modal.${resetType}Title`)"
     title-tag="h2"
     :ok-title="$t(`pageFactoryReset.modal.${resetType}SubmitText`)"
-    :cancel-title="$t('global.action.cancel')"
     @ok="handleConfirm"
     @hidden="resetConfirm"
   >

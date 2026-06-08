@@ -4,7 +4,6 @@
     v-model="modal"
     :title="$t('pageNetwork.table.addDnsAddress')"
     :ok-title="$t('global.action.add')"
-    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >

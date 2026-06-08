@@ -4,7 +4,6 @@
     v-model="modal"
     :title="$t(`pagePower.modalEnablePowerPerformanceMode.title${title}`)"
     :ok-title="$t(`pagePower.modalEnablePowerPerformanceMode.title${title}`)"
-    :cancel-title="$t('global.action.cancel')"
   >
     <p>
       <strong>

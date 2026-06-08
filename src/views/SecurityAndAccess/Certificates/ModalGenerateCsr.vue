@@ -7,7 +7,6 @@
       no-stacking
       :title="$t('pageCertificates.modal.generateACertificateSigningRequest')"
       :ok-title="$t('pageCertificates.generateCsr')"
-      :cancel-title="$t('global.action.cancel')"
       @ok="onOkGenerateCsrModal"
       @cancel="resetForm"
       @hidden="resetCsr()"
