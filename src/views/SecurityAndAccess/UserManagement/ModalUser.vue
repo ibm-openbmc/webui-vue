@@ -10,6 +10,7 @@
     :ok-title="
       newUser ? $t('pageUserManagement.addUser') : $t('global.action.save')
     "
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >

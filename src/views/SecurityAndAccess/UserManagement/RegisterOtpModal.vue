@@ -11,6 +11,7 @@
     no-close-on-backdrop
     hide-header-close
     :ok-title="$t('pageUserManagement.modal.validate')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="okFormSubmit"
     @cancel="resetMfa"
     @hidden="resetForm"

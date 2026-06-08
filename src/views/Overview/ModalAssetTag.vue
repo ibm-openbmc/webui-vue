@@ -4,6 +4,7 @@
     v-model="modal"
     :title="$t('pageOverview.modal.editAssetTag')"
     :ok-title="$t('global.action.save')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >
