@@ -13,6 +13,9 @@
               :href="`#${navItem.route}`"
               :data-test-id="`nav-item-${navItem.id}`"
               class="nav-nochild"
+              :class="{
+                'router-link-exact-active': isRouteActive(navItem.route),
+              }"
             >
               <component :is="navItem.icon" />
               {{ navItem.label }}
@@ -36,6 +39,9 @@
                     :href="`#${subNavItem.route}`"
                     :data-test-id="`nav-item-${subNavItem.id}`"
                     class="nav-link"
+                    :class="{
+                      'nav-link--current': isRouteActive(subNavItem.route),
+                    }"
                   >
                     {{ subNavItem.label }}
                   </a>
@@ -77,6 +83,10 @@ const isNavigationOpen = ref(false);
 const loadingCompleted = ref(false);
 
 const route = useRoute();
+
+const isRouteActive = (routePath) => {
+  return route.path === routePath;
+};
 
 onMounted(() => {
   eventBus.on('loading-bar-status', (value) => {
@@ -190,7 +200,8 @@ svg {
   }
 }
 .nav-nochild {
-  :deep(a.router-link-exact-active) {
+  :deep(a.router-link-exact-active),
+  &.router-link-exact-active :deep(a) {
     position: relative;
     background-color: $secondary;
     color: $light;
