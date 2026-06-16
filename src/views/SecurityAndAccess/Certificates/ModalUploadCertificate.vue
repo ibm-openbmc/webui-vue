@@ -10,6 +10,7 @@
     :ok-title="
       certificate ? $t('global.action.replace') : $t('global.action.add')
     "
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >

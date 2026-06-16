@@ -8,6 +8,7 @@
         : $t('pageNetwork.table.addIpv4Address')
     "
     :ok-title="$t('global.action.add')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >

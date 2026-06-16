@@ -3,6 +3,7 @@
     id="upload-login-certificate"
     v-model="modal"
     :ok-title="$t('global.action.add')"
+    :cancel-title="$t('global.action.cancel')"
     :title="$t('pageLogin.modal.addNewServiceLoginCertificate')"
     @ok="onOk"
     @hidden="resetForm"

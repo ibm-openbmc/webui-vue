@@ -4,6 +4,7 @@
     v-model="modalSettings"
     :title="$t('pageUserManagement.accountPolicySettings')"
     :ok-title="$t('global.action.save')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >
