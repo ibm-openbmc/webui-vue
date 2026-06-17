@@ -237,7 +237,10 @@ export function useTablePagination<T>(options: PaginationOptions<T>) {
   };
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 // Made with Bob
 >>>>>>> 1b9edf6c (Added smart pagination)
+=======
+>>>>>>> ec5bab60 (Sensors page improvement and optimization Vue-Query and TS)
