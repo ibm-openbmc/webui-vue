@@ -18,8 +18,11 @@ export interface RedfishQueryConfig {
   retry?: boolean | number | ((failureCount: number, error: any) => boolean);
   /** Custom retry delay */
   retryDelay?: (attemptIndex: number) => number;
+<<<<<<< HEAD
   /** Interval in ms to automatically refetch data in the background */
   refetchInterval?: number | false;
+=======
+>>>>>>> 63e16a5f (Made useQuery generic)
 }
 
 /**
@@ -69,12 +72,17 @@ export const defaultRedfishRetryDelay = (attemptIndex: number): number => {
 export function createRedfishQueryConfig<T = unknown>(
   overrides: RedfishQueryConfig = {},
 ): Partial<UseQueryOptions<T>> {
+<<<<<<< HEAD
   const config: Partial<UseQueryOptions<T>> = {
+=======
+  return {
+>>>>>>> 63e16a5f (Made useQuery generic)
     staleTime: overrides.staleTime ?? 30 * 1000, // 30 seconds
     gcTime: overrides.gcTime ?? 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: overrides.refetchOnWindowFocus ?? false,
     refetchOnReconnect: overrides.refetchOnReconnect ?? true,
     retry: overrides.retry ?? defaultRedfishRetry,
+<<<<<<< HEAD
     refetchInterval: overrides.refetchInterval ?? false,
     retryDelay: overrides.retryDelay ?? defaultRedfishRetryDelay,
   };
@@ -85,6 +93,10 @@ export function createRedfishQueryConfig<T = unknown>(
   }
 
   return config;
+=======
+    retryDelay: overrides.retryDelay ?? defaultRedfishRetryDelay,
+  };
+>>>>>>> 63e16a5f (Made useQuery generic)
 }
 
 /**
@@ -92,6 +104,7 @@ export function createRedfishQueryConfig<T = unknown>(
  */
 export const RedfishQueryPresets = {
   /**
+<<<<<<< HEAD
    * For sensor readings — always considered stale so each refetch gets fresh
    * data, with automatic background polling every 30 seconds.
    */
@@ -102,6 +115,8 @@ export const RedfishQueryPresets = {
   }),
 
   /**
+=======
+>>>>>>> 63e16a5f (Made useQuery generic)
    * For frequently changing data (e.g., sensor readings, power metrics)
    * Shorter stale time for more frequent updates
    */
@@ -137,3 +152,8 @@ export const RedfishQueryPresets = {
     gcTime: 30 * 60 * 1000, // 30 minutes
   }),
 };
+<<<<<<< HEAD
+=======
+
+// Made with Bob
+>>>>>>> 63e16a5f (Made useQuery generic)
