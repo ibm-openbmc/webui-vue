@@ -236,3 +236,8 @@ export function useTablePagination<T>(options: PaginationOptions<T>) {
     totalRows: pagination.totalItems,
   };
 }
+<<<<<<< HEAD
+=======
+
+// Made with Bob
+>>>>>>> 1b9edf6c (Added smart pagination)
