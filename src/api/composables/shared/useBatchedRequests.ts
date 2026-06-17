@@ -285,3 +285,8 @@ export function chunkArray<T>(array: T[], size: number): T[][] {
   }
   return chunks;
 }
+<<<<<<< HEAD
+=======
+
+// Made with Bob
+>>>>>>> 39d5241d (Batching requests)
