@@ -8,10 +8,7 @@ import {
 } from './useRedfishCollection';
 import type { Resource, ODataId, ResourceCollection } from '@/types/redfish';
 import { createRedfishQueryConfig } from './shared/queryConfig';
-<<<<<<< HEAD
 import { batchFetch } from './shared/useBatchedRequests';
-=======
->>>>>>> 63e16a5f (Made useQuery generic)
 
 // Re-export helpers for consistent imports across all composables
 export { useRedfishCollection, useRedfishResource };
@@ -189,10 +186,7 @@ export function useAllSubResources<T extends Resource>(
     },
     enabled: isSubQueryEnabled,
     ...createRedfishQueryConfig<T[]>(),
-<<<<<<< HEAD
     ...queryConfig,
-=======
->>>>>>> 63e16a5f (Made useQuery generic)
   });
 
   // Combined refetch function that refetches both parent and child queries
