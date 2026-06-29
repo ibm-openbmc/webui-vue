@@ -411,6 +411,7 @@
       "message": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit ",
       "messageText": "To change how date and time are displayed (either UTC or browser offset) throughout the application, visit Profile Settings",
       "messageNtp": "If NTP is selected but an NTP server is not given or the given NTP server is not reachable, then time.google.com will be used.",
+      "alertNtp": "If Time Reference Partition(TRP) is set on this server when the NTP mode is enabled, that will result in independent hypervisor time and BMC time that could result in time drift",
       "messagePowerOff": "The server must be powered off to change date and time to manual or NTP.",
       "mfaMessage": "Changing date and time will affect MFA users."
     },

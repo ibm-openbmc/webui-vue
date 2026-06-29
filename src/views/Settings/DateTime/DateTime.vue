@@ -87,6 +87,15 @@
               {{ $t('pageDateTime.alert.messageNtp') }}
             </span>
           </alert>
+          <alert
+            v-if="showNtpAlert && !manualOptionSelected"
+            variant="warning"
+            class="mb-4"
+          >
+            <span>
+              {{ $t('pageDateTime.alert.alertNtp') }}
+            </span>
+          </alert>
         </BCol>
       </BRow>
       <BForm novalidate @submit.prevent="submitForm">
@@ -386,6 +395,7 @@ const form = ref({
 const loading = ref('');
 const showDhcpNtpServers = ref(false);
 const dhcpNtp = ref([]);
+const showNtpAlert = ref(false);
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -504,6 +514,18 @@ watch(bmcTime, () => {
   form.value.manual.time = formatTime(globalStore.bmcTimeGetter).slice(0, 5);
 });
 
+watch(
+  () => form.value.configurationSelected,
+  (newValue, oldValue) => {
+    // Show alert when switching to NTP (from manual, not from initial empty state)
+    if (newValue === 'ntp' && oldValue !== '') {
+      showNtpAlert.value = true;
+    } else if (newValue === 'manual') {
+      showNtpAlert.value = false;
+    }
+  },
+);
+
 const isServerOff = () => {
   return serverStatus.value === 'off' ? true : false;
 };
@@ -518,6 +540,8 @@ const setInitialNtpValues = () => {
   form.value.configurationSelected = isNtpProtocolEnabled.value
     ? 'ntp'
     : 'manual';
+  // Set showNtpAlert to true if NTP is enabled initially
+  showNtpAlert.value = isNtpProtocolEnabled.value;
   setNtpValues();
 };
 const setNtpValues = () => {
