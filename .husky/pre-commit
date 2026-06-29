@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Run unit tests with coverage before commit
 echo "Running unit tests with coverage check (90% threshold)..."
 npm run test:coverage
@@ -17,14 +18,20 @@ echo "✅ All tests passed with sufficient coverage!"
 # Run unit tests before commit
 echo "Running unit tests..."
 npm run test
+=======
+# Run unit tests with coverage before commit
+echo "Running unit tests with coverage check (90% threshold)..."
+npm run test:coverage
+>>>>>>> 22821125 (Added test coverage and improved test runtume)
 
-# If tests fail, prevent commit
+# If tests or coverage fail, prevent commit
 if [ $? -ne 0 ]; then
-  echo "❌ Unit tests failed. Commit aborted."
+  echo "❌ Tests failed or coverage is below 90%. Commit aborted."
+  echo "Run 'npm run test:coverage' to see detailed coverage report."
   exit 1
 fi
 
-echo "✅ All tests passed!"
+echo "✅ All tests passed with sufficient coverage!"
 
 # Made with Bob
 >>>>>>> 36603038 (Added pre-commit unit test check)
