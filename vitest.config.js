@@ -22,11 +22,19 @@ export default mergeConfig(
       poolOptions: {
         threads: {
           singleThread: false,
+<<<<<<< HEAD
           isolate: true,
         },
       },
       // Isolate each test file's module registry to prevent vi.mock() leaking
       isolate: true,
+=======
+          isolate: false,
+        },
+      },
+      // Faster test execution
+      isolate: false,
+>>>>>>> 22821125 (Added test coverage and improved test runtume)
       // Cache test results
       cache: {
         dir: 'node_modules/.vitest',
