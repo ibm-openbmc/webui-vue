@@ -23,6 +23,7 @@ export default mergeConfig(
         threads: {
           singleThread: false,
 <<<<<<< HEAD
+<<<<<<< HEAD
           isolate: true,
         },
       },
@@ -35,6 +36,13 @@ export default mergeConfig(
       // Faster test execution
       isolate: false,
 >>>>>>> 22821125 (Added test coverage and improved test runtume)
+=======
+          isolate: true,
+        },
+      },
+      // Isolate each test file's module registry to prevent vi.mock() leaking
+      isolate: true,
+>>>>>>> bb148f8e (Added sensors unit tests)
       // Cache test results
       cache: {
         dir: 'node_modules/.vitest',
