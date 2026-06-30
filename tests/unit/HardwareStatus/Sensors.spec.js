@@ -1,6 +1,11 @@
 import { mount } from '@vue/test-utils';
+<<<<<<< HEAD
 import { describe, it, expect, vi, afterAll, beforeEach } from 'vitest';
 import { ref, nextTick } from 'vue';
+=======
+import { describe, it, expect, vi, afterAll } from 'vitest';
+import { ref } from 'vue';
+>>>>>>> bb148f8e (Added sensors unit tests)
 import { createPinia, setActivePinia } from 'pinia';
 import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query';
 import Sensors from '@/views/HardwareStatus/Sensors/Sensors.vue';
@@ -10,13 +15,20 @@ import stores from '@/store';
 // Module mocks
 // ---------------------------------------------------------------------------
 
+<<<<<<< HEAD
 const onBeforeRouteLeaveMock = vi.fn();
 
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
 vi.mock('vue-router', async () => {
   const actual = await vi.importActual('vue-router');
   return {
     ...actual,
+<<<<<<< HEAD
     onBeforeRouteLeave: onBeforeRouteLeaveMock,
+=======
+    onBeforeRouteLeave: vi.fn(),
+>>>>>>> bb148f8e (Added sensors unit tests)
   };
 });
 
@@ -24,6 +36,7 @@ afterAll(() => {
   vi.unmock('vue-router');
 });
 
+<<<<<<< HEAD
 const hideLoaderMock = vi.fn();
 const startLoaderMock = vi.fn();
 const endLoaderMock = vi.fn();
@@ -36,13 +49,18 @@ vi.mock('@/components/Composables/useLoadingBarComposable', () => ({
   }),
 }));
 
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
 // Mock the useSensors composable so tests don't require a live API
 vi.mock('@/api/composables/useSensors', () => ({
   useSensors: vi.fn(),
 }));
 
 import { useSensors } from '@/api/composables/useSensors';
+<<<<<<< HEAD
 import eventBus from '@/eventBus';
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -52,7 +70,10 @@ import eventBus from '@/eventBus';
 const makeSensorsHook = (overrides = {}) => ({
   sensors: ref([]),
   isLoading: ref(false),
+<<<<<<< HEAD
   isFetching: ref(false),
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
   isError: ref(false),
   error: ref(null),
   refetch: vi.fn(),
@@ -115,9 +136,12 @@ function mountSensors(hookOverrides = {}) {
 // ---------------------------------------------------------------------------
 
 describe('Sensors.vue', () => {
+<<<<<<< HEAD
   beforeEach(() => {
     vi.clearAllMocks();
   });
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
   // ── Rendering ─────────────────────────────────────────────────────────────
 
   it('renders without errors', () => {
@@ -144,6 +168,7 @@ describe('Sensors.vue', () => {
 
   // ── Loading state ─────────────────────────────────────────────────────────
 
+<<<<<<< HEAD
   it('isBusy computed is true when sensors are fetching', () => {
     const wrapper = mountSensors({ isFetching: ref(true) });
     expect(wrapper.vm.isBusy).toBe(true);
@@ -151,11 +176,21 @@ describe('Sensors.vue', () => {
 
   it('isBusy computed is false when fetching is complete', () => {
     const wrapper = mountSensors({ isFetching: ref(false) });
+=======
+  it('isBusy computed is true when sensors are loading', () => {
+    const wrapper = mountSensors({ isLoading: ref(true) });
+    expect(wrapper.vm.isBusy).toBe(true);
+  });
+
+  it('isBusy computed is false when loading is complete', () => {
+    const wrapper = mountSensors({ isLoading: ref(false) });
+>>>>>>> bb148f8e (Added sensors unit tests)
     expect(wrapper.vm.isBusy).toBe(false);
   });
 
   // ── Data display ──────────────────────────────────────────────────────────
 
+<<<<<<< HEAD
   it('renders sortable status header content', async () => {
     const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
     await wrapper.vm.$nextTick();
@@ -163,6 +198,8 @@ describe('Sensors.vue', () => {
     expect(wrapper.find('th[aria-sort] svg').exists()).toBe(true);
   });
 
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
   it('displays all sensors when no filter or search is active', async () => {
     const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
     await wrapper.vm.$nextTick();
@@ -315,6 +352,7 @@ describe('Sensors.vue', () => {
     expect(allSelected).toBe(true);
   });
 
+<<<<<<< HEAD
   it('selects all sensors when the header checkbox is toggled through the UI', async () => {
     const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
     await wrapper.vm.$nextTick();
@@ -339,6 +377,8 @@ describe('Sensors.vue', () => {
     expect(wrapper.vm.sensorsData[0].isSelected).toBe(true);
   });
 
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
   it('toggleAll(false) clears all selections', async () => {
     const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
     await wrapper.vm.$nextTick();
@@ -367,6 +407,7 @@ describe('Sensors.vue', () => {
     expect(wrapper.vm.sensorsData).toHaveLength(0);
   });
 
+<<<<<<< HEAD
   it('starts the loader immediately when loading is true on mount', () => {
     mountSensors({ isLoading: ref(true) });
 
@@ -420,6 +461,8 @@ describe('Sensors.vue', () => {
     );
   });
 
+=======
+>>>>>>> bb148f8e (Added sensors unit tests)
   // ── defineExpose ──────────────────────────────────────────────────────────
 
   it('exposes a refetch function via defineExpose', () => {
