@@ -109,6 +109,7 @@ const closeModal = () => {
 };
 
 const resetForm = () => {
+  form.value.ipAddress = '';
   const item = {
     Address: '',
   };
