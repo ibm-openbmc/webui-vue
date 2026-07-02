@@ -1,7 +1,8 @@
 <template>
   <pre>
 IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
-9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
+9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
+firmware version FW1120
 
 Terms and Conditions for Other Internal Licensed Code
 Base Licenses and Attributions
@@ -22,7 +23,8 @@ Preamble and List of Other Internal Licensed Code
 TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE
 
 IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
-9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
+9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
+firmware version FW1120
 
 This file details terms and conditions applicable to
 code included in the products listed above.
@@ -5760,7 +5762,8 @@ End of Source Code Offer Information
 ===========================================================================
 END OF TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE for
 IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
-9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
+9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
+firmware version FW1120
 ===========================================================================
   </pre>
 </template>
