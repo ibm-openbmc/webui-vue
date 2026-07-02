@@ -41,6 +41,7 @@ The Program includes the following licensed Separately as Other Internal License
 <table role="none" class="notice-table">
 <tbody>
 <tr><td><p>Package</p></td><td><p>Licenses</p></td></tr>
+<tr><td><p>attr</p></td><td><p>GPL-2.0-or-later, LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>audit</p></td><td><p>GPL-2.0-or-later, LGPL-2.0-or-later</p></td></tr>
 <tr><td><p>avahi</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>base-files</p></td><td><p>GPL-2.0-only</p></td></tr>
@@ -64,6 +65,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>debug-trigger</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>e2fsprogs</p></td><td><p>GPL-2.0-only, LGPL-2.0-only, BSD-3-Clause, MIT</p></td></tr>
 <tr><td><p>ecmd-pdbg</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>elfutils</p></td><td><p>GPL-2.0-or-later, LGPL-3.0-or-later</p></td></tr>
 <tr><td><p>entity-manager</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>expat</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>fan-watchdog</p></td><td><p>Apache-2.0</p></td></tr>
@@ -84,11 +86,15 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>ibm-acf</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>ibm-private-data</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>ibm-ups</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>ima-evm-keys</p></td><td><p>1.0</p></td></tr>
+<tr><td><p>ima-evm-utils</p></td><td><p>1.6.2</p></td></tr>
 <tr><td><p>iniparser</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>ipl</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>iproute2</p></td><td><p>6.13.0</p></td></tr>
 <tr><td><p>jsmn</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>jsnbd</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>json-c</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>keyutils</p></td><td><p>LGPL-2.1-or-later, GPL-2.0-or-later</p></td></tr>
 <tr><td><p>kmod</p></td><td><p>GPL-2.0-or-later, LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>krb5</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>libarchive</p></td><td><p>BSD-2-Clause</p></td></tr>
@@ -108,6 +114,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>libidn2</p></td><td><p>GPL-2.0-or-later, Unicode-DFS-2016</p></td></tr>
 <tr><td><p>libmctp</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>libmd</p></td><td><p>BSD-3-Clause, BSD-2-Clause</p></td></tr>
+<tr><td><p>libmnl</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>libnl</p></td><td><p>LGPL-2.1-only</p></td></tr>
 <tr><td><p>libnsl2</p></td><td><p>LGPL-2.1-only</p></td></tr>
 <tr><td><p>libnss-mdns</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
@@ -117,6 +124,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>libpldm</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>libpwquality</p></td><td><p>GPL-2.0-or-later</p></td></tr>
 <tr><td><p>libseccomp</p></td><td><p>LGPL-2.1-only</p></td></tr>
+<tr><td><p>libsolv</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libtinyxml2</p></td><td><p>Zlib</p></td></tr>
 <tr><td><p>libtirpc</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libunistring</p></td><td><p>GPL-2.0-or-later</p></td></tr>
@@ -154,22 +162,28 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>npm-qrcode</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-tiny-emitter</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-totp-generator</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-v-calendar</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vitejs-plugin-basic-ssl</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue-axios</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue-i18n</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vue-router</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vuelidate-core</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vuelidate-validators</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue3-cookies</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm-addon-attach</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm-addon-fit</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>nghttp2</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>nss-pam-ldapd</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>obmc-console</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-host-failure-reboots</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-libobmc-intf</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-phosphor-buttons</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-phosphor-power</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-fsi</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-proc-control</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-proc-control-systemd-links</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>openldap</p></td><td><p>OpenLDAP</p></td></tr>
 <tr><td><p>openpower-debug-collector</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>openpower-fru-vpd</p></td><td><p>Apache-2.0</p></td></tr>
@@ -184,7 +198,6 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>openpower-software-manager</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>openssh</p></td><td><p>BSD-2-Clause, BSD-3-Clause, ISC, MIT</p></td></tr>
 <tr><td><p>openssl</p></td><td><p>Apache-2.0</p></td></tr>
-<tr><td><p>op-fsi</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>opkg</p></td><td><p>GPL-2.0-or-later</p></td></tr>
 <tr><td><p>opkg-arch-config</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>opkg-utils</p></td><td><p>GPL-2.0-or-later</p></td></tr>
@@ -213,6 +226,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>phosphor-fan</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-gpio-monitor</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-health-monitor</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-host-postd</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-hostfw-image</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-host-postd</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-hwmon</p></td><td><p>Apache-2.0</p></td></tr>
@@ -269,6 +283,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>systemd</p></td><td><p>GPL-2.0-only, LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>systemd-conf</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>systemd-serialgetty</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>tar</p></td><td><p>GPL-3.0-only</p></td></tr>
 <tr><td><p>tcp-wrappers</p></td><td><p>BSD-1-Clause</p></td></tr>
 <tr><td><p>telemetry</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>trace-enable</p></td><td><p>Apache-2.0</p></td></tr>
