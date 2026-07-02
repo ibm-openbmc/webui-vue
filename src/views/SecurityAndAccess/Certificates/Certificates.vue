@@ -259,7 +259,7 @@ const expiredCertificateTypes = computed(() => {
   return certificates.value.reduce((acc, val) => {
     const daysUntilExpired = getDaysUntilExpired(val.validUntil);
     if (daysUntilExpired < 0) {
-      acc.push(val.certificate);
+      acc.push(getCertificateLabel(val.certificate));
     }
     return acc;
   }, []);
@@ -268,7 +268,7 @@ const expiringCertificateTypes = computed(() => {
   return certificates.value.reduce((acc, val) => {
     const daysUntilExpired = getDaysUntilExpired(val.validUntil);
     if (daysUntilExpired < 31 && daysUntilExpired >= 0) {
-      acc.push(val.certificate);
+      acc.push(getCertificateLabel(val.certificate));
     }
     return acc;
   }, []);
@@ -296,7 +296,7 @@ const initModalUploadCertificate = (certificate = null) => {
   eventBus.emit('upload-certificate');
 };
 const initModalDeleteCertificate = (certificate) => {
-  modalContent.value = certificate.certificate;
+  modalContent.value = getCertificateLabel(certificate.certificate);
   modalCertificate.value = certificate;
   certificate.actions.forEach((action) => {
     if (action.enabled !== undefined) {
