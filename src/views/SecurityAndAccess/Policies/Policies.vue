@@ -270,6 +270,33 @@
             </BFormCheckbox>
           </BCol>
         </BRow>
+        <BRow class="section-divider">
+          <BCol class="d-flex align-items-center justify-content-between">
+            <dl class="mt-3 mr-3 w-75">
+              <dt>
+                {{ $t('pagePolicies.sendServiceAlerts') }}
+              </dt>
+              <dd>
+                {{ $t('pagePolicies.sendServiceAlertsDescription') }}
+              </dd>
+            </dl>
+            <BFormCheckbox
+              id="sendServiceAlertsSwitch"
+              v-model="localSendServiceAlertsEnabled"
+              data-test-id="policies-toggle-send-service-alerts"
+              switch
+              @update:model-value="changeSendServiceAlertsState"
+            >
+              <span class="visually-hidden">
+                {{ $t('pagePolicies.sendServiceAlerts') }}
+              </span>
+              <span v-if="sendServiceAlertsEnabled">
+                {{ $t('global.status.enabled') }}
+              </span>
+              <span v-else>{{ $t('global.status.disabled') }}</span>
+            </BFormCheckbox>
+          </BCol>
+        </BRow>
       </BCol>
     </BRow>
     <BModal
@@ -284,11 +311,26 @@
     >
       {{ ModalContent }}
     </BModal>
+    <BModal
+      ref="sendServiceAlertsModalRef"
+      v-model="sendServiceAlertsModal"
+      :title="$t('pagePolicies.sendServiceAlerts')"
+      :cancel-title="$t('global.action.cancel')"
+      :ok-title="$t('global.action.confirm')"
+      @cancel="onSendServiceAlertsModalCancel"
+      @ok="onSendServiceAlertsModalOk"
+      @hide="onSendServiceAlertsModalHide"
+    >
+      <div>
+        <p>{{ $t('pagePolicies.modal.message1') }}</p>
+        {{ $t('pagePolicies.modal.message2') }}
+      </div>
+    </BModal>
   </BContainer>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { usePolicies } from '@/api/composables/usePolicies';
 import { UserManagementStore } from '@/store/modules/SecurityAndAccess/UserManagementStore';
 import { GlobalStore } from '@/store/modules/GlobalStore';
@@ -314,6 +356,7 @@ const {
   acfUploadEnablement,
   unAuthenticatedACFUploadEnablementState,
   basicAuthEnabled,
+  sendServiceAlertsEnabled,
   loadAllPolicies,
   saveSshProtocolState,
   saveIpmiProtocolState,
@@ -325,6 +368,7 @@ const {
   saveUsbFirmwareUpdatePolicyEnabled,
   saveUnauthenticatedACFUploadEnablement,
   saveBasicAuthEnabled,
+  saveSendServiceAlertsEnabled,
 } = usePolicies();
 
 const UserManagement = UserManagementStore();
@@ -336,6 +380,14 @@ const ModalContent = i18n.global.t(
   'pagePolicies.acfUploadEnablementConfirmText',
 );
 const myModalRef = ref(null);
+const sendServiceAlertsModal = ref(false);
+const sendServiceAlertsModalRef = ref(null);
+const localSendServiceAlertsEnabled = ref(sendServiceAlertsEnabled.value);
+
+// Watch for changes from the API and update local state
+watch(sendServiceAlertsEnabled, (newValue) => {
+  localSendServiceAlertsEnabled.value = newValue;
+});
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -387,6 +439,35 @@ const changeHostUsbState = (state) => {
 };
 const changeBasicAuthState = (state) => {
   saveBasicAuthEnabled(state)
+    .then((message) => {
+      Toast.successToast(message);
+    })
+    .catch(({ message }) => {
+      Toast.errorToast(message);
+    });
+};
+const changeSendServiceAlertsState = (state) => {
+  if (!state) {
+    sendServiceAlertsModal.value = true;
+  } else {
+    sendServiceAlertsApi(state);
+  }
+};
+const onSendServiceAlertsModalOk = () => {
+  sendServiceAlertsApi(false);
+};
+const onSendServiceAlertsModalCancel = () => {
+  // Revert the local toggle state back to enabled
+  localSendServiceAlertsEnabled.value = true;
+};
+const onSendServiceAlertsModalHide = (event) => {
+  if (event.trigger === 'backdrop' || event.trigger === 'close') {
+    // Revert the local toggle state back to enabled
+    localSendServiceAlertsEnabled.value = true;
+  }
+};
+const sendServiceAlertsApi = (state) => {
+  saveSendServiceAlertsEnabled(state)
     .then((message) => {
       Toast.successToast(message);
     })
