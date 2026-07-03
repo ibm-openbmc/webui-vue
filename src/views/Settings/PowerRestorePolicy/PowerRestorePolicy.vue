@@ -119,7 +119,9 @@ watch(
 
 const currentPowerRestorePolicy = computed({
   get() {
-    return powerRestoreCurrentPolicy.value;
+    return policyValue.value !== null
+      ? policyValue.value
+      : powerRestoreCurrentPolicy.value;
   },
   set(policy) {
     policyValue.value = policy;
@@ -143,6 +145,8 @@ const submitForm = async () => {
       i18n.global.t('pagePowerRestorePolicy.toast.successSaveSettings'),
     );
   } catch (error) {
+    // Reset the radio button to the original value on error
+    policyValue.value = null;
     errorToast(error.message);
   } finally {
     endLoader();
