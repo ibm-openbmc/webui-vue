@@ -1,0 +1,284 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`KeyClear.vue > Component Rendering > should render correctly 1`] = `
+<div
+  data-v-246c5923=""
+>
+  <div
+    class="container-xl"
+    data-v-246c5923=""
+  >
+    
+    <div
+      class="page-title"
+      data-v-246c5923=""
+      data-v-e17be9ee=""
+    >
+      <h1
+        data-v-e17be9ee=""
+      >
+        appPageTitle.keyClear
+      </h1>
+      <p
+        data-v-e17be9ee=""
+      >
+        pageKeyClear.description 
+        <!--v-if-->
+      </p>
+    </div>
+    <div
+      class="row"
+      data-v-246c5923=""
+    >
+      
+      <div
+        class="col-md-8 col-xl-6"
+        data-v-246c5923=""
+      >
+        
+        <transition-stub
+          appear="false"
+          class="mb-4"
+          css="true"
+          data-v-246c5923=""
+          data-v-80abc89a=""
+          enteractiveclass=""
+          enterfromclass="showing"
+          entertoclass="show"
+          leaveactiveclass=""
+          leavefromclass=""
+          leavetoclass="showing"
+          name=""
+          persisted="false"
+        >
+          
+          <div
+            aria-atomic="true"
+            aria-live="polite"
+            class="alert alert-info"
+            data-v-80abc89a=""
+            role="alert"
+          >
+            
+            <div
+              class="alert-icon"
+            >
+              <span
+                class="status-icon info"
+                data-v-4b0821d5=""
+              >
+                <svg
+                  aria-hidden="true"
+                  data-v-4b0821d5=""
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16,8a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,13.875H17.125v-8H13v2.25h1.875v5.75H12v2.25h8Z"
+                    fill="none"
+                  />
+                  <path
+                    d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,6a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,16.125H12v-2.25h2.875v-5.75H13v-2.25h4.125v8H20Z"
+                  />
+                </svg>
+              </span>
+            </div>
+            <div
+              class="alert-content"
+            >
+              <div
+                class="alert-msg"
+              >
+                
+                <h5
+                  class="title"
+                  data-v-246c5923=""
+                >
+                  pageKeyClear.alert.title
+                </h5>
+                <div
+                  data-v-246c5923=""
+                >
+                  pageKeyClear.alert.description
+                </div>
+                
+              </div>
+            </div>
+            <div
+              class="alert-action"
+            >
+              
+              
+            </div>
+            
+            <!---->
+          </div>
+          
+        </transition-stub>
+        
+      </div>
+      
+    </div>
+    <!-- Reset Form -->
+    <form
+      class=""
+      data-v-246c5923=""
+      id="key-clear"
+    >
+      
+      <div
+        class="row"
+        data-v-246c5923=""
+      >
+        
+        <div
+          class="col-md-8"
+          data-v-246c5923=""
+        >
+          
+          <fieldset
+            class="fieldset"
+            data-v-246c5923=""
+          >
+            <legend
+              class="form-label bv-no-focus-ring col-form-label pt-0"
+              tabindex="-1"
+            >
+              pageKeyClear.form.keyClearOptionsLabel
+            </legend>
+            <div
+              class=""
+            >
+              
+              <div
+                class="btn-group-md bv-no-focus-ring"
+                data-v-246c5923=""
+                id="key-clear-options"
+                role="radiogroup"
+                tabindex="-1"
+              >
+                
+                
+                
+                
+                
+                <div
+                  class="form-check"
+                  data-v-246c5923=""
+                >
+                  
+                  <input
+                    class="radioButton form-check-input"
+                    type="radio"
+                    value="NONE"
+                  />
+                  <label
+                    class="form-check-label"
+                  >
+                    
+                    pageKeyClear.form.none
+                    
+                  </label>
+                  
+                </div>
+                <small
+                  class="text-body-secondary form-text ms-4 mb-3 formText"
+                  data-v-246c5923=""
+                  id="key-clear-not-requested"
+                >
+                  
+                  pageKeyClear.form.keyClearNotRequested
+                  
+                </small>
+                <div
+                  class="form-check"
+                  data-v-246c5923=""
+                >
+                  
+                  <input
+                    class="radioButton form-check-input"
+                    type="radio"
+                    value="ALL"
+                  />
+                  <label
+                    class="form-check-label"
+                  >
+                    
+                    pageKeyClear.form.clearAllLabel
+                    
+                  </label>
+                  
+                </div>
+                <small
+                  class="text-body-secondary form-text ms-4 mb-3 formText"
+                  data-v-246c5923=""
+                  id="clear-all"
+                >
+                  
+                  pageKeyClear.form.clearAllHelperText
+                  
+                </small>
+                <div
+                  class="form-check"
+                  data-v-246c5923=""
+                >
+                  
+                  <input
+                    class="radioButton form-check-input"
+                    type="radio"
+                    value="POWERVM_SYSKEY"
+                  />
+                  <label
+                    class="form-check-label"
+                  >
+                    
+                    pageKeyClear.form.clearHypervisorSystemKeyLabel
+                    
+                  </label>
+                  
+                </div>
+                <small
+                  class="text-body-secondary form-text ms-4 mb-3 formText"
+                  data-v-246c5923=""
+                  id="clear-hypervisor-key"
+                >
+                  
+                  pageKeyClear.form.clearHypervisorSystemKeyHelperText
+                  
+                </small>
+                <!--v-if-->
+                
+              </div>
+              
+              <!---->
+              <!---->
+              <!---->
+            </div>
+          </fieldset>
+          <button
+            class="btn btn-md btn-primary"
+            data-test-id="keyClear-button-submit"
+            data-v-246c5923=""
+            type="submit"
+          >
+            
+            pageKeyClear.form.clear
+            
+          </button>
+          
+        </div>
+        
+      </div>
+      
+    </form>
+    
+  </div>
+  <!--teleport start-->
+  <!--teleport end-->
+</div>
+`;
