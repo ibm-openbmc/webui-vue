@@ -1,0 +1,531 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DateTime.vue > Component Rendering & Initialization > should render correctly 1`] = `
+<div
+  data-v-a1b7312e=""
+  fluid="xl"
+>
+  
+  <h1
+    data-v-a1b7312e=""
+    title="appPageTitle.dateTime"
+  >
+    
+    
+  </h1>
+  <div
+    data-v-a1b7312e=""
+  >
+    
+    <div
+      data-v-a1b7312e=""
+      md="8"
+      xl="6"
+    >
+      
+      <div
+        class="alert mb-4"
+        data-v-a1b7312e=""
+        variant="info"
+      >
+        
+        <span
+          class="no-underline-link"
+          data-v-a1b7312e=""
+        >
+          pageDateTime.alert.message 
+          <a
+            data-v-a1b7312e=""
+          >
+            
+            pageDateTime.alert.link
+            
+          </a>
+        </span>
+        
+      </div>
+      
+    </div>
+    
+  </div>
+  <section
+    data-v-a1b7312e=""
+  >
+    
+    <div
+      data-v-a1b7312e=""
+    >
+      
+      <div
+        data-v-a1b7312e=""
+        lg="3"
+      >
+        
+        <dl
+          data-v-a1b7312e=""
+        >
+          <dt
+            data-v-a1b7312e=""
+          >
+            pageDateTime.form.date
+          </dt>
+          <dd
+            data-v-a1b7312e=""
+          >
+            --
+          </dd>
+        </dl>
+        
+      </div>
+      <div
+        data-v-a1b7312e=""
+        lg="3"
+      >
+        
+        <dl
+          data-v-a1b7312e=""
+        >
+          <dt
+            data-v-a1b7312e=""
+          >
+            pageDateTime.form.time.label
+          </dt>
+          <dd
+            data-v-a1b7312e=""
+          >
+            --
+          </dd>
+        </dl>
+        
+      </div>
+      
+    </div>
+    
+  </section>
+  <section
+    data-v-a1b7312e=""
+    style="display: none;"
+  >
+    
+    <button
+      aria-controls="collapse-dhcp-ntp"
+      aria-expanded="false"
+      class="mt-3 collapsed"
+      data-v-a1b7312e=""
+    >
+      
+      <svg
+        aria-hidden="true"
+        data-v-a1b7312e=""
+        fill="currentColor"
+        focusable="false"
+        height="20"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 32 32"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
+        />
+      </svg>
+       pageDateTime.viewDynamicNtp 
+      <span
+        class="info-tooltip infoToolTipClass"
+        data-v-a1b7312e=""
+        title="pageDateTime.dhcpNtpInfoTooltip"
+      />
+      
+    </button>
+    <div
+      data-v-a1b7312e=""
+      id="collapse-dhcp-ntp"
+    >
+      
+      
+    </div>
+    
+  </section>
+  <section
+    data-v-a1b7312e=""
+    section-title="pageDateTime.configureSettings"
+  >
+    
+    <div
+      data-v-a1b7312e=""
+    >
+      
+      <div
+        data-v-a1b7312e=""
+        md="8"
+        xl="6"
+      >
+        
+        <!--v-if-->
+        <!--v-if-->
+        <div
+          class="alert mb-4"
+          data-v-a1b7312e=""
+          variant="info"
+        >
+          
+          <span
+            data-v-a1b7312e=""
+          >
+            pageDateTime.alert.messageNtp
+          </span>
+          
+        </div>
+        <!--v-if-->
+        
+      </div>
+      
+    </div>
+    <form
+      data-v-a1b7312e=""
+      novalidate=""
+    >
+      
+      <fieldset
+        aria-label="configure-date-time-settings"
+        class=""
+        data-v-a1b7312e=""
+        id=""
+      >
+        <div>
+          <legend
+            class="visually-hidden"
+            id=""
+          >
+            Configure date and time
+          </legend>
+        </div>
+        <div
+          class=""
+        >
+          
+          <input
+            data-test-id="dateTime-radio-configureManual"
+            data-v-a1b7312e=""
+            type="radio"
+          />
+          <div
+            class="mt-3 ms-3"
+            data-v-a1b7312e=""
+          >
+            
+            <div
+              data-v-a1b7312e=""
+              lg="4"
+              sm="6"
+              xl="3"
+            >
+              
+              <div
+                aria-label="date-input-from"
+                class=""
+                data-v-a1b7312e=""
+                id=""
+                role="group"
+              >
+                <label
+                  class="form-label d-block"
+                  for="input-manual-date"
+                  id=""
+                >
+                  pageDateTime.form.date
+                </label>
+                <div
+                  class=""
+                >
+                  
+                  <small
+                    data-v-a1b7312e=""
+                    id="date-format-help"
+                  >
+                    
+                    global.calendar.dateFormat
+                    
+                  </small>
+                  <div
+                    aria-label="date-input-group"
+                    data-v-a1b7312e=""
+                  >
+                    
+                    <input
+                      aria-label="date-input"
+                      class="form-control-with-button"
+                      data-test-id="dateTime-input-manualDate"
+                      data-v-a1b7312e=""
+                      id="input-manual-date"
+                      type="date"
+                    />
+                    <div
+                      data-v-a1b7312e=""
+                      role="alert"
+                    >
+                      
+                      
+                    </div>
+                    
+                  </div>
+                  
+                  <!---->
+                  <!---->
+                  <!---->
+                </div>
+              </div>
+              
+            </div>
+            <div
+              data-v-a1b7312e=""
+              lg="4"
+              sm="6"
+              xl="3"
+            >
+              
+              <div
+                aria-label="time-input-form"
+                class=""
+                data-v-a1b7312e=""
+                id=""
+                role="group"
+              >
+                <label
+                  class="form-label d-block"
+                  for="input-manual-time"
+                  id=""
+                >
+                  pageDateTime.form.time.timezone
+                </label>
+                <div
+                  class=""
+                >
+                  
+                  <small
+                    data-v-a1b7312e=""
+                    id="time-format-help"
+                  >
+                    
+                    HH:MM
+                    
+                  </small>
+                  <div
+                    aria-label="time-input-group"
+                    data-v-a1b7312e=""
+                  >
+                    
+                    <input
+                      aria-label="24-hour time (UTC)"
+                      data-test-id="dateTime-input-manualTime"
+                      data-v-a1b7312e=""
+                      id="input-manual-time"
+                    />
+                    <div
+                      data-v-a1b7312e=""
+                      role="alert"
+                    >
+                      
+                      
+                    </div>
+                    
+                  </div>
+                  
+                  <!---->
+                  <!---->
+                  <!---->
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+          <input
+            data-test-id="dateTime-radio-configureNTP"
+            data-v-a1b7312e=""
+            type="radio"
+          />
+          <div
+            class="mt-3 ms-3"
+            data-v-a1b7312e=""
+          >
+            
+            <div
+              data-v-a1b7312e=""
+              lg="4"
+              sm="6"
+              xl="3"
+            >
+              
+              <div
+                aria-label="static-ntp-server-1-form-group"
+                class=""
+                data-v-a1b7312e=""
+                id=""
+                role="group"
+              >
+                <label
+                  class="form-label d-block"
+                  for="input-ntp-1"
+                  id=""
+                >
+                  pageDateTime.form.ntpServers.server1
+                </label>
+                <div
+                  class=""
+                >
+                  
+                  <div
+                    aria-label="static-ntp-server-1-input-group"
+                    data-v-a1b7312e=""
+                  >
+                    
+                    <input
+                      data-test-id="dateTime-input-ntpServer1"
+                      data-v-a1b7312e=""
+                      id="input-ntp-1"
+                    />
+                    <div
+                      data-v-a1b7312e=""
+                      role="alert"
+                    >
+                      
+                      
+                    </div>
+                    
+                  </div>
+                  
+                  <!---->
+                  <!---->
+                  <!---->
+                </div>
+              </div>
+              
+            </div>
+            <div
+              data-v-a1b7312e=""
+              lg="4"
+              sm="6"
+              xl="3"
+            >
+              
+              <div
+                aria-label="static-ntp-server-2-form-group"
+                class=""
+                data-v-a1b7312e=""
+                id=""
+                role="group"
+              >
+                <label
+                  class="form-label d-block"
+                  for="input-ntp-2"
+                  id=""
+                >
+                  pageDateTime.form.ntpServers.server2
+                </label>
+                <div
+                  class=""
+                >
+                  
+                  <div
+                    aria-label="static-ntp-server-2-input-group"
+                    data-v-a1b7312e=""
+                  >
+                    
+                    <input
+                      data-test-id="dateTime-input-ntpServer2"
+                      data-v-a1b7312e=""
+                      id="input-ntp-2"
+                    />
+                    <div
+                      data-v-a1b7312e=""
+                      role="alert"
+                    >
+                      
+                      
+                    </div>
+                    
+                  </div>
+                  
+                  <!---->
+                  <!---->
+                  <!---->
+                </div>
+              </div>
+              
+            </div>
+            <div
+              data-v-a1b7312e=""
+              lg="4"
+              sm="6"
+              xl="3"
+            >
+              
+              <div
+                aria-label="static-ntp-server-3-form-group"
+                class=""
+                data-v-a1b7312e=""
+                id=""
+                role="group"
+              >
+                <label
+                  class="form-label d-block"
+                  for="input-ntp-3"
+                  id=""
+                >
+                  pageDateTime.form.ntpServers.server3
+                </label>
+                <div
+                  class=""
+                >
+                  
+                  <div
+                    aria-label="static-ntp-server-3-input-group"
+                    data-v-a1b7312e=""
+                  >
+                    
+                    <input
+                      data-test-id="dateTime-input-ntpServer3"
+                      data-v-a1b7312e=""
+                      id="input-ntp-3"
+                    />
+                    <div
+                      data-v-a1b7312e=""
+                      role="alert"
+                    >
+                      
+                      
+                    </div>
+                    
+                  </div>
+                  
+                  <!---->
+                  <!---->
+                  <!---->
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+          <button
+            data-test-id="dateTime-button-saveSettings"
+            data-v-a1b7312e=""
+          >
+            
+            global.action.save
+            
+          </button>
+          
+          <!---->
+          <!---->
+          <!---->
+        </div>
+      </fieldset>
+      
+    </form>
+    
+  </section>
+  
+</div>
+`;

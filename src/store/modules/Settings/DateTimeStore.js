@@ -87,5 +87,3 @@ export const DateTimeStore = defineStore('dateTime', {
 });
 
 export default DateTimeStore;
-
-// Made with Bob

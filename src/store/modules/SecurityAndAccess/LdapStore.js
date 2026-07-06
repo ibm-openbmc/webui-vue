@@ -270,5 +270,3 @@ export const LdapStore = defineStore('ldapStore', {
 });
 
 export default LdapStore;
-
-// Made with Bob
