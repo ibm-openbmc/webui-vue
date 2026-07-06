@@ -1,0 +1,675 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Policies.vue > Component Rendering & Lifecycle > should render correctly 1`] = `
+<div
+  class="container-xl"
+  data-v-ab5c15cd=""
+>
+  
+  <page-title-stub
+    data-v-ab5c15cd=""
+    description=""
+    link=""
+    title="appPageTitle.policies"
+    to=""
+  />
+  <div
+    class="row"
+    data-v-ab5c15cd=""
+  >
+    
+    <div
+      class="col-md-8"
+      data-v-ab5c15cd=""
+    >
+      
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+              id="ssh-label"
+            >
+              pagePolicies.ssh
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+              id="ssh-description"
+            >
+              pagePolicies.sshDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              aria-describedby="ssh-description"
+              aria-labelledby="ssh-label"
+              class="form-check-input"
+              data-test-id="policies-toggle-bmcShell"
+              false-value="false"
+              id="sshSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="sshSwitch"
+            >
+              
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+              id="ipmi-label"
+            >
+              pagePolicies.ipmi
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+              id="ipmi-description"
+            >
+              pagePolicies.ipmiDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              aria-describedby="ipmi-description"
+              aria-labelledby="ipmi-label"
+              class="form-check-input"
+              data-test-id="polices-toggle-networkIpmi"
+              false-value="false"
+              id="ipmiSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="ipmiSwitch"
+            >
+              
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+              id="host-tpm-label"
+            >
+              pagePolicies.hostTpm
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+              id="host-tpm-description"
+            >
+              pagePolicies.hostTpmDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              aria-describedby="host-tpm-description"
+              aria-labelledby="host-tpm-label"
+              class="form-check-input"
+              false-value="false"
+              id="host-tpm-policy"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="host-tpm-policy"
+            >
+              
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.vtpm 
+              <info-tooltip-stub
+                data-v-ab5c15cd=""
+                status=""
+                title="global.status.nextReboot"
+              />
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.vtpmDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              class="form-check-input"
+              data-test-id="policies-toggle-vtpm"
+              false-value="false"
+              id="vtpmSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="vtpmSwitch"
+            >
+              
+              <span
+                class="visually-hidden"
+                data-v-ab5c15cd=""
+              >
+                pagePolicies.vtpm
+              </span>
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.rtad 
+              <info-tooltip-stub
+                data-v-ab5c15cd=""
+                status=""
+                title="pagePolicies.rtadInfoIcon"
+              />
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.rtadDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              class="form-check-input"
+              data-test-id="policies-toggle-rtad"
+              false-value="false"
+              id="rtadSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="rtadSwitch"
+            >
+              
+              <span
+                class="visually-hidden"
+                data-v-ab5c15cd=""
+              >
+                pagePolicies.rtad
+              </span>
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.usbFirmwareUpdatePolicy
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.usbFirmwareUpdatePolicyDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              class="form-check-input"
+              data-test-id="policies-toggle-usbFirmwareUpdatePolicy"
+              false-value="false"
+              id="usbFirmwareUpdatePolicySwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="usbFirmwareUpdatePolicySwitch"
+            >
+              
+              <span
+                class="visually-hidden"
+                data-v-ab5c15cd=""
+              >
+                pagePolicies.usbFirmwareUpdatePolicy
+              </span>
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.secureVersion
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.secureVersionDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              class="form-check-input"
+              data-test-id="policies-toggle-svle"
+              false-value="false"
+              id="svleSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="svleSwitch"
+            >
+              
+              <span
+                class="visually-hidden"
+                data-v-ab5c15cd=""
+              >
+                pagePolicies.secureVersion
+              </span>
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.hostUsb 
+              <info-tooltip-stub
+                data-v-ab5c15cd=""
+                status=""
+                title="global.status.nextReboot"
+              />
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.hostUsbDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              class="form-check-input"
+              data-test-id="policies-toggle-hostUsb"
+              false-value="false"
+              id="hostUsbSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="hostUsbSwitch"
+            >
+              
+              <span
+                class="visually-hidden"
+                data-v-ab5c15cd=""
+              >
+                pagePolicies.hostUsb
+              </span>
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <!--v-if-->
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.basicAuth
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.basicAuthDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              class="form-check-input"
+              data-test-id="policies-toggle-basic-auth"
+              false-value="false"
+              id="basicAuthSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="basicAuthSwitch"
+            >
+              
+              <span
+                class="visually-hidden"
+                data-v-ab5c15cd=""
+              >
+                pagePolicies.basicAuth
+              </span>
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div
+        class="row section-divider"
+        data-v-ab5c15cd=""
+      >
+        
+        <div
+          class="col d-flex align-items-center justify-content-between"
+          data-v-ab5c15cd=""
+        >
+          
+          <dl
+            class="mt-3 mr-3 w-75"
+            data-v-ab5c15cd=""
+          >
+            <dt
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.sendServiceAlerts
+            </dt>
+            <dd
+              data-v-ab5c15cd=""
+            >
+              pagePolicies.sendServiceAlertsDescription
+            </dd>
+          </dl>
+          <div
+            class="form-check form-switch"
+            data-v-ab5c15cd=""
+          >
+            
+            <input
+              class="form-check-input"
+              data-test-id="policies-toggle-send-service-alerts"
+              false-value="false"
+              id="sendServiceAlertsSwitch"
+              true-value="true"
+              type="checkbox"
+              value="true"
+            />
+            <label
+              class="form-check-label"
+              for="sendServiceAlertsSwitch"
+            >
+              
+              <span
+                class="visually-hidden"
+                data-v-ab5c15cd=""
+              >
+                pagePolicies.sendServiceAlerts
+              </span>
+              <span
+                data-v-ab5c15cd=""
+              >
+                global.status.enabled
+              </span>
+              
+            </label>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+    
+  </div>
+  <!--teleport start-->
+  <!--teleport end-->
+  <!--teleport start-->
+  <!--teleport end-->
+  
+</div>
+`;
