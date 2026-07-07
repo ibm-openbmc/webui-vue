@@ -14,6 +14,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "✅ All tests passed with sufficient coverage!"
+<<<<<<< HEAD
 =======
 # Run unit tests before commit
 echo "Running unit tests..."
@@ -35,3 +36,5 @@ echo "✅ All tests passed with sufficient coverage!"
 
 # Made with Bob
 >>>>>>> 36603038 (Added pre-commit unit test check)
+=======
+>>>>>>> b25d4f96 (Addressed review comments)

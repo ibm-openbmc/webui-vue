@@ -50,9 +50,12 @@
           :items="filteredSensors"
           :fields="fields"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           :busy="isBusy"
 >>>>>>> 1b9edf6c (Added smart pagination)
+=======
+>>>>>>> b25d4f96 (Addressed review comments)
           class="no-scroll-sticky"
           @row-selected="onRowSelected($event, filteredSensors.length)"
         >
