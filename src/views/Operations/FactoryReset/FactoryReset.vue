@@ -132,7 +132,7 @@ const onResetToDefaultsConfirm = () => {
     .then((message) => {
       toast.successToast(message);
       setTimeout(() => {
-        authentication.logout;
+        authentication.logout();
       }, 3000);
     })
     .catch(({ message }) => toast.errorToast(message))
