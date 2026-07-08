@@ -120,6 +120,7 @@ describe('Policies.vue', () => {
       unAuthenticatedACFUploadEnablementState: { value: false },
       basicAuthEnabled: { value: true },
       sendServiceAlertsEnabled: { value: false },
+      isLoading: { value: false },
       loadAllPolicies: vi.fn().mockResolvedValue(),
       saveSshProtocolState: vi.fn().mockResolvedValue('Success message'),
       saveIpmiProtocolState: vi.fn().mockResolvedValue('Success message'),
