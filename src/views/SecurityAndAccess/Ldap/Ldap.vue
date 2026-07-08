@@ -274,14 +274,21 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
+watch(
+  () => isLoading.value,
+  (loading) => {
+    if (loading) startLoader();
+    else endLoader();
+  },
+  { immediate: true },
+);
+
 onBeforeMount(() => {
-  startLoader();
   Promise.all([
     loadAccountSettings(),
     certificatesStore.getCertificates(),
   ]).finally(() => {
     setFormValues();
-    endLoader();
   });
 });
 

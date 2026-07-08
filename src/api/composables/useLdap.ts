@@ -1,6 +1,7 @@
 import { computed } from 'vue';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { useRedfishResource } from './useAllSubResources';
+import { RedfishQueryPresets } from './shared/queryConfig';
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
@@ -8,6 +9,7 @@ import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
 import useToast from '@/components/Composables/useToastComposable';
 import type { Resource } from '@/types/redfish';
+import type { UseQueryOptions } from '@tanstack/vue-query';
 
 // Type definitions for LDAP resources
 interface LdapService {
@@ -70,6 +72,11 @@ export function useLdap() {
   // Fetch Account Service
   const accountServiceQuery = useRedfishResource<AccountService>(
     '/redfish/v1/AccountService',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<AccountService>
+      >,
+    },
   );
 
   const isServiceEnabled = computed(() => {
