@@ -366,7 +366,6 @@ const {
   isNtpProtocolEnabled: isNtpProtocolEnabledFromQuery,
   networkSuppliedServers: networkSuppliedServersFromQuery,
   isLoading: isDateTimeLoading,
-  isFetching: isDateTimeFetching,
   updateDateTime: updateDateTimeAction,
 } = useDateTime();
 
@@ -403,7 +402,7 @@ onBeforeRouteLeave(() => {
 
 // Loading bar automatically shows/hides based on fetch state
 watch(
-  () => isDateTimeLoading.value || isDateTimeFetching.value,
+  () => isDateTimeLoading.value,
   (loading) => {
     if (loading) startLoader();
     else endLoader();
@@ -611,7 +610,6 @@ const submitForm = () => {
         v$.value.form.$reset();
         endLoader();
       } else {
-        startLoader();
         setTimeout(() => {
           globalStore.getBmcTime();
           endLoader();
