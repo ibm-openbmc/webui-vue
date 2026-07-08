@@ -358,6 +358,7 @@ const {
   basicAuthEnabled,
   sendServiceAlertsEnabled,
   loadAllPolicies,
+  isLoading: isPoliciesLoading,
   saveSshProtocolState,
   saveIpmiProtocolState,
   saveTpmPolicy,
@@ -393,17 +394,22 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
+watch(
+  () => isPoliciesLoading.value,
+  (loading) => {
+    if (loading) startLoader();
+    else endLoader();
+  },
+  { immediate: true },
+);
+
 onMounted(() => {
-  startLoader();
   Promise.all([
     loadAllPolicies(),
     UserManagement.getUsers(),
     checkForUserData(),
   ]).finally(() => {
     unAuthenticatedACFUploadEnablementState.value = acfUploadEnablement.value;
-    setTimeout(() => {
-      endLoader();
-    }, 30000);
   });
 });
 

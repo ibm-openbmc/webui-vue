@@ -164,6 +164,17 @@ export function usePolicies() {
     () => systemQuery.data.value?.Oem?.IBM?.SendServiceAlerts ?? false,
   );
 
+  const isLoading = computed(() => {
+    return (
+      networkProtocolQuery.isLoading.value ||
+      biosQuery.isLoading.value ||
+      systemQuery.isLoading.value ||
+      managerQuery.isLoading.value ||
+      serviceAccountQuery.isLoading.value ||
+      accountServiceQuery.isLoading.value
+    );
+  });
+
   // Refetch all policies
   async function loadAllPolicies() {
     await Promise.all([
@@ -876,6 +887,8 @@ export function usePolicies() {
     unAuthenticatedACFUploadEnablementState,
     basicAuthEnabled,
     sendServiceAlertsEnabled,
+    // Loading states
+    isLoading,
     // Fetch
     loadAllPolicies,
     // Save
