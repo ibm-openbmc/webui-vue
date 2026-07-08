@@ -237,5 +237,3 @@ describe('PowerRestorePolicy.vue', () => {
     expect(mockEndLoader).toHaveBeenCalled();
   });
 });
-
-// Made with Bob
