@@ -52,11 +52,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
-import stores from '@/store';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
@@ -65,13 +64,12 @@ import { usePowerRestorePolicy } from '@/api/composables/usePowerRestorePolicy';
 const { successToast, errorToast } = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
-const bootSettings = stores.BootSettingsStore();
-
 const {
   powerRestorePolicies,
   powerRestoreCurrentPolicy,
   isLoading,
   setPowerRestorePolicy,
+  isOperatingModeManual,
 } = usePowerRestorePolicy();
 
 const policyValue = ref(null);
@@ -79,13 +77,6 @@ const options = ref([]);
 
 onBeforeRouteLeave(() => {
   hideLoader();
-});
-
-onMounted(() => {
-  startLoader();
-  bootSettings.fetchBiosAttributes().finally(() => {
-    endLoader();
-  });
 });
 
 // Watch for loading state changes
@@ -126,13 +117,6 @@ const currentPowerRestorePolicy = computed({
   set(policy) {
     policyValue.value = policy;
   },
-});
-
-const isOperatingModeManual = computed(() => {
-  return (
-    !bootSettings.biosAttributes?.pvm_system_operating_mode ||
-    bootSettings.biosAttributes?.pvm_system_operating_mode === 'Manual'
-  );
 });
 
 const submitForm = async () => {
