@@ -6,6 +6,7 @@ import api from '@/store/api';
 import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
 import useToast from '@/components/Composables/useToastComposable';
+import { RedfishQueryPresets } from './shared/queryConfig';
 
 interface NTPData {
   NTPServers: string[];
@@ -34,11 +35,10 @@ export function useDateTime() {
   const {
     data: ntpData,
     isLoading,
-    isFetching,
     isError,
     error,
     refetch,
-  } = useQuery({
+  } = useQuery<NTPData>({
     queryKey: ['redfish', 'managers', 'bmc', 'networkProtocol'],
     queryFn: async (): Promise<NTPData> => {
       const response = await api.get<NetworkProtocolResponse>(
@@ -46,17 +46,7 @@ export function useDateTime() {
       );
       return response.data.NTP;
     },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    // Don't retry client errors (4xx) — they won't succeed on retry.
-    // Do retry transient server errors (5xx) and network failures.
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    ...(RedfishQueryPresets.sensors as any),
   });
 
   const ntpServers = computed<string[]>(() => ntpData.value?.NTPServers || []);
@@ -148,7 +138,6 @@ export function useDateTime() {
     isNtpProtocolEnabled,
     networkSuppliedServers,
     isLoading,
-    isFetching,
     isError,
     error,
     refetch,
