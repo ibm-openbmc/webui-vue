@@ -411,5 +411,3 @@ describe('useKeyClear', () => {
     });
   });
 });
-
-// Made with Bob
