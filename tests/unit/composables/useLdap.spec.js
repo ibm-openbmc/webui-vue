@@ -452,5 +452,3 @@ describe('useLdap', () => {
     });
   });
 });
-
-// Made with Bob
