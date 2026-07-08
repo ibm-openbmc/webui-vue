@@ -1,9 +1,14 @@
 import { computed } from 'vue';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+import type { UseQueryOptions } from '@tanstack/vue-query';
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
-import { usePropertyFromCollection } from './useAllSubResources';
+import {
+  usePropertyFromCollection,
+  useRedfishResource,
+} from './useAllSubResources';
+import { RedfishQueryPresets } from './shared/queryConfig';
 import type { Resource } from '@/types/redfish';
 
 interface PowerRestorePolicyType {
@@ -18,6 +23,12 @@ interface PowerRestorePolicyData {
 
 interface SystemResource extends Resource {
   PowerRestorePolicy?: string;
+}
+
+interface BiosAttributes extends Resource {
+  Attributes?: {
+    pvm_system_operating_mode?: string;
+  };
 }
 
 /**
@@ -36,8 +47,10 @@ export function usePowerRestorePolicy() {
   } = useQuery({
     queryKey: ['redfish', 'powerRestorePolicy', 'schema'],
     queryFn: async (): Promise<PowerRestorePolicyType[]> => {
-      const schemaResponse = await api.get('/redfish/v1/JsonSchemas/ComputerSystem');
-      
+      const schemaResponse = await api.get(
+        '/redfish/v1/JsonSchemas/ComputerSystem',
+      );
+
       if (
         !schemaResponse.data?.Location?.length ||
         !schemaResponse.data.Location[0].Uri
@@ -47,7 +60,7 @@ export function usePowerRestorePolicy() {
 
       const schemaUri = schemaResponse.data.Location[0].Uri;
       const schemaDetailResponse = await api.get(schemaUri);
-      
+
       const powerRestorePolicyTypes =
         schemaDetailResponse.data?.definitions?.PowerRestorePolicyTypes;
 
@@ -59,29 +72,36 @@ export function usePowerRestorePolicy() {
         const desc = `${i18n.global.t(
           `pagePowerRestorePolicy.policies.${powerState}`,
         )} - ${powerRestorePolicyTypes.enumDescriptions[powerState]}`;
-        
+
         return {
           state: powerState,
           desc,
         };
       });
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes - schema rarely changes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    ...RedfishQueryPresets.sensors,
   });
 
   // Fetch current power restore policy from all systems
-  const currentPolicyQuery = usePropertyFromCollection<SystemResource, 'PowerRestorePolicy'>(
-    '/redfish/v1/Systems',
+  const currentPolicyQuery = usePropertyFromCollection<
+    SystemResource,
     'PowerRestorePolicy'
+  >('/redfish/v1/Systems', 'PowerRestorePolicy');
+
+  // Fetch BIOS attributes for operating mode check
+  const biosQuery = useRedfishResource<BiosAttributes>(
+    '/redfish/v1/Systems/system/Bios',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<BiosAttributes>
+      >,
+    },
   );
+
+  const isOperatingModeManual = computed(() => {
+    const mode = biosQuery.data.value?.Attributes?.pvm_system_operating_mode;
+    return !mode || mode === 'Manual';
+  });
 
   // Set power restore policy mutation
   const setPolicyMutation = useMutation({
@@ -97,7 +117,7 @@ export function usePowerRestorePolicy() {
     onError: (error: any) => {
       console.error('Error setting power restore policy:', error);
       const message = i18n.global.t(
-        'pagePowerRestorePolicy.toast.errorSaveSettings'
+        'pagePowerRestorePolicy.toast.errorSaveSettings',
       );
       throw new Error(message);
     },
@@ -105,12 +125,14 @@ export function usePowerRestorePolicy() {
 
   // Computed properties
   const powerRestorePolicies = computed(() => policiesData.value || []);
-  const powerRestoreCurrentPolicy = computed(() => currentPolicyQuery.data.value || null);
+  const powerRestoreCurrentPolicy = computed(
+    () => currentPolicyQuery.data.value || null,
+  );
   const isLoading = computed(
-    () => isPoliciesLoading.value || currentPolicyQuery.isLoading.value
+    () => isPoliciesLoading.value || currentPolicyQuery.isLoading.value,
   );
   const isError = computed(
-    () => isPoliciesError.value || currentPolicyQuery.isError.value
+    () => isPoliciesError.value || currentPolicyQuery.isError.value,
   );
 
   return {
@@ -121,6 +143,7 @@ export function usePowerRestorePolicy() {
     isError,
     policiesError,
     currentPolicyError: currentPolicyQuery.error,
+    isOperatingModeManual,
 
     // Actions
     refetchCurrentPolicy: currentPolicyQuery.refetch,
