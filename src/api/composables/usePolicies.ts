@@ -5,6 +5,8 @@ import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import { useRedfishResource } from './useAllSubResources';
+import { RedfishQueryPresets } from './shared/queryConfig';
+import type { UseQueryOptions } from '@tanstack/vue-query';
 import type { Resource } from '@/types/redfish';
 
 // Type definitions for the resources
@@ -24,6 +26,7 @@ interface BiosAttributes extends Resource {
 
 interface SystemResource extends Resource {
   Boot: { TrustedModuleRequiredToBoot: string };
+  Oem?: { IBM?: { SendServiceAlerts?: boolean } };
 }
 
 interface ManagerResource extends Resource {
@@ -36,10 +39,6 @@ interface ServiceAccount extends Resource {
 
 interface AccountService extends Resource {
   Oem?: { OpenBMC?: { AuthMethods?: { BasicAuth?: boolean } } };
-}
-
-interface SystemResource2 extends Resource {
-  Oem?: { IBM?: { SendServiceAlerts?: boolean } };
 }
 
 /**
@@ -55,6 +54,11 @@ export function usePolicies() {
   // Fetch Network Protocol
   const networkProtocolQuery = useRedfishResource<NetworkProtocol>(
     '/redfish/v1/Managers/bmc/NetworkProtocol',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<NetworkProtocol>
+      >,
+    },
   );
 
   const sshProtocolEnabled = computed(
@@ -68,6 +72,11 @@ export function usePolicies() {
   // Fetch BIOS Status
   const biosQuery = useRedfishResource<BiosAttributes>(
     '/redfish/v1/Systems/system/Bios',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<BiosAttributes>
+      >,
+    },
   );
 
   const rtadEnabled = computed(
@@ -92,6 +101,11 @@ export function usePolicies() {
   // Fetch TPM Policy
   const systemQuery = useRedfishResource<SystemResource>(
     '/redfish/v1/Systems/system',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<SystemResource>
+      >,
+    },
   );
 
   const tpmPolicyEnabled = computed(
@@ -102,6 +116,11 @@ export function usePolicies() {
   // Fetch USB Firmware Update Policy
   const managerQuery = useRedfishResource<ManagerResource>(
     '/redfish/v1/Managers/bmc',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<ManagerResource>
+      >,
+    },
   );
 
   const usbFirmwareUpdatePolicyEnabled = computed(
@@ -111,6 +130,11 @@ export function usePolicies() {
   // Fetch ACF Upload Enablement
   const serviceAccountQuery = useRedfishResource<ServiceAccount>(
     '/redfish/v1/AccountService/Accounts/service',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<ServiceAccount>
+      >,
+    },
   );
 
   const acfUploadEnablement = computed(
@@ -122,6 +146,11 @@ export function usePolicies() {
   // Fetch Basic Auth
   const accountServiceQuery = useRedfishResource<AccountService>(
     '/redfish/v1/AccountService',
+    {
+      queryConfig: RedfishQueryPresets.sensors as Partial<
+        UseQueryOptions<AccountService>
+      >,
+    },
   );
 
   const basicAuthEnabled = computed(
@@ -130,13 +159,9 @@ export function usePolicies() {
       true,
   );
 
-  // Fetch Send Service Alerts
-  const systemQuery2 = useRedfishResource<SystemResource2>(
-    '/redfish/v1/Systems/system',
-  );
-
+  // Send Service Alerts uses the same systemQuery as TPM Policy
   const sendServiceAlertsEnabled = computed(
-    () => systemQuery2.data.value?.Oem?.IBM?.SendServiceAlerts ?? false,
+    () => systemQuery.data.value?.Oem?.IBM?.SendServiceAlerts ?? false,
   );
 
   // Refetch all policies
@@ -148,7 +173,6 @@ export function usePolicies() {
       serviceAccountQuery.refetch(),
       systemQuery.refetch(),
       accountServiceQuery.refetch(),
-      systemQuery2.refetch(),
     ]);
   }
 

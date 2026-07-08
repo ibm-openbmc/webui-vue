@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/vue-query';
+import type { UseQueryOptions } from '@tanstack/vue-query';
 import api from '@/store/api';
 import type {
   ResourceCollection,
@@ -13,6 +14,7 @@ interface UseRedfishCollectionOptions {
   select?: string[];
   enabled?: boolean;
   staleTime?: number;
+  queryConfig?: Partial<UseQueryOptions<any>>;
 }
 
 /**
@@ -29,6 +31,7 @@ export function useRedfishCollection<T extends Resource>(
     select,
     enabled = true,
     staleTime: staleTimeMs,
+    queryConfig,
   } = options;
 
   return useQuery({
@@ -82,6 +85,7 @@ export function useRedfishCollection<T extends Resource>(
     ...createRedfishQueryConfig<T[]>({
       staleTime: staleTimeMs,
     }),
+    ...queryConfig,
   });
 }
 
@@ -90,9 +94,12 @@ export function useRedfishCollection<T extends Resource>(
  */
 export function useRedfishResource<T extends Resource>(
   resourcePath: string,
-  options: { enabled?: boolean } = {},
+  options: {
+    enabled?: boolean;
+    queryConfig?: Partial<UseQueryOptions<T>>;
+  } = {},
 ) {
-  const { enabled = true } = options;
+  const { enabled = true, queryConfig } = options;
 
   return useQuery({
     queryKey: ['redfish', 'resource', resourcePath],
@@ -102,5 +109,6 @@ export function useRedfishResource<T extends Resource>(
     },
     enabled,
     ...createRedfishQueryConfig<T>(),
+    ...queryConfig,
   });
 }
