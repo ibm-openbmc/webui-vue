@@ -8,15 +8,7 @@ const mockErrorToast = vi.fn();
 const mockStartLoader = vi.fn();
 const mockEndLoader = vi.fn();
 const mockHideLoader = vi.fn();
-const mockFetchBiosAttributes = vi.fn();
 const mockSetPowerRestorePolicy = vi.fn();
-
-const mockBootSettingsStore = {
-  biosAttributes: {
-    pvm_system_operating_mode: 'Normal',
-  },
-  fetchBiosAttributes: mockFetchBiosAttributes,
-};
 
 const mockPolicies = ref([
   { state: 'AlwaysOff', desc: 'Always off' },
@@ -25,6 +17,7 @@ const mockPolicies = ref([
 ]);
 const mockCurrentPolicy = ref('AlwaysOn');
 const mockIsLoading = ref(false);
+const mockIsOperatingModeManual = ref(false);
 
 vi.mock('@/components/Composables/useToastComposable', () => ({
   default: () => ({
@@ -41,18 +34,13 @@ vi.mock('@/components/Composables/useLoadingBarComposable', () => ({
   }),
 }));
 
-vi.mock('@/store', () => ({
-  default: {
-    BootSettingsStore: () => mockBootSettingsStore,
-  },
-}));
-
 vi.mock('@/api/composables/usePowerRestorePolicy', () => ({
   usePowerRestorePolicy: () => ({
     powerRestorePolicies: computed(() => mockPolicies.value),
     powerRestoreCurrentPolicy: computed(() => mockCurrentPolicy.value),
     isLoading: computed(() => mockIsLoading.value),
     setPowerRestorePolicy: mockSetPowerRestorePolicy,
+    isOperatingModeManual: computed(() => mockIsOperatingModeManual.value),
   }),
 }));
 
@@ -126,9 +114,6 @@ const factory = async () => {
 describe('PowerRestorePolicy.vue', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockBootSettingsStore.biosAttributes = {
-      pvm_system_operating_mode: 'Normal',
-    };
     mockPolicies.value = [
       { state: 'AlwaysOff', desc: 'Always off' },
       { state: 'AlwaysOn', desc: 'Always on' },
@@ -136,7 +121,7 @@ describe('PowerRestorePolicy.vue', () => {
     ];
     mockCurrentPolicy.value = 'AlwaysOn';
     mockIsLoading.value = false;
-    mockFetchBiosAttributes.mockResolvedValue();
+    mockIsOperatingModeManual.value = false;
     mockSetPowerRestorePolicy.mockResolvedValue();
   });
 
@@ -145,11 +130,14 @@ describe('PowerRestorePolicy.vue', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('should fetch bios attributes and toggle loader on mount', async () => {
+  it('should toggle loader based on loading state', async () => {
+    mockIsLoading.value = true;
     await factory();
 
     expect(mockStartLoader).toHaveBeenCalled();
-    expect(mockFetchBiosAttributes).toHaveBeenCalledTimes(1);
+
+    mockIsLoading.value = false;
+    await flushPromises();
     expect(mockEndLoader).toHaveBeenCalled();
   });
 
@@ -194,9 +182,7 @@ describe('PowerRestorePolicy.vue', () => {
   });
 
   it('should show warning alert and disable controls when operating mode is manual', async () => {
-    mockBootSettingsStore.biosAttributes = {
-      pvm_system_operating_mode: 'Manual',
-    };
+    mockIsOperatingModeManual.value = true;
 
     const wrapper = await factory();
 
@@ -213,7 +199,7 @@ describe('PowerRestorePolicy.vue', () => {
   });
 
   it('should disable controls when operating mode is unavailable', async () => {
-    mockBootSettingsStore.biosAttributes = {};
+    mockIsOperatingModeManual.value = true;
 
     const wrapper = await factory();
 
