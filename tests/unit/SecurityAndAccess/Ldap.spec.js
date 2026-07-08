@@ -476,5 +476,3 @@ describe('Ldap.vue', () => {
     });
   });
 });
-
-// Made with Bob
