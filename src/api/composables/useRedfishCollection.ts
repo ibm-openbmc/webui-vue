@@ -31,10 +31,7 @@ export function useRedfishCollection<T extends Resource>(
     select,
     enabled = true,
     staleTime: staleTimeMs,
-<<<<<<< HEAD
     queryConfig,
-=======
->>>>>>> 63e16a5f (Made useQuery generic)
   } = options;
 
   return useQuery({
@@ -88,10 +85,7 @@ export function useRedfishCollection<T extends Resource>(
     ...createRedfishQueryConfig<T[]>({
       staleTime: staleTimeMs,
     }),
-<<<<<<< HEAD
     ...queryConfig,
-=======
->>>>>>> 63e16a5f (Made useQuery generic)
   });
 }
 
@@ -100,16 +94,12 @@ export function useRedfishCollection<T extends Resource>(
  */
 export function useRedfishResource<T extends Resource>(
   resourcePath: string,
-<<<<<<< HEAD
   options: {
     enabled?: boolean;
     refetchInterval?: number | false;
     staleTime?: number;
     queryConfig?: Partial<UseQueryOptions<T>>;
   } = {},
-=======
-  options: { enabled?: boolean } = {},
->>>>>>> 63e16a5f (Made useQuery generic)
 ) {
   const { enabled = true, refetchInterval, staleTime, queryConfig } = options;
 
@@ -120,11 +110,7 @@ export function useRedfishResource<T extends Resource>(
       return response.data;
     },
     enabled,
-<<<<<<< HEAD
     ...createRedfishQueryConfig<T>({ refetchInterval, staleTime }),
     ...queryConfig,
-=======
-    ...createRedfishQueryConfig<T>(),
->>>>>>> 63e16a5f (Made useQuery generic)
   });
 }
