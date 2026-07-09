@@ -390,10 +390,10 @@
       "errorReplaceCertificate": "Error replacing certificate.",
       "errorGenerateCsr": "Error generating CSR.",
       "successAddCertificate": "Successfully added %{certificate}.",
-      "successAddedHTTPCertificate": "Successfully added %{certificate}. Reload the browser page to see the changes.",
+      "successAddedHTTPCertificate": "Successfully added %{certificate}. Reload the browser page to use the new Certificate.",
       "successDeleteCertificate": "Successfully deleted %{certificate}.",
       "successReplaceCertificate": "Successfully replaced %{certificate}.",
-      "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to see the changes."
+      "successReplacedHTTPCertificate": "Successfully replaced %{certificate}. Reload the browser page to use the new Certificate."
     }
   },
   "pageChangePassword": {
