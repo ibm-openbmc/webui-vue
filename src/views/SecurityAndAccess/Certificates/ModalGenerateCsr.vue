@@ -377,6 +377,7 @@ import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
 import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+import i18n from '@/i18n';
 
 const { errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
@@ -410,7 +411,7 @@ const certificateOptions = CERTIFICATE_TYPES.reduce((arr, cert) => {
   )
     return arr;
   arr.push({
-    text: cert.label,
+    text: i18n.global.t(cert.labelKey),
     value: cert.type,
   });
   return arr;

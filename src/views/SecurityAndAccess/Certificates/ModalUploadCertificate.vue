@@ -18,7 +18,7 @@
       <template v-if="certificate !== null">
         <dl class="mb-4">
           <dt>{{ $t('pageCertificates.modal.certificateType') }}</dt>
-          <dd>{{ certificate.certificate }}</dd>
+          <dd>{{ getCertificateLabel(certificate.certificate) }}</dd>
         </dl>
       </template>
       <!-- Add new Certificate type -->
@@ -96,6 +96,8 @@ import stores from '@/store';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import FormFile from '@/components/Global/FormFile.vue';
 import eventBus from '@/eventBus';
+import i18n from '@/i18n';
+import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
 
 const { getValidationState } = useVuelidateComposable();
 
@@ -142,9 +144,9 @@ const certificateOptions = computed(() => {
       }
       return certificate === certificate;
     })
-    .map(({ type, label }) => {
+    .map(({ type, labelKey }) => {
       return {
-        text: label,
+        text: i18n.global.t(labelKey),
         value: type,
       };
     });
@@ -170,6 +172,11 @@ const fileFormat = computed(() => {
 const isNotAdmin = computed(() => {
   return props.userRoleId !== 'Administrator';
 });
+
+const getCertificateLabel = (certificateType) => {
+  const certConfig = CERTIFICATE_TYPES.find((c) => c.type === certificateType);
+  return certConfig ? i18n.global.t(certConfig.labelKey) : certificateType;
+};
 
 watch(
   () => form.value.file,
