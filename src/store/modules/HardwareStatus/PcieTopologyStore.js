@@ -925,11 +925,11 @@ export const PcieTopologyStore = defineStore('pcieTopologyStore', {
                       (cable?.detailedInfo?.upstreamPorts.length > 0 &&
                         cable?.detailedInfo?.upstreamPorts[0][
                           '@odata.id'
-                        ].startsWith(adapter.data['@odata.id'])) ||
+                        ].startsWith(adapter.data['@odata.id'] + '/')) ||
                       (cable?.detailedInfo?.downstreamPorts.length > 0 &&
                         cable?.detailedInfo?.downstreamPorts[0].data[
                           '@odata.id'
-                        ].startsWith(adapter.data['@odata.id']))
+                        ].startsWith(adapter.data['@odata.id'] + '/'))
                     ) {
                       if (cable.detailedInfo.downstreamResources.length > 0) {
                         row.ioSlotLocation = [];
