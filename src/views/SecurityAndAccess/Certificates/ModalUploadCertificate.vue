@@ -88,20 +88,27 @@
 </template>
 
 <script setup>
+// @ts-ignore
 import Alert from '@/components/Global/Alert.vue';
 import { required, requiredIf } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { computed, ref, watch } from 'vue';
-import stores from '@/store';
+// @ts-ignore
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+// @ts-ignore
 import FormFile from '@/components/Global/FormFile.vue';
+// @ts-ignore
 import eventBus from '@/eventBus';
+// @ts-ignore
 import i18n from '@/i18n';
-import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
+import {
+  useCertificates,
+  CERTIFICATE_TYPES,
+} from '@/api/composables/useCertificates';
 
 const { getValidationState } = useVuelidateComposable();
 
-const uploadCertificate = stores.CertificatesStore();
+const { availableUploadTypes } = useCertificates();
 
 const props = defineProps({
   certificate: {
@@ -131,7 +138,7 @@ const form = ref({
 });
 const fileTypeMismatch = ref(false);
 const certificateTypes = computed(() => {
-  return uploadCertificate.availableUploadTypesGetter;
+  return availableUploadTypes.value || [];
 });
 const certificateOptions = computed(() => {
   const filteredCertificates = certificateTypes.value

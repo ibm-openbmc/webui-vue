@@ -371,18 +371,24 @@
 import { ref, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, requiredIf } from '@vuelidate/validators';
-import stores from '@/store';
+// @ts-ignore
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
+// @ts-ignore
 import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
-import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore';
+import {
+  useCertificates,
+  CERTIFICATE_TYPES,
+} from '@/api/composables/useCertificates';
+// @ts-ignore
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
+// @ts-ignore
 import i18n from '@/i18n';
 
 const { errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
-const uploadCertificate = stores.CertificatesStore();
+const { generateCsr } = useCertificates();
 
 const openCsrModal = ref(false);
 const initialFormState = {
@@ -457,8 +463,7 @@ const modal = ref(false);
 const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
-  uploadCertificate
-    .generateCsr(form.value)
+  generateCsr(form.value)
     .then(({ data: { CSRString } }) => {
       csrString.value = CSRString;
       modal.value = false;
