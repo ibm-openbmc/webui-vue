@@ -49,13 +49,6 @@
           :no-border-collapse="true"
           :items="filteredSensors"
           :fields="fields"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-          :busy="isBusy"
->>>>>>> 1b9edf6c (Added smart pagination)
-=======
->>>>>>> b25d4f96 (Addressed review comments)
           class="no-scroll-sticky"
           @row-selected="onRowSelected($event, filteredSensors.length)"
         >
@@ -251,12 +244,7 @@ const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
 const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
 const tableRef = ref(null);
 const activeFiltersRows = ref([]);
-<<<<<<< HEAD
-// Use isFetching for table busy state (includes background refetches)
 const isBusy = computed(() => isSensorsFetching.value);
-=======
-const isBusy = computed(() => isSensorsLoading.value);
->>>>>>> 1b9edf6c (Added smart pagination)
 const searchFilterInput = ref('');
 
 const fields = ref([
