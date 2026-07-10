@@ -33,7 +33,7 @@
       "tooltip": "Dica de ferramentas"
     },
     "calendar": {
-      "dateFormat": "DD-MM-AAAA",
+      "dateFormat": "DD/MM/AAAA",
       "selectDate": "Selecionar data",
       "useCursorKeysToNavigateCalendarDates": "Use as teclas do cursor para navegar em datas do calendário"
     },
@@ -105,6 +105,7 @@
       "fromDate": "Data de início",
       "items": "%{count} itens",
       "itemsPerPage": "Itens por página",
+      "loading": "Carregando...",
       "selectAll": "Selecionar todos",
       "selectedItems": "%{filterCount} de%{count} itens",
       "selectItem": "Selecionar item",
@@ -389,10 +390,10 @@
       "errorReplaceCertificate": "Erro ao substituir certificado.",
       "errorGenerateCsr": "Erro ao gerar CSR.",
       "successAddCertificate": "Sucesso ao incluir %{certificate}.",
-      "successAddedHTTPCertificate": "Sucesso ao incluir %{certificate}. Recarregue a página do navegador para ver as alterações.",
+      "successAddedHTTPCertificate": "Sucesso ao incluir %{certificate}. Recarregue a página do navegador para usar o novo certificado.",
       "successDeleteCertificate": "Sucesso ao excluir %{certificate}.",
       "successReplaceCertificate": "Sucesso ao substituir %{certificate}.",
-      "successReplacedHTTPCertificate": "Sucesso ao substituir %{certificate}. Recarregue a página do navegador para ver as alterações."
+      "successReplacedHTTPCertificate": "Sucesso ao substituir %{certificate}. Recarregue a página do navegador para usar o novo certificado."
     }
   },
   "pageChangePassword": {
@@ -410,6 +411,7 @@
       "message": "Para mudar como a data e a hora são exibidas (UTC ou deslocamento do navegador) em todo o aplicativo, visite ",
       "messageText": "Para alterar como a data e hora são exibidas (ou UTC ou compensação do navegador) por todo o aplicativo, visite Configurações do Perfil",
       "messageNtp": "Se o NTP for selecionado, mas um servidor NTP não for fornecido ou o servidor NTP fornecido não for alcançável, time.google.com será usado.",
+      "alertNtp": "Se o Time Reference Partition (TRP) estiver configurado neste servidor enquanto o modo NTP estiver ativado, isso resultará em horários independentes entre o hipervisor e o BMC, o que pode levar a um desvio de tempo",
       "messagePowerOff": "O servidor deve estar desligado para mudar a data e a hora para manual ou NTP.",
       "mfaMessage": "A alteração da data e da hora afetará os usuários da MFA."
     },
@@ -693,7 +695,7 @@
     },
     "toast": {
       "errorDelete": "Erro ao excluir %{count} log. | Erro ao excluir %{count} logs.",
-      "errorDeleteGuardRecord": "Não é possível excluir o log, pois ele está associado a um registro de proteção. Considere limpar manualmente a proteção ou substituir a peça. | Os logs com registros de proteção não foram excluídos. Limpe manualmente a proteção ou substitua a peça.",
+      "errorDeleteGuardRecord": "Não é possível excluir o log, pois ele está associado a um registro de proteção. Limpe manualmente a proteção ou substitua a peça. | Os logs com registros de proteção não foram excluídos. Limpe manualmente a proteção ou substitua a peça.",
       "errorLogStatusUpdate": "Erro ao atualizar o status do log.",
       "errorResolveLogs": "Erro ao resolver %{count} log. | Erro ao resolver %{count} logs.",
       "errorResolveLogsGuardRecord": "Não é possível resolver o log, pois ele está associado a um registro de proteção. Limpe manualmente a proteção ou substitua a peça. | Os logs com registros de proteção não foram resolvidos. Limpe manualmente a proteção ou substitua a peça.",
@@ -806,6 +808,7 @@
       "errorActivation": "Erro ao iniciar a ativação do firmware.",
       "errorUpdateFirmware": "Erro ao iniciar atualização de firmware.",
       "errorUploadFirmware": "Erro ao fazer upload do firmware.",
+      "errorUploadFirmwareAlreadyExists": "Erro ao fazer upload do firmware porque essa versão já existe no sistema.",
       "rebootStarted": "Reinicialização iniciada",
       "rebootStartedMessage": "Sucesso na reinicialização da imagem de backup. A reinicialização pode levar vários minutos para ser concluída.",
       "taskComplete": "Tarefa concluída",
@@ -1138,7 +1141,7 @@
     "username": "Nome do usuário",
     "alert": {
       "unauthorizedMessage": "Usuário não autorizado",
-      "message": "Nome do usuário ou senha inválidos"
+      "message": "Credenciais inválidas"
     },
     "modal": {
       "addNewAcfCertificate": "Incluir novo certificado ACF",
@@ -1378,6 +1381,8 @@
   "pagePolicies": {
     "acfUploadEnablement": "Ativação do upload de ACF (Access Control Files) não autenticado",
     "acfUploadEnablementDescription": "Permitir que os usuários não autenticados façam upload de ACFs.",
+    "basicAuth": "Autenticação básica",
+    "basicAuthDescription": "Isso permite que o administrador do BMC desative o método de autenticação básica HTTP, de modo que a interface HTTPS do BMC não aceite autenticação por meio desse método.",
     "hostTpm": "TPM do host",
     "hostTpmDescription": "Ative para garantir que o sistema apenas reinicializa quando o TPM estiver funcional.",
     "hostUsb": "Ativação do USB do host",
@@ -1399,11 +1404,19 @@
       "successEnableBmcShell": "Shell BMC ativado com sucesso (via SSH).",
       "successNetworkPolicyUpdate": "%{policy} atualizada com sucesso.",
       "successIpmiNetworkPolicyUpdate": "%{policy} atualizada com sucesso. O BMC normalmente leva cerca de 30 segundos para mudar o estado.",
-      "successNextBootToast": "Aplicando mudanças em %{policy}. As mudanças feitas em %{policy} entrarão em vigor na próxima reinicialização."
+      "successNextBootToast": "Aplicando mudanças em %{policy}. As mudanças feitas em %{policy} entrarão em vigor na próxima reinicialização.",
+      "successNetworkPolicyEnable": "%{policy} ativada com sucesso.",
+      "successNetworkPolicyDisable": "%{policy} desativada com sucesso."
     },
     "acfUploadEnablementConfirmText": "Cuidado: A ativação dessa configuração remove o requisito de acesso ao sistema físico no processo de fazer upload de um arquivo de controle de acesso (ACF).  Isso permitiria que qualquer pessoa autorizada a solicitar um ACF e que tenha acesso à rede da ASMI obtivesse acesso à conta de administrador.  Deseja prosseguir?",
     "vtpm": "VirtualTPM",
-    "vtpmDescription": "A ativação do vTPM disponibiliza um TPM para o sistema operacional guest."
+    "vtpmDescription": "A ativação do vTPM disponibiliza um TPM para o sistema operacional guest.",
+    "sendServiceAlerts": "Enviar alertas de serviço",
+    "sendServiceAlertsDescription": "Esta propriedade deve indicar se alertas de serviço devem ser enviados quando ocorrerem eventos de isolamento de hardware.",
+    "modal": {
+      "message1": "A desativação da opção \"Enviar alerta de serviço\" suprime o SRC do alerta de serviço (BD50F138). O problema subjacente ainda deve ser resolvido.",
+      "message2": "Observação: se um novo problema for detectado, a função “Enviar alerta de serviço” será reativada automaticamente e os alertas serão retomados."
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
@@ -1961,6 +1974,7 @@
       "errorBatchEnable": "Erro ao ativar %{count} usuário. | Erro ao ativar %{count} usuários.",
       "errorClearSecretKey": "Erro ao limpar a chave secreta",
       "errorCreateUser": "Erro ao criar o usuário '%{username}'.",
+      "errorCreateUserAlreadyExists": "Erro ao criar o usuário '%{username}'. O usuário já existe.",
       "errorCreateUserMaxUsers": "Erro ao criar o usuário '%{username}' porque este sistema atingiu a quantidade máxima de usuários permitidos.",
       "errorCreateUserPasswordNotAccepted": "Erro ao criar o usuário '%{username}' porque a senha não foi aceita.",
       "errorDeleteUser": "Erro ao excluir o usuário '%{username}'.",
