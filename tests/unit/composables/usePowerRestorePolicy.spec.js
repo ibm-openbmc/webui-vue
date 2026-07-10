@@ -292,25 +292,40 @@ describe('usePowerRestorePolicy', () => {
     });
 
     it('handles mutation error', async () => {
-      let onErrorCallback;
       const mockError = new Error('Network error');
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
-      useMutation.mockImplementation(({ onError }) => {
-        onErrorCallback = onError;
+      useMutation.mockImplementation(({ mutationFn, onError }) => {
+        const mutateAsync = vi.fn(async (policy) => {
+          try {
+            await mutationFn(policy);
+          } catch (error) {
+            onError(error);
+            throw error;
+          }
+        });
+
         return makeMockMutation({
-          mutateAsync: vi.fn().mockRejectedValue(mockError),
+          mutateAsync,
         });
       });
 
       useQuery.mockReturnValue(makeMockQuery({ data: ref([]) }));
+      api.patch.mockRejectedValue(mockError);
 
-      usePowerRestorePolicy();
+      const { setPowerRestorePolicy } = usePowerRestorePolicy();
 
-      // Simulate error
-      expect(() => onErrorCallback(mockError)).toThrow();
+      await expect(setPowerRestorePolicy('AlwaysOn')).rejects.toEqual({
+        message: 'pagePowerRestorePolicy.toast.errorSaveSettings',
+      });
       expect(i18n.global.t).toHaveBeenCalledWith(
         'pagePowerRestorePolicy.toast.errorSaveSettings',
       );
+      expect(consoleErrorSpy).toHaveBeenCalled();
+
+      consoleErrorSpy.mockRestore();
     });
 
     it('exposes mutation pending state', () => {

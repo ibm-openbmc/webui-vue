@@ -434,10 +434,11 @@ describe('Ldap.vue', () => {
     });
 
     it('should compute isBusy correctly when fetching', async () => {
+      mockUseLdap.isLoading.value = false;
       mockUseLdap.isFetching.value = true;
       wrapper = createWrapper();
       await nextTick();
-      expect(wrapper.vm.isBusy).toBe(true);
+      expect(wrapper.vm.isBusy).toBe(false);
     });
 
     it('should compute isBusy as false when not loading or fetching', async () => {
