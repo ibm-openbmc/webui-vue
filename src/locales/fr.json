@@ -33,7 +33,7 @@
       "tooltip": "Infobulle"
     },
     "calendar": {
-      "dateFormat": "AAAA-MM-JJ",
+      "dateFormat": "JJ/MM/AAAA",
       "selectDate": "Sélectionnez la date",
       "useCursorKeysToNavigateCalendarDates": "Utiliser les touches de curseur pour naviguer parmi les dates du calendrier"
     },
@@ -105,6 +105,7 @@
       "fromDate": "De",
       "items": "%{count} éléments",
       "itemsPerPage": "Eléments par page",
+      "loading": "Chargement en cours...",
       "selectAll": "Sélectionner tout",
       "selectedItems": "%{filterCount} éléments sur %{count}",
       "selectItem": "Sélectionner l'article",
@@ -389,10 +390,10 @@
       "errorReplaceCertificate": "Erreur lors du remplacement du certificat.",
       "errorGenerateCsr": "Erreur de génération de la demande de signature de certificat (CSR).",
       "successAddCertificate": "Certificat %{certificate} ajouté.",
-      "successAddedHTTPCertificate": "Certificat %{certificate} ajouté. Rechargez la page du navigateur pour voir les modifications.",
+      "successAddedHTTPCertificate": "Certificat %{certificate} ajouté. Actualisez la page du navigateur pour accéder au nouveau certificat.",
       "successDeleteCertificate": "Certificat %{certificate} supprimé.",
       "successReplaceCertificate": "Certificat %{certificate} remplacé.",
-      "successReplacedHTTPCertificate": "Certificat %{certificate} remplacé. Rechargez la page du navigateur pour voir les modifications."
+      "successReplacedHTTPCertificate": "Certificat %{certificate} remplacé. Actualisez la page du navigateur pour accéder au nouveau certificat."
     }
   },
   "pageChangePassword": {
@@ -410,6 +411,7 @@
       "message": "Pour changer le mode d'affichage de la date et de l'heure (horaire décalé du navigateur ou UTC), voir ",
       "messageText": "Pour modifier le mode d'affichage de la date et de l'heure (UTC ou décalage du navigateur) dans l'application, consultez les paramètres de profil",
       "messageNtp": "Si NTP est sélectionné mais qu'aucun serveur NTP n'est indiqué ou que le serveur NTP indiqué n'est pas accessible, c'est time.google.com qui est utilisé.",
+      "alertNtp": "Si une partition de référence temporelle (TRP) est configurée sur ce serveur, alors que le mode NTP est activé, l'heure de l'hyperviseur et celle du contrôleur BMC sont gérées indépendamment, ce qui peut entraîner une dérive de l'horloge.",
       "messagePowerOff": "Le serveur doit être mis hors tension pour que la date et l'heure soient modifiées en mode manuel ou NTP.",
       "mfaMessage": "La modification de la date et de l'heure affectera les utilisateurs de MFA."
     },
@@ -806,6 +808,7 @@
       "errorActivation": "Erreur lors du démarrage de l'activation du microprogramme.",
       "errorUpdateFirmware": "Erreur lors du démarrage de la mise à jour du microprogramme.",
       "errorUploadFirmware": "Erreur lors du téléchargement du microprogramme.",
+      "errorUploadFirmwareAlreadyExists": "Erreur lors du chargement du microprogramme : cette version existe déjà dans le système.",
       "rebootStarted": "La réamorçage a démarré",
       "rebootStartedMessage": "Le reamorçage a démarré à partir de l'image de sauvegarde. Le réamorçage peut prendre plusieurs minutes.",
       "taskComplete": "Tâche terminée",
@@ -1138,7 +1141,7 @@
     "username": "Nom d'utilisateur",
     "alert": {
       "unauthorizedMessage": "Utilisateur non autorisé",
-      "message": "Nom d'utilisateur ou mot de passe non valide"
+      "message": "Données d'identification non valides"
     },
     "modal": {
       "addNewAcfCertificate": "Ajouter un nouveau certificat ACF",
@@ -1378,6 +1381,8 @@
   "pagePolicies": {
     "acfUploadEnablement": "Activation du téléchargement ACF non authentifié",
     "acfUploadEnablementDescription": "Autoriser les utilisateurs non authentifiés à télécharger des fichiers ACF.",
+    "basicAuth": "Authentification de base",
+    "basicAuthDescription": "Ainsi, l'administrateur BMC peut désactiver la méthode d'authentification de base HTTP, afin que l'interface HTTPS de BMC n'accepte plus l'authentification via cette méthode.",
     "hostTpm": "Module TPM hôte",
     "hostTpmDescription": "Activez cette option pour vous assurer que le système n'est réamorcé que lorsque le module TPM est fonctionnel.",
     "hostUsb": "Activation du port USB hôte",
@@ -1399,11 +1404,19 @@
       "successEnableBmcShell": "L'activation du shell BMC (via SSH) a abouti.",
       "successNetworkPolicyUpdate": "La mise à jour de %{policy} a abouti.",
       "successIpmiNetworkPolicyUpdate": "La mise à jour de %{policy} a abouti. Le BMC prend normalement environ 30 secondes pour changer l'état.",
-      "successNextBootToast": "Application des modifications à %{policy}. Les modifications apportées à %{policy} prendront effet lors du prochain redémarrage."
+      "successNextBootToast": "Application des modifications à %{policy}. Les modifications apportées à %{policy} prendront effet lors du prochain redémarrage.",
+      "successNetworkPolicyEnable": "%{policy} a été activé avec succès.",
+      "successNetworkPolicyDisable": "% {policy} a été désactivé avec succès."
     },
     "acfUploadEnablementConfirmText": "Attention : l'activation de ce paramètre supprime la condition d'accès physique au système dans le processus de téléchargement d'un fichier de contrôle d'accès (ACF).  Ainsi, les personnes autorisée à demander un ACF et disposant d'un accès réseau à ASMI peuvent accéder au compte administrateur.  des infos utilisateur ou de groupe. Voulez-vous poursuivre ?",
     "vtpm": "Module VirtualTPM",
-    "vtpmDescription": "Si vous activez vTPM, un module TPM devient disponible sur le système d'exploitation invité."
+    "vtpmDescription": "Si vous activez vTPM, un module TPM devient disponible sur le système d'exploitation invité.",
+    "sendServiceAlerts": "Envoyer des alertes de service",
+    "sendServiceAlertsDescription": "Cette propriété indique si des alertes de maintenance doivent être envoyées lorsque des événements d'isolement matériel se produisent.",
+    "modal": {
+      "message1": "La désactivation de l’option Envoyer une alerte de service supprime le code SRC Alerte de service (BD50F138). Le problème sous-jacent doit encore être traité.",
+      "message2": "Remarque : si un nouveau problème est détecté, la fonction Envoyer une alerte de service sera automatiquement réactivée, et les alertes reprendront."
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
@@ -1961,6 +1974,7 @@
       "errorBatchEnable": "Erreur lors de l'activation d'%{count} utilisateur. | Erreur lors de l'activation de %{count} utilisateurs.",
       "errorClearSecretKey": "Erreur lors de l'effacement de la clé secrète",
       "errorCreateUser": "Erreur lors de la création de l'utilisateur '%{username}'.",
+      "errorCreateUserAlreadyExists": "Erreur lors de la création de l'utilisateur '%{username}'. Cet utilisateur existe déjà.",
       "errorCreateUserMaxUsers": "Erreur lors de la création de l'utilisateur '%{username}' car ce système a atteint le nombre maximal d'utilisateurs autorisés.",
       "errorCreateUserPasswordNotAccepted": "Erreur lors de la création de l'utilisateur '%{username}' car le mot de passe n'a pas été accepté.",
       "errorDeleteUser": "Erreur lors de la suppression de l'utilisateur '%{username}'.",
