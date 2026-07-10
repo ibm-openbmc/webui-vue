@@ -33,7 +33,7 @@
       "tooltip": "ツールチップ"
     },
     "calendar": {
-      "dateFormat": "YYYY-MM-DD",
+      "dateFormat": "DD/MM/YYYY",
       "selectDate": "日付の選択",
       "useCursorKeysToNavigateCalendarDates": "日付を移動するにはカーソル・キーを使用します"
     },
@@ -105,6 +105,7 @@
       "fromDate": "開始日",
       "items": "%{count} 項目",
       "itemsPerPage": "1 ページあたりの部品",
+      "loading": "ロード中...",
       "selectAll": "すべて選択",
       "selectedItems": "%{count} アイテムの%{filterCount} %",
       "selectItem": "項目の選択",
@@ -389,10 +390,10 @@
       "errorReplaceCertificate": "認証の置き換え中にエラーが発生しました。",
       "errorGenerateCsr": "CSR 生成エラー。",
       "successAddCertificate": "%{certificate}が正常に追加されました。",
-      "successAddedHTTPCertificate": "%{certificate}が正常に追加されました。 ブラウザー・ページを再ロードして変更を確認します。",
+      "successAddedHTTPCertificate": "%{certificate}が正常に追加されました。 新しい証明書を使用するには、ブラウザーのページを再ロードしてください。",
       "successDeleteCertificate": "%{certificate}が正常に削除されました。",
       "successReplaceCertificate": "%{certificate}を正常に置換されました。",
-      "successReplacedHTTPCertificate": "%{certificate}を正常に置換されました。 ブラウザー・ページを再ロードして変更を確認します。"
+      "successReplacedHTTPCertificate": "%{certificate}を正常に置換されました。 新しい証明書を使用するには、ブラウザーのページを再ロードしてください。"
     }
   },
   "pageChangePassword": {
@@ -410,6 +411,7 @@
       "message": "アプリケーション全体で日付と時刻の表示方法 (UTC またはブラウザ・オフセット) を変更するには、次のリンクをクリックします: ",
       "messageText": "アプリケーション全体での日時の表示方法 (UTC またはブラウザーのオフセット) を変更するには、「プロファイル設定 (Profile Settings)」にアクセスしてください。",
       "messageNtp": "NTP が選択されているが、NTP サーバーが指定されていない場合、または指定された NTP サーバーに到達できない場合は、time.google.com が使用されます。",
+      "alertNtp": "NTPモードが有効になっている状態で、このサーバーにタイム・リファレンス・パーティション (TRP) が設定されていると、ハイパーバイザーの時刻とBMCの時刻が独立してしまい、時刻のずれが生じる可能性があります。",
       "messagePowerOff": "日時を手動または NTP に変更するには、サーバーの電源をオフにする必要があります。",
       "mfaMessage": "日付と時刻を変更すると、MFA ユーザーに影響します。"
     },
@@ -806,6 +808,7 @@
       "errorActivation": "ファームウェア活動化の開始中にエラーが発生しました。",
       "errorUpdateFirmware": "ファームウェアアップデートの開始中にエラーが発生しました。",
       "errorUploadFirmware": "ファームウェアのアップロード中にエラーが発生しました。",
+      "errorUploadFirmwareAlreadyExists": "このバージョンのファームウェアはシステムにすでに存在するため、アップロードできません。",
       "rebootStarted": "リブートが開始しました。",
       "rebootStartedMessage": "バックアップ・イメージから正常にリブートしました。 リブートが完了するまで数分かかるかもしれません。",
       "taskComplete": "タスク完了",
@@ -1138,7 +1141,7 @@
     "username": "ユーザー名",
     "alert": {
       "unauthorizedMessage": "無許可のユーザー",
-      "message": "ユーザー名またはパスワードが無効です"
+      "message": "資格情報が無効です"
     },
     "modal": {
       "addNewAcfCertificate": "新しいACF証明書を追加",
@@ -1378,6 +1381,8 @@
   "pagePolicies": {
     "acfUploadEnablement": "非認証ACFアップロードの有効化",
     "acfUploadEnablementDescription": "非認証ユーザーにACFのアップロードを許可します。",
+    "basicAuth": "基本認証",
+    "basicAuthDescription": "これにより、BMC管理者はHTTPの基本認証方式を無効にすることができ、BMCのHTTPSインターフェースでは基本認証方式による認証を受け付けなくなります。",
     "hostTpm": "ホスト TPM",
     "hostTpmDescription": "TPM が機能しているときにのみシステムがブートするように有効にします。",
     "hostUsb": "ホスト USB の有効化",
@@ -1399,11 +1404,19 @@
       "successEnableBmcShell": "BMC シェルが (SSH 経由で) 正常に有効になりました。",
       "successNetworkPolicyUpdate": "%{policy} が正常に更新されました。",
       "successIpmiNetworkPolicyUpdate": "%{policy} が正常に更新されました。 BMC は通常、状態を変更するのに約 30 秒かかります。",
-      "successNextBootToast": "%{policy} に変更を適用しています。 %{policy} に対して行われた変更は、次回のリブート時に有効になります。"
+      "successNextBootToast": "%{policy} に変更を適用しています。 %{policy} に対して行われた変更は、次回のリブート時に有効になります。",
+      "successNetworkPolicyEnable": "%{policy}が正常に有効化されました。",
+      "successNetworkPolicyDisable": "%{policy}が正常に無効化されました。"
     },
     "acfUploadEnablementConfirmText": "注意: この設定を有効にすると、アクセス制御ファイル (ACF) をアップロードするプロセスから物理的なシステム・アクセス要件が削除されます。  これにより、ACF をリクエストする権限を持ち、ASMI にネットワーク・アクセスできる人なら誰でも、管理者アカウントにアクセスできるようになります。  続行しますか?",
     "vtpm": "仮想 TPM",
-    "vtpmDescription": "vTPM を有効にすると、ゲスト・オペレーティング・システムで TPM が使用できるようになります。"
+    "vtpmDescription": "vTPM を有効にすると、ゲスト・オペレーティング・システムで TPM が使用できるようになります。",
+    "sendServiceAlerts": "サービス・アラートの送信",
+    "sendServiceAlertsDescription": "このプロパティは、ハードウェアの分離イベントが発生した際にサービス・アラートを送信するかどうかを指定します。",
+    "modal": {
+      "message1": "「サービス・アラートの送信」を無効にすると、サービス・アラートSRC (BD50F138) が抑制されます。 根本的な問題については、依然として対処する必要があります。",
+      "message2": "注: 新たな問題が検出された場合、「サービス・アラートの送信」機能が自動的に再有効化され、アラートの送信が再開されます。"
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
@@ -1961,6 +1974,7 @@
       "errorBatchEnable": "%{count} ユーザーの有効化でエラーが発生しました。 |%{count} ユーザーの有効化中にエラーが発生しました。",
       "errorClearSecretKey": "秘密鍵の消去エラー",
       "errorCreateUser": "ユーザー 「%{username}」 の作成中にエラーが発生しました。",
+      "errorCreateUserAlreadyExists": "ユーザー 「%{username}」 の作成中にエラーが発生しました。 ユーザーはすでに存在します。",
       "errorCreateUserMaxUsers": "このシステムの最大許容ユーザー数に達したため、ユーザー '%{username}' の作成中にエラーが発生しました。",
       "errorCreateUserPasswordNotAccepted": "パスワードが受け入れられなかったため、ユーザー '%{username}' の作成中にエラーが発生しました。",
       "errorDeleteUser": "ユーザー「%{username}」の削除中にエラーが発生しました。",
