@@ -33,7 +33,7 @@
       "tooltip": "工具提示"
     },
     "calendar": {
-      "dateFormat": "YYYY-MM-DD",
+      "dateFormat": "YYYY/MM/DD",
       "selectDate": "選取日期",
       "useCursorKeysToNavigateCalendarDates": "使用游標鍵來導覽行事曆日期"
     },
@@ -105,6 +105,7 @@
       "fromDate": "起始日期",
       "items": "%{count} 個項目",
       "itemsPerPage": "每頁項目數",
+      "loading": "正在載入...",
       "selectAll": "全選",
       "selectedItems": "%{filterCount} /%{count} 個項目",
       "selectItem": "選取項目",
@@ -389,10 +390,10 @@
       "errorReplaceCertificate": "取代憑證時發生錯誤。",
       "errorGenerateCsr": "產生 CSR 時發生錯誤。",
       "successAddCertificate": "已順利新增 %{certificate}。",
-      "successAddedHTTPCertificate": "已順利新增 %{certificate}。 重新載入瀏覽器頁面以查看變更。",
+      "successAddedHTTPCertificate": "已順利新增 %{certificate}。 重新載入瀏覽器頁面以使用新的憑證。",
       "successDeleteCertificate": "已順利刪除 %{certificate}。",
       "successReplaceCertificate": "已順利取代 %{certificate}。",
-      "successReplacedHTTPCertificate": "已順利取代 %{certificate}。 重新載入瀏覽器頁面以查看變更。"
+      "successReplacedHTTPCertificate": "已順利取代 %{certificate}。 重新載入瀏覽器頁面以使用新的憑證。"
     }
   },
   "pageChangePassword": {
@@ -410,6 +411,7 @@
       "message": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪： ",
       "messageText": "若要變更整個應用程式中顯示日期和時間的方式（UTC 或瀏覽器偏移），請造訪「設定檔設定」",
       "messageNtp": "如果已選取 NTP，但未提供 NTP 伺服器，或無法連接給定的 NTP 伺服器，則會使用 time.google.com。",
+      "alertNtp": "若在此伺服器上啟用 NTP 模式時已設定「時間參照分割區 (TRP)」，將導致 Hypervisor 時間與 BMC 時間相互獨立，進而可能造成時間漂移",
       "messagePowerOff": "必須關閉伺服器電源，才能將日期和時間變更為手動或 NTP。",
       "mfaMessage": "變更日期和時間會影響 MFA 使用者。"
     },
@@ -806,6 +808,7 @@
       "errorActivation": "開始韌體啟動時發生錯誤。",
       "errorUpdateFirmware": "啟動韌體更新時發生錯誤。",
       "errorUploadFirmware": "上傳韌體時發生錯誤。",
+      "errorUploadFirmwareAlreadyExists": "上傳韌體時發生錯誤，因為系統中已經存在該版本。",
       "rebootStarted": "已啟動重新開機",
       "rebootStartedMessage": "已順利從備份映像檔啟動重新開機。 重新開機可能需要數分鐘才能完成。",
       "taskComplete": "作業完成",
@@ -1138,7 +1141,7 @@
     "username": "使用者名稱",
     "alert": {
       "unauthorizedMessage": "使用者未獲授權",
-      "message": "使用者名稱或密碼無效"
+      "message": "認證無效"
     },
     "modal": {
       "addNewAcfCertificate": "新增 ACF 憑證",
@@ -1378,6 +1381,8 @@
   "pagePolicies": {
     "acfUploadEnablement": "啟用未經鑑別的 ACF 上傳",
     "acfUploadEnablementDescription": "容許未經鑑別的使用者上傳 ACF。",
+    "basicAuth": "管理者鑑別",
+    "basicAuthDescription": "此設定可讓 BMC 管理者停用 HTTP 基本鑑別方法，因此 BMC 的 HTTPS 介面將不再接受透過基本鑑別方法進行的鑑別。",
     "hostTpm": "主機 TPM",
     "hostTpmDescription": "啟用以確保只有在 TPM 正常運作時系統才會開機。",
     "hostUsb": "主機 USB 啟用",
@@ -1399,11 +1404,19 @@
       "successEnableBmcShell": "已順利啟用 BMC Shell（透過 SSH）。",
       "successNetworkPolicyUpdate": "已順利更新 %{policy}。",
       "successIpmiNetworkPolicyUpdate": "已順利更新 %{policy}。 BMC 通常需要大約 30 秒來變更狀態。",
-      "successNextBootToast": "正在將變更套用至 %{policy}。 對 %{policy} 所做的變更將在下一次重新開機時生效。"
+      "successNextBootToast": "正在將變更套用至 %{policy}。 對 %{policy} 所做的變更將在下一次重新開機時生效。",
+      "successNetworkPolicyEnable": "已成功啟用 %{policy}。",
+      "successNetworkPolicyDisable": "已成功停用 %{policy}。"
     },
     "acfUploadEnablementConfirmText": "注意：啟用此設定會移除上傳存取控制檔案 (ACF) 過程中的實體系統存取要求。  這將容許任何獲授權要求 ACF 且具有 ASMI 網路存取權的人員取得管理帳戶的存取權。  您要繼續嗎？",
     "vtpm": "VirtualTPM",
-    "vtpmDescription": "啟用 vTPM 會使 TPM 可供訪客作業系統使用。"
+    "vtpmDescription": "啟用 vTPM 會使 TPM 可供訪客作業系統使用。",
+    "sendServiceAlerts": "傳送服務警示",
+    "sendServiceAlertsDescription": "此內容將指示在發生硬體隔離事件時，是否應傳送服務警示。",
+    "modal": {
+      "message1": "停用「傳送服務警示」功能將會抑制服務警示 SRC (BD50F138)。 基本問題仍然必須加以解決。",
+      "message2": "附註：若偵測到新問題，「傳送服務警示」功能將自動重新啟用，並回復傳送警示。"
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
@@ -1961,6 +1974,7 @@
       "errorBatchEnable": "啟用 %{count} 使用者時發生錯誤。 | 啟用 %{count} 使用者時發生錯誤。",
       "errorClearSecretKey": "清除秘密金鑰時發生錯誤",
       "errorCreateUser": "建立使用者 '%{username}' 時發生錯誤。",
+      "errorCreateUserAlreadyExists": "建立使用者 '%{username}' 時發生錯誤。 使用者已存在。",
       "errorCreateUserMaxUsers": "建立使用者 '%{username}' 時發生錯誤，因為此系統已達到容許的使用者數量上限。",
       "errorCreateUserPasswordNotAccepted": "建立使用者 '%{username}' 時發生錯誤，因為未接受密碼。",
       "errorDeleteUser": "刪除使用者 '%{username}' 時發生錯誤。",
