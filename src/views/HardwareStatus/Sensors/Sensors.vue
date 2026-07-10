@@ -244,6 +244,7 @@ const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
 const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
 const tableRef = ref(null);
 const activeFiltersRows = ref([]);
+// Use isFetching for table busy state (includes background refetches)
 const isBusy = computed(() => isSensorsFetching.value);
 const searchFilterInput = ref('');
 
