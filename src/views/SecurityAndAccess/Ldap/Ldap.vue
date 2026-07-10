@@ -332,7 +332,7 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, { formLdap });
 
-const isBusy = computed(() => isLoading.value || isFetching.value);
+const isBusy = computed(() => isLoading.value);
 
 const sslCertificates = computed(() => {
   return certificatesStore.allCertificatesGetter;

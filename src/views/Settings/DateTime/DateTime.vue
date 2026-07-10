@@ -617,6 +617,11 @@ const submitForm = () => {
       }
     })
     .catch(() => {
+      // Revert to original configuration when save fails
+      form.value.configurationSelected = isNtpProtocolEnabled.value
+        ? 'ntp'
+        : 'manual';
+      setNtpValues();
       v$.value.form.$reset();
       endLoader();
     });

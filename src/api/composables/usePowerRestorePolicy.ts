@@ -106,8 +106,16 @@ export function usePowerRestorePolicy() {
   // Set power restore policy mutation
   const setPolicyMutation = useMutation({
     mutationFn: async (powerPolicy: string): Promise<void> => {
-      const data = { PowerRestorePolicy: powerPolicy };
-      await api.patch('/redfish/v1/Systems/system', data);
+      try {
+        const data = { PowerRestorePolicy: powerPolicy };
+        await api.patch('/redfish/v1/Systems/system', data);
+      } catch (error) {
+        throw {
+          message: i18n.global.t(
+            'pagePowerRestorePolicy.toast.errorSaveSettings',
+          ),
+        };
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -116,10 +124,6 @@ export function usePowerRestorePolicy() {
     },
     onError: (error: any) => {
       console.error('Error setting power restore policy:', error);
-      const message = i18n.global.t(
-        'pagePowerRestorePolicy.toast.errorSaveSettings',
-      );
-      throw new Error(message);
     },
   });
 
