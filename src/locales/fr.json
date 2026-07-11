@@ -1406,7 +1406,7 @@
       "successIpmiNetworkPolicyUpdate": "La mise à jour de %{policy} a abouti. Le BMC prend normalement environ 30 secondes pour changer l'état.",
       "successNextBootToast": "Application des modifications à %{policy}. Les modifications apportées à %{policy} prendront effet lors du prochain redémarrage.",
       "successNetworkPolicyEnable": "%{policy} a été activé avec succès.",
-      "successNetworkPolicyDisable": "% {policy} a été désactivé avec succès."
+      "successNetworkPolicyDisable": "%{policy} a été désactivé avec succès."
     },
     "acfUploadEnablementConfirmText": "Attention : l'activation de ce paramètre supprime la condition d'accès physique au système dans le processus de téléchargement d'un fichier de contrôle d'accès (ACF).  Ainsi, les personnes autorisée à demander un ACF et disposant d'un accès réseau à ASMI peuvent accéder au compte administrateur.  des infos utilisateur ou de groupe. Voulez-vous poursuivre ?",
     "vtpm": "Module VirtualTPM",
