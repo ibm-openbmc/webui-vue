@@ -288,6 +288,8 @@ onBeforeMount(() => {
     loadAccountSettings(),
     certificatesStore.getCertificates(),
   ]).finally(() => {
+    // Set the ldapAuthenticationEnabled based on the actual service state
+    formLdap.ldapAuthenticationEnabled = isServiceEnabled.value;
     setFormValues();
   });
 });
@@ -385,6 +387,26 @@ watch(
   () => {
     setFormValues();
   },
+);
+
+watch(
+  () => ldapSettings.value,
+  () => {
+    if (!isActiveDirectoryEnabled.value) {
+      setFormValues();
+    }
+  },
+  { deep: true },
+);
+
+watch(
+  () => activeDirectorySettings.value,
+  () => {
+    if (isActiveDirectoryEnabled.value) {
+      setFormValues();
+    }
+  },
+  { deep: true },
 );
 
 function setFormValues(serviceType) {

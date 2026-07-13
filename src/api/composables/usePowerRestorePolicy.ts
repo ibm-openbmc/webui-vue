@@ -86,7 +86,11 @@ export function usePowerRestorePolicy() {
   const currentPolicyQuery = usePropertyFromCollection<
     SystemResource,
     'PowerRestorePolicy'
-  >('/redfish/v1/Systems', 'PowerRestorePolicy');
+  >('/redfish/v1/Systems', 'PowerRestorePolicy', {
+    queryConfig: RedfishQueryPresets.sensors as Partial<
+      UseQueryOptions<SystemResource[]>
+    >,
+  });
 
   // Fetch BIOS attributes for operating mode check
   const biosQuery = useRedfishResource<BiosAttributes>(

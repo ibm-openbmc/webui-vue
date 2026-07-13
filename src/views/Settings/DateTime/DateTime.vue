@@ -505,6 +505,9 @@ const v$ = useVuelidate(rules, { form });
 watch(ntpServers, () => {
   setInitialNtpValues();
 });
+watch(isNtpProtocolEnabled, () => {
+  setInitialNtpValues();
+});
 watch(manualDate, () => {
   emitChange();
 });

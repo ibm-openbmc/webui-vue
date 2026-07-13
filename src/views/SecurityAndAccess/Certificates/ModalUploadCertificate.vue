@@ -193,8 +193,10 @@ watch(
     v$.value.form.file.$touch();
   },
 );
+// Only set initial certificateType when modal opens and form is empty
+// Don't reset on data refetch to preserve user's selection
 watch(certificateOptions, (options) => {
-  if (options.length) {
+  if (options.length && !form.value.certificateType && modal.value) {
     form.value.certificateType = options[0].value;
   }
 });

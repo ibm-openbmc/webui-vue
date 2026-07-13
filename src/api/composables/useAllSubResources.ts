@@ -313,13 +313,18 @@ export function usePropertyFromCollection<
 >(
   collectionPath: string,
   propertyKey: K,
-  options: { enabled?: boolean; expand?: boolean } = {},
+  options: {
+    enabled?: boolean;
+    expand?: boolean;
+    queryConfig?: Partial<UseQueryOptions<T[]>>;
+  } = {},
 ) {
-  const { enabled = true, expand = false } = options;
+  const { enabled = true, expand = false, queryConfig } = options;
 
   const collectionQuery = useRedfishCollection<T>(collectionPath, {
     enabled,
     expand,
+    queryConfig,
   });
 
   const propertyValue = computed(() => {
@@ -339,7 +344,8 @@ export function usePropertyFromCollection<
   return {
     data: propertyValue,
     allResources: collectionQuery.data,
-    isLoading: collectionQuery.isFetching,
+    isLoading: collectionQuery.isLoading,
+    isFetching: collectionQuery.isFetching,
     error: collectionQuery.error,
     isError: collectionQuery.isError,
     refetch: collectionQuery.refetch,
