@@ -55,12 +55,12 @@ export const SessionsStore = defineStore('sessions', {
       }
 
       // Disconnect other sessions first
-      const promises = otherSessions.map((uri) =>
+      const promises = otherSessions.map((uri) => {
         api.delete(uri).catch((error) => {
           console.log(error);
           return error;
-        }),
-      );
+        });
+      });
 
       // If current session is in the list, disconnect it last
       if (currentSession) {
