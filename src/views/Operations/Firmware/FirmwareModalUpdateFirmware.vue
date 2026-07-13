@@ -30,9 +30,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import eventBus from '@/eventBus';
-import stores from '@/store';
-
-const firmwareStore = stores.FirmwareStore();
+import { useFirmware } from '@/api/composables/useFirmware';
 
 const modal = ref(false);
 
@@ -40,15 +38,14 @@ eventBus.on('modal-update-firmware', () => {
   modal.value = true;
 });
 
+// Use VueQuery composable to get firmware data
+const { activeBmcFirmware, isSingleFileUploadEnabled } = useFirmware();
+
 const runningBmc = computed(() => {
-  return firmwareStore.activeBmcFirmware;
+  return activeBmcFirmware.value;
 });
 
 const runningBmcVersion = computed(() => {
   return runningBmc.value?.version || '--';
-});
-
-const isSingleFileUploadEnabled = computed(() => {
-  return firmwareStore.isSingleFileUploadEnabled;
 });
 </script>
