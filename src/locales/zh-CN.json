@@ -33,7 +33,7 @@
       "tooltip": "工具提示"
     },
     "calendar": {
-      "dateFormat": "YYYY-MM-DD",
+      "dateFormat": "DD/MM/YYYY",
       "selectDate": "选择日期",
       "useCursorKeysToNavigateCalendarDates": "使用光标键浏览日历日期"
     },
@@ -105,6 +105,7 @@
       "fromDate": "起始日期",
       "items": "%{count} 项",
       "itemsPerPage": "项/页",
+      "loading": "正在加载...",
       "selectAll": "全选",
       "selectedItems": "%{filterCount} 项（共 %{count} 项）",
       "selectItem": "选择项目",
@@ -389,10 +390,10 @@
       "errorReplaceCertificate": "替换证书时出错。",
       "errorGenerateCsr": "生成 CSR 时出错。",
       "successAddCertificate": "已成功添加 %{certificate}。",
-      "successAddedHTTPCertificate": "已成功添加 %{certificate}。 重新装入浏览器页面以查看更改。",
+      "successAddedHTTPCertificate": "已成功添加 %{certificate}。 请重新加载浏览器页面以使用新证书。",
       "successDeleteCertificate": "已成功删除 %{certificate}。",
       "successReplaceCertificate": "已成功替换 %{certificate}。",
-      "successReplacedHTTPCertificate": "已成功替换 %{certificate}。 重新装入浏览器页面以查看更改。"
+      "successReplacedHTTPCertificate": "已成功替换 %{certificate}。 请重新加载浏览器页面以使用新证书。"
     }
   },
   "pageChangePassword": {
@@ -410,6 +411,7 @@
       "message": "要更改整个应用程序中日期和时间的显示方式（UTC 或浏览器偏移量），请访问 ",
       "messageText": "要更改整个应用程序中日期和时间的显示方式（UTC 或浏览器偏移量），请访问“概要文件设置”",
       "messageNtp": "如果选择了 NTP，但未提供 NTP 服务器，或者无法访问给定的 NTP 服务器，那么将使用 time.google.com。",
+      "alertNtp": "如果在启用 NTP 模式时在此服务器上设置了时间参考分区 (TRP)，将导致 Hypervisor（虚拟机监控程序）时间与 BMC 时间相互独立，进而可能引发时间漂移。",
       "messagePowerOff": "必须关闭服务器电源才能将日期和时间更改为手动或 NTP。",
       "mfaMessage": "更改日期和时间会影响 MFA 用户。"
     },
@@ -806,6 +808,7 @@
       "errorActivation": "开始激活固件时出错。",
       "errorUpdateFirmware": "启动固件更新时出错。",
       "errorUploadFirmware": "上载固件时出错。",
+      "errorUploadFirmwareAlreadyExists": "固件上传失败，该版本已存在于系统中。",
       "rebootStarted": "已启动重新引导",
       "rebootStartedMessage": "已成功从备份映像启动重新引导。 重新引导可能需要几分钟才能完成。",
       "taskComplete": "任务完成",
@@ -1138,7 +1141,7 @@
     "username": "用户名",
     "alert": {
       "unauthorizedMessage": "用户未经授权",
-      "message": "用户名或密码无效"
+      "message": "凭证无效"
     },
     "modal": {
       "addNewAcfCertificate": "添加新的ACF证书",
@@ -1378,6 +1381,8 @@
   "pagePolicies": {
     "acfUploadEnablement": "允许未认证的 ACF 上载",
     "acfUploadEnablementDescription": "允许未认证用户上载 ACF。",
+    "basicAuth": "基本认证",
+    "basicAuthDescription": "此选项允许 BMC 管理员禁用 HTTP 基本身份验证方法，禁用后，HTTPS 接口将不再接受通过基本验证方法进行的身份验证。",
     "hostTpm": "主机 TPM",
     "hostTpmDescription": "启用以确保系统仅在 TPM 正常运行时引导。",
     "hostUsb": "主机 USB 支持",
@@ -1399,11 +1404,19 @@
       "successEnableBmcShell": "已成功启用 BMC shell（通过 SSH）。",
       "successNetworkPolicyUpdate": "已成功更新 %{policy}。",
       "successIpmiNetworkPolicyUpdate": "已成功更新 %{policy}。 BMC 通常需要大约 30 秒来改变状态。",
-      "successNextBootToast": "正在将更改应用于 %{policy}。 对 %{policy} 所作的更改将在下一次重新引导时生效。"
+      "successNextBootToast": "正在将更改应用于 %{policy}。 对 %{policy} 所作的更改将在下一次重新引导时生效。",
+      "successNetworkPolicyEnable": "已成功启用 %{policy}。",
+      "successNetworkPolicyDisable": "已成功禁用 %{policy}。"
     },
     "acfUploadEnablementConfirmText": "注意：启用此设置可从上传访问控制文件 (ACF) 的过程中移除物理系统访问要求。  这将使任何有权申请 ACF 并拥有 ASMI 网络访问权限的人都能够访问管理员账户。  要继续吗？",
     "vtpm": "VirtualTPM",
-    "vtpmDescription": "启用 vTPM 使 TPM 可供访客操作系统使用。"
+    "vtpmDescription": "启用 vTPM 使 TPM 可供访客操作系统使用。",
+    "sendServiceAlerts": "发送服务警报",
+    "sendServiceAlertsDescription": "此属性用于指示在发生硬件隔离事件时，是否应发送服务警报。",
+    "modal": {
+      "message1": "禁用“发送服务警报”将屏蔽服务警报 SRC (BD50F138)。 但仍必须解决导致该警报的根本问题。",
+      "message2": "注意：如果检测到新问题，“发送服务警报”将自动重新启用，并恢复发送警报。"
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
@@ -1961,6 +1974,7 @@
       "errorBatchEnable": "启用 %{count} 用户时出错。| 启用 %{count} 个用户时出错。",
       "errorClearSecretKey": "清除私钥时出错",
       "errorCreateUser": "创建用户“%{username}”时出错。",
+      "errorCreateUserAlreadyExists": "创建用户“%{username}”时出错。 用户已存在。",
       "errorCreateUserMaxUsers": "创建用户 \"%{username}\" 时出错，因为此系统已达到允许的最大用户数。",
       "errorCreateUserPasswordNotAccepted": "创建用户 \"%{username}\" 时出错，因为密码错误。",
       "errorDeleteUser": "删除用户“%{username}”时出错。",
