@@ -33,7 +33,7 @@
       "tooltip": "QuickInfo"
     },
     "calendar": {
-      "dateFormat": "JJJJ-MM-TT",
+      "dateFormat": "TT/MM/JJJJ",
       "selectDate": "Datum auswählen",
       "useCursorKeysToNavigateCalendarDates": "Cursortasten zum Navigieren in Kalenderdaten verwenden"
     },
@@ -105,6 +105,7 @@
       "fromDate": "Ab Datum",
       "items": "%{count} Elemente",
       "itemsPerPage": "Elemente pro Seite",
+      "loading": "Ladevorgang läuft...",
       "selectAll": "Alles auswählen",
       "selectedItems": "%{filterCount} von %{count} Elementen",
       "selectItem": "Artikel auswählen",
@@ -389,10 +390,10 @@
       "errorReplaceCertificate": "Fehler beim Ersetzen des Zertifikats.",
       "errorGenerateCsr": "Fehler bei der Erstellung der CSR.",
       "successAddCertificate": "%{certificate} wurde erfolgreich hinzugefügt.",
-      "successAddedHTTPCertificate": "%{certificate} wurde erfolgreich hinzugefügt. Laden Sie die Browserseite erneut, um die Änderungen anzuzeigen.",
+      "successAddedHTTPCertificate": "%{certificate} wurde erfolgreich hinzugefügt. Laden Sie die Browserseite neu, um das neue Zertifikat zu verwenden.",
       "successDeleteCertificate": "%{certificate} wurde erfolgreich gelöscht.",
       "successReplaceCertificate": "%{certificate} wurde erfolgreich ersetzt.",
-      "successReplacedHTTPCertificate": "%{certificate} wurde erfolgreich ersetzt. Laden Sie die Browserseite erneut, um die Änderungen anzuzeigen."
+      "successReplacedHTTPCertificate": "%{certificate} wurde erfolgreich ersetzt. Laden Sie die Browserseite neu, um das neue Zertifikat zu verwenden."
     }
   },
   "pageChangePassword": {
@@ -410,6 +411,7 @@
       "message": "Rufen Sie zum Ändern von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung die ",
       "messageText": "Um die Anzeige von Datum und Uhrzeit (UTC oder Browser-Offset) in der gesamten Anwendung zu ändern, rufen Sie die Profileinstellungen auf.",
       "messageNtp": "Wenn NTP ausgewählt ist, aber kein NTP-Server angegeben ist oder der angegebene NTP-Server nicht erreichbar ist, wird time.google.com verwendet.",
+      "alertNtp": "Wenn auf diesem Server bei aktiviertem NTP-Modus eine Zeitreferenzpartition (TRP) eingerichtet ist, kann dies zu einer unabhängigen Hypervisor- und BMC-Zeit führen, was eine Zeitabweichung zur Folge haben könnte.",
       "messagePowerOff": "Der Server muss ausgeschaltet werden, um Datum und Zeit in manuell oder NTP zu ändern.",
       "mfaMessage": "Die Änderung von Datum und Uhrzeit wirkt sich auf MFA-Benutzer aus."
     },
@@ -806,6 +808,7 @@
       "errorActivation": "Fehler beim Starten der Firmwareaktivierung.",
       "errorUpdateFirmware": "Fehler beim Starten des Firmware-Updates.",
       "errorUploadFirmware": "Fehler beim Hochladen der Firmware.",
+      "errorUploadFirmwareAlreadyExists": "Beim Hochladen der Firmware ist ein Fehler aufgetreten, weil diese Version bereits im System vorhanden ist.",
       "rebootStarted": "Warmstart gestartet",
       "rebootStartedMessage": "Warmstart über Sicherungsimage erfolgreich gestartet. Der Warmstart kann mehrere Minuten dauern.",
       "taskComplete": "Task abgeschlossen",
@@ -1138,7 +1141,7 @@
     "username": "Benutzername",
     "alert": {
       "unauthorizedMessage": "Benutzer nicht berechtigt",
-      "message": "Benutzername oder Kennwort ungültig"
+      "message": "Ungültige Berechtigungsnachweise"
     },
     "modal": {
       "addNewAcfCertificate": "Neues ACF-Zertifikat hinzufügen",
@@ -1378,6 +1381,8 @@
   "pagePolicies": {
     "acfUploadEnablement": "ACF-Upload durch nicht authentifizierte Benutzer zulassen",
     "acfUploadEnablementDescription": "Nicht authentifizierten Benutzern das Hochladen von ACFs erlauben.",
+    "basicAuth": "Basisauthentifizierung",
+    "basicAuthDescription": "Dadurch kann der BMC-Administrator die HTTP Basic-Authentifizierungsmethode inaktivieren, sodass die BMC-HTTPS-Schnittstelle keine Authentifizierung über die Basic-Auth-Methode mehr akzeptiert.",
     "hostTpm": "Host-TPM",
     "hostTpmDescription": "Aktivieren Sie diese Option, um sicherzustellen, dass das System nur neu startet, wenn das TPM funktionsfähig ist.",
     "hostUsb": "Host-USB-Aktivierung",
@@ -1399,11 +1404,19 @@
       "successEnableBmcShell": "BMC-Shell erfolgreich aktiviert (über SSH).",
       "successNetworkPolicyUpdate": "%{policy} erfolgreich aktualisiert.",
       "successIpmiNetworkPolicyUpdate": "%{policy} erfolgreich aktualisiert. Der BMC benötigt normalerweise etwa 30 Sekunden, um den Zustand zu ändern.",
-      "successNextBootToast": "Änderungen werden auf %{policy} angewendet. Änderungen an %{policy} werden beim nächsten Warmstart wirksam."
+      "successNextBootToast": "Änderungen werden auf %{policy} angewendet. Änderungen an %{policy} werden beim nächsten Warmstart wirksam.",
+      "successNetworkPolicyEnable": "%{policy} wurde erfolgreich aktiviert.",
+      "successNetworkPolicyDisable": "%{policy} wurde erfolgreich inaktiviert."
     },
     "acfUploadEnablementConfirmText": "Achtung! Durch die Aktivierung dieser Einstellung wird die Anforderung des physischen Systemzugriffs aus dem Prozess des Hochladens einer Zugriffskontrolldatei (ACF) entfernt.  Dies würde es jedem, der berechtigt ist, einen ACF anzufordern und Netzwerkzugang zu ASMI hat, ermöglichen, Zugriff auf das Administratorkonto zu erhalten.  Möchten Sie fortfahren?",
     "vtpm": "VirtualTPM",
-    "vtpmDescription": "Durch die Aktivierung von vTPM wird ein TPM für das Gastsystem verfügbar."
+    "vtpmDescription": "Durch die Aktivierung von vTPM wird ein TPM für das Gastsystem verfügbar.",
+    "sendServiceAlerts": "Service-Alerts senden",
+    "sendServiceAlertsDescription": "Diese Eigenschaft gibt an, ob Service-Alerts gesendet werden sollen, wenn Ereignisse im Zusammenhang mit der Hardware-Isolation auftreten.",
+    "modal": {
+      "message1": "Durch das Inaktivieren der Option 'Service-Alert senden' wird der Service-Alert-SRC (BD50F138) unterdrückt. Das zugrunde liegende Problem muss weiterhin angegangen werden.",
+      "message2": "Hinweis: Wenn ein neues Problem erkannt wird, wird die Funktion 'Service-Alert senden' automatisch wieder aktiviert und die Alerts werden fortgesetzt."
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
@@ -1961,6 +1974,7 @@
       "errorBatchEnable": "Fehler beim Aktivieren von %{count} Benutzer. | Fehler beim Aktivieren von %{count} Benutzern.",
       "errorClearSecretKey": "Fehler beim Löschen des geheimen Schlüssels",
       "errorCreateUser": "Fehler beim Erstellen des Benutzers '%{username}'.",
+      "errorCreateUserAlreadyExists": "Fehler beim Erstellen des Benutzers '%{username}'. Benutzer bereits vorhanden",
       "errorCreateUserMaxUsers": "Fehler beim Erstellen von Benutzer '%{username}', da dieses System die maximale Anzahl zulässiger Benutzer erreicht hat.",
       "errorCreateUserPasswordNotAccepted": "Fehler beim Erstellen des Benutzers '%{username}', da das Kennwort nicht akzeptiert wurde.",
       "errorDeleteUser": "Fehler beim Löschen des Benutzers '%{username}'.",
