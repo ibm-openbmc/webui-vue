@@ -33,7 +33,7 @@
       "tooltip": "Ayuda contextual"
     },
     "calendar": {
-      "dateFormat": "AAAA-MM-DD",
+      "dateFormat": "DD/MM/AAAA",
       "selectDate": "Seleccionar fecha",
       "useCursorKeysToNavigateCalendarDates": "Utilizar las teclas de cursor para navegar por las fechas de calendario"
     },
@@ -105,6 +105,7 @@
       "fromDate": "Fecha de inicio",
       "items": "% {count} elementos",
       "itemsPerPage": "Elementos por página",
+      "loading": "Cargando...",
       "selectAll": "Seleccionar todo",
       "selectedItems": "%{filterCount} de %{count} elementos",
       "selectItem": "Seleccionar elemento",
@@ -389,10 +390,10 @@
       "errorReplaceCertificate": "Error al sustituir el certificado.",
       "errorGenerateCsr": "Error al generar CSR.",
       "successAddCertificate": "Se ha añadido correctamente %{certificate}.",
-      "successAddedHTTPCertificate": "Se ha añadido correctamente %{certificate}. Vuelva a cargar la página del navegador para ver los cambios.",
+      "successAddedHTTPCertificate": "Se ha añadido correctamente %{certificate}. Vuelva a cargar la página del navegador para utilizar el nuevo certificado.",
       "successDeleteCertificate": "Se ha suprimido correctamente %{certificate}.",
       "successReplaceCertificate": "Se ha sustituido correctamente %{certificate}.",
-      "successReplacedHTTPCertificate": "Se ha sustituido correctamente %{certificate}. Vuelva a cargar la página del navegador para ver los cambios."
+      "successReplacedHTTPCertificate": "Se ha sustituido correctamente %{certificate}. Vuelva a cargar la página del navegador para utilizar el nuevo certificado."
     }
   },
   "pageChangePassword": {
@@ -410,6 +411,7 @@
       "message": "Para cambiar la forma en que se visualizan la fecha y hora (UTC o diferencia horaria del navegador) en toda la aplicación, visite ",
       "messageText": "Para cambiar la forma en que se muestran la fecha y la hora (ya sea UTC o diferencia horaria del navegador) en toda la aplicación, visite Valores de perfil",
       "messageNtp": "Si se selecciona NTP pero no se proporciona un servidor NTP o no se puede acceder al servidor NTP especificado, se utilizará time.google.com.",
+      "alertNtp": "Si se configura la partición de referencia temporal (TRP) en este servidor cuando el modo NTP está habilitado, esto dará lugar a que la hora del hipervisor y la hora del BMC sean independientes, lo que podría provocar una desviación horaria.",
       "messagePowerOff": "El servidor debe estar apagado para cambiar la fecha y hora a manual o NTP.",
       "mfaMessage": "El cambio de fecha y hora afectará a los usuarios de MFA."
     },
@@ -806,6 +808,7 @@
       "errorActivation": "Error al iniciar la activación del firmware.",
       "errorUpdateFirmware": "Error al iniciar la actualización del firmware.",
       "errorUploadFirmware": "Error al cargar el firmware.",
+      "errorUploadFirmwareAlreadyExists": "Se ha producido un error al cargar el firmware porque esta versión ya existe en el sistema.",
       "rebootStarted": "Rearranque iniciado",
       "rebootStartedMessage": "Se ha iniciado correctamente el rearranque desde la imagen de copia de seguridad. El rearranque puede tardar varios minutos en completarse.",
       "taskComplete": "Tarea completada",
@@ -1138,7 +1141,7 @@
     "username": "Nombre de usuario",
     "alert": {
       "unauthorizedMessage": "Usuario no autorizado",
-      "message": "Nombre de usuario o contraseña no válidos"
+      "message": "Credenciales no válidas"
     },
     "modal": {
       "addNewAcfCertificate": "Añadir nuevo certificado ACF",
@@ -1378,6 +1381,8 @@
   "pagePolicies": {
     "acfUploadEnablement": "Habilitación de carga de ACF no autenticada",
     "acfUploadEnablementDescription": "Permitir que los usuarios no autenticados carguen ACF.",
+    "basicAuth": "Autenticación básica",
+    "basicAuthDescription": "Esto permite al administrador de BMC inhabilitar el método de autenticación básica HTTP, de modo que la interfaz HTTPS de BMC no aceptará la autenticación mediante el método de autenticación básica.",
     "hostTpm": "TPM de host",
     "hostTpmDescription": "Habilite esta opción para asegurarse de que el sistema solo arranca cuando el TPM está funcional.",
     "hostUsb": "Habilitación de USB de host",
@@ -1399,11 +1404,19 @@
       "successEnableBmcShell": "Se ha habilitado correctamente el shell BMC (a través de SSH).",
       "successNetworkPolicyUpdate": "Se ha actualizado correctamente %{policy}.",
       "successIpmiNetworkPolicyUpdate": "Se ha actualizado correctamente %{policy}. El BMC normalmente tarda unos 30 segundos en cambiar el estado.",
-      "successNextBootToast": "Aplicando cambios a %{policy}. Los cambios realizados en %{policy} entrarán en vigor en el próximo reinicio."
+      "successNextBootToast": "Aplicando cambios a %{policy}. Los cambios realizados en %{policy} entrarán en vigor en el próximo reinicio.",
+      "successNetworkPolicyEnable": "Se ha habilitado correctamente %{policy}.",
+      "successNetworkPolicyDisable": "Se ha inhabilitado correctamente %{policy}."
     },
     "acfUploadEnablementConfirmText": "Precaución: Al habilitar este valor se elimina el requisito de acceso físico al sistema por parte del proceso para cargar un Archivo de control de acceso (ACF).  Esto permitiría a cualquier usuario que esté autorizado a solicitar un ACF y tenga acceso de red a ASMI obtener acceso a la cuenta de administrador.  ¿Desea continuar?",
     "vtpm": "VirtualTPM",
-    "vtpmDescription": "Si se habilita vTPM, habrá un TPM disponible para el sistema operativo invitado."
+    "vtpmDescription": "Si se habilita vTPM, habrá un TPM disponible para el sistema operativo invitado.",
+    "sendServiceAlerts": "Enviar alertas de servicio",
+    "sendServiceAlertsDescription": "Esta propiedad indicará si se deben enviar alertas de servicio cuando se produzcan eventos de aislamiento de hardware.",
+    "modal": {
+      "message1": "Al inhabilitar la opción \"Enviar alerta de servicio\", se suprime el SRC de la alerta de servicio (BD50F138). Aún se debe abordar el problema subyacente.",
+      "message2": "Nota: Si se detecta un nuevo problema, la función \"Enviar alerta de servicio\" se volverá a habilitar automáticamente y las alertas se reanudarán."
+    }
   },
   "pagePostCodeLogs": {
     "allExportFilePrefix": "All_POST_codes_log_",
@@ -1961,6 +1974,7 @@
       "errorBatchEnable": "Error al habilitar %{count} usuario. | Error al habilitar %{count} usuarios.",
       "errorClearSecretKey": "Error al borrar la clave secreta",
       "errorCreateUser": "Error al crear el usuario '%{username}'.",
+      "errorCreateUserAlreadyExists": "Error al crear el usuario '%{username}'. El usuario ya existe.",
       "errorCreateUserMaxUsers": "Error al crear el usuario '%{username}' porque este sistema ha alcanzado la cantidad máxima de usuarios permitidos.",
       "errorCreateUserPasswordNotAccepted": "Error al crear el usuario '%{username}' porque la contraseña no se ha aceptado.",
       "errorDeleteUser": "Error al suprimir el usuario '%{username}'.",
