@@ -376,7 +376,10 @@ import stores from '@/store';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
-import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore';
+import {
+  CERTIFICATE_TYPES,
+  getCertificateProp,
+} from '@/store/modules/SecurityAndAccess/CertificatesStore';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import i18n from '@/i18n';
 
@@ -412,7 +415,7 @@ const certificateOptions = CERTIFICATE_TYPES.reduce((arr, cert) => {
   )
     return arr;
   arr.push({
-    text: i18n.global.t(cert.labelKey),
+    text: getCertificateProp(cert.type, 'label'),
     value: cert.type,
   });
   return arr;

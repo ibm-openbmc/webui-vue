@@ -98,7 +98,10 @@ import useVuelidateComposable from '@/components/Composables/useVuelidateComposa
 import FormFile from '@/components/Global/FormFile.vue';
 import eventBus from '@/eventBus';
 import i18n from '@/i18n';
-import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
+import {
+  CERTIFICATE_TYPES,
+  getCertificateProp,
+} from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
 
 const { getValidationState } = useVuelidateComposable();
 
@@ -145,9 +148,9 @@ const certificateOptions = computed(() => {
       }
       return certificate === certificate;
     })
-    .map(({ type, labelKey }) => {
+    .map(({ type }) => {
       return {
-        text: i18n.global.t(labelKey),
+        text: getCertificateProp(type, 'label'),
         value: type,
       };
     });
@@ -175,8 +178,7 @@ const isNotAdmin = computed(() => {
 });
 
 const getCertificateLabel = (certificateType) => {
-  const certConfig = CERTIFICATE_TYPES.find((c) => c.type === certificateType);
-  return certConfig ? i18n.global.t(certConfig.labelKey) : certificateType;
+  return getCertificateProp(certificateType, 'label') || certificateType;
 };
 
 watch(
