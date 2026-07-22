@@ -152,7 +152,7 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import { CERTIFICATE_TYPES } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
+import { getCertificateProp } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const toast = useToastComposable();
@@ -259,7 +259,7 @@ const expiredCertificateTypes = computed(() => {
   return certificates.value.reduce((acc, val) => {
     const daysUntilExpired = getDaysUntilExpired(val.validUntil);
     if (daysUntilExpired < 0) {
-      acc.push(val.certificate);
+      acc.push(getCertificateLabel(val.certificate));
     }
     return acc;
   }, []);
@@ -268,15 +268,14 @@ const expiringCertificateTypes = computed(() => {
   return certificates.value.reduce((acc, val) => {
     const daysUntilExpired = getDaysUntilExpired(val.validUntil);
     if (daysUntilExpired < 31 && daysUntilExpired >= 0) {
-      acc.push(val.certificate);
+      acc.push(getCertificateLabel(val.certificate));
     }
     return acc;
   }, []);
 });
 
 const getCertificateLabel = (certificateType) => {
-  const certConfig = CERTIFICATE_TYPES.find((c) => c.type === certificateType);
-  return certConfig ? i18n.global.t(certConfig.labelKey) : certificateType;
+  return getCertificateProp(certificateType, 'label') || certificateType;
 };
 
 const onTableRowAction = (event, rowItem) => {
@@ -296,7 +295,7 @@ const initModalUploadCertificate = (certificate = null) => {
   eventBus.emit('upload-certificate');
 };
 const initModalDeleteCertificate = (certificate) => {
-  modalContent.value = certificate.certificate;
+  modalContent.value = getCertificateLabel(certificate.certificate);
   modalCertificate.value = certificate;
   certificate.actions.forEach((action) => {
     if (action.enabled !== undefined) {
