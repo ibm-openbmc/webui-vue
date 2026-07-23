@@ -5794,7 +5794,4 @@ td {
   border: 1px solid black;
   padding: 5px;
 }
-tr {
-  line-height: 20px;
-}
 </style>
