@@ -5797,7 +5797,4 @@ td {
 tr {
   line-height: 20px;
 }
-p {
-  margin-bottom: 0px;
-}
 </style>
