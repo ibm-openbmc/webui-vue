@@ -86,41 +86,36 @@ export function useSnmpAlerts() {
   // Add destination mutation
   const addDestinationMutation = useMutation({
     mutationFn: async (payload: AddDestinationPayload): Promise<void> => {
-      const snmpAlertUrl = await navigateToCollection(['EventService', 'Subscriptions']);
-      await api.post(snmpAlertUrl, payload);
+      try {
+        const snmpAlertUrl = await navigateToCollection(['EventService', 'Subscriptions']);
+        await api.post(snmpAlertUrl, payload);
+      } catch (error) {
+        console.error('Error adding SNMP destination:', error);
+        throw new Error(i18n.global.t('pageSnmpAlerts.toast.errorAddDestination'));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'navigatedCollection', 'EventService', 'Subscriptions'],
       });
-    },
-    onError: (error: any) => {
-      console.error('Error adding SNMP destination:', error);
-      const message = i18n.global.t(
-        'pageSnmpAlerts.toast.errorAddDestination'
-      );
-      throw new Error(message);
     },
   });
 
   // Delete single destination mutation
   const deleteDestinationMutation = useMutation({
     mutationFn: async (id: string): Promise<void> => {
-      const snmpAlertUrl = await navigateToCollection(['EventService', 'Subscriptions']);
-      await api.delete(`${snmpAlertUrl}/${id}`);
+      try {
+        const snmpAlertUrl = await navigateToCollection(['EventService', 'Subscriptions']);
+        await api.delete(`${snmpAlertUrl}/${id}`);
+      } catch (error) {
+        console.error('Error deleting SNMP destination:', error);
+        throw new Error(i18n.global.t('pageSnmpAlerts.toast.errorDeleteDestination', { id }));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['redfish', 'navigatedCollection', 'EventService', 'Subscriptions'],
       });
-    },
-    onError: (error: any, id: string) => {
-      console.error('Error deleting SNMP destination:', error);
-      const message = i18n.global.t(
-        'pageSnmpAlerts.toast.errorDeleteDestination',
-        { id }
-      );
-      throw new Error(message);
     },
   });
 

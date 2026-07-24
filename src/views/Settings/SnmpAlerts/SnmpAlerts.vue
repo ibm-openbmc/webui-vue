@@ -287,7 +287,6 @@ const onModalOk = async ({ ipAddress, port }) => {
   startLoader();
   try {
     await addDestination(data);
-    await refetchSnmpAlerts();
     successToast(i18n.global.t('pageSnmpAlerts.toast.successAddDestination'));
   } catch (error) {
     errorToast(i18n.global.t('pageSnmpAlerts.toast.errorAddDestination'));
@@ -324,7 +323,6 @@ const handleOk = async (value) => {
     try {
       const result = await deleteMultipleDestinations(selectedRowsList.value);
 
-      await refetchSnmpAlerts();
       if (result.successCount > 0) {
         successToast(
           i18n.global.t(
@@ -355,7 +353,6 @@ const deleteSingleDestination = async ({ id }) => {
   startLoader();
   try {
     await deleteDestination(id);
-    await refetchSnmpAlerts();
     successToast(
       i18n.global.t('pageSnmpAlerts.toast.successDeleteDestination', { id }),
     );
