@@ -297,8 +297,7 @@ function onModalDeleteBatch(deleteConfirmed) {
       .then((success) => successToast(success))
       .catch(({ message }) => errorToast(message))
       .finally(() => {
-        // Clear selection and reset header checkbox after batch deletion
-        clearSelectedRows(tableRef);
+        eventBus.emit('clear-selected');
         endLoader();
       });
   }
@@ -326,8 +325,7 @@ const onModalDelete = (deleteConfirmed) => {
       .then((success) => successToast(success))
       .catch(({ message }) => errorToast(message))
       .finally(() => {
-        // Clear selection and reset header checkbox after deletion
-        clearSelectedRows(tableRef);
+        eventBus.emit('clear-selected');
         endLoader();
       });
   }
