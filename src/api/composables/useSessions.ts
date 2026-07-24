@@ -13,7 +13,7 @@ import i18n from '@/i18n';
  * Kept as a function so it is read at call-time (not import-time).
  */
 function getCurrentSessionUri(): string | null {
-    return localStorage.getItem('currentSessionUri');
+  return localStorage.getItem('currentSessionUri');
 }
 
 export interface SessionDisplay {
