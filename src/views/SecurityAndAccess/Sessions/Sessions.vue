@@ -24,7 +24,7 @@
       </BCol>
       <BCol sm="3" md="3" xl="2">
         <table-cell-count
-          :filtered-items-count="filteredRows"
+          :filtered-items-count="totalItems"
           :total-number-of-cells="allConnections.length"
         ></table-cell-count>
       </BCol>
@@ -50,14 +50,8 @@
           sticky-header="75vh"
           show-empty
           :fields="fields"
-          :items="allConnections"
-          :filter="searchFilterInput"
-          :per-page="
-            itemPerPage === 0 ? allConnections.length || 1 : itemPerPage
-          "
-          :current-page="currentPageNo"
-          @filtered="onFiltered"
-          @row-selected="onRowSelected($event, allConnections.length)"
+          :items="paginatedSessions"
+          @row-selected="onRowSelected($event, paginatedSessions.length)"
         >
           <!-- Checkbox column -->
           <template #head(checkbox)>
@@ -150,10 +144,8 @@
           :tabindex="currentPageNo - 1"
           first-number
           last-number
-          :per-page="
-            itemPerPage === 0 ? allConnections.length || 1 : itemPerPage
-          "
-          :total-rows="getTotalRowCount(filteredRows)"
+          :per-page="itemPerPage === 0 ? allConnections.length || 1 : itemPerPage"
+          :total-rows="getTotalRowCount(totalItems)"
           aria-controls="table-session-logs"
         />
       </BCol>
@@ -180,6 +172,7 @@ import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
 import { useSessions } from '@/api/composables/useSessions';
+import { usePaginatedData } from '@/api/composables/shared/usePaginatedData';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
@@ -192,7 +185,7 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
-const { currentPage, perPage, itemsPerPageOptions, getTotalRowCount } =
+const { perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
 const {
   clearSelectedRows,
@@ -213,9 +206,6 @@ const selectedSessions = ref(new Set());
 const tableSessionsRef = ref(null);
 const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
 const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
-const currentPageNo = ref(currentPage);
-const itemPerPage = ref(perPage);
-const searchTotalFilteredRows = ref(0);
 const openModal = ref(false);
 const count = ref(0);
 const searchFilterInput = ref('');
@@ -275,7 +265,7 @@ onBeforeMount(() => {
 
 // Loading bar automatically shows/hides based on fetch state
 watch(
-  () => isLoading.value || isFetching.value,
+  () => isLoading.value,
   (loading) => {
     if (loading) startLoader();
     else endLoader();
@@ -289,38 +279,51 @@ onBeforeUnmount(() => {
 
 const isBusy = computed(() => isLoading.value || isFetching.value);
 
+// All connections with selection state merged in
 const allConnections = computed(() => {
   if (!sessions.value) return [];
-  let data = sessions.value.map((session) => ({
+  return sessions.value.map((session) => ({
     ...session,
     isSelected: selectedSessions.value.has(session.uri),
   }));
-  if (searchFilterInput.value) {
-    const search = searchFilterInput.value.toLowerCase();
-    const allowedKeys = fields.value.map((item) => item.key);
-    data = data.filter((item) => {
-      const searchableFields = allowedKeys
-        .filter((key) => key in item)
-        .map((key) => item[key]);
-      return searchableFields.some((field) =>
-        String(field || '')
-          .toLowerCase()
-          .includes(search),
-      );
-    });
-  }
-  return data;
 });
 
-const filteredRows = computed(() => {
-  return searchFilterInput.value
-    ? searchTotalFilteredRows.value
-    : allConnections.value.length;
+// Filtered data (memoized) – used as the source for pagination
+const filteredSessionsData = computed(() => {
+  if (!allConnections.value.length) return [];
+  if (!searchFilterInput.value) return allConnections.value;
+
+  const search = searchFilterInput.value.toLowerCase();
+  const allowedKeys = fields.value.map((item) => item.key);
+  return allConnections.value.filter((item) => {
+    const searchableFields = allowedKeys
+      .filter((key) => key in item)
+      .map((key) => item[key]);
+    return searchableFields.some((field) =>
+      String(field || '')
+        .toLowerCase()
+        .includes(search),
+    );
+  });
 });
 
-const onFiltered = (filteredItems) => {
-  searchTotalFilteredRows.value = filteredItems.length;
-};
+// Pagination via usePaginatedData (same as Sensors)
+const itemPerPage = ref(perPage);
+
+const pagination = usePaginatedData({
+  data: filteredSessionsData,
+  pageSize: itemPerPage.value,
+  initialPage: 1,
+});
+
+watch(itemPerPage, (newSize) => {
+  pagination.pageSize.value = newSize;
+});
+
+const paginatedSessions = pagination.paginatedData;
+const currentPageNo = pagination.currentPage;
+const totalItems = pagination.totalItems;
+
 const onChangeSearch = (event) => {
   searchFilterInput.value = event;
 };
@@ -340,7 +343,7 @@ const onBatchAction = (action) => {
   if (action === 'disconnect') {
     const uris = selectedRowsLists.value.map((row) => row.uri);
     urisStore.value = uris;
-    selectedRowsNo.value = selectedRowsLists.value.map((row) => row.uri).length;
+    selectedRowsNo.value = uris.length;
     count.value = selectedRowsNo.value;
     openModal.value = true;
   }
