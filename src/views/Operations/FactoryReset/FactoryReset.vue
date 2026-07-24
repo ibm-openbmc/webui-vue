@@ -61,7 +61,7 @@
             v-b-modal.modal-reset
             type="submit"
             variant="primary"
-            :disabled="serverStatus !== 'off'"
+            :disabled="serverStatus !== 'off' || isResetting"
             data-test-id="factoryReset-button-submit"
           >
             {{ $t('global.action.reset') }}
@@ -76,7 +76,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import ModalReset from './FactoryResetModal.vue';
@@ -89,14 +90,14 @@ import { useFactoryReset } from '@/api/composables/useFactoryReset';
 const toast = useToastComposable();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
-const { resetBios, resetToDefaults } = useFactoryReset();
+const { resetBios, resetToDefaults, isResetting } = useFactoryReset();
 
 const global = stores.GlobalStore();
 const authentication = stores.AuthenticationStore();
 
 const resetOption = ref('resetBios');
 
-onMounted(() => {
+onBeforeRouteLeave(() => {
   hideLoader();
 });
 
@@ -132,7 +133,7 @@ const onResetToDefaultsConfirm = () => {
     .then((message) => {
       toast.successToast(message);
       setTimeout(() => {
-        authentication.logout;
+        authentication.logout();
       }, 3000);
     })
     .catch(({ message }) => toast.errorToast(message))
