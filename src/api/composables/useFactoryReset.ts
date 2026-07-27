@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
@@ -43,7 +44,10 @@ export function useFactoryReset() {
   return {
     resetToDefaults: resetToDefaultsMutation.mutateAsync,
     resetBios: resetBiosMutation.mutateAsync,
-    isResetting:
-      resetToDefaultsMutation.isPending || resetBiosMutation.isPending,
+    isResetting: computed(
+      () =>
+        resetToDefaultsMutation.isPending.value ||
+        resetBiosMutation.isPending.value,
+    ),
   };
 }
