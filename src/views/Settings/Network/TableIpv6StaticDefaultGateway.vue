@@ -19,7 +19,7 @@
             hover
             sticky-header="75vh"
             :fields="ipv6DefaultGatewayTableFields"
-            :items="form.ipv6DefaultGatewayTableItems"
+            :items="ipv6DefaultGatewayTableItems"
             class="mb-0"
             show-empty
           >
@@ -75,22 +75,21 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeMount } from 'vue';
+import { ref, computed, watch } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import PageSection from '@/components/Global/PageSection.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
-const { successToast, errorToast } = useToast();
 const { startLoader, endLoader } = useLoadingBar();
 
-const networkStore = stores.NetworkStore();
+const { networkSettings, isTableBusy, deleteIpv6StaticDefaultGatewayAddress } =
+  useNetwork();
 
 const props = defineProps({
   tabIndex: {
@@ -100,11 +99,8 @@ const props = defineProps({
 });
 
 const openModal = ref(false);
-
 const modalMessage = ref('');
-const modalPayload = ref({
-  newIpv6Array: null,
-});
+const modalPayload = ref({ newIpv6Array: null });
 const modalOptions = ref({
   title: '',
   okVariant: '',
@@ -112,22 +108,7 @@ const modalOptions = ref({
   cancelTitle: '',
 });
 
-const form = ref({
-  ipv6DefaultGatewayTableItems: [],
-});
-
-const actions = ref([
-  {
-    value: 'edit',
-    title: i18n.global.t('global.action.edit'),
-  },
-  {
-    value: 'delete',
-    title: i18n.global.t('global.action.delete'),
-  },
-]);
-
-const ipv6DefaultGatewayTableFields = ref([
+const ipv6DefaultGatewayTableFields = [
   {
     key: 'Address',
     label: i18n.global.t('pageNetwork.table.ipAddress'),
@@ -141,72 +122,42 @@ const ipv6DefaultGatewayTableFields = ref([
     thAttr: { scope: 'col' },
     tdAttr: { scope: null },
   },
-]);
+];
 
-onBeforeMount(() => {
-  getipv6DefaultGatewayTableItems();
+const isTablesDisabled = computed(() => isTableBusy.value);
+
+const ipv6DefaultGatewayTableItems = computed(() => {
+  const addresses =
+    networkSettings.value[props.tabIndex]?.ipv6StaticDefaultGateways ?? [];
+  return addresses.map((ipv6) => ({
+    Address: ipv6.Address,
+    actions: [
+      {
+        value: 'edit',
+        enabled: true,
+        title: i18n.global.t('pageNetwork.table.editIpv6StaticDefaultGateway'),
+      },
+      {
+        value: 'delete',
+        enabled: true,
+        title: i18n.global.t(
+          'pageNetwork.table.deleteIpv6StaticDefaultGateway',
+        ),
+      },
+    ],
+  }));
 });
 
-const isTablesDisabled = computed(() => {
-  return networkStore.isTableBusyGetter;
-});
-
-const network = computed(() => {
-  return networkStore.networkSettingsGetter;
-});
-
-const selectedInterface = computed(() => {
-  return networkStore.selectedInterfaceIndexGetter;
-});
-
-// Watch for change in tab index
 watch(
-  () => props.tabIndex,
-  () => {
-    getipv6DefaultGatewayTableItems();
-  },
-);
-
-watch(
-  () => form.value.ipv6DefaultGatewayTableItems,
-  (item) => {
-    if (!item.length) {
+  () => ipv6DefaultGatewayTableItems.value,
+  (items) => {
+    if (!items.length) {
       document
         .querySelector('tr.b-table-empty-slot td[scope]')
         ?.removeAttribute('scope');
     }
   },
 );
-
-watch(network, () => {
-  getipv6DefaultGatewayTableItems();
-});
-
-const getipv6DefaultGatewayTableItems = () => {
-  const index = props.tabIndex;
-  const addresses = network.value[index].ipv6StaticDefaultGateways || [];
-  form.value.ipv6DefaultGatewayTableItems = addresses.map((ipv6) => {
-    return {
-      Address: ipv6.Address,
-      actions: [
-        {
-          value: 'edit',
-          enabled: true,
-          title: i18n.global.t(
-            'pageNetwork.table.editIpv6StaticDefaultGateway',
-          ),
-        },
-        {
-          value: 'delete',
-          enabled: true,
-          title: i18n.global.t(
-            'pageNetwork.table.deleteIpv6StaticDefaultGateway',
-          ),
-        },
-      ],
-    };
-  });
-};
 
 const onIpv6DefaultGatewayTableAction = (action, $event, item) => {
   if (!isTablesDisabled.value) {
@@ -221,14 +172,9 @@ const onIpv6DefaultGatewayTableAction = (action, $event, item) => {
 };
 
 const openDeleteIpv6DefaultGatewayTableRowModal = (item) => {
-  const newIpv6Array = form.value.ipv6DefaultGatewayTableItems
+  const newIpv6Array = ipv6DefaultGatewayTableItems.value
     .filter((row) => row.Address !== item.Address)
-    .map((ipv6) => {
-      const { Address } = ipv6;
-      return {
-        Address,
-      };
-    });
+    .map((ipv6) => ({ Address: ipv6.Address }));
   const addressIp = item.Address;
 
   modalPayload.value.newIpv6Array = newIpv6Array;
@@ -246,16 +192,13 @@ const openDeleteIpv6DefaultGatewayTableRowModal = (item) => {
 };
 
 const operationConfirm = () => {
-  networkStore
-    .deleteIpv6StaticDefaultGatewayAddress(modalPayload.value.newIpv6Array)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  if (!modalPayload.value.newIpv6Array) return;
+  startLoader();
+  deleteIpv6StaticDefaultGatewayAddress(
+    modalPayload.value.newIpv6Array,
+  ).finally(() => {
+    setTimeout(() => endLoader(), 15000);
+  });
 };
 
 const initIpv6DefaultGatewayModal = () => {

@@ -16,7 +16,7 @@
           sort-icon-left
           sticky-header="75vh"
           :fields="dnsTableFields"
-          :items="form.dnsStaticTableItems"
+          :items="dnsStaticTableItems"
           class="mb-0"
           show-empty
         >
@@ -50,20 +50,17 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeMount } from 'vue';
+import { computed } from 'vue';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
-import useToast from '@/components/Composables/useToastComposable';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import IconEdit from '@carbon/icons-vue/es/edit/20';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
 import PageSection from '@/components/Global/PageSection.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
-const { successToast, errorToast } = useToast();
-
-const networkStore = stores.NetworkStore();
+const { networkSettings, isTableBusy, editDnsAddress } = useNetwork();
 
 const props = defineProps({
   tabIndex: {
@@ -72,22 +69,7 @@ const props = defineProps({
   },
 });
 
-const form = ref({
-  dnsStaticTableItems: [],
-});
-
-const actions = ref([
-  {
-    value: 'edit',
-    title: i18n.global.t('global.action.edit'),
-  },
-  {
-    value: 'delete',
-    title: i18n.global.t('global.action.delete'),
-  },
-]);
-
-const dnsTableFields = ref([
+const dnsTableFields = [
   {
     key: 'address',
     label: i18n.global.t('pageNetwork.table.ipAddress'),
@@ -101,47 +83,22 @@ const dnsTableFields = ref([
     thAttr: { scope: 'col' },
     tdAttr: { scope: null },
   },
-]);
+];
 
-onBeforeMount(() => {
-  getStaticDnsItems();
+const isTablesDisabled = computed(() => isTableBusy.value);
+
+const dnsStaticTableItems = computed(() => {
+  const dns = networkSettings.value[props.tabIndex]?.staticNameServers ?? [];
+  return dns.map((server) => ({
+    address: server,
+    actions: [
+      {
+        value: 'delete',
+        title: i18n.global.t('pageNetwork.table.deleteDns'),
+      },
+    ],
+  }));
 });
-
-const network = computed(() => {
-  return networkStore.networkSettingsGetter;
-});
-
-const isTablesDisabled = computed(() => {
-  return networkStore.isTableBusyGetter;
-});
-
-// Watch for change in tab index
-watch(
-  () => props.tabIndex,
-  () => {
-    getStaticDnsItems();
-  },
-);
-
-watch(network, () => {
-  getStaticDnsItems();
-});
-
-const getStaticDnsItems = () => {
-  const index = props.tabIndex;
-  const dns = network.value[index].staticNameServers || [];
-  form.value.dnsStaticTableItems = dns.map((server) => {
-    return {
-      address: server,
-      actions: [
-        {
-          value: 'delete',
-          title: i18n.global.t('pageNetwork.table.deleteDns'),
-        },
-      ],
-    };
-  });
-};
 
 const onDnsTableAction = (action, $event, index) => {
   if ($event === 'delete') {
@@ -150,14 +107,10 @@ const onDnsTableAction = (action, $event, index) => {
 };
 
 const deleteDnsTableRow = (index) => {
-  form.value.dnsStaticTableItems.splice(index, 1);
-  const newDnsArray = form.value.dnsStaticTableItems.map((dns) => {
-    return dns.address;
-  });
-  networkStore
-    .editDnsAddress(newDnsArray)
-    .then((message) => successToast(message))
-    .catch(({ message }) => errorToast(message));
+  const newDnsArray = dnsStaticTableItems.value
+    .filter((_, i) => i !== index)
+    .map((dns) => dns.address);
+  editDnsAddress(newDnsArray);
 };
 
 const initDnsModal = () => {

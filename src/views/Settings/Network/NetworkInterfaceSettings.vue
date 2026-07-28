@@ -77,18 +77,22 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeMount } from 'vue';
-import useToast from '@/components/Composables/useToastComposable';
+import { computed, watch, ref } from 'vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import PageSection from '@/components/Global/PageSection.vue';
-import stores from '@/store';
+import { useNetwork } from '@/api/composables/useNetwork';
 
 const { startLoader, endLoader } = useLoadingBar();
-const { successToast, errorToast } = useToast();
 const { dataFormatter } = useDataFormatterGlobal();
 
-const networkStore = stores.NetworkStore();
+const {
+  networkSettings,
+  isTableBusy,
+  saveDomainNameState: saveDomainNameApi,
+  saveDnsState: saveDnsApi,
+  saveNtpState: saveNtpApi,
+} = useNetwork();
 
 const props = defineProps({
   tabIndex: {
@@ -97,110 +101,79 @@ const props = defineProps({
   },
 });
 
-const selectedInterface = ref('');
 const macAddress = ref('');
 
-onBeforeMount(() => {
-  getSettings();
-});
+const isDisabled = computed(() => isTableBusy.value);
 
-const isDisabled = computed(() => {
-  return networkStore.isTableBusyGetter;
-});
-
-const network = computed(() => {
-  return networkStore.networkSettingsGetter;
+const currentInterface = computed(() => {
+  return networkSettings.value[props.tabIndex];
 });
 
 const dhcpState = computed(() => {
-  const ipv4Dhcp =
-    networkStore.networkSettingsGetter[selectedInterface.value].dhcpEnabled;
-  const ipv6Dhcp =
-    networkStore.networkSettingsGetter[selectedInterface.value]
-      .ipv6OperatingMode === 'Enabled'
-      ? true
-      : false;
-  return ipv4Dhcp || ipv6Dhcp ? true : false;
+  const iface = currentInterface.value;
+  if (!iface) return false;
+  const ipv4Dhcp = iface.dhcpEnabled;
+  const ipv6Dhcp = iface.ipv6OperatingMode === 'Enabled';
+  return ipv4Dhcp || ipv6Dhcp;
 });
 
 const useDomainNameState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .useDomainNameEnabled;
+    return currentInterface.value?.useDomainNameEnabled ?? false;
   },
-  set(newValue) {
-    return newValue;
+  set(_newValue) {
+    // controlled via changeDomainNameState
   },
 });
 
 const useDnsState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .useDnsEnabled;
+    return currentInterface.value?.useDnsEnabled ?? false;
   },
-  set(newValue) {
-    return newValue;
+  set(_newValue) {
+    // controlled via changeDnsState
   },
 });
 
 const useNtpState = computed({
   get() {
-    return networkStore.networkSettingsGetter[selectedInterface.value]
-      .useNtpEnabled;
+    return currentInterface.value?.useNtpEnabled ?? false;
   },
-  set(newValue) {
-    return newValue;
+  set(_newValue) {
+    // controlled via changeNtpState
   },
 });
 
 watch(
   () => props.tabIndex,
   () => {
-    getSettings();
+    macAddress.value = networkSettings.value[props.tabIndex]?.macAddress ?? '';
   },
+  { immediate: true },
 );
 
-const getSettings = () => {
-  selectedInterface.value = props.tabIndex;
-  macAddress.value = network.value[selectedInterface.value].macAddress;
-};
+watch(networkSettings, () => {
+  macAddress.value = networkSettings.value[props.tabIndex]?.macAddress ?? '';
+});
 
 const changeDomainNameState = (state) => {
-  networkStore
-    .saveDomainNameState(state)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  startLoader();
+  saveDomainNameApi(state).finally(() => {
+    setTimeout(() => endLoader(), 15000);
+  });
 };
 
 const changeDnsState = (state) => {
-  networkStore
-    .saveDnsState(state)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  startLoader();
+  saveDnsApi(state).finally(() => {
+    setTimeout(() => endLoader(), 15000);
+  });
 };
 
 const changeNtpState = (state) => {
-  networkStore
-    .saveNtpState(state)
-    .then((message) => {
-      successToast(message);
-      startLoader();
-      setTimeout(() => {
-        endLoader();
-      }, 15000);
-    })
-    .catch(({ message }) => errorToast(message));
+  startLoader();
+  saveNtpApi(state).finally(() => {
+    setTimeout(() => endLoader(), 15000);
+  });
 };
 </script>
