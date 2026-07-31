@@ -1,174 +1,164 @@
 <template>
   <BForm novalidate @submit.prevent="handleSubmit">
     <bios-settings
-      v-if="form.attributes && form.attributeValues"
+      v-if="props.attributeValues"
       :key="componentKey"
-      :attribute-values="form.attributeValues"
-      :disabled="disabled"
-      :is-in-phyp-standby="isInPhypStandby"
+      :attribute-values="props.attributeValues"
+      :disabled="props.isSavingBios"
+      :is-in-phyp-standby="props.isInPhypStandby"
+      :bios-attributes="props.biosAttributes"
+      :hmc-managed="props.hmcManaged"
+      :ibmi-load-source-value="props.ibmiLoadSourceValue"
+      :ibmi-alt-load-source-value="props.ibmiAltLoadSourceValue"
+      :ibmi-console-value="props.ibmiConsoleValue"
+      :linux-kvm-percentage-value="props.linuxKvmPercentageValue"
+      :linux-kvm-percentage-initial-value="props.linuxKvmPercentageInitialValue"
+      :linux-kvm-percentage-current-value="props.linuxKvmPercentageCurrentValue"
+      :is-atleast-phyp-in-standby="props.isAtleastPhypInStandby"
+      :power-restore-policy="props.powerRestorePolicy"
+      :location-codes="props.locationCodes"
+      :save-operating-mode-settings="props.saveOperatingModeSettings"
       @is-linux-kvm-valid="linuxKvmValue"
       @updated-attributes="updateAttributeKeys"
     />
   </BForm>
 </template>
 
-<script setup>
-import { ref, computed, watch, onBeforeMount } from 'vue';
-import eventBus from '@/eventBus';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import BiosSettings from './BiosSettings.vue';
+// @ts-ignore - useToastComposable is a JS module
 import useToast from '@/components/Composables/useToastComposable';
+// @ts-ignore - useLoadingBarComposable is a JS module
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import stores from '@/store';
+import type { BiosAttributes } from '@/api/composables/useServerPowerOperations';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
 
-const globalStore = stores.GlobalStore();
-const bootSettingsStore = stores.BootSettingsStore();
-const resourceMemoryStore = stores.ResourceMemoryStore();
+// ─── Props & Emits ───────────────────────────────────────────────────────────
 
-const props = defineProps({
-  isInPhypStandby: {
-    type: Boolean,
-    default: false,
-  },
-  isUpdated: {
-    type: Boolean,
-    default: false,
-  },
-});
+const props = defineProps<{
+  isInPhypStandby?: boolean;
+  isUpdated?: boolean;
+  isAtleastPhypInStandby: boolean;
+  // BIOS data passed from parent
+  attributeValues: Record<string, Array<{ value: string; text: string }>> | null;
+  biosAttributes: BiosAttributes | null;
+  hmcManaged: string | null;
+  ibmiLoadSourceValue: string;
+  ibmiAltLoadSourceValue: string;
+  ibmiConsoleValue: string;
+  linuxKvmPercentageValue: number | null;
+  linuxKvmPercentageInitialValue: number | null;
+  linuxKvmPercentageCurrentValue: number | null;
+  powerRestorePolicy: string;
+  locationCodes: string[];
+  // Actions passed from parent
+  saveBiosSettings: (settings: BiosAttributes) => Promise<string>;
+  saveOperatingModeSettings: (payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string }) => Promise<void>;
+  refetch: () => void;
+  isSavingBios: boolean;
+}>();
 
-const emit = defineEmits('update-standby');
+const emit = defineEmits<{
+  (e: 'update-standby', value: boolean): void;
+}>();
+
+// ─── Local state ─────────────────────────────────────────────────────────────
 
 const componentKey = ref(0);
 const isLinuxKvmValid = ref(true);
-const form = ref({
-  attributes: bootSettingsStore.getBiosAttributes,
-  attributeValues: bootSettingsStore.getAttributeValues,
-});
+const localAttributeKeys = ref<BiosAttributes>({ ...props.biosAttributes });
 
-onBeforeMount(() => {
-  Promise.all([
-    bootSettingsStore.fetchBiosAttributes(),
-    bootSettingsStore.fetchAttributeValues(),
-  ]).finally(() => {
-    eventBus.emit('server-power-operations-boot-settings-complete');
-  });
-});
+// ─── Methods ──────────────────────────────────────────────────────────────────
 
-const attributeValues = computed(() => {
-  return bootSettingsStore.getAttributeValues;
-});
+function updateAttributeKeys(attributeKeysFromChild: BiosAttributes): void {
+  localAttributeKeys.value = attributeKeysFromChild;
+}
 
-const biosAttributes = computed(() => {
-  return bootSettingsStore.getBiosAttributes;
-});
+function linuxKvmValue(value: boolean): void {
+  isLinuxKvmValid.value = value;
+}
 
-const disabled = computed(() => {
-  return bootSettingsStore.getDisabled;
-});
+async function handleSubmit(): Promise<void> {
+  startLoader();
+  const biosSettings = { ...localAttributeKeys.value };
+  try {
+    const message = await props.saveBiosSettings(biosSettings);
+    componentKey.value += 1;
+    const hmcManaged = props.hmcManaged;
 
-const isAtleastPhypInStandby = computed(() => {
-  return globalStore.isInPhypStandby;
-});
+    if (!props.isUpdated) {
+      if (biosSettings.pvm_default_os_type === 'Linux KVM') {
+        successToast(
+          i18n.global.t(
+            'pageServerPowerOperations.toast.successSaveLinuxKvmSettings',
+          ),
+        );
+      } else if (
+        (biosSettings.pvm_default_os_type === 'IBM I' &&
+          props.isAtleastPhypInStandby) ||
+        (biosSettings.pvm_default_os_type === 'Default' &&
+          props.isAtleastPhypInStandby)
+      ) {
+        if (props.isInPhypStandby) {
+          if (hmcManaged !== 'Enabled') {
+            infoToast(
+              i18n.global.t(
+                'pageServerPowerOperations.toast.successSaveIBMiStandby',
+              ),
+            );
+          }
+          successToast(
+            i18n.global.t(
+              'pageServerPowerOperations.toast.successSaveSettings',
+            ),
+          );
+        } else {
+          if (hmcManaged !== 'Enabled') {
+            infoToast(
+              i18n.global.t(
+                'pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo',
+              ),
+            );
+          }
+          successToast(
+            i18n.global.t(
+              'pageServerPowerOperations.toast.successSaveSettings',
+            ),
+          );
+        }
+      } else {
+        successToast(message);
+      }
+    }
 
-watch(attributeValues, function (value) {
-  form.value.attributeValues = value;
-});
+    // Wait 5 seconds then refetch
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        props.refetch();
+        resolve();
+      }, 5000);
+    });
+  } catch (error: any) {
+    errorToast(error?.message ?? error);
+  } finally {
+    if (props.isUpdated) {
+      emit('update-standby', props.isUpdated);
+    }
+    endLoader();
+  }
+}
 
-watch(biosAttributes, function (value) {
-  form.value.attributes = value;
-});
+// ─── Watch isUpdated prop ─────────────────────────────────────────────────────
 
 watch(
   () => props.isUpdated,
   (newValue) => {
-    if (newValue) {
-      handleSubmit();
-    }
+    if (newValue) handleSubmit();
   },
 );
-
-function updateAttributeKeys(attributeKeys) {
-  form.value.attributes = attributeKeys;
-}
-
-function linuxKvmValue(value) {
-  isLinuxKvmValid.value = value;
-}
-
-function handleSubmit() {
-  startLoader();
-  let settings;
-  let biosSettings = form.value.attributes;
-  settings = { biosSettings };
-  bootSettingsStore
-    .saveSettings(settings)
-    .then((message) => {
-      componentKey.value += 1;
-      let hmcManaged = resourceMemoryStore.hmcManagedGetter;
-      if (!props.isUpdated) {
-        if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {
-          successToast(
-            i18n.global.t(
-              'pageServerPowerOperations.toast.successSaveLinuxKvmSettings',
-            ),
-          );
-        } else if (
-          (settings.biosSettings.pvm_default_os_type == 'IBM I' &&
-            isAtleastPhypInStandby.value) ||
-          (settings.biosSettings.pvm_default_os_type == 'Default' &&
-            isAtleastPhypInStandby.value)
-        ) {
-          if (props.isInPhypStandby) {
-            if (hmcManaged != 'Enabled') {
-              infoToast(
-                i18n.global.t(
-                  'pageServerPowerOperations.toast.successSaveIBMiStandby',
-                ),
-              );
-            }
-            successToast(
-              i18n.global.t(
-                'pageServerPowerOperations.toast.successSaveSettings',
-              ),
-            );
-          } else {
-            if (hmcManaged != 'Enabled') {
-              infoToast(
-                i18n.global.t(
-                  'pageServerPowerOperations.toast.successSaveIbmiOsRunningInfo',
-                ),
-              );
-            }
-            successToast(
-              i18n.global.t(
-                'pageServerPowerOperations.toast.successSaveSettings',
-              ),
-            );
-          }
-        } else {
-          successToast(message);
-        }
-      }
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          bootSettingsStore
-            .fetchAttributeValues()
-            .catch((error) => console.log(error))
-            .finally(resolve); // Resolve the promise after the setTimeout logic
-        }, 5000);
-      });
-    })
-    .catch(({ message }) => {
-      errorToast(message);
-    })
-    .finally(() => {
-      if (props.isUpdated) {
-        emit('update-standby', props.isUpdated);
-      }
-      endLoader();
-    });
-}
 </script>

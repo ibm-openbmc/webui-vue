@@ -217,6 +217,22 @@
             <boot-settings
               :is-in-phyp-standby="isInPhypStandby"
               :is-updated="isUpdated"
+              :is-atleast-phyp-in-standby="isInPhypStandby"
+              :attribute-values="attributeValues"
+              :bios-attributes="biosAttributes"
+              :hmc-managed="hmcManaged"
+              :ibmi-load-source-value="ibmiLoadSourceValue"
+              :ibmi-alt-load-source-value="ibmiAltLoadSourceValue"
+              :ibmi-console-value="ibmiConsoleValue"
+              :linux-kvm-percentage-value="linuxKvmPercentageValue"
+              :linux-kvm-percentage-initial-value="linuxKvmPercentageInitialValue"
+              :linux-kvm-percentage-current-value="linuxKvmPercentageCurrentValue"
+              :power-restore-policy="powerRestorePolicy"
+              :location-codes="locationCodes"
+              :save-bios-settings="saveBiosSettings"
+              :save-operating-mode-settings="saveOperatingModeSettings"
+              :refetch="refetchBios"
+              :is-saving-bios="isSavingBios"
               @update-standby="updateToRuntime()"
             />
           </page-section>
@@ -242,12 +258,16 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue';
+// @ts-ignore - eventBus is a JS module
 import eventBus from '@/eventBus';
+// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
+// @ts-ignore - useLoadingBarComposable is a JS module
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+// @ts-ignore - useToastComposable is a JS module
 import useToast from '@/components/Composables/useToastComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
@@ -255,153 +275,168 @@ import BootSettings from './BootSettings.vue';
 import Alert from '@/components/Global/Alert.vue';
 import ArrowRight16 from '@carbon/icons-vue/es/arrow--right/16';
 import NetworkSettingsModal from './NetworkSettingsModal.vue';
-
-import stores from '@/store';
+import {
+  useBootBiosAttributes,
+  useServerSystemInfo,
+  useServerBmcInfo,
+  useLocationCodes,
+  useServerPowerControl,
+} from '@/api/composables/useServerPowerOperations';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
 
-const globalStore = stores.GlobalStore();
-const controlStore = stores.ControlStore();
-const bmcStore = stores.BmcStore();
-const bootSettingsStore = stores.BootSettingsStore();
-const resourceMemoryStore = stores.ResourceMemoryStore();
+// ─── Composables ─────────────────────────────────────────────────────────────
+
+const {
+  biosAttributes,
+  attributeValues,
+  isLoading: isBiosLoading,
+  refetch: refetchBios,
+  refetchBios: refetchBiosOnly,
+  standbyToRuntime: standbyToRuntimeMutation,
+  hmcManaged,
+  ibmiLoadSourceValue,
+  ibmiAltLoadSourceValue,
+  ibmiConsoleValue,
+  linuxKvmPercentageValue,
+  linuxKvmPercentageInitialValue,
+  linuxKvmPercentageCurrentValue,
+  saveBiosSettings,
+  saveOperatingModeSettings,
+  isSavingBios,
+} = useBootBiosAttributes();
+
+const {
+  serverStatus,
+  isInPhypStandby: isInPhypStandbyFromSystem,
+  isSystemLoading,
+  refetchSystem,
+  powerRestorePolicy,
+  lastPowerOperationTime,
+} = useServerSystemInfo();
+
+const { bmc, isLoading: isBmcLoading, refetch: refetchBmc } = useServerBmcInfo();
+
+const { locationCodes, refetch: refetchLocationCodes } = useLocationCodes();
+
+const {
+  isOperationInProgress,
+  serverPowerOn,
+  serverSoftReboot,
+  serverHardReboot,
+  serverSoftPowerOff,
+  serverHardPowerOff,
+} = useServerPowerControl();
+
+// ─── Local state ─────────────────────────────────────────────────────────────
 
 const openModal = ref(false);
 const phypStandby = ref(false);
 const isUpdated = ref(false);
-const form = ref({
-  rebootOption: 'orderly',
-  shutdownOption: 'orderly',
-});
+const form = ref({ rebootOption: 'orderly', shutdownOption: 'orderly' });
 const modalMessage = ref('');
-const modalOptions = ref({
-  title: '',
-  okVariant: '',
-  okTitle: '',
-  cancelTitle: '',
-});
+const modalOptions = ref({ title: '', okVariant: '', okTitle: '', cancelTitle: '' });
 const modalOption = ref('');
 
 onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-onBeforeMount(() => {
-  startLoader();
-  const bootSettingsPromise = new Promise((resolve) => {
-    eventBus.on('server-power-operations-boot-settings-complete', () =>
-      resolve(),
-    );
-  });
-  Promise.all([
-    globalStore.getHmcManaged(),
-    bootSettingsStore.getOperatingModeSettings(),
-    controlStore.fetchLastPowerOperationTime(),
-    bmcStore.getBmcInfo(),
-    globalStore.getBootProgress(),
-    bootSettingsPromise,
-  ]).finally(() => endLoader());
-});
+// ─── Loading bar management ───────────────────────────────────────────────────
+// Use isLoading (not isFetching) so the bar only fires on the very first load
+// when there is no cached data yet — not on every 30s background refetch.
+// Array-watch with a guard ref matches the Overview pattern and prevents
+// start/end flicker when multiple queries finish in the same tick.
+
+const isPageLoading = ref(false);
+
+watch(
+  [isBiosLoading, isSystemLoading, isBmcLoading],
+  (states) => {
+    const loading = states.some(Boolean);
+    if (loading && !isPageLoading.value) {
+      isPageLoading.value = true;
+      startLoader();
+    } else if (!loading && isPageLoading.value) {
+      isPageLoading.value = false;
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+// ─── Computed ─────────────────────────────────────────────────────────────────
 
 const isInPhypStandby = computed(() => {
-  if (!phypStandby.value) {
-    const bootProgress = globalStore.bootProgressGetter;
-    if (bootProgress === 'SystemHardwareInitializationComplete') {
-      return true;
-    } else {
-      return false;
-    }
-  } else return false;
+  if (phypStandby.value) return false;
+  return isInPhypStandbyFromSystem.value;
 });
 
-const bmc = computed(() => {
-  return bmcStore.bmcGetter;
+// Once the server itself stops reporting standby, clear the optimistic flag so
+// a subsequent hard refresh (or refetchInterval) doesn't re-show the banner.
+watch(isInPhypStandbyFromSystem, (inStandby) => {
+  if (!inStandby) phypStandby.value = false;
 });
 
-const hmcInfo = computed(() => {
-  return globalStore.hmcManagedGetter;
-});
+const hmcInfo = computed(() => hmcManaged.value);
 
 const isIBMi = computed(() => {
-  if (
-    attributeKeys.value?.pvm_default_os_type === 'Default' ||
-    attributeKeys.value?.pvm_default_os_type === 'IBM I'
-  ) {
-    return true;
-  } else {
-    return false;
-  }
+  const osType = biosAttributes.value?.pvm_default_os_type;
+  return osType === 'Default' || osType === 'IBM I';
 });
 
-const attributeKeys = computed(() => {
-  return bootSettingsStore.getBiosAttributes;
-});
+const systemDumpActive = computed(
+  () => biosAttributes.value?.pvm_sys_dump_active === 'Enabled',
+);
 
-const serverStatus = computed(() => {
-  return globalStore.serverStatusGetter;
-});
+// ─── Methods ──────────────────────────────────────────────────────────────────
 
-const isOperationInProgress = computed(() => {
-  return controlStore.getIsOperationInProgress;
-});
-
-const lastPowerOperationTime = computed(() => {
-  return controlStore.getLastPowerOperationTime;
-});
-
-const systemDumpActive = computed(() => {
-  return bootSettingsStore.getSystemDumpActive;
-});
-
-function openNetworkSettings() {
+function openNetworkSettings(): void {
   eventBus.emit('modal-network-settings');
 }
 
-function discardStandbyToRuntime() {
+function discardStandbyToRuntime(): void {
   getRequiredResponses();
 }
 
-function saveStandbyToRuntime() {
+function saveStandbyToRuntime(): void {
   isUpdated.value = true;
 }
 
-function updateToRuntime() {
+function updateToRuntime(): void {
   isUpdated.value = false;
   standbyToRuntime();
 }
 
-function getRequiredResponses() {
+async function getRequiredResponses(): Promise<void> {
   startLoader();
-  Promise.all([
-    bootSettingsStore.getOperatingModeSettings(),
-    controlStore.fetchLastPowerOperationTime(),
-    bmcStore.getBmcInfo(),
-    globalStore.getBootProgress(),
-    bootSettingsStore.fetchLocationCodes(),
-    resourceMemoryStore.getHmcManaged(),
-    bootSettingsStore.fetchBiosAttributes(),
-    bootSettingsStore.fetchAttributeValues(),
-  ]).finally(() => {
-    endLoader();
+  try {
+    await Promise.all([
+      refetchBios(),
+      refetchSystem(),
+      refetchBmc(),
+      refetchLocationCodes(),
+    ]);
     standbyToRuntime();
-  });
+  } finally {
+    endLoader();
+  }
 }
 
-function powerOn() {
+function powerOn(): void {
   if (
-    bmc.value.powerState === 'On' &&
-    bmc.value.statusState === 'Enabled' &&
-    bmc.value.health === 'OK'
+    bmc.value?.powerState === 'On' &&
+    bmc.value?.statusState === 'Enabled' &&
+    bmc.value?.health === 'OK'
   ) {
-    controlStore
-      .serverPowerOn()
+    serverPowerOn()
       .then((response) => {
         if (response === true) {
           infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
         errorToast(
           i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
@@ -412,10 +447,11 @@ function powerOn() {
   }
 }
 
-function rebootServer() {
+function rebootServer(): void {
   modalOption.value = 'reboot';
 
-  bootSettingsStore.fetchBiosAttributes().then(() => {
+  // Refetch BIOS attrs to check system dump active flag before opening modal
+  refetchBiosOnly().then(() => {
     modalMessage.value = `${
       systemDumpActive.value
         ? i18n.global.t('pageServerPowerOperations.modal.confirmRebootMessage2')
@@ -425,9 +461,7 @@ function rebootServer() {
     modalOptions.value.title = i18n.global.t(
       'pageServerPowerOperations.modal.confirmRebootTitle',
     );
-    modalOptions.value.okVariant = systemDumpActive.value
-      ? 'danger'
-      : 'primary';
+    modalOptions.value.okVariant = systemDumpActive.value ? 'danger' : 'primary';
     modalOptions.value.okTitle = systemDumpActive.value
       ? i18n.global.t('pageServerPowerOperations.reboot')
       : i18n.global.t('global.action.confirm');
@@ -437,7 +471,7 @@ function rebootServer() {
   });
 }
 
-function shutdownServer() {
+function shutdownServer(): void {
   modalOption.value = 'shutdown';
 
   modalMessage.value = `${
@@ -458,77 +492,45 @@ function shutdownServer() {
   openModal.value = true;
 }
 
-function operationConfirm() {
+function operationConfirm(): void {
+  const errMsg = i18n.global.t(
+    'pageServerPowerOperations.toast.errorSaveSettings',
+  );
+  const refreshMsg = i18n.global.t('pageServerPowerOperations.userRefresh');
+
   if (modalOption.value === 'reboot') {
-    if (form.value.rebootOption === 'orderly') {
-      controlStore
-        .serverSoftReboot()
-        .then((response) => {
-          if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
-          }
-        })
-        .catch((error) => {
-          errorToast(
-            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
-          );
-          console.log(error);
-        });
-    } else if (form.value.rebootOption === 'immediate') {
-      controlStore
-        .serverHardReboot()
-        .then((response) => {
-          if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
-          }
-        })
-        .catch((error) => {
-          errorToast(
-            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
-          );
-          console.log(error);
-        });
-    }
+    const fn =
+      form.value.rebootOption === 'orderly' ? serverSoftReboot : serverHardReboot;
+    fn()
+      .then((response) => {
+        if (response === true) infoToast(refreshMsg);
+      })
+      .catch((error: any) => {
+        errorToast(errMsg);
+        console.log(error);
+      });
   } else if (modalOption.value === 'shutdown') {
-    if (form.value.shutdownOption === 'orderly') {
-      controlStore
-        .serverSoftPowerOff()
-        .then((response) => {
-          if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
-          }
-        })
-        .catch((error) => {
-          errorToast(
-            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
-          );
-          console.log(error);
-        });
-    } else if (form.value.shutdownOption === 'immediate') {
-      controlStore
-        .serverHardPowerOff()
-        .then((response) => {
-          if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
-          }
-        })
-        .catch((error) => {
-          errorToast(
-            i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
-          );
-          console.log(error);
-        });
-    }
+    const fn =
+      form.value.shutdownOption === 'orderly'
+        ? serverSoftPowerOff
+        : serverHardPowerOff;
+    fn()
+      .then((response) => {
+        if (response === true) infoToast(refreshMsg);
+      })
+      .catch((error: any) => {
+        errorToast(errMsg);
+        console.log(error);
+      });
   }
 }
 
-function standbyToRuntime() {
-  bootSettingsStore
-    .standbyToRuntime()
-    .then((message) => {
+function standbyToRuntime(): void {
+  standbyToRuntimeMutation()
+    .then((message: string) => {
       phypStandby.value = true;
       successToast(message);
     })
-    .catch(({ message }) => errorToast(message));
+    .catch((error: any) => errorToast(error?.message ?? error));
 }
 </script>
