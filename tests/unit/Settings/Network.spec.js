@@ -81,6 +81,14 @@ vi.mock('@/components/Composables/useToastComposable', () => ({
   default: () => ({ successToast: vi.fn(), errorToast: vi.fn() }),
 }));
 
+vi.mock('@tanstack/vue-query', async () => {
+  const actual = await vi.importActual('@tanstack/vue-query');
+  return {
+    ...actual,
+    useQueryClient: () => ({ removeQueries: vi.fn() }),
+  };
+});
+
 vi.mock('@/store', () => ({
   default: {
     AuthenticationStore: () => ({ logout: vi.fn() }),

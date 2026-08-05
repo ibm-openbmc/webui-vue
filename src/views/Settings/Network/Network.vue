@@ -92,6 +92,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
+import { useQueryClient } from '@tanstack/vue-query';
 import eventBus from '@/eventBus';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageSection from '@/components/Global/PageSection.vue';
@@ -111,6 +112,7 @@ import { useNetwork } from '@/api/composables/useNetwork';
 import stores from '@/store';
 
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
+const queryClient = useQueryClient();
 const authenticationStore = stores.AuthenticationStore();
 
 const {
@@ -180,8 +182,8 @@ const lldpState = computed({
   get() {
     return lldpEnabledState.value?.[tabIndex.value]?.lldpEnabled ?? false;
   },
-  set(_newValue) {
-    // controlled via changeLLDPState
+  set(newValue) {
+    return newValue;
   },
 });
 
@@ -205,35 +207,51 @@ const getTabIndex = (selectedIndex) => {
 };
 
 const saveIpv4Address = (modalFormData) => {
-  startLoader();
   const modalData = [modalFormData];
-  const payload =
-    ipAddress.value !== ''
-      ? [...modalData, { Address: ipAddress.value, Subnet: '' }]
-      : modalData;
-  updateIpv4Address(payload).finally(() => setEndLoaderAfterDelay());
+  startLoader();
+  if (ipAddress.value !== '') {
+    //Edit selected row
+    const selectedRow = { Address: ipAddress.value, Subnet: '' };
+    const editRow = modalData.concat(selectedRow);
+    updateIpv4Address(editRow).finally(() => setEndLoaderAfterDelay());
+  } else {
+    // Add new address
+    updateIpv4Address(modalData).finally(() => setEndLoaderAfterDelay());
+  }
 };
 
 const saveIpv6Address = (modalFormData) => {
-  startLoader();
   const modalData = [modalFormData];
-  const payload =
-    ipAddress.value !== ''
-      ? [...modalData, { Address: ipAddress.value, PrefixLength: 0 }]
-      : modalData;
-  updateIpv6Address(payload).finally(() => setEndLoaderAfterDelay());
+  startLoader();
+  if (ipAddress.value !== '') {
+    //Edit selected row
+    const selectedRow = { Address: ipAddress.value, PrefixLength: 0 };
+    const editRow = modalData.concat(selectedRow);
+    updateIpv6Address(editRow).finally(() => setEndLoaderAfterDelay());
+  } else {
+    // Add new address
+    updateIpv6Address(modalData).finally(() => setEndLoaderAfterDelay());
+  }
 };
 
 const saveIpv6StaticDefaultGatewayAddress = (modalFormData) => {
-  startLoader();
   const modalData = [modalFormData];
-  const payload =
-    ipAddressIpv6StaticDefaultGateway.value !== ''
-      ? [...modalData, { Address: ipAddressIpv6StaticDefaultGateway.value }]
-      : modalData;
-  updateIpv6StaticDefaultGatewayAddress(payload).finally(() =>
-    setEndLoaderAfterDelay(),
-  );
+  startLoader();
+  if (ipAddressIpv6StaticDefaultGateway.value !== '') {
+    //Edit selected row
+    const selectedRow = {
+      Address: ipAddressIpv6StaticDefaultGateway.value,
+    };
+    const editRow = modalData.concat(selectedRow);
+    updateIpv6StaticDefaultGatewayAddress(editRow).finally(() =>
+      setEndLoaderAfterDelay(),
+    );
+  } else {
+    // Add new address
+    updateIpv6StaticDefaultGatewayAddress(modalData).finally(() =>
+      setEndLoaderAfterDelay(),
+    );
+  }
 };
 
 const saveDnsAddress = (modalFormData) => {
@@ -244,7 +262,11 @@ const saveDnsAddress = (modalFormData) => {
 const saveHostname = (modalFormData) => {
   startLoader();
   saveHostnameApi(modalFormData)
-    .then(() => authenticationStore.logout())
+    .then(() => {
+      queryClient.removeQueries({ queryKey: ['redfish', 'system', 'info'] });
+      sessionStorage.removeItem('systemInfoCache');
+      return authenticationStore.logout();
+    })
     .finally(() => endLoader());
 };
 

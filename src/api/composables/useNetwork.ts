@@ -259,10 +259,13 @@ export function useNetwork() {
   async function patchEthernetInterface(
     payload: Record<string, unknown>,
   ): Promise<void> {
-    await api.patch(
-      `${ETHERNET_INTERFACES_URL}/${selectedInterfaceId.value}`,
-      payload,
-    );
+    // selectedInterfaceId is only set on tab click; fall back to the id of the
+    // currently selected interface so tab-0 operations work on first load.
+    const id =
+      selectedInterfaceId.value ||
+      networkSettings.value[selectedInterfaceIndex.value]?.id ||
+      '';
+    await api.patch(`${ETHERNET_INTERFACES_URL}/${id}`, payload);
   }
 
   // ── Mutations ─────────────────────────────────────────────────────────────────
@@ -406,10 +409,13 @@ export function useNetwork() {
 
   const saveLldpMutation = useMutation({
     mutationFn: async (state: boolean): Promise<void> => {
-      await api.patch(
-        `${DEDICATED_NETWORK_PORTS_URL}/${selectedInterfaceId.value}`,
-        { Ethernet: { LLDPEnabled: state } },
-      );
+      const id =
+        selectedInterfaceId.value ||
+        networkSettings.value[selectedInterfaceIndex.value]?.id ||
+        '';
+      await api.patch(`${DEDICATED_NETWORK_PORTS_URL}/${id}`, {
+        Ethernet: { LLDPEnabled: state },
+      });
       invalidateLldp();
     },
     onSuccess: () => {
@@ -637,13 +643,9 @@ export function useNetwork() {
     mutationFn: async (hostname: { HostName: string }): Promise<void> => {
       await patchEthernetInterface(hostname);
     },
-    onSuccess: () => {
-      successToast(
-        i18n.global.t('pageNetwork.toast.successSaveNetworkSettings', {
-          setting: i18n.global.t('pageNetwork.network'),
-        }),
-      );
-    },
+    // No onSuccess toast — the view calls authenticationStore.logout() on
+    // success, matching the original NetworkStore behaviour where hostname
+    // save triggered an immediate logout rather than a toast.
     onError: () => {
       errorToast(
         i18n.global.t('pageNetwork.toast.errorSaveNetworkSettings', {
@@ -704,7 +706,7 @@ export function useNetwork() {
     refetchEthernet,
     refetchLldp,
 
-    // Mutations (return Promise<string> with the success message)
+    // Mutations (return Promise<void>; toasts are handled in onSuccess/onError)
     saveDomainNameState: saveDomainNameMutation.mutateAsync,
     saveDnsState: saveDnsMutation.mutateAsync,
     saveNtpState: saveNtpMutation.mutateAsync,

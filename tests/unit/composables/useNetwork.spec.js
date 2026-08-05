@@ -581,12 +581,9 @@ describe('useNetwork', () => {
       );
     });
 
-    it('saveHostname (index 13): onSuccess calls successSaveNetworkSettings toast', () => {
+    it('saveHostname (index 13): has no onSuccess handler (logout is handled by the view)', () => {
       const configs = getMutationConfigs();
-      configs[13].onSuccess();
-      expect(mockSuccessToast).toHaveBeenCalledWith(
-        expect.stringContaining('pageNetwork.toast.successSaveNetworkSettings'),
-      );
+      expect(configs[13].onSuccess).toBeUndefined();
     });
 
     it('saveDnsAddress (index 14): onSuccess calls successAddingDnsServer toast', () => {

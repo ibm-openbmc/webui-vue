@@ -85,19 +85,23 @@ const dnsTableFields = [
   },
 ];
 
-const isTablesDisabled = computed(() => isTableBusy.value);
+const isTablesDisabled = computed(() => {
+  return isTableBusy.value;
+});
 
 const dnsStaticTableItems = computed(() => {
   const dns = networkSettings.value[props.tabIndex]?.staticNameServers ?? [];
-  return dns.map((server) => ({
-    address: server,
-    actions: [
-      {
-        value: 'delete',
-        title: i18n.global.t('pageNetwork.table.deleteDns'),
-      },
-    ],
-  }));
+  return dns.map((server) => {
+    return {
+      address: server,
+      actions: [
+        {
+          value: 'delete',
+          title: i18n.global.t('pageNetwork.table.deleteDns'),
+        },
+      ],
+    };
+  });
 });
 
 const onDnsTableAction = (action, $event, index) => {

@@ -149,7 +149,9 @@ const props = defineProps({
 
 const openModal = ref(false);
 const modalMessage = ref('');
-const modalPayload = ref({ newIpv6Array: null });
+const modalPayload = ref({
+  newIpv6Array: null,
+});
 const modalOptions = ref({
   title: '',
   okVariant: '',
@@ -185,33 +187,37 @@ const ipv6TableFields = [
   },
 ];
 
-const isTablesDisabled = computed(() => isTableBusy.value);
+const isTablesDisabled = computed(() => {
+  return isTableBusy.value;
+});
 
 const ipv6TableItems = computed(() => {
   const addresses = networkSettings.value[props.tabIndex]?.ipv6 ?? [];
-  return addresses.map((ipv6) => ({
-    Address: ipv6.Address,
-    PrefixLength: ipv6.PrefixLength,
-    AddressOrigin: ipv6.AddressOrigin,
-    actions: [
-      {
-        value: 'edit',
-        enabled:
-          ipv6.AddressOrigin !== 'LinkLocal' &&
-          ipv6.AddressOrigin !== 'DHCPv6' &&
-          ipv6.AddressOrigin !== 'SLAAC',
-        title: i18n.global.t('pageNetwork.table.editIpv6'),
-      },
-      {
-        value: 'delete',
-        enabled:
-          ipv6.AddressOrigin !== 'LinkLocal' &&
-          ipv6.AddressOrigin !== 'DHCPv6' &&
-          ipv6.AddressOrigin !== 'SLAAC',
-        title: i18n.global.t('pageNetwork.table.deleteIpv6'),
-      },
-    ],
-  }));
+  return addresses.map((ipv6) => {
+    return {
+      Address: ipv6.Address,
+      PrefixLength: ipv6.PrefixLength,
+      AddressOrigin: ipv6.AddressOrigin,
+      actions: [
+        {
+          value: 'edit',
+          enabled:
+            ipv6.AddressOrigin !== 'LinkLocal' &&
+            ipv6.AddressOrigin !== 'DHCPv6' &&
+            ipv6.AddressOrigin !== 'SLAAC',
+          title: i18n.global.t('pageNetwork.table.editIpv6'),
+        },
+        {
+          value: 'delete',
+          enabled:
+            ipv6.AddressOrigin !== 'LinkLocal' &&
+            ipv6.AddressOrigin !== 'DHCPv6' &&
+            ipv6.AddressOrigin !== 'SLAAC',
+          title: i18n.global.t('pageNetwork.table.deleteIpv6'),
+        },
+      ],
+    };
+  });
 });
 
 const ipv6DefaultGateway = computed(() => {
@@ -228,8 +234,8 @@ const dhcpEnabledState = computed({
       'Enabled'
     );
   },
-  set(_newValue) {
-    // controlled via changeIpv6DhcpEnabledState
+  set(newValue) {
+    return newValue;
   },
 });
 
@@ -240,15 +246,15 @@ const ipv6AutoConfigState = computed({
         ?.ipv6AutoConfigEnabled ?? false
     );
   },
-  set(_newValue) {
-    // controlled via changeIpv6AutoConfigState
+  set(newValue) {
+    return newValue;
   },
 });
 
 watch(
   () => ipv6TableItems.value,
-  (items) => {
-    if (!items.length) {
+  (item) => {
+    if (!item.length) {
       document
         .querySelector('tr.b-table-empty-slot td[scope]')
         ?.removeAttribute('scope');
@@ -271,10 +277,13 @@ const onIpv6TableAction = (action, $event, item) => {
 const openDeleteIpv6TableRowModal = (item) => {
   const newIpv6Array = ipv6TableItems.value
     .filter((row) => row.Address !== item.Address)
-    .map((ipv6) => ({
-      Address: ipv6.Address,
-      PrefixLength: ipv6.PrefixLength,
-    }));
+    .map((ipv6) => {
+      const { Address, PrefixLength } = ipv6;
+      return {
+        Address,
+        PrefixLength,
+      };
+    });
   const addressIp = item.Address;
 
   modalPayload.value.newIpv6Array = newIpv6Array;
@@ -296,24 +305,29 @@ const initIpv6Modal = () => {
 };
 
 const operationConfirm = () => {
-  if (!modalPayload.value.newIpv6Array) return;
   startLoader();
   deleteIpv6Address(modalPayload.value.newIpv6Array).finally(() => {
-    setTimeout(() => endLoader(), 15000);
+    setTimeout(() => {
+      endLoader();
+    }, 15000);
   });
 };
 
 const changeIpv6DhcpEnabledState = (state) => {
   startLoader();
   saveIpv6DhcpEnabledState(state).finally(() => {
-    setTimeout(() => endLoader(), 15000);
+    setTimeout(() => {
+      endLoader();
+    }, 15000);
   });
 };
 
 const changeIpv6AutoConfigState = (state) => {
   startLoader();
   saveIpv6AutoConfigState(state).finally(() => {
-    setTimeout(() => endLoader(), 15000);
+    setTimeout(() => {
+      endLoader();
+    }, 15000);
   });
 };
 </script>

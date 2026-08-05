@@ -99,8 +99,11 @@ const props = defineProps({
 });
 
 const openModal = ref(false);
+
 const modalMessage = ref('');
-const modalPayload = ref({ newIpv6Array: null });
+const modalPayload = ref({
+  newIpv6Array: null,
+});
 const modalOptions = ref({
   title: '',
   okVariant: '',
@@ -124,34 +127,40 @@ const ipv6DefaultGatewayTableFields = [
   },
 ];
 
-const isTablesDisabled = computed(() => isTableBusy.value);
+const isTablesDisabled = computed(() => {
+  return isTableBusy.value;
+});
 
 const ipv6DefaultGatewayTableItems = computed(() => {
   const addresses =
     networkSettings.value[props.tabIndex]?.ipv6StaticDefaultGateways ?? [];
-  return addresses.map((ipv6) => ({
-    Address: ipv6.Address,
-    actions: [
-      {
-        value: 'edit',
-        enabled: true,
-        title: i18n.global.t('pageNetwork.table.editIpv6StaticDefaultGateway'),
-      },
-      {
-        value: 'delete',
-        enabled: true,
-        title: i18n.global.t(
-          'pageNetwork.table.deleteIpv6StaticDefaultGateway',
-        ),
-      },
-    ],
-  }));
+  return addresses.map((ipv6) => {
+    return {
+      Address: ipv6.Address,
+      actions: [
+        {
+          value: 'edit',
+          enabled: true,
+          title: i18n.global.t(
+            'pageNetwork.table.editIpv6StaticDefaultGateway',
+          ),
+        },
+        {
+          value: 'delete',
+          enabled: true,
+          title: i18n.global.t(
+            'pageNetwork.table.deleteIpv6StaticDefaultGateway',
+          ),
+        },
+      ],
+    };
+  });
 });
 
 watch(
   () => ipv6DefaultGatewayTableItems.value,
-  (items) => {
-    if (!items.length) {
+  (item) => {
+    if (!item.length) {
       document
         .querySelector('tr.b-table-empty-slot td[scope]')
         ?.removeAttribute('scope');
@@ -174,7 +183,12 @@ const onIpv6DefaultGatewayTableAction = (action, $event, item) => {
 const openDeleteIpv6DefaultGatewayTableRowModal = (item) => {
   const newIpv6Array = ipv6DefaultGatewayTableItems.value
     .filter((row) => row.Address !== item.Address)
-    .map((ipv6) => ({ Address: ipv6.Address }));
+    .map((ipv6) => {
+      const { Address } = ipv6;
+      return {
+        Address,
+      };
+    });
   const addressIp = item.Address;
 
   modalPayload.value.newIpv6Array = newIpv6Array;
@@ -192,12 +206,13 @@ const openDeleteIpv6DefaultGatewayTableRowModal = (item) => {
 };
 
 const operationConfirm = () => {
-  if (!modalPayload.value.newIpv6Array) return;
   startLoader();
   deleteIpv6StaticDefaultGatewayAddress(
     modalPayload.value.newIpv6Array,
   ).finally(() => {
-    setTimeout(() => endLoader(), 15000);
+    setTimeout(() => {
+      endLoader();
+    }, 15000);
   });
 };
 

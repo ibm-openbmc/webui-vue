@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { computed, watch, ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import PageSection from '@/components/Global/PageSection.vue';
@@ -103,7 +103,9 @@ const props = defineProps({
 
 const macAddress = ref('');
 
-const isDisabled = computed(() => isTableBusy.value);
+const isDisabled = computed(() => {
+  return isTableBusy.value;
+});
 
 const currentInterface = computed(() => {
   return networkSettings.value[props.tabIndex];
@@ -121,8 +123,8 @@ const useDomainNameState = computed({
   get() {
     return currentInterface.value?.useDomainNameEnabled ?? false;
   },
-  set(_newValue) {
-    // controlled via changeDomainNameState
+  set(newValue) {
+    return newValue;
   },
 });
 
@@ -130,8 +132,8 @@ const useDnsState = computed({
   get() {
     return currentInterface.value?.useDnsEnabled ?? false;
   },
-  set(_newValue) {
-    // controlled via changeDnsState
+  set(newValue) {
+    return newValue;
   },
 });
 
@@ -139,8 +141,8 @@ const useNtpState = computed({
   get() {
     return currentInterface.value?.useNtpEnabled ?? false;
   },
-  set(_newValue) {
-    // controlled via changeNtpState
+  set(newValue) {
+    return newValue;
   },
 });
 
@@ -159,21 +161,27 @@ watch(networkSettings, () => {
 const changeDomainNameState = (state) => {
   startLoader();
   saveDomainNameApi(state).finally(() => {
-    setTimeout(() => endLoader(), 15000);
+    setTimeout(() => {
+      endLoader();
+    }, 15000);
   });
 };
 
 const changeDnsState = (state) => {
   startLoader();
   saveDnsApi(state).finally(() => {
-    setTimeout(() => endLoader(), 15000);
+    setTimeout(() => {
+      endLoader();
+    }, 15000);
   });
 };
 
 const changeNtpState = (state) => {
   startLoader();
   saveNtpApi(state).finally(() => {
-    setTimeout(() => endLoader(), 15000);
+    setTimeout(() => {
+      endLoader();
+    }, 15000);
   });
 };
 </script>
