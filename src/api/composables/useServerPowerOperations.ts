@@ -242,10 +242,13 @@ export function useBootBiosAttributes() {
   // ─── Save BIOS settings mutation ─────────────────────────────────────────
 
   const saveBiosSettingsMutation = useMutation({
-    mutationFn: async (biosSettings: BiosAttributes): Promise<void> => {
+    mutationFn: async (biosSettings: BiosAttributes): Promise<string> => {
       await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
         Attributes: biosSettings,
       });
+      return i18n.global.t(
+        'pageServerPowerOperations.toast.successSaveSettings',
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -358,20 +361,6 @@ export function useServerSystemInfo() {
     return serverStateMapper(PowerState ?? '');
   });
 
-  const bootProgress = computed(
-    () => systemData.value?.BootProgress?.LastState ?? null,
-  );
-
-  const isInPhypStandby = computed(() => {
-    const bp = bootProgress.value;
-    // Only show the standby banner for states where user action is required.
-    // OSBootStarted / OSRunning mean the OS is already starting or running,
-    // so the banner should not appear for those.
-    return (
-      bp === 'SystemHardwareInitializationComplete' || bp === 'SetupEntered'
-    );
-  });
-
   const powerRestorePolicy = computed(
     () => systemData.value?.PowerRestorePolicy ?? '',
   );
@@ -390,8 +379,6 @@ export function useServerSystemInfo() {
 
   return {
     serverStatus,
-    bootProgress,
-    isInPhypStandby,
     powerRestorePolicy,
     automaticRetryConfig,
     bootFault,

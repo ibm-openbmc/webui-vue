@@ -532,8 +532,12 @@ import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 // @ts-ignore - UtilitiesFunction is a JS module
 import utilitiesFunctions from '../../../components/Global/UtilitiesFunction';
 import type { BiosAttributes } from '@/api/composables/useServerPowerOperations';
+import stores from '@/store';
 
 const { spaceFilter } = utilitiesFunctions();
+
+const globalStore = stores.GlobalStore();
+const resourceMemoryStore = stores.ResourceMemoryStore();
 
 // ─── Props & Emits ───────────────────────────────────────────────────────────
 
@@ -542,25 +546,21 @@ const props = defineProps<{
   disabled: boolean;
   isInPhypStandby?: boolean;
   biosAttributes: BiosAttributes | null;
-  hmcManaged: string | null;
   ibmiLoadSourceValue: string;
   ibmiAltLoadSourceValue: string;
   ibmiConsoleValue: string;
   linuxKvmPercentageValue: number | null;
   linuxKvmPercentageInitialValue: number | null;
   linuxKvmPercentageCurrentValue: number | null;
-  isAtleastPhypInStandby: boolean;
   powerRestorePolicy: string;
   locationCodes: string[];
-  saveOperatingModeSettings: (payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string }) => Promise<void>;
 }>();
 
 const emit = defineEmits<{
   (e: 'updated-attributes', keys: BiosAttributes): void;
   (e: 'is-linux-kvm-valid', valid: boolean): void;
+  (e: 'pending-operating-mode-settings', payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string } | null): void;
 }>();
-
-// ─── Local state ─────────────────────────────────────────────────────────────
 
 const isLinuxKvmValid = ref(true);
 const manualMode = ref('Manual');
@@ -571,12 +571,19 @@ const taggedSettingsArr = ref(['Current configuration', 'none']);
 const localLinuxKvmPercentage = ref<number>(props.linuxKvmPercentageValue ?? 0);
 
 const taggedSettings = ref([
-  { settingKey: 'pvm_ibmi_load_source', settingValue: 'Current configuration' },
-  { settingKey: 'pvm_ibmi_alt_load_source', settingValue: 'Current configuration' },
-  { settingKey: 'pvm_ibmi_console', settingValue: 'Current configuration' },
+  {
+    settingKey: 'pvm_ibmi_load_source',
+    settingValue: 'Current configuration',
+  },
+  {
+    settingKey: 'pvm_ibmi_alt_load_source',
+    settingValue: 'Current configuration',
+  },
+  {
+    settingKey: 'pvm_ibmi_console',
+    settingValue: 'Current configuration',
+  },
 ]);
-
-// ─── Table field definitions ─────────────────────────────────────────────────
 
 const fields = ref([
   {
@@ -615,68 +622,210 @@ const taggedSettingsFields = ref([
   },
 ]);
 
-// ─── Table items ─────────────────────────────────────────────────────────────
-
 const serverFirmwareItems = ref([
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartOnly'), description: i18n.global.t('pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartOnly') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartAlways'), description: i18n.global.t('pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartAlways') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.standBy'), description: i18n.global.t('pageServerPowerOperations.biosSettings.serverFirmwareItems.description.standBy') },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartOnly',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartOnly',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.autoStartAlways',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.autoStartAlways',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.setting.standBy',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.serverFirmwareItems.description.standBy',
+    ),
+  },
 ]);
 
 const defaultPartitionItems = ref([
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.aix'), description: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.description.aix') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linux'), description: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linux') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.ibmI'), description: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.description.ibmI') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linuxKVM'), description: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linuxKVM') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.default'), description: i18n.global.t('pageServerPowerOperations.biosSettings.defaultPartitionItems.description.default') },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.aix',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.aix',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linux',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linux',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.ibmI',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.ibmI',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.linuxKVM',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.linuxKVM',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.setting.default',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.defaultPartitionItems.description.default',
+    ),
+  },
 ]);
 
 const aixPartitionItems = ref([
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.setting.partitionBoot'), description: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.description.partitionBoot') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBoot'), description: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBoot') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToSms'), description: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToSms') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToOpenFirware'), description: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToOpenFirware') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBootMode'), description: i18n.global.t('pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBootMode') },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.partitionBoot',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.partitionBoot',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBoot',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBoot',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToSms',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToSms',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.bootToOpenFirware',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.bootToOpenFirware',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.setting.serviceBootMode',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.aixPartitionItems.description.serviceBootMode',
+    ),
+  },
 ]);
 
 const ibmiItems = ref([
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.setting.a'), description: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.description.a') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.setting.b'), description: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.description.b') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.setting.c'), description: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.description.c') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.setting.d'), description: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiItems.description.d') },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.a',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.a',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.b',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.b',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.c',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.c',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.setting.d',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiItems.description.d',
+    ),
+  },
 ]);
 
 const linuxKvmItems = ref([
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.linuxKvmItems.setting.automatic'), description: i18n.global.t('pageServerPowerOperations.biosSettings.linuxKvmItems.description.automatic') },
-  { setting: i18n.global.t('pageServerPowerOperations.biosSettings.linuxKvmItems.setting.custom'), description: i18n.global.t('pageServerPowerOperations.biosSettings.linuxKvmItems.description.custom') },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.automatic',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.description.automatic',
+    ),
+  },
+  {
+    setting: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.setting.custom',
+    ),
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.linuxKvmItems.description.custom',
+    ),
+  },
 ]);
 
 const linuxKvmPercentageItems = ref([
-  { description: i18n.global.t('pageServerPowerOperations.biosSettings.linuxKvmPercentage.description') },
+  {
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.linuxKvmPercentage.description',
+    ),
+  },
 ]);
 
 const ibmiLoadSourceItems = ref([
-  { description: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiLoadSource.description') },
+  {
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiLoadSource.description',
+    ),
+  },
 ]);
 
 const ibmiAltLoadSourceItems = ref([
-  { description: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiAltLoadSource.description') },
+  {
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiAltLoadSource.description',
+    ),
+  },
 ]);
 
 const ibmiConsoleItems = ref([
-  { description: i18n.global.t('pageServerPowerOperations.biosSettings.ibmiConsole.description') },
+  {
+    description: i18n.global.t(
+      'pageServerPowerOperations.biosSettings.ibmiConsole.description',
+    ),
+  },
 ]);
-
-// ─── attributeKeys — mutable local copy of BIOS attrs ────────────────────────
 
 const attributeKeys = ref<BiosAttributes>({ ...props.biosAttributes });
 
-// Keep in sync when parent data refreshes
 watch(() => props.biosAttributes, (newVal) => {
   if (newVal) Object.assign(attributeKeys.value, newVal);
 });
-
-// ─── onBeforeMount ────────────────────────────────────────────────────────────
 
 onBeforeMount(() => {
   if (props.biosAttributes) {
@@ -692,25 +841,22 @@ onBeforeMount(() => {
   taggedSettings.value[2].settingValue = props.ibmiConsoleValue;
 });
 
-// ─── Computed ─────────────────────────────────────────────────────────────────
-
-const manualModeSelected = computed(
-  () => selectedOperatingMode.value === manualMode.value,
-);
+const manualModeSelected = computed(() => {
+  return selectedOperatingMode.value == manualMode.value;
+});
 
 const taggedSettingValues = computed(() => {
-  const info = taggedSettings.value;
-  info[0].settingValue = props.ibmiLoadSourceValue;
-  info[1].settingValue = props.ibmiAltLoadSourceValue;
-  info[2].settingValue = props.ibmiConsoleValue;
-  return info;
+  let taggedSettingsInfo = taggedSettings.value;
+  taggedSettingsInfo[0].settingValue = props.ibmiLoadSourceValue;
+  taggedSettingsInfo[1].settingValue = props.ibmiAltLoadSourceValue;
+  taggedSettingsInfo[2].settingValue = props.ibmiConsoleValue;
+  return taggedSettingsInfo;
 });
 
 const taggedSettingsOptions = computed(() => {
-  return [...taggedSettingsArr.value, ...(props.locationCodes ?? [])];
+  let taggedSettingsList = [...taggedSettingsArr.value];
+  return [...taggedSettingsList, ...(props.locationCodes ?? [])];
 });
-
-// ─── Methods ──────────────────────────────────────────────────────────────────
 
 function hmcManagedChecks(value: string): boolean {
   if (!isHmcManaged()) return true;
@@ -722,53 +868,67 @@ function hmcManagedChecks(value: string): boolean {
   return false;
 }
 
+const hmcManaged = computed(() => {
+  return resourceMemoryStore.hmcManagedGetter;
+});
+
+const isAtleastPhypInStandby = computed(() => {
+  return globalStore.isInPhypStandby;
+});
+
 function isHmcManaged(): boolean {
-  return props.hmcManaged === 'Enabled';
+  return hmcManaged.value === 'Enabled' ? true : false;
 }
 
 function onChangeSystemOpsMode(value: string): void {
   selectedOperatingMode.value = value;
   if (selectedOperatingMode.value === normalMode.value) {
     if (currentOperatingMode.value !== selectedOperatingMode.value) {
-      props.saveOperatingModeSettings({
+      emit('pending-operating-mode-settings', {
         powerRestorePolicy: 'LastState',
         automaticRetryConfig: 'RetryAttempts',
         bootFault: 'Never',
-      }).catch(console.error);
+      });
+    } else {
+      emit('pending-operating-mode-settings', null);
     }
   } else if (selectedOperatingMode.value === manualMode.value) {
-    props.saveOperatingModeSettings({
+    emit('pending-operating-mode-settings', {
       powerRestorePolicy: 'AlwaysOff',
       automaticRetryConfig: 'Disabled',
       bootFault: 'Never',
-    }).catch(console.error);
+    });
   }
 }
 
 function changeLinuxKvmPercentageValue(value: string | number): void {
-  const valueAsString = value.toString();
-  const regex = /^\d+(\.\d?)?$/;
-  isLinuxKvmValid.value = regex.test(valueAsString);
+  let valueAsString = value.toString();
+  let regex = /^\d+(\.\d?)?$/;
+  if (regex.test(valueAsString)) {
+    isLinuxKvmValid.value = true;
+  } else {
+    isLinuxKvmValid.value = false;
+  }
   localLinuxKvmPercentage.value = Number(value);
 }
 
 function changeTaggedSettingsValue(key: string, value: string): void {
-  // Update local tagged settings array (store is bypassed; emitted through watcher)
   const idx = taggedSettings.value.findIndex((s) => s.settingKey === key);
   if (idx !== -1) taggedSettings.value[idx].settingValue = value;
 }
 
-function validateLinuxKvmPercentage(event: KeyboardEvent): void {
-  const keyCode = event.keyCode ?? (event as any).which;
-  const target = event.target as HTMLInputElement;
-  const percentageValue = target.value + event.key;
-  const decimalSet = event.key === '.';
+function validateLinuxKvmPercentage($event: KeyboardEvent): void {
+  let keyCode = ($event as any).keyCode ? ($event as any).keyCode : ($event as any).which;
+  let percentageValue = ($event.target as HTMLInputElement).value + $event.key;
+  let decimalSet = $event.key === '.';
   if (!decimalSet) {
+    // only allow number and one decimal
     if (
       (keyCode < 48 || keyCode > 57) &&
-      (keyCode !== 46 || percentageValue.indexOf('.') !== -1)
+      (keyCode !== 46 || percentageValue.indexOf('.') != -1)
     ) {
-      event.preventDefault();
+      // 46 is decimal
+      $event.preventDefault();
     }
   }
 }
@@ -791,11 +951,10 @@ function validateAttributeKeys(
     );
   } else if (key === 'pvm_linux_kvm_memory') {
     return defaultPartitionEnvironment === 'Linux KVM';
+  } else {
+    return true;
   }
-  return true;
 }
-
-// ─── Watch to emit updates ───────────────────────────────────────────────────
 
 watch(
   () => [
@@ -804,17 +963,20 @@ watch(
     localLinuxKvmPercentage.value,
   ],
   () => {
-    const keys = { ...attributeKeys.value };
-    if (keys['pvm_linux_kvm_memory'] === 'Custom') {
-      keys['pvm_linux_kvm_percentage'] = localLinuxKvmPercentage.value * 10;
+    if (attributeKeys.value['pvm_linux_kvm_memory'] === 'Custom') {
+      attributeKeys.value['pvm_linux_kvm_percentage'] =
+        localLinuxKvmPercentage.value * 10;
     } else {
-      keys['pvm_linux_kvm_percentage'] =
+      attributeKeys.value['pvm_linux_kvm_percentage'] =
         (props.linuxKvmPercentageInitialValue ?? 0) * 10;
     }
-    keys['pvm_ibmi_load_source'] = taggedSettingValues.value[0].settingValue;
-    keys['pvm_ibmi_alt_load_source'] = taggedSettingValues.value[1].settingValue;
-    keys['pvm_ibmi_console'] = taggedSettingValues.value[2].settingValue;
-    emit('updated-attributes', keys);
+    attributeKeys.value['pvm_ibmi_load_source'] =
+      taggedSettingValues.value[0].settingValue;
+    attributeKeys.value['pvm_ibmi_alt_load_source'] =
+      taggedSettingValues.value[1].settingValue;
+    attributeKeys.value['pvm_ibmi_console'] =
+      taggedSettingValues.value[2].settingValue;
+    emit('updated-attributes', attributeKeys.value);
     emit('is-linux-kvm-valid', isLinuxKvmValid.value);
   },
   { deep: true },
