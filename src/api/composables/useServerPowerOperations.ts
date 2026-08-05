@@ -250,11 +250,16 @@ export function useBootBiosAttributes() {
         'pageServerPowerOperations.toast.successSaveSettings',
       );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['spo', 'bios', 'attributes'],
-      });
-      queryClient.invalidateQueries({ queryKey: ['spo', 'bios', 'registry'] });
+    onSuccess: (_result, biosSettings) => {
+      // Optimistically update the cache with the saved values so the UI
+      // reflects what was saved without a re-fetch. The PATCH goes to
+      // /Bios/Settings (pending buffer) while GET /Bios returns committed
+      // values — they won't match until after a reboot, so a re-fetch
+      // would just overwrite the UI with stale old data.
+      queryClient.setQueryData(
+        ['spo', 'bios', 'attributes'],
+        (old: BiosAttributes | undefined) => ({ ...old, ...biosSettings }),
+      );
     },
   });
 

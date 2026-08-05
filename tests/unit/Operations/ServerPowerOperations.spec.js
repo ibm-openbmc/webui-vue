@@ -1,6 +1,8 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { computed, ref } from 'vue';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { createPinia, setActivePinia } from 'pinia';
+import stores from '@/store';
 import ServerPowerOperations from '@/views/Operations/ServerPowerOperations/ServerPowerOperations.vue';
 
 // ── Mock composable ───────────────────────────────────────────────────────────
@@ -25,7 +27,7 @@ const mockAttributeValues = ref({ pvm_default_os_type: [{ value: 'AIX', text: 'A
 const mockIsBiosLoading = ref(false);
 const mockHmcManaged = ref(null);
 const mockServerStatus = ref('on');
-const mockIsInPhypStandbyFromSystem = ref(false);
+const mockBootProgressGetter = ref('');
 const mockIsSystemLoading = ref(false);
 const mockPowerRestorePolicy = ref('LastState');
 const mockLastPowerOperationTime = ref(null);
@@ -55,7 +57,6 @@ vi.mock('@/api/composables/useServerPowerOperations', () => ({
   }),
   useServerSystemInfo: () => ({
     serverStatus: computed(() => mockServerStatus.value),
-    isInPhypStandby: computed(() => mockIsInPhypStandbyFromSystem.value),
     isSystemLoading: computed(() => mockIsSystemLoading.value),
     refetchSystem: mockRefetchSystem,
     powerRestorePolicy: computed(() => mockPowerRestorePolicy.value),
@@ -139,9 +140,13 @@ const globalStubs = {
 
 // ── Factory ───────────────────────────────────────────────────────────────────
 
+let pinia;
+let globalStore;
+
 const factory = async () => {
   const wrapper = mount(ServerPowerOperations, {
     global: {
+      plugins: [pinia],
       stubs: globalStubs,
       mocks: {
         $t: (key) => key,
@@ -160,13 +165,21 @@ const factory = async () => {
 describe('ServerPowerOperations.vue', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Set up Pinia and mock GlobalStore getter
+    pinia = createPinia();
+    setActivePinia(pinia);
+    globalStore = stores.GlobalStore();
+    Object.defineProperty(globalStore, 'bootProgressGetter', {
+      get: () => mockBootProgressGetter.value,
+      configurable: true,
+    });
     // Reset all reactive state to defaults
     mockBiosAttributes.value = { pvm_default_os_type: 'AIX', pvm_sys_dump_active: 'Disabled' };
     mockAttributeValues.value = {};
     mockIsBiosLoading.value = false;
     mockHmcManaged.value = null;
     mockServerStatus.value = 'on';
-    mockIsInPhypStandbyFromSystem.value = false;
+    mockBootProgressGetter.value = '';
     mockIsSystemLoading.value = false;
     mockPowerRestorePolicy.value = 'LastState';
     mockLastPowerOperationTime.value = null;
@@ -257,20 +270,20 @@ describe('ServerPowerOperations.vue', () => {
   // ── PHYP Standby banner ──────────────────────────────────────────────────────
 
   describe('PHYP Standby banner', () => {
-    it('shows standby banner when isInPhypStandby is true', async () => {
-      mockIsInPhypStandbyFromSystem.value = true;
+    it('shows standby banner when bootProgress is SystemHardwareInitializationComplete', async () => {
+      mockBootProgressGetter.value = 'SystemHardwareInitializationComplete';
       const wrapper = await factory();
       expect(wrapper.text()).toContain('pageServerPowerOperations.phypStandby');
     });
 
     it('hides standby banner when not in standby', async () => {
-      mockIsInPhypStandbyFromSystem.value = false;
+      mockBootProgressGetter.value = '';
       const wrapper = await factory();
       expect(wrapper.text()).not.toContain('pageServerPowerOperations.phypStandby');
     });
 
     it('hides banner after standbyToRuntime succeeds (phypStandby = true)', async () => {
-      mockIsInPhypStandbyFromSystem.value = true;
+      mockBootProgressGetter.value = 'SystemHardwareInitializationComplete';
       const wrapper = await factory();
       // Trigger standbyToRuntime via "OS Runtime" button click
       await wrapper.vm.standbyToRuntime();
@@ -280,14 +293,13 @@ describe('ServerPowerOperations.vue', () => {
       expect(wrapper.vm.isInPhypStandby).toBe(false);
     });
 
-    it('clears phypStandby when server reports non-standby state', async () => {
-      mockIsInPhypStandbyFromSystem.value = true;
+    it('isInPhypStandby is false when phypStandby flag is set', async () => {
+      mockBootProgressGetter.value = 'SystemHardwareInitializationComplete';
       const wrapper = await factory();
+      // phypStandby flag overrides bootProgress — once set, isInPhypStandby returns false
       wrapper.vm.phypStandby = true;
-      // Server transitions out of standby
-      mockIsInPhypStandbyFromSystem.value = false;
-      await flushPromises();
-      expect(wrapper.vm.phypStandby).toBe(false);
+      await wrapper.vm.$nextTick();
+      expect(wrapper.vm.isInPhypStandby).toBe(false);
     });
   });
 

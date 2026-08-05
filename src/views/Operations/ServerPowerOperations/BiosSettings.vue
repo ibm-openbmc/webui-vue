@@ -554,12 +554,12 @@ const props = defineProps<{
   linuxKvmPercentageCurrentValue: number | null;
   powerRestorePolicy: string;
   locationCodes: string[];
+  saveOperatingModeSettings: (payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string }) => Promise<void>;
 }>();
 
 const emit = defineEmits<{
   (e: 'updated-attributes', keys: BiosAttributes): void;
   (e: 'is-linux-kvm-valid', valid: boolean): void;
-  (e: 'pending-operating-mode-settings', payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string } | null): void;
 }>();
 
 const isLinuxKvmValid = ref(true);
@@ -823,10 +823,6 @@ const ibmiConsoleItems = ref([
 
 const attributeKeys = ref<BiosAttributes>({ ...props.biosAttributes });
 
-watch(() => props.biosAttributes, (newVal) => {
-  if (newVal) Object.assign(attributeKeys.value, newVal);
-});
-
 onBeforeMount(() => {
   if (props.biosAttributes) {
     Object.assign(attributeKeys.value, props.biosAttributes);
@@ -843,6 +839,10 @@ onBeforeMount(() => {
 
 const manualModeSelected = computed(() => {
   return selectedOperatingMode.value == manualMode.value;
+});
+
+const powerPolicy = computed(() => {
+  return props.powerRestorePolicy;
 });
 
 const taggedSettingValues = computed(() => {
@@ -883,17 +883,17 @@ function isHmcManaged(): boolean {
 function onChangeSystemOpsMode(value: string): void {
   selectedOperatingMode.value = value;
   if (selectedOperatingMode.value === normalMode.value) {
-    if (currentOperatingMode.value !== selectedOperatingMode.value) {
-      emit('pending-operating-mode-settings', {
+    if (currentOperatingMode.value === selectedOperatingMode.value) {
+      // no-op: already in normal mode, no patch needed
+    } else {
+      props.saveOperatingModeSettings({
         powerRestorePolicy: 'LastState',
         automaticRetryConfig: 'RetryAttempts',
         bootFault: 'Never',
       });
-    } else {
-      emit('pending-operating-mode-settings', null);
     }
   } else if (selectedOperatingMode.value === manualMode.value) {
-    emit('pending-operating-mode-settings', {
+    props.saveOperatingModeSettings({
       powerRestorePolicy: 'AlwaysOff',
       automaticRetryConfig: 'Disabled',
       bootFault: 'Never',

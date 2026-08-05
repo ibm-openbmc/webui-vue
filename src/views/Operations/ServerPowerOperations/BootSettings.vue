@@ -15,9 +15,9 @@
       :linux-kvm-percentage-current-value="props.linuxKvmPercentageCurrentValue"
       :power-restore-policy="props.powerRestorePolicy"
       :location-codes="props.locationCodes"
+      :save-operating-mode-settings="props.saveOperatingModeSettings"
       @is-linux-kvm-valid="linuxKvmValue"
       @updated-attributes="updateAttributeKeys"
-      @pending-operating-mode-settings="updatePendingOperatingMode"
     />
   </BForm>
 </template>
@@ -70,14 +70,9 @@ const isAtleastPhypInStandby = computed(() => {
 const componentKey = ref(0);
 const isLinuxKvmValid = ref(true);
 const localAttributeKeys = ref<BiosAttributes>({ ...props.biosAttributes });
-const pendingOperatingModeSettings = ref<{ powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string } | null>(null);
 
 function updateAttributeKeys(attributeKeys: BiosAttributes): void {
   localAttributeKeys.value = attributeKeys;
-}
-
-function updatePendingOperatingMode(payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string } | null): void {
-  pendingOperatingModeSettings.value = payload;
 }
 
 function linuxKvmValue(value: boolean): void {
@@ -92,15 +87,6 @@ function handleSubmit() {
   props
     .saveBiosSettings(biosSettings)
     .then((message) => {
-      if (pendingOperatingModeSettings.value) {
-        return props
-          .saveOperatingModeSettings(pendingOperatingModeSettings.value)
-          .then(() => message);
-      }
-      return message;
-    })
-    .then((message) => {
-      componentKey.value += 1;
       let hmcManaged = resourceMemoryStore.hmcManagedGetter;
       if (!props.isUpdated) {
         if (settings.biosSettings.pvm_default_os_type == 'Linux KVM') {

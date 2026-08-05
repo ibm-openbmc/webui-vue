@@ -223,8 +223,12 @@
               :ibmi-alt-load-source-value="ibmiAltLoadSourceValue"
               :ibmi-console-value="ibmiConsoleValue"
               :linux-kvm-percentage-value="linuxKvmPercentageValue"
-              :linux-kvm-percentage-initial-value="linuxKvmPercentageInitialValue"
-              :linux-kvm-percentage-current-value="linuxKvmPercentageCurrentValue"
+              :linux-kvm-percentage-initial-value="
+                linuxKvmPercentageInitialValue
+              "
+              :linux-kvm-percentage-current-value="
+                linuxKvmPercentageCurrentValue
+              "
               :power-restore-policy="powerRestorePolicy"
               :location-codes="locationCodes ?? []"
               :save-bios-settings="saveBiosSettings"
@@ -260,7 +264,6 @@
 import { ref, computed, watch } from 'vue';
 // @ts-ignore - eventBus is a JS module
 import eventBus from '@/eventBus';
-import stores from '@/store';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -282,8 +285,12 @@ import {
   useServerPowerControl,
 } from '@/api/composables/useServerPowerOperations';
 
+import stores from '@/store';
+
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
+
+const globalStore = stores.GlobalStore();
 
 const {
   biosAttributes,
@@ -312,9 +319,11 @@ const {
   lastPowerOperationTime,
 } = useServerSystemInfo();
 
-const globalStore = stores.GlobalStore();
-
-const { bmc, isLoading: isBmcLoading, refetch: refetchBmc } = useServerBmcInfo();
+const {
+  bmc,
+  isLoading: isBmcLoading,
+  refetch: refetchBmc,
+} = useServerBmcInfo();
 
 const { locationCodes, refetch: refetchLocationCodes } = useLocationCodes();
 
@@ -460,7 +469,9 @@ function rebootServer() {
     modalOptions.value.title = i18n.global.t(
       'pageServerPowerOperations.modal.confirmRebootTitle',
     );
-    modalOptions.value.okVariant = systemDumpActive.value ? 'danger' : 'primary';
+    modalOptions.value.okVariant = systemDumpActive.value
+      ? 'danger'
+      : 'primary';
     modalOptions.value.okTitle = systemDumpActive.value
       ? i18n.global.t('pageServerPowerOperations.reboot')
       : i18n.global.t('global.action.confirm');

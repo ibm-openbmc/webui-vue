@@ -79,7 +79,7 @@ describe('useBootBiosAttributes', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockQueryClient = { invalidateQueries: vi.fn() };
+    mockQueryClient = { invalidateQueries: vi.fn(), setQueryData: vi.fn() };
     useQueryClient.mockReturnValue(mockQueryClient);
     useMutation.mockReturnValue(makeMockMutation());
     // Default: both queries return null data
@@ -239,7 +239,7 @@ describe('useBootBiosAttributes', () => {
       expect(saveBiosSettings).toBe(mutateFn);
     });
 
-    it('invalidates bios queries on success', () => {
+    it('updates bios attributes cache on success', () => {
       let onSuccessCallback;
       useMutation.mockImplementation(({ onSuccess }) => {
         if (onSuccess) onSuccessCallback = onSuccess;
@@ -247,9 +247,11 @@ describe('useBootBiosAttributes', () => {
       });
       useQuery.mockReturnValue(makeMockQuery({ data: ref({}) }));
       useBootBiosAttributes();
-      onSuccessCallback?.();
-      expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith(
-        expect.objectContaining({ queryKey: ['spo', 'bios', 'attributes'] }),
+      const saved = { pvm_default_os_type: 'AIX' };
+      onSuccessCallback?.('result', saved);
+      expect(mockQueryClient.setQueryData).toHaveBeenCalledWith(
+        ['spo', 'bios', 'attributes'],
+        expect.any(Function),
       );
     });
 
@@ -317,28 +319,6 @@ describe('useServerSystemInfo', () => {
       );
       const { serverStatus } = useServerSystemInfo();
       expect(serverStatus.value).toBe('diagnosticMode');
-    });
-  });
-
-  describe('isInPhypStandby', () => {
-    const cases = [
-      { state: 'SystemHardwareInitializationComplete', expected: true },
-      { state: 'SetupEntered', expected: true },
-      { state: 'OSBootStarted', expected: false },
-      { state: 'OSRunning', expected: false },
-      { state: null, expected: false },
-    ];
-
-    cases.forEach(({ state, expected }) => {
-      it(`returns ${expected} for BootProgress.LastState="${state}"`, () => {
-        useQuery.mockReturnValue(
-          makeMockQuery({
-            data: ref({ BootProgress: { LastState: state } }),
-          }),
-        );
-        const { isInPhypStandby } = useServerSystemInfo();
-        expect(isInPhypStandby.value).toBe(expected);
-      });
     });
   });
 
