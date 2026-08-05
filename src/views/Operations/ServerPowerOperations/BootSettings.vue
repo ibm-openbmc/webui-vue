@@ -22,16 +22,12 @@
   </BForm>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, watch } from 'vue';
-// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import BiosSettings from './BiosSettings.vue';
-// @ts-ignore - useToastComposable is a JS module
 import useToast from '@/components/Composables/useToastComposable';
-// @ts-ignore - useLoadingBarComposable is a JS module
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import type { BiosAttributes } from '@/api/composables/useServerPowerOperations';
 import stores from '@/store';
 
 const { startLoader, endLoader } = useLoadingBar();
@@ -40,28 +36,74 @@ const { successToast, infoToast, errorToast } = useToast();
 const globalStore = stores.GlobalStore();
 const resourceMemoryStore = stores.ResourceMemoryStore();
 
-const props = defineProps<{
-  isInPhypStandby?: boolean;
-  isUpdated?: boolean;
-  attributeValues: Record<string, Array<{ value: string; text: string }>> | null;
-  biosAttributes: BiosAttributes | null;
-  ibmiLoadSourceValue: string;
-  ibmiAltLoadSourceValue: string;
-  ibmiConsoleValue: string;
-  linuxKvmPercentageValue: number | null;
-  linuxKvmPercentageInitialValue: number | null;
-  linuxKvmPercentageCurrentValue: number | null;
-  powerRestorePolicy: string;
-  locationCodes: string[];
-  saveBiosSettings: (settings: BiosAttributes) => Promise<string>;
-  saveOperatingModeSettings: (payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string }) => Promise<void>;
-  refetch: () => void;
-  isSavingBios: boolean;
-}>();
+const props = defineProps({
+  isInPhypStandby: {
+    type: Boolean,
+    default: false,
+  },
+  isUpdated: {
+    type: Boolean,
+    default: false,
+  },
+  attributeValues: {
+    type: Object,
+    default: null,
+  },
+  biosAttributes: {
+    type: Object,
+    default: null,
+  },
+  ibmiLoadSourceValue: {
+    type: String,
+    default: '',
+  },
+  ibmiAltLoadSourceValue: {
+    type: String,
+    default: '',
+  },
+  ibmiConsoleValue: {
+    type: String,
+    default: '',
+  },
+  linuxKvmPercentageValue: {
+    type: Number,
+    default: null,
+  },
+  linuxKvmPercentageInitialValue: {
+    type: Number,
+    default: null,
+  },
+  linuxKvmPercentageCurrentValue: {
+    type: Number,
+    default: null,
+  },
+  powerRestorePolicy: {
+    type: String,
+    default: '',
+  },
+  locationCodes: {
+    type: Array,
+    default: () => [],
+  },
+  saveBiosSettings: {
+    type: Function,
+    required: true,
+  },
+  saveOperatingModeSettings: {
+    type: Function,
+    required: true,
+  },
+  refetch: {
+    type: Function,
+    required: true,
+  },
+  isSavingBios: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const emit = defineEmits<{
-  (e: 'update-standby', value: boolean): void;
-}>();
+const emit = defineEmits(['update-standby']);
 
 const isAtleastPhypInStandby = computed(() => {
   return globalStore.isInPhypStandby;
@@ -69,13 +111,13 @@ const isAtleastPhypInStandby = computed(() => {
 
 const componentKey = ref(0);
 const isLinuxKvmValid = ref(true);
-const localAttributeKeys = ref<BiosAttributes>({ ...props.biosAttributes });
+const localAttributeKeys = ref({ ...props.biosAttributes });
 
-function updateAttributeKeys(attributeKeys: BiosAttributes): void {
+function updateAttributeKeys(attributeKeys) {
   localAttributeKeys.value = attributeKeys;
 }
 
-function linuxKvmValue(value: boolean): void {
+function linuxKvmValue(value) {
   isLinuxKvmValid.value = value;
 }
 

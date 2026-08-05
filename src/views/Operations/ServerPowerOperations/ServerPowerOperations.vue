@@ -260,16 +260,12 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, watch } from 'vue';
-// @ts-ignore - eventBus is a JS module
 import eventBus from '@/eventBus';
-// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
-// @ts-ignore - useLoadingBarComposable is a JS module
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-// @ts-ignore - useToastComposable is a JS module
 import useToast from '@/components/Composables/useToastComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';

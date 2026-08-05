@@ -523,15 +523,12 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, onBeforeMount, watch } from 'vue';
-// @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
-// @ts-ignore - UtilitiesFunction is a JS module
 import utilitiesFunctions from '../../../components/Global/UtilitiesFunction';
-import type { BiosAttributes } from '@/api/composables/useServerPowerOperations';
 import stores from '@/store';
 
 const { spaceFilter } = utilitiesFunctions();
@@ -541,26 +538,62 @@ const resourceMemoryStore = stores.ResourceMemoryStore();
 
 // ─── Props & Emits ───────────────────────────────────────────────────────────
 
-const props = defineProps<{
-  attributeValues: Record<string, Array<{ value: string; text: string }>> | null;
-  disabled: boolean;
-  isInPhypStandby?: boolean;
-  biosAttributes: BiosAttributes | null;
-  ibmiLoadSourceValue: string;
-  ibmiAltLoadSourceValue: string;
-  ibmiConsoleValue: string;
-  linuxKvmPercentageValue: number | null;
-  linuxKvmPercentageInitialValue: number | null;
-  linuxKvmPercentageCurrentValue: number | null;
-  powerRestorePolicy: string;
-  locationCodes: string[];
-  saveOperatingModeSettings: (payload: { powerRestorePolicy: string; automaticRetryConfig: string; bootFault: string }) => Promise<void>;
-}>();
+const props = defineProps({
+  attributeValues: {
+    type: Object,
+    default: null,
+  },
+  disabled: {
+    type: Boolean,
+    require: true,
+  },
+  isInPhypStandby: {
+    type: Boolean,
+    default: false,
+  },
+  biosAttributes: {
+    type: Object,
+    default: null,
+  },
+  ibmiLoadSourceValue: {
+    type: String,
+    default: '',
+  },
+  ibmiAltLoadSourceValue: {
+    type: String,
+    default: '',
+  },
+  ibmiConsoleValue: {
+    type: String,
+    default: '',
+  },
+  linuxKvmPercentageValue: {
+    type: Number,
+    default: null,
+  },
+  linuxKvmPercentageInitialValue: {
+    type: Number,
+    default: null,
+  },
+  linuxKvmPercentageCurrentValue: {
+    type: Number,
+    default: null,
+  },
+  powerRestorePolicy: {
+    type: String,
+    default: '',
+  },
+  locationCodes: {
+    type: Array,
+    default: () => [],
+  },
+  saveOperatingModeSettings: {
+    type: Function,
+    required: true,
+  },
+});
 
-const emit = defineEmits<{
-  (e: 'updated-attributes', keys: BiosAttributes): void;
-  (e: 'is-linux-kvm-valid', valid: boolean): void;
-}>();
+const emit = defineEmits(['updated-attributes', 'is-linux-kvm-valid']);
 
 const isLinuxKvmValid = ref(true);
 const manualMode = ref('Manual');
@@ -568,7 +601,7 @@ const normalMode = ref('Normal');
 const currentOperatingMode = ref('');
 const selectedOperatingMode = ref('');
 const taggedSettingsArr = ref(['Current configuration', 'none']);
-const localLinuxKvmPercentage = ref<number>(props.linuxKvmPercentageValue ?? 0);
+const localLinuxKvmPercentage = ref(props.linuxKvmPercentageValue ?? 0);
 
 const taggedSettings = ref([
   {
@@ -821,7 +854,7 @@ const ibmiConsoleItems = ref([
   },
 ]);
 
-const attributeKeys = ref<BiosAttributes>({ ...props.biosAttributes });
+const attributeKeys = ref({ ...props.biosAttributes });
 
 onBeforeMount(() => {
   if (props.biosAttributes) {
@@ -858,7 +891,7 @@ const taggedSettingsOptions = computed(() => {
   return [...taggedSettingsList, ...(props.locationCodes ?? [])];
 });
 
-function hmcManagedChecks(value: string): boolean {
+function hmcManagedChecks(value) {
   if (!isHmcManaged()) return true;
   if (
     value ===
@@ -876,11 +909,11 @@ const isAtleastPhypInStandby = computed(() => {
   return globalStore.isInPhypStandby;
 });
 
-function isHmcManaged(): boolean {
+function isHmcManaged() {
   return hmcManaged.value === 'Enabled' ? true : false;
 }
 
-function onChangeSystemOpsMode(value: string): void {
+function onChangeSystemOpsMode(value) {
   selectedOperatingMode.value = value;
   if (selectedOperatingMode.value === normalMode.value) {
     if (currentOperatingMode.value === selectedOperatingMode.value) {
@@ -901,7 +934,7 @@ function onChangeSystemOpsMode(value: string): void {
   }
 }
 
-function changeLinuxKvmPercentageValue(value: string | number): void {
+function changeLinuxKvmPercentageValue(value) {
   let valueAsString = value.toString();
   let regex = /^\d+(\.\d?)?$/;
   if (regex.test(valueAsString)) {
@@ -912,14 +945,14 @@ function changeLinuxKvmPercentageValue(value: string | number): void {
   localLinuxKvmPercentage.value = Number(value);
 }
 
-function changeTaggedSettingsValue(key: string, value: string): void {
+function changeTaggedSettingsValue(key, value) {
   const idx = taggedSettings.value.findIndex((s) => s.settingKey === key);
   if (idx !== -1) taggedSettings.value[idx].settingValue = value;
 }
 
-function validateLinuxKvmPercentage($event: KeyboardEvent): void {
-  let keyCode = ($event as any).keyCode ? ($event as any).keyCode : ($event as any).which;
-  let percentageValue = ($event.target as HTMLInputElement).value + $event.key;
+function validateLinuxKvmPercentage($event) {
+  let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+  let percentageValue = $event.target.value + $event.key;
   let decimalSet = $event.key === '.';
   if (!decimalSet) {
     // only allow number and one decimal
@@ -933,10 +966,7 @@ function validateLinuxKvmPercentage($event: KeyboardEvent): void {
   }
 }
 
-function validateAttributeKeys(
-  defaultPartitionEnvironment: string | undefined,
-  key: string,
-): boolean {
+function validateAttributeKeys(defaultPartitionEnvironment, key) {
   if (key === 'pvm_rpa_boot_mode') {
     return (
       defaultPartitionEnvironment === 'Default' ||
