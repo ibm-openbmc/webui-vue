@@ -11,8 +11,9 @@
         >
         </info-tooltip>
         <BFormCheckbox
-          v-if="currentUser"
+          v-if="currentUser && globalMfaValue !== null"
           id="switch"
+          :key="globalMfaValue"
           ref="globalMfaRef"
           v-model="globalMfaValue"
           :disabled="isBusy"
@@ -105,14 +106,14 @@
           </template>
           <template #cell(checkbox)="row">
             <BFormCheckbox
-              v-model="userManagement.allUsers[row.index].isSelected"
+              v-model="tableItems[row.index].isSelected"
               aria-label="checkbox"
               data-test-id="userManagement-checkbox-toggleSelectRow"
               @change="
                 toggleSelectRowByUsername(
                   tableRef,
                   row.index,
-                  userManagement.allUsers[row.index].isSelected,
+                  tableItems[row.index].isSelected,
                   row.item,
                 )
               "
@@ -238,14 +239,7 @@
 </template>
 
 <script setup>
-import {
-  ref,
-  onMounted,
-  computed,
-  onBeforeMount,
-  onBeforeUnmount,
-  watch,
-} from 'vue';
+import { ref, computed, onBeforeMount, onBeforeUnmount, watch } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import IconTrashcan from '@carbon/icons-vue/es/trash-can/20';
@@ -268,6 +262,7 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import AuthenticationStore from '../../../store/modules/Authentication/AuthenticationStore';
 import { TOTP } from 'totp-generator';
 import stores from '@/store';
+import { useUserManagement } from '@/api/composables/useUserManagement';
 
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
@@ -286,12 +281,39 @@ const {
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const toast = useToastComposable();
 const authenticationStore = AuthenticationStore();
-
-const userManagement = stores.UserManagementStore();
 const global = stores.GlobalStore();
 
+const {
+  allUsers: allUsersRaw,
+  accountRoles,
+  accountSettings: accountSettingsData,
+  accountPasswordRequirements,
+  isGlobalMfaEnabled,
+  isCurrentUserMfaBypassed,
+  secretKeyInfo,
+  isLoading: isDataLoading,
+  isMutating,
+  createUser: createUserApi,
+  updateUser: updateUserApi,
+  deleteUser: deleteUserApi,
+  deleteUsers: deleteUsersApi,
+  enableUsers: enableUsersApi,
+  disableUsers: disableUsersApi,
+  saveAccountSettings: saveAccountSettingsApi,
+  updateGlobalMfa: updateGlobalMfaApi,
+  updateMfaBypass: updateMfaBypassApi,
+  updateMfaBypassNewUser: updateMfaBypassNewUserApi,
+  clearSetSecretKey: clearSetSecretKeyApi,
+  verifyRegisterTotp: verifyRegisterTotpApi,
+  checkCurrentUserMfaBypassed,
+  clearSecretKey: clearSecretKeyApi,
+  generateSecretKey: generateSecretKeyApi,
+  refetchUsers,
+  refetchAccountService,
+} = useUserManagement();
+
 const isAllSelected = ref(false);
-const isBusy = ref(true);
+const isBusy = computed(() => isDataLoading.value || isMutating.value);
 const beforeMfa = ref(false);
 const activeUser = ref(null);
 const openModal = ref(false);
@@ -352,119 +374,116 @@ const userToDelete = ref('');
 
 onBeforeMount(() => {
   eventBus.on('clear-selected', () => {
-    userManagement?.allUsersGetter?.map((singleConnection) => {
-      singleConnection.isSelected = false;
+    tableItems.value.forEach((u) => {
+      u.isSelected = false;
     });
     clearSelectedRows(tableRef);
   });
   eventBus.on('okUser', handleOkUser);
+  eventBus.on('refresh-application', (ctx) => {
+    // Mark as handled so AppLayout does not remount the page via routerKey.
+    // VueQuery refetch keeps the existing rows visible while fetching fresh data.
+    if (ctx) ctx.handled = true;
+    refetchUsers();
+    refetchAccountService();
+  });
 });
 
 onBeforeUnmount(() => {
   eventBus.off('okUser', handleOkUser);
+  eventBus.off('refresh-application');
 });
 
-onBeforeMount(() => {
-  startLoader();
-  userManagement.getAccountSettings();
-  addMfaBypass();
-  Promise.all([
-    userManagement.getAccountRoles(),
-    userManagement.getUsers(),
-    userManagement.checkCurrentUserMfaBypassed({
-      uri: currentUser.value['@odata.id'],
-    }),
-  ]).finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
-});
+const currentMfaBypassed = computed(() => isCurrentUserMfaBypassed.value);
 
-const currentMfaBypassed = computed(() => {
-  return userManagement.isCurrentUserMfaBypassedGetter;
-});
+const isAdminUser = computed(() => global.isAdminUser);
 
-const isAdminUser = computed(() => {
-  return global.isAdminUser;
-});
+const isServiceUser = computed(() => global.isServiceUser);
 
-const isServiceUser = computed(() => {
-  return global.isServiceUser;
-});
+// Local ref that mirrors server MFA state. A plain writable ref (instead of a
+// read-only computed) lets BFormCheckbox v-model re-sync the DOM when we
+// explicitly reset it after a failed enable attempt.
+const globalMfaValue = ref(null);
 
-const globalMfaValue = computed({
-  get() {
-    return userManagement.isGlobalMfaEnabledGetter;
+// Keep the local ref in sync whenever the server state changes (e.g. after
+// invalidateAccountService() refetches and confirms the real value).
+watch(
+  isGlobalMfaEnabled,
+  (val) => {
+    globalMfaValue.value = val;
   },
-  set(newValue) {
-    return (userManagement.isGlobalMfaEnabled = newValue);
-  },
-});
+  { immediate: true },
+);
 
-const secretKey = computed(() => {
-  return userManagement.secretKeyInfoGetter;
-});
-
-const accountRoles = computed(() => {
-  return userManagement.accountRolesGetter;
-});
+const secretKey = computed(() => secretKeyInfo.value);
 
 const allUsers = computed(() => {
-  return userManagement.allUsersGetter.map((user) => {
-    // Changing users' description with redfish role description
-    const userDescription = accountRoles.value.filter((role) =>
-      user.RoleId.includes(role),
-    )[0];
-
-    if (userDescription) user.RoleId = userDescription;
-
-    return user;
+  return allUsersRaw.value.map((user) => {
+    // Resolve role label from roles list
+    const role = accountRoles.value.find((r) => user.RoleId?.includes(r));
+    return role ? { ...user, RoleId: role } : user;
   });
 });
-const currentUser = computed(() => {
-  return global.currentUserGetter;
-});
+
+const currentUser = computed(() => global.currentUserGetter);
+
+// Watch currentUser so MFA/secretKey columns are added reactively even if
+// currentUser is null at onBeforeMount time (e.g. store not yet hydrated).
+watch(
+  currentUser,
+  (user) => {
+    if (user) {
+      addMfaBypass();
+      checkCurrentUserMfaBypassed(user['@odata.id']);
+    }
+  },
+  { immediate: true },
+);
 
 const tableItems = ref([]);
 
-watch(allUsers, (users) => {
-  tableItems.value = users.map((user) => ({
-    username: user.UserName,
-    privilege:
-      user.RoleId === 'Administrator'
-        ? i18n.global.t('pageUserManagement.table.administrator')
-        : user.RoleId === 'ReadOnly'
-          ? i18n.global.t('pageUserManagement.table.readOnly')
-          : user.RoleId === 'OemIBMServiceAgent'
-            ? i18n.global.t('pageUserManagement.table.serviceAgent')
-            : user.RoleId,
-    status: user.Locked
-      ? i18n.global.t('global.status.locked')
-      : user.Enabled
-        ? i18n.global.t('global.status.enabled')
-        : i18n.global.t('global.status.disabled'),
-    mfa: user?.MFABypass?.BypassTypes.includes('GoogleAuthenticator'),
-    secretKey: user?.SecretKeySet,
-    actions: [
-      { value: 'edit', enabled: true },
-      { value: 'delete', enabled: user.RoleId !== 'OemIBMServiceAgent' },
-    ],
-    ...user,
-  }));
-});
+watch(
+  allUsers,
+  (users) => {
+    // Preserve selection state across refetches by keying on username
+    const prevSelected = new Set(
+      tableItems.value.filter((r) => r.isSelected).map((r) => r.username),
+    );
+    tableItems.value = users.map((user) => ({
+      username: user.UserName,
+      privilege:
+        user.RoleId === 'Administrator'
+          ? i18n.global.t('pageUserManagement.table.administrator')
+          : user.RoleId === 'ReadOnly'
+            ? i18n.global.t('pageUserManagement.table.readOnly')
+            : user.RoleId === 'OemIBMServiceAgent'
+              ? i18n.global.t('pageUserManagement.table.serviceAgent')
+              : user.RoleId,
+      status: user.Locked
+        ? i18n.global.t('global.status.locked')
+        : user.Enabled
+          ? i18n.global.t('global.status.enabled')
+          : i18n.global.t('global.status.disabled'),
+      mfa: user?.MFABypass?.BypassTypes?.includes('GoogleAuthenticator'),
+      secretKey: user?.SecretKeySet,
+      isSelected: prevSelected.has(user.UserName),
+      actions: [
+        { value: 'edit', enabled: true },
+        { value: 'delete', enabled: user.RoleId !== 'OemIBMServiceAgent' },
+      ],
+      ...user,
+    }));
+  },
+  { immediate: true },
+);
 
-const settings = computed(() => {
-  return userManagement.accountSettingsGetter;
-});
+const settings = computed(() => accountSettingsData.value);
+
 const passwordRequirements = computed(() => {
   if (activeUser.value?.AccountTypes?.includes('IPMI')) {
-    return {
-      minLength: 8,
-      maxLength: 20,
-    };
-  } else {
-    return userManagement.accountPasswordRequirementsGetter;
+    return { minLength: 8, maxLength: 20 };
   }
+  return accountPasswordRequirements.value;
 });
 
 const handleOkUser = ({ isNewUser, userData, mfaByPass }) => {
@@ -474,20 +493,19 @@ const handleOkUser = ({ isNewUser, userData, mfaByPass }) => {
 watch(secretKey, (value) => {
   if (value !== null && beforeMfa.value) {
     const { otp } = TOTP.generate(value, { digits: 6 });
-    userManagement
-      .verifyRegisterTotp({ otpValue: otp.toString() })
+    verifyRegisterTotpApi(otp.toString())
       .then(() => {
-        userManagement
-          .updateGlobalMfa({
-            globalMfa: true,
-          })
+        updateGlobalMfaApi(true)
           .then((message) => {
             toast.successToast(message);
             if (!currentMfaBypassed.value) {
               authenticationStore.logout();
             }
           })
-          .catch(({ message }) => toast.errorToast(message));
+          .catch(({ message }) => {
+            toast.errorToast(message);
+            disableMFA();
+          });
       })
       .catch(() => {
         toast.errorToast(
@@ -502,7 +520,11 @@ watch(secretKey, (value) => {
 });
 
 function addMfaBypass() {
-  if (currentUser.value && (isAdminUser.value || isServiceUser.value)) {
+  if (
+    currentUser.value &&
+    (isAdminUser.value || isServiceUser.value) &&
+    !fields.value.some((f) => f.key === 'secretKey')
+  ) {
     fields.value.splice(4, 0, {
       key: 'mfa',
       label: i18n.global.t('pageUserManagement.table.mfaByPass'),
@@ -521,50 +543,46 @@ function addMfaBypass() {
 }
 
 function clearSecretKey(value) {
-  userManagement
-    .clearSetSecretKey(value)
+  clearSetSecretKeyApi(value)
     .then((message) => {
       toast.successToast(message);
       if (currentUser.value?.UserName === value.username) {
         authenticationStore.logout();
-      } else {
-        userManagement.getUsers();
       }
     })
     .catch(({ message }) => toast.errorToast(message));
 }
 
 function disableMFA() {
+  // Always clear beforeMfa so the secretKey watcher cannot re-trigger
+  // the enable flow after cache invalidation
+  beforeMfa.value = false;
+  // Reset toggle immediately — the watch(isGlobalMfaEnabled) will confirm
+  // once the server refetch resolves, but this gives instant visual feedback
   globalMfaValue.value = false;
+  // Clear the singleton secret key so no stale QR is shown on next enable
+  clearSecretKeyApi();
+  updateGlobalMfaApi(false).catch(() => {});
 }
 
 async function updateGlobalMfa(state) {
-  await userManagement.checkCurrentUserMfaBypassed({
-    uri: currentUser.value['@odata.id'],
-  });
-  if (globalMfaValue.value) {
+  await checkCurrentUserMfaBypassed(currentUser.value['@odata.id']);
+  if (state) {
+    // Enabling MFA: generate secret key then open TOTP registration
     beforeMfa.value = true;
-    userManagement
-      .clearSecretKey()
-      .then(() => {
-        userManagement.generateSecretKey().catch(() => {
-          disableMFA();
-          beforeMfa.value = false;
-          toast.errorToast(
-            i18n.global.t('pageUserManagement.toast.errorEnableMfa'),
-          );
-        });
-      })
-      .catch(() => {
-        beforeMfa.value = false;
-        toast.errorToast(
-          i18n.global.t('pageUserManagement.toast.errorEnableMfaAuto'),
-        );
-        eventBus.emit('otp-register-modal');
-      });
+    clearSecretKeyApi();
+    generateSecretKeyApi().catch(() => {
+      disableMFA();
+      beforeMfa.value = false;
+      toast.errorToast(
+        i18n.global.t('pageUserManagement.toast.errorEnableMfa'),
+      );
+    });
   } else {
-    userManagement
-      .updateGlobalMfa({ globalMfa: state })
+    // Disabling MFA — reset beforeMfa first so the secretKey watcher
+    // does not re-trigger the enable flow if cache invalidation fires
+    beforeMfa.value = false;
+    updateGlobalMfaApi(false)
       .then((message) => {
         toast.successToast(message);
       })
@@ -573,19 +591,15 @@ async function updateGlobalMfa(state) {
 }
 
 function updateMfaBypassVal(value) {
-  userManagement
-    .updateMfaBypass(value)
+  updateMfaBypassApi(value)
     .then((message) => {
       toast.successToast(message);
       if (currentUser.value) {
-        userManagement.checkCurrentUserMfaBypassed({
-          uri: currentUser.value['@odata.id'],
-        });
+        checkCurrentUserMfaBypassed(currentUser.value['@odata.id']);
       }
-      userManagement.getUsers();
       if (
         currentUser.value?.UserName === value.username &&
-        globalMfaValue.value === true &&
+        isGlobalMfaEnabled.value === true &&
         value.mfa === false
       ) {
         authenticationStore.logout();
@@ -595,35 +609,35 @@ function updateMfaBypassVal(value) {
 }
 
 function toggleAll(checked) {
-  userManagement?.allUsers?.map((singleUser) => {
-    singleUser.isSelected = checked;
+  tableItems.value.forEach((u) => {
+    u.isSelected = checked;
   });
   isAllSelected.value = checked;
 }
+
 function initModalUser(user) {
   activeUser.value = user;
   eventBus.emit('modal-user');
 }
+
 function initModalDelete(user) {
   userToDelete.value = user;
   openModal.value = true;
   okTitle.value = i18n.global.t('pageUserManagement.deleteUser');
   deleteMessage.value = i18n.global.t(
     'pageUserManagement.modal.deleteConfirmMessage',
-    {
-      user: user.username,
-    },
+    { user: user.username },
   );
   deleteTitle.value = i18n.global.t('pageUserManagement.deleteUser');
   deleteType.value = 'singleEntry';
 }
+
 function handleOk(value) {
   if (value === 'singleEntry') {
     deleteUser(userToDelete.value);
   } else {
     startLoader();
-    userManagement
-      .deleteUsers(selectedRows.value)
+    deleteUsersApi(selectedRows.value)
       .then((messages) => {
         messages.forEach(({ type, message }) => {
           if (type === 'success') toast.successToast(message);
@@ -637,46 +651,36 @@ function handleOk(value) {
       });
   }
 }
+
 function initModalSettings() {
   eventBus.emit('modal-settings');
 }
+
 function saveUser({ isNewUser, userData, mfaByPass }) {
   if (isNewUser !== undefined && userData !== undefined) {
     startLoader();
-    isBusy.value = true;
     if (isNewUser) {
-      userManagement
-        .createUser(userData)
+      createUserApi(userData)
         .then(async (success) => {
           toast.successToast(success);
           if (mfaByPass) {
-            await userManagement.updateMfaBypassNewUser({
-              userData,
-              mfaByPass,
-            });
+            await updateMfaBypassNewUserApi({ userData, mfaByPass });
           }
         })
         .catch(({ message }) => toast.errorToast(message))
-        .finally(() => {
-          isBusy.value = false;
-          endLoader();
-        });
+        .finally(() => endLoader());
     } else {
-      userManagement
-        .updateUserfromUserManagement(userData)
+      updateUserApi(userData)
         .then((success) => toast.successToast(success))
         .catch(({ message }) => toast.errorToast(message))
-        .finally(() => {
-          isBusy.value = false;
-          endLoader();
-        });
+        .finally(() => endLoader());
     }
   }
 }
+
 function deleteUser({ username }) {
   startLoader();
-  userManagement
-    .deleteUser(username)
+  deleteUserApi(username)
     .then((success) => toast.successToast(success))
     .catch(({ message }) => toast.errorToast(message))
     .finally(() => {
@@ -686,6 +690,7 @@ function deleteUser({ username }) {
       eventBus.emit('clear-selected');
     });
 }
+
 function onBatchAction(action) {
   switch (action) {
     case 'delete':
@@ -706,8 +711,7 @@ function onBatchAction(action) {
       break;
     case 'enable':
       startLoader();
-      userManagement
-        .enableUsers(selectedRows.value)
+      enableUsersApi(selectedRows.value)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             if (type === 'success') toast.successToast(message);
@@ -721,8 +725,7 @@ function onBatchAction(action) {
       break;
     case 'disable':
       startLoader();
-      userManagement
-        .disableUsers(selectedRows.value)
+      disableUsersApi(selectedRows.value)
         .then((messages) => {
           messages.forEach(({ type, message }) => {
             if (type === 'success') toast.successToast(message);
@@ -736,6 +739,7 @@ function onBatchAction(action) {
       break;
   }
 }
+
 function onTableRowAction(action, row) {
   switch (action) {
     case 'edit':
@@ -748,17 +752,13 @@ function onTableRowAction(action, row) {
       break;
   }
 }
+
 function saveAccountSettings(settings) {
   startLoader();
-  isBusy.value = true;
-  userManagement
-    .saveAccountSettings(settings)
+  saveAccountSettingsApi(settings)
     .then((message) => toast.successToast(message))
     .catch(({ message }) => toast.errorToast(message))
-    .finally(() => {
-      endLoader();
-      isBusy.value = false;
-    });
+    .finally(() => endLoader());
 }
 </script>
 

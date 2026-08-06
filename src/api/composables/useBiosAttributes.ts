@@ -31,20 +31,24 @@ export function useBiosAttributes() {
   const queryClient = useQueryClient();
 
   // Fetch BIOS data
-  const { 
-    data: biosData, 
-    isFetching: isFetchingBios, 
-    isError: isBiosError, 
+  const {
+    data: biosData,
+    isFetching: isFetchingBios,
+    isError: isBiosError,
     error: biosError,
     refetch: refetchBios,
   } = useQuery({
     queryKey: ['redfish', 'systems', 'system', 'bios'],
     queryFn: async (): Promise<BiosAttributes> => {
-      const response = await api.get<BiosResponse>('/redfish/v1/Systems/system/Bios');
+      const response = await api.get<BiosResponse>(
+        '/redfish/v1/Systems/system/Bios',
+      );
       return response.data?.Attributes ?? {};
     },
     staleTime: 30 * 1000, // 30 seconds
     gcTime: 5 * 60 * 1000, // 5 minutes
+    refetchInterval: 60 * 1000, // refetch every 1 minute in the background
+    refetchOnMount: true, // always fetch fresh data when navigating to the page
     retry: (failureCount: number, err: any) => {
       const status = err?.response?.status;
       if (status && status >= 400 && status < 500) return false;
@@ -55,17 +59,17 @@ export function useBiosAttributes() {
   });
 
   // Fetch BIOS Registry data
-  const { 
-    data: registryData, 
-    isFetching: isFetchingRegistry, 
-    isError: isRegistryError, 
+  const {
+    data: registryData,
+    isFetching: isFetchingRegistry,
+    isError: isRegistryError,
     error: registryError,
     refetch: refetchRegistry,
   } = useQuery({
     queryKey: ['redfish', 'registries', 'bios'],
     queryFn: async (): Promise<RegistryAttribute[]> => {
       const response = await api.get<RegistryResponse>(
-        '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry'
+        '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
       );
       return response.data?.RegistryEntries?.Attributes ?? [];
     },
@@ -99,7 +103,7 @@ export function useBiosAttributes() {
     return computed<string[]>(() => {
       if (!registryData.value) return [];
       const attr = registryData.value.find(
-        (a) => a.AttributeName === attributeName
+        (a) => a.AttributeName === attributeName,
       );
       return attr?.Value?.map((v) => v.ValueName) ?? [];
     });
@@ -110,7 +114,7 @@ export function useBiosAttributes() {
     return computed(() => {
       if (!registryData.value) return null;
       const attr = registryData.value.find(
-        (a) => a.AttributeName === attributeName
+        (a) => a.AttributeName === attributeName,
       );
       return attr?.CurrentValue ?? null;
     });
@@ -121,14 +125,16 @@ export function useBiosAttributes() {
     return computed<number | null>(() => {
       if (!registryData.value) return null;
       const attr = registryData.value.find(
-        (a) => a.AttributeName === attributeName
+        (a) => a.AttributeName === attributeName,
       );
       return attr?.UpperBound ?? null;
     });
   };
 
   // Loading and error states
-  const isFetching = computed(() => isFetchingBios.value || isFetchingRegistry.value);
+  const isFetching = computed(
+    () => isFetchingBios.value || isFetchingRegistry.value,
+  );
   const isError = computed(() => isBiosError.value || isRegistryError.value);
   const error = computed(() => biosError.value || registryError.value);
 
@@ -147,12 +153,18 @@ export function useBiosAttributes() {
   });
 
   // Helper function to update a single attribute
-  const updateBiosAttribute = async (attributeName: string, value: any): Promise<void> => {
+  const updateBiosAttribute = async (
+    attributeName: string,
+    value: any,
+  ): Promise<void> => {
     return updateBiosAttributesMutation.mutateAsync({ [attributeName]: value });
   };
 
   // Helper function to update a boolean attribute (converts to Enabled/Disabled)
-  const updateBiosBooleanAttribute = async (attributeName: string, enabled: boolean): Promise<void> => {
+  const updateBiosBooleanAttribute = async (
+    attributeName: string,
+    enabled: boolean,
+  ): Promise<void> => {
     const value = enabled ? 'Enabled' : 'Disabled';
     return updateBiosAttribute(attributeName, value);
   };
@@ -161,25 +173,25 @@ export function useBiosAttributes() {
     // Raw data
     biosData,
     registryData,
-    
+
     // Loading and error states
     isFetching,
     isFetchingBios,
     isFetchingRegistry,
     isError,
     error,
-    
+
     // Refetch functions
     refetchBios,
     refetchRegistry,
-    
+
     // Helper functions
     getBiosAttribute,
     getBiosBooleanAttribute,
     getRegistryOptions,
     getRegistryCurrentValue,
     getRegistryUpperBound,
-    
+
     // Mutations
     updateBiosAttributes: updateBiosAttributesMutation.mutateAsync,
     updateBiosAttribute,

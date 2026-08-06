@@ -62,7 +62,6 @@ import {
 const { hideLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
 
-const systemStore = stores.SystemStore();
 const global = stores.GlobalStore();
 const bootSettingsStore = stores.BootSettingsStore();
 
@@ -83,8 +82,6 @@ onBeforeMount(() => {
   Promise.all([
     global.getServiceLogin(),
     bootSettingsStore.fetchBiosAttributes(),
-    bootSettingsStore.getBiosAttributes,
-    systemStore.getSystem(),
   ]).finally(() => {
     eventBus.emit('overview-server-complete');
   });

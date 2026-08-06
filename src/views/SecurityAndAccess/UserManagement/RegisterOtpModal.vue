@@ -130,17 +130,16 @@ import GlobalStore from '../../../store/modules/GlobalStore';
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
-import UserManagementStore from '../../../store/modules/SecurityAndAccess/UserManagementStore';
 import AuthenticationStore from '../../../store/modules/Authentication/AuthenticationStore';
 import { ref, computed, watch, nextTick } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
+import { useUserManagement } from '@/api/composables/useUserManagement';
 
 const modal = ref(false);
 const issuer = ref('bmc');
 const globalStore = GlobalStore();
-const userManagementStore = UserManagementStore();
 const authenticationStore = AuthenticationStore();
 const { dataFormatter } = useDataFormatterGlobal();
 const { getValidationState } = useVuelidateComposable();
@@ -151,6 +150,13 @@ const qrValue = ref(null);
 const size = ref(355);
 
 const { errorToast, successToast } = useToast();
+
+const {
+  secretKeyInfo,
+  isCurrentUserMfaBypassed,
+  verifyRegisterTotp: verifyRegisterTotpApi,
+  updateGlobalMfa: updateGlobalMfaApi,
+} = useUserManagement();
 
 const formattedTooltip = computed(() => {
   return (
@@ -168,53 +174,43 @@ eventBus.on('otp-register-modal', () => {
   modal.value = true;
 });
 
-const bmcTime = computed(() => {
-  return globalStore.bmcTimeGetter;
-});
+const bmcTime = computed(() => globalStore.bmcTimeGetter);
 
-const currentMfaBypassed = computed(() => {
-  return userManagementStore.isCurrentUserMfaBypassedGetter;
-});
+const currentMfaBypassed = computed(() => isCurrentUserMfaBypassed.value);
 
-const isServiceUser = computed(() => {
-  return globalStore.isServiceUser;
-});
+const isServiceUser = computed(() => globalStore.isServiceUser);
 
-const secretKey = computed(() => {
-  return userManagementStore.secretKeyInfoGetter;
-});
+const secretKey = computed(() => secretKeyInfo.value);
 
-watch(secretKey, (newValue) => {
-  globalStore.getBmcTime();
-  if (newValue === null) {
-    qrValue.value = null;
-  } else {
-    qrValue.value = `otpauth://totp/${issuer.value}:${accountName.value}?secret=${newValue}&issuer=${issuer.value}`;
-  }
-});
+watch(
+  secretKey,
+  (newValue) => {
+    globalStore.getBmcTime();
+    if (newValue === null) {
+      qrValue.value = null;
+    } else {
+      qrValue.value = `otpauth://totp/${issuer.value}:${accountName.value}?secret=${newValue}&issuer=${issuer.value}`;
+    }
+  },
+  { immediate: true },
+);
 
 const rules = computed(() => ({
-  otpValue: modal.value
-    ? {
-        required,
-      }
-    : {},
+  otpValue: modal.value ? { required } : {},
 }));
 
 const v$ = useVuelidate(rules, { otpValue });
 
 function copySecretKey() {
   navigator.clipboard.writeText(secretKey.value).then(() => {
-    // Show copied text for 5 seconds
     secretKeyCopied.value = true;
     setTimeout(() => {
       secretKeyCopied.value = false;
-    }, 5000 /*5 seconds*/);
+    }, 5000);
   });
 }
 
 function okFormSubmit(bvModalEvt) {
-  // prevent modal close
   bvModalEvt.preventDefault();
   handleSubmit();
 }
@@ -233,13 +229,9 @@ function resetForm() {
 function handleSubmit() {
   v$.value.$touch();
   if (v$.value.$invalid) return;
-  userManagementStore
-    .verifyRegisterTotp({ otpValue: otpValue.value })
+  verifyRegisterTotpApi(otpValue.value)
     .then(() => {
-      userManagementStore
-        .updateGlobalMfa({
-          globalMfa: true,
-        })
+      updateGlobalMfaApi(true)
         .then((message) => {
           successToast(message);
           closeModal();
@@ -248,9 +240,16 @@ function handleSubmit() {
             authenticationStore.logout();
           }
         })
-        .catch(({ message }) => errorToast(message));
+        .catch(({ message }) => {
+          // Server rejected the enable — revert toggle and close modal
+          errorToast(message);
+          resetMfa();
+        });
     })
-    .catch(({ message }) => errorToast(message));
+    .catch(({ message }) => {
+      // Wrong OTP — show error and keep modal open so user can retry
+      errorToast(message);
+    });
 }
 
 function closeModal() {

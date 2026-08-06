@@ -283,12 +283,17 @@ import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
 import Alert from '@/components/Global/Alert.vue';
 import stores from '@/store';
 import eventBus from '@/eventBus';
+import { useUserManagement } from '@/api/composables/useUserManagement';
 
 const { getValidationState } = useVuelidateComposable();
 
 const globalStore = stores.GlobalStore();
-const userManagementStore = stores.UserManagementStore();
 const uploadCertificate = stores.CertificatesStore();
+const {
+  accountRoles: accountRolesList,
+  accountSettings: accountSettingsData,
+  isGlobalMfaEnabled,
+} = useUserManagement();
 
 const props = defineProps({
   user: {
@@ -334,9 +339,7 @@ const certificateTypes = computed(() => {
   return uploadCertificate.availableUploadTypesGetter;
 });
 
-const globalMfaValue = computed(() => {
-  return userManagementStore.isGlobalMfaEnabledGetter;
-});
+const globalMfaValue = computed(() => isGlobalMfaEnabled.value);
 const editDisabled = computed(() => {
   return !props.user?.RoleId;
 });
@@ -362,14 +365,12 @@ const notReadyOnly = computed(() => {
 const currentUser = computed(() => {
   return globalStore.currentUserGetter;
 });
-const accountSettings = computed(() => {
-  return userManagementStore.accountSettingsGetter;
-});
-const manualUnlockPolicy = computed(() => {
-  return !accountSettings.value.accountLockoutDuration;
-});
+const accountSettings = computed(() => accountSettingsData.value);
+const manualUnlockPolicy = computed(
+  () => !accountSettings.value?.lockoutDuration,
+);
 const privilegeTypes = computed(() => {
-  return userManagementStore.accountRolesGetter.filter(
+  return accountRolesList.value.filter(
     (privilege) =>
       privilege !== 'OemIBMServiceAgent' &&
       privilege !== 'ServiceAgent' &&

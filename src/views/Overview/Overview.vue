@@ -38,7 +38,6 @@ import OverviewPower from './OverviewPower.vue';
 import OverviewEvents from './OverviewEvents.vue';
 import OverviewInventory from './OverviewInventory.vue';
 import OverviewDumps from './OverviewDumps.vue';
-import stores from '@/store';
 import {
   useSystemInfo,
   useUpdateAssetTag,
@@ -58,8 +57,6 @@ import {
 } from '@/api/composables/useOverview';
 
 const { startLoader, endLoader } = useLoadingBar();
-
-const userManagementStore = stores.UserManagementStore();
 
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 
@@ -109,8 +106,7 @@ watch(
       startLoader();
     } else if (!loading && isAnyLoading.value) {
       isAnyLoading.value = false;
-      // Also wait for user management store
-      userManagementStore.getUsers().finally(() => endLoader());
+      endLoader();
     }
   },
   { immediate: true },

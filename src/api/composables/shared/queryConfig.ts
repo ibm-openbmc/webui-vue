@@ -20,6 +20,8 @@ export interface RedfishQueryConfig {
   retryDelay?: (attemptIndex: number) => number;
   /** Interval in ms to automatically refetch data in the background */
   refetchInterval?: number | false;
+  /** Whether to refetch when the component mounts (default: true — always refetch on mount) */
+  refetchOnMount?: boolean | 'always';
 }
 
 /**
@@ -77,12 +79,10 @@ export function createRedfishQueryConfig<T = unknown>(
     retry: overrides.retry ?? defaultRedfishRetry,
     refetchInterval: overrides.refetchInterval ?? false,
     retryDelay: overrides.retryDelay ?? defaultRedfishRetryDelay,
+    ...(overrides.refetchOnMount !== undefined && {
+      refetchOnMount: overrides.refetchOnMount,
+    }),
   };
-
-  // Only add refetchInterval if explicitly provided
-  if (overrides.refetchInterval !== undefined) {
-    config.refetchInterval = overrides.refetchInterval;
-  }
 
   return config;
 }
@@ -108,6 +108,15 @@ export const RedfishQueryPresets = {
   realtime: createRedfishQueryConfig({
     staleTime: 10 * 1000, // 10 seconds
     gcTime: 2 * 60 * 1000, // 2 minutes
+  }),
+
+  /**
+   * For static/rarely changing data (e.g., hardware inventory, BIOS settings)
+   * Longer stale time to reduce unnecessary requests
+   */
+  static: createRedfishQueryConfig({
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 15 * 60 * 1000, // 15 minutes
   }),
 
   concurrentMaintenance: createRedfishQueryConfig({

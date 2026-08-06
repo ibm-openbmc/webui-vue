@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import { useQueryClient } from '@tanstack/vue-query';
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
@@ -9,11 +9,13 @@ import {
   useRedfishResource,
 } from './useRedfishCollection';
 import { usePatchResource } from './usePatchResource';
+import api from '@/store/api';
 import type {
   Manager,
   FirmwareInventory,
   License,
   EthernetInterface,
+  IPv4Address,
   EventLog,
   System,
   Account,
@@ -80,7 +82,9 @@ export function useOverviewFirmware() {
     isLoading: isBmcLoading,
     isError: isBmcError,
     error: bmcError,
-  } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc');
+  } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc', {
+    queryConfig: { refetchOnMount: true },
+  });
 
   // Get all firmware inventory
   const {
@@ -93,6 +97,7 @@ export function useOverviewFirmware() {
     {
       expand: false, // Disable expand for this endpoint
       staleTime: 5 * 60 * 1000, // 5 minutes
+      queryConfig: { refetchOnMount: true },
     },
   );
 
@@ -111,13 +116,13 @@ export function useOverviewFirmware() {
       .pop();
 
     const bmcFirmware: FirmwareVersion[] = firmwareInventory.value
-      .filter((fw) => {
+      .filter((fw: FirmwareInventory) => {
         const firmwareType = fw.RelatedItem?.[0]?.['@odata.id']
           ?.split('/')
           .pop();
         return firmwareType === 'bmc';
       })
-      .map((fw) => ({
+      .map((fw: FirmwareInventory) => ({
         version: fw.Version,
         id: fw.Id,
       }));
@@ -153,33 +158,46 @@ export function useOverviewFirmware() {
 }
 
 /**
- * Composable for fetching license/access key information
+ * Composable for fetching license/access key information.
+ * Shares the same query key as useCapacityOnDemand so the two pages
+ * use a single cached fetch instead of two parallel requests.
  */
 export function useOverviewLicense() {
   const {
-    data: licenses,
+    data: licensesData,
     isLoading,
     isError,
     error,
-  } = useRedfishCollection<License>('/redfish/v1/LicenseService/Licenses', {
+  } = useQuery({
+    // Shared key — same as useCapacityOnDemand
+    queryKey: ['redfish', 'licenseService', 'licenses'],
+    queryFn: async (): Promise<Record<string, License>> => {
+      const response = await api.get('/redfish/v1/LicenseService/Licenses');
+      const members: Array<{ '@odata.id': string }> =
+        response.data?.Members || [];
+
+      const responses = await Promise.all(
+        members.map((member) => api.get<License>(member['@odata.id'])),
+      );
+
+      return responses.reduce(
+        (acc, { data }) => {
+          acc[data.Id] = data;
+          return acc;
+        },
+        {} as Record<string, License>,
+      );
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
-    enabled: true,
+    gcTime: 5 * 60 * 1000,
+    refetchOnMount: true,
   });
 
   const licenseData = computed((): LicenseData => {
-    if (!licenses.value) {
-      return { expirationDate: null };
-    }
-
-    // Find the UAK (Firmware Update Access Key) license
-    const uakLicense = licenses.value.find((license) => license.Id === 'UAK');
-    if (uakLicense?.ExpirationDate) {
-      return {
-        expirationDate: new Date(uakLicense.ExpirationDate),
-      };
-    }
-
-    return { expirationDate: null };
+    const uak = licensesData.value?.['UAK'];
+    return {
+      expirationDate: uak?.ExpirationDate ? new Date(uak.ExpirationDate) : null,
+    };
   });
 
   return {
@@ -208,6 +226,7 @@ export function useOverviewNetwork() {
     {
       expand: false, // Disable expand for this endpoint
       staleTime: 2 * 60 * 1000, // 2 minutes
+      queryConfig: { refetchOnMount: true },
     },
   );
 
@@ -222,7 +241,7 @@ export function useOverviewNetwork() {
 
     const firstInterface = ethernetInterfaces.value[0];
     const dhcpAddresses = (firstInterface.IPv4Addresses || []).filter(
-      (ipv4) => ipv4.AddressOrigin === 'DHCP',
+      (ipv4: IPv4Address) => ipv4.AddressOrigin === 'DHCP',
     );
 
     return {
@@ -257,6 +276,7 @@ export function useOverviewEvents() {
     '/redfish/v1/Systems/system/LogServices/EventLog/Entries',
     {
       staleTime: 30 * 1000, // 30 seconds
+      queryConfig: { refetchOnMount: true },
     },
   );
 
@@ -265,7 +285,7 @@ export function useOverviewEvents() {
       return [];
     }
 
-    return eventLogs.value.map((event) => ({
+    return eventLogs.value.map((event: EventLog) => ({
       ...event,
       Severity: event.Severity || 'OK',
       filterByStatus: event.Resolved ? 'Resolved' : 'Unresolved',
@@ -311,6 +331,7 @@ export function useOverviewInventory() {
     error,
   } = useRedfishResource<System>('/redfish/v1/Systems/system', {
     enabled: true,
+    queryConfig: { refetchOnMount: true },
   });
 
   const inventoryData = computed((): SystemInventory => {
@@ -339,7 +360,9 @@ export function useOverviewQuickLinks() {
     data: bmcManager,
     isLoading: isBmcTimeLoading,
     isError: isBmcTimeError,
-  } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc');
+  } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc', {
+    queryConfig: { refetchOnMount: true },
+  });
 
   const bmcTimeData = computed((): BmcTimeData => {
     const bmcDateTime = bmcManager.value?.DateTime;
@@ -359,6 +382,7 @@ export function useOverviewQuickLinks() {
     `/redfish/v1/AccountService/Accounts/${username}`,
     {
       enabled: !!username,
+      queryConfig: { refetchOnMount: true },
     },
   );
 
