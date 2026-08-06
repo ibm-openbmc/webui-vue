@@ -1,10 +1,11 @@
 import { computed } from 'vue';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+import type { UseQueryOptions } from '@tanstack/vue-query';
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
-import { createRedfishQueryConfig } from './shared/queryConfig';
+import { RedfishQueryPresets } from './shared/queryConfig';
 import type { Resource } from '@/types/redfish';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -93,7 +94,9 @@ export function useNetworkSettings() {
       }, {});
       return Object.keys(filtered).length ? filtered : null;
     },
-    ...createRedfishQueryConfig({ staleTime: 30 * 1000 }),
+    ...(RedfishQueryPresets.metadata as Partial<
+      UseQueryOptions<NetworkBiosAttributes | null>
+    >),
   });
 
   // ─── Property limits from registry ───────────────────────────────────────
@@ -124,7 +127,9 @@ export function useNetworkSettings() {
         vlanTagIdUpperBound: find('pvm_ibmi_vlan_tag_id')?.UpperBound ?? null,
       };
     },
-    ...createRedfishQueryConfig({ staleTime: 5 * 60 * 1000 }),
+    ...(RedfishQueryPresets.metadata as Partial<
+      UseQueryOptions<NetworkPropertyLimits>
+    >),
   });
 
   // ─── Set D-Mode mutation ──────────────────────────────────────────────────
