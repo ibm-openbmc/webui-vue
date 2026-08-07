@@ -91,13 +91,17 @@ vi.mock('@tanstack/vue-query', async () => {
 
 vi.mock('@/store', () => ({
   default: {
-    AuthenticationStore: () => ({ logout: vi.fn() }),
+    AuthenticationStore: () => ({ logout: vi.fn().mockResolvedValue(undefined) }),
   },
 }));
 
 vi.mock('vue-router', async () => {
   const actual = await vi.importActual('vue-router');
-  return { ...actual, onBeforeRouteLeave: vi.fn() };
+  return {
+    ...actual,
+    onBeforeRouteLeave: vi.fn(),
+    useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  };
 });
 
 vi.mock('@/eventBus', () => ({
