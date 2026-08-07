@@ -110,7 +110,9 @@ import TableIpv6 from './TableIpv6.vue';
 import TableIpv6StaticDefaultGateway from './TableIpv6StaticDefaultGateway.vue';
 import { useNetwork } from '@/api/composables/useNetwork';
 import stores from '@/store';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const queryClient = useQueryClient();
 const authenticationStore = stores.AuthenticationStore();
@@ -263,9 +265,9 @@ const saveHostname = (modalFormData) => {
   startLoader();
   saveHostnameApi(modalFormData)
     .then(() => {
-      queryClient.removeQueries({ queryKey: ['redfish', 'system', 'info'] });
-      sessionStorage.removeItem('systemInfoCache');
-      return authenticationStore.logout();
+      authenticationStore.logout().then(() => {
+        router.push('/login');
+      });
     })
     .finally(() => endLoader());
 };
