@@ -115,6 +115,7 @@ const BOOT_ATTRIBUTE_KEYS = [
 export function useBootBiosAttributes() {
   const queryClient = useQueryClient();
   const { patchResource, isPending: isSavingBiosPatch } = usePatchResource();
+  const resourceMemoryStore = stores.ResourceMemoryStore();
 
   const {
     data: rawBiosResource,
@@ -152,6 +153,12 @@ export function useBootBiosAttributes() {
   const rawRegistry = computed<RegistryAttribute[]>(
     () => rawRegistryResource.value?.RegistryEntries?.Attributes ?? [],
   );
+
+  // Sync pvm_hmc_managed into ResourceMemoryStore so BiosSettings can read it
+  watch(rawRegistry, (attrs) => {
+    const found = attrs.find((a) => a.AttributeName === 'pvm_hmc_managed');
+    resourceMemoryStore.hmcManaged = found?.CurrentValue ?? null;
+  });
 
   // ─── Derived: attributeValues (maps attribute name → dropdown options) ────
 
