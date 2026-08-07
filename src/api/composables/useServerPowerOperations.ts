@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import type { UseQueryOptions } from '@tanstack/vue-query';
 // @ts-ignore - api.js is a JavaScript module
@@ -10,6 +10,8 @@ import type { Resource } from '@/types/redfish';
 import { serverStateMapper } from './useSystemInfo';
 import { useRedfishResource, useRedfishCollection } from './useAllSubResources';
 import { usePatchResource } from './usePatchResource';
+// @ts-ignore - stores is a JavaScript module
+import stores from '@/store';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -346,6 +348,8 @@ export function useBootBiosAttributes() {
  * Fetch system status, last power operation time, and boot progress.
  */
 export function useServerSystemInfo() {
+  const globalStore = stores.GlobalStore();
+
   const {
     data: systemData,
     isFetching: isSystemFetching,
@@ -354,6 +358,10 @@ export function useServerSystemInfo() {
     refetch: refetchSystem,
   } = useRedfishResource<SystemResponse>('/redfish/v1/Systems/system', {
     queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<SystemResponse>>,
+  });
+
+  watch(systemData, (data) => {
+    globalStore.bootProgress = data?.BootProgress?.LastState ?? null;
   });
 
   const serverStatus = computed(() => {
