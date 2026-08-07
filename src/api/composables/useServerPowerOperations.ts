@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import type { UseQueryOptions } from '@tanstack/vue-query';
 // @ts-ignore - api.js is a JavaScript module
 import api from '@/store/api';
@@ -8,6 +8,8 @@ import i18n from '@/i18n';
 import { RedfishQueryPresets } from './shared/queryConfig';
 import type { Resource } from '@/types/redfish';
 import { serverStateMapper } from './useSystemInfo';
+import { useRedfishResource, useRedfishCollection } from './useAllSubResources';
+import { usePatchResource } from './usePatchResource';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -110,51 +112,49 @@ const BOOT_ATTRIBUTE_KEYS = [
  */
 export function useBootBiosAttributes() {
   const queryClient = useQueryClient();
+  const { patchResource, isPending: isSavingBiosPatch } = usePatchResource();
 
   const {
-    data: rawBios,
+    data: rawBiosResource,
     isFetching: isBiosFetching,
     isLoading: isBiosLoading,
     isError: isBiosError,
     refetch: refetchBios,
-  } = useQuery({
-    queryKey: ['spo', 'bios', 'attributes'],
-    queryFn: async (): Promise<BiosAttributes> => {
-      const response = await api.get<BiosResponse>(
-        '/redfish/v1/Systems/system/Bios',
-      );
-      const attrs = response.data?.Attributes ?? {};
-      return BOOT_ATTRIBUTE_KEYS.reduce<BiosAttributes>((obj, key) => {
-        if (key in attrs) obj[key] = attrs[key];
-        return obj;
-      }, {});
-    },
-    ...(RedfishQueryPresets.metadata as Partial<UseQueryOptions<BiosAttributes>>),
+  } = useRedfishResource<BiosResponse>('/redfish/v1/Systems/system/Bios', {
+    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<BiosResponse>>,
+  });
+
+  const rawBios = computed<BiosAttributes>(() => {
+    const attrs = rawBiosResource.value?.Attributes ?? {};
+    return BOOT_ATTRIBUTE_KEYS.reduce<BiosAttributes>((obj, key) => {
+      if (key in attrs) obj[key] = attrs[key];
+      return obj;
+    }, {});
   });
 
   // ─── Registry data (attribute values / dropdown options) ─────────────────
 
   const {
-    data: rawRegistry,
+    data: rawRegistryResource,
     isFetching: isRegistryFetching,
     isLoading: isRegistryLoading,
     isError: isRegistryError,
     refetch: refetchRegistry,
-  } = useQuery({
-    queryKey: ['spo', 'bios', 'registry'],
-    queryFn: async (): Promise<RegistryAttribute[]> => {
-      const response = await api.get<RegistryResponse>(
-        '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-      );
-      return response.data?.RegistryEntries?.Attributes ?? [];
+  } = useRedfishResource<RegistryResponse>(
+    '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
+    {
+      queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<RegistryResponse>>,
     },
-    ...(RedfishQueryPresets.metadata as Partial<UseQueryOptions<RegistryAttribute[]>>),
-  });
+  );
+
+  const rawRegistry = computed<RegistryAttribute[]>(
+    () => rawRegistryResource.value?.RegistryEntries?.Attributes ?? [],
+  );
 
   // ─── Derived: attributeValues (maps attribute name → dropdown options) ────
 
   const attributeValues = computed(() => {
-    if (!rawRegistry.value) return null;
+    if (!rawRegistry.value?.length) return null;
     const attrs = rawRegistry.value;
 
     return BOOT_ATTRIBUTE_KEYS.filter(
@@ -241,45 +241,51 @@ export function useBootBiosAttributes() {
 
   // ─── Save BIOS settings mutation ─────────────────────────────────────────
 
-  const saveBiosSettingsMutation = useMutation({
-    mutationFn: async (biosSettings: BiosAttributes): Promise<string> => {
-      await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
-        Attributes: biosSettings,
-      });
-      return i18n.global.t(
-        'pageServerPowerOperations.toast.successSaveSettings',
-      );
-    },
-    onSuccess: (_result, biosSettings) => {
-      // Optimistically update the cache with the saved values so the UI
-      // reflects what was saved without a re-fetch. The PATCH goes to
-      // /Bios/Settings (pending buffer) while GET /Bios returns committed
-      // values — they won't match until after a reboot, so a re-fetch
-      // would just overwrite the UI with stale old data.
-      queryClient.setQueryData(
-        ['spo', 'bios', 'attributes'],
-        (old: BiosAttributes | undefined) => ({ ...old, ...biosSettings }),
-      );
-    },
-  });
+  const saveBiosSettings = async (biosSettings: BiosAttributes): Promise<string> => {
+    // Optimistically update the cache with the saved values so the UI
+    // reflects what was saved without a re-fetch. The PATCH goes to
+    // /Bios/Settings (pending buffer) while GET /Bios returns committed
+    // values — they won't match until after a reboot, so a re-fetch
+    // would just overwrite the UI with stale old data.
+    await patchResource({
+      endpoint: '/redfish/v1/Systems/system/Bios/Settings',
+      field: 'Attributes',
+      value: biosSettings,
+      onSuccess: () => {
+        queryClient.setQueryData(
+          ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'],
+          (old: BiosResponse | undefined) => ({
+            ...old,
+            Attributes: { ...(old?.Attributes ?? {}), ...biosSettings },
+          }),
+        );
+      },
+    });
+    return i18n.global.t('pageServerPowerOperations.toast.successSaveSettings');
+  };
 
   // ─── Save operating mode settings mutation ───────────────────────────────
 
-  const saveOperatingModeSettingsMutation = useMutation({
-    mutationFn: async (payload: {
-      powerRestorePolicy: string;
-      automaticRetryConfig: string;
-      bootFault: string;
-    }): Promise<void> => {
-      await api.patch('/redfish/v1/Systems/system', {
-        PowerRestorePolicy: payload.powerRestorePolicy,
+  const saveOperatingModeSettings = async (payload: {
+    powerRestorePolicy: string;
+    automaticRetryConfig: string;
+    bootFault: string;
+  }): Promise<void> => {
+    await patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'PowerRestorePolicy',
+      value: payload.powerRestorePolicy,
+      additionalFields: {
         Boot: {
           AutomaticRetryConfig: payload.automaticRetryConfig,
           StopBootOnFault: payload.bootFault,
         },
-      });
-    },
-  });
+      },
+      invalidateQueries: [
+        ['redfish', 'resource', '/redfish/v1/Systems/system'],
+      ],
+    });
+  };
 
   // ─── Standby to runtime mutation ─────────────────────────────────────────
 
@@ -326,9 +332,9 @@ export function useBootBiosAttributes() {
       refetchBios();
       refetchRegistry();
     },
-    saveBiosSettings: saveBiosSettingsMutation.mutateAsync,
-    isSavingBios: saveBiosSettingsMutation.isPending,
-    saveOperatingModeSettings: saveOperatingModeSettingsMutation.mutateAsync,
+    saveBiosSettings,
+    isSavingBios: isSavingBiosPatch,
+    saveOperatingModeSettings,
     standbyToRuntime: standbyToRuntimeMutation.mutateAsync,
     isStandbyToRuntimePending: standbyToRuntimeMutation.isPending,
   };
@@ -346,15 +352,8 @@ export function useServerSystemInfo() {
     isLoading: isSystemLoading,
     isError: isSystemError,
     refetch: refetchSystem,
-  } = useQuery({
-    queryKey: ['spo', 'system'],
-    queryFn: async (): Promise<SystemResponse> => {
-      const response = await api.get<SystemResponse>(
-        '/redfish/v1/Systems/system',
-      );
-      return response.data;
-    },
-    ...(RedfishQueryPresets.metadata as Partial<UseQueryOptions<SystemResponse>>),
+  } = useRedfishResource<SystemResponse>('/redfish/v1/Systems/system', {
+    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<SystemResponse>>,
   });
 
   const serverStatus = computed(() => {
@@ -418,72 +417,80 @@ export interface BmcInfo {
 
 export function useServerBmcInfo() {
   const {
-    data: bmcData,
+    data: rawBmc,
     isFetching,
     isLoading,
     isError,
     refetch,
-  } = useQuery({
-    queryKey: ['spo', 'bmc'],
-    queryFn: async (): Promise<BmcInfo> => {
-      const response = await api.get<BmcResponse>('/redfish/v1/Managers/bmc');
-      const d = response.data;
-      return {
-        dateTime: d.DateTime ? new Date(d.DateTime) : null,
-        description: d.Description ?? null,
-        health: d.Status?.Health ?? null,
-        id: d.Id,
-        identifyLed: d.LocationIndicatorActive ?? false,
-        locationNumber: d.Location?.PartLocation?.ServiceLabel ?? null,
-        model: d.Model ?? null,
-        name: d.Name,
-        partNumber: d.PartNumber ?? null,
-        powerState: d.PowerState ?? null,
-        serialNumber: d.SerialNumber ?? null,
-        sparePartNumber: d.SparePartNumber ?? null,
-        statusState: d.Status?.State ?? null,
-        uri: d['@odata.id'],
-      };
-    },
-    ...(RedfishQueryPresets.metadata as Partial<UseQueryOptions<BmcInfo>>),
+  } = useRedfishResource<BmcResponse>('/redfish/v1/Managers/bmc', {
+    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<BmcResponse>>,
   });
 
-  return { bmc: bmcData, isFetching, isLoading, isError, refetch };
+  const bmc = computed<BmcInfo | null>(() => {
+    const d = rawBmc.value;
+    if (!d) return null;
+    return {
+      dateTime: d.DateTime ? new Date(d.DateTime) : null,
+      description: d.Description ?? null,
+      health: d.Status?.Health ?? null,
+      id: d.Id,
+      identifyLed: d.LocationIndicatorActive ?? false,
+      locationNumber: d.Location?.PartLocation?.ServiceLabel ?? null,
+      model: d.Model ?? null,
+      name: d.Name,
+      partNumber: d.PartNumber ?? null,
+      powerState: d.PowerState ?? null,
+      serialNumber: d.SerialNumber ?? null,
+      sparePartNumber: d.SparePartNumber ?? null,
+      statusState: d.Status?.State ?? null,
+      uri: d['@odata.id'],
+    };
+  });
+
+  return { bmc, isFetching, isLoading, isError, refetch };
 }
 
 // ─── Composable: Location Codes ──────────────────────────────────────────────
 
+interface ChassisWithPcieSlots extends Resource {
+  PCIeSlots?: {
+    Slots: Array<{
+      Links?: { PCIeDevice?: any[] };
+      Location?: { PartLocation?: { ServiceLabel?: string } };
+    }>;
+  };
+}
+
 export function useLocationCodes() {
-  const { data, isFetching, isError, refetch } = useQuery({
-    queryKey: ['spo', 'locationCodes'],
-    queryFn: async (): Promise<string[]> => {
-      const response = await api.get<{
-        Members: Array<{
-          PCIeSlots?: {
-            Slots: Array<{
-              Links?: { PCIeDevice?: any[] };
-              Location?: { PartLocation?: { ServiceLabel?: string } };
-            }>;
-          };
-        }>;
-      }>('/redfish/v1/Chassis?$expand=.($levels=2)');
-      const codes: string[] = [];
-      response.data.Members.forEach((chassis) => {
-        chassis.PCIeSlots?.Slots.forEach((slot) => {
-          if (
-            slot.Links?.PCIeDevice?.length &&
-            slot.Location?.PartLocation?.ServiceLabel
-          ) {
-            codes.push(slot.Location.PartLocation.ServiceLabel);
-          }
-        });
-      });
-      return codes;
-    },
-    ...(RedfishQueryPresets.metadata as Partial<UseQueryOptions<string[]>>),
+  const {
+    data: chassisMembers,
+    isFetching,
+    isError,
+    refetch,
+  } = useRedfishCollection<ChassisWithPcieSlots>('/redfish/v1/Chassis', {
+    expand: true,
+    expandLevels: 2,
+    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<ChassisWithPcieSlots[]>>,
   });
 
-  return { locationCodes: data, isFetching, isError, refetch };
+  type PcieSlot = NonNullable<ChassisWithPcieSlots['PCIeSlots']>['Slots'][number];
+
+  const locationCodes = computed<string[]>(() => {
+    const codes: string[] = [];
+    (chassisMembers.value ?? []).forEach((chassis: ChassisWithPcieSlots) => {
+      chassis.PCIeSlots?.Slots.forEach((slot: PcieSlot) => {
+        if (
+          slot.Links?.PCIeDevice?.length &&
+          slot.Location?.PartLocation?.ServiceLabel
+        ) {
+          codes.push(slot.Location.PartLocation.ServiceLabel);
+        }
+      });
+    });
+    return codes;
+  });
+
+  return { locationCodes, isFetching, isError, refetch };
 }
 
 // ─── Composable: Server Power Control ────────────────────────────────────────

@@ -856,15 +856,22 @@ const ibmiConsoleItems = ref([
 
 const attributeKeys = ref({ ...props.biosAttributes });
 
-onBeforeMount(() => {
-  if (props.biosAttributes) {
-    Object.assign(attributeKeys.value, props.biosAttributes);
+// Re-populate attributeKeys when biosAttributes prop arrives (async query)
+watch(
+  () => props.biosAttributes,
+  (newVal) => {
+    if (!newVal) return;
+    Object.assign(attributeKeys.value, newVal);
     currentOperatingMode.value =
       attributeKeys.value['pvm_system_operating_mode'] ?? '';
     if (currentOperatingMode.value === manualMode.value) {
       onChangeSystemOpsMode(manualMode.value);
     }
-  }
+  },
+  { immediate: true },
+);
+
+onBeforeMount(() => {
   taggedSettings.value[0].settingValue = props.ibmiLoadSourceValue;
   taggedSettings.value[1].settingValue = props.ibmiAltLoadSourceValue;
   taggedSettings.value[2].settingValue = props.ibmiConsoleValue;

@@ -24,11 +24,12 @@ vi.mock('@/i18n', () => ({
   },
 }));
 
-// ── Mock shared queryConfig ───────────────────────────────────────────────────
+// ── Mock shared queryConfig (include createRedfishQueryConfig) ────────────────
 vi.mock('@/api/composables/shared/queryConfig', () => ({
   RedfishQueryPresets: {
     metadata: { staleTime: 600000, gcTime: 1800000 },
   },
+  createRedfishQueryConfig: vi.fn(() => ({})),
 }));
 
 // ── Mock useSystemInfo (for serverStateMapper) ────────────────────────────────
@@ -42,7 +43,20 @@ vi.mock('@/api/composables/useSystemInfo', () => ({
   }),
 }));
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+// ── Mock useAllSubResources (useRedfishResource + useRedfishCollection) ────────
+vi.mock('@/api/composables/useAllSubResources', () => ({
+  useRedfishResource: vi.fn(),
+  useRedfishCollection: vi.fn(),
+}));
+
+// ── Mock usePatchResource ─────────────────────────────────────────────────────
+vi.mock('@/api/composables/usePatchResource', () => ({
+  usePatchResource: vi.fn(),
+}));
+
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
+import { useRedfishResource, useRedfishCollection } from '@/api/composables/useAllSubResources';
+import { usePatchResource } from '@/api/composables/usePatchResource';
 import {
   useBootBiosAttributes,
   useServerSystemInfo,
@@ -76,51 +90,77 @@ const makeMockMutation = (overrides = {}) => ({
 
 describe('useBootBiosAttributes', () => {
   let mockQueryClient;
+  let mockPatchResource;
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockQueryClient = { invalidateQueries: vi.fn(), setQueryData: vi.fn() };
     useQueryClient.mockReturnValue(mockQueryClient);
     useMutation.mockReturnValue(makeMockMutation());
-    // Default: both queries return null data
-    useQuery.mockReturnValue(makeMockQuery());
+    mockPatchResource = vi.fn().mockResolvedValue(undefined);
+    usePatchResource.mockReturnValue({
+      patchResource: mockPatchResource,
+      isPending: ref(false),
+    });
+    // Default: both resource queries return null data
+    useRedfishResource.mockReturnValue(makeMockQuery());
   });
 
   describe('BIOS attributes data', () => {
     it('returns null biosAttributes when query data is null', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref(null) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
       const { biosAttributes } = useBootBiosAttributes();
-      expect(biosAttributes.value).toBeNull();
+      expect(biosAttributes.value).toEqual({});
     });
 
-    it('returns biosAttributes when query data is present', () => {
-      const attrs = { pvm_default_os_type: 'IBM I', pvm_sys_dump_active: 'Disabled' };
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref(attrs) })) // bios
-        .mockReturnValueOnce(makeMockQuery({ data: ref([]) }));   // registry
+    it('returns filtered biosAttributes when query data is present', () => {
+      const biosResource = {
+        Attributes: {
+          pvm_default_os_type: 'IBM I',
+          pvm_sys_dump_active: 'Disabled',
+          some_other_attr: 'ignored',
+        },
+      };
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(biosResource) })) // bios
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }));        // registry
       const { biosAttributes } = useBootBiosAttributes();
-      expect(biosAttributes.value).toEqual(attrs);
+      expect(biosAttributes.value).toHaveProperty('pvm_default_os_type', 'IBM I');
+      expect(biosAttributes.value).toHaveProperty('pvm_sys_dump_active', 'Disabled');
+      expect(biosAttributes.value).not.toHaveProperty('some_other_attr');
     });
   });
 
   describe('attributeValues derived from registry', () => {
     it('returns null when registry is not loaded', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref(null) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
+      const { attributeValues } = useBootBiosAttributes();
+      expect(attributeValues.value).toBeNull();
+    });
+
+    it('returns null when registry resource has empty Attributes', () => {
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref({ RegistryEntries: { Attributes: [] } }) }));
       const { attributeValues } = useBootBiosAttributes();
       expect(attributeValues.value).toBeNull();
     });
 
     it('derives attributeValues from registry entries', () => {
-      const registry = [
-        {
-          AttributeName: 'pvm_default_os_type',
-          CurrentValue: 'AIX',
-          Value: [{ ValueName: 'AIX' }, { ValueName: 'IBM I' }],
+      const registryResource = {
+        RegistryEntries: {
+          Attributes: [
+            {
+              AttributeName: 'pvm_default_os_type',
+              CurrentValue: 'AIX',
+              Value: [{ ValueName: 'AIX' }, { ValueName: 'IBM I' }],
+            },
+          ],
         },
-      ];
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))      // bios
-        .mockReturnValueOnce(makeMockQuery({ data: ref(registry) })); // registry
+      };
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))          // bios
+        .mockReturnValueOnce(makeMockQuery({ data: ref(registryResource) })); // registry
       const { attributeValues } = useBootBiosAttributes();
       expect(attributeValues.value).toHaveProperty('pvm_default_os_type');
       expect(attributeValues.value['pvm_default_os_type']).toHaveLength(2);
@@ -128,12 +168,16 @@ describe('useBootBiosAttributes', () => {
     });
 
     it('skips pvm_sys_dump_active from attributeValues', () => {
-      const registry = [
-        { AttributeName: 'pvm_sys_dump_active', Value: [{ ValueName: 'Enabled' }] },
-      ];
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))
-        .mockReturnValueOnce(makeMockQuery({ data: ref(registry) }));
+      const registryResource = {
+        RegistryEntries: {
+          Attributes: [
+            { AttributeName: 'pvm_sys_dump_active', Value: [{ ValueName: 'Enabled' }] },
+          ],
+        },
+      };
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref(registryResource) }));
       const { attributeValues } = useBootBiosAttributes();
       expect(attributeValues.value).not.toHaveProperty('pvm_sys_dump_active');
     });
@@ -141,18 +185,22 @@ describe('useBootBiosAttributes', () => {
 
   describe('hmcManaged derived from registry', () => {
     it('returns null when registry has no pvm_hmc_managed entry', () => {
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))
-        .mockReturnValueOnce(makeMockQuery({ data: ref([]) }));
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref({ RegistryEntries: { Attributes: [] } }) }));
       const { hmcManaged } = useBootBiosAttributes();
       expect(hmcManaged.value).toBeNull();
     });
 
     it('returns hmcManaged CurrentValue from registry', () => {
-      const registry = [{ AttributeName: 'pvm_hmc_managed', CurrentValue: 'Enabled' }];
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))
-        .mockReturnValueOnce(makeMockQuery({ data: ref(registry) }));
+      const registryResource = {
+        RegistryEntries: {
+          Attributes: [{ AttributeName: 'pvm_hmc_managed', CurrentValue: 'Enabled' }],
+        },
+      };
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref(registryResource) }));
       const { hmcManaged } = useBootBiosAttributes();
       expect(hmcManaged.value).toBe('Enabled');
     });
@@ -160,18 +208,22 @@ describe('useBootBiosAttributes', () => {
 
   describe('linuxKvmPercentageValue', () => {
     it('returns null when registry entry is absent', () => {
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))
-        .mockReturnValueOnce(makeMockQuery({ data: ref([]) }));
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref({ RegistryEntries: { Attributes: [] } }) }));
       const { linuxKvmPercentageValue } = useBootBiosAttributes();
       expect(linuxKvmPercentageValue.value).toBeNull();
     });
 
     it('divides CurrentValue by 10', () => {
-      const registry = [{ AttributeName: 'pvm_linux_kvm_percentage', CurrentValue: 500 }];
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))
-        .mockReturnValueOnce(makeMockQuery({ data: ref(registry) }));
+      const registryResource = {
+        RegistryEntries: {
+          Attributes: [{ AttributeName: 'pvm_linux_kvm_percentage', CurrentValue: 500 }],
+        },
+      };
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref(registryResource) }));
       const { linuxKvmPercentageValue } = useBootBiosAttributes();
       expect(linuxKvmPercentageValue.value).toBe(50);
     });
@@ -179,9 +231,9 @@ describe('useBootBiosAttributes', () => {
 
   describe('IBM i tagged settings', () => {
     it('falls back to "Current configuration" when registry entry missing', () => {
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))
-        .mockReturnValueOnce(makeMockQuery({ data: ref([]) }));
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref({ RegistryEntries: { Attributes: [] } }) }));
       const { ibmiLoadSourceValue, ibmiAltLoadSourceValue, ibmiConsoleValue } =
         useBootBiosAttributes();
       expect(ibmiLoadSourceValue.value).toBe('Current configuration');
@@ -190,14 +242,18 @@ describe('useBootBiosAttributes', () => {
     });
 
     it('returns CurrentValue from registry for IBM i tagged settings', () => {
-      const registry = [
-        { AttributeName: 'pvm_ibmi_load_source', CurrentValue: 'SlotA' },
-        { AttributeName: 'pvm_ibmi_alt_load_source', CurrentValue: 'SlotB' },
-        { AttributeName: 'pvm_ibmi_console', CurrentValue: 'HMC' },
-      ];
-      useQuery
-        .mockReturnValueOnce(makeMockQuery({ data: ref({}) }))
-        .mockReturnValueOnce(makeMockQuery({ data: ref(registry) }));
+      const registryResource = {
+        RegistryEntries: {
+          Attributes: [
+            { AttributeName: 'pvm_ibmi_load_source', CurrentValue: 'SlotA' },
+            { AttributeName: 'pvm_ibmi_alt_load_source', CurrentValue: 'SlotB' },
+            { AttributeName: 'pvm_ibmi_console', CurrentValue: 'HMC' },
+          ],
+        },
+      };
+      useRedfishResource
+        .mockReturnValueOnce(makeMockQuery({ data: ref(null) }))
+        .mockReturnValueOnce(makeMockQuery({ data: ref(registryResource) }));
       const { ibmiLoadSourceValue, ibmiAltLoadSourceValue, ibmiConsoleValue } =
         useBootBiosAttributes();
       expect(ibmiLoadSourceValue.value).toBe('SlotA');
@@ -208,7 +264,7 @@ describe('useBootBiosAttributes', () => {
 
   describe('combined isLoading / isError', () => {
     it('isLoading is true when either bios or registry is loading', () => {
-      useQuery
+      useRedfishResource
         .mockReturnValueOnce(makeMockQuery({ isLoading: ref(true) }))
         .mockReturnValueOnce(makeMockQuery({ isLoading: ref(false) }));
       const { isLoading } = useBootBiosAttributes();
@@ -216,13 +272,13 @@ describe('useBootBiosAttributes', () => {
     });
 
     it('isLoading is false when both queries are done', () => {
-      useQuery.mockReturnValue(makeMockQuery({ isLoading: ref(false) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ isLoading: ref(false) }));
       const { isLoading } = useBootBiosAttributes();
       expect(isLoading.value).toBe(false);
     });
 
     it('isError is true when bios query errors', () => {
-      useQuery
+      useRedfishResource
         .mockReturnValueOnce(makeMockQuery({ isError: ref(true) }))
         .mockReturnValueOnce(makeMockQuery({ isError: ref(false) }));
       const { isError } = useBootBiosAttributes();
@@ -231,33 +287,33 @@ describe('useBootBiosAttributes', () => {
   });
 
   describe('saveBiosSettings mutation', () => {
-    it('exposes saveBiosSettings as mutateAsync', () => {
-      const mutateFn = vi.fn().mockResolvedValue(undefined);
-      useQuery.mockReturnValue(makeMockQuery({ data: ref({}) }));
-      useMutation.mockReturnValue(makeMockMutation({ mutateAsync: mutateFn }));
+    it('exposes saveBiosSettings as a function', () => {
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
       const { saveBiosSettings } = useBootBiosAttributes();
-      expect(saveBiosSettings).toBe(mutateFn);
+      expect(typeof saveBiosSettings).toBe('function');
     });
 
-    it('updates bios attributes cache on success', () => {
-      let onSuccessCallback;
-      useMutation.mockImplementation(({ onSuccess }) => {
-        if (onSuccess) onSuccessCallback = onSuccess;
-        return makeMockMutation();
-      });
-      useQuery.mockReturnValue(makeMockQuery({ data: ref({}) }));
-      useBootBiosAttributes();
-      const saved = { pvm_default_os_type: 'AIX' };
-      onSuccessCallback?.('result', saved);
-      expect(mockQueryClient.setQueryData).toHaveBeenCalledWith(
-        ['spo', 'bios', 'attributes'],
-        expect.any(Function),
+    it('calls patchResource with correct args and updates cache on success', async () => {
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
+      mockPatchResource.mockResolvedValue(undefined);
+      const { saveBiosSettings } = useBootBiosAttributes();
+      const biosSettings = { pvm_default_os_type: 'AIX' };
+      await saveBiosSettings(biosSettings);
+      expect(mockPatchResource).toHaveBeenCalledWith(
+        expect.objectContaining({
+          endpoint: '/redfish/v1/Systems/system/Bios/Settings',
+          field: 'Attributes',
+          value: biosSettings,
+        }),
       );
     });
 
-    it('exposes isSavingBios from mutation isPending', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref({}) }));
-      useMutation.mockReturnValue(makeMockMutation({ isPending: ref(true) }));
+    it('exposes isSavingBios from usePatchResource isPending', () => {
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
+      usePatchResource.mockReturnValue({
+        patchResource: vi.fn(),
+        isPending: ref(true),
+      });
       const { isSavingBios } = useBootBiosAttributes();
       expect(isSavingBios.value).toBe(true);
     });
@@ -265,8 +321,7 @@ describe('useBootBiosAttributes', () => {
 
   describe('refetch', () => {
     it('exposes a refetch function', () => {
-      useQuery.mockReturnValue(makeMockQuery());
-      useMutation.mockReturnValue(makeMockMutation());
+      useRedfishResource.mockReturnValue(makeMockQuery());
       const { refetch } = useBootBiosAttributes();
       expect(typeof refetch).toBe('function');
     });
@@ -284,25 +339,25 @@ describe('useServerSystemInfo', () => {
 
   describe('serverStatus', () => {
     it('returns "unreachable" when data is null', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref(null) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
       const { serverStatus } = useServerSystemInfo();
       expect(serverStatus.value).toBe('unreachable');
     });
 
     it('maps PowerState "On" to "on"', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref({ PowerState: 'On' }) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref({ PowerState: 'On' }) }));
       const { serverStatus } = useServerSystemInfo();
       expect(serverStatus.value).toBe('on');
     });
 
     it('maps PowerState "Off" to "off"', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref({ PowerState: 'Off' }) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref({ PowerState: 'Off' }) }));
       const { serverStatus } = useServerSystemInfo();
       expect(serverStatus.value).toBe('off');
     });
 
     it('prefers Status.State over PowerState for Quiesced', () => {
-      useQuery.mockReturnValue(
+      useRedfishResource.mockReturnValue(
         makeMockQuery({
           data: ref({ PowerState: 'On', Status: { State: 'Quiesced' } }),
         }),
@@ -312,7 +367,7 @@ describe('useServerSystemInfo', () => {
     });
 
     it('prefers Status.State over PowerState for InTest', () => {
-      useQuery.mockReturnValue(
+      useRedfishResource.mockReturnValue(
         makeMockQuery({
           data: ref({ PowerState: 'On', Status: { State: 'InTest' } }),
         }),
@@ -324,13 +379,13 @@ describe('useServerSystemInfo', () => {
 
   describe('lastPowerOperationTime', () => {
     it('returns null when LastResetTime is absent', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref({}) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref({}) }));
       const { lastPowerOperationTime } = useServerSystemInfo();
       expect(lastPowerOperationTime.value).toBeNull();
     });
 
     it('returns a Date when LastResetTime is present', () => {
-      useQuery.mockReturnValue(
+      useRedfishResource.mockReturnValue(
         makeMockQuery({ data: ref({ LastResetTime: '2024-01-15T12:00:00Z' }) }),
       );
       const { lastPowerOperationTime } = useServerSystemInfo();
@@ -340,13 +395,13 @@ describe('useServerSystemInfo', () => {
 
   describe('powerRestorePolicy', () => {
     it('returns empty string when data is null', () => {
-      useQuery.mockReturnValue(makeMockQuery({ data: ref(null) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
       const { powerRestorePolicy } = useServerSystemInfo();
       expect(powerRestorePolicy.value).toBe('');
     });
 
     it('returns PowerRestorePolicy from system data', () => {
-      useQuery.mockReturnValue(
+      useRedfishResource.mockReturnValue(
         makeMockQuery({ data: ref({ PowerRestorePolicy: 'AlwaysOn' }) }),
       );
       const { powerRestorePolicy } = useServerSystemInfo();
@@ -356,20 +411,20 @@ describe('useServerSystemInfo', () => {
 
   describe('loading and error states', () => {
     it('exposes isSystemLoading', () => {
-      useQuery.mockReturnValue(makeMockQuery({ isLoading: ref(true) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ isLoading: ref(true) }));
       const { isSystemLoading } = useServerSystemInfo();
       expect(isSystemLoading.value).toBe(true);
     });
 
     it('exposes isSystemError', () => {
-      useQuery.mockReturnValue(makeMockQuery({ isError: ref(true) }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ isError: ref(true) }));
       const { isSystemError } = useServerSystemInfo();
       expect(isSystemError.value).toBe(true);
     });
 
     it('exposes refetchSystem function', () => {
       const refetchFn = vi.fn();
-      useQuery.mockReturnValue(makeMockQuery({ refetch: refetchFn }));
+      useRedfishResource.mockReturnValue(makeMockQuery({ refetch: refetchFn }));
       const { refetchSystem } = useServerSystemInfo();
       expect(refetchSystem).toBe(refetchFn);
     });
@@ -386,31 +441,28 @@ describe('useServerBmcInfo', () => {
   });
 
   it('returns null bmc data when query has no data', () => {
-    useQuery.mockReturnValue(makeMockQuery({ data: ref(null) }));
+    useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(null) }));
     const { bmc } = useServerBmcInfo();
     expect(bmc.value).toBeNull();
   });
 
-  it('returns mapped BmcInfo fields when query provides them', () => {
-    // useQuery is mocked — data holds the already-mapped BmcInfo shape.
-    // (The queryFn mapping only runs in the real implementation.)
-    const mappedBmc = {
-      id: 'bmc',
-      name: 'BMC',
-      dateTime: new Date('2024-01-15T12:00:00Z'),
-      description: 'Baseboard Management Controller',
-      powerState: 'On',
-      health: 'OK',
-      statusState: 'Enabled',
-      locationNumber: 'U1234',
-      model: 'ASTBMC',
-      partNumber: 'P001',
-      serialNumber: 'S001',
-      sparePartNumber: 'SP001',
-      identifyLed: false,
-      uri: '/redfish/v1/Managers/bmc',
+  it('returns mapped BmcInfo fields when query provides raw BmcResponse', () => {
+    const rawBmc = {
+      '@odata.id': '/redfish/v1/Managers/bmc',
+      Id: 'bmc',
+      Name: 'BMC',
+      DateTime: '2024-01-15T12:00:00Z',
+      Description: 'Baseboard Management Controller',
+      PowerState: 'On',
+      Status: { Health: 'OK', State: 'Enabled' },
+      Location: { PartLocation: { ServiceLabel: 'U1234' } },
+      Model: 'ASTBMC',
+      PartNumber: 'P001',
+      SerialNumber: 'S001',
+      SparePartNumber: 'SP001',
+      LocationIndicatorActive: false,
     };
-    useQuery.mockReturnValue(makeMockQuery({ data: ref(mappedBmc) }));
+    useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(rawBmc) }));
     const { bmc } = useServerBmcInfo();
     expect(bmc.value.id).toBe('bmc');
     expect(bmc.value.powerState).toBe('On');
@@ -421,15 +473,19 @@ describe('useServerBmcInfo', () => {
     expect(bmc.value.uri).toBe('/redfish/v1/Managers/bmc');
   });
 
-  it('identifyLed is false in the returned BmcInfo', () => {
-    const mappedBmc = { id: 'bmc', name: 'BMC', identifyLed: false, uri: '/redfish/v1/Managers/bmc' };
-    useQuery.mockReturnValue(makeMockQuery({ data: ref(mappedBmc) }));
+  it('identifyLed is false when LocationIndicatorActive is absent', () => {
+    const rawBmc = {
+      '@odata.id': '/redfish/v1/Managers/bmc',
+      Id: 'bmc',
+      Name: 'BMC',
+    };
+    useRedfishResource.mockReturnValue(makeMockQuery({ data: ref(rawBmc) }));
     const { bmc } = useServerBmcInfo();
     expect(bmc.value.identifyLed).toBe(false);
   });
 
   it('exposes isLoading and isFetching', () => {
-    useQuery.mockReturnValue(
+    useRedfishResource.mockReturnValue(
       makeMockQuery({ isLoading: ref(true), isFetching: ref(true) }),
     );
     const { isLoading, isFetching } = useServerBmcInfo();
@@ -447,21 +503,37 @@ describe('useLocationCodes', () => {
     vi.clearAllMocks();
   });
 
-  it('returns empty array when data is null', () => {
-    useQuery.mockReturnValue(makeMockQuery({ data: ref(null) }));
+  it('returns empty array when collection data is null', () => {
+    useRedfishCollection.mockReturnValue(makeMockQuery({ data: ref(null) }));
     const { locationCodes } = useLocationCodes();
-    expect(locationCodes.value).toBeNull();
+    expect(locationCodes.value).toEqual([]);
   });
 
-  it('returns location codes array when data is present', () => {
-    useQuery.mockReturnValue(makeMockQuery({ data: ref(['U78DA.001.XYZ-P1-C1', 'U78DA.001.XYZ-P1-C2']) }));
+  it('returns location codes extracted from chassis PCIeSlots', () => {
+    const chassisMembers = [
+      {
+        PCIeSlots: {
+          Slots: [
+            {
+              Links: { PCIeDevice: [{ '@odata.id': '/redfish/v1/Systems/system/PCIeDevices/0' }] },
+              Location: { PartLocation: { ServiceLabel: 'U78DA.001.XYZ-P1-C1' } },
+            },
+            {
+              Links: { PCIeDevice: [] }, // no device — should be skipped
+              Location: { PartLocation: { ServiceLabel: 'U78DA.001.XYZ-P1-C2' } },
+            },
+          ],
+        },
+      },
+    ];
+    useRedfishCollection.mockReturnValue(makeMockQuery({ data: ref(chassisMembers) }));
     const { locationCodes } = useLocationCodes();
-    expect(locationCodes.value).toEqual(['U78DA.001.XYZ-P1-C1', 'U78DA.001.XYZ-P1-C2']);
+    expect(locationCodes.value).toEqual(['U78DA.001.XYZ-P1-C1']);
   });
 
   it('exposes a refetch function', () => {
     const refetchFn = vi.fn();
-    useQuery.mockReturnValue(makeMockQuery({ refetch: refetchFn }));
+    useRedfishCollection.mockReturnValue(makeMockQuery({ refetch: refetchFn }));
     const { refetch } = useLocationCodes();
     expect(refetch).toBe(refetchFn);
   });

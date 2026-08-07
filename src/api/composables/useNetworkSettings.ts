@@ -1,12 +1,11 @@
 import { computed } from 'vue';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import type { UseQueryOptions } from '@tanstack/vue-query';
-// @ts-ignore - api.js is a JavaScript module
-import api from '@/store/api';
 // @ts-ignore - i18n.js is a JavaScript module
 import i18n from '@/i18n';
 import { RedfishQueryPresets } from './shared/queryConfig';
 import type { Resource } from '@/types/redfish';
+import { useRedfishResource } from './useAllSubResources';
+import { usePatchResource } from './usePatchResource';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -70,135 +69,127 @@ const REQUIRED_ATTRIBUTES = [
  * Replaces NetworkSettingsStore with TanStack Query.
  */
 export function useNetworkSettings() {
-  const queryClient = useQueryClient();
+  const { patchResource, isPending: isPatchPending } = usePatchResource();
 
   // ─── BIOS attributes ─────────────────────────────────────────────────────
 
   const {
-    data: rawBiosAttributes,
+    data: rawBiosResource,
     isFetching: isBiosFetching,
     isError: isBiosError,
     refetch: refetchBios,
-  } = useQuery({
-    queryKey: ['network-settings', 'bios'],
-    queryFn: async (): Promise<NetworkBiosAttributes | null> => {
-      const response = await api.get<BiosResponse>(
-        '/redfish/v1/Systems/system/Bios',
-      );
-      const allAttrs = response.data?.Attributes ?? {};
-      const filtered = REQUIRED_ATTRIBUTES.filter(
-        (key) => key in allAttrs,
-      ).reduce<NetworkBiosAttributes>((obj, key) => {
-        obj[key] = allAttrs[key];
-        return obj;
-      }, {});
-      return Object.keys(filtered).length ? filtered : null;
-    },
-    ...(RedfishQueryPresets.metadata as Partial<
-      UseQueryOptions<NetworkBiosAttributes | null>
-    >),
+  } = useRedfishResource<BiosResponse>('/redfish/v1/Systems/system/Bios', {
+    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<BiosResponse>>,
+  });
+
+  const rawBiosAttributes = computed<NetworkBiosAttributes | null>(() => {
+    const allAttrs = rawBiosResource.value?.Attributes ?? {};
+    const filtered = REQUIRED_ATTRIBUTES.filter(
+      (key) => key in allAttrs,
+    ).reduce<NetworkBiosAttributes>((obj, key) => {
+      obj[key] = allAttrs[key];
+      return obj;
+    }, {});
+    return Object.keys(filtered).length ? filtered : null;
   });
 
   // ─── Property limits from registry ───────────────────────────────────────
 
   const {
-    data: propertyLimits,
+    data: rawRegistryResource,
     isFetching: isLimitsFetching,
     isError: isLimitsError,
     refetch: refetchLimits,
-  } = useQuery({
-    queryKey: ['network-settings', 'limits'],
-    queryFn: async (): Promise<NetworkPropertyLimits> => {
-      const response = await api.get<RegistryResponse>(
-        '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
-      );
-      const attrs = response.data?.RegistryEntries?.Attributes ?? [];
-      const find = (name: string) =>
-        attrs.find((a) => a.AttributeName === name);
-      return {
-        nfsImageDirMaxLength:
-          find('pvm_ibmi_nfs_image_directory')?.MaxLength ?? null,
-        initiatorNameMaxLength:
-          find('pvm_ibmi_iscsi_initiator_name')?.MaxLength ?? null,
-        targetNameMaxLength:
-          find('pvm_ibmi_iscsi_target_name')?.MaxLength ?? null,
-        targetPortUpperBound:
-          find('pvm_ibmi_iscsi_target_port')?.UpperBound ?? null,
-        vlanTagIdUpperBound: find('pvm_ibmi_vlan_tag_id')?.UpperBound ?? null,
-      };
+  } = useRedfishResource<RegistryResponse>(
+    '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
+    {
+      queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<RegistryResponse>>,
     },
-    ...(RedfishQueryPresets.metadata as Partial<
-      UseQueryOptions<NetworkPropertyLimits>
-    >),
+  );
+
+  const propertyLimits = computed<NetworkPropertyLimits>(() => {
+    const attrs = rawRegistryResource.value?.RegistryEntries?.Attributes ?? [];
+    const find = (name: string) => attrs.find((a) => a.AttributeName === name);
+    return {
+      nfsImageDirMaxLength:
+        find('pvm_ibmi_nfs_image_directory')?.MaxLength ?? null,
+      initiatorNameMaxLength:
+        find('pvm_ibmi_iscsi_initiator_name')?.MaxLength ?? null,
+      targetNameMaxLength:
+        find('pvm_ibmi_iscsi_target_name')?.MaxLength ?? null,
+      targetPortUpperBound:
+        find('pvm_ibmi_iscsi_target_port')?.UpperBound ?? null,
+      vlanTagIdUpperBound: find('pvm_ibmi_vlan_tag_id')?.UpperBound ?? null,
+    };
   });
 
   // ─── Set D-Mode mutation ──────────────────────────────────────────────────
 
-  const setDModeMutation = useMutation({
-    mutationFn: async (): Promise<string> => {
-      await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
-        Attributes: { pvm_os_boot_type: 'D_Mode' },
-      });
-      return i18n.global.t(
-        'pageServerPowerOperations.modal.networkSettings.toast.successUpdateDMode',
-      );
-    },
-  });
+  const setDMode = async (): Promise<string> => {
+    await patchResource({
+      endpoint: '/redfish/v1/Systems/system/Bios/Settings',
+      field: 'Attributes',
+      value: { pvm_os_boot_type: 'D_Mode' },
+    });
+    return i18n.global.t(
+      'pageServerPowerOperations.modal.networkSettings.toast.successUpdateDMode',
+    );
+  };
 
   // ─── Save BIOS settings mutation ─────────────────────────────────────────
 
-  const saveBiosSettingsMutation = useMutation({
-    mutationFn: async (form: NetworkBiosAttributes): Promise<string> => {
-      await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
-        Attributes: form,
-      });
-      return i18n.global.t(
-        'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting',
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['network-settings', 'bios'] });
-    },
-  });
+  const saveBiosSettings = async (form: NetworkBiosAttributes): Promise<string> => {
+    await patchResource({
+      endpoint: '/redfish/v1/Systems/system/Bios/Settings',
+      field: 'Attributes',
+      value: form,
+      invalidateQueries: [
+        ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'],
+      ],
+    });
+    return i18n.global.t(
+      'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting',
+    );
+  };
 
   // ─── Update CHAP data mutation ────────────────────────────────────────────
 
-  const updateChapDataMutation = useMutation({
-    mutationFn: async (chapData: {
-      chapName: string;
-      chapSecret: string;
-    }): Promise<string> => {
-      await api.patch('/redfish/v1/Systems/system', {
-        Oem: {
-          IBM: {
-            ChapData: {
-              ChapName: chapData.chapName,
-              ChapSecret: chapData.chapSecret,
-            },
+  const updateChapData = async (chapData: {
+    chapName: string;
+    chapSecret: string;
+  }): Promise<string> => {
+    await patchResource({
+      endpoint: '/redfish/v1/Systems/system',
+      field: 'Oem',
+      value: {
+        IBM: {
+          ChapData: {
+            ChapName: chapData.chapName,
+            ChapSecret: chapData.chapSecret,
           },
         },
-      });
-      return i18n.global.t(
-        'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting',
-      );
-    },
-  });
+      },
+    });
+    return i18n.global.t(
+      'pageServerPowerOperations.modal.networkSettings.toast.successSavedSetting',
+    );
+  };
 
   // ─── Restore default mutation ─────────────────────────────────────────────
 
-  const restoreDefaultMutation = useMutation({
-    mutationFn: async (): Promise<string> => {
-      await api.patch('/redfish/v1/Systems/system/Bios/Settings', {
-        Attributes: { pvm_ibmi_iscsi_initiator_name: '' },
-      });
-      return i18n.global.t(
-        'pageServerPowerOperations.modal.networkSettings.toast.successRestoreDefault',
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['network-settings', 'bios'] });
-    },
-  });
+  const restoreDefault = async (): Promise<string> => {
+    await patchResource({
+      endpoint: '/redfish/v1/Systems/system/Bios/Settings',
+      field: 'Attributes',
+      value: { pvm_ibmi_iscsi_initiator_name: '' },
+      invalidateQueries: [
+        ['redfish', 'resource', '/redfish/v1/Systems/system/Bios'],
+      ],
+    });
+    return i18n.global.t(
+      'pageServerPowerOperations.modal.networkSettings.toast.successRestoreDefault',
+    );
+  };
 
   // ─── Derived ─────────────────────────────────────────────────────────────
 
@@ -239,15 +230,15 @@ export function useNetworkSettings() {
 
     // Actions
     refetchAll,
-    setDMode: setDModeMutation.mutateAsync,
-    saveBiosSettings: saveBiosSettingsMutation.mutateAsync,
-    updateChapData: updateChapDataMutation.mutateAsync,
-    restoreDefault: restoreDefaultMutation.mutateAsync,
+    setDMode,
+    saveBiosSettings,
+    updateChapData,
+    restoreDefault,
 
-    // Mutation states
-    isSettingDMode: setDModeMutation.isPending,
-    isSavingBios: saveBiosSettingsMutation.isPending,
-    isUpdatingChap: updateChapDataMutation.isPending,
-    isRestoringDefault: restoreDefaultMutation.isPending,
+    // Mutation states (all share the single usePatchResource instance)
+    isSettingDMode: isPatchPending,
+    isSavingBios: isPatchPending,
+    isUpdatingChap: isPatchPending,
+    isRestoringDefault: isPatchPending,
   };
 }
