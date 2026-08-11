@@ -31,7 +31,7 @@ export const CERTIFICATE_TYPES = [
     limit: 1,
   },
 ];
-const getCertificateProp = (type, prop) => {
+export const getCertificateProp = (type, prop) => {
   const certificate = CERTIFICATE_TYPES.find(
     (certificate) => certificate.type === type,
   );
@@ -210,14 +210,13 @@ export const CertificatesStore = defineStore('certificates', {
         });
     },
     async addNewCertificate({ file, type }) {
-      const typeOfCertificate = getCertificateProp(type, 'label');
       return await api
         .post(getCertificateProp(type, 'location'), file, {
           headers: { 'Content-Type': 'application/x-pem-file' },
         })
         .then(() => this.getCertificates())
         .then(() => {
-          if (typeOfCertificate === 'HTTPS Certificate') {
+          if (type === 'HTTPS Certificate') {
             return i18n.global.t(
               'pageCertificates.toast.successAddedHTTPCertificate',
               {
@@ -276,7 +275,6 @@ export const CertificatesStore = defineStore('certificates', {
       data.CertificateString = certificateString;
       data.CertificateType = 'PEM';
       data.CertificateUri = { '@odata.id': location };
-      const typeOfCertificate = getCertificateProp(type, 'label');
       return await api
         .post(
           '/redfish/v1/CertificateService/Actions/CertificateService.ReplaceCertificate',
@@ -287,7 +285,7 @@ export const CertificatesStore = defineStore('certificates', {
           this.getCertificates();
         })
         .then(() => {
-          if (typeOfCertificate === 'HTTPS Certificate') {
+          if (type === 'HTTPS Certificate') {
             return i18n.global.t(
               'pageCertificates.toast.successReplacedHTTPCertificate',
               {
