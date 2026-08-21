@@ -3,7 +3,7 @@
     <BForm
       class="mb-4 pb-5 section-divider"
       novalidate
-      @submit.prevent="login()"
+      @submit.prevent="submitLogin()"
     >
       <alert class="login-error mb-4" :show="authError" variant="danger">
         <p id="login-error-alert">
@@ -127,8 +127,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onBeforeMount } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { onBeforeRouteLeave } from 'vue-router';
 import stores from '@/store';
 import i18n from '@/i18n';
 import { useRouter } from 'vue-router';
@@ -144,119 +145,130 @@ import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import ModalUploadCertificate from './ModalUploadCertificate.vue';
 import ModalOtpGenerate from './ModalOtpGenerate.vue';
+import { useLogin } from '@/api/composables/useLogin';
 
 const router = useRouter();
 const { getValidationState } = useVuelidateComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { successToast, errorToast } = useToast();
 const { t } = useI18n();
-const { startLoader, endLoader } = useLoadingBar();
+const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
 const authenticationStore = stores.AuthenticationStore();
 const certificatesStore = stores.CertificatesStore();
 const userManagementStore = stores.UserManagementStore();
 const globalStore = stores.GlobalStore();
 
+// ── Vue Query composable ──────────────────────────────────────────────────────
+const {
+  loginPageDetails,
+  isGlobalMfaEnabled,
+  isLoading,
+  login: loginMutate,
+} = useLogin();
+
+// ── Sync loading bar with TanStack Query loading state ────────────────────────
+watch(isLoading, (loading) => {
+  if (loading) {
+    startLoader();
+  } else {
+    endLoader();
+  }
+});
+
+onBeforeRouteLeave(() => {
+  hideLoader();
+});
+
+// ── Local state ───────────────────────────────────────────────────────────────
 const passwordType = ref('password');
 const acfUploadButton = ref(
   import.meta.env.VITE_APP_ACF_UPLOAD_REQUIRED === 'true',
 );
-const isBusy = ref(true);
 const disableSubmitButton = ref(false);
 const otpValue = ref('');
-const languages = ref([
-  {
-    value: 'en-US',
-    text: 'English',
-  },
-]);
-
-const isGlobalMfaEnabled = computed(() => {
-  return authenticationStore.isGlobalMfaEnabledGetter;
-});
+const languages = ref([{ value: 'en-US', text: 'English' }]);
 
 const userInfo = reactive({ username: null, password: null });
 const rules = { username: { required }, password: { required } };
 const v$ = useVuelidate(rules, userInfo);
 
-onBeforeMount(() => {
-  startLoader();
-  authenticationStore.dateAndTime().finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
-});
+const authError = computed(() => authenticationStore.authErrorGetter);
+const unauthError = computed(() => authenticationStore.unauthErrorGetter);
 
-const authError = computed(() => {
-  return authenticationStore.authErrorGetter;
-});
-
-const unauthError = computed(() => {
-  return authenticationStore.unauthErrorGetter;
-});
-
-const loginPageDetails = computed(() => {
-  return authenticationStore.loginPageDetailsGetter;
-});
-
-const login = async () => {
+// ── Login handler ─────────────────────────────────────────────────────────────
+const submitLogin = async () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
+
   disableSubmitButton.value = true;
-  const username = userInfo.username;
-  const password = userInfo.password;
-  const otpInfo = otpValue.value;
-  authenticationStore
-    .login({ username, password, otpInfo })
-    .then(() => {
-      localStorage.setItem('storedLanguage', i18n.global.locale.value);
-      localStorage.setItem('storedUsername', username);
-      globalStore.username = username;
-      globalStore.languagePreference = i18n.global.locale.value;
-      return authenticationStore.checkPasswordChangeRequired(username);
-    })
-    .then(async (passwordChangeRequired) => {
-      if (passwordChangeRequired) {
-        router.push('/change-password');
-      } else {
-        let otpGenerateRequired = authenticationStore.isGenerateOtpRequired;
-        if (otpGenerateRequired) {
-          userManagementStore.clearSecretKey().finally(() => {
-            userManagementStore.generateSecretKey().then(() => {
-              eventBus.emit('otp-generate-modal');
-            });
-          });
-        } else {
-          globalStore.getCurrentUser(userInfo.username);
-          await globalStore
-            .getSystemInfo()
-            .then(() => {
-              router.push('/');
-            })
-            .catch(() => {
-              Promise.all([
-                authenticationStore.unauthlogin(),
-                authenticationStore.logout(),
-              ]);
-            });
-        }
-      }
-    })
-    .catch((error) => console.log(error))
-    .finally(() => (disableSubmitButton.value = false));
+  authenticationStore.authError = false;
+  authenticationStore.unauthError = false;
+
+  try {
+    const { isGenerateOtpRequired } = await loginMutate({
+      username: userInfo.username,
+      password: userInfo.password,
+      otpInfo: otpValue.value,
+    });
+
+    authenticationStore.authSuccess();
+
+    localStorage.setItem('storedLanguage', i18n.global.locale.value);
+    localStorage.setItem('storedUsername', userInfo.username);
+    globalStore.username = userInfo.username;
+    globalStore.languagePreference = i18n.global.locale.value;
+
+    const passwordChangeRequired =
+      await authenticationStore.checkPasswordChangeRequired(userInfo.username);
+
+    if (passwordChangeRequired) {
+      router.push('/change-password');
+      return;
+    }
+
+    if (isGenerateOtpRequired) {
+      authenticationStore.isGenerateOtpRequired = true;
+      userManagementStore.clearSecretKey().finally(() => {
+        userManagementStore.generateSecretKey().then(() => {
+          eventBus.emit('otp-generate-modal');
+        });
+      });
+      return;
+    }
+
+    globalStore.getCurrentUser(userInfo.username);
+    await globalStore
+      .getSystemInfo()
+      .then(() => {
+        router.push('/');
+      })
+      .catch(() => {
+        Promise.all([
+          authenticationStore.unauthlogin(),
+          authenticationStore.logout(),
+        ]);
+      });
+  } catch (error) {
+    authenticationStore.authError = true;
+    console.error(error);
+  } finally {
+    disableSubmitButton.value = false;
+  }
 };
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 const initModalUploadCertificate = () => {
   eventBus.emit('upload-login-certificate');
 };
+
 const updatePasswordType = (type) => {
   passwordType.value = type;
 };
+
 const addNewCertificate = ({ type, file }) => {
   certificatesStore
-    .addNewACFCertificateOnLoginPage({
-      file,
-      type,
-    })
+    .addNewACFCertificateOnLoginPage({ file, type })
     .then((success) => successToast(success))
     .catch(({ message }) => errorToast(message));
 };
