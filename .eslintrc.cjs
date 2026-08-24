@@ -39,6 +39,15 @@ module.exports = {
   ignorePatterns: ['*.timestamp-*.mjs'],
   overrides: [
     {
+      files: ['*.ts', '*.tsx', '*.vue'],
+      parser: 'vue-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        ecmaVersion: 2021,
+        sourceType: 'module',
+      },
+    },
+    {
       files: [
         'vite.config.*',
         '**/__tests__/*.{j,t}s?(x)',

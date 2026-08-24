@@ -6,6 +6,7 @@ exports[`Search.vue > should render correctly 1`] = `
   data-v-60d88d37=""
 >
   <div
+    aria-label="search-bar-"
     class="mb-2"
     data-v-60d88d37=""
     id=""
@@ -13,7 +14,7 @@ exports[`Search.vue > should render correctly 1`] = `
   >
     <label
       class="form-label d-block invisible"
-      for="searchInput-undefined"
+      for="searchInput-"
       id=""
     >
       global.form.search
@@ -23,6 +24,7 @@ exports[`Search.vue > should render correctly 1`] = `
     >
       
       <div
+        aria-label="global.form.search-"
         class="input-group align-items-center"
         data-v-60d88d37=""
         role="group"
@@ -58,7 +60,7 @@ exports[`Search.vue > should render correctly 1`] = `
           aria-label="global.form.search"
           class="form-control search-input"
           data-v-60d88d37=""
-          id="searchInput-undefined"
+          id="searchInput-"
           placeholder="Search"
           type="text"
           value=""

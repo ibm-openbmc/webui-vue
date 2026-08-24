@@ -103,15 +103,12 @@ exports[`AppHeader.vue > should render correctly 1`] = `
           
           <li
             class="nav-item"
-            data-test-id="appHeader-container-health"
           >
             <a
               class="nav-link"
-              href="/logs/event-logs"
-              to="/logs/event-logs"
+              data-test-id="appHeader-container-health"
+              href="#/logs/event-logs"
             >
-              
-              
               <span
                 class="status-icon secondary"
                 data-v-4b0821d5=""
@@ -138,21 +135,16 @@ exports[`AppHeader.vue > should render correctly 1`] = `
                 </svg>
               </span>
                appHeader.health
-              
-              
             </a>
           </li>
           <li
             class="nav-item"
-            data-test-id="appHeader-container-power"
           >
             <a
               class="nav-link"
-              href="/operations/server-power-operations"
-              to="/operations/server-power-operations"
+              data-test-id="appHeader-container-power"
+              href="#/operations/server-power-operations"
             >
-              
-              
               <span
                 class="status-icon secondary"
                 data-v-4b0821d5=""
@@ -179,8 +171,6 @@ exports[`AppHeader.vue > should render correctly 1`] = `
                 </svg>
               </span>
                appHeader.power
-              
-              
             </a>
           </li>
           <!-- Using LI elements instead of BNavItem to support semantic button elements -->
@@ -279,9 +269,8 @@ exports[`AppHeader.vue > should render correctly 1`] = `
                   <a
                     class="dropdown-item"
                     data-test-id="appHeader-link-profile"
-                    href="/profile-settings"
+                    href="#/profile-settings"
                     role="menuitem"
-                    to="/profile-settings"
                   >
                     
                     
