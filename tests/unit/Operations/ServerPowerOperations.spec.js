@@ -14,7 +14,9 @@ const mockRefetchBmc = vi.fn().mockResolvedValue({});
 const mockRefetchLocationCodes = vi.fn().mockResolvedValue({});
 const mockSaveBiosSettings = vi.fn().mockResolvedValue('');
 const mockSaveOperatingModeSettings = vi.fn().mockResolvedValue(undefined);
-const mockStandbyToRuntimeMutation = vi.fn().mockResolvedValue('pageServerPowerOperations.toast.successSaveSettings');
+const mockStandbyToRuntimeMutation = vi
+  .fn()
+  .mockResolvedValue('pageServerPowerOperations.toast.successSaveSettings');
 const mockServerPowerOn = vi.fn().mockResolvedValue(true);
 const mockServerSoftReboot = vi.fn().mockResolvedValue(true);
 const mockServerHardReboot = vi.fn().mockResolvedValue(true);
@@ -22,8 +24,13 @@ const mockServerSoftPowerOff = vi.fn().mockResolvedValue(true);
 const mockServerHardPowerOff = vi.fn().mockResolvedValue(true);
 
 // Reactive mock state — tests mutate these to drive component behaviour
-const mockBiosAttributes = ref({ pvm_default_os_type: 'AIX', pvm_sys_dump_active: 'Disabled' });
-const mockAttributeValues = ref({ pvm_default_os_type: [{ value: 'AIX', text: 'AIX' }] });
+const mockBiosAttributes = ref({
+  pvm_default_os_type: 'AIX',
+  pvm_sys_dump_active: 'Disabled',
+});
+const mockAttributeValues = ref({
+  pvm_default_os_type: [{ value: 'AIX', text: 'AIX' }],
+});
 const mockIsBiosLoading = ref(false);
 const mockHmcManaged = ref(null);
 const mockServerStatus = ref('on');
@@ -91,11 +98,19 @@ const mockEndLoader = vi.fn();
 const mockHideLoader = vi.fn();
 
 vi.mock('@/components/Composables/useToastComposable', () => ({
-  default: () => ({ successToast: mockSuccessToast, infoToast: mockInfoToast, errorToast: mockErrorToast }),
+  default: () => ({
+    successToast: mockSuccessToast,
+    infoToast: mockInfoToast,
+    errorToast: mockErrorToast,
+  }),
 }));
 
 vi.mock('@/components/Composables/useLoadingBarComposable', () => ({
-  default: () => ({ startLoader: mockStartLoader, endLoader: mockEndLoader, hideLoader: mockHideLoader }),
+  default: () => ({
+    startLoader: mockStartLoader,
+    endLoader: mockEndLoader,
+    hideLoader: mockHideLoader,
+  }),
 }));
 
 vi.mock('@/i18n', () => ({
@@ -118,22 +133,75 @@ vi.mock('vue-router', async () => {
 
 const globalStubs = {
   PageTitle: { name: 'PageTitle', props: ['title'], template: '<div />' },
-  PageSection: { name: 'PageSection', props: ['sectionTitle'], template: '<div><slot /></div>' },
-  Alert: { name: 'Alert', props: ['variant'], template: '<div class="alert"><slot /><slot name="action" /></div>' },
-  BootSettings: { name: 'BootSettings', props: ['isInPhypStandby', 'isUpdated', 'isAtleastPhypInStandby', 'attributeValues', 'biosAttributes', 'hmcManaged', 'ibmiLoadSourceValue', 'ibmiAltLoadSourceValue', 'ibmiConsoleValue', 'linuxKvmPercentageValue', 'linuxKvmPercentageInitialValue', 'linuxKvmPercentageCurrentValue', 'powerRestorePolicy', 'locationCodes', 'saveBiosSettings', 'saveOperatingModeSettings', 'refetch', 'isSavingBios'], emits: ['update-standby'], template: '<div />' },
+  PageSection: {
+    name: 'PageSection',
+    props: ['sectionTitle'],
+    template: '<div><slot /></div>',
+  },
+  Alert: {
+    name: 'Alert',
+    props: ['variant'],
+    template: '<div class="alert"><slot /><slot name="action" /></div>',
+  },
+  BootSettings: {
+    name: 'BootSettings',
+    props: [
+      'isInPhypStandby',
+      'isUpdated',
+      'isAtleastPhypInStandby',
+      'attributeValues',
+      'biosAttributes',
+      'hmcManaged',
+      'ibmiLoadSourceValue',
+      'ibmiAltLoadSourceValue',
+      'ibmiConsoleValue',
+      'linuxKvmPercentageValue',
+      'linuxKvmPercentageInitialValue',
+      'linuxKvmPercentageCurrentValue',
+      'powerRestorePolicy',
+      'locationCodes',
+      'saveBiosSettings',
+      'saveOperatingModeSettings',
+      'refetch',
+      'isSavingBios',
+    ],
+    emits: ['update-standby'],
+    template: '<div />',
+  },
   NetworkSettingsModal: { name: 'NetworkSettingsModal', template: '<div />' },
   BContainer: { template: '<div><slot /></div>' },
   BRow: { template: '<div><slot /></div>' },
   BCol: { template: '<div><slot /></div>' },
-  BForm: { template: '<form @submit.prevent="$emit(\'submit\')"><slot /></form>', emits: ['submit'] },
+  BForm: {
+    template: '<form @submit.prevent="$emit(\'submit\')"><slot /></form>',
+    emits: ['submit'],
+  },
   BFormGroup: { props: ['label'], template: '<div><slot /></div>' },
-  BFormRadio: { props: ['modelValue', 'value'], emits: ['update:modelValue'], template: '<input type="radio" :value="value" @change="$emit(\'update:modelValue\', value)" />' },
-  BButton: { props: ['variant', 'type', 'disabled'], emits: ['click'], template: '<button :type="type || \'button\'" @click="$emit(\'click\')"><slot /></button>' },
+  BFormRadio: {
+    props: ['modelValue', 'value'],
+    emits: ['update:modelValue'],
+    template:
+      '<input type="radio" :value="value" @change="$emit(\'update:modelValue\', value)" />',
+  },
+  BButton: {
+    props: ['variant', 'type', 'disabled'],
+    emits: ['click'],
+    template:
+      '<button :type="type || \'button\'" @click="$emit(\'click\')"><slot /></button>',
+  },
   BModal: {
     name: 'BModal',
-    props: ['modelValue', 'title', 'okTitle', 'okVariant', 'cancelTitle', 'hideHeaderClose'],
+    props: [
+      'modelValue',
+      'title',
+      'okTitle',
+      'okVariant',
+      'cancelTitle',
+      'hideHeaderClose',
+    ],
     emits: ['update:modelValue', 'ok'],
-    template: '<div v-if="modelValue" class="modal"><slot /><button class="ok-btn" @click="$emit(\'ok\')">OK</button></div>',
+    template:
+      '<div v-if="modelValue" class="modal"><slot /><button class="ok-btn" @click="$emit(\'ok\')">OK</button></div>',
   },
   IconArrowRight: { template: '<span />' },
 };
@@ -150,7 +218,10 @@ const factory = async () => {
       stubs: globalStubs,
       mocks: {
         $t: (key) => key,
-        $filters: { formatDate: () => '2024-01-15', formatTime: () => '12:00:00' },
+        $filters: {
+          formatDate: () => '2024-01-15',
+          formatTime: () => '12:00:00',
+        },
       },
     },
   });
@@ -174,7 +245,10 @@ describe('ServerPowerOperations.vue', () => {
       configurable: true,
     });
     // Reset all reactive state to defaults
-    mockBiosAttributes.value = { pvm_default_os_type: 'AIX', pvm_sys_dump_active: 'Disabled' };
+    mockBiosAttributes.value = {
+      pvm_default_os_type: 'AIX',
+      pvm_sys_dump_active: 'Disabled',
+    };
     mockAttributeValues.value = {};
     mockIsBiosLoading.value = false;
     mockHmcManaged.value = null;
@@ -207,12 +281,16 @@ describe('ServerPowerOperations.vue', () => {
 
     it('renders BootSettings component', async () => {
       const wrapper = await factory();
-      expect(wrapper.findComponent({ name: 'BootSettings' }).exists()).toBe(true);
+      expect(wrapper.findComponent({ name: 'BootSettings' }).exists()).toBe(
+        true,
+      );
     });
 
     it('renders NetworkSettingsModal', async () => {
       const wrapper = await factory();
-      expect(wrapper.findComponent({ name: 'NetworkSettingsModal' }).exists()).toBe(true);
+      expect(
+        wrapper.findComponent({ name: 'NetworkSettingsModal' }).exists(),
+      ).toBe(true);
     });
   });
 
@@ -241,7 +319,9 @@ describe('ServerPowerOperations.vue', () => {
     it('shows "on" status text when server is on', async () => {
       mockServerStatus.value = 'on';
       const wrapper = await factory();
-      const statusEl = wrapper.find('[data-test-id="powerServerOps-text-hostStatus"]');
+      const statusEl = wrapper.find(
+        '[data-test-id="powerServerOps-text-hostStatus"]',
+      );
       expect(statusEl.exists()).toBe(true);
       expect(statusEl.text()).toBe('global.status.on');
     });
@@ -249,14 +329,18 @@ describe('ServerPowerOperations.vue', () => {
     it('shows "off" status text when server is off', async () => {
       mockServerStatus.value = 'off';
       const wrapper = await factory();
-      const statusEl = wrapper.find('[data-test-id="powerServerOps-text-hostStatus"]');
+      const statusEl = wrapper.find(
+        '[data-test-id="powerServerOps-text-hostStatus"]',
+      );
       expect(statusEl.text()).toBe('global.status.off');
     });
 
     it('shows last power operation time when available', async () => {
       mockLastPowerOperationTime.value = new Date('2024-01-15T12:00:00Z');
       const wrapper = await factory();
-      const lastOpEl = wrapper.find('[data-test-id="powerServerOps-text-lastPowerOp"]');
+      const lastOpEl = wrapper.find(
+        '[data-test-id="powerServerOps-text-lastPowerOp"]',
+      );
       expect(lastOpEl.exists()).toBe(true);
     });
 
@@ -279,7 +363,9 @@ describe('ServerPowerOperations.vue', () => {
     it('hides standby banner when not in standby', async () => {
       mockBootProgressGetter.value = '';
       const wrapper = await factory();
-      expect(wrapper.text()).not.toContain('pageServerPowerOperations.phypStandby');
+      expect(wrapper.text()).not.toContain(
+        'pageServerPowerOperations.phypStandby',
+      );
     });
 
     it('hides banner after standbyToRuntime succeeds (phypStandby = true)', async () => {
@@ -309,28 +395,42 @@ describe('ServerPowerOperations.vue', () => {
     it('shows operation in progress alert when isOperationInProgress is true', async () => {
       mockIsOperationInProgress.value = true;
       const wrapper = await factory();
-      expect(wrapper.text()).toContain('pageServerPowerOperations.operationInProgress');
+      expect(wrapper.text()).toContain(
+        'pageServerPowerOperations.operationInProgress',
+      );
     });
 
     it('shows power on button when server is off', async () => {
       mockServerStatus.value = 'off';
       const wrapper = await factory();
-      const powerOnBtn = wrapper.find('[data-test-id="serverPowerOperations-button-powerOn"]');
+      const powerOnBtn = wrapper.find(
+        '[data-test-id="serverPowerOperations-button-powerOn"]',
+      );
       expect(powerOnBtn.exists()).toBe(true);
     });
 
     it('hides power on button when server is on', async () => {
       mockServerStatus.value = 'on';
       const wrapper = await factory();
-      const powerOnBtn = wrapper.find('[data-test-id="serverPowerOperations-button-powerOn"]');
+      const powerOnBtn = wrapper.find(
+        '[data-test-id="serverPowerOperations-button-powerOn"]',
+      );
       expect(powerOnBtn.exists()).toBe(false);
     });
 
     it('shows reboot and shutdown forms when server is on', async () => {
       mockServerStatus.value = 'on';
       const wrapper = await factory();
-      expect(wrapper.find('[data-test-id="serverPowerOperations-button-reboot"]').exists()).toBe(true);
-      expect(wrapper.find('[data-test-id="serverPowerOperations-button-shutDown"]').exists()).toBe(true);
+      expect(
+        wrapper
+          .find('[data-test-id="serverPowerOperations-button-reboot"]')
+          .exists(),
+      ).toBe(true);
+      expect(
+        wrapper
+          .find('[data-test-id="serverPowerOperations-button-shutDown"]')
+          .exists(),
+      ).toBe(true);
     });
   });
 
@@ -339,7 +439,11 @@ describe('ServerPowerOperations.vue', () => {
   describe('powerOn()', () => {
     it('calls serverPowerOn when BMC is healthy', async () => {
       mockServerStatus.value = 'off';
-      mockBmc.value = { powerState: 'On', statusState: 'Enabled', health: 'OK' };
+      mockBmc.value = {
+        powerState: 'On',
+        statusState: 'Enabled',
+        health: 'OK',
+      };
       const wrapper = await factory();
       await wrapper.vm.powerOn();
       await flushPromises();
@@ -348,20 +452,32 @@ describe('ServerPowerOperations.vue', () => {
 
     it('shows error toast when BMC is not healthy', async () => {
       mockServerStatus.value = 'off';
-      mockBmc.value = { powerState: 'Off', statusState: 'Disabled', health: 'Warning' };
+      mockBmc.value = {
+        powerState: 'Off',
+        statusState: 'Disabled',
+        health: 'Warning',
+      };
       const wrapper = await factory();
       await wrapper.vm.powerOn();
-      expect(mockErrorToast).toHaveBeenCalledWith('pageServerPowerOperations.toast.errorPowerOn');
+      expect(mockErrorToast).toHaveBeenCalledWith(
+        'pageServerPowerOperations.toast.errorPowerOn',
+      );
       expect(mockServerPowerOn).not.toHaveBeenCalled();
     });
 
     it('shows info toast when serverPowerOn returns true', async () => {
-      mockBmc.value = { powerState: 'On', statusState: 'Enabled', health: 'OK' };
+      mockBmc.value = {
+        powerState: 'On',
+        statusState: 'Enabled',
+        health: 'OK',
+      };
       mockServerPowerOn.mockResolvedValue(true);
       const wrapper = await factory();
       await wrapper.vm.powerOn();
       await flushPromises();
-      expect(mockInfoToast).toHaveBeenCalledWith('pageServerPowerOperations.userRefresh');
+      expect(mockInfoToast).toHaveBeenCalledWith(
+        'pageServerPowerOperations.userRefresh',
+      );
     });
   });
 
@@ -474,7 +590,9 @@ describe('ServerPowerOperations.vue', () => {
     });
 
     it('shows error toast when mutation fails', async () => {
-      mockStandbyToRuntimeMutation.mockRejectedValueOnce({ message: 'Server error' });
+      mockStandbyToRuntimeMutation.mockRejectedValueOnce({
+        message: 'Server error',
+      });
       const wrapper = await factory();
       await wrapper.vm.standbyToRuntime();
       await flushPromises();

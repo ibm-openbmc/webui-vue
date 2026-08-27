@@ -1,23 +1,24 @@
 # Forms
 
-Forms are created using the [bootstrap-vue-next form
-component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form.html#form)
+Forms are created using the
+[bootstrap-vue-next form component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form.html#form)
 and validated with the [Vuelidate](https://vuelidate.js.org/#sub-installation)
 plugin.
 
 ## Form component
 
-When creating a new form, use the `<BForm>` [form
-component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form.html#form). Use the `.prevent`
-event modifier on submit to prevent the submit event from reloading the page.
+When creating a new form, use the `<BForm>`
+[form component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form.html#form).
+Use the `.prevent` event modifier on submit to prevent the submit event from
+reloading the page.
 
 ## Form group component
 
-The `<BFormGroup>` [form group
-component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-group.html)
-pairs form controls with a legend or label, helper text, invalid/valid
-feedback text, and visual validation state feedback. Learn more about
-commonly used form components:
+The `<BFormGroup>`
+[form group component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-group.html)
+pairs form controls with a legend or label, helper text, invalid/valid feedback
+text, and visual validation state feedback. Learn more about commonly used form
+components:
 
 - [Form checkbox](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-checkbox.html#form-checkbox)
 - [Form input](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-input.html)
@@ -25,21 +26,19 @@ commonly used form components:
 - [Form select](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-select.html)
 - [Form file custom component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-file.html#form-file)
 
-When helper text is provided, use the `<BFormText>` component and `aria-describedby` on the
-form group component the helper text describes.
+When helper text is provided, use the `<BFormText>` component and
+`aria-describedby` on the form group component the helper text describes.
 
 ## Validation
 
-For custom form validation messages, disable browser native HTML5
-validation by setting the `novalidate` prop on `<BForm>`. Use Vuelidate to
-check the form validation state and add
-custom validation messages in the `<BFormInvalidFeedback>` component.
+For custom form validation messages, disable browser native HTML5 validation by
+setting the `novalidate` prop on `<BForm>`. Use Vuelidate to check the form
+validation state and add custom validation messages in the
+`<BFormInvalidFeedback>` component.
 
-When creating a new form add the `useVuelidateComposable`
-to the `scripts` block and import any
-[validators](https://vuelidate.js.org/#validators) needed
-such as: `required`, `requiredIf`, etc. The use of built-in validators is
-preferred.
+When creating a new form add the `useVuelidateComposable` to the `scripts` block
+and import any [validators](https://vuelidate.js.org/#validators) needed such
+as: `required`, `requiredIf`, etc. The use of built-in validators is preferred.
 
 ## Complete form
 
@@ -53,7 +52,7 @@ A complete form will look like this.
       label-for="form-input-id"
     >
       <BFormText id="form-input-helper-text">
-        {{ $t('pageName.form.helperText') }}
+        {{ $t("pageName.form.helperText") }}
       </BFormText>
       <BFormInput
         id="form-input-id"
@@ -65,12 +64,12 @@ A complete form will look like this.
       />
       <BFormInvalidFeedback role="alert">
         <div v-if="!$v.form.input.required">
-          {{ $t('global.form.fieldRequired') }}
+          {{ $t("global.form.fieldRequired") }}
         </div>
       </BFormInvalidFeedback>
     </BFormGroup>
     <BButton variant="primary" type="submit" class="mb-3">
-      {{ $t('global.action.save') }}
+      {{ $t("global.action.save") }}
     </BButton>
   </BForm>
 </template>

@@ -50,8 +50,10 @@ const makeRecord = (overrides = {}) => ({
   status: false,
   filterByStatus: 'Unresolved',
   uri: '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Entries/1',
-  additionalDataUri: '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Entries/1/attachment',
-  oemPelAttachment: '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Entries/1/OemPelAttachment',
+  additionalDataUri:
+    '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Entries/1/attachment',
+  oemPelAttachment:
+    '/redfish/v1/Systems/system/LogServices/HardwareIsolation/Entries/1/OemPelAttachment',
   srcDetails: 'EVT001',
   location: 'CPU1',
   name: 'Hardware Deconfiguration Event',
@@ -199,20 +201,26 @@ describe('DeconfigurationRecords.vue', () => {
   // ── Pagination ────────────────────────────────────────────────────────────
 
   it('paginatedData shows records when no filters are active', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     expect(wrapper.vm.pagination.paginatedData.value.length).toBeGreaterThan(0);
   });
 
   it('displays correct number of records on current page', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     // With 3 records and default page size of 20, all should be on page 1
     expect(wrapper.vm.pagination.paginatedData.value.length).toBe(3);
   });
 
   it('pagination respects itemPerPageRef changes', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.itemPerPageRef = 2;
     await nextTick();
@@ -221,7 +229,9 @@ describe('DeconfigurationRecords.vue', () => {
   });
 
   it('currentPage resets to 1 when itemPerPageRef changes', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.pagination.currentPage.value = 2;
     await nextTick();
@@ -239,7 +249,9 @@ describe('DeconfigurationRecords.vue', () => {
   // ── Filtering ──────────────────────────────────────────────────────────────
 
   it('onFilterChange applies active filters', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.onFilterChange({
       activeFilters: [{ key: 'filterByStatus', values: ['Resolved'] }],
@@ -251,7 +263,9 @@ describe('DeconfigurationRecords.vue', () => {
   });
 
   it('clearing activeFilters restores all records', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.onFilterChange({
       activeFilters: [{ key: 'filterByStatus', values: ['Resolved'] }],
@@ -265,7 +279,9 @@ describe('DeconfigurationRecords.vue', () => {
   // ── Record selection ────────────────────────────────────────────────────────
 
   it('toggleAll sets isSelected on all records', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.toggleAll(true);
     await nextTick();
@@ -275,7 +291,9 @@ describe('DeconfigurationRecords.vue', () => {
   });
 
   it('toggleAll can deselect all records', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.toggleAll(true);
     await nextTick();
@@ -306,7 +324,9 @@ describe('DeconfigurationRecords.vue', () => {
   });
 
   it('onBatchAction("delete") sets count to selected rows length', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.selectedRowsLists = [MOCK_RECORDS[0], MOCK_RECORDS[1]];
     wrapper.vm.onBatchAction('delete');
@@ -351,7 +371,9 @@ describe('DeconfigurationRecords.vue', () => {
   });
 
   it('batchExportData returns selected rows without actions property', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.selectedRowsLists = [MOCK_RECORDS[0]];
     await nextTick();
@@ -361,7 +383,9 @@ describe('DeconfigurationRecords.vue', () => {
   });
 
   it('allEntries returns deconfigRecordsData', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     expect(wrapper.vm.allEntries).toEqual(MOCK_RECORDS);
   });
@@ -400,7 +424,9 @@ describe('DeconfigurationRecords.vue', () => {
   // ── Event bus integration ──────────────────────────────────────────────────
 
   it('clears isSelected when clear-selected event is emitted', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     wrapper.vm.recordItems.forEach((record) => {
       record.isSelected = true;
@@ -438,7 +464,9 @@ describe('DeconfigurationRecords.vue', () => {
   // ── Record items computed ──────────────────────────────────────────────────
 
   it('recordItems returns allRecords data', async () => {
-    const wrapper = mountDeconfigurationRecords({ allRecords: ref(MOCK_RECORDS) });
+    const wrapper = mountDeconfigurationRecords({
+      allRecords: ref(MOCK_RECORDS),
+    });
     await nextTick();
     expect(wrapper.vm.recordItems).toEqual(MOCK_RECORDS);
   });

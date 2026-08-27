@@ -144,7 +144,9 @@
           :tabindex="currentPageNo - 1"
           first-number
           last-number
-          :per-page="itemPerPage === 0 ? allConnections.length || 1 : itemPerPage"
+          :per-page="
+            itemPerPage === 0 ? allConnections.length || 1 : itemPerPage
+          "
           :total-rows="getTotalRowCount(totalItems)"
           aria-controls="table-session-logs"
         />

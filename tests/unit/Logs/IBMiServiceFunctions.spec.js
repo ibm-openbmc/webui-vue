@@ -146,7 +146,9 @@ describe('IBMiServiceFunctions.vue', () => {
   });
 
   it('isIBMi returns true when pvm_default_os_type is "Default"', async () => {
-    mockBootSettingsStore.getBiosAttributes = { pvm_default_os_type: 'Default' };
+    mockBootSettingsStore.getBiosAttributes = {
+      pvm_default_os_type: 'Default',
+    };
     const wrapper = mountIBMiServiceFunctions();
     await nextTick();
     expect(wrapper.vm.isIBMi).toBe(true);

@@ -99,7 +99,9 @@ describe('useSessions', () => {
 
   describe('sessions computed', () => {
     it('returns empty array when data is null', () => {
-      useRedfishCollection.mockReturnValue(makeCollectionQuery({ data: ref(null) }));
+      useRedfishCollection.mockReturnValue(
+        makeCollectionQuery({ data: ref(null) }),
+      );
       useMutation.mockReturnValue(makeMockMutation());
 
       const { sessions } = useSessions();

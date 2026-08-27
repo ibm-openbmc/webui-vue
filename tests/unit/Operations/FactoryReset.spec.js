@@ -131,9 +131,7 @@ describe('FactoryReset.vue', () => {
   it('renders the submit button', () => {
     const wrapper = mountFactoryReset();
     expect(
-      wrapper
-        .find('[data-test-id="factoryReset-button-submit"]')
-        .exists(),
+      wrapper.find('[data-test-id="factoryReset-button-submit"]').exists(),
     ).toBe(true);
   });
 

@@ -330,7 +330,6 @@ import { NETWORK_OBJECT } from '@/utilities/NetworkSettingsObject.js';
 // @ts-ignore - GlobalConstants is a JS module
 import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants.js';
 import { useNetworkSettings } from '@/api/composables/useNetworkSettings';
-import type { NetworkBiosAttributes } from '@/api/composables/useNetworkSettings';
 
 const { getValidationState } = useVuelidateComposable();
 const { successToast, errorToast } = useToast();
@@ -395,7 +394,7 @@ const properties = ref<FormProperties>({
 
 // ─── Local mutable copy of biosAttributes ────────────────────────────────────
 
-const attributesList = ref<NetworkBiosAttributes | null>(null);
+const attributesList = ref(null);
 
 watch(biosAttributes, (newVal) => {
   if (newVal) attributesList.value = { ...newVal };
@@ -601,7 +600,7 @@ async function handleSubmit(): Promise<void> {
   try {
     // Set IBM i partition boot mode to 'D_mode' first
     await setDMode();
-    const msg = await saveBiosSettings(form as NetworkBiosAttributes);
+    const msg = await saveBiosSettings(form);
     if (installType === 'iSCSI' && chapData.chapName !== '' && chapData.chapSecret !== '') {
       const msge = await updateChapData(chapData);
       modal.value = false;

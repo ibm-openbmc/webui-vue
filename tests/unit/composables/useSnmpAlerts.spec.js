@@ -251,9 +251,7 @@ describe('useSnmpAlerts', () => {
 
     it('throws a translated error when the API call fails', async () => {
       navigateToCollection.mockRejectedValue(new Error('Network error'));
-      i18n.global.t.mockReturnValue(
-        'pageSnmpAlerts.toast.errorAddDestination',
-      );
+      i18n.global.t.mockReturnValue('pageSnmpAlerts.toast.errorAddDestination');
 
       await expect(
         capturedAddConfig.mutationFn({
@@ -296,9 +294,7 @@ describe('useSnmpAlerts', () => {
 
       await capturedDeleteConfig.mutationFn('sub-1');
 
-      expect(api.delete).toHaveBeenCalledWith(
-        `${collectionUrl}/sub-1`,
-      );
+      expect(api.delete).toHaveBeenCalledWith(`${collectionUrl}/sub-1`);
     });
 
     it('throws a translated error (with id) when the delete fails', async () => {
@@ -347,10 +343,7 @@ describe('useSnmpAlerts', () => {
       navigateToCollection.mockResolvedValue(collectionUrl);
       api.delete.mockResolvedValue({});
 
-      const destinations = [
-        { id: 'sub-1' },
-        { id: 'sub-2' },
-      ];
+      const destinations = [{ id: 'sub-1' }, { id: 'sub-2' }];
 
       const result =
         await capturedDeleteMultipleConfig.mutationFn(destinations);

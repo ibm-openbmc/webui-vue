@@ -91,7 +91,9 @@ vi.mock('@tanstack/vue-query', async () => {
 
 vi.mock('@/store', () => ({
   default: {
-    AuthenticationStore: () => ({ logout: vi.fn().mockResolvedValue(undefined) }),
+    AuthenticationStore: () => ({
+      logout: vi.fn().mockResolvedValue(undefined),
+    }),
   },
 }));
 

@@ -1,17 +1,16 @@
 # Table
 
-All tables in the application are using the [Boostrap-vue-next table
-component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html).
+All tables in the application are using the
+[Boostrap-vue-next table component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html).
 
 To use the component, include the `<BTable>` tag in the template. The component
 is registered globally so does not need to be imported in each SFC.
 
 ## Basic table
-There are a few required properties to maintain consistency across the
-application. The full list of options can be viewed on the [Bootstrap-vue-next table
-component's documentation
-page](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#table-helper-components).
 
+There are a few required properties to maintain consistency across the
+application. The full list of options can be viewed on the
+[Bootstrap-vue-next table component's documentation page](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#table-helper-components).
 
 ### Required properties
 
@@ -20,12 +19,13 @@ page](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/ta
 - `hover` - enables table row hover state
 - `responsive` or `stacked` - makes the table responsive (enables horizontal
   scrolling or stacked view) at the defined breakpoint
-- `show-empty` *(required if table data is generated dynamically)* - shows an
+- `show-empty` _(required if table data is generated dynamically)_ - shows an
   empty message if there are no items in the table
-- `empty-text` *(required if table data is generated dynamically)* - the
+- `empty-text` _(required if table data is generated dynamically)_ - the
   translated empty message
 
-![Basic table example](./table.png) ![Basic empty table
+![Basic table example](./table.png)
+![Basic empty table
 example](./table-empty.png)
 
 ```vue
@@ -41,34 +41,34 @@ example](./table-empty.png)
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const items = ref([
-        {
-          name: 'Babe',
-          age: '3 years',
-          color: 'white, orange, grey'
-        },
-        {
-          name: 'Grey Boy',
-          age: '4 months',
-          color: 'grey'
-        },
-      ]);
+  {
+    name: "Babe",
+    age: "3 years",
+    color: "white, orange, grey",
+  },
+  {
+    name: "Grey Boy",
+    age: "4 months",
+    color: "grey",
+  },
+]);
 const fields = ref([
-        {
-          key: 'name',
-          label: i18n.global.t('table.name') //translated label
-        },
-        {
-          key: 'age',
-          label: i18n.global.t('table.age') //translated label
-        },
-        {
-          key: 'color',
-          label: i18n.global.t('table.color') // translated label
-        }
-      ]);
+  {
+    key: "name",
+    label: i18n.global.t("table.name"), //translated label
+  },
+  {
+    key: "age",
+    label: i18n.global.t("table.age"), //translated label
+  },
+  {
+    key: "color",
+    label: i18n.global.t("table.color"), // translated label
+  },
+]);
 </script>
 ```
 
@@ -82,7 +82,6 @@ columns and add the following props to the `<BTable>` component:
 - `sort-icon-left`
 
 ![Table sort example](./table-sort.png)
-
 
 ```vue
 <template>
@@ -129,21 +128,22 @@ handled.
 
 Include the
 [useTableRowExpandComposable](https://github.com/ibm-openbmc/webui-vue/blob/1060-vue3/src/components/Composables/useTableRowExpandComposable.js).
-The composable contains the dynamic `aria-label` and `title` attribute values that
-need to be included with the expand button. The `toggleRowDetails` method should
-be the button's click event callback. Be sure to pass the `row` object to the
-function.
+The composable contains the dynamic `aria-label` and `title` attribute values
+that need to be included with the expand button. The `toggleRowDetails` method
+should be the button's click event callback. Be sure to pass the `row` object to
+the function.
 
-Use the [row-details
-slot](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#row-details-support) to
-format the expanded row content. The slot has access to the row `item` property.
+Use the
+[row-details slot](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#row-details-support)
+to format the expanded row content. The slot has access to the row `item`
+property.
 
 ### Summary
 
 1. Add a column for the expansion row button with the tdClass,
    `table-row-expand`
-2. Include the `useTableRowExpandComposable` to handle the dynamic aria label, title,
-   and row expansion toggling
+2. Include the `useTableRowExpandComposable` to handle the dynamic aria label,
+   title, and row expansion toggling
 3. Use the `#cell` slot to target the expandable row column and add the button
    with accessible markup and click handler
 4. Use the `#row-details` slot to format expanded row content
@@ -152,12 +152,7 @@ format the expanded row content. The slot has access to the row `item` property.
 
 ```vue
 <template>
-  <BTable
-    hover
-    responsive="md"
-    :items="items"
-    :fields="fields"
-  >
+  <BTable hover responsive="md" :items="items" :fields="fields">
     <template #cell(expandRow)="row">
       <BButton
         variant="link"
@@ -196,12 +191,12 @@ const fields = ref([
 
 ## Search
 
-The table is leveraging [BootstrapVue table
-filtering](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#filtering) for
-search. Add the
-[@filtered](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#filter-events) event
-listener onto the `<BTable>` component. The event callback should track the
-total filtered items count.
+The table is leveraging
+[BootstrapVue table filtering](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#filtering)
+for search. Add the
+[@filtered](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/table.html#filter-events)
+event listener onto the `<BTable>` component. The event callback should track
+the total filtered items count.
 
 Import the `<search>` and `<table-cell-count>` components and include them in
 the template above the `<BTable>` component.
@@ -228,29 +223,29 @@ if there are no search matches.
 ```vue
 <template>
   <BContainer>
-  <BRow>
-    <BCol>
-      <search
-        @changeSearch="onChangeSearchInput"
-        @clearSearch="onClearSearchInput"
-      />
-    </BCol>
-    <BCol>
-      <table-cell-count
-        :filtered-items-count="filteredItemsCount"
-        :total-number-of-cells="items.length"
-      />
-    </BCol>
-  </BRow>
-  <BTable
-    hover
-    responsive="md"
-    :items="items"
-    :fields="fields"
-    :filter="searchFilter"
-    :empty-filtered-text="$t('global.table.emptySearchMessage')"
-    @filtered="onFiltered"
-  />
+    <BRow>
+      <BCol>
+        <search
+          @changeSearch="onChangeSearchInput"
+          @clearSearch="onClearSearchInput"
+        />
+      </BCol>
+      <BCol>
+        <table-cell-count
+          :filtered-items-count="filteredItemsCount"
+          :total-number-of-cells="items.length"
+        />
+      </BCol>
+    </BRow>
+    <BTable
+      hover
+      responsive="md"
+      :items="items"
+      :fields="fields"
+      :filter="searchFilter"
+      :empty-filtered-text="$t('global.table.emptySearchMessage')"
+      @filtered="onFiltered"
+    />
   </BContainer>
 </template>
 
@@ -356,6 +351,7 @@ const onTableRowAction = (event, row) => {
 ## Filters
 
 To add a table dropdown filter:
+
 1. Import the `<table-filter> `component and useTableFilterComposable.
 1. Add a filters prop to the `<table-filters>` component. This prop should be an
    array of filter groups–each required to have a key, label, and values prop.
@@ -384,12 +380,7 @@ from the useTableFilterComposable to show the filtered table data.
         />
       </BCol>
     </BRow>
-    <BTable
-      hover
-      responsive="md"
-      :items="filteredItems"
-      :fields="fields"
-    />
+    <BTable hover responsive="md" :items="filteredItems" :fields="fields" />
   </b-container>
 </template>
 
@@ -421,13 +412,11 @@ const onTableFilterChange = ({ activeFilters }) => {
 </script>
 ```
 
-
 ### Date filter
 
 To add a date filter, import the `<table-date-filter>` component. It will emit a
 `@change` event with the user input date values. There is a date filter method,
 `getFilteredTableDataByDate`, in the `useTableFilterComposable`.
-
 
 ## Batch actions
 
@@ -435,11 +424,12 @@ Batch actions allow a user to take a single action on many items in a table at
 once.
 
 To add table batch actions:
+
 1. Import the `<table-toolbar> `component and useTableSelectableComposable
 1. Add the `selectable`, `no-select-on-click` props and a unique `ref` to the
    table. The table will emit a `@row-selected` event. Use the `onRowSelected`
-   composable method as a callback and provide the `$event` as the first argument and
-   the total table items count as the second argument.
+   composable method as a callback and provide the `$event` as the first
+   argument and the total table items count as the second argument.
 1. Add a table column for checkboxes. The table header checkbox should use the
    `tableHeaderCheckboxModel` and `tableHeaderCheckboxIndeterminate` values
    provided by the composable. The table header checkbox should also use the
@@ -530,10 +520,10 @@ const onBatchAction = (action) => {
 </script>
 ```
 
-
 ## Pagination
 
 To add table pagination:
+
 1. Import the usePaginationComposable
 1. Add the `per-page` and `current-page` props to the `<table>` component.
 1. Add the below HTML snippet to the template. Make sure to update the
@@ -566,6 +556,7 @@ To add table pagination:
   </BCol>
 </BRow>
 ```
+
 ![Table pagination example](./table-pagination.png)
 
 ```vue
@@ -616,6 +607,5 @@ const { currentPage, perPage, itemsPerPageOptions } =
 
 const tems = ref([...]);
 const fields = ref([..]);
-
 </script>
 ```
