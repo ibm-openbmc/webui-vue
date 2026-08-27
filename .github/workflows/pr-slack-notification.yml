@@ -1,125 +1,129 @@
 name: PR Slack Notification
 
 on:
-  pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize]
-  workflow_dispatch:
+    pull_request_target:
+        types: [opened, reopened, ready_for_review, synchronize]
+    workflow_dispatch:
 
 jobs:
-  notify-slack:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Send Slack Notification (Test Mode)
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "text": "🧪 Test Notification from GitHub Actions",
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": "🧪 Test: PR Slack Notification",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "This is a test notification triggered manually from GitHub Actions.\n\n*Repository:* ${{ github.repository }}\n*Triggered by:* ${{ github.actor }}"
-                }
-              }
-            ]
-          }'
-      
-      - name: Set notification header
-        if: github.event_name == 'pull_request_target' && github.event.pull_request.draft == false
-        id: header
-        run: |
-          if [ "${{ github.event.action }}" = "ready_for_review" ]; then
-            echo "text=✅ PR Ready for Review" >> $GITHUB_OUTPUT
-          elif [ "${{ github.event.action }}" = "synchronize" ]; then
-            echo "text=🔄 PR Updated" >> $GITHUB_OUTPUT
-          else
-            echo "text=🔔 New Pull Request" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Send Slack Notification (PR Mode)
-        if: github.event_name == 'pull_request_target' && github.event.pull_request.draft == false
-        run: |
-          curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "text": "Pull Request in ${{ github.repository }}",
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": "${{ steps.header.outputs.text }}",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*👥 @ebmc-gui-squad, Please review*"
-                }
-              },
-              {
-                "type": "section",
-                "fields": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Repository:*\n${{ github.repository }}"
-                  },
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Author:*\n${{ github.event.pull_request.user.login }}"
-                  }
-                ]
-              },
-              {
-                "type": "section",
-                "fields": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Title:*\n${{ github.event.pull_request.title }}"
-                  },
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Branch:*\n`${{ github.event.pull_request.head.ref }}` → `${{ github.event.pull_request.base.ref }}`"
-                  }
-                ]
-              },
-              {
-                "type": "actions",
-                "elements": [
-                  {
-                    "type": "button",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "View Pull Request",
-                      "emoji": true
-                    },
-                    "url": "${{ github.event.pull_request.html_url }}",
-                    "style": "primary"
-                  },
-                  {
-                    "type": "button",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "View Files Changed",
-                      "emoji": true
-                    },
-                    "url": "${{ github.event.pull_request.html_url }}/files"
-                  }
-                ]
-              }
-            ]
-          }'
+    notify-slack:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Send Slack Notification (Test Mode)
+              if: github.event_name == 'workflow_dispatch'
+              run: |
+                  curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+                  -H "Content-Type: application/json" \
+                  -d '{
+                    "text": "🧪 Test Notification from GitHub Actions",
+                    "blocks": [
+                      {
+                        "type": "header",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "🧪 Test: PR Slack Notification",
+                          "emoji": true
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "This is a test notification triggered manually from GitHub Actions.\n\n*Repository:* ${{ github.repository }}\n*Triggered by:* ${{ github.actor }}"
+                        }
+                      }
+                    ]
+                  }'
+
+            - name: Set notification header
+              if:
+                  github.event_name == 'pull_request_target' &&
+                  github.event.pull_request.draft == false
+              id: header
+              run: |
+                  if [ "${{ github.event.action }}" = "ready_for_review" ]; then
+                    echo "text=✅ PR Ready for Review" >> $GITHUB_OUTPUT
+                  elif [ "${{ github.event.action }}" = "synchronize" ]; then
+                    echo "text=🔄 PR Updated" >> $GITHUB_OUTPUT
+                  else
+                    echo "text=🔔 New Pull Request" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Send Slack Notification (PR Mode)
+              if:
+                  github.event_name == 'pull_request_target' &&
+                  github.event.pull_request.draft == false
+              run: |
+                  curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+                  -H "Content-Type: application/json" \
+                  -d '{
+                    "text": "Pull Request in ${{ github.repository }}",
+                    "blocks": [
+                      {
+                        "type": "header",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "${{ steps.header.outputs.text }}",
+                          "emoji": true
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "*👥 @ebmc-gui-squad, Please review*"
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "fields": [
+                          {
+                            "type": "mrkdwn",
+                            "text": "*Repository:*\n${{ github.repository }}"
+                          },
+                          {
+                            "type": "mrkdwn",
+                            "text": "*Author:*\n${{ github.event.pull_request.user.login }}"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "section",
+                        "fields": [
+                          {
+                            "type": "mrkdwn",
+                            "text": "*Title:*\n${{ github.event.pull_request.title }}"
+                          },
+                          {
+                            "type": "mrkdwn",
+                            "text": "*Branch:*\n`${{ github.event.pull_request.head.ref }}` → `${{ github.event.pull_request.base.ref }}`"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "actions",
+                        "elements": [
+                          {
+                            "type": "button",
+                            "text": {
+                              "type": "plain_text",
+                              "text": "View Pull Request",
+                              "emoji": true
+                            },
+                            "url": "${{ github.event.pull_request.html_url }}",
+                            "style": "primary"
+                          },
+                          {
+                            "type": "button",
+                            "text": {
+                              "type": "plain_text",
+                              "text": "View Files Changed",
+                              "emoji": true
+                            },
+                            "url": "${{ github.event.pull_request.html_url }}/files"
+                          }
+                        ]
+                      }
+                    ]
+                  }'
