@@ -1,152 +1,158 @@
-name: 'Dispatch'
+name: "Dispatch"
 
 on:
-  issue_comment:
-    types:
-      - 'created'
+    issue_comment:
+        types:
+            - "created"
 
 defaults:
-  run:
-    shell: 'bash'
+    run:
+        shell: "bash"
 
 jobs:
-  dispatch:
-    if: |-
-      (
-        github.event.sender.type == 'User' &&
-        contains(github.event.comment.body, '@bobshell') &&
-        (
-          (vars.BOB_OWNERS_ONLY == 'true' && github.event.comment.author_association == 'OWNER') ||
-          (vars.BOB_OWNERS_ONLY != 'true' && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
-        )
-      )
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      issues: 'write'
-      pull-requests: 'write'
-    outputs:
-      command: '${{ steps.extract_command.outputs.command }}'
-      request: '${{ steps.extract_command.outputs.request }}'
-      additional_context: '${{ steps.extract_command.outputs.additional_context }}'
-      issue_number: '${{ github.event.issue.number }}'
-    steps:
-      - name: 'Get GitHub App token'
-        id: 'app_token'
-        if: vars.BOB_APP_ID != ''
-        uses: 'actions/create-github-app-token@v2'
-        with:
-          app-id: '${{ vars.BOB_APP_ID }}'
-          private-key: '${{ secrets.BOB_APP_PRIVATE_KEY }}'
+    dispatch:
+        if: |-
+            (
+              github.event.sender.type == 'User' &&
+              contains(github.event.comment.body, '@bobshell') &&
+              (
+                (vars.BOB_OWNERS_ONLY == 'true' && github.event.comment.author_association == 'OWNER') ||
+                (vars.BOB_OWNERS_ONLY != 'true' && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
+              )
+            )
+        runs-on: ubuntu-latest
+        permissions:
+            contents: "read"
+            issues: "write"
+            pull-requests: "write"
+        outputs:
+            command: "${{ steps.extract_command.outputs.command }}"
+            request: "${{ steps.extract_command.outputs.request }}"
+            additional_context:
+                "${{ steps.extract_command.outputs.additional_context }}"
+            issue_number: "${{ github.event.issue.number }}"
+        steps:
+            - name: "Get GitHub App token"
+              id: "app_token"
+              if: vars.BOB_APP_ID != ''
+              uses: "actions/create-github-app-token@v2"
+              with:
+                  app-id: "${{ vars.BOB_APP_ID }}"
+                  private-key: "${{ secrets.BOB_APP_PRIVATE_KEY }}"
 
-      - name: 'Extract command'
-        id: 'extract_command'
-        uses: 'actions/github-script@v7'
-        env:
-          EVENT_TYPE: '${{ github.event_name }}.${{ github.event.action }}'
-          REQUEST: '${{ github.event.comment.body }}'
-        with:
-          script: |
-            const raw = process.env.REQUEST || '';
-            const request = raw.trim();
-            core.setOutput('request', raw);
+            - name: "Extract command"
+              id: "extract_command"
+              uses: "actions/github-script@v7"
+              env:
+                  EVENT_TYPE:
+                      "${{ github.event_name }}.${{ github.event.action }}"
+                  REQUEST: "${{ github.event.comment.body }}"
+              with:
+                  script: |
+                      const raw = process.env.REQUEST || '';
+                      const request = raw.trim();
+                      core.setOutput('request', raw);
 
-            if (request.startsWith("@bobshell /review")) {
-              core.setOutput('command', 'review');
-              core.setOutput('additional_context', request.replace(/^@bobshell \/review/, '').trim());
-            } else if (request.startsWith("@bobshell /summary")) {
-              core.setOutput('command', 'summary');
-              core.setOutput('additional_context', request.replace(/^@bobshell \/summary/, '').trim());
-            } else if (request.startsWith("@bobshell /triage")) {
-              core.setOutput('command', 'triage');
-              core.setOutput('additional_context', request.replace(/^@bobshell \/triage/, '').trim());
-            } else {
-              core.setOutput('command', 'fallthrough');
-            }
+                      if (request.startsWith("@bobshell /review")) {
+                        core.setOutput('command', 'review');
+                        core.setOutput('additional_context', request.replace(/^@bobshell \/review/, '').trim());
+                      } else if (request.startsWith("@bobshell /summary")) {
+                        core.setOutput('command', 'summary');
+                        core.setOutput('additional_context', request.replace(/^@bobshell \/summary/, '').trim());
+                      } else if (request.startsWith("@bobshell /triage")) {
+                        core.setOutput('command', 'triage');
+                        core.setOutput('additional_context', request.replace(/^@bobshell \/triage/, '').trim());
+                      } else {
+                        core.setOutput('command', 'fallthrough');
+                      }
 
-      - name: 'Acknowledge request'
-        env:
-          COMMENT_TOKEN: '${{ steps.app_token.outputs.token || secrets.GITHUB_TOKEN }}'
-          ISSUE_NUMBER: '${{ github.event.issue.number }}'
-          MESSAGE: |-
-            🤖 Hi @${{ github.actor }}, I've received your request, and I'm working on it now! You can track my progress [in the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.
-          REPOSITORY: '${{ github.repository }}'
-        run: |-
-          curl -L \
-             -X POST \
-             -H "Accept: application/vnd.github+json" \
-             -H "Authorization: Bearer ${COMMENT_TOKEN}" \
-             -H "X-GitHub-Api-Version: 2022-11-28" \
-             https://api.github.com/repos/${REPOSITORY}/issues/${ISSUE_NUMBER}/comments \
-             -d "{\"body\":\"${MESSAGE}\"}"
+            - name: "Acknowledge request"
+              env:
+                  COMMENT_TOKEN:
+                      "${{ steps.app_token.outputs.token || secrets.GITHUB_TOKEN
+                      }}"
+                  ISSUE_NUMBER: "${{ github.event.issue.number }}"
+                  MESSAGE: |-
+                      🤖 Hi @${{ github.actor }}, I've received your request, and I'm working on it now! You can track my progress [in the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.
+                  REPOSITORY: "${{ github.repository }}"
+              run: |-
+                  curl -L \
+                     -X POST \
+                     -H "Accept: application/vnd.github+json" \
+                     -H "Authorization: Bearer ${COMMENT_TOKEN}" \
+                     -H "X-GitHub-Api-Version: 2022-11-28" \
+                     https://api.github.com/repos/${REPOSITORY}/issues/${ISSUE_NUMBER}/comments \
+                     -d "{\"body\":\"${MESSAGE}\"}"
 
-  review:
-    needs: 'dispatch'
-    if: |-
-      ${{ needs.dispatch.outputs.command == 'review' }}
-    uses: './.github/workflows/review.yml'
-    permissions:
-      contents: 'read'
-      issues: 'write'
-      pull-requests: 'write'
-    secrets: 'inherit'
+    review:
+        needs: "dispatch"
+        if: |-
+            ${{ needs.dispatch.outputs.command == 'review' }}
+        uses: "./.github/workflows/review.yml"
+        permissions:
+            contents: "read"
+            issues: "write"
+            pull-requests: "write"
+        secrets: "inherit"
 
-  summary:
-    needs: 'dispatch'
-    if: |-
-      ${{ needs.dispatch.outputs.command == 'summary' }}
-    uses: './.github/workflows/summary.yml'
-    permissions:
-      contents: 'read'
-      issues: 'write'
-      pull-requests: 'write'
-    secrets: 'inherit'
+    summary:
+        needs: "dispatch"
+        if: |-
+            ${{ needs.dispatch.outputs.command == 'summary' }}
+        uses: "./.github/workflows/summary.yml"
+        permissions:
+            contents: "read"
+            issues: "write"
+            pull-requests: "write"
+        secrets: "inherit"
 
-  triage:
-    needs: 'dispatch'
-    if: |-
-      ${{ needs.dispatch.outputs.command == 'triage' }}
-    uses: './.github/workflows/triage.yml'
-    permissions:
-      contents: 'read'
-      issues: 'write'
-      pull-requests: 'write'
-    secrets: 'inherit'
+    triage:
+        needs: "dispatch"
+        if: |-
+            ${{ needs.dispatch.outputs.command == 'triage' }}
+        uses: "./.github/workflows/triage.yml"
+        permissions:
+            contents: "read"
+            issues: "write"
+            pull-requests: "write"
+        secrets: "inherit"
 
-  fallthrough:
-    needs:
-      - 'dispatch'
-      - 'review'
-      - 'summary'
-      - 'triage'
-    if: |-
-      ${{ always() && !cancelled() && (failure() || needs.dispatch.outputs.command == 'fallthrough') }}
-    runs-on: 'ubuntu-latest'
-    permissions:
-      contents: 'read'
-      issues: 'write'
-      pull-requests: 'write'
-    steps:
-      - name: 'Get GitHub App token'
-        id: 'app_token'
-        if: vars.BOB_APP_ID != ''
-        uses: 'actions/create-github-app-token@v2'
-        with:
-          app-id: '${{ vars.BOB_APP_ID }}'
-          private-key: '${{ secrets.BOB_APP_PRIVATE_KEY }}'
+    fallthrough:
+        needs:
+            - "dispatch"
+            - "review"
+            - "summary"
+            - "triage"
+        if: |-
+            ${{ always() && !cancelled() && (failure() || needs.dispatch.outputs.command == 'fallthrough') }}
+        runs-on: "ubuntu-latest"
+        permissions:
+            contents: "read"
+            issues: "write"
+            pull-requests: "write"
+        steps:
+            - name: "Get GitHub App token"
+              id: "app_token"
+              if: vars.BOB_APP_ID != ''
+              uses: "actions/create-github-app-token@v2"
+              with:
+                  app-id: "${{ vars.BOB_APP_ID }}"
+                  private-key: "${{ secrets.BOB_APP_PRIVATE_KEY }}"
 
-      - name: 'Send failure comment'
-        env:
-          COMMENT_TOKEN: '${{ steps.app_token.outputs.token || secrets.GITHUB_TOKEN }}'
-          ISSUE_NUMBER: '${{ github.event.issue.number }}'
-          MESSAGE: |-
-            🤖 I'm sorry @${{ github.actor }}, but I was unable to process your request. Please [see the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.
-          REPOSITORY: '${{ github.repository }}'
-        run: |-
-          curl -L \
-             -X POST \
-             -H "Accept: application/vnd.github+json" \
-             -H "Authorization: Bearer ${COMMENT_TOKEN}" \
-             -H "X-GitHub-Api-Version: 2022-11-28" \
-             https://api.github.com/repos/${REPOSITORY}/issues/${ISSUE_NUMBER}/comments \
-             -d "{\"body\":\"${MESSAGE}\"}"
+            - name: "Send failure comment"
+              env:
+                  COMMENT_TOKEN:
+                      "${{ steps.app_token.outputs.token || secrets.GITHUB_TOKEN
+                      }}"
+                  ISSUE_NUMBER: "${{ github.event.issue.number }}"
+                  MESSAGE: |-
+                      🤖 I'm sorry @${{ github.actor }}, but I was unable to process your request. Please [see the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.
+                  REPOSITORY: "${{ github.repository }}"
+              run: |-
+                  curl -L \
+                     -X POST \
+                     -H "Accept: application/vnd.github+json" \
+                     -H "Authorization: Bearer ${COMMENT_TOKEN}" \
+                     -H "X-GitHub-Api-Version: 2022-11-28" \
+                     https://api.github.com/repos/${REPOSITORY}/issues/${ISSUE_NUMBER}/comments \
+                     -d "{\"body\":\"${MESSAGE}\"}"

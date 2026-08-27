@@ -1,123 +1,131 @@
-name: 'PR Summary'
+name: "PR Summary"
 
 on:
-  workflow_call:
+    workflow_call:
 
 concurrency:
-  group: '${{ github.workflow }}-summary-${{ github.event_name }}-${{ github.event.issue.number }}'
-  cancel-in-progress: true
+    group:
+        "${{ github.workflow }}-summary-${{ github.event_name }}-${{
+        github.event.issue.number }}"
+    cancel-in-progress: true
 
 defaults:
-  run:
-    shell: 'bash'
+    run:
+        shell: "bash"
 
 jobs:
-  summary:
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    permissions:
-      contents: 'read'
-      issues: 'write'
-      pull-requests: 'write'
-    steps:
-      - name: 'Checkout repository'
-        uses: 'actions/checkout@v4'
-        with:
-          ref: refs/pull/${{ github.event.issue.number }}/head
+    summary:
+        runs-on: ubuntu-latest
+        timeout-minutes: 3
+        permissions:
+            contents: "read"
+            issues: "write"
+            pull-requests: "write"
+        steps:
+            - name: "Checkout repository"
+              uses: "actions/checkout@v4"
+              with:
+                  ref: refs/pull/${{ github.event.issue.number }}/head
 
-      - name: 'Set up Node.js'
-        uses: 'actions/setup-node@v4'
-        with:
-          node-version: '${{ vars.NODE_VERSION || ''22'' }}'
+            - name: "Set up Node.js"
+              uses: "actions/setup-node@v4"
+              with:
+                  node-version: "${{ vars.NODE_VERSION || '22' }}"
 
-      - name: 'Download bob-action from default branch'
-        run: |
-          mkdir -p .github/actions/bob-action
-          curl \
-            --retry 3 \
-            --retry-max-time 60 \
-            -L -s \
-            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            -H "Accept: application/vnd.github.raw" \
-            -o .github/actions/bob-action/action.yml \
-            "${API_URL}/repos/${REPOSITORY}/contents/.github/actions/bob-action/action.yml?ref=${DEFAULT_BRANCH}"
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
-          API_URL: '${{ github.api_url }}'
-          REPOSITORY: '${{ github.repository }}'
-          DEFAULT_BRANCH: '${{ github.event.repository.default_branch }}'
+            - name: "Download bob-action from default branch"
+              run: |
+                  mkdir -p .github/actions/bob-action
+                  curl \
+                    --retry 3 \
+                    --retry-max-time 60 \
+                    -L -s \
+                    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+                    -H "Accept: application/vnd.github.raw" \
+                    -o .github/actions/bob-action/action.yml \
+                    "${API_URL}/repos/${REPOSITORY}/contents/.github/actions/bob-action/action.yml?ref=${DEFAULT_BRANCH}"
+              env:
+                  GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN || github.token }}"
+                  API_URL: "${{ github.api_url }}"
+                  REPOSITORY: "${{ github.repository }}"
+                  DEFAULT_BRANCH:
+                      "${{ github.event.repository.default_branch }}"
 
-      - name: 'Download commands from default branch'
-        run: |
-          mkdir -p .github/commands
-          for file in bob-review.toml bob-summary.toml; do
-            curl --retry 3 --retry-max-time 60 -L -s -f \
-              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-              -H "Accept: application/vnd.github.raw" \
-              -o ".github/commands/${file}" \
-              "${API_URL}/repos/${REPOSITORY}/contents/.github/commands/${file}?ref=${DEFAULT_BRANCH}" || true
-          done
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
-          API_URL: '${{ github.api_url }}'
-          REPOSITORY: '${{ github.repository }}'
-          DEFAULT_BRANCH: '${{ github.event.repository.default_branch }}'
+            - name: "Download commands from default branch"
+              run: |
+                  mkdir -p .github/commands
+                  for file in bob-review.toml bob-summary.toml; do
+                    curl --retry 3 --retry-max-time 60 -L -s -f \
+                      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+                      -H "Accept: application/vnd.github.raw" \
+                      -o ".github/commands/${file}" \
+                      "${API_URL}/repos/${REPOSITORY}/contents/.github/commands/${file}?ref=${DEFAULT_BRANCH}" || true
+                  done
+              env:
+                  GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN || github.token }}"
+                  API_URL: "${{ github.api_url }}"
+                  REPOSITORY: "${{ github.repository }}"
+                  DEFAULT_BRANCH:
+                      "${{ github.event.repository.default_branch }}"
 
-      - name: 'Download and install GitHub MCP server'
-        run: |
-          curl \
-            --retry 3 \
-            --retry-max-time 60 \
-            -L -s --fail \
-            -o github-mcp-server.tar.gz https://github.com/github/github-mcp-server/releases/download/v0.20.1/github-mcp-server_Linux_x86_64.tar.gz
-          tar -xzf github-mcp-server.tar.gz
-          chmod +x ./github-mcp-server
-          rm github-mcp-server.tar.gz
+            - name: "Download and install GitHub MCP server"
+              run: |
+                  curl \
+                    --retry 3 \
+                    --retry-max-time 60 \
+                    -L -s --fail \
+                    -o github-mcp-server.tar.gz https://github.com/github/github-mcp-server/releases/download/v0.20.1/github-mcp-server_Linux_x86_64.tar.gz
+                  tar -xzf github-mcp-server.tar.gz
+                  chmod +x ./github-mcp-server
+                  rm github-mcp-server.tar.gz
 
-      - name: 'Get GitHub App token'
-        id: 'app_token'
-        if: vars.BOB_APP_ID != ''
-        uses: 'actions/create-github-app-token@v2'
-        with:
-          app-id: '${{ vars.BOB_APP_ID }}'
-          private-key: '${{ secrets.BOB_APP_PRIVATE_KEY }}'
+            - name: "Get GitHub App token"
+              id: "app_token"
+              if: vars.BOB_APP_ID != ''
+              uses: "actions/create-github-app-token@v2"
+              with:
+                  app-id: "${{ vars.BOB_APP_ID }}"
+                  private-key: "${{ secrets.BOB_APP_PRIVATE_KEY }}"
 
-      - name: 'Generate pull request summary'
-        uses: './.github/actions/bob-action'
-        id: 'bobshell_pr_summary'
-        env:
-          GITHUB_TOKEN: '${{ steps.app_token.outputs.token || secrets.GITHUB_TOKEN }}'
-          ISSUE_TITLE: '${{ github.event.issue.title }}'
-          ISSUE_BODY: '${{ github.event.issue.body }}'
-          PULL_REQUEST_NUMBER: '${{ github.event.issue.number }}'
-          REPOSITORY: '${{ github.repository }}'
-        with:
-          max_coins: 2
-          bobshell_api_key: '${{ secrets.BOBSHELL_API_KEY }}'
-          bobshell_version: '${{ vars.BOBSHELL_VERSION || ''latest'' }}'
-          bobshell_debug: '${{ fromJSON(vars.DEBUG || vars.ACTIONS_STEP_DEBUG || false) }}'
-          settings: |-
-            {
-              "coreTools": [
-                "attempt_completion"
-              ]
-            }
-          mcp: |-
-            {
-              "mcpServers": {
-                "github": {
-                  "command": "./github-mcp-server",
-                  "args": ["stdio"],
-                  "includeTools": [
-                    "pull_request_read",
-                    "add_issue_comment",
-                    "issue_read"
-                  ],
-                  "env": {
-                    "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}",
-                    "GITHUB_HOST": "https://github.com"
-                  }
-                }
-              }
-            }
-          prompt: '/bob-summary'
+            - name: "Generate pull request summary"
+              uses: "./.github/actions/bob-action"
+              id: "bobshell_pr_summary"
+              env:
+                  GITHUB_TOKEN:
+                      "${{ steps.app_token.outputs.token || secrets.GITHUB_TOKEN
+                      }}"
+                  ISSUE_TITLE: "${{ github.event.issue.title }}"
+                  ISSUE_BODY: "${{ github.event.issue.body }}"
+                  PULL_REQUEST_NUMBER: "${{ github.event.issue.number }}"
+                  REPOSITORY: "${{ github.repository }}"
+              with:
+                  max_coins: 2
+                  bobshell_api_key: "${{ secrets.BOBSHELL_API_KEY }}"
+                  bobshell_version: "${{ vars.BOBSHELL_VERSION || 'latest' }}"
+                  bobshell_debug:
+                      "${{ fromJSON(vars.DEBUG || vars.ACTIONS_STEP_DEBUG ||
+                      false) }}"
+                  settings: |-
+                      {
+                        "coreTools": [
+                          "attempt_completion"
+                        ]
+                      }
+                  mcp: |-
+                      {
+                        "mcpServers": {
+                          "github": {
+                            "command": "./github-mcp-server",
+                            "args": ["stdio"],
+                            "includeTools": [
+                              "pull_request_read",
+                              "add_issue_comment",
+                              "issue_read"
+                            ],
+                            "env": {
+                              "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}",
+                              "GITHUB_HOST": "https://github.com"
+                            }
+                          }
+                        }
+                      }
+                  prompt: "/bob-summary"

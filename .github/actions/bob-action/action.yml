@@ -12,287 +12,301 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: 'Run Bob Shell'
-author: 'IBM'
+name: "Run Bob Shell"
+author: "IBM"
 description: |-
-  Invoke Bob Shell from a GitHub Action.
+    Invoke Bob Shell from a GitHub Action.
 
 inputs:
-  bobshell_api_key:
-    description: 'The API key used for authenticating with Bob Shell.'
-    required: true
-  bobshell_version:
-    description: 'The version of Bob Shell to install. Can be "latest" or a specific version number. Do not use a version older than `0.0.27`.'
-    required: false
-    default: 'latest'
-  bobshell_debug:
-    description: 'Enable debug logging and output streaming.'
-    required: false
-    default: false
-  prompt:
-    description: 'Prompt string, or a command name (e.g. `/bob-review`) to load prompt from `.bob/commands/<name>.toml`. Passed to Bob Shell as the positional prompt.'
-    required: false
-    default: 'You are a helpful assistant.'
-  settings:
-    description: 'A JSON string written to `.bob/settings.json` to configure Bob Shell project settings.'
-    required: false
-  mcp:
-    description: 'A JSON string written to `.bob/mcp.json` to configure Bob Shell MCP settings.'
-    required: false
-  chat_mode:
-    description: 'The chat mode to run Bob Shell in.'
-    required: false
-    default: 'advanced'
-  max_coins:
-    description: 'When task costs exceed this value, Bob Shell will not continue.'
-    required: false
-    default: 3
-  hide_intermediary_output:
-    description: 'Pass --hide-intermediary-output to Bob so only final attempt_completion output is shown. Useful for triage and other single-answer prompts.'
-    required: false
-    default: false
+    bobshell_api_key:
+        description: "The API key used for authenticating with Bob Shell."
+        required: true
+    bobshell_version:
+        description:
+            'The version of Bob Shell to install. Can be "latest" or a specific
+            version number. Do not use a version older than `0.0.27`.'
+        required: false
+        default: "latest"
+    bobshell_debug:
+        description: "Enable debug logging and output streaming."
+        required: false
+        default: false
+    prompt:
+        description:
+            "Prompt string, or a command name (e.g. `/bob-review`) to load
+            prompt from `.bob/commands/<name>.toml`. Passed to Bob Shell as the
+            positional prompt."
+        required: false
+        default: "You are a helpful assistant."
+    settings:
+        description:
+            "A JSON string written to `.bob/settings.json` to configure Bob
+            Shell project settings."
+        required: false
+    mcp:
+        description:
+            "A JSON string written to `.bob/mcp.json` to configure Bob Shell MCP
+            settings."
+        required: false
+    chat_mode:
+        description: "The chat mode to run Bob Shell in."
+        required: false
+        default: "advanced"
+    max_coins:
+        description:
+            "When task costs exceed this value, Bob Shell will not continue."
+        required: false
+        default: 3
+    hide_intermediary_output:
+        description:
+            "Pass --hide-intermediary-output to Bob so only final
+            attempt_completion output is shown. Useful for triage and other
+            single-answer prompts."
+        required: false
+        default: false
 
 outputs:
-  summary:
-    description: 'The summarized output from the Bob Shell execution.'
-    value: '${{ steps.bobshell_run.outputs.bobshell_response }}'
-  error:
-    description: 'The error output from the Bob Shell execution, if any.'
-    value: '${{ steps.bobshell_run.outputs.bobshell_errors }}'
+    summary:
+        description: "The summarized output from the Bob Shell execution."
+        value: "${{ steps.bobshell_run.outputs.bobshell_response }}"
+    error:
+        description: "The error output from the Bob Shell execution, if any."
+        value: "${{ steps.bobshell_run.outputs.bobshell_errors }}"
 
 runs:
-  using: 'composite'
-  steps:
-    - name: 'Validate Inputs'
-      id: 'validate_inputs'
-      shell: 'bash'
-      run: |-
-        set -exuo pipefail
+    using: "composite"
+    steps:
+        - name: "Validate Inputs"
+          id: "validate_inputs"
+          shell: "bash"
+          run: |-
+              set -exuo pipefail
 
-        # Validate Bob API key
-        if [[ "${INPUT_BOBSHELL_API_KEY_PRESENT:-false}" == "false" ]]; then
-          echo "ERROR: Authentication key not provided. Please provide 'bobshell_api_key'." >&2
-          echo "::error title=Input validation::Authentication key not provided. Please provide 'bobshell_api_key'."
-          if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-            {
-              echo "### Input validation errors"
-              echo
-              echo "- Authentication key not provided. Please provide 'bobshell_api_key'."
-            } >> "${GITHUB_STEP_SUMMARY}"
-          fi
-          exit 1
-        fi
-      env:
-        INPUT_BOBSHELL_API_KEY_PRESENT: "${{ inputs.bobshell_api_key != '' }}"
+              # Validate Bob API key
+              if [[ "${INPUT_BOBSHELL_API_KEY_PRESENT:-false}" == "false" ]]; then
+                echo "ERROR: Authentication key not provided. Please provide 'bobshell_api_key'." >&2
+                echo "::error title=Input validation::Authentication key not provided. Please provide 'bobshell_api_key'."
+                if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+                  {
+                    echo "### Input validation errors"
+                    echo
+                    echo "- Authentication key not provided. Please provide 'bobshell_api_key'."
+                  } >> "${GITHUB_STEP_SUMMARY}"
+                fi
+                exit 1
+              fi
+          env:
+              INPUT_BOBSHELL_API_KEY_PRESENT:
+                  "${{ inputs.bobshell_api_key != '' }}"
 
-    - name: 'Configure Bob Shell'
-      run: |-
-        if [[ "${SETTINGS:-}" || "${MCP:-}" ]]; then
-          mkdir -p .bob/
-          if [[ "${SETTINGS:-}" ]]; then
-            echo "Configuring Bob Shell project settings."
-            echo "${SETTINGS}" > ".bob/settings.json"
-          fi
-          if [[ "${MCP:-}" ]]; then
-            echo "Configuring Bob Shell MCP settings."
-            echo "${MCP}" > ".bob/mcp.json"
-          fi
-        else
-          echo "Nothing to configure."
-        fi
-      shell: 'bash'
-      env:
-        SETTINGS: '${{ inputs.settings }}'
-        MCP: '${{ inputs.mcp }}'
+        - name: "Configure Bob Shell"
+          run: |-
+              if [[ "${SETTINGS:-}" || "${MCP:-}" ]]; then
+                mkdir -p .bob/
+                if [[ "${SETTINGS:-}" ]]; then
+                  echo "Configuring Bob Shell project settings."
+                  echo "${SETTINGS}" > ".bob/settings.json"
+                fi
+                if [[ "${MCP:-}" ]]; then
+                  echo "Configuring Bob Shell MCP settings."
+                  echo "${MCP}" > ".bob/mcp.json"
+                fi
+              else
+                echo "Nothing to configure."
+              fi
+          shell: "bash"
+          env:
+              SETTINGS: "${{ inputs.settings }}"
+              MCP: "${{ inputs.mcp }}"
 
-    - name: 'Install Custom Commands'
-      shell: 'bash'
-      run: |-
-        set -euo pipefail
-        mkdir -p .bob/commands
-        if [[ -d .github/commands ]]; then
-          # Copy any .toml files (nullglob: no match = empty list, not literal *.toml)
-          shopt -s nullglob
-          for f in .github/commands/*.toml; do
-            cp "$f" .bob/commands/
-            echo "Installed $(basename "$f") from .github/commands/"
-          done
-          shopt -u nullglob
-        fi
+        - name: "Install Custom Commands"
+          shell: "bash"
+          run: |-
+              set -euo pipefail
+              mkdir -p .bob/commands
+              if [[ -d .github/commands ]]; then
+                # Copy any .toml files (nullglob: no match = empty list, not literal *.toml)
+                shopt -s nullglob
+                for f in .github/commands/*.toml; do
+                  cp "$f" .bob/commands/
+                  echo "Installed $(basename "$f") from .github/commands/"
+                done
+                shopt -u nullglob
+              fi
 
-    - name: 'Install Bob Shell'
-      id: 'install'
-      env:
-        BOBSHELL_VERSION: '${{ inputs.bobshell_version }}'
-      shell: 'bash'
-      run: |-
-        set -euo pipefail
+        - name: "Install Bob Shell"
+          id: "install"
+          env:
+              BOBSHELL_VERSION: "${{ inputs.bobshell_version }}"
+          shell: "bash"
+          run: |-
+              set -euo pipefail
 
-        VERSION_INPUT="${BOBSHELL_VERSION:-latest}"
+              VERSION_INPUT="${BOBSHELL_VERSION:-latest}"
 
-        if [[ "${VERSION_INPUT}" == "latest" ]]; then
-          echo "Installing the latest version of Bob Shell."
-          version="$(curl -s https://s3.us-south.cloud-object-storage.appdomain.cloud/bobshell/bobshell-version.txt)"
-          
-          if [[ -z "$version" ]]; then
-            echo "Error: Failed to fetch bobshell version"
-            exit 1
-          fi
-          
-          echo "Latest version: ${version}"
-          dl_url="https://s3.us-south.cloud-object-storage.appdomain.cloud/bobshell/bobshell-${version}.tgz"
-          npm install --reg=https://registry.npmjs.org/ --progress=false --loglevel=error --global "${dl_url}"
-        elif [[ "${VERSION_INPUT}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9\.-]+)?(\+[a-zA-Z0-9\.-]+)?$ ]]; then
-          echo "Installing Bob Shell version ${VERSION_INPUT}"
-          version="${VERSION_INPUT}"
-          dl_url="https://s3.us-south.cloud-object-storage.appdomain.cloud/bobshell/bobshell-${VERSION_INPUT}.tgz"
-          npm install --reg=https://registry.npmjs.org/ --progress=false --loglevel=error --global "${dl_url}"
-        else
-          echo "Error: Invalid version format '${VERSION_INPUT}'"
-          exit 1
-        fi
+              if [[ "${VERSION_INPUT}" == "latest" ]]; then
+                echo "Installing the latest version of Bob Shell."
+                version="$(curl -s https://s3.us-south.cloud-object-storage.appdomain.cloud/bobshell/bobshell-version.txt)"
+                
+                if [[ -z "$version" ]]; then
+                  echo "Error: Failed to fetch bobshell version"
+                  exit 1
+                fi
+                
+                echo "Latest version: ${version}"
+                dl_url="https://s3.us-south.cloud-object-storage.appdomain.cloud/bobshell/bobshell-${version}.tgz"
+                npm install --reg=https://registry.npmjs.org/ --progress=false --loglevel=error --global "${dl_url}"
+              elif [[ "${VERSION_INPUT}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9\.-]+)?(\+[a-zA-Z0-9\.-]+)?$ ]]; then
+                echo "Installing Bob Shell version ${VERSION_INPUT}"
+                version="${VERSION_INPUT}"
+                dl_url="https://s3.us-south.cloud-object-storage.appdomain.cloud/bobshell/bobshell-${VERSION_INPUT}.tgz"
+                npm install --reg=https://registry.npmjs.org/ --progress=false --loglevel=error --global "${dl_url}"
+              else
+                echo "Error: Invalid version format '${VERSION_INPUT}'"
+                exit 1
+              fi
 
-        echo "Verifying installation:"
-        if command -v bob >/dev/null 2>&1; then
-          installed_version=$(bob --version 2>/dev/null | tail -n 1 | tr -d '[:space:]')
-          if [[ "$installed_version" == "$version" ]]; then
-            echo "Bob Shell ${version} installed successfully"
-          else
-            echo "Warning: Version mismatch - installed ${installed_version}, expected ${version}"
-            echo "Bob Shell installed, but version verification failed"
-          fi
-        else
-          echo "Error: Bob Shell not found in PATH"
-          exit 1
-        fi
+              echo "Verifying installation:"
+              if command -v bob >/dev/null 2>&1; then
+                installed_version=$(bob --version 2>/dev/null | tail -n 1 | tr -d '[:space:]')
+                if [[ "$installed_version" == "$version" ]]; then
+                  echo "Bob Shell ${version} installed successfully"
+                else
+                  echo "Warning: Version mismatch - installed ${installed_version}, expected ${version}"
+                  echo "Bob Shell installed, but version verification failed"
+                fi
+              else
+                echo "Error: Bob Shell not found in PATH"
+                exit 1
+              fi
 
-    - name: 'Resolve prompt'
-      id: 'resolve_prompt'
-      shell: 'bash'
-      run: |-
-        set -euo pipefail
-        RAW_PROMPT="${{ inputs.prompt }}"
-        if [[ "${RAW_PROMPT}" == /* ]]; then
-          # Command name: load from .bob/commands/<name>.toml or .github/commands/<name>.toml
-          CMD_NAME="${RAW_PROMPT#/}"
-          CMD_FILE=""
-          if [[ -f ".bob/commands/${CMD_NAME}.toml" ]]; then
-            CMD_FILE=".bob/commands/${CMD_NAME}.toml"
-          elif [[ -f ".github/commands/${CMD_NAME}.toml" ]]; then
-            CMD_FILE=".github/commands/${CMD_NAME}.toml"
-          fi
-          if [[ -z "${CMD_FILE}" ]]; then
-            echo "::error title=Resolve prompt::Command file not found: .bob/commands/${CMD_NAME}.toml or .github/commands/${CMD_NAME}.toml"
-            exit 1
-          fi
-          # Extract prompt field (content between """ and """)
-          PROMPT_CONTENT=$(sed -n '/^prompt = """$/,/^"""$/p' "${CMD_FILE}" | sed '1d;$d')
-          # Substitute placeholders (Option A)
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{REPOSITORY\}\}/${REPOSITORY:-}}"
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{PULL_REQUEST_NUMBER\}\}/${PULL_REQUEST_NUMBER:-}}"
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{WORKSPACE_PATH\}\}/${WORKSPACE_PATH:-}}"
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{ISSUE_TITLE\}\}/${ISSUE_TITLE:-}}"
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{ISSUE_BODY\}\}/${ISSUE_BODY:-}}"
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{AVAILABLE_LABELS\}\}/${AVAILABLE_LABELS:-}}"
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{GITHUB_ENV\}\}/${GITHUB_ENV:-}}"
-          PROMPT_CONTENT="${PROMPT_CONTENT//\{\{ISSUES_TO_TRIAGE\}\}/${ISSUES_TO_TRIAGE:-}}"
-          TEMP_FILE="$(mktemp -p "${RUNNER_TEMP}" bob-prompt.XXXXXXXXXX)"
-          printf '%s' "${PROMPT_CONTENT}" > "${TEMP_FILE}"
-          echo "prompt_file=${TEMP_FILE}" >> "${GITHUB_OUTPUT}"
-        else
-          echo "prompt_file=" >> "${GITHUB_OUTPUT}"
-        fi
-      env:
-        REPOSITORY: '${{ env.REPOSITORY }}'
-        PULL_REQUEST_NUMBER: '${{ env.PULL_REQUEST_NUMBER }}'
-        WORKSPACE_PATH: '${{ env.WORKSPACE_PATH }}'
-        ISSUE_TITLE: '${{ env.ISSUE_TITLE }}'
-        ISSUE_BODY: '${{ env.ISSUE_BODY }}'
-        AVAILABLE_LABELS: '${{ env.AVAILABLE_LABELS }}'
-        GITHUB_ENV: '${{ env.GITHUB_ENV }}'
-        ISSUES_TO_TRIAGE: '${{ env.ISSUES_TO_TRIAGE }}'
+        - name: "Resolve prompt"
+          id: "resolve_prompt"
+          shell: "bash"
+          run: |-
+              set -euo pipefail
+              RAW_PROMPT="${{ inputs.prompt }}"
+              if [[ "${RAW_PROMPT}" == /* ]]; then
+                # Command name: load from .bob/commands/<name>.toml or .github/commands/<name>.toml
+                CMD_NAME="${RAW_PROMPT#/}"
+                CMD_FILE=""
+                if [[ -f ".bob/commands/${CMD_NAME}.toml" ]]; then
+                  CMD_FILE=".bob/commands/${CMD_NAME}.toml"
+                elif [[ -f ".github/commands/${CMD_NAME}.toml" ]]; then
+                  CMD_FILE=".github/commands/${CMD_NAME}.toml"
+                fi
+                if [[ -z "${CMD_FILE}" ]]; then
+                  echo "::error title=Resolve prompt::Command file not found: .bob/commands/${CMD_NAME}.toml or .github/commands/${CMD_NAME}.toml"
+                  exit 1
+                fi
+                # Extract prompt field (content between """ and """)
+                PROMPT_CONTENT=$(sed -n '/^prompt = """$/,/^"""$/p' "${CMD_FILE}" | sed '1d;$d')
+                # Substitute placeholders (Option A)
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{REPOSITORY\}\}/${REPOSITORY:-}}"
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{PULL_REQUEST_NUMBER\}\}/${PULL_REQUEST_NUMBER:-}}"
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{WORKSPACE_PATH\}\}/${WORKSPACE_PATH:-}}"
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{ISSUE_TITLE\}\}/${ISSUE_TITLE:-}}"
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{ISSUE_BODY\}\}/${ISSUE_BODY:-}}"
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{AVAILABLE_LABELS\}\}/${AVAILABLE_LABELS:-}}"
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{GITHUB_ENV\}\}/${GITHUB_ENV:-}}"
+                PROMPT_CONTENT="${PROMPT_CONTENT//\{\{ISSUES_TO_TRIAGE\}\}/${ISSUES_TO_TRIAGE:-}}"
+                TEMP_FILE="$(mktemp -p "${RUNNER_TEMP}" bob-prompt.XXXXXXXXXX)"
+                printf '%s' "${PROMPT_CONTENT}" > "${TEMP_FILE}"
+                echo "prompt_file=${TEMP_FILE}" >> "${GITHUB_OUTPUT}"
+              else
+                echo "prompt_file=" >> "${GITHUB_OUTPUT}"
+              fi
+          env:
+              REPOSITORY: "${{ env.REPOSITORY }}"
+              PULL_REQUEST_NUMBER: "${{ env.PULL_REQUEST_NUMBER }}"
+              WORKSPACE_PATH: "${{ env.WORKSPACE_PATH }}"
+              ISSUE_TITLE: "${{ env.ISSUE_TITLE }}"
+              ISSUE_BODY: "${{ env.ISSUE_BODY }}"
+              AVAILABLE_LABELS: "${{ env.AVAILABLE_LABELS }}"
+              GITHUB_ENV: "${{ env.GITHUB_ENV }}"
+              ISSUES_TO_TRIAGE: "${{ env.ISSUES_TO_TRIAGE }}"
 
-    - name: 'Run Bob Shell'
-      id: 'bobshell_run'
-      shell: 'bash'
-      run: |-
-        set -euo pipefail
+        - name: "Run Bob Shell"
+          id: "bobshell_run"
+          shell: "bash"
+          run: |-
+              set -euo pipefail
 
-        # Resolved prompt: from command file (use stdin to avoid ARG_MAX) or literal (positional)
-        USE_PROMPT_STDIN=false
-        if [[ -n "${PROMPT_FILE:-}" && -f "${PROMPT_FILE}" ]]; then
-          USE_PROMPT_STDIN=true
-        else
-          PROMPT_CONTENT="${PROMPT:-You are a helpful assistant.}"
-        fi
+              # Resolved prompt: from command file (use stdin to avoid ARG_MAX) or literal (positional)
+              USE_PROMPT_STDIN=false
+              if [[ -n "${PROMPT_FILE:-}" && -f "${PROMPT_FILE}" ]]; then
+                USE_PROMPT_STDIN=true
+              else
+                PROMPT_CONTENT="${PROMPT:-You are a helpful assistant.}"
+              fi
 
-        # Create a temporary directory for storing the output, and ensure it's
-        # cleaned up later
-        TEMP_STDOUT="$(mktemp -p "${RUNNER_TEMP}" bobshell-out.XXXXXXXXXX)"
-        TEMP_STDERR="$(mktemp -p "${RUNNER_TEMP}" bobshell-err.XXXXXXXXXX)"
-        function cleanup {
-          rm -f "${TEMP_STDOUT}" "${TEMP_STDERR}"
-        }
-        trap cleanup EXIT
+              # Create a temporary directory for storing the output, and ensure it's
+              # cleaned up later
+              TEMP_STDOUT="$(mktemp -p "${RUNNER_TEMP}" bobshell-out.XXXXXXXXXX)"
+              TEMP_STDERR="$(mktemp -p "${RUNNER_TEMP}" bobshell-err.XXXXXXXXXX)"
+              function cleanup {
+                rm -f "${TEMP_STDOUT}" "${TEMP_STDERR}"
+              }
+              trap cleanup EXIT
 
-        # Keep track of whether we've failed
-        FAILED=false
+              # Keep track of whether we've failed
+              FAILED=false
 
-        # Run Bob Shell: use stdin for prompt when from file (avoids ARG_MAX); otherwise positional prompt
-        BOB_OPTS="--accept-license --yolo --max-coins ${MAX_COINS:-3} --chat-mode ${CHAT_MODE:-advanced} ${HIDE_INTERMEDIARY_OUTPUT:+--hide-intermediary-output}"
-        if [[ "${USE_PROMPT_STDIN}" = true ]]; then
-          if [[ "${DEBUG}" = true ]]; then
-            echo "::warning::Bob Shell debug logging is enabled. This will stream responses, which could reveal sensitive information if processed with untrusted inputs."
-            if ! { bob ${BOB_OPTS} < "${PROMPT_FILE}" 2> >(tee "${TEMP_STDERR}" >&2) | tee "${TEMP_STDOUT}"; }; then
-              FAILED=true
-            fi
-          else
-            if ! bob ${BOB_OPTS} < "${PROMPT_FILE}" 2> "${TEMP_STDERR}" 1> "${TEMP_STDOUT}"; then
-              FAILED=true
-            fi
-          fi
-        else
-          if [[ "${DEBUG}" = true ]]; then
-            echo "::warning::Bob Shell debug logging is enabled. This will stream responses, which could reveal sensitive information if processed with untrusted inputs."
-            if ! { bob ${BOB_OPTS} -- "${PROMPT_CONTENT}" 2> >(tee "${TEMP_STDERR}" >&2) | tee "${TEMP_STDOUT}"; }; then
-              FAILED=true
-            fi
-          else
-            if ! bob ${BOB_OPTS} -- "${PROMPT_CONTENT}" 2> "${TEMP_STDERR}" 1> "${TEMP_STDOUT}"; then
-              FAILED=true
-            fi
-          fi
-        fi
+              # Run Bob Shell: use stdin for prompt when from file (avoids ARG_MAX); otherwise positional prompt
+              BOB_OPTS="--accept-license --yolo --max-coins ${MAX_COINS:-3} --chat-mode ${CHAT_MODE:-advanced} ${HIDE_INTERMEDIARY_OUTPUT:+--hide-intermediary-output}"
+              if [[ "${USE_PROMPT_STDIN}" = true ]]; then
+                if [[ "${DEBUG}" = true ]]; then
+                  echo "::warning::Bob Shell debug logging is enabled. This will stream responses, which could reveal sensitive information if processed with untrusted inputs."
+                  if ! { bob ${BOB_OPTS} < "${PROMPT_FILE}" 2> >(tee "${TEMP_STDERR}" >&2) | tee "${TEMP_STDOUT}"; }; then
+                    FAILED=true
+                  fi
+                else
+                  if ! bob ${BOB_OPTS} < "${PROMPT_FILE}" 2> "${TEMP_STDERR}" 1> "${TEMP_STDOUT}"; then
+                    FAILED=true
+                  fi
+                fi
+              else
+                if [[ "${DEBUG}" = true ]]; then
+                  echo "::warning::Bob Shell debug logging is enabled. This will stream responses, which could reveal sensitive information if processed with untrusted inputs."
+                  if ! { bob ${BOB_OPTS} -- "${PROMPT_CONTENT}" 2> >(tee "${TEMP_STDERR}" >&2) | tee "${TEMP_STDOUT}"; }; then
+                    FAILED=true
+                  fi
+                else
+                  if ! bob ${BOB_OPTS} -- "${PROMPT_CONTENT}" 2> "${TEMP_STDERR}" 1> "${TEMP_STDOUT}"; then
+                    FAILED=true
+                  fi
+                fi
+              fi
 
-        BOBSHELL_RESPONSE="$(cat "${TEMP_STDOUT}")"
+              BOBSHELL_RESPONSE="$(cat "${TEMP_STDOUT}")"
 
-        # Set the captured response as a step output, supporting multiline
-        echo "bobshell_response<<EOF" >> "${GITHUB_OUTPUT}"
-        echo "${BOBSHELL_RESPONSE}" >> "${GITHUB_OUTPUT}"
-        echo "EOF" >> "${GITHUB_OUTPUT}"
+              # Set the captured response as a step output, supporting multiline
+              echo "bobshell_response<<EOF" >> "${GITHUB_OUTPUT}"
+              echo "${BOBSHELL_RESPONSE}" >> "${GITHUB_OUTPUT}"
+              echo "EOF" >> "${GITHUB_OUTPUT}"
 
-        BOBSHELL_ERRORS="$(cat "${TEMP_STDERR}")"
+              BOBSHELL_ERRORS="$(cat "${TEMP_STDERR}")"
 
-        # Set the captured errors as a step output, supporting multiline
-        echo "bobshell_errors<<EOF" >> "${GITHUB_OUTPUT}"
-        echo "${BOBSHELL_ERRORS}" >> "${GITHUB_OUTPUT}"
-        echo "EOF" >> "${GITHUB_OUTPUT}"
+              # Set the captured errors as a step output, supporting multiline
+              echo "bobshell_errors<<EOF" >> "${GITHUB_OUTPUT}"
+              echo "${BOBSHELL_ERRORS}" >> "${GITHUB_OUTPUT}"
+              echo "EOF" >> "${GITHUB_OUTPUT}"
 
-        if [[ "${FAILED}" = true ]]; then
-          LAST_LINE="$(echo "${BOBSHELL_ERRORS}" | tail -n1)"
-          echo "::error title=Bob Shell execution failed::${LAST_LINE}"
-          echo "See logs for more details"
-          exit 1
-        fi
-      env:
-        DEBUG: '${{ fromJSON(inputs.bobshell_debug || false) }}'
-        BOBSHELL_API_KEY: '${{ inputs.bobshell_api_key }}'
-        PROMPT: '${{ inputs.prompt }}'
-        PROMPT_FILE: '${{ steps.resolve_prompt.outputs.prompt_file }}'
-        CHAT_MODE: '${{ inputs.chat_mode }}'
-        MAX_COINS: '${{ inputs.max_coins }}'
-        HIDE_INTERMEDIARY_OUTPUT: '${{ inputs.hide_intermediary_output }}'
+              if [[ "${FAILED}" = true ]]; then
+                LAST_LINE="$(echo "${BOBSHELL_ERRORS}" | tail -n1)"
+                echo "::error title=Bob Shell execution failed::${LAST_LINE}"
+                echo "See logs for more details"
+                exit 1
+              fi
+          env:
+              DEBUG: "${{ fromJSON(inputs.bobshell_debug || false) }}"
+              BOBSHELL_API_KEY: "${{ inputs.bobshell_api_key }}"
+              PROMPT: "${{ inputs.prompt }}"
+              PROMPT_FILE: "${{ steps.resolve_prompt.outputs.prompt_file }}"
+              CHAT_MODE: "${{ inputs.chat_mode }}"
+              MAX_COINS: "${{ inputs.max_coins }}"
+              HIDE_INTERMEDIARY_OUTPUT: "${{ inputs.hide_intermediary_output }}"
 
 branding:
-  icon: 'terminal'
-  color: 'blue'
+    icon: "terminal"
+    color: "blue"
