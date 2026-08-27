@@ -4,12 +4,13 @@
 component. The purpose of this component is to upload files to the BMC.
 
 To use this component:
+
 1. Import it into the single file component (SFC)
 2. Add the `<form-file />` tag
 3. Add the optional `id` , `disabled`, `accept` and `state` prop as required
 
-[Learn more about the Bootstrap-vue-next Form File
-component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-file.html#form-file)
+[Learn more about the Bootstrap-vue-next Form File component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form-file.html#form-file)
+
 ### Optional properties
 
 - `id`- Used to set the `id` attribute on the rendered content, and used as the
@@ -23,10 +24,7 @@ component](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/componen
 ## Example of form file
 
 ```vue
-<FormFile
-  id="image-file"
-  accept=".tar"
-  >
+<FormFile id="image-file" accept=".tar">
 </FormFile>
 ```
 
