@@ -1,6 +1,6 @@
 <template>
   <pre>
-IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
+IBM Firmware for IBM Power System models 9824-42A, 9824-22A, 9824-22B, 
 9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
 
 Terms and Conditions for Other Internal Licensed Code
