@@ -529,6 +529,7 @@ function clearSecretKey(value) {
         authenticationStore.logout();
       } else {
         userManagement.getUsers();
+        eventBus.emit('clear-selected');
       }
     })
     .catch(({ message }) => toast.errorToast(message));
@@ -583,6 +584,7 @@ function updateMfaBypassVal(value) {
         });
       }
       userManagement.getUsers();
+      eventBus.emit('clear-selected');
       if (
         currentUser.value?.UserName === value.username &&
         globalMfaValue.value === true &&
@@ -655,8 +657,7 @@ function saveUser({ isNewUser, userData, mfaByPass }) {
               mfaByPass,
             });
           }
-          // Clear selection and reset header checkbox after user creation
-          clearSelectedRows(tableRef);
+          eventBus.emit('clear-selected');
         })
         .catch(({ message }) => toast.errorToast(message))
         .finally(() => {
@@ -668,8 +669,7 @@ function saveUser({ isNewUser, userData, mfaByPass }) {
         .updateUserfromUserManagement(userData)
         .then((success) => {
           toast.successToast(success);
-          // Clear selection and reset header checkbox after user update
-          clearSelectedRows(tableRef);
+          eventBus.emit('clear-selected');
         })
         .catch(({ message }) => toast.errorToast(message))
         .finally(() => {
