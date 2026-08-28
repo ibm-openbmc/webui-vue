@@ -619,7 +619,12 @@ export default {
           this.toast.successToast(success);
         })
         .catch(({ message }) => this.toast.errorToast(message))
-        .finally(() => this.reloadEventLogData());
+        .finally(() => {
+          this.reloadEventLogData();
+          eventBus.emit('clear-selected');
+          this.tableHeaderCheckboxModel = false;
+          this.tableHeaderCheckboxIndeterminate = false;
+        });
     },
     resolutionValue(item) {
       let value = item?.resolution?.split('\n');

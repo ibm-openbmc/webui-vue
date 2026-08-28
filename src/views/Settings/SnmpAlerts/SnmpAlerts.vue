@@ -309,8 +309,7 @@ const deleteDestination = ({ id }) => {
     .finally(() => {
       openDeleteModal.value = false;
       snmpToDelete.value = '';
-      // Clear selection and reset header checkbox after deletion
-      clearSelectedRows(tableRef);
+      eventBus.emit('clear-selected');
       endLoader();
     });
 };
