@@ -14,6 +14,7 @@
           v-model="selectedDumpType"
           :options="updatedDumpTypeOptions"
           :state="getValidationState(v$.selectedDumpType)"
+          data-test-id="dumps-form-dump-type-select"
           @change="updateDumpInfo"
         >
           <template #first>
@@ -35,7 +36,11 @@
             />
           </template>
 
-          <BForm-input id="resourceSelector" v-model="resourceSelectorValue">
+          <BForm-input
+            id="resourceSelector"
+            v-model="resourceSelectorValue"
+            data-test-id="dumps-form-resource-selector-input"
+          >
           </BForm-input>
         </BFormGroup>
         <template v-if="isServiceUser">
@@ -50,6 +55,7 @@
                 v-model="resourcePasswordValue"
                 autocomplete="off"
                 :type="inputType"
+                data-test-id="dumps-form-resource-password-input"
               >
               </BForm-input>
             </input-password-toggle>
@@ -61,6 +67,7 @@
         variant="primary"
         type="submit"
         form="form-new-dump"
+        data-test-id="dumps-form-initiate-dump-button"
       >
         {{ $t('pageDumps.form.initiateDump') }}
       </b-button>
