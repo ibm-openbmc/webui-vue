@@ -56,12 +56,14 @@ export const CertificatesStore = defineStore('certificates', {
       allCertificates: [],
       acfCertificate: [],
       availableUploadTypes: [],
+      replaceableTypes: [],
     };
   },
   getters: {
     allCertificatesGetter: (state) => state.allCertificates,
     acfCertificateGetter: (state) => state.acfCertificate,
     availableUploadTypesGetter: (state) => state.availableUploadTypes,
+    replaceableTypesGetter: (state) => state.replaceableTypes,
   },
   actions: {
     async getAcfCertificate() {
@@ -143,6 +145,7 @@ export const CertificatesStore = defineStore('certificates', {
             certificate.certificate === certificateType.type
           );
         }).length;
+        this.replaceableTypes.push(certificateType);
         if (certificateType.limit === certificateCount) {
           return;
         } else {
