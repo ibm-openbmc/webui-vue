@@ -135,7 +135,9 @@ const form = ref({
 });
 const fileTypeMismatch = ref(false);
 const certificateTypes = computed(() => {
-  return uploadCertificate.availableUploadTypesGetter;
+  return props.certificate
+    ? uploadCertificate.replaceableTypesGetter
+    : uploadCertificate.availableUploadTypesGetter;
 });
 const certificateOptions = computed(() => {
   const filteredCertificates = certificateTypes.value
