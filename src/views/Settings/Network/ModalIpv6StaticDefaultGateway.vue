@@ -8,6 +8,7 @@
         : $t('pageNetwork.table.addIpv6StaticDefaultGateway')
     "
     :ok-title="$t('global.action.add')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >
@@ -108,6 +109,7 @@ const closeModal = () => {
 };
 
 const resetForm = () => {
+  form.value.ipAddress = '';
   const item = {
     Address: '',
   };

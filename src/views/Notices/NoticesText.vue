@@ -1,7 +1,8 @@
 <template>
   <pre>
-IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
-9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B,
+9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
+firmware version FW1120
 
 Terms and Conditions for Other Internal Licensed Code
 Base Licenses and Attributions
@@ -21,8 +22,9 @@ Preamble and List of Other Internal Licensed Code
 
 TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE
 
-IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
-9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B,
+9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
+firmware version FW1120
 
 This file details terms and conditions applicable to
 code included in the products listed above.
@@ -39,6 +41,7 @@ The Program includes the following licensed Separately as Other Internal License
 <table role="none" class="notice-table">
 <tbody>
 <tr><td><p>Package</p></td><td><p>Licenses</p></td></tr>
+<tr><td><p>attr</p></td><td><p>GPL-2.0-or-later, LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>audit</p></td><td><p>GPL-2.0-or-later, LGPL-2.0-or-later</p></td></tr>
 <tr><td><p>avahi</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>base-files</p></td><td><p>GPL-2.0-only</p></td></tr>
@@ -62,6 +65,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>debug-trigger</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>e2fsprogs</p></td><td><p>GPL-2.0-only, LGPL-2.0-only, BSD-3-Clause, MIT</p></td></tr>
 <tr><td><p>ecmd-pdbg</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>elfutils</p></td><td><p>GPL-2.0-or-later, LGPL-3.0-or-later</p></td></tr>
 <tr><td><p>entity-manager</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>expat</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>fan-watchdog</p></td><td><p>Apache-2.0</p></td></tr>
@@ -82,11 +86,15 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>ibm-acf</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>ibm-private-data</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>ibm-ups</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>ima-evm-keys</p></td><td><p>1.0</p></td></tr>
+<tr><td><p>ima-evm-utils</p></td><td><p>1.6.2</p></td></tr>
 <tr><td><p>iniparser</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>ipl</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>iproute2</p></td><td><p>6.13.0</p></td></tr>
 <tr><td><p>jsmn</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>jsnbd</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>json-c</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>keyutils</p></td><td><p>LGPL-2.1-or-later, GPL-2.0-or-later</p></td></tr>
 <tr><td><p>kmod</p></td><td><p>GPL-2.0-or-later, LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>krb5</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>libarchive</p></td><td><p>BSD-2-Clause</p></td></tr>
@@ -110,11 +118,13 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>libnsl2</p></td><td><p>LGPL-2.1-only</p></td></tr>
 <tr><td><p>libnss-mdns</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>libpam</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>libmnl</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>libpcap</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libpcre2</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libpldm</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>libpwquality</p></td><td><p>GPL-2.0-or-later</p></td></tr>
 <tr><td><p>libseccomp</p></td><td><p>LGPL-2.1-only</p></td></tr>
+<tr><td><p>libsolv</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libtinyxml2</p></td><td><p>Zlib</p></td></tr>
 <tr><td><p>libtirpc</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libunistring</p></td><td><p>GPL-2.0-or-later</p></td></tr>
@@ -152,22 +162,28 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>npm-qrcode</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-tiny-emitter</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-totp-generator</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-v-calendar</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vitejs-plugin-basic-ssl</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue-axios</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue-i18n</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>npm-vue-router</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vuelidate-core</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vuelidate-validators</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-vue3-cookies</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm-addon-attach</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>npm-xterm-addon-fit</p></td><td><p>MIT</p></td></tr>
+<tr><td><p>nghttp2</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>nss-pam-ldapd</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>obmc-console</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-host-failure-reboots</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-libobmc-intf</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-phosphor-buttons</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>obmc-phosphor-power</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-fsi</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-proc-control</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-proc-control-systemd-links</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>openldap</p></td><td><p>OpenLDAP</p></td></tr>
 <tr><td><p>openpower-debug-collector</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>openpower-fru-vpd</p></td><td><p>Apache-2.0</p></td></tr>
@@ -182,12 +198,9 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>openpower-software-manager</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>openssh</p></td><td><p>BSD-2-Clause, BSD-3-Clause, ISC, MIT</p></td></tr>
 <tr><td><p>openssl</p></td><td><p>Apache-2.0</p></td></tr>
-<tr><td><p>op-fsi</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>opkg</p></td><td><p>GPL-2.0-or-later</p></td></tr>
 <tr><td><p>opkg-arch-config</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>opkg-utils</p></td><td><p>GPL-2.0-or-later</p></td></tr>
-<tr><td><p>op-proc-control</p></td><td><p>Apache-2.0</p></td></tr>
-<tr><td><p>op-proc-control-systemd-links</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>os-release</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>p9-host-start</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>packagegroup-base</p></td><td><p>MIT</p></td></tr>
@@ -211,6 +224,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>phosphor-fan</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-gpio-monitor</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-health-monitor</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>phosphor-host-postd</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-hostfw-image</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-host-postd</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>phosphor-hwmon</p></td><td><p>Apache-2.0</p></td></tr>
@@ -276,6 +290,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>udev-aspeed-vuart</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>util-linux</p></td><td><p>GPL-1.0-or-later, GPL-2.0-or-later, LGPL-2.1-or-later, BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, MIT</p></td></tr>
 <tr><td><p>util-linux-libuuid</p></td><td><p>BSD-3-Clause</p></td></tr>
+<tr><td><p>tar</p></td><td><p>GPL-3.0-only</p></td></tr>
 <tr><td><p>volatile-binds</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>webui-vue</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>xz</p></td><td><p>GPL-2.0-or-later, PD</p></td></tr>
@@ -5759,8 +5774,9 @@ End of Source Code Offer Information
 
 ===========================================================================
 END OF TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE for
-IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
-9824-41B, 9856-42H, 9856-22H, and 9043-MRU running firmware version FW1110
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B,
+9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
+firmware version FW1120
 ===========================================================================
   </pre>
 </template>

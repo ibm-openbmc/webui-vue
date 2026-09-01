@@ -8,6 +8,7 @@
         : $t('pageNetwork.table.addIpv6Address')
     "
     :ok-title="$t('global.action.add')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >
@@ -156,6 +157,8 @@ const closeModal = () => {
 };
 
 const resetForm = () => {
+  form.value.ipAddress = '';
+  form.value.prefixLength = 0;
   const item = {
     Address: '',
   };

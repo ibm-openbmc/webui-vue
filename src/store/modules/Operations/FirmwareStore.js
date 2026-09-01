@@ -1,5 +1,6 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
+import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
 import { defineStore } from 'pinia';
 
 export const FirmwareStore = defineStore('firmware', {
@@ -165,6 +166,16 @@ export const FirmwareStore = defineStore('firmware', {
         })
         .catch((error) => {
           console.log(error);
+          const errorMsg = error.response?.data?.error?.code;
+
+          if (REGEX_MAPPINGS.resourceAlreadyExists.test(errorMsg)) {
+            throw new Error(
+              i18n.global.t(
+                'pageFirmware.toast.errorUploadFirmwareAlreadyExists',
+              ),
+            );
+          }
+
           throw new Error(
             i18n.global.t('pageFirmware.toast.errorUpdateFirmware'),
           );

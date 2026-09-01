@@ -304,7 +304,9 @@ function onModalDeleteBatch(deleteConfirmed) {
       .then(() => {
         eventBus.emit('clear-selected');
       })
-      .finally(() => endLoader());
+      .finally(() => {
+        endLoader();
+      });
   }
 }
 
@@ -342,7 +344,9 @@ function onModalDelete(deleteConfirmed) {
       .then(() => {
         eventBus.emit('clear-selected');
       })
-      .finally(() => endLoader());
+      .finally(() => {
+        endLoader();
+      });
   }
 }
 

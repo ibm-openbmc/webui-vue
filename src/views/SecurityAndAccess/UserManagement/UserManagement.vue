@@ -546,6 +546,7 @@ function clearSecretKey(value) {
   clearSetSecretKeyApi(value)
     .then((message) => {
       toast.successToast(message);
+      eventBus.emit('clear-selected');
       if (currentUser.value?.UserName === value.username) {
         authenticationStore.logout();
       }
@@ -566,7 +567,7 @@ function disableMFA() {
 }
 
 async function updateGlobalMfa(state) {
-  await checkCurrentUserMfaBypassed(currentUser.value['@odata.id']);
+  await checkCurrentUserMfaBypassed(currentUser?.value?.['@odata.id']);
   if (state) {
     // Enabling MFA: generate secret key then open TOTP registration
     beforeMfa.value = true;
@@ -594,8 +595,9 @@ function updateMfaBypassVal(value) {
   updateMfaBypassApi(value)
     .then((message) => {
       toast.successToast(message);
+      eventBus.emit('clear-selected');
       if (currentUser.value) {
-        checkCurrentUserMfaBypassed(currentUser.value['@odata.id']);
+        checkCurrentUserMfaBypassed(currentUser?.value?.['@odata.id']);
       }
       if (
         currentUser.value?.UserName === value.username &&
@@ -666,12 +668,16 @@ function saveUser({ isNewUser, userData, mfaByPass }) {
           if (mfaByPass) {
             await updateMfaBypassNewUserApi({ userData, mfaByPass });
           }
+          eventBus.emit('clear-selected');
         })
         .catch(({ message }) => toast.errorToast(message))
         .finally(() => endLoader());
     } else {
       updateUserApi(userData)
-        .then((success) => toast.successToast(success))
+        .then((success) => {
+          toast.successToast(success);
+          eventBus.emit('clear-selected');
+        })
         .catch(({ message }) => toast.errorToast(message))
         .finally(() => endLoader());
     }

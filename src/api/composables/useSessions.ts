@@ -90,12 +90,12 @@ export function useSessions() {
       }
 
       // Build promise list: others first, current session last
-      const promises = otherSessions.map((uri) =>
-        api.delete(uri).catch((error: Error) => {
+      const promises = otherSessions.map((uri) => {
+        return api.delete(uri).catch((error: Error) => {
           console.log(error);
           return error;
-        }),
-      );
+        });
+      });
 
       if (currentSession) {
         promises.push(

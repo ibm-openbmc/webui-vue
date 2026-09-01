@@ -147,6 +147,15 @@ export const UserManagementStore = defineStore('userManagment', {
           const errorMsg = error.response?.data?.error?.code;
 
           switch (true) {
+            case REGEX_MAPPINGS.resourceAlreadyExists.test(errorMsg):
+              throw new Error(
+                i18n.global.t(
+                  'pageUserManagement.toast.errorCreateUserAlreadyExists',
+                  {
+                    username,
+                  },
+                ),
+              );
             case REGEX_MAPPINGS.propertyValueFormatError.test(errorMsg):
               throw new Error(
                 i18n.global.t(
@@ -270,13 +279,12 @@ export const UserManagementStore = defineStore('userManagment', {
     async deleteUser(username) {
       return await api
         .delete(`/redfish/v1/AccountService/Accounts/${username}`)
-        .then(() =>
-          this.getUsers().then(() => {
-            return i18n.global.t('pageUserManagement.toast.successDeleteUser', {
-              username,
-            });
-          }),
-        )
+        .then(() => {
+          this.getUsers();
+          return i18n.global.t('pageUserManagement.toast.successDeleteUser', {
+            username,
+          });
+        })
         .catch((error) => {
           console.log(error);
           const message = i18n.global.t(

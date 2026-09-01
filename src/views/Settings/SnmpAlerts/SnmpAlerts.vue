@@ -343,6 +343,8 @@ const handleOk = async (value) => {
       errorToast(i18n.global.t('pageSnmpAlerts.toast.errorBatchDelete'));
     } finally {
       openDeleteModal.value = false;
+      // Clear selection and reset header checkbox after batch deletion
+      clearSelectedRows(tableRef);
       eventBus.emit('clear-selected');
       endLoader();
     }
@@ -361,6 +363,7 @@ const deleteSingleDestination = async ({ id }) => {
   } finally {
     openDeleteModal.value = false;
     snmpToDelete.value = null;
+    eventBus.emit('clear-selected');
     endLoader();
   }
 };

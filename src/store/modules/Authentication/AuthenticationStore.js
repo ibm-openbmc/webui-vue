@@ -15,6 +15,7 @@ export const AuthenticationStore = defineStore('authentication', {
     isAuthenticatedCookie: cookies.get('IsAuthenticated'),
     isGenerateOtpRequired: false,
     isGlobalMfaEnabled: false,
+    currentSessionUri: localStorage.getItem('currentSessionUri') || null,
   }),
   getters: {
     loginPageDetailsGetter: (state) => state.loginPageDetails,
@@ -41,9 +42,11 @@ export const AuthenticationStore = defineStore('authentication', {
       cookies.remove('XSRF-TOKEN');
       cookies.remove('IsAuthenticated');
       localStorage.removeItem('storedUsername');
+      localStorage.removeItem('currentSessionUri');
       //Change null to undefined once the cookies value able to get
       this.xsrfCookie = null;
       this.isAuthenticatedCookie = undefined;
+      this.currentSessionUri = null;
     },
     login({ username, password, otpInfo }) {
       this.isGenerateOtpRequired = false;
@@ -70,6 +73,13 @@ export const AuthenticationStore = defineStore('authentication', {
           ) {
             this.isGenerateOtpRequired = true;
           }
+          // Store the current session URI from the response
+          const sessionUri =
+            response.headers?.location || response.data?.['@odata.id'];
+          if (sessionUri) {
+            this.currentSessionUri = sessionUri;
+            localStorage.setItem('currentSessionUri', sessionUri);
+          }
           this.authSuccess();
         })
         .catch((error) => {
@@ -94,8 +104,10 @@ export const AuthenticationStore = defineStore('authentication', {
           localStorage.removeItem('storedCurrentUser');
           localStorage.removeItem('storedHmcManagedValue');
           localStorage.removeItem('storedLanguage');
+          localStorage.removeItem('currentSessionUri');
           this.xsrfCookie = undefined;
           this.isAuthenticatedCookie = undefined;
+          this.currentSessionUri = null;
 
           // Clear TanStack Query cache and sessionStorage for system info
           const queryClient = useQueryClient();

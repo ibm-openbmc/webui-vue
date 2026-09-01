@@ -166,10 +166,8 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
 // @ts-ignore
 import eventBus from '@/eventBus';
-import {
-  useCertificates,
-  CERTIFICATE_TYPES,
-} from '@/api/composables/useCertificates';
+import { useCertificates } from '@/api/composables/useCertificates';
+import { getCertificateProp } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
 
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const toast = useToastComposable();
@@ -319,8 +317,7 @@ const expiringCertificateTypes = computed(() => {
 });
 
 const getCertificateLabel = (certificateType) => {
-  const certConfig = CERTIFICATE_TYPES.find((c) => c.type === certificateType);
-  return certConfig ? i18n.global.t(certConfig.labelKey) : certificateType;
+  return getCertificateProp(certificateType, 'label') || certificateType;
 };
 
 const onTableRowAction = (event, rowItem) => {

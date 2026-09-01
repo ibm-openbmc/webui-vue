@@ -11,6 +11,7 @@
     no-close-on-backdrop
     hide-header-close
     :ok-title="$t('pageUserManagement.modal.validate')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="okFormSubmit"
     @cancel="resetMfa"
     @hidden="resetForm"
@@ -69,8 +70,8 @@
                 </dt>
                 <span>
                   {{ $t('pageUserManagement.mfaTimeMatch') }}
-                  <b-link to="/settings/date-time">
-                    {{ $t('appPageTitle.dateTime') }}</b-link
+                  <router-link to="/settings/date-time">
+                    {{ $t('appPageTitle.dateTime') }}</router-link
                   >
                 </span>
               </alert>

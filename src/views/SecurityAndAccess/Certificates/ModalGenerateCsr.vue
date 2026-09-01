@@ -7,6 +7,7 @@
       no-stacking
       :title="$t('pageCertificates.modal.generateACertificateSigningRequest')"
       :ok-title="$t('pageCertificates.generateCsr')"
+      :cancel-title="$t('global.action.cancel')"
       @ok="onOkGenerateCsrModal"
       @cancel="resetForm"
       @hidden="resetCsr()"
@@ -376,10 +377,11 @@ import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 // @ts-ignore
 import useToast from '@/components/Composables/useToastComposable';
 import { COUNTRY_LIST } from './CsrCountryCodes';
+import { useCertificates } from '@/api/composables/useCertificates';
 import {
-  useCertificates,
   CERTIFICATE_TYPES,
-} from '@/api/composables/useCertificates';
+  getCertificateProp,
+} from '@/store/modules/SecurityAndAccess/CertificatesStore';
 // @ts-ignore
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 // @ts-ignore
@@ -417,7 +419,7 @@ const certificateOptions = CERTIFICATE_TYPES.reduce((arr, cert) => {
   )
     return arr;
   arr.push({
-    text: i18n.global.t(cert.labelKey),
+    text: getCertificateProp(cert.type, 'label'),
     value: cert.type,
   });
   return arr;

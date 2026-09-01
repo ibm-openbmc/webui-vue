@@ -444,7 +444,7 @@ const changeHostUsbState = (state) => {
     });
 };
 const changeBasicAuthState = (state) => {
-  saveBasicAuthEnabled(state)
+  saveBasicAuthEnabled(state ? 'Enabled' : 'Disabled')
     .then((message) => {
       Toast.successToast(message);
     })

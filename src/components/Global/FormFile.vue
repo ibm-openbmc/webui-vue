@@ -22,8 +22,10 @@
       >
         {{ $t('global.fileUpload.browseText') }}
       </span>
-      <slot name="invalid"></slot>
     </label>
+    <div class="error-message-wrapper">
+      <slot name="invalid"></slot>
+    </div>
     <div v-if="file" class="clear-selected-file px-3 py-2 mt-2">
       {{ file ? file.name : '' }}
       <BButton
@@ -89,7 +91,7 @@ eventBus.on('clear-file', () => {
 <style lang="scss" scoped>
 // Get mouse pointer on complete element
 .add-file-btn {
-  position: relative;
+  position: absolute;
   &.disabled {
     border-color: $gray-400;
     background-color: $gray-400;
@@ -123,7 +125,19 @@ eventBus.on('clear-file', () => {
   height: 56px;
   width: 90px;
 }
+.error-message-wrapper {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  clear: both;
+}
 .custom-form-file-container {
   word-break: break-all;
+}
+// Only show invalid feedback when form control is actually invalid
+.custom-form-file-container:has(.form-control-file.is-invalid)
+  .error-message-wrapper
+  :deep(.invalid-feedback) {
+  display: block;
 }
 </style>

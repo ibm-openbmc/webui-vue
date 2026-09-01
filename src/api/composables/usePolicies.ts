@@ -39,6 +39,7 @@ interface ServiceAccount extends Resource {
 
 interface AccountService extends Resource {
   Oem?: { OpenBMC?: { AuthMethods?: { BasicAuth?: boolean } } };
+  HTTPBasicAuth?: 'Enabled' | 'Disabled';
 }
 
 /**
@@ -155,8 +156,7 @@ export function usePolicies() {
 
   const basicAuthEnabled = computed(
     () =>
-      accountServiceQuery.data.value?.Oem?.OpenBMC?.AuthMethods?.BasicAuth ??
-      true,
+      accountServiceQuery.data.value?.HTTPBasicAuth === 'Enabled' ?? false,
   );
 
   // Send Service Alerts uses the same systemQuery as TPM Policy
@@ -744,13 +744,7 @@ export function usePolicies() {
     mutationFn: async (updatedBasicAuth: boolean): Promise<string> => {
       try {
         await api.patch('/redfish/v1/AccountService', {
-          Oem: {
-            OpenBMC: {
-              AuthMethods: {
-                BasicAuth: updatedBasicAuth,
-              },
-            },
-          },
+          HTTPBasicAuth: updatedBasicAuth ? 'Enabled' : 'Disabled',
         });
         return i18n.global.t('pagePolicies.toast.successNetworkPolicyUpdate', {
           policy: i18n.global.t('pagePolicies.basicAuth'),
@@ -778,15 +772,7 @@ export function usePolicies() {
         ['redfish', 'resource', '/redfish/v1/AccountService'],
         (old: any) => ({
           ...old,
-          Oem: {
-            ...old?.Oem,
-            OpenBMC: {
-              ...old?.Oem?.OpenBMC,
-              AuthMethods: {
-                BasicAuth: updatedBasicAuth,
-              },
-            },
-          },
+          HTTPBasicAuth: updatedBasicAuth ? 'Enabled' : 'Disabled',
         }),
       );
       return { previousData };
@@ -924,9 +910,11 @@ export function usePolicies() {
   }
 
   async function saveBasicAuthEnabled(
-    updatedBasicAuth: boolean,
+    updatedBasicAuth: 'Enabled' | 'Disabled',
   ): Promise<string> {
-    return await saveBasicAuthMutation.mutateAsync(updatedBasicAuth);
+    return await saveBasicAuthMutation.mutateAsync(
+      updatedBasicAuth === 'Enabled',
+    );
   }
 
   async function saveSendServiceAlertsEnabled(

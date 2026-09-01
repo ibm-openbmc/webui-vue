@@ -45,7 +45,7 @@
           >
           </BFormSelect>
           <BFormInvalidFeedback role="alert" class="text-style">
-            <template v-if="!v$.form.certificateType.required">
+            <template v-if="v$.form.certificateType.required.$invalid">
               {{ $t('global.form.fieldRequired') }}
             </template>
           </BFormInvalidFeedback>
@@ -101,10 +101,11 @@ import FormFile from '@/components/Global/FormFile.vue';
 import eventBus from '@/eventBus';
 // @ts-ignore
 import i18n from '@/i18n';
+import { useCertificates } from '@/api/composables/useCertificates';
 import {
-  useCertificates,
   CERTIFICATE_TYPES,
-} from '@/api/composables/useCertificates';
+  getCertificateProp,
+} from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
 
 const { getValidationState } = useVuelidateComposable();
 
@@ -151,9 +152,9 @@ const certificateOptions = computed(() => {
       }
       return certificate === certificate;
     })
-    .map(({ type, labelKey }) => {
+    .map(({ type }) => {
       return {
-        text: i18n.global.t(labelKey),
+        text: getCertificateProp(type, 'label'),
         value: type,
       };
     });
@@ -181,8 +182,7 @@ const isNotAdmin = computed(() => {
 });
 
 const getCertificateLabel = (certificateType) => {
-  const certConfig = CERTIFICATE_TYPES.find((c) => c.type === certificateType);
-  return certConfig ? i18n.global.t(certConfig.labelKey) : certificateType;
+  return getCertificateProp(certificateType, 'label') || certificateType;
 };
 
 watch(

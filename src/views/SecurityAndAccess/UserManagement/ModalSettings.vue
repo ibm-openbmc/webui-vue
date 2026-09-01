@@ -4,6 +4,7 @@
     v-model="modalSettings"
     :title="$t('pageUserManagement.accountPolicySettings')"
     :ok-title="$t('global.action.save')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >
@@ -36,7 +37,7 @@
                 @input="v$.form.lockoutThreshold.$touch()"
               />
               <BFormInvalidFeedback role="alert">
-                <template v-if="!v$.form.lockoutThreshold.required">
+                <template v-if="v$.form.lockoutThreshold.required.$invalid">
                   {{ $t('global.form.fieldRequired') }}
                 </template>
                 <template

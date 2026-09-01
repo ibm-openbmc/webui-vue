@@ -4,6 +4,7 @@
     v-model="modal"
     :title="$t('pageOverview.modal.editAssetTag')"
     :ok-title="$t('global.action.save')"
+    :cancel-title="$t('global.action.cancel')"
     @ok="onOk"
     @hidden="resetForm"
   >
@@ -22,7 +23,7 @@
               @input="v$.form.assetTag.$touch()"
             />
             <b-form-invalid-feedback role="alert">
-              <template v-if="!v$.form.assetTag.required">
+              <template v-if="v$.form.assetTag.required.$invalid">
                 {{ $t('global.form.fieldRequired') }}
               </template>
             </b-form-invalid-feedback>
