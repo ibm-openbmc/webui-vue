@@ -5,6 +5,7 @@ heroText: Style Guide and Coding Conventions
 actionText: Get Started
 actionLink: /guide/
 --- -->
+
 # Style Guide and Coding Conventions
 
 <img src="/openbmc-logo.svg" alt="OpenBMC Logo" style="height: 80px; max-height: 80px; display: block; margin: 0 auto;" />
