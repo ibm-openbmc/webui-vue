@@ -42,6 +42,7 @@ export function usePowerRestorePolicy() {
   const {
     data: policiesData,
     isLoading: isPoliciesLoading,
+    isFetching: isFetchingPolicies,
     isError: isPoliciesError,
     error: policiesError,
   } = useQuery({
@@ -139,6 +140,12 @@ export function usePowerRestorePolicy() {
   const isLoading = computed(
     () => isPoliciesLoading.value || currentPolicyQuery.isLoading.value,
   );
+  const isFetching = computed(
+    () =>
+      isFetchingPolicies.value ||
+      currentPolicyQuery.isFetching.value ||
+      biosQuery.isFetching.value,
+  );
   const isError = computed(
     () => isPoliciesError.value || currentPolicyQuery.isError.value,
   );
@@ -148,6 +155,7 @@ export function usePowerRestorePolicy() {
     powerRestorePolicies,
     powerRestoreCurrentPolicy,
     isLoading,
+    isFetching,
     isError,
     policiesError,
     currentPolicyError: currentPolicyQuery.error,

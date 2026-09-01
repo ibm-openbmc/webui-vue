@@ -57,44 +57,26 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
+import { ref, computed, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useToast from '@/components/Composables/useToastComposable';
 import { useRebootBmc } from '@/api/composables/useRebootBmc';
 import { useBootSettings } from '@/api/composables/useBootSettings';
 
 const { successToast, errorToast } = useToast();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
-const { lastBmcRebootTime, isLoading, isError, rebootBmc } = useRebootBmc();
+const bootSettingsStore = stores.BootSettingsStore();
+
+const { lastBmcRebootTime, isFetching, isError, rebootBmc } = useRebootBmc();
 const { systemDumpActive } = useBootSettings();
 
 const openModal = ref(false);
 
-// Only show loading bar on initial load, not during background refetches
-watch(
-  isLoading,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
+usePageLoadingBar(isFetching, isError);
 
-// Stop the loading bar when the BMC manager fetch fails
-watch(isError, (hasError) => {
-  if (hasError) {
-    endLoader();
-  }
-});
-
-onBeforeRouteLeave(() => {
-  hideLoader();
+const systemDumpActive = computed(() => {
+  return bootSettingsStore.getSystemDumpActive;
 });
 
 function onClick() {

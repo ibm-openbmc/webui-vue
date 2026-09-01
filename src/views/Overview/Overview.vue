@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
@@ -56,63 +56,78 @@ import {
   useOverviewQuickLinks,
 } from '@/api/composables/useOverview';
 
-const { startLoader, endLoader } = useLoadingBar();
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 
 // Use VueQuery composables for all Overview data
-const { isLoading: isSystemInfoLoading, isError: isSystemInfoError } =
+const { isFetching: isSystemInfoFetching, isError: isSystemInfoError } =
   useSystemInfo();
 const { isUpdating: isAssetTagUpdating } = useUpdateAssetTag();
 const { isPowerControlFetching, isPowerControlError } = usePowerControl();
 const { isPowerPerformanceFetching, isPowerPerformanceError } =
   usePowerPerformanceMode();
 const { isIdlePowerSaverFetching, isIdlePowerSaverError } = useIdlePowerSaver();
-const { isLoading: isFirmwareLoading, isError: isFirmwareError } =
+const { isFetching: isFirmwareFetching, isError: isFirmwareError } =
   useOverviewFirmware();
-const { isLoading: isLicenseLoading, isError: isLicenseError } =
+const { isFetching: isLicenseFetching, isError: isLicenseError } =
   useOverviewLicense();
-const { isLoading: isNetworkLoading, isError: isNetworkError } =
+const { isFetching: isNetworkFetching, isError: isNetworkError } =
   useOverviewNetwork();
-const { isLoading: isEventsLoading, isError: isEventsError } =
+const { isFetching: isEventsFetching, isError: isEventsError } =
   useOverviewEvents();
-const { isLoading: isInventoryLoading, isError: isInventoryError } =
+const { isFetching: isInventoryFetching, isError: isInventoryError } =
   useOverviewInventory();
-const { isLoading: isQuickLinksLoading, isError: isQuickLinksError } =
+const { isFetching: isQuickLinksFetching, isError: isQuickLinksError } =
   useOverviewQuickLinks();
 
-// Track overall loading state
-const isAnyLoading = ref(false);
+// Child components (OverviewServer, OverviewFirmware, OverviewPower, etc.) share
+// the same queries — watch from script-setup time so we catch the fetch before
+// onMounted fires.
+const isPageFetching = computed(
+  () =>
+    isSystemInfoFetching.value ||
+    isPowerControlFetching.value ||
+    isPowerPerformanceFetching.value ||
+    isIdlePowerSaverFetching.value ||
+    isFirmwareFetching.value ||
+    isLicenseFetching.value ||
+    isNetworkFetching.value ||
+    isEventsFetching.value ||
+    isInventoryFetching.value ||
+    isQuickLinksFetching.value,
+);
 
-// Watch all loading states
+let mountFetchDone = false;
+let awaitingFetch = false;
+
 watch(
-  [
-    isSystemInfoLoading,
-    isPowerControlFetching,
-    isPowerPerformanceFetching,
-    isIdlePowerSaverFetching,
-    isFirmwareLoading,
-    isLicenseLoading,
-    isNetworkLoading,
-    isEventsLoading,
-    isInventoryLoading,
-    isQuickLinksLoading,
-  ],
-  (loadingStates) => {
-    const loading = loadingStates.some((state) => state);
-
-    if (loading && !isAnyLoading.value) {
-      isAnyLoading.value = true;
-      startLoader();
-    } else if (!loading && isAnyLoading.value) {
-      isAnyLoading.value = false;
+  isPageFetching,
+  (fetching) => {
+    if (mountFetchDone) return;
+    if (fetching) {
+      if (!awaitingFetch) {
+        awaitingFetch = true;
+        startLoader();
+      }
+    } else if (awaitingFetch) {
+      awaitingFetch = false;
+      mountFetchDone = true;
       endLoader();
     }
   },
   { immediate: true },
 );
 
-// Watch mutation state separately
+onMounted(() => {
+  if (!awaitingFetch) mountFetchDone = true;
+});
+
+onBeforeUnmount(() => {
+  hideLoader();
+});
+
+// User-triggered asset tag mutation — always shows the bar
 watch(isAssetTagUpdating, (updating) => {
   if (updating) {
     startLoader();
@@ -120,25 +135,4 @@ watch(isAssetTagUpdating, (updating) => {
     endLoader();
   }
 });
-
-// Stop the loading bar when any fetch fails
-watch(
-  [
-    isSystemInfoError,
-    isPowerControlError,
-    isPowerPerformanceError,
-    isIdlePowerSaverError,
-    isFirmwareError,
-    isLicenseError,
-    isNetworkError,
-    isEventsError,
-    isInventoryError,
-    isQuickLinksError,
-  ],
-  (errorStates) => {
-    if (errorStates.some((state) => state)) {
-      endLoader();
-    }
-  },
-);
 </script>

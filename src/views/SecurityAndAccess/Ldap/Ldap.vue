@@ -247,13 +247,15 @@ import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import TableRoleGroups from './TableRoleGroups.vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import { useLdap } from '@/api/composables/useLdap';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import stores from '@/store';
 
 const { getValidationState } = useVuelidateComposable();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
+// Direct loader for mutation (save settings)
+const { startLoader, endLoader } = useLoadingBar();
 
 const certificatesStore = stores.CertificatesStore();
 
@@ -268,26 +270,22 @@ const {
   saveAccountSettings,
 } = useLdap();
 
+// 1120-vue3 waited for getAccountSettings() + getCertificates(). Track the
+// certificates Vuex call as an extra loading flag and combine with isFetching.
+const isExtraLoading = ref(true);
+const isPageFetching = computed(() => isFetching.value || isExtraLoading.value);
+
+// Show the loading bar on navigation; ignore background polls
+usePageLoadingBar(isPageFetching);
+
 const inputType = ref('password');
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-watch(
-  () => isLoading.value,
-  (loading) => {
-    if (loading) startLoader();
-    else endLoader();
-  },
-  { immediate: true },
-);
 
 onBeforeMount(() => {
   Promise.all([
     loadAccountSettings(),
     certificatesStore.getCertificates(),
   ]).finally(() => {
+    isExtraLoading.value = false;
     // Set the ldapAuthenticationEnabled based on the actual service state
     formLdap.ldapAuthenticationEnabled = isServiceEnabled.value;
     setFormValues();

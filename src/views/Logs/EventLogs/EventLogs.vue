@@ -327,6 +327,7 @@ import TableToolbar from '@/components/Global/TableToolbar.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useTableFilter from '../../../components/Composables/useTableFilterComposable';
 import usePaginationComposable from '../../../components/Composables/usePaginationComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
@@ -368,6 +369,7 @@ export default {
     const {
       allLogs: eventLogsData,
       isLoading,
+      isFetching,
       deleteAllLogs: deleteAllLogsApi,
       deleteEventLogs: deleteEventLogsApi,
       resolveEventLogs: resolveEventLogsApi,
@@ -378,6 +380,7 @@ export default {
       refetchCELogs,
     } = useEventLogs();
 
+    usePageLoadingBar(isFetching);
     const { startLoader, endLoader } = useLoadingBar();
     const { perPage } = usePaginationComposable();
 
@@ -436,19 +439,6 @@ export default {
     watch(perPageRef, (newSize) => {
       pagination.pageSize.value = newSize;
     });
-
-    // Watch loading state
-    watch(
-      isLoading,
-      (loading) => {
-        if (loading) {
-          startLoader();
-        } else {
-          endLoader();
-        }
-      },
-      { immediate: true },
-    );
 
     return {
       eventLogsData,

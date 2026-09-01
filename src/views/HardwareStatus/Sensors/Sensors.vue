@@ -192,8 +192,8 @@ import TableCellCount from '@/components/Global/TableCellCount.vue';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import eventBus from '@/eventBus';
 
 const { perPage, itemsPerPageOptions, getTotalRowCount } =
@@ -210,7 +210,6 @@ const {
 const { dataFormatter } = useDataFormatterGlobal();
 const { statusIconValue } = useDataFormatterGlobal();
 const { getFilteredTableData } = useTableFilterComposable();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
 const {
   sensors: sensorsFromQuery,
@@ -219,6 +218,8 @@ const {
   isError,
   refetch: refetchSensors,
 } = useSensors();
+
+usePageLoadingBar(isSensorsFetching, isError);
 
 defineExpose({
   refetch: refetchSensors,
@@ -292,7 +293,6 @@ const tableFilters = ref([
 
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
-  hideLoader();
 });
 
 onBeforeMount(() => {
@@ -302,28 +302,6 @@ onBeforeMount(() => {
   });
 });
 
-// Only show loading bar on initial load, not during background refetches
-watch(
-  () => isSensorsLoading.value,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
-
-// Stop the loading bar and log the error when sensor fetch fails
-watch(
-  () => isError.value,
-  (hasError) => {
-    if (hasError) {
-      endLoader();
-    }
-  },
-);
 
 // Filtered data before pagination (memoized for performance)
 const filteredSensorsData = computed(() => {

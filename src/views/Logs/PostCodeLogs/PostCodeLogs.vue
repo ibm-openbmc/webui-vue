@@ -146,7 +146,6 @@ import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableFilter from '../../../components/Composables/useTableFilterComposable';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
@@ -160,6 +159,7 @@ import { usePaginatedData } from '@/api/composables/shared/usePaginatedData';
 import { onBeforeRouteLeave } from 'vue-router';
 import { buildUrlNewTab } from '@/utilities/url';
 import { usePostCodeLogs } from '@/api/composables/usePostCodeLogs';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 
 // Composables
 const {
@@ -178,14 +178,17 @@ const { getFilteredTableData, getFilteredTableDataByDate } = useTableFilter();
 const { toggleRowDetails } = useTableRowExpandComposable();
 const { expandRowLabel } = useTableRowExpandComposable();
 const { errorToast } = useToastComposable();
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 // Use the new vue-query composable
 const {
   allLogs: postCodeLogsData,
   isLoading,
+  isFetching,
+  isError,
   fetchSrcDetails: fetchSrcDetailsApi,
 } = usePostCodeLogs();
+
+usePageLoadingBar(isFetching, isError);
 
 const srcData = ref({});
 const isBusy = ref(true);
@@ -236,25 +239,14 @@ const tableHeaderCheckboxIndeterminateVal = ref(
 );
 const expandColumn = ref(['timeStampOffset']);
 
-// Watch loading state
+// Keep isBusy in sync for the table empty-slot spinner
 watch(
   isLoading,
   (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-      isBusy.value = false;
-    }
+    isBusy.value = loading;
   },
   { immediate: true },
 );
-
-onBeforeRouteLeave(() => {
-  // Hide loader if the user navigates to another page
-  // before request is fulfilled.
-  hideLoader();
-});
 
 const allLogs = computed(() => {
   return postCodeLogsData.value || [];

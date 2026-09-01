@@ -35,6 +35,7 @@ export function useDateTime() {
   const {
     data: ntpData,
     isLoading,
+    isFetching,
     isError,
     error,
     refetch,
@@ -138,6 +139,7 @@ export function useDateTime() {
     isNtpProtocolEnabled,
     networkSuppliedServers,
     isLoading,
+    isFetching,
     isError,
     error,
     refetch,

@@ -36,8 +36,7 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
+import { computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
@@ -51,31 +50,27 @@ import {
   useIdlePowerSaver,
 } from '@/api/composables/usePowerControl';
 
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
 
 // Use VueQuery composables for power data
-const { isPowerControlLoading, isPowerControlMutating, isPowerControlError } =
+const { isPowerControlFetching, isPowerControlMutating, isPowerControlError } =
   usePowerControl();
 
 const {
   oemMode,
-  isPowerPerformanceLoading,
+  isPowerPerformanceFetching,
   isPowerPerformanceMutating,
   isPowerPerformanceError,
 } = usePowerPerformanceMode();
 
 const {
   idlePowerSaverData,
-  isIdlePowerSaverLoading,
+  isIdlePowerSaverFetching,
   isIdlePowerSaverMutating,
   isIdlePowerSaverError,
 } = useIdlePowerSaver();
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
 
 const safeMode = computed(() => {
   return globalStore.safeModeGetter;
@@ -85,30 +80,46 @@ const nonIdlePowerSaverMode = computed(() => {
   return idlePowerSaverData.value ? false : true;
 });
 
-// Only show loading bar on initial load, not during background refetches
+// Child components (PowerCap, PowerPerformanceModes, PowerIdleSaver) share the
+// same queries — watch isPageFetching from script-setup time so we never miss
+// the fetch that a child triggers before onMounted fires.
+const isPageFetching = computed(
+  () =>
+    isPowerControlFetching.value ||
+    isPowerPerformanceFetching.value ||
+    isIdlePowerSaverFetching.value,
+);
+
+let mountFetchDone = false;
+let awaitingFetch = false;
+
 watch(
-  [isPowerControlLoading, isPowerPerformanceLoading, isIdlePowerSaverLoading],
-  ([controlLoading, performanceLoading, idleLoading]) => {
-    if (controlLoading || performanceLoading || idleLoading) {
-      startLoader();
-    } else {
+  isPageFetching,
+  (fetching) => {
+    if (mountFetchDone) return;
+    if (fetching) {
+      if (!awaitingFetch) {
+        awaitingFetch = true;
+        startLoader();
+      }
+    } else if (awaitingFetch) {
+      awaitingFetch = false;
+      mountFetchDone = true;
       endLoader();
     }
   },
   { immediate: true },
 );
 
-// Stop the loading bar when any fetch fails
-watch(
-  [isPowerControlError, isPowerPerformanceError, isIdlePowerSaverError],
-  ([controlError, performanceError, idleError]) => {
-    if (controlError || performanceError || idleError) {
-      endLoader();
-    }
-  },
-);
+onMounted(() => {
+  if (!awaitingFetch) mountFetchDone = true;
+});
 
-// Manage loading bar for mutation/update state (separate from fetching)
+onBeforeUnmount(() => {
+  hideLoader();
+});
+
+// Manage loading bar for user-triggered mutations (save/update actions)
 watch(
   [
     isPowerControlMutating,

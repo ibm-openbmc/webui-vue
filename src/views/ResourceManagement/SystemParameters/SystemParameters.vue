@@ -13,8 +13,7 @@
 </template>
 
 <script setup>
-import { watch, computed } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
+import { computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import LateralCastOut from './LateralCastOut.vue';
 import FrequencyCap from './FrequencyCap.vue';
@@ -24,32 +23,42 @@ import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import stores from '@/store';
 import { useSystemParameters } from '@/api/composables/useSystemParameters';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
-
 const global = stores.GlobalStore();
 const { isFetching, isError } = useSystemParameters();
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
-// Manage loading bar for query fetching state
+// The BIOS query is shared with child components so it may already be
+// in-flight (or even done) before onMounted fires. Watch isFetching from
+// script-setup time — before any lifecycle hook — so we never miss the
+// true→false transition of the very first fetch on this navigation.
+let mountFetchDone = false;
+let awaitingFetch = false;
+
 watch(
   isFetching,
   (fetching) => {
+    if (mountFetchDone) return;
     if (fetching) {
-      startLoader();
-    } else {
+      if (!awaitingFetch) {
+        awaitingFetch = true;
+        startLoader();
+      }
+    } else if (awaitingFetch) {
+      awaitingFetch = false;
+      mountFetchDone = true;
       endLoader();
     }
   },
   { immediate: true },
 );
 
-// Stop the loading bar when the fetch fails
-watch(isError, (hasError) => {
-  if (hasError) {
-    endLoader();
-  }
+// If data was already fresh and isFetching never became true, lock out
+// after mount so interval polls are ignored.
+onMounted(() => {
+  if (!awaitingFetch) mountFetchDone = true;
 });
 
-onBeforeRouteLeave(() => {
+onBeforeUnmount(() => {
   hideLoader();
 });
 

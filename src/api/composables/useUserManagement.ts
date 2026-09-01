@@ -584,6 +584,13 @@ export function useUserManagement() {
       rolesQuery.isLoading.value,
   );
 
+  const isFetching = computed(
+    () =>
+      usersQuery.isFetching.value ||
+      accountServiceQuery.isFetching.value ||
+      rolesQuery.isFetching.value,
+  );
+
   const isMutating = computed(
     () =>
       createUserMutation.isPending.value ||
@@ -611,6 +618,7 @@ export function useUserManagement() {
 
     // ── Loading ───────────────────────────────────────────────────────────────
     isLoading,
+    isFetching,
     isMutating,
     isUsersLoading: usersQuery.isLoading,
     isUsersError: usersQuery.isError,

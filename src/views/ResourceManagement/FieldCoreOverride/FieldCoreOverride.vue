@@ -23,8 +23,14 @@
 </template>
 
 <script setup>
-import { watch, onBeforeMount } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
+import {
+  onBeforeMount,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  computed,
+  ref,
+} from 'vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
@@ -33,42 +39,61 @@ import { useFieldCoreOverride } from '@/api/composables/useFieldCoreOverride';
 import CurrentConfiguration from './FieldCoreOverrideInfo.vue';
 import ChangeConfiguration from './FieldCoreOverrideConfiguration.vue';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
-
 const systemStore = stores.SystemStore();
 const licenseStore = stores.LicenseStore();
 
-const { isLoading, isError, refetch } = useFieldCoreOverride();
+const { isFetching, isError, refetch } = useFieldCoreOverride();
+const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 // Expose refetch for parent components
 defineExpose({
   refetch,
 });
 
+// 1120-vue3 waited for getLicenses() + getSystem() + getBiosAttributes().
+// Track the Vuex side-calls as an extra loading flag.
+const isExtraLoading = ref(true);
+
+// Combined: BIOS query (shared with children) + Vuex side-calls
+const isPageFetching = computed(() => isFetching.value || isExtraLoading.value);
+
 onBeforeMount(() => {
-  startLoader();
   Promise.all([licenseStore.getLicenses(), systemStore.getSystem()]).finally(
-    () => endLoader(),
+    () => {
+      isExtraLoading.value = false;
+    },
   );
 });
 
-// Only show loading bar on initial load, not during background refetches
-watch(isLoading, (loading) => {
-  if (loading) {
-    startLoader();
-  } else {
-    endLoader();
-  }
+// Child components (FieldCoreOverrideInfo, FieldCoreOverrideConfiguration) share
+// the same BIOS query — watch isPageFetching from script-setup time to catch the
+// fetch before onMounted fires.
+let mountFetchDone = false;
+let awaitingFetch = false;
+
+watch(
+  isPageFetching,
+  (fetching) => {
+    if (mountFetchDone) return;
+    if (fetching) {
+      if (!awaitingFetch) {
+        awaitingFetch = true;
+        startLoader();
+      }
+    } else if (awaitingFetch) {
+      awaitingFetch = false;
+      mountFetchDone = true;
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
+
+onMounted(() => {
+  if (!awaitingFetch) mountFetchDone = true;
 });
 
-// Stop the loading bar when the BIOS fetch fails
-watch(isError, (hasError) => {
-  if (hasError) {
-    endLoader();
-  }
-});
-
-onBeforeRouteLeave(() => {
+onBeforeUnmount(() => {
   hideLoader();
 });
 </script>

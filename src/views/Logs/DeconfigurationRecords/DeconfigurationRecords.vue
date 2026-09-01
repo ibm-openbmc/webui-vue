@@ -332,6 +332,7 @@ import stores from '@/store';
 import { onBeforeRouteLeave } from 'vue-router';
 import eventBus from '@/eventBus';
 import { useDeconfigurationRecords } from '@/api/composables/useDeconfigurationRecords';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 
 // Composables
 const {
@@ -348,18 +349,22 @@ const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const Toast = useToastComposable();
 const { getFilteredTableData } = useTableFilterComposable();
 const { dataFormatter } = useDataFormatterGlobal();
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
+const { startLoader, endLoader } = useLoadingBar();
 
 // Use the new vue-query composable
 const {
   allRecords: deconfigRecordsData,
   isLoading,
+  isFetching,
   isProcessing,
+  isError,
   clearAllRecords: clearAllRecordsApi,
   deleteRecords: deleteRecordsApi,
   downloadLog: downloadLogApi,
   refetchRecords,
 } = useDeconfigurationRecords();
+
+usePageLoadingBar(isFetching, isError);
 
 const global = stores.GlobalStore();
 
@@ -461,17 +466,11 @@ const currentPageRef = ref(1);
 
 const itemPerPageRef = ref(20);
 
-// Watch loading state - includes both initial fetch and processing
+// Keep isBusy in sync with loading state
 watch(
   () => isLoading.value || isProcessing.value,
   (loading) => {
-    if (loading) {
-      startLoader();
-      isBusy.value = true;
-    } else {
-      endLoader();
-      isBusy.value = false;
-    }
+    isBusy.value = loading;
   },
   { immediate: true },
 );
@@ -479,7 +478,6 @@ watch(
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
   isBusy.value = false;
-  hideLoader();
 });
 
 eventBus.on('clear-selected', () => {

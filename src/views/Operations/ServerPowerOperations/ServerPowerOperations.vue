@@ -261,10 +261,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import eventBus from '@/eventBus';
 import i18n from '@/i18n';
-import { onBeforeRouteLeave } from 'vue-router';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
@@ -283,14 +283,15 @@ import {
 
 import stores from '@/store';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, infoToast, errorToast } = useToast();
+const { startLoader, endLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
 
 const {
   biosAttributes,
   attributeValues,
+  isFetching: isBiosFetchingState,
   isLoading: isBiosLoading,
   refetch: refetchBios,
   refetchBios: refetchBiosOnly,
@@ -309,6 +310,7 @@ const {
 
 const {
   serverStatus,
+  isSystemFetching,
   isSystemLoading,
   refetchSystem,
   powerRestorePolicy,
@@ -317,6 +319,7 @@ const {
 
 const {
   bmc,
+  isFetching: isBmcFetching,
   isLoading: isBmcLoading,
   refetch: refetchBmc,
 } = useServerBmcInfo();
@@ -348,26 +351,11 @@ const modalOptions = ref({
 });
 const modalOption = ref('');
 
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-const isPageLoading = ref(false);
-
-watch(
-  [isBiosLoading, isSystemLoading, isBmcLoading],
-  (states) => {
-    const loading = states.some(Boolean);
-    if (loading && !isPageLoading.value) {
-      isPageLoading.value = true;
-      startLoader();
-    } else if (!loading && isPageLoading.value) {
-      isPageLoading.value = false;
-      endLoader();
-    }
-  },
-  { immediate: true },
+const isPageFetching = computed(
+  () =>
+    isBiosFetchingState.value || isSystemFetching.value || isBmcFetching.value,
 );
+usePageLoadingBar(isPageFetching);
 
 const isInPhypStandby = computed(() => {
   if (!phypStandby.value) {

@@ -140,6 +140,7 @@ export function useDeconfigurationRecords() {
   const {
     data: deconfigRecordsRaw,
     isLoading: isLoadingRecords,
+    isFetching: isFetchingRecords,
     error: recordsError,
     isError: isRecordsError,
     refetch: refetchRecords,
@@ -324,6 +325,7 @@ export function useDeconfigurationRecords() {
 
     // Loading states
     isLoading: computed(() => isLoadingRecords.value || isProcessing.value),
+    isFetching: isFetchingRecords,
     isProcessing,
 
     // Error states

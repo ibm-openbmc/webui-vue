@@ -51,11 +51,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
+import { ref, computed } from 'vue';
 import useLoadingBar, {
   loading,
 } from '@/components/Composables/useLoadingBarComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import Alert from '@/components/Global/Alert.vue';
@@ -68,8 +68,6 @@ import stores from '@/store';
 import { useFirmware } from '@/api/composables/useFirmware';
 import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
-
 const globalStore = stores.GlobalStore();
 const controlStore = stores.ControlStore();
 
@@ -77,7 +75,7 @@ const controlStore = stores.ControlStore();
 const {
   isSingleFileUploadEnabled,
   lowestSupportedFirmwareVersion: lowestSupportedData,
-  isLoading: isFirmwareLoading,
+  isFetching: isFirmwareFetching,
   isError,
 } = useFirmware();
 
@@ -87,29 +85,7 @@ useCapacityOnDemand();
 const isServerPowerOffRequired = ref('true');
 const isLoading = ref(loading.value);
 
-// Only show loading bar on initial load, not during background refetches
-watch(
-  isFirmwareLoading,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
-
-// Stop the loading bar when the fetch fails
-watch(isError, (hasError) => {
-  if (hasError) {
-    endLoader();
-  }
-});
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
+usePageLoadingBar(isFirmwareFetching, isError);
 
 const serverStatus = computed(() => {
   return globalStore.serverStatusGetter;

@@ -183,10 +183,9 @@ import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import Alert from '@/components/Global/Alert.vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const { perPage, itemsPerPageOptions, getTotalRowCount } =
   usePaginationComposable();
 const {
@@ -200,7 +199,10 @@ const {
 } = useTableSelectableComposable();
 const Toast = useToastComposable();
 
-const { sessions, isLoading, isFetching, disconnectSessions } = useSessions();
+const { sessions, isLoading, isFetching, isError, disconnectSessions } =
+  useSessions();
+
+const { startLoader, endLoader } = usePageLoadingBar(isFetching, isError);
 
 // Track selection state separately to avoid circular dependencies
 const selectedSessions = ref(new Set());
@@ -255,7 +257,6 @@ const batchActions = ref([
 
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
-  hideLoader();
 });
 
 onBeforeMount(() => {
@@ -263,20 +264,6 @@ onBeforeMount(() => {
     selectedSessions.value.clear();
     clearSelectedRows(tableSessionsRef);
   });
-});
-
-// Loading bar automatically shows/hides based on fetch state
-watch(
-  () => isLoading.value,
-  (loading) => {
-    if (loading) startLoader();
-    else endLoader();
-  },
-  { immediate: true },
-);
-
-onBeforeUnmount(() => {
-  hideLoader();
 });
 
 const isBusy = computed(() => isLoading.value || isFetching.value);

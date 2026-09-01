@@ -93,20 +93,19 @@
 </template>
 
 <script setup>
-import { watch } from 'vue';
 import { useConcurrentMaintenance } from '@/api/composables/useConcurrentMaintenance';
 import useToast from '@/components/Composables/useToastComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import i18n from '@/i18n';
 
 const { successToast, errorToast } = useToast();
-const { startLoader, endLoader } = useLoadingBar();
 
 const {
   readyToRemove: readyToRemoveState,
   readyToRemoveControlPanel: readyToRemoveControlPanelState,
   readyToRemoveControlPanelDisp: readyToRemoveControlPanelDispState,
   isLoading,
+  isFetching,
   isUpdating,
   isError,
   updateTodState,
@@ -114,28 +113,8 @@ const {
   updateControlPanelDispState,
 } = useConcurrentMaintenance();
 
-// Watch loading state
-watch(
-  () => isLoading.value || isUpdating.value,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
-
-// Stop the loading bar and log the error when fetch fails
-watch(
-  () => isError.value,
-  (hasError) => {
-    if (hasError) {
-      endLoader();
-    }
-  },
-);
+// Show loading bar on navigation; also show on mutation (isUpdating)
+usePageLoadingBar(isFetching, isError, isUpdating);
 
 async function changeReadyToRemoveState(state) {
   try {

@@ -150,25 +150,32 @@ import useTableFilterComposable from '@/components/Composables/useTableFilterCom
 import Search from '@/components/Global/Search.vue';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useToast from '@/components/Composables/useToastComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useDataFormatterGlobal from '@/components/Composables/useDataFormatterGlobal';
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
 import useTableRowExpandComposable from '@/components/Composables/useTableRowExpandComposable';
 import { usePaginatedData } from '@/api/composables/shared/usePaginatedData';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import eventBus from '@/eventBus';
 import { useAuditLogs } from '@/api/composables/useAuditLogs';
 
 const { perPage, itemsPerPageOptions } = usePaginationComposable();
 const { successToast, infoToast, errorToast } = useToast();
-const { startLoader, endLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRowDetails } = useTableRowExpandComposable();
 const { getFilteredTableData, getFilteredTableDataByDate } =
   useTableFilterComposable();
 
 // Use the audit logs composable
-const { auditLogs, isLoading, refetch, downloadAuditLog, isDownloading } =
-  useAuditLogs();
+const {
+  auditLogs,
+  isLoading,
+  isFetching,
+  refetch,
+  downloadAuditLog,
+  isDownloading,
+} = useAuditLogs();
+
+const { startLoader, endLoader } = usePageLoadingBar(isFetching);
 
 const itemPerPage = ref(perPage);
 const isBusy = ref(true);
@@ -217,16 +224,11 @@ const filterStartDate = ref(null);
 const filterEndDate = ref(null);
 const expandColumn = ref(['auditId', 'message']);
 
-// Watch loading state from composable
+// Keep isBusy in sync with loading state for the table empty-slot spinner
 watch(
   isLoading,
   (loading) => {
     isBusy.value = loading;
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
   },
   { immediate: true },
 );

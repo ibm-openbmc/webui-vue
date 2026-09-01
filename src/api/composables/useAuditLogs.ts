@@ -67,6 +67,7 @@ export function useAuditLogs() {
   const {
     data: auditLogsRaw,
     isLoading,
+    isFetching,
     refetch,
   } = useRedfishCollection<AuditLog>(
     '/redfish/v1/Systems/system/LogServices/AuditLog/Entries',
@@ -154,6 +155,7 @@ export function useAuditLogs() {
     // Data
     auditLogs,
     isLoading,
+    isFetching,
 
     // Actions
     refetch,

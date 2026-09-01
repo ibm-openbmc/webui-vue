@@ -7,6 +7,7 @@ import { useBiosAttributes } from './useBiosAttributes';
  */
 export function useSystemParameters() {
   const {
+    isLoading,
     isFetching,
     isError,
     error,
@@ -20,16 +21,24 @@ export function useSystemParameters() {
   } = useBiosAttributes();
 
   // System Parameters-specific BIOS attributes
-  const aggressivePrefetch = getBiosBooleanAttribute('hb_proc_favor_aggressive_prefetch');
-  const lateralCastOutMode = getBiosBooleanAttribute('hb_lateral_cast_out_mode');
+  const aggressivePrefetch = getBiosBooleanAttribute(
+    'hb_proc_favor_aggressive_prefetch',
+  );
+  const lateralCastOutMode = getBiosBooleanAttribute(
+    'hb_lateral_cast_out_mode',
+  );
   const frequencyMax = getBiosAttribute('hb_cap_freq_mhz_max');
   const frequencyMin = getBiosAttribute('hb_cap_freq_mhz_min');
   const frequencyRequest = getBiosAttribute('hb_cap_freq_mhz_request');
-  const frequencyRequestCurrent = getBiosAttribute('hb_cap_freq_mhz_request_current');
+  const frequencyRequestCurrent = getBiosAttribute(
+    'hb_cap_freq_mhz_request_current',
+  );
   const rpdPolicy = getBiosAttribute('pvm_rpd_policy');
   const rpdFeature = getBiosAttribute('pvm_rpd_feature');
   const rpdPolicyCurrent = getBiosAttribute('pvm_rpd_feature_current');
-  const immediateTestRequested = getBiosBooleanAttribute('pvm_rpd_immediate_test');
+  const immediateTestRequested = getBiosBooleanAttribute(
+    'pvm_rpd_immediate_test',
+  );
   const guardOnError = getBiosBooleanAttribute('pvm_rpd_guard_policy');
 
   // Computed: frequency request toggle
@@ -50,7 +59,9 @@ export function useSystemParameters() {
     return `${hourString}:${minuteString}`;
   });
 
-  const rpdScheduledRunDuration = getBiosAttribute('pvm_rpd_scheduled_duration');
+  const rpdScheduledRunDuration = getBiosAttribute(
+    'pvm_rpd_scheduled_duration',
+  );
 
   // System Parameters-specific registry attributes
   const rpdPolicyOptions = getRegistryOptions('pvm_rpd_policy');
@@ -58,7 +69,10 @@ export function useSystemParameters() {
 
   // Mutation methods
   const saveAggressivePrefetch = async (enabled: boolean): Promise<void> => {
-    return updateBiosBooleanAttribute('hb_proc_favor_aggressive_prefetch', enabled);
+    return updateBiosBooleanAttribute(
+      'hb_proc_favor_aggressive_prefetch',
+      enabled,
+    );
   };
 
   const saveLateralCastOutMode = async (enabled: boolean): Promise<void> => {
@@ -85,7 +99,10 @@ export function useSystemParameters() {
     return updateBiosBooleanAttribute('pvm_rpd_guard_policy', enabled);
   };
 
-  const saveRpdScheduledRun = async (payload: { totalSeconds: number; duration: number }): Promise<void> => {
+  const saveRpdScheduledRun = async (payload: {
+    totalSeconds: number;
+    duration: number;
+  }): Promise<void> => {
     return updateBiosAttributes({
       pvm_rpd_scheduled_tod: payload.totalSeconds,
       pvm_rpd_scheduled_duration: payload.duration,
@@ -110,12 +127,13 @@ export function useSystemParameters() {
     guardOnError,
     rpdScheduledRun,
     rpdScheduledRunDuration,
-    
+
     // Loading and error states
+    isLoading,
     isFetching,
     isError,
     error,
-    
+
     // Mutations
     saveAggressivePrefetch,
     saveLateralCastOutMode,
@@ -125,7 +143,7 @@ export function useSystemParameters() {
     saveImmediateTestRequested,
     saveGuardOnError,
     saveRpdScheduledRun,
-    
+
     // Mutation state
     isUpdating,
   };
