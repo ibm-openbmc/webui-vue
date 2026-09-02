@@ -477,8 +477,7 @@ export function useEventLogs() {
     refetchEventLogs,
     refetchCELogs,
     refetchAll: async () => {
-      await refetchEventLogs();
-      await refetchCELogs();
+      await Promise.all([refetchEventLogs(), refetchCELogs()]);
     },
   };
 }

@@ -91,6 +91,7 @@ const MOCK_RECORDS = [
 const makeHook = (overrides = {}) => ({
   allRecords: ref([]),
   isLoading: ref(false),
+  isFetching: ref(false),
   isProcessing: ref(false),
   isError: ref(false),
   error: ref(null),
@@ -180,21 +181,25 @@ describe('DeconfigurationRecords.vue', () => {
     expect(wrapper.vm.isBusy).toBe(false);
   });
 
-  it('calls startLoader when loading begins', () => {
-    mountDeconfigurationRecords({ isLoading: ref(true) });
+  it('calls startLoader when loading begins', async () => {
+    mountDeconfigurationRecords({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls endLoader when loading finishes', () => {
-    mountDeconfigurationRecords({ isLoading: ref(false) });
+  it('calls endLoader when loading finishes', async () => {
+    mountDeconfigurationRecords({ isLoading: ref(false), isFetching: ref(false) });
+    await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls startLoader when processing begins', () => {
+  it('calls startLoader when processing begins', async () => {
     mountDeconfigurationRecords({
       isLoading: ref(false),
+      isFetching: ref(false),
       isProcessing: ref(true),
     });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 

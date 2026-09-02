@@ -335,7 +335,7 @@ import useToastComposable from '@/components/Composables/useToastComposable';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import eventBus from '@/eventBus';
 import { useEventLogs } from '@/api/composables/useEventLogs';
 import { usePaginatedData } from '@/api/composables/shared/usePaginatedData';
@@ -359,10 +359,7 @@ export default {
     TableDateFilter,
   },
   beforeRouteLeave(to, from, next) {
-    // Hide loader if the user navigates to another page
-    // before request is fulfilled.
     eventBus.emit('clear-selected');
-    useLoadingBar().hideLoader();
     next();
   },
   setup() {
@@ -370,6 +367,7 @@ export default {
       allLogs: eventLogsData,
       isLoading,
       isFetching,
+      isError,
       deleteAllLogs: deleteAllLogsApi,
       deleteEventLogs: deleteEventLogsApi,
       resolveEventLogs: resolveEventLogsApi,
@@ -380,8 +378,8 @@ export default {
       refetchCELogs,
     } = useEventLogs();
 
-    usePageLoadingBar(isFetching);
-    const { startLoader, endLoader } = useLoadingBar();
+    usePageLoadingBar(isFetching, isError);
+
     const { perPage } = usePaginationComposable();
 
     // Reactive filter state — must live in setup() so usePaginatedData can

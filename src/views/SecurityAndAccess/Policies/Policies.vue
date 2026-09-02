@@ -336,7 +336,6 @@ import { UserManagementStore } from '@/store/modules/SecurityAndAccess/UserManag
 import { GlobalStore } from '@/store/modules/GlobalStore';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
-import { onBeforeRouteLeave } from 'vue-router';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import IconTime from '@carbon/icons-vue/es/time/16';
 import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';

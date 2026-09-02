@@ -26,8 +26,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { ref, computed } from 'vue';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import OverviewQuickLinks from './OverviewQuickLinks.vue';
@@ -56,8 +56,6 @@ import {
   useOverviewQuickLinks,
 } from '@/api/composables/useOverview';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
-
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 
 // Use VueQuery composables for all Overview data
@@ -81,9 +79,9 @@ const { isFetching: isInventoryFetching, isError: isInventoryError } =
 const { isFetching: isQuickLinksFetching, isError: isQuickLinksError } =
   useOverviewQuickLinks();
 
-// Child components (OverviewServer, OverviewFirmware, OverviewPower, etc.) share
-// the same queries — watch from script-setup time so we catch the fetch before
-// onMounted fires.
+// Child components share the same queries — usePageLoadingBar watches
+// isFetching with { immediate: true } from setup time, before any lifecycle
+// hook fires, so the child-fetch race is handled correctly.
 const isPageFetching = computed(
   () =>
     isSystemInfoFetching.value ||
@@ -98,41 +96,6 @@ const isPageFetching = computed(
     isQuickLinksFetching.value,
 );
 
-let mountFetchDone = false;
-let awaitingFetch = false;
-
-watch(
-  isPageFetching,
-  (fetching) => {
-    if (mountFetchDone) return;
-    if (fetching) {
-      if (!awaitingFetch) {
-        awaitingFetch = true;
-        startLoader();
-      }
-    } else if (awaitingFetch) {
-      awaitingFetch = false;
-      mountFetchDone = true;
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
-
-onMounted(() => {
-  if (!awaitingFetch) mountFetchDone = true;
-});
-
-onBeforeUnmount(() => {
-  hideLoader();
-});
-
-// User-triggered asset tag mutation — always shows the bar
-watch(isAssetTagUpdating, (updating) => {
-  if (updating) {
-    startLoader();
-  } else {
-    endLoader();
-  }
-});
+// isAssetTagUpdating is the user-triggered mutation — always shows the bar.
+usePageLoadingBar(isPageFetching, null, isAssetTagUpdating);
 </script>

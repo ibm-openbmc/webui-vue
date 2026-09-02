@@ -58,6 +58,7 @@ import i18n from '@/i18n';
 const makeSnmpHook = (overrides = {}) => ({
   snmpAlerts: ref([]),
   isLoading: ref(false),
+  isFetching: ref(false),
   isError: ref(false),
   error: ref(null),
   refetch: vi.fn(),
@@ -170,14 +171,17 @@ describe('SnmpAlerts.vue', () => {
     expect(wrapper.vm.isBusy).toBe(false);
   });
 
-  it('starts the loader when loading on mount', () => {
-    mountSnmpAlerts({ isLoading: ref(true) });
+  it('starts the loader when loading on mount', async () => {
+    mountSnmpAlerts({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalled();
   });
 
   it('ends the loader when the query enters an error state', async () => {
     const isError = ref(false);
-    mountSnmpAlerts({ isError });
+    const isFetching = ref(true);
+    mountSnmpAlerts({ isError, isFetching });
+    await nextTick();
 
     endLoaderMock.mockClear();
     isError.value = true;

@@ -73,6 +73,7 @@ const makeCertificatesHook = (overrides = {}) => ({
   certificates: ref([]),
   availableUploadTypes: ref([]),
   isLoading: ref(false),
+  isFetching: ref(false),
   refetchAll: vi.fn(),
   addNewACFCertificate: vi.fn(),
   addNewCertificate: vi.fn(),
@@ -220,30 +221,37 @@ describe('Certificates.vue', () => {
 
   // ── Loading state ─────────────────────────────────────────────────────────
 
-  it('starts the loader when loading is true on mount', () => {
-    mountCertificates({ isLoading: ref(true) });
+  it('starts the loader when loading is true on mount', async () => {
+    mountCertificates({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
 
     expect(startLoaderMock).toHaveBeenCalled();
   });
 
   it('ends the loader when loading is false', async () => {
-    const isLoading = ref(true);
-    mountCertificates({ isLoading });
+    const isFetching = ref(true);
+    mountCertificates({ isFetching });
+    await nextTick();
+    await nextTick();
 
     startLoaderMock.mockClear();
     endLoaderMock.mockClear();
 
-    isLoading.value = false;
+    isFetching.value = false;
+    await nextTick();
     await nextTick();
 
     expect(endLoaderMock).toHaveBeenCalled();
   });
 
   it('sets isBusy to false when loading completes', async () => {
-    const isLoading = ref(true);
-    const wrapper = mountCertificates({ isLoading });
+    const isFetching = ref(true);
+    const wrapper = mountCertificates({ isFetching });
+    await nextTick();
+    await nextTick();
 
-    isLoading.value = false;
+    isFetching.value = false;
+    await nextTick();
     await nextTick();
 
     expect(wrapper.vm.isBusy).toBe(false);

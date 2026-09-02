@@ -78,6 +78,7 @@ const MOCK_LOGS = [
 const makeHook = (overrides = {}) => ({
   allLogs: ref([]),
   isLoading: ref(false),
+  isFetching: ref(false),
   isError: ref(false),
   fetchSrcDetails: vi.fn().mockResolvedValue('D1 AABBCCDD EEFF0011'),
   ...overrides,
@@ -151,13 +152,15 @@ describe('PostCodeLogs.vue', () => {
     expect(wrapper.vm.isBusy).toBe(false);
   });
 
-  it('calls startLoader when loading begins', () => {
-    mountPostCodeLogs({ isLoading: ref(true) });
+  it('calls startLoader when loading begins', async () => {
+    mountPostCodeLogs({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls endLoader when loading finishes', () => {
-    mountPostCodeLogs({ isLoading: ref(false) });
+  it('calls endLoader when loading finishes', async () => {
+    mountPostCodeLogs({ isLoading: ref(false), isFetching: ref(false) });
+    await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
   });
 

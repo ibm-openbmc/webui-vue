@@ -310,7 +310,6 @@ import { omit } from 'lodash';
 import i18n from '@/i18n';
 import { ref, computed, watch, nextTick } from 'vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useTableRowExpandComposable from '@/components/Composables/useTableRowExpandComposable';
@@ -349,7 +348,6 @@ const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const Toast = useToastComposable();
 const { getFilteredTableData } = useTableFilterComposable();
 const { dataFormatter } = useDataFormatterGlobal();
-const { startLoader, endLoader } = useLoadingBar();
 
 // Use the new vue-query composable
 const {
@@ -364,7 +362,7 @@ const {
   refetchRecords,
 } = useDeconfigurationRecords();
 
-usePageLoadingBar(isFetching, isError);
+const { startLoader, endLoader } = usePageLoadingBar(isFetching, isError, isProcessing);
 
 const global = stores.GlobalStore();
 

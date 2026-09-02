@@ -36,8 +36,8 @@
 </template>
 
 <script setup>
-import { computed, watch, onMounted, onBeforeUnmount } from 'vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { computed } from 'vue';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
 import PowerCap from './PowerCap.vue';
@@ -49,8 +49,6 @@ import {
   usePowerPerformanceMode,
   useIdlePowerSaver,
 } from '@/api/composables/usePowerControl';
-
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
 
@@ -80,9 +78,6 @@ const nonIdlePowerSaverMode = computed(() => {
   return idlePowerSaverData.value ? false : true;
 });
 
-// Child components (PowerCap, PowerPerformanceModes, PowerIdleSaver) share the
-// same queries — watch isPageFetching from script-setup time so we never miss
-// the fetch that a child triggers before onMounted fires.
 const isPageFetching = computed(
   () =>
     isPowerControlFetching.value ||
@@ -90,50 +85,11 @@ const isPageFetching = computed(
     isIdlePowerSaverFetching.value,
 );
 
-let mountFetchDone = false;
-let awaitingFetch = false;
-
-watch(
-  isPageFetching,
-  (fetching) => {
-    if (mountFetchDone) return;
-    if (fetching) {
-      if (!awaitingFetch) {
-        awaitingFetch = true;
-        startLoader();
-      }
-    } else if (awaitingFetch) {
-      awaitingFetch = false;
-      mountFetchDone = true;
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
-
-onMounted(() => {
-  if (!awaitingFetch) mountFetchDone = true;
-});
-
-onBeforeUnmount(() => {
-  hideLoader();
-});
-
-// Manage loading bar for user-triggered mutations (save/update actions)
-watch(
-  [
-    isPowerControlMutating,
-    isPowerPerformanceMutating,
-    isIdlePowerSaverMutating,
-  ],
-  ([controlMutating, performanceMutating, idleMutating]) => {
-    if (controlMutating || performanceMutating || idleMutating) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-);
+usePageLoadingBar(isPageFetching, null, [
+  isPowerControlMutating,
+  isPowerPerformanceMutating,
+  isIdlePowerSaverMutating,
+]);
 </script>
 
 <style lang="scss" scoped>

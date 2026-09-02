@@ -15,10 +15,6 @@ vi.mock('vue-router', async () => {
     useRouter: () => ({
       push: vi.fn(),
     }),
-    onBeforeRouteLeave: vi.fn((callback) => {
-      // Store the callback for testing
-      callback();
-    }),
   };
 });
 
@@ -121,6 +117,7 @@ describe('Policies.vue', () => {
       basicAuthEnabled: { value: true },
       sendServiceAlertsEnabled: { value: false },
       isLoading: { value: false },
+      isFetching: { value: false },
       loadAllPolicies: vi.fn().mockResolvedValue(),
       saveSshProtocolState: vi.fn().mockResolvedValue('Success message'),
       saveIpmiProtocolState: vi.fn().mockResolvedValue('Success message'),
@@ -178,12 +175,6 @@ describe('Policies.vue', () => {
       wrapper = createWrapper();
       await flushPromises();
       expect(userManagementStore.getUsers).toHaveBeenCalled();
-    });
-
-    it('should hide loader on route leave', () => {
-      wrapper = createWrapper();
-      // The onBeforeRouteLeave hook is already called in the mock
-      expect(mockLoadingBar.hideLoader).toHaveBeenCalled();
     });
 
     it('should set unAuthenticatedACFUploadEnablementState after data loads', async () => {

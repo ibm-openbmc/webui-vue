@@ -23,15 +23,8 @@
 </template>
 
 <script setup>
-import {
-  onBeforeMount,
-  onMounted,
-  onBeforeUnmount,
-  watch,
-  computed,
-  ref,
-} from 'vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { onBeforeMount, computed, ref } from 'vue';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
 import stores from '@/store';
@@ -43,7 +36,6 @@ const systemStore = stores.SystemStore();
 const licenseStore = stores.LicenseStore();
 
 const { isFetching, isError, refetch } = useFieldCoreOverride();
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 // Expose refetch for parent components
 defineExpose({
@@ -65,35 +57,5 @@ onBeforeMount(() => {
   );
 });
 
-// Child components (FieldCoreOverrideInfo, FieldCoreOverrideConfiguration) share
-// the same BIOS query — watch isPageFetching from script-setup time to catch the
-// fetch before onMounted fires.
-let mountFetchDone = false;
-let awaitingFetch = false;
-
-watch(
-  isPageFetching,
-  (fetching) => {
-    if (mountFetchDone) return;
-    if (fetching) {
-      if (!awaitingFetch) {
-        awaitingFetch = true;
-        startLoader();
-      }
-    } else if (awaitingFetch) {
-      awaitingFetch = false;
-      mountFetchDone = true;
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
-
-onMounted(() => {
-  if (!awaitingFetch) mountFetchDone = true;
-});
-
-onBeforeUnmount(() => {
-  hideLoader();
-});
+usePageLoadingBar(isPageFetching, isError);
 </script>

@@ -34,6 +34,7 @@ const makeHook = (overrides = {}) => ({
   readyToRemoveControlPanel: ref(null),
   readyToRemoveControlPanelDisp: ref(null),
   isLoading: ref(false),
+  isFetching: ref(false),
   isUpdating: ref(false),
   isError: ref(false),
   error: ref(null),
@@ -111,33 +112,38 @@ describe('ConcurrentMaintenance.vue', () => {
 
   // ── Loading state ──────────────────────────────────────────────────────────
 
-  it('calls startLoader when isLoading is true on mount', () => {
-    mountConcurrentMaintenance({ isLoading: ref(true) });
+  it('calls startLoader when isLoading is true on mount', async () => {
+    mountConcurrentMaintenance({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
     expect(endLoaderMock).not.toHaveBeenCalled();
   });
 
-  it('calls endLoader when isLoading is false on mount', () => {
-    mountConcurrentMaintenance({ isLoading: ref(false) });
+  it('calls endLoader when isLoading is false on mount', async () => {
+    mountConcurrentMaintenance({ isLoading: ref(false), isFetching: ref(false) });
+    await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
     expect(startLoaderMock).not.toHaveBeenCalled();
   });
 
-  it('calls startLoader when isUpdating is true on mount', () => {
+  it('calls startLoader when isUpdating is true on mount', async () => {
     mountConcurrentMaintenance({
       isLoading: ref(false),
+      isFetching: ref(false),
       isUpdating: ref(true),
     });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls endLoader when isLoading transitions to false', async () => {
-    const isLoading = ref(true);
-    mountConcurrentMaintenance({ isLoading });
+    const isFetching = ref(true);
+    mountConcurrentMaintenance({ isFetching });
+    await nextTick();
     startLoaderMock.mockClear();
     endLoaderMock.mockClear();
 
-    isLoading.value = false;
+    isFetching.value = false;
     await nextTick();
 
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
@@ -145,7 +151,9 @@ describe('ConcurrentMaintenance.vue', () => {
 
   it('calls endLoader when isError becomes true', async () => {
     const isError = ref(false);
-    mountConcurrentMaintenance({ isError });
+    const isFetching = ref(true);
+    mountConcurrentMaintenance({ isError, isFetching });
+    await nextTick();
     endLoaderMock.mockClear();
 
     isError.value = true;

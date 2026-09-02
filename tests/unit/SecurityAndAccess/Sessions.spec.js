@@ -166,13 +166,15 @@ describe('Sessions.vue', () => {
     expect(wrapper.vm.isBusy).toBe(false);
   });
 
-  it('starts the loader when loading on mount', () => {
-    mountSessions({ isLoading: ref(true) });
+  it('starts the loader when loading on mount', async () => {
+    mountSessions({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 
-  it('ends the loader when not loading on mount', () => {
-    mountSessions({ isLoading: ref(false) });
+  it('ends the loader when not loading on mount', async () => {
+    mountSessions({ isLoading: ref(false), isFetching: ref(false) });
+    await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
   });
 

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ref } from 'vue';
+import { createPinia, setActivePinia } from 'pinia';
 
 // ── Mock @tanstack/vue-query ──────────────────────────────────────────────────
 vi.mock('@tanstack/vue-query', () => ({
@@ -104,6 +105,7 @@ describe('useBootBiosAttributes', () => {
   let mockPatchResource;
 
   beforeEach(() => {
+    setActivePinia(createPinia());
     vi.clearAllMocks();
     mockQueryClient = { invalidateQueries: vi.fn(), setQueryData: vi.fn() };
     useQueryClient.mockReturnValue(mockQueryClient);
@@ -371,6 +373,7 @@ describe('useBootBiosAttributes', () => {
 
 describe('useServerSystemInfo', () => {
   beforeEach(() => {
+    setActivePinia(createPinia());
     vi.clearAllMocks();
   });
 
@@ -480,6 +483,7 @@ describe('useServerSystemInfo', () => {
 
 describe('useServerBmcInfo', () => {
   beforeEach(() => {
+    setActivePinia(createPinia());
     vi.clearAllMocks();
   });
 
@@ -543,6 +547,7 @@ describe('useServerBmcInfo', () => {
 
 describe('useLocationCodes', () => {
   beforeEach(() => {
+    setActivePinia(createPinia());
     vi.clearAllMocks();
   });
 
