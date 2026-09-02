@@ -48,6 +48,20 @@ export const GlobalStore = defineStore('global', {
     isAuthorized: true,
     hmcManaged: localStorage.getItem('storedHmcManagedValue') || null,
     isServiceLoginEnabled: false,
+    firmwareSwitchInProgress: false,
+    firmwareSwitchStartTime: null,
+    firmwareSwitchCurrentStep: 1,
+    firmwareUpdateInProgress: false,
+    firmwareUpdateStartTime: null,
+    firmwareUpdateCurrentStep: 1,
+    bmcRebootInProgress: false,
+    bmcRebootStartTime: null,
+    bmcRebootCurrentStep: 1,
+    dumpGenerationInProgress: false,
+    dumpGenerationStartTime: null,
+    dumpGenerationType: '',
+    completedOperations: [],
+    notificationsViewed: true,
   }),
   getters: {
     bootProgressGetter: (state) => state.bootProgress,
@@ -83,6 +97,27 @@ export const GlobalStore = defineStore('global', {
       state.currentUser?.RoleId === 'ReadOnly' || !state.currentUser,
     isAuthorizedGetter: (state) => state.isAuthorized,
     isServiceLoginEnabledGetter: (state) => state.isServiceLoginEnabled,
+    firmwareSwitchInProgressGetter: (state) => state.firmwareSwitchInProgress,
+    firmwareSwitchStartTimeGetter: (state) => state.firmwareSwitchStartTime,
+    firmwareSwitchCurrentStepGetter: (state) => state.firmwareSwitchCurrentStep,
+    firmwareUpdateInProgressGetter: (state) => state.firmwareUpdateInProgress,
+    firmwareUpdateStartTimeGetter: (state) => state.firmwareUpdateStartTime,
+    firmwareUpdateCurrentStepGetter: (state) => state.firmwareUpdateCurrentStep,
+    bmcRebootInProgressGetter: (state) => state.bmcRebootInProgress,
+    bmcRebootStartTimeGetter: (state) => state.bmcRebootStartTime,
+    bmcRebootCurrentStepGetter: (state) => state.bmcRebootCurrentStep,
+    dumpGenerationInProgressGetter: (state) => state.dumpGenerationInProgress,
+    dumpGenerationStartTimeGetter: (state) => state.dumpGenerationStartTime,
+    dumpGenerationTypeGetter: (state) => state.dumpGenerationType,
+    hasActiveOperations: (state) =>
+      state.firmwareSwitchInProgress ||
+      state.firmwareUpdateInProgress ||
+      state.bmcRebootInProgress ||
+      state.dumpGenerationInProgress,
+    completedOperationsGetter: (state) => state.completedOperations,
+    notificationsViewedGetter: (state) => state.notificationsViewed,
+    hasUnviewedNotifications: (state) =>
+      state.completedOperations.length > 0 && !state.notificationsViewed,
   },
   actions: {
     async getBmcTime() {
@@ -228,6 +263,147 @@ export const GlobalStore = defineStore('global', {
     },
     setUtcTime(isUtcDisplay) {
       this.isUtcDisplay = isUtcDisplay;
+    },
+    setFirmwareSwitchInProgress(payload) {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+
+      this.firmwareSwitchInProgress = inProgress;
+      if (inProgress) {
+        this.firmwareSwitchStartTime = Date.now();
+        this.firmwareSwitchCurrentStep = 1;
+      } else {
+        // When operation completes successfully, add to completed operations
+        if (this.firmwareSwitchStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'firmware-switch',
+            title: 'Firmware Switch',
+            message: 'BMC firmware switched successfully',
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - this.firmwareSwitchStartTime,
+          };
+          this.completedOperations.unshift(operation);
+          // Keep only last 10 completed operations
+          if (this.completedOperations.length > 10) {
+            this.completedOperations = this.completedOperations.slice(0, 10);
+          }
+          // Mark notifications as unviewed when new operation completes
+          this.notificationsViewed = false;
+        }
+        this.firmwareSwitchStartTime = null;
+        this.firmwareSwitchCurrentStep = 1;
+      }
+    },
+    setFirmwareSwitchStep(step) {
+      this.firmwareSwitchCurrentStep = step;
+    },
+    removeCompletedOperation(operationId) {
+      this.completedOperations = this.completedOperations.filter(
+        (op) => op.id !== operationId,
+      );
+    },
+    markNotificationsAsViewed() {
+      this.notificationsViewed = true;
+    },
+    setFirmwareUpdateInProgress(payload) {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+
+      this.firmwareUpdateInProgress = inProgress;
+      if (inProgress) {
+        this.firmwareUpdateStartTime = Date.now();
+        this.firmwareUpdateCurrentStep = 1;
+      } else {
+        if (this.firmwareUpdateStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'firmware-update',
+            title: 'Firmware Update',
+            message: 'Firmware image updated successfully',
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - this.firmwareUpdateStartTime,
+          };
+          this.completedOperations.unshift(operation);
+          if (this.completedOperations.length > 10) {
+            this.completedOperations = this.completedOperations.slice(0, 10);
+          }
+          this.notificationsViewed = false;
+        }
+        this.firmwareUpdateStartTime = null;
+        this.firmwareUpdateCurrentStep = 1;
+      }
+    },
+    setFirmwareUpdateStep(step) {
+      this.firmwareUpdateCurrentStep = step;
+    },
+    setBmcRebootInProgress(payload) {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+
+      this.bmcRebootInProgress = inProgress;
+      if (inProgress) {
+        this.bmcRebootStartTime = Date.now();
+        this.bmcRebootCurrentStep = 1;
+      } else {
+        if (this.bmcRebootStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'bmc-reboot',
+            title: 'BMC Reboot',
+            message: 'BMC reboot completed and system is reachable',
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - this.bmcRebootStartTime,
+          };
+          this.completedOperations.unshift(operation);
+          if (this.completedOperations.length > 10) {
+            this.completedOperations = this.completedOperations.slice(0, 10);
+          }
+          this.notificationsViewed = false;
+        }
+        this.bmcRebootStartTime = null;
+        this.bmcRebootCurrentStep = 1;
+      }
+    },
+    setBmcRebootStep(step) {
+      this.bmcRebootCurrentStep = step;
+    },
+    setDumpGenerationInProgress(payload) {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+      const dumpType = payload?.dumpType || this.dumpGenerationType || 'System';
+
+      this.dumpGenerationInProgress = inProgress;
+      if (inProgress) {
+        this.dumpGenerationStartTime = Date.now();
+        this.dumpGenerationType = dumpType;
+      } else {
+        if (this.dumpGenerationStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'dump-generation',
+            title: `${this.dumpGenerationType} Dump`,
+            message: `${this.dumpGenerationType} dump generated successfully`,
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - this.dumpGenerationStartTime,
+          };
+          this.completedOperations.unshift(operation);
+          if (this.completedOperations.length > 10) {
+            this.completedOperations = this.completedOperations.slice(0, 10);
+          }
+          this.notificationsViewed = false;
+        }
+        this.dumpGenerationStartTime = null;
+        this.dumpGenerationType = '';
+      }
     },
   },
 });

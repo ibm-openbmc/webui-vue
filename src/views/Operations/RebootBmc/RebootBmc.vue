@@ -97,11 +97,15 @@ const bootProgress = computed(() => {
 });
 
 function rebootBmc() {
+  globalStore.setBmcRebootInProgress(true);
   controlStore
     .rebootBmc()
     .then((message) => {
       infoToast(message);
       startLoader();
+
+      // Step 2 - reboot in progress
+      globalStore.setBmcRebootStep(2);
 
       // Start checking BMC status after reboot
       const timer = (checkCounter = 0) => {
@@ -111,14 +115,23 @@ function rebootBmc() {
         // if this function runs more than 10 times, it won't run anymore
         if (checkCounter > 10) {
           endLoader();
+          globalStore.setBmcRebootInProgress({
+            inProgress: false,
+            success: false,
+          });
           return errorToast(message);
         }
         globalStore.getBootProgress().then(() => {
           if (bootProgress.value) {
+            globalStore.setBmcRebootStep(3);
             infoToast(
               i18n.global.t('pageRebootBmc.toast.successRebootCompleted'),
             );
             endLoader();
+            globalStore.setBmcRebootInProgress({
+              inProgress: false,
+              success: true,
+            });
           } else {
             setTimeout(() => {
               timer(checkCounter);
@@ -128,7 +141,13 @@ function rebootBmc() {
       };
       timer();
     })
-    .catch(({ message }) => errorToast(message));
+    .catch(({ message }) => {
+      globalStore.setBmcRebootInProgress({
+        inProgress: false,
+        success: false,
+      });
+      errorToast(message);
+    });
 }
 
 function onClick() {
