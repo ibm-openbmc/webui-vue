@@ -182,6 +182,7 @@ import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { useI18n } from 'vue-i18n';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
+import { useFans } from '@/api/composables/useFans';
 
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
@@ -191,7 +192,7 @@ const { toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 
-const fanStore = stores.FanStore();
+const { fans, isLoading: fansLoading, updateIdentifyLed } = useFans();
 const globalStore = stores.GlobalStore();
 
 const props = defineProps({
@@ -258,21 +259,14 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  fanStore.getAllFans({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-fans-complete');
-    isBusy.value = false;
-  });
+  eventBus.emit('hardware-status-fans-complete');
+  isBusy.value = false;
 });
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
-    : fanStore.fans.length;
-});
-
-const fans = computed(() => {
-  return fanStore.fansGetter;
+    : fans.value.length;
 });
 
 const serverStatus = computed(() => {
@@ -302,18 +296,6 @@ const isIoExpansionChassis = computed(() => {
 });
 
 watch(
-  () => props.chassis,
-  (value) => {
-    isBusy.value = true;
-    fanStore.getAllFans({ uri: value }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      eventBus.emit('hardware-status-fans-complete');
-      isBusy.value = false;
-    });
-  },
-);
-
-watch(
   () => fans,
   (item) => {
     nextTick(() => {
@@ -336,8 +318,7 @@ function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
 function toggleIdentifyLedValue(row) {
-  fanStore
-    .updateIdentifyLedValue({ uri: row.uri, identifyLed: row.identifyLed })
+  updateIdentifyLed(row.uri, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

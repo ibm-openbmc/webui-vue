@@ -102,25 +102,25 @@ import { ref, computed, watch, onBeforeMount } from 'vue';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { serverStateMapper } from '../../../store/modules/GlobalStore';
+import { useSystem } from '@/api/composables/useSystem';
 
 const { successToast, errorToast } = useToast();
 
 const globalStore = stores.GlobalStore();
-const systemStore = stores.SystemStore();
+const {
+  systems: systemList,
+  changeIdentifyLedState,
+  changeSystemAttentionLedState,
+  changeLampTestState,
+} = useSystem();
 
 const isLampTestEditable = ref(true);
 
 onBeforeMount(() => {
-  return systemStore.getSystem().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-service-complete');
-  });
+  eventBus.emit('hardware-status-service-complete');
 });
 
-const systems = computed(() => {
-  let systemData = systemStore.getSystems[0];
-  return systemData ? systemData : {};
-});
+const systems = computed(() => systemList.value[0] ?? {});
 
 const serverStatus = computed(() => {
   return globalStore.serverStatusGetter;
@@ -151,22 +151,19 @@ watch(
 );
 
 function toggleIdentifyLedSwitch(ledState) {
-  systemStore
-    .changeIdentifyLedState(ledState)
+  changeIdentifyLedState(ledState)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }
 
 function toggleSystemAttentionLedSwitch(systemLedState) {
-  systemStore
-    .changeSystemAttentionLedState(systemLedState)
+  changeSystemAttentionLedState(systemLedState)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }
 
 function toggleLampTestSwitch(lampTestState) {
-  systemStore
-    .changeLampTestState(lampTestState)
+  changeLampTestState(lampTestState)
     .then((message) => {
       successToast(message);
       isLampTestEditable.value = false;

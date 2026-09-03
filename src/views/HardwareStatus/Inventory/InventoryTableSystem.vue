@@ -133,14 +133,14 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import { computed, onBeforeMount, reactive, ref, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
-import stores from '../../../store';
 import eventBus from '@/eventBus';
+import { useSystem } from '@/api/composables/useSystem';
 
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();
 
-const systemStore = stores.SystemStore();
+const { systems, isLoading: systemLoading } = useSystem();
 
 const isBusy = ref(false);
 const fields = reactive([
@@ -178,14 +178,8 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  systemStore.getSystem().finally(() => {
-    eventBus.emit('hardware-status-system-complete');
-    isBusy.value = false;
-  });
-});
-
-const systems = computed(() => {
-  return systemStore.systems;
+  eventBus.emit('hardware-status-system-complete');
+  isBusy.value = false;
 });
 
 watch(

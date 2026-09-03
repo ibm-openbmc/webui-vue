@@ -170,6 +170,7 @@ import { onBeforeRouteLeave } from 'vue-router';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import { useIBMiServiceFunctions } from '@/api/composables/useIBMiServiceFunctions';
+import { useBootSettings } from '@/api/composables/useBootSettings';
 import stores from '@/store';
 import Alert from '@/components/Global/Alert.vue';
 
@@ -177,13 +178,13 @@ const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
-const bootSettingsStore = stores.BootSettingsStore();
 
 const {
   availableFunctions,
   isLoading,
   executeServiceFunction: executeServiceFunctionApi,
 } = useIBMiServiceFunctions();
+const { biosAttributes } = useBootSettings();
 
 onBeforeRouteLeave(() => {
   hideLoader();
@@ -192,10 +193,7 @@ onBeforeRouteLeave(() => {
 onBeforeMount(async () => {
   startLoader();
   try {
-    await Promise.all([
-      globalStore.getBootProgress(),
-      bootSettingsStore.fetchBiosAttributes(),
-    ]);
+    await globalStore.getBootProgress();
   } catch {
     errorToast('Failed to load service functions');
   } finally {
@@ -227,9 +225,7 @@ const isIBMi = computed(() => {
   }
 });
 
-const attributeKeys = computed(() => {
-  return bootSettingsStore.getBiosAttributes;
-});
+const attributeKeys = computed(() => biosAttributes.value);
 
 const exceuteFunction = async (value) => {
   try {

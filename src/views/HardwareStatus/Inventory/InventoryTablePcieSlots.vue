@@ -101,6 +101,7 @@ import useToast from '@/components/Composables/useToastComposable';
 import { useI18n } from 'vue-i18n';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import { BLink } from 'bootstrap-vue-next';
+import { usePcieSlots } from '@/api/composables/usePcieSlots';
 
 const { t } = useI18n();
 const { successToast, errorToast } = useToast();
@@ -108,7 +109,11 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 
-const pcieSlotsStore = stores.PcieSlotsStore();
+const {
+  pcieSlots: allPcieSlots,
+  isLoading: pcieSlotsLoading,
+  updateIdentifyLed,
+} = usePcieSlots();
 const globalStore = stores.GlobalStore();
 
 const props = defineProps({
@@ -151,10 +156,8 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  pcieSlotsStore.getPcieSlotsInfo({ uri: props.chassis }).finally(() => {
-    eventBus.emit('hardware-status-pcie-slots-complete');
-    isBusy.value = false;
-  });
+  eventBus.emit('hardware-status-pcie-slots-complete');
+  isBusy.value = false;
 });
 
 const filteredRows = computed(() => {
@@ -164,13 +167,7 @@ const filteredRows = computed(() => {
 });
 
 const pcieSlots = computed(() => {
-  let slotsList = [];
-  const slots = pcieSlotsStore.pcieSlotsGetter;
-  slots.map((slot) => {
-    if (slot.type !== 'OEM') {
-      slotsList.push(slot);
-    }
-  });
+  const slotsList = allPcieSlots.value.filter((slot) => slot.type !== 'OEM');
   setSlotListLength(slotsList.length);
   return slotsList;
 });
@@ -184,17 +181,6 @@ const serverStatus = computed(() => {
     return false;
   }
 });
-
-watch(
-  () => props.chassis,
-  (value) => {
-    isBusy.value = true;
-    pcieSlotsStore.getPcieSlotsInfo({ uri: value }).finally(() => {
-      eventBus.emit('hardware-status-pcie-slots-complete');
-      isBusy.value = false;
-    });
-  },
-);
 
 const setSlotListLength = (value) => {
   slotListLength.value = value;
@@ -225,12 +211,7 @@ function onFiltered(filteredItems) {
 }
 
 function toggleIdentifyLedValue(row) {
-  pcieSlotsStore
-    .updateIdentifyLedValue({
-      locationNumber: row.locationNumber,
-      identifyLed: row.identifyLed,
-      uri: props.chassis,
-    })
+  updateIdentifyLed(props.chassis, row.locationNumber, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

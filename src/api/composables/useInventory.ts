@@ -1,5 +1,5 @@
 import { ref, watch } from 'vue';
-import { useRedfishCollection } from './useAllSubResources';
+import { useRedfishCollection } from './useRedfishCollection';
 import { RedfishQueryPresets } from './shared/queryConfig';
 import type { Chassis } from '@/types/redfish';
 

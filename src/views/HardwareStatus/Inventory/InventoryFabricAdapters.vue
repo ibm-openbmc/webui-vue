@@ -173,6 +173,7 @@ import { reactive, ref, computed, watch, onBeforeMount, nextTick } from 'vue';
 import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
+import { useFabricAdapters } from '@/api/composables/useFabricAdapters';
 
 const { t } = useI18n();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
@@ -182,7 +183,11 @@ const { toggleRow } = useTableRowExpandComposable();
 const { successToast, errorToast } = useToast();
 
 const globalStore = stores.GlobalStore();
-const fabricAdaptersStore = stores.FabricAdaptersStore();
+const {
+  fabricAdapters,
+  isLoading: faLoading,
+  updateIdentifyLed,
+} = useFabricAdapters();
 const { expandRowLabel } = useTableRowExpandComposable();
 
 const props = defineProps({
@@ -248,18 +253,14 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  fabricAdaptersStore
-    .getFabricAdaptersInfo({ uri: props.chassis })
-    .finally(() => {
-      eventBus.emit('hardware-status-fabric-adapters-complete');
-      isBusy.value = false;
-    });
+  eventBus.emit('hardware-status-fabric-adapters-complete');
+  isBusy.value = false;
 });
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
-    : fabricAdaptersStore.fabricAdapters.length;
+    : fabricAdapters.value.length;
 });
 
 const serverStatus = computed(() => {
@@ -288,24 +289,6 @@ const isIoExpansionChassis = computed(() => {
   }
 });
 
-const fabricAdapters = computed(() => {
-  const adapters = fabricAdaptersStore.fabricAdaptersGetter;
-  return adapters;
-});
-
-watch(
-  () => props.chassis,
-  () => {
-    isBusy.value = true;
-    fabricAdaptersStore
-      .getFabricAdaptersInfo({ uri: props.chassis })
-      .finally(() => {
-        eventBus.emit('hardware-status-fabric-adapters-complete');
-        isBusy.value = false;
-      });
-  },
-);
-
 watch(
   () => fabricAdapters,
   (fA) => {
@@ -329,13 +312,7 @@ function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
 function toggleIdentifyLedValue(row) {
-  fabricAdaptersStore
-    .updateIdentifyLedValue({
-      uri: row.uri,
-      memberId: row.id,
-      identifyLed: row.identifyLed,
-      chassisUri: props.chassis,
-    })
+  updateIdentifyLed(row.uri, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

@@ -175,6 +175,7 @@ import useToast from '@/components/Composables/useToastComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import stores from '../../../store';
 import eventBus from '@/eventBus';
+import { useAssembly } from '@/api/composables/useAssembly';
 
 const props = defineProps({
   chassis: {
@@ -191,7 +192,11 @@ const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();
 
 const globalStore = stores.GlobalStore();
-const assemblyStore = stores.AssemblyStore();
+const {
+  assemblies,
+  isLoading: assemblyLoading,
+  updateIdentifyLed,
+} = useAssembly();
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
@@ -249,24 +254,11 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  assemblyStore.getAssemblyInfo({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-assembly-complete');
-    isBusy.value = false;
-  });
+  eventBus.emit('hardware-status-assembly-complete');
+  isBusy.value = false;
 });
 
-const assemblies = computed(() => {
-  return assemblyStore.assemblies;
-});
-
-const items = computed(() => {
-  if (assemblies.value) {
-    return assemblies.value;
-  } else {
-    return [];
-  }
-});
+const items = computed(() => assemblies.value ?? []);
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
@@ -316,18 +308,6 @@ const tableHeaders = computed(() => {
 });
 
 watch(
-  () => props.chassis,
-  (value) => {
-    isBusy.value = true;
-    assemblyStore.getAssemblyInfo({ uri: value }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      eventBus.emit('hardware-status-assembly-complete');
-      isBusy.value = false;
-    });
-  },
-);
-
-watch(
   () => items,
   (item) => {
     nextTick(() => {
@@ -351,12 +331,7 @@ function onFiltered(filteredItems) {
 }
 
 function toggleIdentifyLedValue(row) {
-  assemblyStore
-    .updateIdentifyLedValue({
-      uri: row.uri,
-      memberId: row.id,
-      identifyLed: row.identifyLed,
-    })
+  updateIdentifyLed(row.uri, row.id, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

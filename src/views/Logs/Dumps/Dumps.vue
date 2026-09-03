@@ -194,7 +194,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import { usePaginatedData } from '@/api/composables/shared/usePaginatedData';
@@ -212,6 +212,7 @@ import useToast from '@/components/Composables/useToastComposable';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableFilterComposable from '@/components/Composables/useTableFilterComposable';
+import { useDumps } from '@/api/composables/useDumps';
 import stores from '@/store';
 import eventBus from '@/eventBus';
 
@@ -221,12 +222,11 @@ const { getFilteredTableData, getFilteredTableDataByDate } =
   useTableFilterComposable();
 const { successToast, errorToast } = useToast();
 
-const dumps = stores.DumpsStore();
-const userManagement = stores.UserManagementStore();
+const { allDumps, isLoading, deleteDumps } = useDumps();
 const resourceMemory = stores.ResourceMemoryStore();
 const global = stores.GlobalStore();
 
-const isBusy = ref(true);
+const isBusy = computed(() => isLoading.value);
 const selectedDumpType = ref('');
 const fields = ref([
   {
@@ -295,28 +295,21 @@ onBeforeRouteLeave(() => {
   hideLoader();
 });
 
-onBeforeMount(() => {
-  startLoader();
-  Promise.all([
-    dumps.getAllDumps(),
-    userManagement.getUsers(),
-    resourceMemory.getHmcManaged(),
-    global.getBootProgress(),
-  ]).finally(() => {
-    endLoader();
-    isBusy.value = false;
-  });
-});
-
-onMounted(() => {
-  eventBus.on('updateDumpInfo', updateDumpInfo);
-});
+// Watch loading state to drive the loading bar
+watch(
+  isLoading,
+  (loading) => {
+    if (loading) {
+      startLoader();
+    } else {
+      endLoader();
+    }
+  },
+  { immediate: true },
+);
 
 const filteredRows = computed(() => {
   return filteredDumps.value.length;
-});
-const allDumps = computed(() => {
-  return dumps.allDumpsGetter;
 });
 const filteredDumpsByDate = computed(() => {
   return getFilteredTableDataByDate(
@@ -376,6 +369,7 @@ watch(pagination.currentPage, (newPage) => {
 const updateDumpInfo = (selectedDumpTypeVal) => {
   selectedDumpType.value = selectedDumpTypeVal.toString();
 };
+eventBus.on('updateDumpInfo', updateDumpInfo);
 const convertBytesToMegabytes = (bytes) => {
   return parseFloat((bytes / 1000000).toFixed(3));
 };
@@ -394,7 +388,7 @@ const onTableRowAction = (action, dump) => {
 };
 const handleOk = () => {
   openModal.value = false;
-  dumps.deleteDumps([dumpVal.value]).then((messages) => {
+  deleteDumps([dumpVal.value]).then((messages) => {
     messages.forEach(({ type, message }) => {
       if (type === 'success') {
         successToast(message);

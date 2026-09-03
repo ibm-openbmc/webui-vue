@@ -57,27 +57,21 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeMount } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import { useRebootBmc } from '@/api/composables/useRebootBmc';
-import stores from '@/store';
+import { useBootSettings } from '@/api/composables/useBootSettings';
 
 const { successToast, errorToast } = useToast();
 const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
-const bootSettingsStore = stores.BootSettingsStore();
-
 const { lastBmcRebootTime, isLoading, isError, rebootBmc } = useRebootBmc();
+const { systemDumpActive } = useBootSettings();
 
 const openModal = ref(false);
-
-onBeforeMount(() => {
-  // Pre-fetch BIOS attributes so the modal opens instantly on click
-  bootSettingsStore.fetchBiosAttributes();
-});
 
 // Only show loading bar on initial load, not during background refetches
 watch(
@@ -101,10 +95,6 @@ watch(isError, (hasError) => {
 
 onBeforeRouteLeave(() => {
   hideLoader();
-});
-
-const systemDumpActive = computed(() => {
-  return bootSettingsStore.getSystemDumpActive;
 });
 
 function onClick() {

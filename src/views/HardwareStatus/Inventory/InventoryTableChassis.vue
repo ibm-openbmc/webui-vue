@@ -126,9 +126,9 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import { reactive, ref, computed, onBeforeMount, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
-import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
+import { useChassisInventory } from '@/api/composables/useChassisInventory';
 
 const { successToast, errorToast } = useToast();
 const { t } = useI18n();
@@ -136,7 +136,11 @@ const isBusy = ref(false);
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 
-const chassisStore = stores.ChassisStore();
+const {
+  chassis,
+  isLoading: chassisLoading,
+  updateIdentifyLed,
+} = useChassisInventory();
 
 const fields = reactive([
   {
@@ -187,15 +191,8 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  chassisStore.fetchGetChassisInfo().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-chassis-complete');
-    isBusy.value = false;
-  });
-});
-
-const chassis = computed(() => {
-  return chassisStore.chassis;
+  eventBus.emit('hardware-status-chassis-complete');
+  isBusy.value = false;
 });
 
 watch(
@@ -218,8 +215,7 @@ watch(
 );
 
 function toggleIdentifyLedValue(row) {
-  chassisStore
-    .updateIdentifyLedValue({ uri: row.uri, identifyLed: row.identifyLed })
+  updateIdentifyLed(row.uri, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

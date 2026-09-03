@@ -176,13 +176,13 @@ import TableCellCount from '@/components/Global/TableCellCount.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import Search from '@/components/Global/Search.vue';
-import ProcessorStore from '../../../store/modules/HardwareStatus/ProcessorStore';
 import { computed, onBeforeMount, reactive, ref, watch, nextTick } from 'vue';
 import useToast from '@/components/Composables/useToastComposable';
 import eventBus from '@/eventBus';
 import { useI18n } from 'vue-i18n';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
+import { useProcessors } from '@/api/composables/useProcessors';
 
 const { t } = useI18n();
 const { toggleRow } = useTableRowExpandComposable();
@@ -192,7 +192,11 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
 const { expandRowLabel } = useTableRowExpandComposable();
 
-const processorStore = ProcessorStore();
+const {
+  processors,
+  isLoading: processorsLoading,
+  updateIdentifyLed,
+} = useProcessors();
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
@@ -252,21 +256,14 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  processorStore.getProcessorsInfo().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-processors-complete');
-    isBusy.value = false;
-  });
+  eventBus.emit('hardware-status-processors-complete');
+  isBusy.value = false;
 });
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
-    : processorStore.processorsGetter.length;
-});
-
-const processors = computed(() => {
-  return processorStore.processorsGetter;
+    : processors.value.length;
 });
 
 function onFiltered(filteredItems) {
@@ -293,11 +290,7 @@ watch(
 );
 
 function toggleIdentifyLedValue(row) {
-  processorStore
-    .updateIdentifyLedValue({
-      uri: row.uri,
-      identifyLed: row.identifyLed,
-    })
+  updateIdentifyLed(row.uri, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

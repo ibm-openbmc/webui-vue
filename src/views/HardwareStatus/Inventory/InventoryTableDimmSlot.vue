@@ -182,7 +182,7 @@ import { useI18n } from 'vue-i18n';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { ref, reactive, computed, onBeforeMount, watch, nextTick } from 'vue';
-import stores from '../../../store';
+import { useDimms } from '@/api/composables/useDimms';
 
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
@@ -191,7 +191,7 @@ const { t } = useI18n();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { successToast, errorToast } = useToast();
 
-const memoryStore = stores.MemoryStore();
+const { dimms, isLoading: dimmsLoading, updateIdentifyLed } = useDimms();
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
@@ -250,21 +250,14 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  memoryStore.getDimms().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-dimm-slot-complete');
-    isBusy.value = false;
-  });
+  eventBus.emit('hardware-status-dimm-slot-complete');
+  isBusy.value = false;
 });
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
-    : memoryStore.dimms.length;
-});
-
-const dimms = computed(() => {
-  return memoryStore.dimmsGetter;
+    : dimms.value.length;
 });
 
 watch(
@@ -291,8 +284,7 @@ function onFiltered(filteredItems) {
 }
 
 function toggleIdentifyLedValue(row) {
-  memoryStore
-    .updateIdentifyLedValue({ uri: row.uri, identifyLed: row.identifyLed })
+  updateIdentifyLed(row.uri, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

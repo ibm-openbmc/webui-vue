@@ -141,17 +141,17 @@ import IconChevron from '@carbon/icons-vue/es/chevron--down/20';
 import { reactive, ref, computed, onBeforeMount, watch, nextTick } from 'vue';
 import useDataFormatterGlobal from '../../../components/Composables/useDataFormatterGlobal';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
-import stores from '../../../store';
 import eventBus from '@/eventBus';
 import { useI18n } from 'vue-i18n';
 import useToast from '@/components/Composables/useToastComposable';
+import { useBmc } from '@/api/composables/useBmc';
 
 const { successToast, errorToast } = useToast();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { t } = useI18n();
 
-const bmcStore = stores.BmcStore();
+const { bmc, isLoading: bmcLoading, updateIdentifyLed } = useBmc();
 
 const isBusy = ref(false);
 
@@ -203,24 +203,11 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  bmcStore.getBmcInfo().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-bmc-manager-complete');
-    isBusy.value = false;
-  });
+  eventBus.emit('hardware-status-bmc-manager-complete');
+  isBusy.value = false;
 });
 
-const bmc = computed(() => {
-  return bmcStore.bmcGetter;
-});
-
-const items = computed(() => {
-  if (bmc.value) {
-    return [bmc.value];
-  } else {
-    return [];
-  }
-});
+const items = computed(() => (bmc.value ? [bmc.value] : []));
 
 watch(
   () => items,
@@ -242,8 +229,7 @@ watch(
 );
 
 function toggleIdentifyLedValue(row) {
-  bmcStore
-    .updateIdentifyLedValue({ uri: row.uri, identifyLed: row.identifyLed })
+  updateIdentifyLed(row.uri, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

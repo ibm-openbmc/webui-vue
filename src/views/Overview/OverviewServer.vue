@@ -58,16 +58,17 @@ import {
   useSystemInfo,
   useUpdateAssetTag,
 } from '@/api/composables/useSystemInfo';
+import { useBootSettings } from '@/api/composables/useBootSettings';
 
 const { hideLoader } = useLoadingBar();
 const { dataFormatter } = useDataFormatterGlobal();
 
 const global = stores.GlobalStore();
-const bootSettingsStore = stores.BootSettingsStore();
 
-// Use VueQuery composables for system info and asset tag updates
+// Use VueQuery composables for system info, asset tag updates, and BIOS attributes
 const { assetTag, modelType, serialNumber } = useSystemInfo();
 const { updateAssetTagAsync } = useUpdateAssetTag();
+const { biosAttributes } = useBootSettings();
 
 const openModal = ref(false);
 const serviceLoginStatus = ref(null);
@@ -79,10 +80,7 @@ onBeforeRouteLeave(() => {
 onBeforeMount(() => {
   eventBus.on('okAssetTag', okAssetTagHandler);
 
-  Promise.all([
-    global.getServiceLogin(),
-    bootSettingsStore.fetchBiosAttributes(),
-  ]).finally(() => {
+  Promise.all([global.getServiceLogin()]).finally(() => {
     eventBus.emit('overview-server-complete');
   });
 });
@@ -107,10 +105,6 @@ const serviceLogin = computed(() => {
     setServiceLoginStatus(i18n.global.t('global.status.disabled'));
   }
   return serviceLoginStatus.value;
-});
-
-const biosAttributes = computed(() => {
-  return bootSettingsStore.getBiosAttributes;
 });
 
 const operatingMode = computed(() => {

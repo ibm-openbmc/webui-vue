@@ -188,6 +188,7 @@ import stores from '../../../store';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { BFormCheckbox } from 'bootstrap-vue-next';
+import { usePowerSupplies } from '@/api/composables/usePowerSupplies';
 
 const { t } = useI18n();
 const { successToast, errorToast } = useToast();
@@ -197,7 +198,11 @@ const { statusIconValue } = useDataFormatterGlobal();
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
 
-const powerSupplyStore = stores.PowerSupplyStore();
+const {
+  powerSupplies,
+  isLoading: psLoading,
+  updateIdentifyLed,
+} = usePowerSupplies();
 const globalStore = stores.GlobalStore();
 
 const props = defineProps({
@@ -259,22 +264,18 @@ const fields = reactive([
     tdAttr: { scope: null },
   },
 ]);
-// const searchFilter = ref(searchFilters);
 const searchTotalFilteredRows = ref(0);
 
 const filteredRows = computed(() => {
   return searchFilterInput.value
     ? searchTotalFilteredRows.value
-    : powerSupplyStore.powerSuppliesGetter.length;
+    : powerSupplies.value.length;
 });
 
 onBeforeMount(() => {
   isBusy.value = true;
-  powerSupplyStore.getAllPowerSupplies({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-power-supplies-complete');
-    isBusy.value = false;
-  });
+  eventBus.emit('hardware-status-power-supplies-complete');
+  isBusy.value = false;
 });
 
 const serverStatus = computed(() => {
@@ -300,22 +301,6 @@ const isIoExpansionChassis = computed(() => {
     return true;
   }
 });
-const powerSupplies = computed(() => {
-  return powerSupplyStore.powerSuppliesGetter;
-});
-
-watch(
-  () => props.chassis,
-  (value) => {
-    isBusy.value = true;
-    powerSupplyStore.getAllPowerSupplies({ uri: value }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      eventBus.emit('hardware-status-power-supplies-complete');
-      isBusy.value = false;
-    });
-  },
-);
-
 watch(
   () => powerSupplies,
   (item) => {
@@ -339,8 +324,7 @@ function onFiltered(filteredItems) {
   searchTotalFilteredRows.value = filteredItems.length;
 }
 function toggleIdentifyLedValue(row) {
-  powerSupplyStore
-    .updateIdentifyLedValue({ uri: row.uri, identifyLed: row.identifyLed })
+  updateIdentifyLed(row.uri, row.identifyLed)
     .then((message) => successToast(message))
     .catch(({ message }) => errorToast(message));
 }

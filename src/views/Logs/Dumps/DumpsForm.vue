@@ -67,7 +67,7 @@
     </BForm>
     <modal-confirmation
       v-model="modalConfirmation"
-      @ok="createSystemDump($t(`pageDumps.form.${selectedDumpType}Dump`))"
+      @ok="onCreateSystemDump($t(`pageDumps.form.${selectedDumpType}Dump`))"
     />
     <modal-partition-dump-confirmation
       v-model="modalPartition"
@@ -92,17 +92,20 @@ import InputPasswordToggle from '@/components/Global/InputPasswordToggle.vue';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import { useVuelidate } from '@vuelidate/core';
+import { useDumps } from '@/api/composables/useDumps';
+import { useBootSettings } from '@/api/composables/useBootSettings';
 import stores from '@/store/index.js';
 import eventBus from '@/eventBus';
 
 const { getValidationState } = useVuelidateComposable();
 const { successToast, errorToast, infoToast } = useToast();
 
+const { createBmcDump, createResourceDump, createSystemDump, getTask } =
+  useDumps();
+const { biosAttributes } = useBootSettings();
 const global = stores.GlobalStore();
 const ibmiServiceFunctions = stores.IBMiServiceFunctionsStore();
-const serverBootSettings = stores.BootSettingsStore();
 const userManagement = stores.UserManagementStore();
-const dumps = stores.DumpsStore();
 
 const selectedDumpType = ref('');
 const resourceSelectorValue = ref(null);
@@ -120,8 +123,6 @@ onBeforeMount(() => {
     global.getHmcManaged(),
     global.getBootProgress(),
     ibmiServiceFunctions.getAvailableServiceFunctions(),
-    serverBootSettings.fetchBiosAttributes(),
-    serverBootSettings.getBiosAttributes,
   ]);
   eventBus.on('modal-close', () => {
     modalConfirmation.value = false;
@@ -152,9 +153,7 @@ const isIBMi = computed(() => {
     return false;
   }
 });
-const attributeKeys = computed(() => {
-  return serverBootSettings.getBiosAttributes;
-});
+const attributeKeys = computed(() => biosAttributes.value);
 const currentUser = computed(() => {
   return global.currentUserGetter;
 });
@@ -194,7 +193,7 @@ const isButtonDisabled = computed(() => {
 
 const checkTask = async () => {
   //getting list of all tasks and getting the api to the most recent task
-  const taskObj = await dumps.getTask();
+  const taskObj = await getTask();
   taskProgress.value = taskObj.data.Members[taskObj.data.Members.length - 1];
   const taskLink = taskProgress.value['@odata.id'];
   //going to the most recent task
@@ -267,12 +266,11 @@ const handleSubmit = () => {
   }
   // Resource dump initiation
   else if (selectedDumpType.value === 'resource') {
-    dumps
-      .createResourceDump({
-        resourceSelector: resourceSelectorValue.value,
-        // If not logged as service, '' must be used
-        resourcePassword: resourcePasswordValue.value || '',
-      })
+    createResourceDump({
+      resourceSelector: resourceSelectorValue.value,
+      // If not logged as service, '' must be used
+      resourcePassword: resourcePasswordValue.value || '',
+    })
       .then(() => {
         infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
           title: i18n.global.t('pageDumps.toast.successStartResourceDumpTitle'),
@@ -284,8 +282,7 @@ const handleSubmit = () => {
   }
   // BMC dump initiation
   else if (selectedDumpType.value === 'bmc') {
-    dumps
-      .createBmcDump(dumpType)
+    createBmcDump(dumpType)
       .then(() =>
         infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
           title: i18n.global.t('pageDumps.toast.successStartBmcDumpTitle'),
@@ -349,9 +346,8 @@ const showConfirmationModal = () => {
 const showPartitionDumpConfirmationModal = () => {
   modalPartition.value = true;
 };
-const createSystemDump = (dumpType) => {
-  dumps
-    .createSystemDump(dumpType)
+const onCreateSystemDump = (dumpType) => {
+  createSystemDump(dumpType)
     .then(() =>
       infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
         title: i18n.global.t('pageDumps.toast.successStartSystemDumpTitle'),
