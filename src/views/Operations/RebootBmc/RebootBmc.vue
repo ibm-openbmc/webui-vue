@@ -66,18 +66,12 @@ import { useBootSettings } from '@/api/composables/useBootSettings';
 
 const { successToast, errorToast } = useToast();
 
-const bootSettingsStore = stores.BootSettingsStore();
-
 const { lastBmcRebootTime, isFetching, isError, rebootBmc } = useRebootBmc();
 const { systemDumpActive } = useBootSettings();
 
 const openModal = ref(false);
 
 usePageLoadingBar(isFetching, isError);
-
-const systemDumpActive = computed(() => {
-  return bootSettingsStore.getSystemDumpActive;
-});
 
 function onClick() {
   openModal.value = true;
