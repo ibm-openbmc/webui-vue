@@ -14,9 +14,6 @@ vi.mock('vue-router', async () => {
     useRouter: () => ({
       push: vi.fn(),
     }),
-    onBeforeRouteLeave: vi.fn((callback) => {
-      callback();
-    }),
   };
 });
 
@@ -146,11 +143,6 @@ describe('Ldap.vue', () => {
       expect(certificatesStore.getCertificates).toHaveBeenCalled();
     });
 
-    it('should hide loader on route leave', () => {
-      wrapper = createWrapper();
-      expect(mockLoadingBar.hideLoader).toHaveBeenCalled();
-    });
-
     it('should start loader when loading is true', async () => {
       mockUseLdap.isLoading.value = true;
       wrapper = createWrapper();
@@ -161,7 +153,7 @@ describe('Ldap.vue', () => {
     it('should end loader when loading is false', async () => {
       mockUseLdap.isLoading.value = false;
       wrapper = createWrapper();
-      await nextTick();
+      await flushPromises();
       expect(mockLoadingBar.endLoader).toHaveBeenCalled();
     });
   });

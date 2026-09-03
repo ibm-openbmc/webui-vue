@@ -183,6 +183,7 @@ export function useSnmpAlerts() {
     // Data
     snmpAlerts: snmpSubscriptions,
     isLoading: subscriptionsQuery.isLoading,
+    isFetching: subscriptionsQuery.isFetching,
     isError: subscriptionsQuery.isError,
     error: subscriptionsQuery.error,
 

@@ -57,40 +57,26 @@ import PageTitle from '@/components/Global/PageTitle.vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
 import i18n from '@/i18n';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import { usePowerRestorePolicy } from '@/api/composables/usePowerRestorePolicy';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 
 const { successToast, errorToast } = useToastComposable();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
 const {
   powerRestorePolicies,
   powerRestoreCurrentPolicy,
   isLoading,
+  isFetching,
+  isError,
   setPowerRestorePolicy,
   isOperatingModeManual,
 } = usePowerRestorePolicy();
 
+const { startLoader, endLoader } = usePageLoadingBar(isFetching, isError);
+
 const policyValue = ref(null);
 const options = ref([]);
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-// Watch for loading state changes
-watch(
-  () => isLoading.value,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
 
 // Watch for policies data and update options
 watch(

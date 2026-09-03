@@ -120,13 +120,12 @@ import PageTitle from '@/components/Global/PageTitle.vue';
 import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import { useSnmpAlerts } from '@/api/composables/useSnmpAlerts';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import eventBus from '@/eventBus';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
 const { successToast, errorToast } = useToastComposable();
 const {
   clearSelectedRows,
@@ -141,12 +140,18 @@ const {
 const {
   snmpAlerts: snmpAlertsFromQuery,
   isLoading: isSnmpAlertsLoading,
+  isFetching: isSnmpAlertsFetching,
   isError,
   addDestination,
   deleteDestination,
   deleteMultipleDestinations,
   refetch: refetchSnmpAlerts,
 } = useSnmpAlerts();
+
+const { startLoader, endLoader } = usePageLoadingBar(
+  isSnmpAlertsFetching,
+  isError,
+);
 
 defineExpose({
   refetch: refetchSnmpAlerts,
@@ -228,7 +233,6 @@ const tableItems = computed(() => {
 
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
-  hideLoader();
 });
 
 onBeforeMount(() => {
@@ -237,29 +241,6 @@ onBeforeMount(() => {
     clearSelectedRows(tableRef);
   });
 });
-
-// Manage loading bar for query fetching state
-watch(
-  () => isSnmpAlertsLoading.value,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
-
-// Stop the loading bar when fetch fails
-watch(
-  () => isError.value,
-  (hasError) => {
-    if (hasError) {
-      endLoader();
-    }
-  },
-);
 
 watch(
   () => tableItems.value,

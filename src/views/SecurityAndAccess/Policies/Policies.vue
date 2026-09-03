@@ -336,12 +336,10 @@ import { UserManagementStore } from '@/store/modules/SecurityAndAccess/UserManag
 import { GlobalStore } from '@/store/modules/GlobalStore';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import i18n from '@/i18n';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
-import { onBeforeRouteLeave } from 'vue-router';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import IconTime from '@carbon/icons-vue/es/time/16';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
 const Toast = useToastComposable();
 
 const {
@@ -359,6 +357,7 @@ const {
   sendServiceAlertsEnabled,
   loadAllPolicies,
   isLoading: isPoliciesLoading,
+  isFetching: isPoliciesFetching,
   saveSshProtocolState,
   saveIpmiProtocolState,
   saveTpmPolicy,
@@ -371,6 +370,8 @@ const {
   saveBasicAuthEnabled,
   saveSendServiceAlertsEnabled,
 } = usePolicies();
+
+const { startLoader, endLoader } = usePageLoadingBar(isPoliciesFetching);
 
 const UserManagement = UserManagementStore();
 const Global = GlobalStore();
@@ -389,19 +390,6 @@ const localSendServiceAlertsEnabled = ref(sendServiceAlertsEnabled.value);
 watch(sendServiceAlertsEnabled, (newValue) => {
   localSendServiceAlertsEnabled.value = newValue;
 });
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-watch(
-  () => isPoliciesLoading.value,
-  (loading) => {
-    if (loading) startLoader();
-    else endLoader();
-  },
-  { immediate: true },
-);
 
 onMounted(() => {
   Promise.all([

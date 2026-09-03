@@ -83,6 +83,7 @@ const MOCK_LOGS = [
 const makeHook = (overrides = {}) => ({
   allLogs: ref([]),
   isLoading: ref(false),
+  isFetching: ref(false),
   isError: ref(false),
   deleteAllLogs: vi.fn().mockResolvedValue(undefined),
   deleteEventLogs: vi.fn().mockResolvedValue([]),
@@ -174,14 +175,17 @@ describe('EventLogs.vue', () => {
     expect(wrapper.vm.isBusy).toBe(false);
   });
 
-  it('calls startLoader when loading begins', () => {
-    mountEventLogs({ isLoading: ref(true) });
+  it('calls startLoader when loading begins', async () => {
+    mountEventLogs({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls endLoader when loading finishes', () => {
-    mountEventLogs({ isLoading: ref(false) });
+  it('calls endLoader when data is already fresh (no fetch needed)', async () => {
+    mountEventLogs({ isLoading: ref(false), isFetching: ref(false) });
+    await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
+    expect(startLoaderMock).not.toHaveBeenCalled();
   });
 
   // ── filteredLogs / paginatedLogs ───────────────────────────────────────────

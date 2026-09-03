@@ -70,6 +70,7 @@ export function usePostCodeLogs() {
   const {
     data: postCodeLogsRaw,
     isLoading: isLoadingPostCodeLogs,
+    isFetching: isFetchingPostCodeLogs,
     error: postCodeLogsError,
     isError: isPostCodeLogsError,
     refetch: refetchPostCodeLogs,
@@ -178,6 +179,7 @@ export function usePostCodeLogs() {
 
     // Loading states
     isLoading: isLoadingPostCodeLogs,
+    isFetching: isFetchingPostCodeLogs,
 
     // Error states
     isError: isPostCodeLogsError,

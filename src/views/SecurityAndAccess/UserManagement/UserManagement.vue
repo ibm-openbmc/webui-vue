@@ -257,6 +257,7 @@ import TableToolbar from '@/components/Global/TableToolbar.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import RegisterOtpModal from './RegisterOtpModal.vue';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useToastComposable from '@/components/Composables/useToastComposable';
 import AuthenticationStore from '../../../store/modules/Authentication/AuthenticationStore';
@@ -292,6 +293,7 @@ const {
   isCurrentUserMfaBypassed,
   secretKeyInfo,
   isLoading: isDataLoading,
+  isFetching: isDataFetching,
   isMutating,
   createUser: createUserApi,
   updateUser: updateUserApi,
@@ -311,6 +313,8 @@ const {
   refetchUsers,
   refetchAccountService,
 } = useUserManagement();
+
+usePageLoadingBar(isDataFetching);
 
 const isAllSelected = ref(false);
 const isBusy = computed(() => isDataLoading.value || isMutating.value);

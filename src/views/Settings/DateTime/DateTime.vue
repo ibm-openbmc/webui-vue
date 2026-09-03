@@ -321,14 +321,13 @@ import {
   watch,
   computed,
   onBeforeMount,
-  onBeforeUnmount,
   getCurrentInstance,
 } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useLocalTimezoneLabelComposable from '@/components/Composables/useLocalTimezoneLabelComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
@@ -347,7 +346,7 @@ import UserManagementStore from '../../../store/modules/SecurityAndAccess/UserMa
 import { useDateTime } from '@/api/composables/useDateTime';
 
 const { proxy } = getCurrentInstance();
-const { startLoader, hideLoader, endLoader } = useLoadingBar();
+const { startLoader, endLoader } = useLoadingBar();
 const userManagementStore = UserManagementStore();
 const { getValidationState } = useVuelidateComposable();
 const { localOffset } = useLocalTimezoneLabelComposable();
@@ -365,9 +364,18 @@ const {
   ntpServers: ntpServersFromQuery,
   isNtpProtocolEnabled: isNtpProtocolEnabledFromQuery,
   networkSuppliedServers: networkSuppliedServersFromQuery,
-  isLoading: isDateTimeLoading,
+  isFetching: isDateTimeFetching,
+  isError: isDateTimeError,
   updateDateTime: updateDateTimeAction,
 } = useDateTime();
+
+// 1120-vue3 waited for getBmcTime() + getNtpData() + getAccountSettings().
+// Track the Vuex side-calls as an extra loading flag and combine with the
+// NTP query isFetching so the bar ends only after all three settle.
+const isExtraLoading = ref(true);
+const isPageFetching = computed(
+  () => isDateTimeFetching.value || isExtraLoading.value,
+);
 
 const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -396,33 +404,16 @@ const showDhcpNtpServers = ref(false);
 const dhcpNtp = ref([]);
 const showNtpAlert = ref(false);
 
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-// Loading bar automatically shows/hides based on fetch state
-watch(
-  () => isDateTimeLoading.value,
-  (loading) => {
-    if (loading) startLoader();
-    else endLoader();
-  },
-  { immediate: true },
-);
-
-onBeforeUnmount(() => {
-  hideLoader();
-});
+usePageLoadingBar(isPageFetching, isDateTimeError);
 
 onMounted(() => {
-  startLoader();
   Promise.all([
     globalStore.getBmcTime(),
     userManagementStore.getAccountSettings(),
   ]).finally(() => {
+    isExtraLoading.value = false;
     showCollapse();
     setInitialNtpValues();
-    endLoader();
   });
 });
 

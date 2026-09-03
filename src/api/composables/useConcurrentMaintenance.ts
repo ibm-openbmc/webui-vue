@@ -37,6 +37,7 @@ export function useConcurrentMaintenance() {
   const {
     data: assembliesData,
     isLoading,
+    isFetching,
     error,
     isError,
     refetch,
@@ -232,6 +233,7 @@ export function useConcurrentMaintenance() {
 
     // Loading states
     isLoading,
+    isFetching,
     isUpdating,
 
     // Error states

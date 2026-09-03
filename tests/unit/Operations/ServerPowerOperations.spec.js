@@ -48,6 +48,7 @@ vi.mock('@/api/composables/useServerPowerOperations', () => ({
     biosAttributes: computed(() => mockBiosAttributes.value),
     attributeValues: computed(() => mockAttributeValues.value),
     isLoading: computed(() => mockIsBiosLoading.value),
+    isFetching: computed(() => mockIsBiosLoading.value),
     refetch: mockRefetchBios,
     refetchBios: mockRefetchBiosOnly,
     standbyToRuntime: mockStandbyToRuntimeMutation,
@@ -65,6 +66,7 @@ vi.mock('@/api/composables/useServerPowerOperations', () => ({
   useServerSystemInfo: () => ({
     serverStatus: computed(() => mockServerStatus.value),
     isSystemLoading: computed(() => mockIsSystemLoading.value),
+    isSystemFetching: computed(() => mockIsSystemLoading.value),
     refetchSystem: mockRefetchSystem,
     powerRestorePolicy: computed(() => mockPowerRestorePolicy.value),
     lastPowerOperationTime: computed(() => mockLastPowerOperationTime.value),
@@ -72,6 +74,7 @@ vi.mock('@/api/composables/useServerPowerOperations', () => ({
   useServerBmcInfo: () => ({
     bmc: computed(() => mockBmc.value),
     isLoading: computed(() => mockIsBmcLoading.value),
+    isFetching: computed(() => mockIsBmcLoading.value),
     refetch: mockRefetchBmc,
   }),
   useLocationCodes: () => ({

@@ -96,6 +96,7 @@ export function useEventLogs() {
   const {
     data: eventLogsRaw,
     isLoading: isLoadingEventLogs,
+    isFetching: isFetchingEventLogs,
     error: eventLogsError,
     isError: isEventLogsError,
     refetch: refetchEventLogs,
@@ -110,6 +111,7 @@ export function useEventLogs() {
   const {
     data: ceLogsRaw,
     isLoading: isLoadingCELogs,
+    isFetching: isFetchingCELogs,
     error: ceLogsError,
     isError: isCELogsError,
     refetch: refetchCELogs,
@@ -443,6 +445,9 @@ export function useEventLogs() {
     isLoading: computed(
       () => isLoadingEventLogs.value || isLoadingCELogs.value,
     ),
+    isFetching: computed(
+      () => isFetchingEventLogs.value || isFetchingCELogs.value,
+    ),
     isLoadingEventLogs,
     isLoadingCELogs,
 
@@ -472,8 +477,7 @@ export function useEventLogs() {
     refetchEventLogs,
     refetchCELogs,
     refetchAll: async () => {
-      await refetchEventLogs();
-      await refetchCELogs();
+      await Promise.all([refetchEventLogs(), refetchCELogs()]);
     },
   };
 }

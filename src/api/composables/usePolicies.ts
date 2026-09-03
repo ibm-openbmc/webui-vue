@@ -175,6 +175,17 @@ export function usePolicies() {
     );
   });
 
+  const isFetching = computed(() => {
+    return (
+      networkProtocolQuery.isFetching.value ||
+      biosQuery.isFetching.value ||
+      systemQuery.isFetching.value ||
+      managerQuery.isFetching.value ||
+      serviceAccountQuery.isFetching.value ||
+      accountServiceQuery.isFetching.value
+    );
+  });
+
   // Refetch all policies
   async function loadAllPolicies() {
     await Promise.all([
@@ -941,6 +952,7 @@ export function usePolicies() {
     sendServiceAlertsEnabled,
     // Loading states
     isLoading,
+    isFetching,
     // Fetch
     loadAllPolicies,
     // Save

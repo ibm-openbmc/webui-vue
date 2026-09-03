@@ -13,6 +13,13 @@ import {
 // ── Mocks ──────────────────────────────────────────────────────────────────────
 
 vi.mock('@tanstack/vue-query', () => ({
+  useQuery: vi.fn(() => ({
+    data: { value: null },
+    isLoading: { value: false },
+    isFetching: { value: false },
+    isError: { value: false },
+    error: { value: null },
+  })),
   useQueryClient: vi.fn(),
 }));
 
@@ -45,7 +52,7 @@ import {
   useRedfishCollection,
 } from '@/api/composables/useRedfishCollection';
 import { usePatchResource } from '@/api/composables/usePatchResource';
-import { useQueryClient } from '@tanstack/vue-query';
+import { useQueryClient, useQuery } from '@tanstack/vue-query';
 import useToast from '@/components/Composables/useToastComposable';
 
 // ── Shared helpers ─────────────────────────────────────────────────────────────
@@ -225,23 +232,34 @@ describe('useOverviewLicense', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => vi.restoreAllMocks());
 
+  const stubLicenseQuery = (data = null, overrides = {}) => ({
+    data: ref(data),
+    isLoading: ref(false),
+    isFetching: ref(false),
+    isError: ref(false),
+    error: ref(null),
+    ...overrides,
+  });
+
   it('returns null expirationDate when licenses data is null', () => {
-    useRedfishCollection.mockReturnValue(stubCollection(null));
+    useQuery.mockReturnValue(stubLicenseQuery(null));
 
     const { firmwareAccessKeyInfo } = useOverviewLicense();
     expect(firmwareAccessKeyInfo.value.expirationDate).toBeNull();
   });
 
   it('returns null expirationDate when no licenses', () => {
-    useRedfishCollection.mockReturnValue(stubCollection([]));
+    useQuery.mockReturnValue(stubLicenseQuery({}));
 
     const { firmwareAccessKeyInfo } = useOverviewLicense();
     expect(firmwareAccessKeyInfo.value.expirationDate).toBeNull();
   });
 
   it('returns null when UAK license is absent', () => {
-    useRedfishCollection.mockReturnValue(
-      stubCollection([{ Id: 'OTHER', ExpirationDate: '2030-01-01T00:00:00Z' }]),
+    useQuery.mockReturnValue(
+      stubLicenseQuery({
+        OTHER: { Id: 'OTHER', ExpirationDate: '2030-01-01T00:00:00Z' },
+      }),
     );
 
     const { firmwareAccessKeyInfo } = useOverviewLicense();
@@ -250,8 +268,8 @@ describe('useOverviewLicense', () => {
 
   it('returns expirationDate from UAK license', () => {
     const dateStr = '2030-06-15T00:00:00Z';
-    useRedfishCollection.mockReturnValue(
-      stubCollection([{ Id: 'UAK', ExpirationDate: dateStr }]),
+    useQuery.mockReturnValue(
+      stubLicenseQuery({ UAK: { Id: 'UAK', ExpirationDate: dateStr } }),
     );
 
     const { firmwareAccessKeyInfo } = useOverviewLicense();
@@ -261,8 +279,8 @@ describe('useOverviewLicense', () => {
   });
 
   it('exposes isLoading and isError', () => {
-    useRedfishCollection.mockReturnValue(
-      stubCollection([], { isLoading: ref(true), isError: ref(true) }),
+    useQuery.mockReturnValue(
+      stubLicenseQuery(null, { isLoading: ref(true), isError: ref(true) }),
     );
 
     const { isLoading, isError } = useOverviewLicense();

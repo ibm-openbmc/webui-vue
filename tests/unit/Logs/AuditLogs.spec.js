@@ -73,6 +73,7 @@ const MOCK_LOGS = [
 const makeHook = (overrides = {}) => ({
   auditLogs: ref([]),
   isLoading: ref(false),
+  isFetching: ref(false),
   refetch: vi.fn().mockResolvedValue(undefined),
   downloadAuditLog: vi.fn().mockResolvedValue('base64data=='),
   isDownloading: ref(false),
@@ -152,13 +153,15 @@ describe('AuditLogs.vue', () => {
     expect(wrapper.vm.isBusy).toBe(false);
   });
 
-  it('calls startLoader when loading begins', () => {
-    mountAuditLogs({ isLoading: ref(true) });
+  it('calls startLoader when loading begins', async () => {
+    mountAuditLogs({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls endLoader when loading finishes', () => {
-    mountAuditLogs({ isLoading: ref(false) });
+  it('calls endLoader when loading finishes', async () => {
+    mountAuditLogs({ isLoading: ref(false), isFetching: ref(false) });
+    await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
   });
 

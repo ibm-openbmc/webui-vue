@@ -43,15 +43,14 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive, watch } from 'vue';
+import { ref, computed, reactive } from 'vue';
 import i18n from '@/i18n';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import Alert from '@/components/Global/Alert.vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import { default as IconJumpLink } from '@carbon/icons-vue/es/jump-link/16';
-import { onBeforeRouteLeave } from 'vue-router';
 import CapacityOnDemandOrderInfo from './CapacityOnDemandOrderInfo.vue';
 import CapacityOnDemandAcvitation from './CapacityOnDemandActivation.vue';
 import CapacityOnDemandTable from './CapacityOnDemandTable.vue';
@@ -59,13 +58,13 @@ import stores from '@/store';
 import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 
 const { scrollToOffset } = useJumpLinkComposable();
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 const global = stores.GlobalStore();
 const systemStore = stores.SystemStore();
 
 // Use the new VueQuery composable
-const { isLoading, isError, vetCapabilities, refetch } = useCapacityOnDemand();
+const { isFetching, isLoading, isError, vetCapabilities, refetch } =
+  useCapacityOnDemand();
 
 // Expose refetch for parent components
 defineExpose({
@@ -101,32 +100,18 @@ const quickLinks = reactive([
   },
 ]);
 
-// Only show loading bar on initial load, not during background refetches
-watch(
-  isLoading,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
+// 1120-vue3 waited for getLicenses() + getSystem(). Track the Vuex getSystem()
+// call as an extra loading flag and combine with licenses isFetching.
+const isExtraLoading = ref(true);
+const isPageFetching = computed(() => isFetching.value || isExtraLoading.value);
 
-// Stop the loading bar when the fetch fails
-watch(isError, (hasError) => {
-  if (hasError) {
-    endLoader();
-  }
-});
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
+// CapacityOnDemand has no children sharing its query so usePageLoadingBar is safe
+usePageLoadingBar(isPageFetching, isError);
 
 // Also fetch system data (not part of licenses composable)
-systemStore.getSystem();
+systemStore.getSystem().finally(() => {
+  isExtraLoading.value = false;
+});
 
 const serverStatus = computed(() => {
   return global.serverStatusGetter;

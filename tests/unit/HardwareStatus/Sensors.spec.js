@@ -367,15 +367,17 @@ describe('Sensors.vue', () => {
     expect(wrapper.vm.sensorsData).toHaveLength(0);
   });
 
-  it('starts the loader immediately when loading is true on mount', () => {
-    mountSensors({ isLoading: ref(true) });
+  it('starts the loader immediately when loading is true on mount', async () => {
+    mountSensors({ isLoading: ref(true), isFetching: ref(true) });
+    await nextTick();
 
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
     expect(endLoaderMock).not.toHaveBeenCalled();
   });
 
-  it('ends the loader immediately when loading is false on mount', () => {
-    mountSensors({ isLoading: ref(false) });
+  it('ends the loader immediately when loading is false on mount', async () => {
+    mountSensors({ isLoading: ref(false), isFetching: ref(false) });
+    await nextTick();
 
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
     expect(startLoaderMock).not.toHaveBeenCalled();
@@ -383,7 +385,9 @@ describe('Sensors.vue', () => {
 
   it('ends the loader when the sensors query enters an error state', async () => {
     const isError = ref(false);
-    mountSensors({ isError });
+    const isFetching = ref(true);
+    mountSensors({ isError, isFetching });
+    await nextTick();
 
     endLoaderMock.mockClear();
     isError.value = true;

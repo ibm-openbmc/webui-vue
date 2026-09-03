@@ -36,9 +36,8 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { computed } from 'vue';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
 import PowerCap from './PowerCap.vue';
@@ -51,31 +50,25 @@ import {
   useIdlePowerSaver,
 } from '@/api/composables/usePowerControl';
 
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
-
 const globalStore = stores.GlobalStore();
 
 // Use VueQuery composables for power data
-const { isPowerControlLoading, isPowerControlMutating, isPowerControlError } =
+const { isPowerControlFetching, isPowerControlMutating, isPowerControlError } =
   usePowerControl();
 
 const {
   oemMode,
-  isPowerPerformanceLoading,
+  isPowerPerformanceFetching,
   isPowerPerformanceMutating,
   isPowerPerformanceError,
 } = usePowerPerformanceMode();
 
 const {
   idlePowerSaverData,
-  isIdlePowerSaverLoading,
+  isIdlePowerSaverFetching,
   isIdlePowerSaverMutating,
   isIdlePowerSaverError,
 } = useIdlePowerSaver();
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
 
 const safeMode = computed(() => {
   return globalStore.safeModeGetter;
@@ -85,44 +78,18 @@ const nonIdlePowerSaverMode = computed(() => {
   return idlePowerSaverData.value ? false : true;
 });
 
-// Only show loading bar on initial load, not during background refetches
-watch(
-  [isPowerControlLoading, isPowerPerformanceLoading, isIdlePowerSaverLoading],
-  ([controlLoading, performanceLoading, idleLoading]) => {
-    if (controlLoading || performanceLoading || idleLoading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
+const isPageFetching = computed(
+  () =>
+    isPowerControlFetching.value ||
+    isPowerPerformanceFetching.value ||
+    isIdlePowerSaverFetching.value,
 );
 
-// Stop the loading bar when any fetch fails
-watch(
-  [isPowerControlError, isPowerPerformanceError, isIdlePowerSaverError],
-  ([controlError, performanceError, idleError]) => {
-    if (controlError || performanceError || idleError) {
-      endLoader();
-    }
-  },
-);
-
-// Manage loading bar for mutation/update state (separate from fetching)
-watch(
-  [
-    isPowerControlMutating,
-    isPowerPerformanceMutating,
-    isIdlePowerSaverMutating,
-  ],
-  ([controlMutating, performanceMutating, idleMutating]) => {
-    if (controlMutating || performanceMutating || idleMutating) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-);
+usePageLoadingBar(isPageFetching, null, [
+  isPowerControlMutating,
+  isPowerPerformanceMutating,
+  isIdlePowerSaverMutating,
+]);
 </script>
 
 <style lang="scss" scoped>

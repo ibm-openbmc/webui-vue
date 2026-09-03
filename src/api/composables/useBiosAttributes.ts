@@ -33,6 +33,7 @@ export function useBiosAttributes() {
   // Fetch BIOS data
   const {
     data: biosData,
+    isLoading: isLoadingBios,
     isFetching: isFetchingBios,
     isError: isBiosError,
     error: biosError,
@@ -48,7 +49,7 @@ export function useBiosAttributes() {
     staleTime: 30 * 1000, // 30 seconds
     gcTime: 5 * 60 * 1000, // 5 minutes
     refetchInterval: 60 * 1000, // refetch every 1 minute in the background
-    refetchOnMount: true, // always fetch fresh data when navigating to the page
+    refetchOnMount: 'always', // set isFetching=true synchronously on mount so the loading bar always fires
     retry: (failureCount: number, err: any) => {
       const status = err?.response?.status;
       if (status && status >= 400 && status < 500) return false;
@@ -61,6 +62,7 @@ export function useBiosAttributes() {
   // Fetch BIOS Registry data
   const {
     data: registryData,
+    isLoading: isLoadingRegistry,
     isFetching: isFetchingRegistry,
     isError: isRegistryError,
     error: registryError,
@@ -132,6 +134,11 @@ export function useBiosAttributes() {
   };
 
   // Loading and error states
+  // isLoading: true only on first fetch (no cache) — use for the page loading bar
+  // isFetching: true on first fetch AND every background poll — use only for busy indicators
+  const isLoading = computed(
+    () => isLoadingBios.value || isLoadingRegistry.value,
+  );
   const isFetching = computed(
     () => isFetchingBios.value || isFetchingRegistry.value,
   );
@@ -175,6 +182,8 @@ export function useBiosAttributes() {
     registryData,
 
     // Loading and error states
+    // isLoading is true only on the initial fetch (no cached data)
+    isLoading,
     isFetching,
     isFetchingBios,
     isFetchingRegistry,

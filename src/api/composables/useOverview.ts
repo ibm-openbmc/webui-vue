@@ -80,6 +80,7 @@ export function useOverviewFirmware() {
   const {
     data: bmcManager,
     isLoading: isBmcLoading,
+    isFetching: isBmcFetching,
     isError: isBmcError,
     error: bmcError,
   } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc', {
@@ -90,6 +91,7 @@ export function useOverviewFirmware() {
   const {
     data: firmwareInventory,
     isLoading: isFirmwareLoading,
+    isFetching: isFirmwareFetching,
     isError: isFirmwareError,
     error: firmwareError,
   } = useRedfishCollection<FirmwareInventory>(
@@ -152,6 +154,7 @@ export function useOverviewFirmware() {
       () => firmwareData.value?.backupBmcFirmware?.version ?? null,
     ),
     isLoading: computed(() => isBmcLoading.value || isFirmwareLoading.value),
+    isFetching: computed(() => isBmcFetching.value || isFirmwareFetching.value),
     isError: computed(() => isBmcError.value || isFirmwareError.value),
     error: computed(() => bmcError.value || firmwareError.value),
   };
@@ -166,6 +169,7 @@ export function useOverviewLicense() {
   const {
     data: licensesData,
     isLoading,
+    isFetching,
     isError,
     error,
   } = useRedfishCollection<License>('/redfish/v1/LicenseService/Licenses', {
@@ -186,6 +190,7 @@ export function useOverviewLicense() {
   return {
     firmwareAccessKeyInfo: licenseData,
     isLoading,
+    isFetching,
     isError,
     error,
   };
@@ -202,6 +207,7 @@ export function useOverviewNetwork() {
   const {
     data: ethernetInterfaces,
     isLoading,
+    isFetching,
     isError,
     error,
   } = useRedfishCollection<EthernetInterface>(
@@ -237,6 +243,7 @@ export function useOverviewNetwork() {
   return {
     network: networkData,
     isLoading,
+    isFetching,
     isError,
     error,
   };
@@ -253,6 +260,7 @@ export function useOverviewEvents() {
   const {
     data: eventLogs,
     isLoading,
+    isFetching,
     isError,
     error,
   } = useRedfishCollection<EventLog>(
@@ -294,6 +302,7 @@ export function useOverviewEvents() {
     criticalEvents,
     warningEvents,
     isLoading,
+    isFetching,
     isError,
     error,
   };
@@ -310,6 +319,7 @@ export function useOverviewInventory() {
   const {
     data: system,
     isLoading,
+    isFetching,
     isError,
     error,
   } = useRedfishResource<System>('/redfish/v1/Systems/system', {
@@ -326,6 +336,7 @@ export function useOverviewInventory() {
   return {
     systems: inventoryData,
     isLoading,
+    isFetching,
     isError,
     error,
   };
@@ -342,6 +353,7 @@ export function useOverviewQuickLinks() {
   const {
     data: bmcManager,
     isLoading: isBmcTimeLoading,
+    isFetching: isBmcTimeFetching,
     isError: isBmcTimeError,
   } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc', {
     queryConfig: { refetchOnMount: true },
@@ -360,6 +372,7 @@ export function useOverviewQuickLinks() {
   const {
     data: currentUser,
     isLoading: isUserLoading,
+    isFetching: isUserFetching,
     isError: isUserError,
   } = useRedfishResource<Account>(
     `/redfish/v1/AccountService/Accounts/${username}`,
@@ -384,6 +397,7 @@ export function useOverviewQuickLinks() {
       return role === 'Administrator' || role === 'OemIBMServiceAgent';
     }),
     isLoading: computed(() => isBmcTimeLoading.value || isUserLoading.value),
+    isFetching: computed(() => isBmcTimeFetching.value || isUserFetching.value),
     isError: computed(() => isBmcTimeError.value || isUserError.value),
   };
 }

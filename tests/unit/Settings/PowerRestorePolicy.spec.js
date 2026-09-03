@@ -1,5 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import { computed, ref } from 'vue';
+import { computed, ref, nextTick } from 'vue';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import PowerRestorePolicy from '@/views/Settings/PowerRestorePolicy/PowerRestorePolicy.vue';
 
@@ -39,6 +39,8 @@ vi.mock('@/api/composables/usePowerRestorePolicy', () => ({
     powerRestorePolicies: computed(() => mockPolicies.value),
     powerRestoreCurrentPolicy: computed(() => mockCurrentPolicy.value),
     isLoading: computed(() => mockIsLoading.value),
+    isFetching: computed(() => mockIsLoading.value),
+    isError: ref(false),
     setPowerRestorePolicy: mockSetPowerRestorePolicy,
     isOperatingModeManual: computed(() => mockIsOperatingModeManual.value),
   }),
@@ -226,10 +228,10 @@ describe('PowerRestorePolicy.vue', () => {
   });
 
   it('should react to loading state changes', async () => {
-    await factory();
-
     mockIsLoading.value = true;
-    await flushPromises();
+    const wrapper = await factory();
+    await nextTick();
+
     expect(mockStartLoader).toHaveBeenCalled();
 
     mockIsLoading.value = false;

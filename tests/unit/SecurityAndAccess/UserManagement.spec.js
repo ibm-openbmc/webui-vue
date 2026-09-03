@@ -105,6 +105,7 @@ const GLOBAL_STUBS = {
   },
   ModalSettings: {
     props: ['settings'],
+    emits: ['ok'],
     template: '<div data-stub="modal-settings" />',
   },
   TableRoles: { template: '<div data-stub="table-roles" />' },
@@ -114,73 +115,47 @@ const GLOBAL_STUBS = {
     props: ['modelValue', 'title', 'okTitle', 'cancelTitle', 'okVariant'],
     emits: ['update:modelValue', 'ok'],
     template:
-      '<div data-stub="b-modal" :modelvalue="modelValue"><slot /></div>',
+      '<div data-stub="b-modal" :modelvalue="modelValue ? \'true\' : \'false\'"><slot /></div>',
   },
-  // Stub BFormCheckbox to prevent bootstrap-vue-next from passing object-typed
-  // props/attrs down to native elements, which throws in jsdom.
-  BFormCheckbox: {
-    inheritAttrs: false,
-    props: ['modelValue', 'disabled', 'indeterminate', 'switch'],
-    emits: ['update:modelValue', 'change'],
-    template: '<span><slot /></span>',
+  PageTitle: { props: ['title'], template: '<div data-stub="page-title" />' },
+  InfoTooltip: {
+    props: ['title'],
+    template: '<div data-stub="info-tooltip" />',
   },
-  // Stub layout components — real bootstrap-vue-next BRow/BCol/BContainer/BButton
-  // attempt to patch reactive-object props as DOM attributes during re-renders,
-  // throwing "Cannot convert object to primitive value" in jsdom.
-  BContainer: { inheritAttrs: false, template: '<div><slot /></div>' },
-  BRow: { inheritAttrs: false, template: '<div><slot /></div>' },
-  BCol: { inheritAttrs: false, template: '<div><slot /></div>' },
-  BButton: {
-    inheritAttrs: false,
-    props: ['variant', 'disabled'],
-    emits: ['click'],
-    template:
-      '<button :disabled="disabled || undefined" v-bind="$attrs"><slot /></button>',
-  },
-  PageTitle: { inheritAttrs: false, template: '<div />' },
-  // Declare object-valued props so they are not forwarded as DOM attributes.
-  InfoTooltip: { inheritAttrs: false, props: ['title'], template: '<span />' },
   TableToolbar: {
-    inheritAttrs: false,
     props: ['selectedItemsCount', 'table', 'actions'],
     emits: ['clear-selected', 'batch-action'],
-    template: '<div />',
+    template: '<div data-stub="table-toolbar" />',
   },
   TableRowAction: {
-    inheritAttrs: false,
-    props: ['actions', 'row'],
-    emits: ['table-row-action'],
-    template: '<div />',
+    props: ['value', 'enabled', 'title'],
+    emits: ['click-table-action'],
+    template: '<div data-stub="table-row-action"><slot name="icon" /></div>',
   },
   Alert: {
-    inheritAttrs: false,
     props: ['variant'],
-    template: '<div><slot /></div>',
+    template: '<div data-stub="alert"><slot /></div>',
   },
   BTable: {
-    inheritAttrs: false,
     props: [
       'fields',
       'items',
       'responsive',
       'selectable',
-      'showEmpty',
-      'noSelectOnClick',
       'stickyHeader',
       'hover',
     ],
     emits: ['row-selected'],
-    template: '<div id="table-pcie-topology" />',
+    template: '<div data-stub="b-table"><slot /></div>',
   },
-  IconTrashcan: { inheritAttrs: false, template: '<span />' },
-  IconEdit: { inheritAttrs: false, template: '<span />' },
-  IconAdd: { inheritAttrs: false, template: '<span />' },
-  IconSettings: { inheritAttrs: false, template: '<span />' },
-  IconChevron: { inheritAttrs: false, template: '<span />' },
+  IconTrashcan: true,
+  IconEdit: true,
+  IconAdd: true,
+  IconSettings: true,
+  IconChevron: true,
   BCollapse: {
-    inheritAttrs: false,
     props: ['id'],
-    template: '<div><slot /></div>',
+    template: '<div data-stub="b-collapse"><slot /></div>',
   },
 };
 

@@ -34,6 +34,7 @@ export function useIBMiServiceFunctions() {
   const {
     data: systemRaw,
     isLoading,
+    isFetching,
     refetch,
   } = useRedfishResource<IBMSystem>(SYSTEM_PATH, {
     queryConfig: RedfishQueryPresets.ibmiServiceFunctions,
@@ -86,6 +87,7 @@ export function useIBMiServiceFunctions() {
     // Data
     availableFunctions,
     isLoading,
+    isFetching,
 
     // Actions
     refetch,

@@ -165,48 +165,41 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, watch } from 'vue';
+import { computed, onBeforeMount, watch, ref } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import { useIBMiServiceFunctions } from '@/api/composables/useIBMiServiceFunctions';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import { useBootSettings } from '@/api/composables/useBootSettings';
 import stores from '@/store';
 import Alert from '@/components/Global/Alert.vue';
 
 const { successToast, errorToast } = useToast();
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
 
 const globalStore = stores.GlobalStore();
 
 const {
   availableFunctions,
   isLoading,
+  isFetching,
   executeServiceFunction: executeServiceFunctionApi,
 } = useIBMiServiceFunctions();
 const { biosAttributes } = useBootSettings();
 
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
+// 1120-vue3 waited for getBootProgress() + fetchBiosAttributes() + the system
+// query. Track the Vuex side-calls as an extra loading flag and combine.
+const isExtraLoading = ref(true);
+const isPageFetching = computed(() => isFetching.value || isExtraLoading.value);
+
+usePageLoadingBar(isPageFetching);
 
 onBeforeMount(async () => {
-  startLoader();
   try {
     await globalStore.getBootProgress();
   } catch {
     errorToast('Failed to load service functions');
   } finally {
-    endLoader();
-  }
-});
-
-// Sync loading bar with TanStack Query loading state
-watch(isLoading, (loading) => {
-  if (loading) {
-    startLoader();
-  } else {
-    endLoader();
+    isExtraLoading.value = false;
   }
 });
 

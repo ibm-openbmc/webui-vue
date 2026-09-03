@@ -53,6 +53,7 @@ const AVAILABLE_FUNCTIONS = [21, 65, 67, 68, 69, 70];
 const makeHook = (overrides = {}) => ({
   availableFunctions: ref(AVAILABLE_FUNCTIONS),
   isLoading: ref(false),
+  isFetching: ref(false),
   refetch: vi.fn().mockResolvedValue(undefined),
   executeServiceFunction: vi
     .fn()
@@ -117,7 +118,7 @@ describe('IBMiServiceFunctions.vue', () => {
   // ── Loading state ──────────────────────────────────────────────────────────
 
   it('calls startLoader on mount', async () => {
-    mountIBMiServiceFunctions();
+    mountIBMiServiceFunctions({ isFetching: ref(true) });
     await nextTick();
     expect(startLoaderMock).toHaveBeenCalled();
   });
@@ -206,11 +207,11 @@ describe('IBMiServiceFunctions.vue', () => {
   });
 
   it('handles composable loading state change', async () => {
-    const composableIsLoading = ref(false);
-    mountIBMiServiceFunctions({ isLoading: composableIsLoading });
+    const composableIsFetching = ref(false);
+    mountIBMiServiceFunctions({ isFetching: composableIsFetching });
     await nextTick();
 
-    composableIsLoading.value = true;
+    composableIsFetching.value = true;
     await nextTick();
 
     expect(startLoaderMock).toHaveBeenCalled();

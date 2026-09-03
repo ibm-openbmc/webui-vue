@@ -111,9 +111,10 @@ import TableIpv6StaticDefaultGateway from './TableIpv6StaticDefaultGateway.vue';
 import { useNetwork } from '@/api/composables/useNetwork';
 import stores from '@/store';
 import { useRouter } from 'vue-router';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 
 const router = useRouter();
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
+const { startLoader, endLoader } = useLoadingBar();
 const queryClient = useQueryClient();
 const authenticationStore = stores.AuthenticationStore();
 
@@ -121,6 +122,8 @@ const {
   networkSettings,
   lldpEnabledState,
   isLoading,
+  isFetching,
+  isError,
   setSelectedTabIndex,
   setSelectedTabId,
   refetchEthernet,
@@ -133,6 +136,8 @@ const {
   saveHostname: saveHostnameApi,
 } = useNetwork();
 
+usePageLoadingBar(isFetching, isError);
+
 const currentHostname = ref('');
 const defaultGateway = ref('');
 const ipAddress = ref('');
@@ -141,23 +146,6 @@ const ipAddressIpv6StaticDefaultGateway = ref('');
 const prefixLength = ref(0);
 const subnet = ref('');
 const tabIndex = ref(0);
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-// Manage loading bar based on query state
-watch(
-  isLoading,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
 
 onMounted(() => {
   refetchEthernet();

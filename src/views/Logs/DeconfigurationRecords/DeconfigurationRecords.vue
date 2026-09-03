@@ -310,7 +310,6 @@ import { omit } from 'lodash';
 import i18n from '@/i18n';
 import { ref, computed, watch, nextTick } from 'vue';
 import useToastComposable from '@/components/Composables/useToastComposable';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useTableRowExpandComposable from '@/components/Composables/useTableRowExpandComposable';
@@ -332,6 +331,7 @@ import stores from '@/store';
 import { onBeforeRouteLeave } from 'vue-router';
 import eventBus from '@/eventBus';
 import { useDeconfigurationRecords } from '@/api/composables/useDeconfigurationRecords';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 
 // Composables
 const {
@@ -348,18 +348,25 @@ const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const Toast = useToastComposable();
 const { getFilteredTableData } = useTableFilterComposable();
 const { dataFormatter } = useDataFormatterGlobal();
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
 
 // Use the new vue-query composable
 const {
   allRecords: deconfigRecordsData,
   isLoading,
+  isFetching,
   isProcessing,
+  isError,
   clearAllRecords: clearAllRecordsApi,
   deleteRecords: deleteRecordsApi,
   downloadLog: downloadLogApi,
   refetchRecords,
 } = useDeconfigurationRecords();
+
+const { startLoader, endLoader } = usePageLoadingBar(
+  isFetching,
+  isError,
+  isProcessing,
+);
 
 const global = stores.GlobalStore();
 
@@ -461,17 +468,11 @@ const currentPageRef = ref(1);
 
 const itemPerPageRef = ref(20);
 
-// Watch loading state - includes both initial fetch and processing
+// Keep isBusy in sync with loading state
 watch(
   () => isLoading.value || isProcessing.value,
   (loading) => {
-    if (loading) {
-      startLoader();
-      isBusy.value = true;
-    } else {
-      endLoader();
-      isBusy.value = false;
-    }
+    isBusy.value = loading;
   },
   { immediate: true },
 );
@@ -479,7 +480,6 @@ watch(
 onBeforeRouteLeave(() => {
   eventBus.emit('clear-selected');
   isBusy.value = false;
-  hideLoader();
 });
 
 eventBus.on('clear-selected', () => {

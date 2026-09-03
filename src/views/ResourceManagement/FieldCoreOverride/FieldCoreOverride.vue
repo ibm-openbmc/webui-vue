@@ -23,9 +23,8 @@
 </template>
 
 <script setup>
-import { watch, onBeforeMount } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { onBeforeMount, computed, ref } from 'vue';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import Alert from '@/components/Global/Alert.vue';
 import stores from '@/store';
@@ -33,42 +32,30 @@ import { useFieldCoreOverride } from '@/api/composables/useFieldCoreOverride';
 import CurrentConfiguration from './FieldCoreOverrideInfo.vue';
 import ChangeConfiguration from './FieldCoreOverrideConfiguration.vue';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
-
 const systemStore = stores.SystemStore();
 const licenseStore = stores.LicenseStore();
 
-const { isLoading, isError, refetch } = useFieldCoreOverride();
+const { isFetching, isError, refetch } = useFieldCoreOverride();
 
 // Expose refetch for parent components
 defineExpose({
   refetch,
 });
 
+// 1120-vue3 waited for getLicenses() + getSystem() + getBiosAttributes().
+// Track the Vuex side-calls as an extra loading flag.
+const isExtraLoading = ref(true);
+
+// Combined: BIOS query (shared with children) + Vuex side-calls
+const isPageFetching = computed(() => isFetching.value || isExtraLoading.value);
+
 onBeforeMount(() => {
-  startLoader();
   Promise.all([licenseStore.getLicenses(), systemStore.getSystem()]).finally(
-    () => endLoader(),
+    () => {
+      isExtraLoading.value = false;
+    },
   );
 });
 
-// Only show loading bar on initial load, not during background refetches
-watch(isLoading, (loading) => {
-  if (loading) {
-    startLoader();
-  } else {
-    endLoader();
-  }
-});
-
-// Stop the loading bar when the BIOS fetch fails
-watch(isError, (hasError) => {
-  if (hasError) {
-    endLoader();
-  }
-});
-
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
+usePageLoadingBar(isPageFetching, isError);
 </script>

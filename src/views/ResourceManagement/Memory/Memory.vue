@@ -383,11 +383,11 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { minValue, maxValue } from '@vuelidate/validators';
 import i18n from '@/i18n';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import useVuelidateComposable from '@/components/Composables/useVuelidateComposable';
@@ -398,7 +398,7 @@ import PageSection from '@/components/Global/PageSection.vue';
 import stores from '@/store';
 import { useMemory } from '@/api/composables/useMemory';
 
-const { startLoader, endLoader, hideLoader } = useLoadingBar();
+const { startLoader, endLoader } = useLoadingBar();
 const { scrollToOffset } = useJumpLinkComposable();
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
@@ -416,6 +416,7 @@ const {
   numHugePages: numHugePagesData,
   memoryMirroringMode,
   predictiveDynamicMemoryDeallocation,
+  isLoading,
   isFetching,
   isError,
   saveLogicalMemorySize,
@@ -488,37 +489,16 @@ const quickLinks = ref([
   },
 ]);
 
-// Manage loading bar for query fetching state
-watch(
-  isFetching,
-  (fetching) => {
-    if (fetching) {
-      startLoader();
-    } else {
-      endLoader();
-    }
-  },
-  { immediate: true },
-);
+// Page navigation loading bar — fires once on mount fetch, ignores interval polls
+usePageLoadingBar(isFetching, isError);
 
-// Stop the loading bar when the fetch fails
-watch(isError, (hasError) => {
-  if (hasError) {
-    endLoader();
-  }
-});
-
-// Manage loading bar for mutation/update state
+// Manage loading bar for user-triggered mutations (save/update actions)
 watch(isUpdating, (updating) => {
   if (updating) {
     startLoader();
   } else {
     endLoader();
   }
-});
-
-onBeforeRouteLeave(() => {
-  hideLoader();
 });
 
 // Local state for form inputs with validation

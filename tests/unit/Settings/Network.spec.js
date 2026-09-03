@@ -37,6 +37,8 @@ vi.mock('@/api/composables/useNetwork', () => ({
     networkSettings: computed(() => mockNetworkSettings.value),
     lldpEnabledState: computed(() => mockLldpEnabledState.value),
     isLoading: computed(() => mockIsLoading.value),
+    isFetching: computed(() => mockIsLoading.value),
+    isError: ref(false),
     isTableBusy: computed(() => mockIsTableBusy.value),
     selectedInterfaceIndex: computed(() => mockSelectedInterfaceIndex.value),
     selectedInterfaceId: computed(() => mockSelectedInterfaceId.value),

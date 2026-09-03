@@ -233,6 +233,10 @@ export function useCertificates() {
     () => acfQuery.isLoading.value || certificatesQuery.isLoading.value,
   );
 
+  const isFetching = computed(
+    () => acfQuery.isFetching.value || certificatesQuery.isFetching.value,
+  );
+
   // Refetch all certificates
   const refetchAll = async () => {
     await Promise.all([acfQuery.refetch(), certificatesQuery.refetch()]);
@@ -669,6 +673,7 @@ export function useCertificates() {
     availableUploadTypes,
     // Loading
     isLoading,
+    isFetching,
     // Refetch
     refetchAll,
     // Mutations

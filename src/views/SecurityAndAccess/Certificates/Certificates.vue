@@ -159,6 +159,7 @@ import stores from '@/store';
 import { ref, onMounted, computed, watch } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 // @ts-ignore
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 // @ts-ignore
 import useToastComposable from '@/components/Composables/useToastComposable';
@@ -169,7 +170,7 @@ import eventBus from '@/eventBus';
 import { useCertificates } from '@/api/composables/useCertificates';
 import { getCertificateProp } from '@/store/modules/SecurityAndAccess/CertificatesStore.js';
 
-const { hideLoader, startLoader, endLoader } = useLoadingBar();
+const { startLoader, endLoader } = useLoadingBar();
 const toast = useToastComposable();
 
 // Use the certificates composable
@@ -177,6 +178,7 @@ const {
   certificates: certificatesData,
   availableUploadTypes,
   isLoading,
+  isFetching: isCertificatesFetching,
   refetchAll,
   addNewACFCertificate,
   addNewCertificate,
@@ -234,28 +236,19 @@ const fields = ref([
   },
 ]);
 
-onBeforeRouteLeave(() => {
-  hideLoader();
-});
-
-// Watch loading state
-watch(
-  isLoading,
-  (loading) => {
-    if (loading) {
-      startLoader();
-    } else {
-      endLoader();
-      isBusy.value = false;
-    }
-  },
-  { immediate: true },
+// 1120-vue3 waited for getBmcTime() + getAcfCertificate() + getCertificates()
+// + getUsers(). Track the Vuex side-calls as an extra loading flag and combine.
+const isExtraLoading = ref(true);
+const isPageFetching = computed(
+  () => isCertificatesFetching.value || isExtraLoading.value,
 );
 
+// Show loading bar on navigation; ignore background polls
+usePageLoadingBar(isPageFetching);
+
 onMounted(() => {
-  startLoader();
   Promise.all([global.getBmcTime(), userManagement.getUsers()]).finally(() => {
-    endLoader();
+    isExtraLoading.value = false;
     isBusy.value = false;
     userRoleId.value = global.currentUser?.RoleId;
   });

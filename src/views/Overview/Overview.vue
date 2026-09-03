@@ -26,8 +26,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
+import { ref, computed } from 'vue';
+import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import OverviewQuickLinks from './OverviewQuickLinks.vue';
@@ -56,89 +56,46 @@ import {
   useOverviewQuickLinks,
 } from '@/api/composables/useOverview';
 
-const { startLoader, endLoader } = useLoadingBar();
-
 const showDumps = ref(import.meta.env.VITE_APP_ENV_NAME === 'ibm');
 
 // Use VueQuery composables for all Overview data
-const { isLoading: isSystemInfoLoading, isError: isSystemInfoError } =
+const { isFetching: isSystemInfoFetching, isError: isSystemInfoError } =
   useSystemInfo();
 const { isUpdating: isAssetTagUpdating } = useUpdateAssetTag();
 const { isPowerControlFetching, isPowerControlError } = usePowerControl();
 const { isPowerPerformanceFetching, isPowerPerformanceError } =
   usePowerPerformanceMode();
 const { isIdlePowerSaverFetching, isIdlePowerSaverError } = useIdlePowerSaver();
-const { isLoading: isFirmwareLoading, isError: isFirmwareError } =
+const { isFetching: isFirmwareFetching, isError: isFirmwareError } =
   useOverviewFirmware();
-const { isLoading: isLicenseLoading, isError: isLicenseError } =
+const { isFetching: isLicenseFetching, isError: isLicenseError } =
   useOverviewLicense();
-const { isLoading: isNetworkLoading, isError: isNetworkError } =
+const { isFetching: isNetworkFetching, isError: isNetworkError } =
   useOverviewNetwork();
-const { isLoading: isEventsLoading, isError: isEventsError } =
+const { isFetching: isEventsFetching, isError: isEventsError } =
   useOverviewEvents();
-const { isLoading: isInventoryLoading, isError: isInventoryError } =
+const { isFetching: isInventoryFetching, isError: isInventoryError } =
   useOverviewInventory();
-const { isLoading: isQuickLinksLoading, isError: isQuickLinksError } =
+const { isFetching: isQuickLinksFetching, isError: isQuickLinksError } =
   useOverviewQuickLinks();
 
-// Track overall loading state
-const isAnyLoading = ref(false);
-
-// Watch all loading states
-watch(
-  [
-    isSystemInfoLoading,
-    isPowerControlFetching,
-    isPowerPerformanceFetching,
-    isIdlePowerSaverFetching,
-    isFirmwareLoading,
-    isLicenseLoading,
-    isNetworkLoading,
-    isEventsLoading,
-    isInventoryLoading,
-    isQuickLinksLoading,
-  ],
-  (loadingStates) => {
-    const loading = loadingStates.some((state) => state);
-
-    if (loading && !isAnyLoading.value) {
-      isAnyLoading.value = true;
-      startLoader();
-    } else if (!loading && isAnyLoading.value) {
-      isAnyLoading.value = false;
-      endLoader();
-    }
-  },
-  { immediate: true },
+// Child components share the same queries — usePageLoadingBar watches
+// isFetching with { immediate: true } from setup time, before any lifecycle
+// hook fires, so the child-fetch race is handled correctly.
+const isPageFetching = computed(
+  () =>
+    isSystemInfoFetching.value ||
+    isPowerControlFetching.value ||
+    isPowerPerformanceFetching.value ||
+    isIdlePowerSaverFetching.value ||
+    isFirmwareFetching.value ||
+    isLicenseFetching.value ||
+    isNetworkFetching.value ||
+    isEventsFetching.value ||
+    isInventoryFetching.value ||
+    isQuickLinksFetching.value,
 );
 
-// Watch mutation state separately
-watch(isAssetTagUpdating, (updating) => {
-  if (updating) {
-    startLoader();
-  } else {
-    endLoader();
-  }
-});
-
-// Stop the loading bar when any fetch fails
-watch(
-  [
-    isSystemInfoError,
-    isPowerControlError,
-    isPowerPerformanceError,
-    isIdlePowerSaverError,
-    isFirmwareError,
-    isLicenseError,
-    isNetworkError,
-    isEventsError,
-    isInventoryError,
-    isQuickLinksError,
-  ],
-  (errorStates) => {
-    if (errorStates.some((state) => state)) {
-      endLoader();
-    }
-  },
-);
+// isAssetTagUpdating is the user-triggered mutation — always shows the bar.
+usePageLoadingBar(isPageFetching, null, isAssetTagUpdating);
 </script>

@@ -81,6 +81,7 @@ export function useSystemInfo() {
   const {
     data: system,
     isLoading: isSystemLoading,
+    isFetching: isSystemFetching,
     error: systemError,
     isError: isSystemError,
     refetch: refetchSystem,
@@ -92,6 +93,7 @@ export function useSystemInfo() {
   const {
     data: eventLogs,
     isLoading: isEventsLoading,
+    isFetching: isEventsFetching,
     error: eventsError,
     isError: isEventsError,
     refetch: refetchEvents,
@@ -162,6 +164,9 @@ export function useSystemInfo() {
     healthStatus: computed(() => systemData.value?.healthStatus ?? ''),
     events: computed(() => systemData.value?.events ?? []),
     isLoading: computed(() => isSystemLoading.value || isEventsLoading.value),
+    isFetching: computed(
+      () => isSystemFetching.value || isEventsFetching.value,
+    ),
     error: computed(() => systemError.value || eventsError.value),
     isError: computed(() => isSystemError.value || isEventsError.value),
     refetch: () => {
