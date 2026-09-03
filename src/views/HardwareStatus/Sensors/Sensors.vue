@@ -302,7 +302,6 @@ onBeforeMount(() => {
   });
 });
 
-
 // Filtered data before pagination (memoized for performance)
 const filteredSensorsData = computed(() => {
   if (!sensorsData.value) return [];

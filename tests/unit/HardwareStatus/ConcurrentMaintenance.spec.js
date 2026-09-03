@@ -120,7 +120,10 @@ describe('ConcurrentMaintenance.vue', () => {
   });
 
   it('calls endLoader when isLoading is false on mount', async () => {
-    mountConcurrentMaintenance({ isLoading: ref(false), isFetching: ref(false) });
+    mountConcurrentMaintenance({
+      isLoading: ref(false),
+      isFetching: ref(false),
+    });
     await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
     expect(startLoaderMock).not.toHaveBeenCalled();

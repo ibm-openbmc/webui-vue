@@ -257,7 +257,9 @@ describe('useOverviewLicense', () => {
 
   it('returns null when UAK license is absent', () => {
     useQuery.mockReturnValue(
-      stubLicenseQuery({ OTHER: { Id: 'OTHER', ExpirationDate: '2030-01-01T00:00:00Z' } }),
+      stubLicenseQuery({
+        OTHER: { Id: 'OTHER', ExpirationDate: '2030-01-01T00:00:00Z' },
+      }),
     );
 
     const { firmwareAccessKeyInfo } = useOverviewLicense();

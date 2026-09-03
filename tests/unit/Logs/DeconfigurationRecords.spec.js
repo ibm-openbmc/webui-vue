@@ -182,13 +182,19 @@ describe('DeconfigurationRecords.vue', () => {
   });
 
   it('calls startLoader when loading begins', async () => {
-    mountDeconfigurationRecords({ isLoading: ref(true), isFetching: ref(true) });
+    mountDeconfigurationRecords({
+      isLoading: ref(true),
+      isFetching: ref(true),
+    });
     await nextTick();
     expect(startLoaderMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls endLoader when loading finishes', async () => {
-    mountDeconfigurationRecords({ isLoading: ref(false), isFetching: ref(false) });
+    mountDeconfigurationRecords({
+      isLoading: ref(false),
+      isFetching: ref(false),
+    });
     await nextTick();
     expect(endLoaderMock).toHaveBeenCalledTimes(1);
   });

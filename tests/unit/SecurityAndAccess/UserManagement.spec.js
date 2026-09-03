@@ -118,7 +118,10 @@ const GLOBAL_STUBS = {
       '<div data-stub="b-modal" :modelvalue="modelValue ? \'true\' : \'false\'"><slot /></div>',
   },
   PageTitle: { props: ['title'], template: '<div data-stub="page-title" />' },
-  InfoTooltip: { props: ['title'], template: '<div data-stub="info-tooltip" />' },
+  InfoTooltip: {
+    props: ['title'],
+    template: '<div data-stub="info-tooltip" />',
+  },
   TableToolbar: {
     props: ['selectedItemsCount', 'table', 'actions'],
     emits: ['clear-selected', 'batch-action'],
@@ -129,9 +132,19 @@ const GLOBAL_STUBS = {
     emits: ['click-table-action'],
     template: '<div data-stub="table-row-action"><slot name="icon" /></div>',
   },
-  Alert: { props: ['variant'], template: '<div data-stub="alert"><slot /></div>' },
+  Alert: {
+    props: ['variant'],
+    template: '<div data-stub="alert"><slot /></div>',
+  },
   BTable: {
-    props: ['fields', 'items', 'responsive', 'selectable', 'stickyHeader', 'hover'],
+    props: [
+      'fields',
+      'items',
+      'responsive',
+      'selectable',
+      'stickyHeader',
+      'hover',
+    ],
     emits: ['row-selected'],
     template: '<div data-stub="b-table"><slot /></div>',
   },
@@ -140,7 +153,10 @@ const GLOBAL_STUBS = {
   IconAdd: true,
   IconSettings: true,
   IconChevron: true,
-  BCollapse: { props: ['id'], template: '<div data-stub="b-collapse"><slot /></div>' },
+  BCollapse: {
+    props: ['id'],
+    template: '<div data-stub="b-collapse"><slot /></div>',
+  },
 };
 
 /** Mounts UserManagement with mocked composable and store state. */
