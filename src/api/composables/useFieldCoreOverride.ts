@@ -35,10 +35,12 @@ export function useFieldCoreOverride() {
       return response.data?.Attributes ?? {};
     },
     staleTime: 0,
-    refetchInterval: 60 * 1000,
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    // Don't retry client errors (4xx) — they won't succeed on retry.
-    // Do retry transient server errors (5xx) and network failures.
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: 'always',
+    notifyOnChangeProps: ['data', 'error'] as any,
     retry: (failureCount: number, err: any) => {
       const status = err?.response?.status;
       if (status && status >= 400 && status < 500) return false;

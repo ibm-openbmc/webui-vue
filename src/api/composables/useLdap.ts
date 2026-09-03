@@ -73,7 +73,7 @@ export function useLdap() {
   const accountServiceQuery = useRedfishResource<AccountService>(
     '/redfish/v1/AccountService',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.ldap as Partial<
         UseQueryOptions<AccountService>
       >,
     },

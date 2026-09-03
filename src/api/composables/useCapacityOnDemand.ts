@@ -5,6 +5,7 @@ import api from '@/store/api';
 import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
 import useToast from '@/components/Composables/useToastComposable';
+import { RedfishQueryPresets } from './shared/queryConfig';
 
 interface License {
   Id: string;
@@ -76,16 +77,7 @@ export function useCapacityOnDemand() {
 
       return data;
     },
-    staleTime: 0,
-    refetchInterval: 60 * 1000,
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    ...RedfishQueryPresets.capacityOnDemand,
   });
 
   // Computed: All licenses

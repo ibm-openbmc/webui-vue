@@ -79,7 +79,7 @@ export function useNetworkSettings() {
     isError: isBiosError,
     refetch: refetchBios,
   } = useRedfishResource<BiosResponse>('/redfish/v1/Systems/system/Bios', {
-    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<BiosResponse>>,
+    queryConfig: RedfishQueryPresets.serverPowerOperations as Partial<UseQueryOptions<BiosResponse>>,
   });
 
   const rawBiosAttributes = computed<NetworkBiosAttributes | null>(() => {
@@ -103,7 +103,7 @@ export function useNetworkSettings() {
   } = useRedfishResource<RegistryResponse>(
     '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
     {
-      queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<RegistryResponse>>,
+      queryConfig: RedfishQueryPresets.serverPowerOperations as Partial<UseQueryOptions<RegistryResponse>>,
     },
   );
 

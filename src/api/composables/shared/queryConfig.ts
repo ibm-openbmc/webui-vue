@@ -72,16 +72,15 @@ export function createRedfishQueryConfig(
   overrides: RedfishQueryConfig = {},
 ): Partial<UseQueryOptions<any>> {
   const config: Partial<UseQueryOptions<any>> = {
-    staleTime: overrides.staleTime ?? 30 * 1000, // 30 seconds
-    gcTime: overrides.gcTime ?? 5 * 60 * 1000, // 5 minutes
-    refetchOnWindowFocus: overrides.refetchOnWindowFocus ?? false,
+    staleTime: overrides.staleTime ?? 0,
+    gcTime: overrides.gcTime ?? 2 * 60 * 1000, // 2 minutes
+    refetchOnWindowFocus: overrides.refetchOnWindowFocus ?? true,
     refetchOnReconnect: overrides.refetchOnReconnect ?? true,
     retry: overrides.retry ?? defaultRedfishRetry,
-    refetchInterval: overrides.refetchInterval ?? false,
-    retryDelay: overrides.retryDelay ?? defaultRedfishRetryDelay,
-    ...(overrides.refetchOnMount !== undefined && {
-      refetchOnMount: overrides.refetchOnMount,
-    }),
+    refetchInterval: overrides.refetchInterval ?? 60 * 1000, // 60 seconds
+    retryDelay: overrides.retryDelay ?? (() => 2000), // 2 seconds fixed
+    refetchOnMount: overrides.refetchOnMount ?? 'always',
+    notifyOnChangeProps: ['data', 'error'] as any,
   };
 
   return config;
@@ -119,39 +118,51 @@ export const RedfishQueryPresets = {
     gcTime: 15 * 60 * 1000, // 15 minutes
   }),
 
+  /** Concurrent Maintenance page */
   concurrentMaintenance: createRedfishQueryConfig({
-    gcTime: 5 * 60 * 1000, // 5 minutes,
-    refetchInterval: 30 * 1000,
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
   }),
 
+  /** Audit Logs page */
   auditLogs: createRedfishQueryConfig({
+    staleTime: 0,
     gcTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 30 * 1000,
+    refetchInterval: 30 * 1000, // 30 seconds
   }),
 
+  /** Progress Logs page */
   progressLogs: createRedfishQueryConfig({
+    staleTime: 0,
     gcTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 30 * 1000,
+    refetchInterval: 20 * 1000, // 20 seconds
   }),
 
+  /** Event Logs page */
   eventLogs: createRedfishQueryConfig({
+    staleTime: 0,
     gcTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 30 * 1000,
+    refetchInterval: 30 * 1000, // 30 seconds
   }),
 
+  /** Deconfiguration Records page */
   deconfigurationRecords: createRedfishQueryConfig({
+    staleTime: 0,
     gcTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 30 * 1000,
+    refetchInterval: 60 * 1000, // 60 seconds
   }),
 
   dumps: createRedfishQueryConfig({
+    staleTime: 0,
     gcTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 30 * 1000,
+    refetchInterval: 60 * 1000, // 60 seconds
   }),
 
   ibmiServiceFunctions: createRedfishQueryConfig({
+    staleTime: 0,
     gcTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 30 * 1000,
+    refetchInterval: 30 * 1000, // 30 seconds
   }),
 
   /**
@@ -173,20 +184,23 @@ export const RedfishQueryPresets = {
     gcTime: 10 * 60 * 1000, // 10 minutes
   }),
 
+  /** Inventory and LEDs page */
   inventory: createRedfishQueryConfig({
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 10 * 60 * 1000,
+    staleTime: 0,
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
   }),
 
   hardwareDeconfiguration: createRedfishQueryConfig({
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 10 * 60 * 1000,
-    refetchInterval: 60 * 1000, // 1 minute
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
   }),
 
   pcieTopology: createRedfishQueryConfig({
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 10 * 60 * 1000,
+    staleTime: 0,
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
   }),
 
   /**
@@ -196,5 +210,110 @@ export const RedfishQueryPresets = {
   metadata: createRedfishQueryConfig({
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
+  }),
+
+  /** Server Power Operations page */
+  serverPowerOperations: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+  }),
+
+  /** Firmware page */
+  firmware: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 5 * 60 * 1000, // 5 minutes
+  }),
+
+  /** Reboot BMC page */
+  rebootBmc: createRedfishQueryConfig({
+    staleTime: 60 * 1000, // 1 minute
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 5 * 60 * 1000, // 5 minutes
+  }),
+
+  /** Capacity on Demand page */
+  capacityOnDemand: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 2 * 60 * 1000, // 2 minutes
+  }),
+
+  /** Power Restore Policy page */
+  powerRestorePolicy: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 2 * 60 * 1000, // 2 minutes
+  }),
+
+  /** LDAP page */
+  ldap: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+  }),
+
+  /** Certificates page */
+  certificates: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+  }),
+
+  /** Policies page */
+  policies: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+  }),
+
+  /** Key Clear page */
+  keyClear: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 2 * 60 * 1000, // 2 minutes
+  }),
+
+  /** Overview page */
+  overview: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 2 * 60 * 1000, // 2 minutes
+  }),
+
+  /** Date and Time page */
+  dateAndTime: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 30 * 1000, // 30 seconds
+  }),
+
+  /** HMC and User Sessions page */
+  sessions: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 30 * 1000, // 30 seconds
+  }),
+
+  /** Network page */
+  network: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 30 * 1000, // 30 seconds
+  }),
+
+  /** SNMP Alerts page */
+  snmpAlerts: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+  }),
+
+  /** User Management page */
+  userManagement: createRedfishQueryConfig({
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
   }),
 };

@@ -56,7 +56,7 @@ export function usePolicies() {
   const networkProtocolQuery = useRedfishResource<NetworkProtocol>(
     '/redfish/v1/Managers/bmc/NetworkProtocol',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.policies as Partial<
         UseQueryOptions<NetworkProtocol>
       >,
     },
@@ -74,7 +74,7 @@ export function usePolicies() {
   const biosQuery = useRedfishResource<BiosAttributes>(
     '/redfish/v1/Systems/system/Bios',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.policies as Partial<
         UseQueryOptions<BiosAttributes>
       >,
     },
@@ -103,7 +103,7 @@ export function usePolicies() {
   const systemQuery = useRedfishResource<SystemResource>(
     '/redfish/v1/Systems/system',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.policies as Partial<
         UseQueryOptions<SystemResource>
       >,
     },
@@ -118,7 +118,7 @@ export function usePolicies() {
   const managerQuery = useRedfishResource<ManagerResource>(
     '/redfish/v1/Managers/bmc',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.policies as Partial<
         UseQueryOptions<ManagerResource>
       >,
     },
@@ -132,7 +132,7 @@ export function usePolicies() {
   const serviceAccountQuery = useRedfishResource<ServiceAccount>(
     '/redfish/v1/AccountService/Accounts/service',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.policies as Partial<
         UseQueryOptions<ServiceAccount>
       >,
     },
@@ -148,15 +148,14 @@ export function usePolicies() {
   const accountServiceQuery = useRedfishResource<AccountService>(
     '/redfish/v1/AccountService',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.policies as Partial<
         UseQueryOptions<AccountService>
       >,
     },
   );
 
   const basicAuthEnabled = computed(
-    () =>
-      accountServiceQuery.data.value?.HTTPBasicAuth === 'Enabled' ?? false,
+    () => accountServiceQuery.data.value?.HTTPBasicAuth === 'Enabled' ?? false,
   );
 
   // Send Service Alerts uses the same systemQuery as TPM Policy

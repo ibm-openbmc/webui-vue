@@ -46,10 +46,13 @@ export function useBiosAttributes() {
       );
       return response.data?.Attributes ?? {};
     },
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    refetchInterval: 60 * 1000, // refetch every 1 minute in the background
-    refetchOnMount: 'always', // set isFetching=true synchronously on mount so the loading bar always fires
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: 'always',
+    notifyOnChangeProps: ['data', 'error'] as any,
     retry: (failureCount: number, err: any) => {
       const status = err?.response?.status;
       if (status && status >= 400 && status < 500) return false;
@@ -75,8 +78,13 @@ export function useBiosAttributes() {
       );
       return response.data?.RegistryEntries?.Attributes ?? [];
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes (registry data changes less frequently)
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: 'always',
+    notifyOnChangeProps: ['data', 'error'] as any,
     retry: (failureCount: number, err: any) => {
       const status = err?.response?.status;
       if (status && status >= 400 && status < 500) return false;
