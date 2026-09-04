@@ -126,7 +126,6 @@ export function useUserManagement() {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchOnMount: 'always',
-    notifyOnChangeProps: ['data', 'error'] as any,
     retryDelay: (attemptIndex: number) =>
       Math.min(1000 * 2 ** attemptIndex, 10000),
     retry: (failureCount: number, error: any) => {
@@ -155,7 +154,6 @@ export function useUserManagement() {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchOnMount: 'always',
-    notifyOnChangeProps: ['data', 'error'] as any,
     retryDelay: (attemptIndex: number) =>
       Math.min(1000 * 2 ** attemptIndex, 10000),
     retry: (failureCount: number, error: any) => {
@@ -184,7 +182,6 @@ export function useUserManagement() {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchOnMount: 'always',
-    notifyOnChangeProps: ['data', 'error'] as any,
     retryDelay: (attemptIndex: number) =>
       Math.min(1000 * 2 ** attemptIndex, 10000),
     retry: (failureCount: number, error: any) => {

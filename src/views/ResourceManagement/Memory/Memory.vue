@@ -386,7 +386,6 @@ import { ref, computed, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { minValue, maxValue } from '@vuelidate/validators';
 import i18n from '@/i18n';
-import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import useToast from '@/components/Composables/useToastComposable';
@@ -398,7 +397,6 @@ import PageSection from '@/components/Global/PageSection.vue';
 import stores from '@/store';
 import { useMemory } from '@/api/composables/useMemory';
 
-const { startLoader, endLoader } = useLoadingBar();
 const { scrollToOffset } = useJumpLinkComposable();
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
@@ -489,17 +487,7 @@ const quickLinks = ref([
   },
 ]);
 
-// Page navigation loading bar — fires once on mount fetch, ignores interval polls
-usePageLoadingBar(isFetching, isError);
-
-// Manage loading bar for user-triggered mutations (save/update actions)
-watch(isUpdating, (updating) => {
-  if (updating) {
-    startLoader();
-  } else {
-    endLoader();
-  }
-});
+usePageLoadingBar(isFetching, isError, isUpdating);
 
 // Local state for form inputs with validation
 const ioAdapterCapacity = ref(0);
