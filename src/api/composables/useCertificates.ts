@@ -140,7 +140,7 @@ export function useCertificates() {
   const acfQuery = useRedfishResource<ServiceAccountResource>(
     '/redfish/v1/AccountService/Accounts/service',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.certificates as Partial<
         UseQueryOptions<ServiceAccountResource>
       >,
     },
@@ -200,7 +200,7 @@ export function useCertificates() {
         validUntil: new Date(data.ValidNotAfter),
       }));
     },
-    ...RedfishQueryPresets.sensors,
+    ...RedfishQueryPresets.certificates,
   });
 
   // Combined certificates

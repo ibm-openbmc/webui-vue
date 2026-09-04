@@ -203,7 +203,7 @@ export function useNetwork() {
   } = useQuery<NetworkSetting[]>({
     queryKey: QUERY_KEY_ETHERNET,
     queryFn: fetchEthernetInterfaces,
-    ...(RedfishQueryPresets.sensors as Partial<
+    ...(RedfishQueryPresets.network as Partial<
       UseQueryOptions<NetworkSetting[]>
     >),
   });
@@ -211,7 +211,7 @@ export function useNetwork() {
   const { data: lldpData, refetch: refetchLldp } = useQuery<LldpState[]>({
     queryKey: QUERY_KEY_LLDP,
     queryFn: fetchLldpData,
-    ...(RedfishQueryPresets.sensors as Partial<UseQueryOptions<LldpState[]>>),
+    ...(RedfishQueryPresets.network as Partial<UseQueryOptions<LldpState[]>>),
   });
 
   // ── Derived computed ─────────────────────────────────────────────────────────

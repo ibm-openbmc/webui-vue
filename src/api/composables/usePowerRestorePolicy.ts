@@ -80,7 +80,7 @@ export function usePowerRestorePolicy() {
         };
       });
     },
-    ...RedfishQueryPresets.sensors,
+    ...RedfishQueryPresets.powerRestorePolicy,
   });
 
   // Fetch current power restore policy from all systems
@@ -88,7 +88,7 @@ export function usePowerRestorePolicy() {
     SystemResource,
     'PowerRestorePolicy'
   >('/redfish/v1/Systems', 'PowerRestorePolicy', {
-    queryConfig: RedfishQueryPresets.sensors as Partial<
+    queryConfig: RedfishQueryPresets.powerRestorePolicy as Partial<
       UseQueryOptions<SystemResource[]>
     >,
   });
@@ -97,7 +97,7 @@ export function usePowerRestorePolicy() {
   const biosQuery = useRedfishResource<BiosAttributes>(
     '/redfish/v1/Systems/system/Bios',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.powerRestorePolicy as Partial<
         UseQueryOptions<BiosAttributes>
       >,
     },

@@ -47,7 +47,7 @@ export function useDateTime() {
       );
       return response.data.NTP;
     },
-    ...(RedfishQueryPresets.sensors as any),
+    ...RedfishQueryPresets.dateAndTime,
   });
 
   const ntpServers = computed<string[]>(() => ntpData.value?.NTPServers || []);

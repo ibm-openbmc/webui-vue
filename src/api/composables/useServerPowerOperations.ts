@@ -124,7 +124,7 @@ export function useBootBiosAttributes() {
     isError: isBiosError,
     refetch: refetchBios,
   } = useRedfishResource<BiosResponse>('/redfish/v1/Systems/system/Bios', {
-    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<BiosResponse>>,
+    queryConfig: RedfishQueryPresets.serverPowerOperations as Partial<UseQueryOptions<BiosResponse>>,
   });
 
   const rawBios = computed<BiosAttributes>(() => {
@@ -146,7 +146,7 @@ export function useBootBiosAttributes() {
   } = useRedfishResource<RegistryResponse>(
     '/redfish/v1/Registries/BiosAttributeRegistry/BiosAttributeRegistry',
     {
-      queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<RegistryResponse>>,
+      queryConfig: RedfishQueryPresets.serverPowerOperations as Partial<UseQueryOptions<RegistryResponse>>,
     },
   );
 
@@ -364,7 +364,7 @@ export function useServerSystemInfo() {
     isError: isSystemError,
     refetch: refetchSystem,
   } = useRedfishResource<SystemResponse>('/redfish/v1/Systems/system', {
-    queryConfig: RedfishQueryPresets.metadata as Partial<UseQueryOptions<SystemResponse>>,
+    queryConfig: RedfishQueryPresets.serverPowerOperations as Partial<UseQueryOptions<SystemResponse>>,
   });
 
   watch(systemData, (data) => {

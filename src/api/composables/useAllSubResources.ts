@@ -245,9 +245,13 @@ export async function navigateToCollection(
  */
 export function useNavigatedCollection<T extends Resource>(
   navigationPath: string[],
-  options: { enabled?: boolean; filter?: (item: T) => boolean } = {},
+  options: {
+    enabled?: boolean;
+    filter?: (item: T) => boolean;
+    queryConfig?: Partial<UseQueryOptions<T[]>>;
+  } = {},
 ) {
-  const { enabled = true, filter } = options;
+  const { enabled = true, filter, queryConfig } = options;
 
   return useQuery({
     queryKey: ['redfish', 'navigatedCollection', ...navigationPath],
@@ -292,14 +296,8 @@ export function useNavigatedCollection<T extends Resource>(
       return filter ? members.filter(filter) : members;
     },
     enabled,
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: (failureCount, error: any) => {
-      const status = error?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
+    ...createRedfishQueryConfig(),
+    ...queryConfig,
   });
 }
 

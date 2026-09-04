@@ -5,6 +5,7 @@ import api from '@/store/api';
 import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
 import useToast from '@/components/Composables/useToastComposable';
+import { RedfishQueryPresets } from './shared/queryConfig';
 
 interface FirmwareItem {
   version: string;
@@ -82,10 +83,7 @@ export function useFirmware() {
         .pop();
       return id || null;
     },
-    staleTime: 0,
-    refetchInterval: false, // Disable automatic refetch
-    gcTime: 5 * 60 * 1000,
-    retry: 2,
+    ...RedfishQueryPresets.firmware,
   });
 
   // Fetch Host active firmware ID
@@ -104,10 +102,7 @@ export function useFirmware() {
         .pop();
       return id || null;
     },
-    staleTime: 0,
-    refetchInterval: false, // Disable automatic refetch
-    gcTime: 5 * 60 * 1000,
-    retry: 2,
+    ...RedfishQueryPresets.firmware,
   });
 
   // Fetch firmware boot side
@@ -123,10 +118,7 @@ export function useFirmware() {
       );
       return response.data?.Attributes?.fw_boot_side_current || null;
     },
-    staleTime: 0,
-    refetchInterval: false, // Disable automatic refetch
-    gcTime: 5 * 60 * 1000,
-    retry: 2,
+    ...RedfishQueryPresets.firmware,
   });
 
   // Fetch firmware inventory
@@ -176,16 +168,7 @@ export function useFirmware() {
 
       return { bmc: bmcFirmware, host: hostFirmware };
     },
-    staleTime: 0,
-    refetchInterval: false, // Disable automatic refetch
-    gcTime: 5 * 60 * 1000,
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    ...RedfishQueryPresets.firmware,
   });
 
   // Fetch update service settings
@@ -204,10 +187,7 @@ export function useFirmware() {
         null
       );
     },
-    staleTime: 0,
-    refetchInterval: false, // Disable automatic refetch
-    gcTime: 5 * 60 * 1000,
-    retry: 2,
+    ...RedfishQueryPresets.firmware,
   });
 
   // Fetch lowest supported firmware version
@@ -239,10 +219,7 @@ export function useFirmware() {
         showAlert: !!lowestVersion,
       };
     },
-    staleTime: 0,
-    refetchInterval: false, // Disable automatic refetch
-    gcTime: 10 * 60 * 1000,
-    retry: 2,
+    ...RedfishQueryPresets.firmware,
   });
 
   // Computed: BMC firmware list

@@ -26,7 +26,7 @@ export function useKeyClear() {
   const biosQuery = useRedfishResource<BiosAttributes>(
     '/redfish/v1/Systems/system/Bios',
     {
-      queryConfig: RedfishQueryPresets.sensors as Partial<
+      queryConfig: RedfishQueryPresets.keyClear as Partial<
         UseQueryOptions<BiosAttributes>
       >,
     },

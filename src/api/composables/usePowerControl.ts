@@ -54,8 +54,22 @@ export function usePowerControl() {
   } = useRedfishResource<EnvironmentMetrics>(
     '/redfish/v1/Chassis/chassis/EnvironmentMetrics',
     {
-      staleTime: 0,
-      refetchInterval: 60 * 1000,
+      queryConfig: {
+        staleTime: 0,
+        gcTime: 2 * 60 * 1000,
+        refetchInterval: 60 * 1000,
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        refetchOnMount: 'always',
+        notifyOnChangeProps: ['data', 'error'] as any,
+        retry: (failureCount: number, err: any) => {
+          const status = err?.response?.status;
+          if (status && status >= 400 && status < 500) return false;
+          return failureCount < 2;
+        },
+        retryDelay: (attemptIndex: number) =>
+          Math.min(1000 * 2 ** attemptIndex, 10000),
+      },
     },
   );
 
@@ -144,8 +158,22 @@ export function usePowerPerformanceMode() {
     isError: isPowerPerformanceError,
     error: powerPerformanceError,
   } = useRedfishResource<SystemPowerMode>('/redfish/v1/Systems/system', {
-    staleTime: 0,
-    refetchInterval: 60 * 1000,
+    queryConfig: {
+      staleTime: 0,
+      gcTime: 2 * 60 * 1000,
+      refetchInterval: 60 * 1000,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      refetchOnMount: 'always',
+      notifyOnChangeProps: ['data', 'error'] as any,
+      retry: (failureCount: number, err: any) => {
+        const status = err?.response?.status;
+        if (status && status >= 400 && status < 500) return false;
+        return failureCount < 2;
+      },
+      retryDelay: (attemptIndex: number) =>
+        Math.min(1000 * 2 ** attemptIndex, 10000),
+    },
   });
 
   const powerPerformanceData = computed<PowerPerformanceData>(() => {
@@ -220,8 +248,22 @@ export function useIdlePowerSaver() {
     error: idlePowerSaverError,
     refetch: refetchIdlePowerSaver,
   } = useRedfishResource<SystemPowerMode>('/redfish/v1/Systems/system', {
-    staleTime: 0,
-    refetchInterval: 60 * 1000,
+    queryConfig: {
+      staleTime: 0,
+      gcTime: 2 * 60 * 1000,
+      refetchInterval: 60 * 1000,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      refetchOnMount: 'always',
+      notifyOnChangeProps: ['data', 'error'] as any,
+      retry: (failureCount: number, err: any) => {
+        const status = err?.response?.status;
+        if (status && status >= 400 && status < 500) return false;
+        return failureCount < 2;
+      },
+      retryDelay: (attemptIndex: number) =>
+        Math.min(1000 * 2 ** attemptIndex, 10000),
+    },
   });
 
   const idlePowerSaverData = computed<IdlePowerSaver | null>(() => {

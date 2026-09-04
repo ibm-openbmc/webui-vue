@@ -121,8 +121,14 @@ export function useUserManagement() {
       }));
     },
     staleTime: 0,
-    gcTime: 5 * 60 * 1000,
-    refetchOnMount: true, // always fetch fresh data when navigating to the page
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: 'always',
+    notifyOnChangeProps: ['data', 'error'] as any,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 10000),
     retry: (failureCount: number, error: any) => {
       if (error?.message === 'otpRequired') return false;
       const status = error?.response?.status;
@@ -143,9 +149,15 @@ export function useUserManagement() {
       });
       return data;
     },
-    staleTime: 30 * 1000,
-    gcTime: 5 * 60 * 1000,
-    refetchOnMount: true, // always fetch fresh data when navigating to the page
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: 'always',
+    notifyOnChangeProps: ['data', 'error'] as any,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 10000),
     retry: (failureCount: number, error: any) => {
       const status = error?.response?.status;
       if (status && status >= 400 && status < 500) return false;
@@ -166,9 +178,20 @@ export function useUserManagement() {
       );
       return roleIds;
     },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    retry: false,
+    staleTime: 0,
+    gcTime: 2 * 60 * 1000, // 2 minutes
+    refetchInterval: 60 * 1000, // 60 seconds
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: 'always',
+    notifyOnChangeProps: ['data', 'error'] as any,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 10000),
+    retry: (failureCount: number, error: any) => {
+      const status = error?.response?.status;
+      if (status && status >= 400 && status < 500) return false;
+      return failureCount < 2;
+    },
   });
 
   // ── Derived state ──────────────────────────────────────────────────────────

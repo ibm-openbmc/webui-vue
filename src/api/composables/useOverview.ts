@@ -9,6 +9,7 @@ import {
   useRedfishResource,
 } from './useRedfishCollection';
 import { usePatchResource } from './usePatchResource';
+import { RedfishQueryPresets } from './shared/queryConfig';
 import api from '@/store/api';
 import type {
   Manager,
@@ -84,7 +85,7 @@ export function useOverviewFirmware() {
     isError: isBmcError,
     error: bmcError,
   } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc', {
-    queryConfig: { refetchOnMount: true },
+    queryConfig: RedfishQueryPresets.overview,
   });
 
   // Get all firmware inventory
@@ -98,8 +99,7 @@ export function useOverviewFirmware() {
     '/redfish/v1/UpdateService/FirmwareInventory',
     {
       expand: false, // Disable expand for this endpoint
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      queryConfig: { refetchOnMount: true },
+      queryConfig: RedfishQueryPresets.overview,
     },
   );
 
@@ -174,8 +174,7 @@ export function useOverviewLicense() {
     error,
   } = useRedfishCollection<License>('/redfish/v1/LicenseService/Licenses', {
     expand: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    queryConfig: { refetchOnMount: true },
+    queryConfig: RedfishQueryPresets.overview,
   });
 
   const licenseData = computed((): LicenseData => {
@@ -214,8 +213,7 @@ export function useOverviewNetwork() {
     '/redfish/v1/Managers/bmc/EthernetInterfaces',
     {
       expand: false, // Disable expand for this endpoint
-      staleTime: 2 * 60 * 1000, // 2 minutes
-      queryConfig: { refetchOnMount: true },
+      queryConfig: RedfishQueryPresets.overview,
     },
   );
 
@@ -266,8 +264,7 @@ export function useOverviewEvents() {
   } = useRedfishCollection<EventLog>(
     '/redfish/v1/Systems/system/LogServices/EventLog/Entries',
     {
-      staleTime: 30 * 1000, // 30 seconds
-      queryConfig: { refetchOnMount: true },
+      queryConfig: RedfishQueryPresets.overview,
     },
   );
 
@@ -324,7 +321,7 @@ export function useOverviewInventory() {
     error,
   } = useRedfishResource<System>('/redfish/v1/Systems/system', {
     enabled: true,
-    queryConfig: { refetchOnMount: true },
+    queryConfig: RedfishQueryPresets.overview,
   });
 
   const inventoryData = computed((): SystemInventory => {
@@ -356,7 +353,7 @@ export function useOverviewQuickLinks() {
     isFetching: isBmcTimeFetching,
     isError: isBmcTimeError,
   } = useRedfishResource<Manager>('/redfish/v1/Managers/bmc', {
-    queryConfig: { refetchOnMount: true },
+    queryConfig: RedfishQueryPresets.overview,
   });
 
   const bmcTimeData = computed((): BmcTimeData => {
@@ -378,7 +375,7 @@ export function useOverviewQuickLinks() {
     `/redfish/v1/AccountService/Accounts/${username}`,
     {
       enabled: !!username,
-      queryConfig: { refetchOnMount: true },
+      queryConfig: RedfishQueryPresets.overview,
     },
   );
 

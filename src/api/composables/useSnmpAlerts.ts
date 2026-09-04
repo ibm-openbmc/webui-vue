@@ -7,6 +7,7 @@ import {
   useNavigatedCollection,
   navigateToCollection,
 } from './useAllSubResources';
+import { RedfishQueryPresets } from './shared/queryConfig';
 import type { Resource } from '@/types/redfish';
 
 interface SnmpSubscription extends Resource {
@@ -47,6 +48,7 @@ export function useSnmpAlerts() {
     {
       // Filter only SNMP subscriptions
       filter: (item) => item.SubscriptionType === 'SNMPTrap',
+      queryConfig: RedfishQueryPresets.snmpAlerts,
     },
   );
 

@@ -2,6 +2,7 @@ import { computed } from 'vue';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import api from '@/store/api';
 import type { Manager } from '@/types/redfish';
+import { RedfishQueryPresets } from './shared/queryConfig';
 
 /**
  * Composable for fetching BMC manager info and performing BMC reboot
@@ -22,18 +23,7 @@ export function useRebootBmc() {
       const response = await api.get<Manager>('/redfish/v1/Managers/bmc');
       return response.data;
     },
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    refetchInterval: false, // Disable automatic refetch
-    // Don't retry client errors (4xx) — they won't succeed on retry.
-    // Do retry transient server errors (5xx) and network failures.
-    retry: (failureCount: number, err: any) => {
-      const status = err?.response?.status;
-      if (status && status >= 400 && status < 500) return false;
-      return failureCount < 2;
-    },
-    retryDelay: (attemptIndex: number) =>
-      Math.min(1000 * 2 ** attemptIndex, 10000),
+    ...RedfishQueryPresets.rebootBmc,
   });
 
   const lastBmcRebootTime = computed<Date | null>(() => {
