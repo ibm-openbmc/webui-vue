@@ -80,7 +80,7 @@ export function createRedfishQueryConfig(
     refetchInterval: overrides.refetchInterval ?? 60 * 1000, // 60 seconds
     retryDelay: overrides.retryDelay ?? (() => 2000), // 2 seconds fixed
     refetchOnMount: overrides.refetchOnMount ?? 'always',
-    notifyOnChangeProps: ['data', 'error'] as any,
+    notifyOnChangeProps: 'all' as any,
   };
 
   return config;

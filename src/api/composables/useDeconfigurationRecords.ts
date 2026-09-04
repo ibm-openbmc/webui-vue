@@ -325,7 +325,7 @@ export function useDeconfigurationRecords() {
 
     // Loading states
     isLoading: computed(() => isLoadingRecords.value || isProcessing.value),
-    isFetching: isFetchingRecords,
+    isFetching: computed(() => isFetchingRecords.value || isProcessing.value),
     isProcessing,
 
     // Error states

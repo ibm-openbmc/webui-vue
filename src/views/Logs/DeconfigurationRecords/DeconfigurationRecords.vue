@@ -362,11 +362,7 @@ const {
   refetchRecords,
 } = useDeconfigurationRecords();
 
-const { startLoader, endLoader } = usePageLoadingBar(
-  isFetching,
-  isError,
-  isProcessing,
-);
+const { startLoader, endLoader } = usePageLoadingBar(isFetching, isError);
 
 const global = stores.GlobalStore();
 

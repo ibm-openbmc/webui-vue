@@ -40,7 +40,6 @@ export function useFieldCoreOverride() {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchOnMount: 'always',
-    notifyOnChangeProps: ['data', 'error'] as any,
     retry: (failureCount: number, err: any) => {
       const status = err?.response?.status;
       if (status && status >= 400 && status < 500) return false;
