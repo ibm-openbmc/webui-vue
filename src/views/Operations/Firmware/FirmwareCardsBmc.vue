@@ -54,7 +54,11 @@
             variant="link"
             size="sm"
             class="py-0 px-1 mt-2"
-            :disabled="isPageDisabled || !backup || !isServerOff"
+            :disabled="
+              isPageDisabled ||
+              !backup ||
+              (serverStatus !== 'unreachable' && !isServerOff)
+            "
             @click="showConfirmationModal"
           >
             <icon-switch class="d-none d-sm-inline-block" />
@@ -102,13 +106,13 @@ defineProps({
   },
 });
 
+const serverStatus = computed(() => {
+  return globalStore.serverStatusGetter;
+});
+
 const switchToBackupImageDisabled = ref(
   import.meta.env.VITE_APP_SWITCH_TO_BACKUP_IMAGE_DISABLED === 'true',
 );
-
-const bootProgress = computed(() => {
-  return globalStore.bootProgressGetter;
-});
 
 const isSingleFileUploadEnabled = computed(() => {
   return firmwareStore.isSingleFileUploadEnabled;
@@ -164,7 +168,6 @@ function showConfirmationModal() {
 function switchToRunning() {
   startLoader();
   emit('loadingStatus', loading.value);
-  console.log('confirm');
 
   // Step 1 - Switch firmware
   const switchFirmware = () => {
@@ -207,15 +210,20 @@ function switchToRunning() {
           i18n.global.t('pageFirmware.toast.errorSwitchImages'),
         );
       }
-      globalStore.getBootProgress().then(() => {
-        if (bootProgress.value) {
+
+      // Check if BMC is back online by verifying API response
+      globalStore
+        .getSystemInfo()
+        .then(() => {
+          // BMC is responding, go to step 3
           step3();
-        } else {
+        })
+        .catch(() => {
+          // BMC not responding yet, retry in 1 minute
           setTimeout(() => {
             timer(checkCounter);
-          }, 60000); // 1 minute;
-        }
-      });
+          }, 60000);
+        });
     };
     timer();
   };

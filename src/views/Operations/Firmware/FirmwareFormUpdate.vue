@@ -86,10 +86,6 @@ const bmcPowerState = computed(() => {
   return bmcStore.bmcGetter?.powerState;
 });
 
-const bootProgress = computed(() => {
-  return globalStore.bootProgressGetter;
-});
-
 const rules = computed(() => ({
   file: {
     required: required,
@@ -200,20 +196,37 @@ function updateFirmware() {
       timestamp: true,
     });
 
-    const rebootProgress = async () => {
-      setTimeout(async () => {
+    const rebootProgress = (checkCounter = 0) => {
+      checkCounter++;
+
+      // This counter goes up by 1 every time this function runs
+      // If the function successfully goes to last toast, it won't run anymore
+      // if this function runs more than 36 times, it won't run anymore
+      if (checkCounter > 36) {
+        endLoader();
+        return errorToast(i18n.global.t('pageFirmware.toast.errorActivation'));
+      }
+
+      setTimeout(() => {
         bmcStore
           .getBmcInfo()
           .then(() => {
-            if (bmcPowerState.value === 'On') {
-              activationComplete();
+            if (bmcPowerState.value) {
+              // Power state is available — original logic
+              if (bmcPowerState.value === 'On') {
+                activationComplete();
+              } else {
+                rebootProgress(checkCounter);
+              }
             } else {
-              rebootProgress();
+              // Power state unavailable (passive BMC) —
+              // getBmcInfo() responding is sufficient to confirm BMC is back
+              activationComplete();
             }
           })
-          .catch(({ message }) => {
-            endLoader();
-            errorToast(message);
+          .catch(() => {
+            // BMC not responding yet, retry
+            rebootProgress(checkCounter);
           });
       }, 180000); // 3 minutes
     };

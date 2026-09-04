@@ -8,7 +8,11 @@
         </p>
       </alert>
       <!-- Power off server warning alert -->
-      <alert v-else-if="!isServerOff" variant="warning" class="mb-5">
+      <alert
+        v-else-if="!isServerOff && serverStatus !== 'unreachable'"
+        variant="warning"
+        class="mb-5"
+      >
         <p class="mb-0">
           {{ $t('pageFirmware.alert.serverMustBePoweredOffTo') }}
         </p>
@@ -42,6 +46,11 @@ defineProps({
     required: true,
     type: Boolean,
     default: true,
+  },
+  serverStatus: {
+    required: true,
+    type: String,
+    default: '',
   },
 });
 

@@ -2,8 +2,8 @@
   <BContainer fluid="xl">
     <page-title :title="$t('appPageTitle.firmware')" />
     <alerts-server-power
-      v-if="isServerPowerOffRequired"
       :is-server-off="isServerOff"
+      :server-status="serverStatus"
     />
 
     <!-- Firmware cards -->
@@ -117,10 +117,10 @@ const isOperationInProgress = computed(() => {
 });
 
 const isPageDisabled = computed(() => {
-  if (isServerPowerOffRequired.value) {
-    return !isServerOff.value || loading.value || isOperationInProgress.value;
-  }
-  return isLoading.value || isOperationInProgress.value;
+  // Disable when server is powered on (not off and not unreachable).
+  const isPoweredOn =
+    serverStatus.value !== 'off' && serverStatus.value !== 'unreachable';
+  return isPoweredOn || loading.value || isOperationInProgress.value;
 });
 
 function loadingStatus(value) {
