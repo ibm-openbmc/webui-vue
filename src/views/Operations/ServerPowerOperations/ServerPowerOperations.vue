@@ -394,15 +394,24 @@ function powerOn() {
     bmc.value.statusState === 'Enabled' &&
     bmc.value.health === 'OK'
   ) {
+    globalStore.setServerPowerInProgress({
+      inProgress: true,
+      operationType: i18n.global.t('pageServerPowerOperations.powerOn'),
+    });
     controlStore
       .serverPowerOn()
       .then((response) => {
         if (response === true) {
           infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
         }
+        // completion signalled by controlStore.isOperationInProgress → false
       })
       .catch((error) => {
         console.log(error);
+        globalStore.setServerPowerInProgress({
+          inProgress: false,
+          success: false,
+        });
         errorToast(
           i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
         );
@@ -460,6 +469,11 @@ function shutdownServer() {
 
 function operationConfirm() {
   if (modalOption.value === 'reboot') {
+    const rebootLabel = i18n.global.t('pageServerPowerOperations.reboot');
+    globalStore.setServerPowerInProgress({
+      inProgress: true,
+      operationType: rebootLabel,
+    });
     if (form.value.rebootOption === 'orderly') {
       controlStore
         .serverSoftReboot()
@@ -467,8 +481,13 @@ function operationConfirm() {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
           }
+          // completion signalled by controlStore.isOperationInProgress → false
         })
         .catch((error) => {
+          globalStore.setServerPowerInProgress({
+            inProgress: false,
+            success: false,
+          });
           errorToast(
             i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
           );
@@ -481,8 +500,13 @@ function operationConfirm() {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
           }
+          // completion signalled by controlStore.isOperationInProgress → false
         })
         .catch((error) => {
+          globalStore.setServerPowerInProgress({
+            inProgress: false,
+            success: false,
+          });
           errorToast(
             i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
           );
@@ -490,6 +514,11 @@ function operationConfirm() {
         });
     }
   } else if (modalOption.value === 'shutdown') {
+    const shutdownLabel = i18n.global.t('pageServerPowerOperations.shutDown');
+    globalStore.setServerPowerInProgress({
+      inProgress: true,
+      operationType: shutdownLabel,
+    });
     if (form.value.shutdownOption === 'orderly') {
       controlStore
         .serverSoftPowerOff()
@@ -497,8 +526,13 @@ function operationConfirm() {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
           }
+          // completion signalled by controlStore.isOperationInProgress → false
         })
         .catch((error) => {
+          globalStore.setServerPowerInProgress({
+            inProgress: false,
+            success: false,
+          });
           errorToast(
             i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
           );
@@ -511,8 +545,13 @@ function operationConfirm() {
           if (response === true) {
             infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
           }
+          // completion signalled by controlStore.isOperationInProgress → false
         })
         .catch((error) => {
+          globalStore.setServerPowerInProgress({
+            inProgress: false,
+            success: false,
+          });
           errorToast(
             i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
           );
