@@ -6,6 +6,8 @@ import i18n from '@/i18n';
 // @ts-ignore - useToast is a JS module
 import useToast from '@/components/Composables/useToastComposable';
 import { RedfishQueryPresets } from './shared/queryConfig';
+// @ts-ignore - GlobalConstants.js is a JavaScript module
+import { REGEX_MAPPINGS } from '@/utilities/GlobalConstants';
 
 interface FirmwareItem {
   version: string;
@@ -232,7 +234,7 @@ export function useFirmware() {
   const activeBmcFirmware = computed(() => {
     return (
       bmcFirmware.value.find(
-        (firmware) => firmware.id === bmcActiveFirmwareId.value,
+        (firmware: FirmwareItem) => firmware.id === bmcActiveFirmwareId.value,
       ) || null
     );
   });
@@ -241,7 +243,7 @@ export function useFirmware() {
   const activeHostFirmware = computed(() => {
     return (
       hostFirmware.value.find(
-        (firmware) => firmware.id === hostActiveFirmwareId.value,
+        (firmware: FirmwareItem) => firmware.id === hostActiveFirmwareId.value,
       ) || null
     );
   });
@@ -250,7 +252,7 @@ export function useFirmware() {
   const backupBmcFirmware = computed(() => {
     return (
       bmcFirmware.value.find(
-        (firmware) => firmware.id !== bmcActiveFirmwareId.value,
+        (firmware: FirmwareItem) => firmware.id !== bmcActiveFirmwareId.value,
       ) || null
     );
   });
@@ -259,7 +261,7 @@ export function useFirmware() {
   const backupHostFirmware = computed(() => {
     return (
       hostFirmware.value.find(
-        (firmware) => firmware.id !== hostActiveFirmwareId.value,
+        (firmware: FirmwareItem) => firmware.id !== hostActiveFirmwareId.value,
       ) || null
     );
   });
@@ -343,8 +345,17 @@ export function useFirmware() {
         queryKey: ['redfish', 'systems', 'system', 'bios', 'activeFirmware'],
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.log('Upload firmware error:', error);
+      const errorMsg = error.response?.data?.error?.code;
+
+      if (REGEX_MAPPINGS.resourceAlreadyExists.test(errorMsg)) {
+        errorToast(
+          i18n.global.t('pageFirmware.toast.errorUploadFirmwareAlreadyExists'),
+        );
+        return;
+      }
+
       errorToast(i18n.global.t('pageFirmware.toast.errorUpdateFirmware'));
     },
   });

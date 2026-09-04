@@ -787,13 +787,13 @@ async function fetchTopologyRows(): Promise<RawPcieRow[]> {
               const upMatch =
                 cable?.detailedInfo?.upstreamPorts.length > 0 &&
                 cable?.detailedInfo?.upstreamPorts[0]['@odata.id'].startsWith(
-                  adapter.data['@odata.id'],
+                  adapter.data['@odata.id'] + '/',
                 );
               const downMatch =
                 cable?.detailedInfo?.downstreamPorts.length > 0 &&
                 cable?.detailedInfo?.downstreamPorts[0].data[
                   '@odata.id'
-                ].startsWith(adapter.data['@odata.id']);
+                ].startsWith(adapter.data['@odata.id'] + '/');
 
               if (upMatch || downMatch) {
                 if (cable.detailedInfo.downstreamResources.length > 0) {

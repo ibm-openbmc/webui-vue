@@ -249,6 +249,14 @@ export function useUserManagement() {
       };
       await api.post(ACCOUNTS_COLLECTION_KEY, data).catch((error: any) => {
         const errorMsg = error.response?.data?.error?.code;
+        if (REGEX_MAPPINGS.resourceAlreadyExists.test(errorMsg)) {
+          throw new Error(
+            i18n.global.t(
+              'pageUserManagement.toast.errorCreateUserAlreadyExists',
+              { username: params.username },
+            ),
+          );
+        }
         if (REGEX_MAPPINGS.propertyValueFormatError.test(errorMsg)) {
           throw new Error(
             i18n.global.t(
