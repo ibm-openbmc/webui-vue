@@ -192,7 +192,7 @@ const isButtonDisabled = computed(() => {
   }
 });
 
-const checkTask = async () => {
+const checkTask = async (dumpType = 'Resource') => {
   //getting list of all tasks and getting the api to the most recent task
   const taskObj = await dumps.getTask();
   taskProgress.value = taskObj.data.Members[taskObj.data.Members.length - 1];
@@ -219,7 +219,7 @@ const checkTask = async () => {
         global.setDumpGenerationInProgress({
           inProgress: false,
           success: true,
-          dumpType: 'Resource',
+          dumpType,
         });
         successToast(i18n.global.t('pageDumps.toast.resourceDumpSuccess'));
         //if TaskState is running/in progress
@@ -314,15 +314,11 @@ const handleSubmit = () => {
     dumps
       .createBmcDump(dumpType)
       .then(() => {
-        global.setDumpGenerationInProgress({
-          inProgress: false,
-          success: true,
-          dumpType: 'BMC',
-        });
         infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
           title: i18n.global.t('pageDumps.toast.successStartBmcDumpTitle'),
           timestamp: true,
         });
+        checkTask('BMC');
       })
       .catch(({ message }) => {
         global.setDumpGenerationInProgress({
@@ -395,15 +391,11 @@ const createSystemDump = (dumpType) => {
   dumps
     .createSystemDump(dumpType)
     .then(() => {
-      global.setDumpGenerationInProgress({
-        inProgress: false,
-        success: true,
-        dumpType: 'System',
-      });
       infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
         title: i18n.global.t('pageDumps.toast.successStartSystemDumpTitle'),
         timestamp: true,
       });
+      checkTask('System');
     })
     .catch(({ message }) => {
       global.setDumpGenerationInProgress({

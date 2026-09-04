@@ -1,6 +1,50 @@
 import api from '@/store/api';
 import { defineStore } from 'pinia';
 
+const NOTIF_SESSION_KEY = 'notifCentState';
+
+const loadNotifState = () => {
+  try {
+    const raw = sessionStorage.getItem(NOTIF_SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const saveNotifState = (state) => {
+  try {
+    sessionStorage.setItem(
+      NOTIF_SESSION_KEY,
+      JSON.stringify({
+        firmwareSwitchInProgress: state.firmwareSwitchInProgress,
+        firmwareSwitchStartTime: state.firmwareSwitchStartTime,
+        firmwareSwitchCurrentStep: state.firmwareSwitchCurrentStep,
+        firmwareUpdateInProgress: state.firmwareUpdateInProgress,
+        firmwareUpdateStartTime: state.firmwareUpdateStartTime,
+        firmwareUpdateCurrentStep: state.firmwareUpdateCurrentStep,
+        bmcRebootInProgress: state.bmcRebootInProgress,
+        bmcRebootStartTime: state.bmcRebootStartTime,
+        bmcRebootCurrentStep: state.bmcRebootCurrentStep,
+        dumpGenerationInProgress: state.dumpGenerationInProgress,
+        dumpGenerationStartTime: state.dumpGenerationStartTime,
+        dumpGenerationType: state.dumpGenerationType,
+        serverPowerInProgress: state.serverPowerInProgress,
+        serverPowerStartTime: state.serverPowerStartTime,
+        serverPowerOperationType: state.serverPowerOperationType,
+        immediateTestInProgress: state.immediateTestInProgress,
+        immediateTestStartTime: state.immediateTestStartTime,
+        lampTestInProgress: state.lampTestInProgress,
+        lampTestStartTime: state.lampTestStartTime,
+        completedOperations: state.completedOperations,
+        notificationsViewed: state.notificationsViewed,
+      }),
+    );
+  } catch {
+    // sessionStorage unavailable — fail silently
+  }
+};
+
 export const HOST_STATE = {
   on: 'xyz.openbmc_project.State.Host.HostState.Running',
   off: 'xyz.openbmc_project.State.Host.HostState.Off',
@@ -48,20 +92,32 @@ export const GlobalStore = defineStore('global', {
     isAuthorized: true,
     hmcManaged: localStorage.getItem('storedHmcManagedValue') || null,
     isServiceLoginEnabled: false,
-    firmwareSwitchInProgress: false,
-    firmwareSwitchStartTime: null,
-    firmwareSwitchCurrentStep: 1,
-    firmwareUpdateInProgress: false,
-    firmwareUpdateStartTime: null,
-    firmwareUpdateCurrentStep: 1,
-    bmcRebootInProgress: false,
-    bmcRebootStartTime: null,
-    bmcRebootCurrentStep: 1,
-    dumpGenerationInProgress: false,
-    dumpGenerationStartTime: null,
-    dumpGenerationType: '',
-    completedOperations: [],
-    notificationsViewed: true,
+    ...(() => {
+      const n = loadNotifState() || {};
+      return {
+        firmwareSwitchInProgress: n.firmwareSwitchInProgress ?? false,
+        firmwareSwitchStartTime: n.firmwareSwitchStartTime ?? null,
+        firmwareSwitchCurrentStep: n.firmwareSwitchCurrentStep ?? 1,
+        firmwareUpdateInProgress: n.firmwareUpdateInProgress ?? false,
+        firmwareUpdateStartTime: n.firmwareUpdateStartTime ?? null,
+        firmwareUpdateCurrentStep: n.firmwareUpdateCurrentStep ?? 1,
+        bmcRebootInProgress: n.bmcRebootInProgress ?? false,
+        bmcRebootStartTime: n.bmcRebootStartTime ?? null,
+        bmcRebootCurrentStep: n.bmcRebootCurrentStep ?? 1,
+        dumpGenerationInProgress: n.dumpGenerationInProgress ?? false,
+        dumpGenerationStartTime: n.dumpGenerationStartTime ?? null,
+        dumpGenerationType: n.dumpGenerationType ?? '',
+        serverPowerInProgress: n.serverPowerInProgress ?? false,
+        serverPowerStartTime: n.serverPowerStartTime ?? null,
+        serverPowerOperationType: n.serverPowerOperationType ?? '',
+        immediateTestInProgress: n.immediateTestInProgress ?? false,
+        immediateTestStartTime: n.immediateTestStartTime ?? null,
+        lampTestInProgress: n.lampTestInProgress ?? false,
+        lampTestStartTime: n.lampTestStartTime ?? null,
+        completedOperations: n.completedOperations ?? [],
+        notificationsViewed: n.notificationsViewed ?? true,
+      };
+    })(),
   }),
   getters: {
     bootProgressGetter: (state) => state.bootProgress,
@@ -109,11 +165,21 @@ export const GlobalStore = defineStore('global', {
     dumpGenerationInProgressGetter: (state) => state.dumpGenerationInProgress,
     dumpGenerationStartTimeGetter: (state) => state.dumpGenerationStartTime,
     dumpGenerationTypeGetter: (state) => state.dumpGenerationType,
+    serverPowerInProgressGetter: (state) => state.serverPowerInProgress,
+    serverPowerStartTimeGetter: (state) => state.serverPowerStartTime,
+    serverPowerOperationTypeGetter: (state) => state.serverPowerOperationType,
+    immediateTestInProgressGetter: (state) => state.immediateTestInProgress,
+    immediateTestStartTimeGetter: (state) => state.immediateTestStartTime,
+    lampTestInProgressGetter: (state) => state.lampTestInProgress,
+    lampTestStartTimeGetter: (state) => state.lampTestStartTime,
     hasActiveOperations: (state) =>
       state.firmwareSwitchInProgress ||
       state.firmwareUpdateInProgress ||
       state.bmcRebootInProgress ||
-      state.dumpGenerationInProgress,
+      state.dumpGenerationInProgress ||
+      state.serverPowerInProgress ||
+      state.immediateTestInProgress ||
+      state.lampTestInProgress,
     completedOperationsGetter: (state) => state.completedOperations,
     notificationsViewedGetter: (state) => state.notificationsViewed,
     hasUnviewedNotifications: (state) =>
@@ -296,17 +362,21 @@ export const GlobalStore = defineStore('global', {
         this.firmwareSwitchStartTime = null;
         this.firmwareSwitchCurrentStep = 1;
       }
+      saveNotifState(this);
     },
     setFirmwareSwitchStep(step) {
       this.firmwareSwitchCurrentStep = step;
+      saveNotifState(this);
     },
     removeCompletedOperation(operationId) {
       this.completedOperations = this.completedOperations.filter(
         (op) => op.id !== operationId,
       );
+      saveNotifState(this);
     },
     markNotificationsAsViewed() {
       this.notificationsViewed = true;
+      saveNotifState(this);
     },
     setFirmwareUpdateInProgress(payload) {
       const inProgress =
@@ -337,9 +407,11 @@ export const GlobalStore = defineStore('global', {
         this.firmwareUpdateStartTime = null;
         this.firmwareUpdateCurrentStep = 1;
       }
+      saveNotifState(this);
     },
     setFirmwareUpdateStep(step) {
       this.firmwareUpdateCurrentStep = step;
+      saveNotifState(this);
     },
     setBmcRebootInProgress(payload) {
       const inProgress =
@@ -370,9 +442,11 @@ export const GlobalStore = defineStore('global', {
         this.bmcRebootStartTime = null;
         this.bmcRebootCurrentStep = 1;
       }
+      saveNotifState(this);
     },
     setBmcRebootStep(step) {
       this.bmcRebootCurrentStep = step;
+      saveNotifState(this);
     },
     setDumpGenerationInProgress(payload) {
       const inProgress =
@@ -403,6 +477,126 @@ export const GlobalStore = defineStore('global', {
         }
         this.dumpGenerationStartTime = null;
         this.dumpGenerationType = '';
+      }
+      saveNotifState(this);
+    },
+    setServerPowerInProgress(payload) {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+      const operationType =
+        payload?.operationType || this.serverPowerOperationType || 'Power On';
+
+      this.serverPowerInProgress = inProgress;
+      if (inProgress) {
+        this.serverPowerStartTime = Date.now();
+        this.serverPowerOperationType = operationType;
+      } else {
+        if (this.serverPowerStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'server-power',
+            title: this.serverPowerOperationType,
+            message: `${this.serverPowerOperationType} completed successfully`,
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - this.serverPowerStartTime,
+          };
+          this.completedOperations.unshift(operation);
+          if (this.completedOperations.length > 10) {
+            this.completedOperations = this.completedOperations.slice(0, 10);
+          }
+          this.notificationsViewed = false;
+        }
+        this.serverPowerStartTime = null;
+        this.serverPowerOperationType = '';
+      }
+      saveNotifState(this);
+    },
+    setImmediateTestInProgress(payload) {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+
+      this.immediateTestInProgress = inProgress;
+      if (inProgress) {
+        this.immediateTestStartTime = Date.now();
+      } else {
+        if (this.immediateTestStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'immediate-test',
+            title: 'Immediate Test Requested',
+            message: 'Runtime processor diagnostic test completed',
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - this.immediateTestStartTime,
+          };
+          this.completedOperations.unshift(operation);
+          if (this.completedOperations.length > 10) {
+            this.completedOperations = this.completedOperations.slice(0, 10);
+          }
+          this.notificationsViewed = false;
+        }
+        this.immediateTestStartTime = null;
+      }
+      saveNotifState(this);
+    },
+    setLampTestInProgress(payload) {
+      const inProgress =
+        typeof payload === 'boolean' ? payload : payload.inProgress;
+      const success = typeof payload === 'boolean' ? true : payload.success;
+
+      this.lampTestInProgress = inProgress;
+      if (inProgress) {
+        this.lampTestStartTime = Date.now();
+      } else {
+        if (this.lampTestStartTime && success) {
+          const operation = {
+            id: Date.now(),
+            type: 'lamp-test',
+            title: 'Lamp Test',
+            message: 'Lamp test activated successfully',
+            status: 'success',
+            timestamp: Date.now(),
+            duration: Date.now() - this.lampTestStartTime,
+          };
+          this.completedOperations.unshift(operation);
+          if (this.completedOperations.length > 10) {
+            this.completedOperations = this.completedOperations.slice(0, 10);
+          }
+          this.notificationsViewed = false;
+        }
+        this.lampTestStartTime = null;
+      }
+      saveNotifState(this);
+    },
+    clearNotificationState() {
+      this.firmwareSwitchInProgress = false;
+      this.firmwareSwitchStartTime = null;
+      this.firmwareSwitchCurrentStep = 1;
+      this.firmwareUpdateInProgress = false;
+      this.firmwareUpdateStartTime = null;
+      this.firmwareUpdateCurrentStep = 1;
+      this.bmcRebootInProgress = false;
+      this.bmcRebootStartTime = null;
+      this.bmcRebootCurrentStep = 1;
+      this.dumpGenerationInProgress = false;
+      this.dumpGenerationStartTime = null;
+      this.dumpGenerationType = '';
+      this.serverPowerInProgress = false;
+      this.serverPowerStartTime = null;
+      this.serverPowerOperationType = '';
+      this.immediateTestInProgress = false;
+      this.immediateTestStartTime = null;
+      this.lampTestInProgress = false;
+      this.lampTestStartTime = null;
+      this.completedOperations = [];
+      this.notificationsViewed = true;
+      try {
+        sessionStorage.removeItem(NOTIF_SESSION_KEY);
+      } catch {
+        // ignore
       }
     },
   },

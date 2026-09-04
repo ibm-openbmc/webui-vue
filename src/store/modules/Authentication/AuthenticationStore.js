@@ -3,6 +3,7 @@ import api from '@/store/api';
 import { useCookies } from 'vue3-cookies';
 import Cookies from 'js-cookie';
 import router from '@/router';
+import stores from '@/store';
 const { cookies } = useCookies();
 
 export const AuthenticationStore = defineStore('authentication', {
@@ -46,6 +47,7 @@ export const AuthenticationStore = defineStore('authentication', {
       this.xsrfCookie = null;
       this.isAuthenticatedCookie = undefined;
       this.currentSessionUri = null;
+      stores.GlobalStore().clearNotificationState();
     },
     login({ username, password, otpInfo }) {
       this.isGenerateOtpRequired = false;

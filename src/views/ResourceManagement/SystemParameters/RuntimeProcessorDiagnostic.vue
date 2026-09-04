@@ -349,6 +349,10 @@ const v$ = useVuelidate(rules, { rpdScheduledRun, rpdScheduledRunDuration });
 
 const updateImmediateTestRequestedState = (value) => {
   startLoader();
+  if (value) {
+    // Run Now — mark as active immediately; stay active until the user stops
+    global.setImmediateTestInProgress(true);
+  }
   Promise.all([
     systemParametersStore.saveImmediateTestRequested({
       value: value ? 'Enabled' : 'Disabled',
@@ -358,17 +362,30 @@ const updateImmediateTestRequestedState = (value) => {
     }, 5000),
   ])
     .then((message) => {
-      if (value && isServerOff.value) {
-        Toast.successToast(
-          i18n.global.t(
-            'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
-          ),
-        );
+      if (value) {
+        // API confirmed the test was scheduled — leave Active widget showing
+        if (isServerOff.value) {
+          Toast.successToast(
+            i18n.global.t(
+              'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
+            ),
+          );
+        } else {
+          Toast.successToast(message[0]);
+        }
       } else {
+        // Stop diagnostic test run — move from Active to Completed
+        global.setImmediateTestInProgress({
+          inProgress: false,
+          success: true,
+        });
         Toast.successToast(message[0]);
       }
     })
-    .catch(({ message }) => Toast.errorToast(message))
+    .catch(({ message }) => {
+      global.setImmediateTestInProgress({ inProgress: false, success: false });
+      Toast.errorToast(message);
+    })
     .finally(() => endLoader());
 };
 const updateGuardOnErrorState = (state) => {

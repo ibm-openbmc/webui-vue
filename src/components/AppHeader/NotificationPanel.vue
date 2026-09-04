@@ -221,6 +221,96 @@
             </div>
           </div>
 
+          <!-- Server Power Operation Progress Widget -->
+          <div
+            v-if="serverPowerInProgress"
+            class="widget-card operation-progress"
+          >
+            <div class="widget-header">
+              <icon-power class="widget-icon" />
+              <h6>{{ serverPowerOperationType }}</h6>
+            </div>
+            <div class="progress-content">
+              <div class="single-step-indicator">
+                <div class="loading-circle"></div>
+                <div class="step-details">
+                  <div class="step-name">
+                    {{ $t('appHeader.serverPowerInProgress') }}
+                  </div>
+                  <div class="step-desc">
+                    {{ $t('appHeader.serverPowerInProgressDesc') }}
+                  </div>
+                </div>
+              </div>
+              <div class="elapsed-time">
+                <icon-time class="time-icon" />
+                <span
+                  >{{ $t('appHeader.elapsedTime') }}:
+                  {{ serverPowerElapsedTime }}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Immediate Test Progress Widget -->
+          <div
+            v-if="immediateTestInProgress"
+            class="widget-card operation-progress"
+          >
+            <div class="widget-header">
+              <icon-chart-activity class="widget-icon" />
+              <h6>{{ $t('appHeader.immediateTestProgress') }}</h6>
+            </div>
+            <div class="progress-content">
+              <div class="single-step-indicator">
+                <div class="loading-circle"></div>
+                <div class="step-details">
+                  <div class="step-name">
+                    {{ $t('appHeader.immediateTestRunning') }}
+                  </div>
+                  <div class="step-desc">
+                    {{ $t('appHeader.immediateTestRunningDesc') }}
+                  </div>
+                </div>
+              </div>
+              <div class="elapsed-time">
+                <icon-time class="time-icon" />
+                <span
+                  >{{ $t('appHeader.elapsedTime') }}:
+                  {{ immediateTestElapsedTime }}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Lamp Test Progress Widget -->
+          <div v-if="lampTestInProgress" class="widget-card operation-progress">
+            <div class="widget-header">
+              <icon-light class="widget-icon" />
+              <h6>{{ $t('appHeader.lampTestProgress') }}</h6>
+            </div>
+            <div class="progress-content">
+              <div class="single-step-indicator">
+                <div class="loading-circle"></div>
+                <div class="step-details">
+                  <div class="step-name">
+                    {{ $t('appHeader.lampTestRunning') }}
+                  </div>
+                  <div class="step-desc">
+                    {{ $t('appHeader.lampTestRunningDesc') }}
+                  </div>
+                </div>
+              </div>
+              <div class="elapsed-time">
+                <icon-time class="time-icon" />
+                <span
+                  >{{ $t('appHeader.elapsedTime') }}:
+                  {{ lampTestElapsedTime }}</span
+                >
+              </div>
+            </div>
+          </div>
+
           <!-- No Active Operations -->
           <div v-if="!hasActiveOperations" class="no-operations">
             <icon-checkmark class="success-icon-large" />
@@ -350,6 +440,9 @@ import IconCloseSmall from '@carbon/icons-vue/es/close/16';
 import IconUpgrade from '@carbon/icons-vue/es/upgrade/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
 import IconDownload from '@carbon/icons-vue/es/download/20';
+import IconPower from '@carbon/icons-vue/es/power/20';
+import IconChartActivity from '@carbon/icons-vue/es/chart--bar/20';
+import IconLight from '@carbon/icons-vue/es/light/20';
 import IconCheckmark from '@carbon/icons-vue/es/checkmark--filled/32';
 import IconCheckmarkFilled from '@carbon/icons-vue/es/checkmark--filled/16';
 import IconWarningFilled from '@carbon/icons-vue/es/warning--filled/16';
@@ -361,6 +454,7 @@ import i18n from '@/i18n';
 defineEmits(['close']);
 
 const globalStore = stores.GlobalStore();
+const controlStore = stores.ControlStore();
 const eventLogStore = stores.EventLogStore();
 
 const activeTab = ref(0);
@@ -368,6 +462,9 @@ const firmwareSwitchElapsedTime = ref('0:00');
 const firmwareUpdateElapsedTime = ref('0:00');
 const bmcRebootElapsedTime = ref('0:00');
 const dumpElapsedTime = ref('0:00');
+const serverPowerElapsedTime = ref('0:00');
+const immediateTestElapsedTime = ref('0:00');
+const lampTestElapsedTime = ref('0:00');
 let timerInterval = null;
 
 const firmwareSwitchSteps = computed(() => [
@@ -476,6 +573,22 @@ const dumpGenerationType = computed(
   () => globalStore.dumpGenerationType || 'System',
 );
 
+const serverPowerInProgress = computed(() => globalStore.serverPowerInProgress);
+const serverPowerStartTime = computed(() => globalStore.serverPowerStartTime);
+const serverPowerOperationType = computed(
+  () => globalStore.serverPowerOperationType || '',
+);
+
+const immediateTestInProgress = computed(
+  () => globalStore.immediateTestInProgress,
+);
+const immediateTestStartTime = computed(
+  () => globalStore.immediateTestStartTime,
+);
+
+const lampTestInProgress = computed(() => globalStore.lampTestInProgress);
+const lampTestStartTime = computed(() => globalStore.lampTestStartTime);
+
 const hasActiveOperations = computed(() => globalStore.hasActiveOperations);
 const completedOperations = computed(
   () => globalStore.completedOperations || [],
@@ -518,6 +631,17 @@ const updateAllTimers = () => {
   }
   if (dumpGenerationStartTime.value) {
     dumpElapsedTime.value = calculateTime(dumpGenerationStartTime.value);
+  }
+  if (serverPowerStartTime.value) {
+    serverPowerElapsedTime.value = calculateTime(serverPowerStartTime.value);
+  }
+  if (immediateTestStartTime.value) {
+    immediateTestElapsedTime.value = calculateTime(
+      immediateTestStartTime.value,
+    );
+  }
+  if (lampTestStartTime.value) {
+    lampTestElapsedTime.value = calculateTime(lampTestStartTime.value);
   }
 };
 
@@ -564,6 +688,20 @@ const formatDuration = (ms) => {
 const removeOperation = (operationId) => {
   globalStore.removeCompletedOperation(operationId);
 };
+
+// When controlStore.isOperationInProgress goes true→false, the server power
+// operation has actually reached the target state. Mark it complete.
+watch(
+  () => controlStore.isOperationInProgress,
+  (isInProgress) => {
+    if (!isInProgress && globalStore.serverPowerInProgress) {
+      globalStore.setServerPowerInProgress({
+        inProgress: false,
+        success: true,
+      });
+    }
+  },
+);
 
 watch(hasActiveOperations, (newVal) => {
   if (newVal) {

@@ -97,6 +97,11 @@ const bootProgress = computed(() => {
 });
 
 function rebootBmc() {
+  // Capture the reboot time before we start so we can detect when it changes
+  const rebootTimeBeforeStart = controlStore.getLastBmcRebootTime
+    ? new Date(controlStore.getLastBmcRebootTime).getTime()
+    : null;
+
   globalStore.setBmcRebootInProgress(true);
   controlStore
     .rebootBmc()
@@ -107,12 +112,10 @@ function rebootBmc() {
       // Step 2 - reboot in progress
       globalStore.setBmcRebootStep(2);
 
-      // Start checking BMC status after reboot
+      // Poll until LastResetTime on /redfish/v1/Managers/bmc changes to a
+      // newer value — that is the definitive signal the BMC has rebooted
       const timer = (checkCounter = 0) => {
         checkCounter++;
-        // This counter goes up by 1 every time this function runs
-        // If the function successfully goes to last toast, it won't run anymore
-        // if this function runs more than 10 times, it won't run anymore
         if (checkCounter > 10) {
           endLoader();
           globalStore.setBmcRebootInProgress({
@@ -121,8 +124,15 @@ function rebootBmc() {
           });
           return errorToast(message);
         }
-        globalStore.getBootProgress().then(() => {
-          if (bootProgress.value) {
+        controlStore.fetchLastBmcRebootTime().then(() => {
+          const newRebootTime = controlStore.getLastBmcRebootTime
+            ? new Date(controlStore.getLastBmcRebootTime).getTime()
+            : null;
+          const rebootComplete =
+            newRebootTime !== null &&
+            (rebootTimeBeforeStart === null ||
+              newRebootTime > rebootTimeBeforeStart);
+          if (rebootComplete) {
             globalStore.setBmcRebootStep(3);
             infoToast(
               i18n.global.t('pageRebootBmc.toast.successRebootCompleted'),

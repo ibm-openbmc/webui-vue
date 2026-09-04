@@ -179,6 +179,14 @@
         "uptime": "Uptime",
         "viewAll": "View All",
         "viewLogs": "View Logs",
+        "immediateTestProgress": "Immediate Test Requested",
+        "immediateTestRunning": "Running processor diagnostic test...",
+        "immediateTestRunningDesc": "Please wait while the diagnostic test runs",
+        "lampTestProgress": "Lamp Test",
+        "lampTestRunning": "Lamp test in progress...",
+        "lampTestRunningDesc": "All LEDs are being activated for visual inspection",
+        "serverPowerInProgress": "Server power operation in progress...",
+        "serverPowerInProgressDesc": "Waiting for the server to complete the operation",
         "widgets": "Widgets"
     },
     "appNavigation": {
