@@ -155,7 +155,9 @@ export function usePolicies() {
   );
 
   const basicAuthEnabled = computed(
-    () => accountServiceQuery.data.value?.HTTPBasicAuth === 'Enabled' ?? false,
+    () =>
+      (accountServiceQuery.data.value?.HTTPBasicAuth ?? 'Disabled') ===
+      'Enabled',
   );
 
   // Send Service Alerts uses the same systemQuery as TPM Policy

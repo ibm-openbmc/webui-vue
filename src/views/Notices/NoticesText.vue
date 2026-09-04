@@ -1,6 +1,6 @@
 <template>
   <pre>
-IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B,
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
 9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
 firmware version FW1120
 
@@ -22,7 +22,7 @@ Preamble and List of Other Internal Licensed Code
 
 TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE
 
-IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B,
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
 9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
 firmware version FW1120
 
@@ -114,11 +114,11 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>libidn2</p></td><td><p>GPL-2.0-or-later, Unicode-DFS-2016</p></td></tr>
 <tr><td><p>libmctp</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>libmd</p></td><td><p>BSD-3-Clause, BSD-2-Clause</p></td></tr>
+<tr><td><p>libmnl</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>libnl</p></td><td><p>LGPL-2.1-only</p></td></tr>
 <tr><td><p>libnsl2</p></td><td><p>LGPL-2.1-only</p></td></tr>
 <tr><td><p>libnss-mdns</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>libpam</p></td><td><p>GPL-2.0-or-later</p></td></tr>
-<tr><td><p>libmnl</p></td><td><p>LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>libpcap</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libpcre2</p></td><td><p>BSD-3-Clause</p></td></tr>
 <tr><td><p>libpldm</p></td><td><p>Apache-2.0</p></td></tr>
@@ -201,6 +201,8 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>opkg</p></td><td><p>GPL-2.0-or-later</p></td></tr>
 <tr><td><p>opkg-arch-config</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>opkg-utils</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>op-proc-control</p></td><td><p>Apache-2.0</p></td></tr>
+<tr><td><p>op-proc-control-systemd-links</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>os-release</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>p9-host-start</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>packagegroup-base</p></td><td><p>MIT</p></td></tr>
@@ -281,6 +283,7 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>systemd</p></td><td><p>GPL-2.0-only, LGPL-2.1-or-later</p></td></tr>
 <tr><td><p>systemd-conf</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>systemd-serialgetty</p></td><td><p>GPL-2.0-or-later</p></td></tr>
+<tr><td><p>tar</p></td><td><p>GPL-3.0-only</p></td></tr>
 <tr><td><p>tcp-wrappers</p></td><td><p>BSD-1-Clause</p></td></tr>
 <tr><td><p>telemetry</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>trace-enable</p></td><td><p>Apache-2.0</p></td></tr>
@@ -290,7 +293,6 @@ The Program includes the following licensed Separately as Other Internal License
 <tr><td><p>udev-aspeed-vuart</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>util-linux</p></td><td><p>GPL-1.0-or-later, GPL-2.0-or-later, LGPL-2.1-or-later, BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, MIT</p></td></tr>
 <tr><td><p>util-linux-libuuid</p></td><td><p>BSD-3-Clause</p></td></tr>
-<tr><td><p>tar</p></td><td><p>GPL-3.0-only</p></td></tr>
 <tr><td><p>volatile-binds</p></td><td><p>MIT</p></td></tr>
 <tr><td><p>webui-vue</p></td><td><p>Apache-2.0</p></td></tr>
 <tr><td><p>xz</p></td><td><p>GPL-2.0-or-later, PD</p></td></tr>
@@ -5774,7 +5776,7 @@ End of Source Code Offer Information
 
 ===========================================================================
 END OF TERMS AND CONDITIONS FOR OTHER INTERNAL LICENSED CODE for
-IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B,
+IBM Firmware for IBM Power Systems models 9824-42A, 9824-22A, 9824-22B, 
 9824-41B, 9856-42H, 9856-22H, 9043-MRU, 9242-21B, and 9242-21T running
 firmware version FW1120
 ===========================================================================
