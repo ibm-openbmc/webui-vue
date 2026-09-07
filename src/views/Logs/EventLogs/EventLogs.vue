@@ -672,6 +672,7 @@ export default {
                   ? this.$t('pageEventLogs.toast.successResolveLogs', 1)
                   : this.$t('pageEventLogs.toast.successUnresolveLogs', 1),
               );
+              eventBus.emit('clear-selected');
               toastShown = true;
             }
           },
@@ -680,10 +681,8 @@ export default {
         // Revert the toggle to its original state on failure
         row.status = !newStatus;
         this.toast.errorToast(error.message);
-      } finally {
         eventBus.emit('clear-selected');
-        this.tableHeaderCheckboxModel = false;
-        this.tableHeaderCheckboxIndeterminate = false;
+      } finally {
         this.reloadEventLogData();
       }
     },
