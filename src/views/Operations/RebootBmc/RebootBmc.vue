@@ -96,29 +96,63 @@ const bootProgress = computed(() => {
   return globalStore.bootProgressGetter;
 });
 
-function rebootBmc() {
+async function rebootBmc() {
+  // Ensure we have a real baseline timestamp before triggering the reboot.
+  // onBeforeMount fetches this, but if that request failed getLastBmcRebootTime
+  // would be null — which would cause the first successful poll to be treated
+  // as completion regardless of whether the BMC actually rebooted.
+  if (!controlStore.getLastBmcRebootTime) {
+    await controlStore.fetchLastBmcRebootTime();
+  }
+
+  const rebootTimeBeforeStart = controlStore.getLastBmcRebootTime
+    ? new Date(controlStore.getLastBmcRebootTime).getTime()
+    : null;
+
+  globalStore.setBmcRebootInProgress({ inProgress: true, success: false });
   controlStore
     .rebootBmc()
     .then((message) => {
       infoToast(message);
       startLoader();
 
-      // Start checking BMC status after reboot
+      // Step 2 - reboot in progress
+      globalStore.setBmcRebootStep(2);
+
+      // Poll until LastResetTime on /redfish/v1/Managers/bmc changes to a
+      // newer value — that is the definitive signal the BMC has rebooted.
+      // If rebootTimeBeforeStart is still null after the retry above (the BMC
+      // has never recorded a reset time), we accept any non-null response as
+      // completion — a timestamp appearing for the first time means it rebooted.
       const timer = (checkCounter = 0) => {
         checkCounter++;
-        // This counter goes up by 1 every time this function runs
-        // If the function successfully goes to last toast, it won't run anymore
-        // if this function runs more than 10 times, it won't run anymore
         if (checkCounter > 10) {
           endLoader();
-          return errorToast(message);
+          globalStore.setBmcRebootInProgress({
+            inProgress: false,
+            success: false,
+          });
+          return errorToast(i18n.global.t('pageRebootBmc.toast.errorTimeout'));
         }
-        globalStore.getBootProgress().then(() => {
-          if (bootProgress.value) {
+        controlStore.fetchLastBmcRebootTime().then(() => {
+          const newRebootTime = controlStore.getLastBmcRebootTime
+            ? new Date(controlStore.getLastBmcRebootTime).getTime()
+            : null;
+          const rebootComplete =
+            newRebootTime !== null &&
+            (rebootTimeBeforeStart === null
+              ? true // no baseline — any timestamp means the BMC came back
+              : newRebootTime > rebootTimeBeforeStart);
+          if (rebootComplete) {
+            globalStore.setBmcRebootStep(3);
             infoToast(
               i18n.global.t('pageRebootBmc.toast.successRebootCompleted'),
             );
             endLoader();
+            globalStore.setBmcRebootInProgress({
+              inProgress: false,
+              success: true,
+            });
           } else {
             setTimeout(() => {
               timer(checkCounter);
@@ -126,9 +160,19 @@ function rebootBmc() {
           }
         });
       };
-      timer();
+      // Give the BMC time to actually go down before the first poll.
+      // Without this delay, the first fetch could succeed immediately
+      // (before the BMC has started rebooting) and, when rebootTimeBeforeStart
+      // is null, would incorrectly report completion.
+      setTimeout(() => timer(), 30000);
     })
-    .catch(({ message }) => errorToast(message));
+    .catch(({ message }) => {
+      globalStore.setBmcRebootInProgress({
+        inProgress: false,
+        success: false,
+      });
+      errorToast(message);
+    });
 }
 
 function onClick() {

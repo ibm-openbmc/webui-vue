@@ -87,6 +87,23 @@
               <span class="responsive-text">{{ $t('appHeader.refresh') }}</span>
             </BButton>
           </li>
+          <li class="nav-item notification-item">
+            <BButton
+              id="app-header-notification"
+              variant="link"
+              data-test-id="appHeader-button-notification"
+              @click="toggleNotificationPanel"
+            >
+              <icon-notification-new
+                v-if="hasUnviewedNotifications"
+                :title="$t('appHeader.titleNotifications')"
+              />
+              <icon-notification
+                v-else
+                :title="$t('appHeader.titleNotifications')"
+              />
+            </BButton>
+          </li>
           <li class="nav-item">
             <BDropdown
               id="app-header-user"
@@ -115,6 +132,17 @@
       </BNavbar>
     </header>
     <loading-bar />
+    <NotificationPanel
+      v-if="isNotificationPanelOpen"
+      @close="closeNotificationPanel"
+      @keydown.esc="closeNotificationPanel"
+    />
+    <div
+      v-if="isNotificationPanelOpen"
+      aria-hidden="true"
+      class="notification-overlay"
+      @click="closeNotificationPanel"
+    ></div>
   </div>
 </template>
 
@@ -124,7 +152,10 @@ import IconAvatar from '@carbon/icons-vue/es/user--avatar/20';
 import IconClose from '@carbon/icons-vue/es/close/20';
 import IconMenu from '@carbon/icons-vue/es/menu/20';
 import IconRenew from '@carbon/icons-vue/es/renew/20';
+import IconNotification from '@carbon/icons-vue/es/notification/20';
+import IconNotificationNew from '@carbon/icons-vue/es/notification--new/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
+import NotificationPanel from './NotificationPanel.vue';
 import useToast from '@/components/Composables/useToastComposable';
 import stores from '@/store';
 import i18n from '@/i18n';
@@ -136,6 +167,7 @@ const router = useRouter();
 
 const authenticationStore = stores.AuthenticationStore();
 const global = stores.GlobalStore();
+const controlStore = stores.ControlStore();
 const eventLogStore = stores.EventLogStore();
 
 const props = defineProps({
@@ -146,6 +178,7 @@ const props = defineProps({
 });
 
 const isNavigationOpen = ref(false);
+const isNotificationPanelOpen = ref(false);
 const altLogo = ref(import.meta.env.VUE_APP_COMPANY_NAME || 'Built on OpenBMC');
 const headerText = ref('ASMI');
 
@@ -218,6 +251,29 @@ const healthStatusIcon = computed(() => {
 const username = computed(() => {
   return global.usernameGetter;
 });
+const hasUnviewedNotifications = computed(() => {
+  return global.hasUnviewedNotifications;
+});
+
+const toggleNotificationPanel = () => {
+  isNotificationPanelOpen.value = !isNotificationPanelOpen.value;
+};
+
+const closeNotificationPanel = () => {
+  isNotificationPanelOpen.value = false;
+};
+
+// Server power operations complete when controlStore.isOperationInProgress
+// drops to false. This watch lives in AppHeader (always mounted) rather than
+// in NotificationPanel (only mounted while open) so completion is never missed.
+watch(
+  () => controlStore.isOperationInProgress,
+  (isInProgress) => {
+    if (!isInProgress && global.serverPowerInProgress) {
+      global.setServerPowerInProgress({ inProgress: false, success: true });
+    }
+  },
+);
 
 watch(isAuthorized, (value) => {
   if (value === false) {
