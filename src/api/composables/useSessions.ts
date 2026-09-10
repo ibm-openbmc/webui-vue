@@ -90,23 +90,23 @@ export function useSessions() {
       }
 
       // Build promise list: others first, current session last
-      const promises = otherSessions.map((uri) => {
-        return api.delete(uri).catch((error: Error) => {
-          console.log(error);
-          return error;
-        });
-      });
+      const otherPromises = otherSessions.map((uri) =>
+        api.delete(uri).catch((error: Error) => error),
+      );
+      const otherResponses = await api.all(otherPromises);
+
+      const currentResponses: any[] = [];
 
       if (currentSession) {
-        promises.push(
-          api.delete(currentSession).catch((error: Error) => {
-            console.log(error);
-            return error;
-          }),
-        );
+        try {
+          const res = await api.delete(currentSession);
+          currentResponses.push(res);
+        } catch (error) {
+          currentResponses.push(error);
+        }
       }
 
-      const responses = await api.all(promises);
+      const responses = [...otherResponses, ...currentResponses];
       const { successCount, errorCount } = getResponseCount(responses);
       const toastMessages: { type: string; message: string }[] = [];
 

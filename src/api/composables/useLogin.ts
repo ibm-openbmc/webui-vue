@@ -106,6 +106,11 @@ export function useLogin() {
         '/redfish/v1/SessionService/Sessions',
         requestBody,
       );
+      const sessionUri =
+        response.headers?.location || response.data?.['@odata.id'];
+      if (sessionUri) {
+        localStorage.setItem('currentSessionUri', sessionUri);
+      }
 
       const isGenerateOtpRequired =
         Array.isArray(response.data?.['@Message.ExtendedInfo']) &&
