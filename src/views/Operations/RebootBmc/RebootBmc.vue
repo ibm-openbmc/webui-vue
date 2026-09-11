@@ -60,18 +60,26 @@
 import { ref, computed, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
+import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import { useRebootBmc } from '@/api/composables/useRebootBmc';
 import { useBootSettings } from '@/api/composables/useBootSettings';
+import stores from '@/store';
 
-const { successToast, errorToast } = useToast();
+const { errorToast, infoToast } = useToast();
+const { startLoader, endLoader } = useLoadingBar();
 
 const { lastBmcRebootTime, isFetching, isError, rebootBmc } = useRebootBmc();
 const { systemDumpActive } = useBootSettings();
+const globalStore = stores.GlobalStore();
 
 const openModal = ref(false);
 
 usePageLoadingBar(isFetching, isError);
+
+const bootProgress = computed(() => {
+  return globalStore.bootProgressGetter;
+});
 
 function onClick() {
   openModal.value = true;
@@ -80,9 +88,37 @@ function onClick() {
 function handleOK() {
   openModal.value = false;
   rebootBmc()
-    .then(() =>
-      successToast(i18n.global.t('pageRebootBmc.toast.successRebootStart')),
-    )
+    .then(() => {
+      infoToast(i18n.global.t('pageRebootBmc.toast.successRebootStart'));
+      startLoader();
+
+      // Start checking BMC status after reboot
+      const timer = (checkCounter = 0) => {
+        checkCounter++;
+        // This counter goes up by 1 every time this function runs
+        // If the function successfully goes to last toast, it won't run anymore
+        // if this function runs more than 10 times, it won't run anymore
+        if (checkCounter > 10) {
+          endLoader();
+          return errorToast(
+            i18n.global.t('pageRebootBmc.toast.errorRebootStart'),
+          );
+        }
+        globalStore.getBootProgress().then(() => {
+          if (bootProgress.value) {
+            infoToast(
+              i18n.global.t('pageRebootBmc.toast.successRebootCompleted'),
+            );
+            endLoader();
+          } else {
+            setTimeout(() => {
+              timer(checkCounter);
+            }, 60000); // 1 minute
+          }
+        });
+      };
+      timer();
+    })
     .catch(() =>
       errorToast(i18n.global.t('pageRebootBmc.toast.errorRebootStart')),
     );
