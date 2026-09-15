@@ -552,6 +552,11 @@ function standbyToRuntime() {
       phypStandby.value = true;
       successToast(message);
     })
-    .catch(({ message }) => errorToast(message));
+    .catch((error) => {
+      console.error('Standby to runtime transition failed:', error);
+      errorToast(
+        i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+      );
+    });
 }
 </script>

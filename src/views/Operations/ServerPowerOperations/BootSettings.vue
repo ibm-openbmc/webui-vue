@@ -181,8 +181,11 @@ function handleSubmit() {
         }, 5000);
       });
     })
-    .catch(({ message }) => {
-      errorToast(message);
+    .catch((error) => {
+      console.error('Boot settings save failed:', error);
+      errorToast(
+        i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
+      );
     })
     .finally(() => {
       if (props.isUpdated) {
