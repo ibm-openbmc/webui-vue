@@ -181,7 +181,8 @@ function handleSubmit() {
         }, 5000);
       });
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error('Boot settings save failed:', error);
       errorToast(
         i18n.global.t('pageServerPowerOperations.toast.errorSaveSettings'),
       );

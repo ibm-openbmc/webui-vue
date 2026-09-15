@@ -636,6 +636,7 @@ async function handleSubmit() {
       resetForm();
     }
   } catch (error) {
+    console.error('Network settings save failed:', error);
     errorToast(
       i18n.global.t(
         'pageServerPowerOperations.modal.networkSettings.toast.errorSavedSettings',
@@ -649,6 +650,7 @@ async function restoreDefault() {
     const message = await restoreDefaultMutation();
     successToast(message);
   } catch (error) {
+    console.error('Restore default settings failed:', error);
     errorToast(
       i18n.global.t(
         'pageServerPowerOperations.modal.networkSettings.toast.errorRestoreDefault',
