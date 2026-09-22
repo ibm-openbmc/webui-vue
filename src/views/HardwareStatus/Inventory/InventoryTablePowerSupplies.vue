@@ -274,8 +274,8 @@ const filteredRows = computed(() => {
 
 onBeforeMount(() => {
   isBusy.value = true;
-  eventBus.emit('hardware-status-power-supplies-complete');
   isBusy.value = false;
+  eventBus.emit('hardware-status-power-supplies-complete');
 });
 
 const serverStatus = computed(() => {

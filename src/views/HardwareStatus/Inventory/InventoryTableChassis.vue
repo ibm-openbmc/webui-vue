@@ -191,8 +191,8 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  eventBus.emit('hardware-status-chassis-complete');
   isBusy.value = false;
+  eventBus.emit('hardware-status-chassis-complete');
 });
 
 watch(

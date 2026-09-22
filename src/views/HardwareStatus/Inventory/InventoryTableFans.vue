@@ -259,8 +259,8 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  eventBus.emit('hardware-status-fans-complete');
   isBusy.value = false;
+  eventBus.emit('hardware-status-fans-complete');
 });
 
 const filteredRows = computed(() => {
