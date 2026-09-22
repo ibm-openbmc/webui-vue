@@ -2,12 +2,17 @@ import api from '@/store/api';
 import i18n from '@/i18n';
 import { defineStore } from 'pinia';
 
+// Module-level in-flight cache — avoids wrapping a Promise in Pinia's reactive state.
+let _pcieSlotsFetchPromise = null;
+
 export const PcieSlotsStore = defineStore('pcieSlotsStore', {
   state: () => ({
     pcieSlots: [],
+    rawSlots: [],
   }),
   getters: {
     pcieSlotsGetter: (state) => state.pcieSlots,
+    rawSlotsGetter: (state) => state.rawSlots,
   },
   actions: {
     setPcieSlotsInfo(data) {
@@ -21,13 +26,22 @@ export const PcieSlotsStore = defineStore('pcieSlotsStore', {
       });
     },
     async getPcieSlotsInfo(requestBody) {
+      // Deduplicate concurrent calls — share the in-flight promise so
+      // FabricAdaptersStore can also await it without a second HTTP request.
+      if (_pcieSlotsFetchPromise) return _pcieSlotsFetchPromise;
       this.setPcieSlotsInfo([]);
-      return await api
+      this.rawSlots = [];
+      _pcieSlotsFetchPromise = api
         .get(`${requestBody.uri}/PCIeSlots`)
         .then(({ data }) => {
-          this.setPcieSlotsInfo(data.Slots);
+          this.rawSlots = data.Slots ?? [];
+          this.setPcieSlotsInfo(this.rawSlots);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
+        .finally(() => {
+          _pcieSlotsFetchPromise = null;
+        });
+      return _pcieSlotsFetchPromise;
     },
     async updateIdentifyLedValue(led) {
       const tempPcieSlots = [];

@@ -40,19 +40,19 @@ export const FanStore = defineStore('fanStore', {
     },
     async getAllFans(requestBody) {
       this.setFanInfo([]);
-      return await api
-        .get(`${requestBody.uri}`)
-        .then((response) =>
-          api.get(response.data.ThermalSubsystem['@odata.id']),
+      // If a direct thermalSubsystemUri is supplied, skip the chassis GET hop.
+      // Otherwise fall back to fetching the chassis to discover the URI.
+      const fansRequest = requestBody.thermalSubsystemUri
+        ? Promise.resolve(requestBody.thermalSubsystemUri)
+        : api
+            .get(`${requestBody.uri}`)
+            .then((response) => response.data.ThermalSubsystem['@odata.id']);
+      return await fansRequest
+        .then((thermalUri) =>
+          api.get(`${thermalUri}/Fans?$expand=.($levels=1)`),
         )
-        .then((response) => api.get(response.data.Fans['@odata.id']))
-        .then(({ data: { Members } }) =>
-          Members.map((member) => member['@odata.id']),
-        )
-        .then((fanIds) => api.all(fanIds.map((fan) => api.get(fan))))
-        .then((fans) => {
-          const fansData = fans.map((fans) => fans.data);
-          this.setFanInfo(fansData);
+        .then(({ data: { Members } }) => {
+          this.setFanInfo(Members);
         })
         .catch((error) => console.log(error));
     },
