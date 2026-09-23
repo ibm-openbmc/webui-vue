@@ -11,7 +11,7 @@ export const MemoryStore = defineStore('memoryStore', {
   },
   actions: {
     setMemoryInfo(data) {
-      this.dimms = data.map(({ data }) => {
+      this.dimms = data.map((item) => {
         const {
           Id,
           Status = {},
@@ -24,7 +24,7 @@ export const MemoryStore = defineStore('memoryStore', {
           Model,
           LocationIndicatorActive,
           Location,
-        } = data;
+        } = item;
         return {
           id: Id,
           health: Status.Health,
@@ -37,7 +37,7 @@ export const MemoryStore = defineStore('memoryStore', {
           sparePartNumber: SparePartNumber,
           model: Model,
           identifyLed: LocationIndicatorActive,
-          uri: data['@odata.id'],
+          uri: item['@odata.id'],
           locationNumber: Location?.PartLocation?.ServiceLabel,
         };
       });
@@ -45,12 +45,10 @@ export const MemoryStore = defineStore('memoryStore', {
     async getDimms() {
       this.setMemoryInfo([]);
       return await api
-        .get('/redfish/v1/Systems/system/Memory')
+        .get('/redfish/v1/Systems/system/Memory?$expand=.($levels=1)')
         .then(({ data: { Members } }) => {
-          const promises = Members.map((item) => api.get(item['@odata.id']));
-          return api.all(promises);
+          this.setMemoryInfo(Members);
         })
-        .then((response) => this.setMemoryInfo(response))
         .catch((error) => console.log(error));
     },
     async updateIdentifyLedValue(led) {
