@@ -14,6 +14,7 @@ export function useMemory() {
     getBiosBooleanAttribute,
     getRegistryOptions,
     getRegistryCurrentValue,
+    getRegistryLowerBound,
     getRegistryUpperBound,
     updateBiosAttribute,
     updateBiosBooleanAttribute,
@@ -36,6 +37,12 @@ export function useMemory() {
   // Memory-specific registry attributes
   const logicalMemorySizeOptions = getRegistryOptions('hb_memory_region_size');
   const maxNumHugePages = getRegistryCurrentValue('hb_max_number_huge_pages');
+  const ioAdapterCapacityMin = getRegistryLowerBound(
+    'hb_ioadapter_enlarged_capacity',
+  );
+  const ioAdapterCapacityMax = getRegistryUpperBound(
+    'hb_ioadapter_enlarged_capacity',
+  );
   const dynamicIoDrawerDefaultCapacity = getRegistryUpperBound(
     'hb_storage_preallocation_for_drawer_attach',
   );
@@ -77,6 +84,8 @@ export function useMemory() {
     logicalMemorySize,
     logicalMemorySizeOptions,
     ioAdapterCapacity,
+    ioAdapterCapacityMin,
+    ioAdapterCapacityMax,
     dynamicIoDrawerCapacity,
     dynamicIoDrawerDefaultCapacity,
     maxNumHugePages,

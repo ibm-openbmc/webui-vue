@@ -46,7 +46,9 @@
           </BNavbarBrand>
           <div v-if="isNavTagPresent" :key="routerKey" class="ps-2 nav-tags">
             <span>|</span>
-            <span class="ps-3 asset-tag">{{ assetTag }}</span>
+            <span class="ps-3 asset-tag" :title="assetTag">
+              {{ truncatedAssetTag }}
+            </span>
             <span class="ps-3">{{ modelType }}</span>
             <span class="ps-3">{{ serialNumber }}</span>
           </div>
@@ -167,6 +169,11 @@ onMounted(() => {
 
 const isNavTagPresent = computed(() => {
   return assetTag.value || modelType.value || serialNumber.value;
+});
+const truncatedAssetTag = computed(() => {
+  const tag = assetTag.value;
+  if (!tag) return '';
+  return tag.length > 30 ? tag.substring(0, 30) + '...' : tag;
 });
 
 const isAuthorized = computed(() => {

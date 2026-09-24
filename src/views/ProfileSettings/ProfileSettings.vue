@@ -72,6 +72,16 @@
                       })
                     }}
                   </template>
+                  <template
+                    v-else-if="
+                      v$.form.newPassword.$errors.length > 0
+                        ? v$.form.newPassword.$errors[0].$validator ===
+                          'hasTwoCharacterGroups'
+                        : false
+                    "
+                  >
+                    {{ $t('global.passwordValidation.passwordMustContain') }}
+                  </template>
                 </BFormInvalidFeedback>
               </input-password-toggle>
             </BFormGroup>
@@ -160,6 +170,7 @@ import useVuelidateComposable from '@/components/Composables/useVuelidateComposa
 import { useVuelidate } from '@vuelidate/core';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useLocalTimezoneLabelComposable from '../../components/Composables/useLocalTimezoneLabelComposable';
+import usePasswordValidationComposable from '@/components/Composables/usePasswordValidationComposable';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import stores from '@/store';
@@ -169,6 +180,7 @@ const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 const { startLoader, endLoader } = useLoadingBar();
 const { localOffset } = useLocalTimezoneLabelComposable();
+const { hasTwoCharacterGroups } = usePasswordValidationComposable();
 
 const global = stores.GlobalStore();
 const userManagementStore = stores.UserManagementStore();
@@ -219,6 +231,7 @@ const rules = computed(() => ({
     newPassword: {
       minLength: minLength(passwordRequirements.value.minLength),
       maxLength: maxLength(passwordRequirements.value.maxLength),
+      hasTwoCharacterGroups,
     },
     confirmPassword: {
       sameAsPassword: sameAs(form.value.newPassword),

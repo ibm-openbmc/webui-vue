@@ -177,8 +177,8 @@
                 v-model.number="ioAdapterCapacity"
                 data-test-id="io-adapter-capacity"
                 type="number"
-                :min="0"
-                :max="21"
+                :min="ioAdapterCapacityMin"
+                :max="ioAdapterCapacityMax"
                 :state="getValidationState(v$.ioAdapterCapacity)"
                 :disabled="!isSectionEditable()"
                 @update:model-value="v$.ioAdapterCapacity.$touch()"
@@ -186,8 +186,8 @@
               <BFormInvalidFeedback role="alert">
                 {{
                   $t('global.form.valueMustBeBetween', {
-                    min: 0,
-                    max: 21,
+                    min: ioAdapterCapacityMin,
+                    max: ioAdapterCapacityMax,
                   })
                 }}
               </BFormInvalidFeedback>
@@ -410,6 +410,8 @@ const {
   logicalMemorySize,
   logicalMemorySizeOptions,
   ioAdapterCapacity: ioAdapterCapacityData,
+  ioAdapterCapacityMin: ioAdapterCapacityMinData,
+  ioAdapterCapacityMax: ioAdapterCapacityMaxData,
   dynamicIoDrawerCapacity: dynamicIoDrawerCapacityData,
   dynamicIoDrawerDefaultCapacity,
   maxNumHugePages: maxHugePageLimit,
@@ -496,6 +498,9 @@ const ioAdapterCapacity = ref(0);
 const dynamicIoDrawerCapacity = ref(0);
 const systemMemoryPageSetup = ref(0);
 
+const ioAdapterCapacityMin = computed(() => ioAdapterCapacityMinData.value);
+const ioAdapterCapacityMax = computed(() => ioAdapterCapacityMaxData.value);
+
 // Sync local state with fetched data
 watch(ioAdapterCapacityData, (value) => {
   if (value !== null) ioAdapterCapacity.value = value;
@@ -540,8 +545,8 @@ const rules = computed(() => ({
     logicalMemorySizeOption: {},
   },
   ioAdapterCapacity: {
-    minValue: minValue(0),
-    maxValue: maxValue(21),
+    minValue: minValue(ioAdapterCapacityMin.value),
+    maxValue: maxValue(ioAdapterCapacityMax.value),
   },
   dynamicIoDrawerCapacity: {
     minValue: minValue(0),

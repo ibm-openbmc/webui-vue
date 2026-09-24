@@ -13,6 +13,7 @@ interface BiosResponse {
 interface RegistryAttribute {
   AttributeName: string;
   CurrentValue?: any;
+  LowerBound?: number;
   UpperBound?: number;
   Value?: Array<{ ValueName: string }>;
 }
@@ -128,6 +129,17 @@ export function useBiosAttributes() {
     });
   };
 
+  // Helper function to get registry attribute lower bound
+  const getRegistryLowerBound = (attributeName: string) => {
+    return computed<number | null>(() => {
+      if (!registryData.value) return null;
+      const attr = registryData.value.find(
+        (a) => a.AttributeName === attributeName,
+      );
+      return attr?.LowerBound ?? null;
+    });
+  };
+
   // Helper function to get registry attribute upper bound
   const getRegistryUpperBound = (attributeName: string) => {
     return computed<number | null>(() => {
@@ -205,6 +217,7 @@ export function useBiosAttributes() {
     getBiosBooleanAttribute,
     getRegistryOptions,
     getRegistryCurrentValue,
+    getRegistryLowerBound,
     getRegistryUpperBound,
 
     // Mutations
