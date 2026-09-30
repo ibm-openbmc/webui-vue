@@ -1209,6 +1209,7 @@
         "useDns": "Use DNS servers",
         "useDomainName": "Use domain name",
         "useNtp": "Use NTP servers",
+        "lldp": "LLDP",
         "modal": {
             "confirmDeleteIpv4": "Are you sure you want to delete '%{address}'?",
             "confirmDeleteIpv6": "Are you sure you want to delete '%{address}'?",
