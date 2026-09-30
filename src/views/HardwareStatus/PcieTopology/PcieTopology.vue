@@ -493,6 +493,9 @@ const isInPhypStandby = computed(() => {
 const isServiceUser = computed(() => {
   return globalStore.isServiceUser;
 });
+const isReadOnlyUser = computed(() => {
+  return globalStore.isReadOnlyUser;
+});
 
 watch(
   () => filteredEntries,
@@ -518,13 +521,17 @@ function checkIfInPhypStandby(checkCounter = 0) {
   if (checkCounter > 50) return;
   if (isInPhypStandby.value) {
     startLoader();
-    pcieTopologyStore.refreshPage().then(() => {
+    const topologyFetch = () =>
       pcieTopologyStore.getTopologyScreen().finally(() => {
         isBusy.value = false;
         fetched.value = true;
         endLoader();
       });
-    });
+    if (isReadOnlyUser.value) {
+      topologyFetch();
+    } else {
+      pcieTopologyStore.refreshPage().then(topologyFetch);
+    }
     return;
   } else {
     globalStore.getBootProgress();
