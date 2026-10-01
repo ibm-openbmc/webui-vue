@@ -572,93 +572,6 @@ describe('useFirmware', () => {
       expect(typeof switchBmcFirmwareAndReboot).toBe('function');
     });
 
-    it('exposes setApplyTimeImmediate function', () => {
-      useQuery.mockReturnValue({
-        data: ref(null),
-        isFetching: ref(false),
-        isError: ref(false),
-        error: ref(null),
-        refetch: vi.fn(),
-      });
-
-      const mockMutateAsync = vi.fn();
-      useMutation.mockReturnValue({
-        mutateAsync: mockMutateAsync,
-        isPending: ref(false),
-      });
-
-      const { setApplyTimeImmediate } = useFirmware();
-
-      expect(typeof setApplyTimeImmediate).toBe('function');
-
-      it('calls uploadFirmware mutation when uploadFirmware is invoked', async () => {
-        useQuery.mockReturnValue({
-          data: ref(null),
-          isFetching: ref(false),
-          isError: ref(false),
-          error: ref(null),
-          refetch: vi.fn(),
-        });
-
-        const mockMutateAsync = vi.fn().mockResolvedValue(undefined);
-        useMutation.mockReturnValue({
-          mutateAsync: mockMutateAsync,
-          isPending: ref(false),
-        });
-
-        const { uploadFirmware } = useFirmware();
-        const mockFile = new File(['test'], 'test.bin');
-
-        await uploadFirmware(mockFile);
-
-        expect(mockMutateAsync).toHaveBeenCalledWith(mockFile);
-      });
-
-      it('calls switchBmcFirmware mutation when switchBmcFirmwareAndReboot is invoked', async () => {
-        useQuery.mockReturnValue({
-          data: ref(null),
-          isFetching: ref(false),
-          isError: ref(false),
-          error: ref(null),
-          refetch: vi.fn(),
-        });
-
-        const mockMutateAsync = vi.fn().mockResolvedValue(undefined);
-        useMutation.mockReturnValue({
-          mutateAsync: mockMutateAsync,
-          isPending: ref(false),
-        });
-
-        const { switchBmcFirmwareAndReboot } = useFirmware();
-
-        await switchBmcFirmwareAndReboot();
-
-        expect(mockMutateAsync).toHaveBeenCalled();
-      });
-
-      it('calls setApplyTimeImmediate mutation when setApplyTimeImmediate is invoked', async () => {
-        useQuery.mockReturnValue({
-          data: ref(null),
-          isFetching: ref(false),
-          isError: ref(false),
-          error: ref(null),
-          refetch: vi.fn(),
-        });
-
-        const mockMutateAsync = vi.fn().mockResolvedValue(undefined);
-        useMutation.mockReturnValue({
-          mutateAsync: mockMutateAsync,
-          isPending: ref(false),
-        });
-
-        const { setApplyTimeImmediate } = useFirmware();
-
-        await setApplyTimeImmediate();
-
-        expect(mockMutateAsync).toHaveBeenCalled();
-      });
-    });
-
     it('exposes isUploading state', () => {
       useQuery.mockReturnValue({
         data: ref(null),
@@ -746,35 +659,6 @@ describe('useFirmware', () => {
       const { firmwareBootSide } = useFirmware();
 
       expect(firmwareBootSide.value).toBe('Temp');
-    });
-  });
-
-  describe('Apply Time', () => {
-    it('returns apply time when available', () => {
-      useQuery.mockImplementation((config) => {
-        if (config.queryKey && config.queryKey.includes('settings')) {
-          return {
-            data: ref('Immediate'),
-            isFetching: ref(false),
-          };
-        }
-        return {
-          data: ref(null),
-          isFetching: ref(false),
-          isError: ref(false),
-          error: ref(null),
-          refetch: vi.fn(),
-        };
-      });
-
-      useMutation.mockReturnValue({
-        mutateAsync: vi.fn(),
-        isPending: ref(false),
-      });
-
-      const { applyTime } = useFirmware();
-
-      expect(applyTime.value).toBe('Immediate');
     });
   });
 

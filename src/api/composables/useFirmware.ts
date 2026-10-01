@@ -30,14 +30,6 @@ interface FirmwareItemResponse {
   RelatedItem?: Array<{ '@odata.id': string }>;
 }
 
-interface UpdateServiceResponse {
-  HttpPushUriOptions?: {
-    HttpPushUriApplyTime?: {
-      ApplyTime?: string;
-    };
-  };
-}
-
 interface BiosResponse {
   Links?: {
     ActiveSoftwareImage?: {
@@ -173,25 +165,6 @@ export function useFirmware() {
     ...RedfishQueryPresets.firmware,
   });
 
-  // Fetch update service settings
-  const {
-    data: applyTime,
-    isLoading: isLoadingApplyTime,
-    isFetching: isFetchingApplyTime,
-  } = useQuery({
-    queryKey: ['redfish', 'updateService', 'settings'],
-    queryFn: async (): Promise<string | null> => {
-      const response = await api.get<UpdateServiceResponse>(
-        '/redfish/v1/UpdateService',
-      );
-      return (
-        response.data?.HttpPushUriOptions?.HttpPushUriApplyTime?.ApplyTime ||
-        null
-      );
-    },
-    ...RedfishQueryPresets.firmware,
-  });
-
   // Fetch lowest supported firmware version
   const {
     data: lowestSupportedFirmwareVersion,
@@ -278,7 +251,6 @@ export function useFirmware() {
       isLoadingHostActive.value ||
       isLoadingBootSide.value ||
       isLoadingInventory.value ||
-      isLoadingApplyTime.value ||
       isLoadingLowestSupported.value,
   );
 
@@ -289,41 +261,12 @@ export function useFirmware() {
       isFetchingHostActive.value ||
       isFetchingBootSide.value ||
       isFetchingInventory.value ||
-      isFetchingApplyTime.value ||
       isFetchingLowestSupported.value,
   );
-
-  // Mutation: Set apply time to immediate
-  const setApplyTimeImmediateMutation = useMutation({
-    mutationFn: async (): Promise<void> => {
-      const data = {
-        HttpPushUriOptions: {
-          HttpPushUriApplyTime: {
-            ApplyTime: 'Immediate',
-          },
-        },
-      };
-      await api.patch('/redfish/v1/UpdateService', data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['redfish', 'updateService', 'settings'],
-      });
-    },
-    onError: (error) => {
-      console.log('Set apply time error:', error);
-      errorToast(i18n.global.t('pageFirmware.toast.errorUploadFirmware'));
-    },
-  });
 
   // Mutation: Upload firmware
   const uploadFirmwareMutation = useMutation({
     mutationFn: async (image: File): Promise<any> => {
-      // Ensure ApplyTime is set to Immediate
-      if (applyTime.value !== 'Immediate') {
-        await setApplyTimeImmediateMutation.mutateAsync();
-      }
-
       const response = await api.post(
         '/redfish/v1/UpdateService/update',
         image,
@@ -398,10 +341,6 @@ export function useFirmware() {
     return switchBmcFirmwareMutation.mutateAsync();
   };
 
-  const setApplyTimeImmediate = async (): Promise<void> => {
-    return setApplyTimeImmediateMutation.mutateAsync();
-  };
-
   return {
     // Data
     bmcFirmware,
@@ -412,7 +351,6 @@ export function useFirmware() {
     activeHostFirmware,
     backupBmcFirmware,
     backupHostFirmware,
-    applyTime,
     firmwareBootSide,
     lowestSupportedFirmwareVersion,
     isSingleFileUploadEnabled,
@@ -429,7 +367,6 @@ export function useFirmware() {
     // Mutations
     uploadFirmware,
     switchBmcFirmwareAndReboot,
-    setApplyTimeImmediate,
     isUploading: uploadFirmwareMutation.isPending,
     isSwitching: switchBmcFirmwareMutation.isPending,
   };
