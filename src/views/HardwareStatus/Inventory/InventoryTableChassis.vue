@@ -91,9 +91,9 @@
           <b-row style="margin-left: 50px">
             <b-col class="mt-2" sm="6" xl="6">
               <dl>
-                <!-- Name -->
-                <dt>{{ $t('pageInventory.table.name') }}</dt>
-                <dd>{{ dataFormatter(item.name) }}</dd>
+                <!-- Id -->
+                <dt>{{ $t('pageInventory.table.id') }}</dt>
+                <dd>{{ dataFormatter(item.id) }}</dd>
               </dl>
             </b-col>
             <b-col class="mt-2" sm="6" xl="6">
@@ -151,8 +151,8 @@ const fields = reactive([
     tdAttr: { scope: null },
   },
   {
-    key: 'id',
-    label: t('pageInventory.table.id'),
+    key: 'name',
+    label: t('pageInventory.table.name'),
     formatter: dataFormatter,
     thAttr: { scope: 'col' },
     tdAttr: { scope: null },
