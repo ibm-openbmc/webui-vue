@@ -657,6 +657,20 @@
         }
     },
     "pageEventLogs": {
+        "contextMenu": {
+            "selectAll": "Select all",
+            "screenshot": "Full page screenshot",
+            "back": "Back",
+            "reload": "Reload",
+            "inspect": "Inspect",
+            "inspectHint": "F12 / ⌘⌥I",
+            "savePageAs": "Save page as…",
+            "expandAll": "Expand all",
+            "collapseAll": "Collapse all",
+            "screenshotTitle": "Page Screenshot",
+            "screenshotDownload": "Download",
+            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option."
+        },
         "additionalDataUri": "Download additional data",
         "bmcManager": "OpenBmc Manager",
         "resolve": "Resolve",
@@ -709,6 +723,28 @@
         }
     },
     "pageFactoryReset": {
+        "contextMenu": {
+            "selectAll": "Select all",
+            "screenshot": "Full page screenshot",
+            "back": "Back",
+            "reload": "Reload",
+            "inspect": "Inspect",
+            "inspectHint": "F12 / ⌘⌥I",
+            "savePageAs": "Save page as…",
+            "powerOn": "Power on",
+            "powerOff": "Power off",
+            "powerOnTitle": "Power on server",
+            "powerOnMessage": "Are you sure you want to power on the server?",
+            "powerOffTitle": "Power off server",
+            "powerOffMessage": "Are you sure you want to power off the server? This will perform an orderly shutdown.",
+            "powerOnSuccess": "Power on command sent successfully.",
+            "powerOnError": "Failed to power on the server.",
+            "powerOffSuccess": "Power off command sent successfully.",
+            "powerOffError": "Failed to power off the server.",
+            "screenshotTitle": "Page Screenshot",
+            "screenshotDownload": "Download",
+            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option."
+        },
         "alert": "System must be powered off to reset",
         "description": "These functions do not perform a secure delete of any sensitive data.",
         "form": {
