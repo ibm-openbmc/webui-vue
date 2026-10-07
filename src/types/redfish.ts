@@ -256,6 +256,17 @@ export interface StorageCollection extends ResourceCollection {
   Members: (ODataId | Storage)[];
 }
 
+export interface ManagerRedundancy {
+  RedundancySet?: ODataId[];
+  'RedundancySet@odata.count'?: number;
+  ActiveRedundancySet?: ODataId[];
+  'ActiveRedundancySet@odata.count'?: number;
+  Mode?: string;
+  MinNumNeeded?: number;
+  MaxNumSupported?: number;
+  Status?: Status;
+}
+
 export interface Manager extends Resource {
   ManagerType?: string;
   ServiceEntryPointUUID?: string;
@@ -267,6 +278,8 @@ export interface Manager extends Resource {
   FirmwareVersion?: string;
   LastResetTime?: string;
   PowerState?: 'On' | 'Off' | 'PoweringOn' | 'PoweringOff';
+  /** Inline redundancy array. Each entry's ActiveRedundancySet lists the currently active BMCs. */
+  Redundancy?: ManagerRedundancy[];
   Links?: {
     ManagerForServers?: ODataId[];
     ManagerForChassis?: ODataId[];
