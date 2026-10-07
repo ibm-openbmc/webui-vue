@@ -26,7 +26,7 @@ const loadNotifState = () => {
         'firmwareUpdateStartTime',
         'firmwareUpdateCurrentStep',
       ],
-      ['bmcRebootInProgress', 'bmcRebootStartTime', 'bmcRebootCurrentStep'],
+      ['bmcRebootInProgress', 'bmcRebootStartTime', null],
       ['dumpGenerationInProgress', 'dumpGenerationStartTime', null],
       ['serverPowerInProgress', 'serverPowerStartTime', null],
       ['immediateTestInProgress', 'immediateTestStartTime', null],
@@ -62,7 +62,6 @@ const saveNotifState = (state) => {
         firmwareUpdateCurrentStep: state.firmwareUpdateCurrentStep,
         bmcRebootInProgress: state.bmcRebootInProgress,
         bmcRebootStartTime: state.bmcRebootStartTime,
-        bmcRebootCurrentStep: state.bmcRebootCurrentStep,
         dumpGenerationInProgress: state.dumpGenerationInProgress,
         dumpGenerationStartTime: state.dumpGenerationStartTime,
         dumpGenerationType: state.dumpGenerationType,
@@ -187,7 +186,6 @@ export const GlobalStore = defineStore('global', {
         firmwareUpdateCurrentStep: n.firmwareUpdateCurrentStep ?? 1,
         bmcRebootInProgress: n.bmcRebootInProgress ?? false,
         bmcRebootStartTime: n.bmcRebootStartTime ?? null,
-        bmcRebootCurrentStep: n.bmcRebootCurrentStep ?? 1,
         dumpGenerationInProgress: n.dumpGenerationInProgress ?? false,
         dumpGenerationStartTime: n.dumpGenerationStartTime ?? null,
         dumpGenerationType: n.dumpGenerationType ?? '',
@@ -245,7 +243,6 @@ export const GlobalStore = defineStore('global', {
     firmwareUpdateCurrentStepGetter: (state) => state.firmwareUpdateCurrentStep,
     bmcRebootInProgressGetter: (state) => state.bmcRebootInProgress,
     bmcRebootStartTimeGetter: (state) => state.bmcRebootStartTime,
-    bmcRebootCurrentStepGetter: (state) => state.bmcRebootCurrentStep,
     dumpGenerationInProgressGetter: (state) => state.dumpGenerationInProgress,
     dumpGenerationStartTimeGetter: (state) => state.dumpGenerationStartTime,
     dumpGenerationTypeGetter: (state) => state.dumpGenerationType,
@@ -480,7 +477,6 @@ export const GlobalStore = defineStore('global', {
       this.bmcRebootInProgress = inProgress;
       if (inProgress) {
         this.bmcRebootStartTime = Date.now();
-        this.bmcRebootCurrentStep = 1;
       } else {
         if (this.bmcRebootStartTime && success) {
           addCompletedOperation(this, {
@@ -492,12 +488,7 @@ export const GlobalStore = defineStore('global', {
           });
         }
         this.bmcRebootStartTime = null;
-        this.bmcRebootCurrentStep = 1;
       }
-      saveNotifState(this);
-    },
-    setBmcRebootStep(step) {
-      this.bmcRebootCurrentStep = step;
       saveNotifState(this);
     },
     setDumpGenerationInProgress(payload) {
@@ -590,7 +581,6 @@ export const GlobalStore = defineStore('global', {
       this.firmwareUpdateCurrentStep = 1;
       this.bmcRebootInProgress = false;
       this.bmcRebootStartTime = null;
-      this.bmcRebootCurrentStep = 1;
       this.dumpGenerationInProgress = false;
       this.dumpGenerationStartTime = null;
       this.dumpGenerationType = '';

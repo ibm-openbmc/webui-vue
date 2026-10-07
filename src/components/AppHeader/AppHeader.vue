@@ -102,6 +102,9 @@
                 v-else
                 :title="$t('appHeader.titleNotifications')"
               />
+              <span class="responsive-text">{{
+                $t('appHeader.notifications')
+              }}</span>
             </BButton>
           </li>
           <li class="nav-item">

@@ -307,32 +307,15 @@ const handleSubmit = () => {
   }
   // BMC dump initiation
   else if (selectedDumpType.value === 'bmc') {
-    global.setDumpGenerationInProgress({
-      inProgress: true,
-      dumpType: 'BMC',
-    });
     dumps
       .createBmcDump(dumpType)
-      .then(() => {
+      .then(() =>
         infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
           title: i18n.global.t('pageDumps.toast.successStartBmcDumpTitle'),
           timestamp: true,
-        });
-        // BMC dumps do not expose a pollable task link — mark complete
-        // immediately once the initiation request succeeds.
-        global.setDumpGenerationInProgress({
-          inProgress: false,
-          success: true,
-          dumpType: 'BMC',
-        });
-      })
-      .catch(({ message }) => {
-        global.setDumpGenerationInProgress({
-          inProgress: false,
-          success: false,
-        });
-        errorToast(message);
-      });
+        }),
+      )
+      .catch(({ message }) => errorToast(message));
   } else if (selectedDumpType.value === 'partition') {
     // Partition dump initiation
     showPartitionDumpConfirmationModal();
@@ -390,32 +373,15 @@ const showPartitionDumpConfirmationModal = () => {
   modalPartition.value = true;
 };
 const createSystemDump = (dumpType) => {
-  global.setDumpGenerationInProgress({
-    inProgress: true,
-    dumpType: 'System',
-  });
   dumps
     .createSystemDump(dumpType)
-    .then(() => {
+    .then(() =>
       infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
         title: i18n.global.t('pageDumps.toast.successStartSystemDumpTitle'),
         timestamp: true,
-      });
-      // System dumps do not expose a pollable task link — mark complete
-      // immediately once the initiation request succeeds.
-      global.setDumpGenerationInProgress({
-        inProgress: false,
-        success: true,
-        dumpType: 'System',
-      });
-    })
-    .catch(({ message }) => {
-      global.setDumpGenerationInProgress({
-        inProgress: false,
-        success: false,
-      });
-      errorToast(message);
-    });
+      }),
+    )
+    .catch(({ message }) => errorToast(message));
 };
 const updatePasswordType = (passwordType) => {
   inputType.value = passwordType;

@@ -137,38 +137,20 @@
           >
             <div class="widget-header">
               <icon-renew class="widget-icon" />
-              <h6>{{ $t('appHeader.bmcRebootProgress') || 'BMC Reboot' }}</h6>
+              <h6>{{ $t('appHeader.bmcRebootProgress') }}</h6>
             </div>
-
             <div class="progress-content">
-              <div class="steps-list">
-                <div
-                  v-for="(step, index) in bmcRebootSteps"
-                  :key="index"
-                  class="step-item"
-                  :class="{
-                    'step-completed': index < bmcRebootCurrentStep - 1,
-                    'step-active': index === bmcRebootCurrentStep - 1,
-                    'step-pending': index > bmcRebootCurrentStep - 1,
-                  }"
-                >
-                  <div class="step-indicator">
-                    <icon-checkmark-filled
-                      v-if="index < bmcRebootCurrentStep - 1"
-                    />
-                    <div
-                      v-else-if="index === bmcRebootCurrentStep - 1"
-                      class="loading-circle"
-                    ></div>
-                    <span v-else class="step-number">{{ index + 1 }}</span>
+              <div class="single-step-indicator">
+                <div class="loading-circle"></div>
+                <div class="step-details">
+                  <div class="step-name">
+                    {{ $t('appHeader.bmcRebootStep2') }}
                   </div>
-                  <div class="step-details">
-                    <div class="step-name">{{ step.title }}</div>
-                    <div class="step-desc">{{ step.description }}</div>
+                  <div class="step-desc">
+                    {{ $t('appHeader.bmcRebootStep2Desc') }}
                   </div>
                 </div>
               </div>
-
               <div class="elapsed-time">
                 <icon-time class="time-icon" />
                 <span
@@ -449,21 +431,6 @@ const firmwareUpdateSteps = computed(() => [
   },
 ]);
 
-const bmcRebootSteps = computed(() => [
-  {
-    title: i18n.global.t('pageRebootBmc.rebootBmc'),
-    description: i18n.global.t('appHeader.bmcRebootStep1Desc'),
-  },
-  {
-    title: i18n.global.t('appHeader.bmcRebootStep2'),
-    description: i18n.global.t('appHeader.bmcRebootStep2Desc'),
-  },
-  {
-    title: i18n.global.t('appHeader.bmcRebootStep3'),
-    description: i18n.global.t('appHeader.bmcRebootStep3Desc'),
-  },
-]);
-
 const firmwareSwitchInProgress = computed(
   () => globalStore.firmwareSwitchInProgress,
 );
@@ -486,9 +453,6 @@ const firmwareUpdateCurrentStep = computed(
 
 const bmcRebootInProgress = computed(() => globalStore.bmcRebootInProgress);
 const bmcRebootStartTime = computed(() => globalStore.bmcRebootStartTime);
-const bmcRebootCurrentStep = computed(
-  () => globalStore.bmcRebootCurrentStep || 1,
-);
 
 const dumpGenerationInProgress = computed(
   () => globalStore.dumpGenerationInProgress,
@@ -724,8 +688,13 @@ onBeforeUnmount(() => {
     .nav-item {
       flex: 1;
       margin: 0;
+      display: flex;
 
       .nav-link {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border: none;
         border-bottom: 2px solid transparent;
         border-radius: 0;
