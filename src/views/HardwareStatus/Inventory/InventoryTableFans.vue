@@ -189,6 +189,7 @@ const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 
 const fanStore = stores.FanStore();
 const globalStore = stores.GlobalStore();
+const chassisStore = stores.ChassisStore();
 
 const props = defineProps({
   chassis: {
@@ -242,11 +243,21 @@ const fields = reactive([
 
 onBeforeMount(() => {
   isBusy.value = true;
-  fanStore.getAllFans({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-fans-complete');
-    isBusy.value = false;
-  });
+  fanStore
+    .getAllFans({
+      uri: props.chassis,
+      // Only use the cached thermalSubsystemUri for the main chassis.
+      // IO expansion chassis tabs use a different URI that must be
+      // discovered by fetching that chassis directly.
+      thermalSubsystemUri: props.chassis.endsWith('/chassis')
+        ? chassisStore.thermalSubsystemUriGetter
+        : null,
+    })
+    .finally(() => {
+      // Emit initial data fetch complete to parent component
+      eventBus.emit('hardware-status-fans-complete');
+      isBusy.value = false;
+    });
 });
 
 const filteredRows = computed(() => {
@@ -289,11 +300,18 @@ watch(
   () => props.chassis,
   (value) => {
     isBusy.value = true;
-    fanStore.getAllFans({ uri: value }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      eventBus.emit('hardware-status-fans-complete');
-      isBusy.value = false;
-    });
+    fanStore
+      .getAllFans({
+        uri: value,
+        thermalSubsystemUri: value.endsWith('/chassis')
+          ? chassisStore.thermalSubsystemUriGetter
+          : null,
+      })
+      .finally(() => {
+        // Emit initial data fetch complete to parent component
+        eventBus.emit('hardware-status-fans-complete');
+        isBusy.value = false;
+      });
   },
 );
 

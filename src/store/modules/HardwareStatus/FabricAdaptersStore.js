@@ -1,6 +1,7 @@
 import api from '@/store/api';
 import i18n from '@/i18n';
 import { defineStore } from 'pinia';
+import { PcieSlotsStore } from './PcieSlotsStore';
 
 export const FabricAdaptersStore = defineStore('fabricStore', {
   state: () => ({
@@ -39,35 +40,46 @@ export const FabricAdaptersStore = defineStore('fabricStore', {
       });
     },
     async getFabricAdaptersInfo(requestBody) {
-      let tempFabricAdapters = [];
-      this.setFabricAdaptersInfo(tempFabricAdapters);
-      const res = await api.get(requestBody.uri + '/PCIeSlots');
+      this.setFabricAdaptersInfo([]);
+      // PcieSlotsStore (mounts before this component) already fetched PCIeSlots.
+      // Reuse its data — either await the in-flight request or use the already-
+      // populated rawSlots — to avoid a duplicate GET to /PCIeSlots.
+      const pcieSlotsStore = PcieSlotsStore();
+      const pciePromise =
+        pcieSlotsStore.rawSlots.length > 0
+          ? Promise.resolve(pcieSlotsStore.rawSlots)
+          : pcieSlotsStore
+              .getPcieSlotsInfo(requestBody)
+              .then(() => pcieSlotsStore.rawSlots);
       return await api
-        .get(`/redfish/v1/Systems/system/FabricAdapters`)
-        .then(({ data }) => {
-          data.Members.map((member) => {
-            api.get(member['@odata.id']).then((memberResponse) => {
-              if (memberResponse.data?.Links?.PCIeDevices.length > 0) {
-                res.data.Slots.map((singleSlot) => {
-                  if (
-                    singleSlot.Links?.PCIeDevice?.[0]?.['@odata.id'] ===
-                    memberResponse.data?.Links?.PCIeDevices?.[0]?.['@odata.id']
-                  ) {
-                    tempFabricAdapters.push(memberResponse.data);
-                    this.setFabricAdaptersInfo(tempFabricAdapters);
-                  }
-                });
-              } else {
+        .all([
+          pciePromise,
+          api.get(
+            `/redfish/v1/Systems/system/FabricAdapters?$expand=.($levels=1)`,
+          ),
+        ])
+        .then(([slots, fabricRes]) => {
+          const tempFabricAdapters = [];
+          fabricRes.data.Members.forEach((member) => {
+            if (member?.Links?.PCIeDevices?.length > 0) {
+              slots.forEach((singleSlot) => {
                 if (
-                  member['@odata.id'].includes('motherboard') &&
-                  requestBody.uri.endsWith('chassis')
+                  singleSlot.Links?.PCIeDevice?.[0]?.['@odata.id'] ===
+                  member?.Links?.PCIeDevices?.[0]?.['@odata.id']
                 ) {
-                  tempFabricAdapters.push(memberResponse.data);
-                  this.setFabricAdaptersInfo(tempFabricAdapters);
+                  tempFabricAdapters.push(member);
                 }
+              });
+            } else {
+              if (
+                member['@odata.id'].includes('motherboard') &&
+                requestBody.uri.endsWith('chassis')
+              ) {
+                tempFabricAdapters.push(member);
               }
-            });
+            }
           });
+          this.setFabricAdaptersInfo(tempFabricAdapters);
         })
         .catch((error) => console.log(error));
     },

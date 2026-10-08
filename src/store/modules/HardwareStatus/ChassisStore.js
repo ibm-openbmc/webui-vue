@@ -6,10 +6,14 @@ export const ChassisStore = defineStore('chassisStore', {
   state: () => ({
     chassis: [],
     powerState: null,
+    thermalSubsystemUri: null,
+    powerSubsystemUri: null,
   }),
   getters: {
     chassisGetter: (state) => state.chassis,
     powerStateGetter: (state) => state.powerState,
+    thermalSubsystemUriGetter: (state) => state.thermalSubsystemUri,
+    powerSubsystemUriGetter: (state) => state.powerSubsystemUri,
   },
   actions: {
     setChassisInfo(data) {
@@ -38,14 +42,20 @@ export const ChassisStore = defineStore('chassisStore', {
     setPowerState: (state, powerState) => (state.powerState = powerState),
     async fetchGetChassisInfo() {
       return await api
-        .get('/redfish/v1/Chassis')
-        .then(({ data: { Members = [] } }) =>
-          Members.map((member) => api.get(member['@odata.id'])),
-        )
-        .then((promises) => api.all(promises))
-        .then((response) => {
-          const data = response.map(({ data }) => data);
-          this.setChassisInfo(data);
+        .get('/redfish/v1/Chassis?$expand=.($levels=1)')
+        .then(({ data: { Members = [] } }) => {
+          // Capture PowerState and subsystem URIs for chassis named 'chassis'
+          const chassisMember = Members.find((m) => m.Id === 'chassis');
+          if (chassisMember) {
+            this.powerState = chassisMember.PowerState ?? null;
+            this.thermalSubsystemUri =
+              chassisMember.ThermalSubsystem?.['@odata.id'] ?? null;
+            this.powerSubsystemUri =
+              chassisMember.PowerSubsystem?.['@odata.id'] ?? null;
+          }
+          // $expand=.($levels=1) returns each member with the same shape as an
+          // individually fetched resource, so no unwrapping is needed.
+          this.setChassisInfo(Members);
         })
         .catch((error) => console.log(error));
     },
