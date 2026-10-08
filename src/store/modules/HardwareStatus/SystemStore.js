@@ -32,10 +32,7 @@ export const SystemStore = defineStore('system', {
     },
     async getSystem() {
       return await api
-        .get('/redfish/v1')
-        .then((response) =>
-          api.get(`${response.data.Systems['@odata.id']}/system`),
-        )
+        .get('/redfish/v1/Systems/system')
         .then(({ data }) => this.setSystemInfo(data))
         .catch((error) => console.log(error));
     },

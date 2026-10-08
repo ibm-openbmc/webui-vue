@@ -38,14 +38,9 @@ export const ChassisStore = defineStore('chassisStore', {
     setPowerState: (state, powerState) => (state.powerState = powerState),
     async fetchGetChassisInfo() {
       return await api
-        .get('/redfish/v1/Chassis')
-        .then(({ data: { Members = [] } }) =>
-          Members.map((member) => api.get(member['@odata.id'])),
-        )
-        .then((promises) => api.all(promises))
-        .then((response) => {
-          const data = response.map(({ data }) => data);
-          this.setChassisInfo(data);
+        .get('/redfish/v1/Chassis?$expand=.($levels=1)')
+        .then(({ data: { Members = [] } }) => {
+          this.setChassisInfo(Members);
         })
         .catch((error) => console.log(error));
     },
