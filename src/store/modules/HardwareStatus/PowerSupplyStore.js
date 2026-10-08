@@ -42,21 +42,19 @@ export const PowerSupplyStore = defineStore('powerSupplyStore', {
     },
     async getAllPowerSupplies(requestBody) {
       this.setPowerSupply([]);
-      return await api
-        .get(`${requestBody.uri}`)
-        .then((response) => api.get(response.data.PowerSubsystem['@odata.id']))
-        .then((response) => api.get(response.data.PowerSupplies['@odata.id']))
-        .then(({ data: { Members } }) =>
-          Members.map((member) => member['@odata.id']),
+      // If a direct powerSubsystemUri is supplied, skip the chassis GET hop.
+      // Otherwise fall back to fetching the chassis to discover the URI.
+      const psRequest = requestBody.powerSubsystemUri
+        ? Promise.resolve(requestBody.powerSubsystemUri)
+        : api
+            .get(`${requestBody.uri}`)
+            .then((response) => response.data.PowerSubsystem['@odata.id']);
+      return await psRequest
+        .then((powerUri) =>
+          api.get(`${powerUri}/PowerSupplies?$expand=.($levels=1)`),
         )
-        .then((powerSupplyIds) =>
-          api.all(powerSupplyIds.map((powerSupply) => api.get(powerSupply))),
-        )
-        .then((powerSupplies) => {
-          const powerSuppliesData = powerSupplies.map(
-            (powerSupplies) => powerSupplies.data,
-          );
-          this.setPowerSupply(powerSuppliesData);
+        .then(({ data: { Members } }) => {
+          this.setPowerSupply(Members);
         })
         .catch((error) => console.log(error));
     },
