@@ -45,14 +45,9 @@ export const ProcessorStore = defineStore('ProcessorStore', {
     async getProcessorsInfo() {
       this.setProcessorsInfo([]);
       return await api
-        .get('/redfish/v1/Systems/system/Processors')
-        .then(({ data: { Members = [] } }) =>
-          Members.map((member) => api.get(member['@odata.id'])),
-        )
-        .then((promises) => api.all(promises))
-        .then((response) => {
-          const data = response.map(({ data }) => data);
-          this.setProcessorsInfo(data);
+        .get('/redfish/v1/Systems/system/Processors?$expand=.($levels=1)')
+        .then(({ data: { Members = [] } }) => {
+          this.setProcessorsInfo(Members);
         })
         .catch((error) => console.log(error));
     },

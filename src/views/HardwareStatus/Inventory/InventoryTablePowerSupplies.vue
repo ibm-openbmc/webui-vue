@@ -199,6 +199,7 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
 
 const powerSupplyStore = stores.PowerSupplyStore();
 const globalStore = stores.GlobalStore();
+const chassisStore = stores.ChassisStore();
 
 const props = defineProps({
   chassis: {
@@ -270,11 +271,21 @@ const filteredRows = computed(() => {
 
 onBeforeMount(() => {
   isBusy.value = true;
-  powerSupplyStore.getAllPowerSupplies({ uri: props.chassis }).finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-power-supplies-complete');
-    isBusy.value = false;
-  });
+  powerSupplyStore
+    .getAllPowerSupplies({
+      uri: props.chassis,
+      // Only use the cached powerSubsystemUri for the main chassis.
+      // IO expansion chassis tabs use a different URI that must be
+      // discovered by fetching that chassis directly.
+      powerSubsystemUri: props.chassis.endsWith('/chassis')
+        ? chassisStore.powerSubsystemUriGetter
+        : null,
+    })
+    .finally(() => {
+      // Emit initial data fetch complete to parent component
+      eventBus.emit('hardware-status-power-supplies-complete');
+      isBusy.value = false;
+    });
 });
 
 const serverStatus = computed(() => {
@@ -308,11 +319,18 @@ watch(
   () => props.chassis,
   (value) => {
     isBusy.value = true;
-    powerSupplyStore.getAllPowerSupplies({ uri: value }).finally(() => {
-      // Emit initial data fetch complete to parent component
-      eventBus.emit('hardware-status-power-supplies-complete');
-      isBusy.value = false;
-    });
+    powerSupplyStore
+      .getAllPowerSupplies({
+        uri: value,
+        powerSubsystemUri: value.endsWith('/chassis')
+          ? chassisStore.powerSubsystemUriGetter
+          : null,
+      })
+      .finally(() => {
+        // Emit initial data fetch complete to parent component
+        eventBus.emit('hardware-status-power-supplies-complete');
+        isBusy.value = false;
+      });
   },
 );
 

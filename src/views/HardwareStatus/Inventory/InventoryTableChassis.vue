@@ -188,9 +188,8 @@ const fields = reactive([
 onBeforeMount(() => {
   isBusy.value = true;
   chassisStore.fetchGetChassisInfo().finally(() => {
-    // Emit initial data fetch complete to parent component
-    eventBus.emit('hardware-status-chassis-complete');
     isBusy.value = false;
+    eventBus.emit('hardware-status-chassis-complete');
   });
 });
 
