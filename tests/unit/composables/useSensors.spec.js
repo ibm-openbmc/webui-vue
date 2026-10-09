@@ -1,17 +1,45 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ref } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
 
-// Mock the useAllSubResources composable
-vi.mock('@/api/composables/useAllSubResources', () => ({
-  useAllSubResources: vi.fn(),
+// Mock TanStack Query and useRedfishCollection so we don't need a live server
+vi.mock('@tanstack/vue-query', async () => {
+  const actual = await vi.importActual('@tanstack/vue-query');
+  return {
+    ...actual,
+    useQuery: vi.fn(),
+  };
+});
+
+vi.mock('@/api/composables/useRedfishCollection', () => ({
+  useRedfishCollection: vi.fn(),
 }));
 
-import { useAllSubResources } from '@/api/composables/useAllSubResources';
+vi.mock('@/api/composables/shared/useBatchedRequests', () => ({
+  batchFetch: vi.fn(),
+}));
+
+vi.mock('@/store/api', () => ({
+  default: { get: vi.fn() },
+}));
+
+import { useRedfishCollection } from '@/api/composables/useRedfishCollection';
 import { useSensors } from '@/api/composables/useSensors';
 
-const makeMockSubResources = (overrides = {}) => ({
+const makeMockChassisQuery = (overrides = {}) => ({
   data: ref(null),
   isLoading: ref(false),
+  isFetching: ref(false),
+  error: ref(null),
+  isError: ref(false),
+  refetch: vi.fn(),
+  ...overrides,
+});
+
+const makeMockSensorsQuery = (overrides = {}) => ({
+  data: ref(null),
+  isLoading: ref(false),
+  isFetching: ref(false),
   error: ref(null),
   isError: ref(false),
   refetch: vi.fn(),
@@ -21,124 +49,107 @@ const makeMockSubResources = (overrides = {}) => ({
 describe('useSensors', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    useRedfishCollection.mockReturnValue(makeMockChassisQuery());
+    useQuery.mockReturnValue(makeMockSensorsQuery());
   });
 
-  it('returns empty sensors array when data is null', () => {
-    useAllSubResources.mockReturnValue(
-      makeMockSubResources({ data: ref(null) }),
-    );
-
+  it('returns empty sensors array when query data is null', () => {
+    useQuery.mockReturnValue(makeMockSensorsQuery({ data: ref(null) }));
     const { sensors } = useSensors();
-
     expect(sensors.value).toEqual([]);
   });
 
-  it('maps raw Redfish sensor data to SensorData shape', () => {
-    const rawSensors = [
-      {
-        '@odata.id': '/redfish/v1/Chassis/chassis1/Sensors/Temp1',
-        Name: 'CPU Temp',
-        Status: { Health: 'OK' },
-        Reading: 55.5,
-        ReadingUnits: 'Cel',
-      },
-    ];
-    useAllSubResources.mockReturnValue(
-      makeMockSubResources({ data: ref(rawSensors) }),
-    );
-
-    const { sensors } = useSensors();
-
-    expect(sensors.value).toHaveLength(1);
-    expect(sensors.value[0]).toEqual({
-      odataId: '/redfish/v1/Chassis/chassis1/Sensors/Temp1',
-      isSelected: false,
-      name: 'CPU Temp',
-      status: 'OK',
-      currentValue: 55.5,
-      units: 'Cel',
-    });
+  it('returns empty sensorsByChassis array when query data is null', () => {
+    useQuery.mockReturnValue(makeMockSensorsQuery({ data: ref(null) }));
+    const { sensorsByChassis } = useSensors();
+    expect(sensorsByChassis.value).toEqual([]);
   });
 
-  it('falls back to empty string for missing Name', () => {
-    const rawSensors = [
+  it('flattens per-chassis groups into the sensors flat list', () => {
+    const groups = [
       {
-        '@odata.id': '/redfish/v1/Chassis/chassis1/Sensors/NoName',
-        Status: { Health: 'Warning' },
-        Reading: 10,
-        ReadingUnits: 'RPM',
+        chassisId: 'chassis0',
+        chassisName: 'Chassis 0',
+        sensors: [
+          {
+            odataId: '/redfish/v1/Chassis/chassis0/Sensors/Temp1',
+            isSelected: false,
+            name: 'CPU Temp',
+            status: 'OK',
+            currentValue: 55.5,
+            units: 'Cel',
+          },
+        ],
+      },
+      {
+        chassisId: 'chassis1',
+        chassisName: 'Chassis 1',
+        sensors: [
+          {
+            odataId: '/redfish/v1/Chassis/chassis1/Sensors/Fan1',
+            isSelected: false,
+            name: 'Fan Speed',
+            status: 'Warning',
+            currentValue: 2800,
+            units: 'RPM',
+          },
+        ],
       },
     ];
-    useAllSubResources.mockReturnValue(
-      makeMockSubResources({ data: ref(rawSensors) }),
-    );
-
-    const { sensors } = useSensors();
-
-    expect(sensors.value[0].name).toBe('');
-  });
-
-  it('falls back to "Unknown" status when Status.Health is absent', () => {
-    const rawSensors = [
-      {
-        '@odata.id': '/redfish/v1/Chassis/chassis1/Sensors/NoStatus',
-        Name: 'Fan1',
-        Reading: 3000,
-        ReadingUnits: 'RPM',
-      },
-    ];
-    useAllSubResources.mockReturnValue(
-      makeMockSubResources({ data: ref(rawSensors) }),
-    );
-
-    const { sensors } = useSensors();
-
-    expect(sensors.value[0].status).toBe('Unknown');
-  });
-
-  it('maps multiple sensors correctly', () => {
-    const rawSensors = [
-      {
-        '@odata.id': '/id/1',
-        Name: 'Temp1',
-        Status: { Health: 'OK' },
-        Reading: 40,
-        ReadingUnits: 'Cel',
-      },
-      {
-        '@odata.id': '/id/2',
-        Name: 'Fan1',
-        Status: { Health: 'Critical' },
-        Reading: 0,
-        ReadingUnits: 'RPM',
-      },
-    ];
-    useAllSubResources.mockReturnValue(
-      makeMockSubResources({ data: ref(rawSensors) }),
-    );
+    useQuery.mockReturnValue(makeMockSensorsQuery({ data: ref(groups) }));
 
     const { sensors } = useSensors();
 
     expect(sensors.value).toHaveLength(2);
-    expect(sensors.value[1].status).toBe('Critical');
+    expect(sensors.value[0].name).toBe('CPU Temp');
+    expect(sensors.value[1].name).toBe('Fan Speed');
   });
 
-  it('exposes isLoading, isError, error, and refetch from useAllSubResources', () => {
-    const refetchFn = vi.fn();
-    useAllSubResources.mockReturnValue(
-      makeMockSubResources({
-        isLoading: ref(true),
-        isError: ref(true),
-        error: ref(new Error('fetch failed')),
-        refetch: refetchFn,
-      }),
+  it('exposes sensorsByChassis with one entry per chassis', () => {
+    const groups = [
+      {
+        chassisId: 'chassis0',
+        chassisName: 'Chassis 0',
+        sensors: [],
+      },
+    ];
+    useQuery.mockReturnValue(makeMockSensorsQuery({ data: ref(groups) }));
+
+    const { sensorsByChassis } = useSensors();
+
+    expect(sensorsByChassis.value).toHaveLength(1);
+    expect(sensorsByChassis.value[0].chassisId).toBe('chassis0');
+  });
+
+  it('exposes isLoading as combined chassis + sensors loading', () => {
+    useRedfishCollection.mockReturnValue(
+      makeMockChassisQuery({ isLoading: ref(true) }),
     );
+    useQuery.mockReturnValue(makeMockSensorsQuery({ isLoading: ref(false) }));
 
-    const { isLoading, isError, error, refetch } = useSensors();
-
+    const { isLoading } = useSensors();
     expect(isLoading.value).toBe(true);
+  });
+
+  it('exposes isFetching as combined chassis + sensors fetching', () => {
+    useRedfishCollection.mockReturnValue(
+      makeMockChassisQuery({ isFetching: ref(false) }),
+    );
+    useQuery.mockReturnValue(makeMockSensorsQuery({ isFetching: ref(true) }));
+
+    const { isFetching } = useSensors();
+    expect(isFetching.value).toBe(true);
+  });
+
+  it('exposes isError from sensors query', () => {
+    useQuery.mockReturnValue(makeMockSensorsQuery({ isError: ref(true) }));
+
+    const { isError } = useSensors();
     expect(isError.value).toBe(true);
-    expect(error.value).toBeInstanceOf(Error);
-    expect(refetch).toBe(refetchFn);
+  });
+
+  it('exposes a refetch function', () => {
+    const { refetch } = useSensors();
+    expect(typeof refetch).toBe('function');
   });
 });

@@ -51,6 +51,7 @@ import eventBus from '@/eventBus';
 /** Build the minimal mock useSensors return value */
 const makeSensorsHook = (overrides = {}) => ({
   sensors: ref([]),
+  sensorsByChassis: ref([]),
   isLoading: ref(false),
   isFetching: ref(false),
   isError: ref(false),
@@ -144,14 +145,14 @@ describe('Sensors.vue', () => {
 
   // ── Loading state ─────────────────────────────────────────────────────────
 
-  it('isBusy computed is true when sensors are fetching', () => {
+  it('isFetching drives the loading indicator when fetching', () => {
     const wrapper = mountSensors({ isFetching: ref(true) });
-    expect(wrapper.vm.isBusy).toBe(true);
+    expect(wrapper.vm.isSensorsFetching).toBe(true);
   });
 
-  it('isBusy computed is false when fetching is complete', () => {
+  it('isFetching is false when fetching is complete', () => {
     const wrapper = mountSensors({ isFetching: ref(false) });
-    expect(wrapper.vm.isBusy).toBe(false);
+    expect(wrapper.vm.isSensorsFetching).toBe(false);
   });
 
   // ── Data display ──────────────────────────────────────────────────────────
@@ -302,6 +303,37 @@ describe('Sensors.vue', () => {
     expect(filename.startsWith('sensors_')).toBe(true);
   });
 
+  // ── isHeaderIndeterminate ─────────────────────────────────────────────────
+
+  it('isHeaderIndeterminate is false when nothing is selected', async () => {
+    const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.isHeaderIndeterminate).toBe(false);
+  });
+
+  it('isHeaderIndeterminate is true when some but not all sensors are selected', async () => {
+    const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
+    await wrapper.vm.$nextTick();
+
+    // Select only the first row checkbox
+    const rowCheckbox = wrapper.find('input[aria-label="checkbox"]');
+    await rowCheckbox.setValue(true);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.isHeaderIndeterminate).toBe(true);
+  });
+
+  it('isHeaderIndeterminate is false when all sensors are selected', async () => {
+    const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
+    await wrapper.vm.$nextTick();
+
+    wrapper.vm.toggleAll(true);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.isHeaderIndeterminate).toBe(false);
+  });
+
   // ── toggleAll ─────────────────────────────────────────────────────────────
 
   it('toggleAll(true) marks all sensors as selected', async () => {
@@ -411,17 +443,44 @@ describe('Sensors.vue', () => {
     );
   });
 
-  it('onFiltered does not change the current filtered sensors', async () => {
+  // ── onTabChange ───────────────────────────────────────────────────────────
+
+  it('onTabChange switches active chassis by chassisId', async () => {
+    const sensorsByChassis = ref([
+      {
+        chassisId: 'chassis0',
+        chassisName: 'Chassis 0',
+        sensors: MOCK_SENSORS,
+      },
+      {
+        chassisId: 'chassis1',
+        chassisName: 'Chassis 1',
+        sensors: [MOCK_SENSORS[0]],
+      },
+    ]);
+    const wrapper = mountSensors({
+      sensorsByChassis,
+      sensors: ref(MOCK_SENSORS),
+    });
+    await wrapper.vm.$nextTick();
+
+    wrapper.vm.onTabChange(1);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.activeChassisId).toBe('chassis1');
+  });
+
+  it('onTabChange clears selectedRowsList unconditionally', async () => {
     const wrapper = mountSensors({ sensors: ref(MOCK_SENSORS) });
     await wrapper.vm.$nextTick();
 
-    const before = wrapper.vm.filteredSensors.map((sensor) => sensor.name);
-    wrapper.vm.onFiltered([{ name: 'Different Sensor' }]);
+    wrapper.vm.toggleAll(true);
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.vm.filteredSensors.map((sensor) => sensor.name)).toEqual(
-      before,
-    );
+    wrapper.vm.onTabChange(0);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.selectedRowsList.length).toBe(0);
   });
 
   // ── defineExpose ──────────────────────────────────────────────────────────

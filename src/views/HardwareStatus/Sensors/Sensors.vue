@@ -22,6 +22,21 @@
       </BCol>
     </BRow>
 
+    <!-- Chassis tabs — only rendered when there are multiple chassis -->
+    <BRow v-if="sensorsByChassis.length > 1">
+      <BCol>
+        <BCard no-body>
+          <BTabs content-class="mt-3 p-0" @update:model-value="onTabChange">
+            <BTab
+              v-for="group in sensorsByChassis"
+              :key="group.chassisId"
+              :title="group.chassisName || group.chassisId"
+            />
+          </BTabs>
+        </BCard>
+      </BCol>
+    </BRow>
+
     <BRow>
       <BCol xl="12">
         <table-toolbar
@@ -59,8 +74,7 @@
               aria-label="checkbox-head"
               label="Select-all-rows"
               label-class="visually-hidden"
-              :indeterminate="tableHeaderCheckboxIndeterminated"
-              @change="onChangeHeaderCheckbox(tableRef, tableHeaderCheckbox)"
+              :indeterminate="isHeaderIndeterminate"
               @update:model-value="toggleAll"
             >
               <span class="visually-hidden">checkbox-head</span>
@@ -128,7 +142,7 @@
             {{ dataFormatter(data.value) }} {{ data.item.units }}
           </template>
           <template #empty>
-            <span v-if="isBusy">
+            <span v-if="isSensorsLoading">
               {{ $t('global.table.loading') }}
             </span>
             <span v-else-if="searchFilterInput">
@@ -176,7 +190,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeMount, watch, nextTick } from 'vue';
+import {
+  ref,
+  computed,
+  onBeforeMount,
+  watch,
+  watchEffect,
+  nextTick,
+} from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useSensors } from '@/api/composables/useSensors';
@@ -202,17 +223,16 @@ const {
   clearSelectedRows,
   toggleSelectRow,
   onRowSelected,
-  onChangeHeaderCheckbox,
   selectedRowsList,
   tableHeaderCheckboxModel,
-  tableHeaderCheckboxIndeterminate,
 } = useTableSelectableComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 const { statusIconValue } = useDataFormatterGlobal();
 const { getFilteredTableData } = useTableFilterComposable();
 
 const {
-  sensors: sensorsFromQuery,
+  sensors: allSensors,
+  sensorsByChassis,
   isLoading: isSensorsLoading,
   isFetching: isSensorsFetching,
   isError,
@@ -225,28 +245,51 @@ defineExpose({
   refetch: refetchSensors,
 });
 
+// Active chassis tab — keyed by chassisId (string) so refetches that reorder
+// the array never accidentally show the wrong chassis's sensors.
+const activeChassisId = ref(null);
+
+// Initialise to the first chassis as soon as data arrives; preserve the
+// selection when subsequent refetches arrive (identity is stable by chassisId).
+watchEffect(() => {
+  if (sensorsByChassis.value.length && !activeChassisId.value) {
+    activeChassisId.value = sensorsByChassis.value[0].chassisId;
+  }
+});
+
 // Track selection state separately to avoid circular dependencies
 const selectedSensors = ref(new Set());
 
+// Sensors for the currently active chassis tab
+const activeSensorsRaw = computed(() => {
+  if (sensorsByChassis.value.length <= 1) {
+    return allSensors.value ?? [];
+  }
+  const group = sensorsByChassis.value.find(
+    (g) => g.chassisId === activeChassisId.value,
+  );
+  return group ? group.sensors : [];
+});
+
 // Computed property that merges sensor data with selection state
 const sensorsData = computed(() => {
-  if (!sensorsFromQuery.value) {
-    return [];
-  }
-
-  return sensorsFromQuery.value.map((sensor) => ({
+  if (!activeSensorsRaw.value) return [];
+  return activeSensorsRaw.value.map((sensor) => ({
     ...sensor,
     isSelected: selectedSensors.value.has(sensor.name),
   }));
 });
 
-// UI state
-const tableHeaderCheckbox = ref(tableHeaderCheckboxModel);
-const tableHeaderCheckboxIndeterminated = ref(tableHeaderCheckboxIndeterminate);
+// Use the composable refs directly — already reactive.
+const tableHeaderCheckbox = tableHeaderCheckboxModel;
+
+// True when some — but not all — sensors on the active tab are selected.
+const isHeaderIndeterminate = computed(() => {
+  const count = selectedSensors.value.size;
+  return count > 0 && count < activeSensorsRaw.value.length;
+});
 const tableRef = ref(null);
 const activeFiltersRows = ref([]);
-// Use isFetching for table busy state (includes background refetches)
-const isBusy = computed(() => isSensorsFetching.value);
 const searchFilterInput = ref('');
 
 const fields = ref([
@@ -279,6 +322,7 @@ const fields = ref([
     tdAttr: { scope: null },
   },
 ]);
+
 const tableFilters = ref([
   {
     key: 'status',
@@ -302,7 +346,7 @@ onBeforeMount(() => {
   });
 });
 
-// Filtered data before pagination (memoized for performance)
+// Filtered data before pagination
 const filteredSensorsData = computed(() => {
   if (!sensorsData.value) return [];
 
@@ -325,31 +369,34 @@ const filteredSensorsData = computed(() => {
   return data;
 });
 
-// Enhanced pagination with performance optimizations
 const itemPerPage = ref(perPage);
 
-// Create pagination with reactive pageSize
 const pagination = usePaginatedData({
   data: filteredSensorsData,
   pageSize: itemPerPage.value,
   initialPage: 1,
 });
 
-// Sync pageSize changes with pagination
 watch(itemPerPage, (newSize) => {
   pagination.pageSize.value = newSize;
 });
 
-// Extract pagination values for template use
+// Clear selection and reset page when switching tabs.
+// selectedRowsList is reset unconditionally first so the export toolbar is
+// always cleared even when tableRef has not yet mounted.
+function onTabChange(index) {
+  const group = sensorsByChassis.value[index];
+  if (group) activeChassisId.value = group.chassisId;
+  selectedSensors.value.clear();
+  selectedRowsList.value = [];
+  clearSelectedRows(tableRef);
+  pagination.currentPage.value = 1;
+}
+
 const filteredSensors = pagination.paginatedData;
 const currentPageNo = pagination.currentPage;
 const totalItems = pagination.totalItems;
-const pageInfo = pagination.pageInfo;
-
-// Computed for backward compatibility with existing code
 const filteredRows = computed(() => totalItems.value);
-
-onMounted(() => {});
 
 // Accessibility fixes
 watch(
@@ -376,8 +423,10 @@ function toggleAll(checked) {
     sensorsData.value.forEach((sensor) => {
       selectedSensors.value.add(sensor.name);
     });
+    selectedRowsList.value = [...sensorsData.value];
   } else {
     selectedSensors.value.clear();
+    selectedRowsList.value = [];
   }
 }
 
@@ -385,18 +434,15 @@ function onFilterChange({ activeFilters }) {
   activeFiltersRows.value = activeFilters;
 }
 
-function onFiltered(filteredItems) {
-  // This is called by BTable's internal filtering
-  // We don't need it anymore since we handle filtering in computed
-}
 function onChangeSearch(event) {
   searchFilterInput.value = event;
 }
+
 const onClearSearch = () => {
   searchFilterInput.value = '';
 };
+
 function exportFileNameByDate() {
-  // Create export file name based on date
   let date = new Date();
   date =
     date.toISOString().slice(0, 10) +
