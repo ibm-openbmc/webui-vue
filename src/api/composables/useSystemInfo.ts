@@ -10,7 +10,7 @@ import {
 } from './useRedfishCollection';
 import { usePatchResource } from './usePatchResource';
 import { RedfishQueryPresets } from './shared/queryConfig';
-import type { System, EventLog } from '@/types/redfish';
+import type { System, EventLog, Manager, ODataId } from '@/types/redfish';
 
 export const HOST_STATE = {
   on: 'xyz.openbmc_project.State.Host.HostState.Running',
@@ -174,6 +174,36 @@ export function useSystemInfo() {
       refetchEvents();
     },
   };
+}
+
+/**
+ * Composable that exposes whether the current BMC is passive.
+ *
+ * Detection rule (from the Manager GET response Redundancy[0].ActiveRedundancySet):
+ *   - ActiveRedundancySet contains '/redfish/v1/Managers/bmc' → Active BMC
+ *   - ActiveRedundancySet absent or does not contain it       → Passive BMC
+ *
+ * The query shares the same TanStack Query cache key as useBmc / useOverviewFirmware
+ * (['redfish', 'resource', '/redfish/v1/Managers/bmc']), so no extra network
+ * request is made when those composables are also mounted.
+ */
+export function useBmcRole() {
+  const { data: bmcManager, isLoading } = useRedfishResource<Manager>(
+    '/redfish/v1/Managers/bmc',
+    { queryConfig: RedfishQueryPresets.systemInfo },
+  );
+
+  const isPassiveBmc = computed<boolean>(() => {
+    // Active BMC:  ActiveRedundancySet contains "/redfish/v1/Managers/bmc"
+    // Passive BMC: ActiveRedundancySet is absent or does not contain it
+    const activeSet = bmcManager.value?.Redundancy?.[0]?.ActiveRedundancySet;
+    if (!activeSet) return true;
+    return !activeSet.some(
+      (entry: ODataId) => entry['@odata.id'] === '/redfish/v1/Managers/bmc',
+    );
+  });
+
+  return { isPassiveBmc, isLoading };
 }
 
 /**

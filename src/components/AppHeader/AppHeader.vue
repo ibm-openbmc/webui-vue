@@ -65,7 +65,7 @@
               {{ $t('appHeader.health') }}
             </a>
           </li>
-          <li class="nav-item">
+          <li v-if="!isPassiveBmc" class="nav-item">
             <a
               href="#/operations/server-power-operations"
               class="nav-link"
@@ -127,7 +127,7 @@ import IconRenew from '@carbon/icons-vue/es/renew/20';
 import StatusIcon from '@/components/Global/StatusIcon.vue';
 import LoadingBar from '@/components/Global/LoadingBar.vue';
 import useToast from '@/components/Composables/useToastComposable';
-import { useSystemInfo } from '@/api/composables/useSystemInfo';
+import { useSystemInfo, useBmcRole } from '@/api/composables/useSystemInfo';
 import stores from '@/store';
 import i18n from '@/i18n';
 import eventBus from '@/eventBus';
@@ -142,6 +142,9 @@ const global = stores.GlobalStore();
 // Use vue-query composable for system info and event log health
 const { assetTag, modelType, serialNumber, serverStatus, healthStatus } =
   useSystemInfo();
+
+// Determine BMC role: passive if ActiveRedundancySet is absent or does not contain this BMC
+const { isPassiveBmc } = useBmcRole();
 
 const props = defineProps({
   routerKey: {
