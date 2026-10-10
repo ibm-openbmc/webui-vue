@@ -1,4 +1,11 @@
 <template>
+  <!-- Custom right-click context menu -->
+  <context-menu
+    ref="contextMenu"
+    :items="contextMenuItems"
+    @action="onContextMenuAction"
+  />
+
   <b-container fluid="xl">
     <page-title :title="$t('appPageTitle.eventLogs')" />
     <b-row class="align-items-start">
@@ -296,6 +303,23 @@
         />
       </b-col>
     </b-row>
+    <!-- Screenshot preview modal -->
+    <BModal
+      v-model="screenshotModalOpen"
+      :title="$t('pageEventLogs.contextMenu.screenshotTitle')"
+      ok-only
+      :ok-title="$t('pageEventLogs.contextMenu.screenshotDownload')"
+      size="xl"
+      @ok="downloadScreenshot"
+    >
+      <img
+        v-if="screenshotDataUrl"
+        :src="screenshotDataUrl"
+        alt="Page screenshot"
+        style="width: 100%; height: auto"
+      />
+    </BModal>
+
     <BModal
       v-model="openModal"
       :title="deleteTitle"
@@ -326,6 +350,7 @@ import TableFilter from '@/components/Global/TableFilter.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
 import TableToolbar from '@/components/Global/TableToolbar.vue';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
+import ContextMenu from '@/components/Global/ContextMenu.vue';
 
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
@@ -358,6 +383,7 @@ export default {
     TableRowAction,
     TableToolbar,
     TableDateFilter,
+    ContextMenu,
   },
   beforeRouteLeave(to, from, next) {
     eventBus.emit('clear-selected');
@@ -477,6 +503,9 @@ export default {
       deleteTitle: '',
       deleteType: '',
       uris: [],
+      screenshotModalOpen: false,
+      screenshotDataUrl: null,
+      allRowsExpanded: false,
       fields: [
         {
           key: 'expandRow',
@@ -585,11 +614,65 @@ export default {
     isBusy() {
       return this.isLoading;
     },
+    contextMenuItems() {
+      return [
+        {
+          key: 'selectAll',
+          label: this.$t('pageEventLogs.contextMenu.selectAll'),
+        },
+        {
+          key: 'screenshot',
+          label: this.$t('pageEventLogs.contextMenu.screenshot'),
+        },
+        { divider: true, key: 'div1' },
+        {
+          key: 'back',
+          label: this.$t('pageEventLogs.contextMenu.back'),
+          disabled: !window.history || window.history.length <= 1,
+        },
+        {
+          key: 'reload',
+          label: this.$t('pageEventLogs.contextMenu.reload'),
+        },
+        {
+          key: 'inspect',
+          label: this.$t('pageEventLogs.contextMenu.inspect'),
+          hint: this.$t('pageEventLogs.contextMenu.inspectHint'),
+        },
+        {
+          key: 'savePageAs',
+          label: this.$t('pageEventLogs.contextMenu.savePageAs'),
+        },
+        { divider: true, key: 'div2' },
+        {
+          key: 'deleteAll',
+          label: this.$t('global.action.deleteAll'),
+          disabled: this.allLogs.length === 0,
+        },
+        {
+          key: 'downloadAll',
+          label: this.$t('global.action.downloadAll'),
+          disabled: this.allLogs.length === 0,
+        },
+        {
+          key: 'expandAll',
+          label: this.allRowsExpanded
+            ? this.$t('pageEventLogs.contextMenu.collapseAll')
+            : this.$t('pageEventLogs.contextMenu.expandAll'),
+          disabled: this.allLogs.length === 0,
+        },
+      ];
+    },
   },
   watch: {
     // Keep perPageRef (setup ref) in sync with the perPage data property
     perPage(newSize) {
       this.perPageRef = newSize;
+      this.allRowsExpanded = false;
+    },
+    // Reset expand-all state when logs data changes (reload / filter)
+    paginatedLogs() {
+      this.allRowsExpanded = false;
     },
     filteredLogs: function (value) {
       this.$nextTick(() => {
@@ -606,6 +689,16 @@ export default {
       });
     },
   },
+  mounted() {
+    this._contextMenuHandler = (event) => {
+      event.preventDefault();
+      this.$refs.contextMenu?.open(event);
+    };
+    document.addEventListener('contextmenu', this._contextMenuHandler);
+  },
+  beforeUnmount() {
+    document.removeEventListener('contextmenu', this._contextMenuHandler);
+  },
   created() {
     eventBus.on('clear-selected', () => {
       this.allLogs?.forEach((singleLog) => {
@@ -620,6 +713,77 @@ export default {
     }
   },
   methods: {
+    // ── Context menu ────────────────────────────────────────────────────────
+    openContextMenu(event) {
+      this.$refs.contextMenu.open(event);
+    },
+    async onContextMenuAction(key) {
+      switch (key) {
+        case 'selectAll':
+          this.toggleAll(true);
+          this.tableHeaderCheckboxModel = true;
+          this.onChangeHeaderCheckbox(this.$refs.table, true);
+          break;
+        case 'screenshot':
+          await this.captureScreenshot();
+          break;
+        case 'back':
+          window.history.back();
+          break;
+        case 'reload':
+          window.location.reload();
+          break;
+        case 'savePageAs':
+          // Triggers the browser's native Save / Print dialog —
+          // the only cross-browser way to let users save a page.
+          window.print();
+          break;
+        case 'deleteAll':
+          this.deleteAllLogs();
+          break;
+        case 'downloadAll':
+          this.downloadEventLogs('all');
+          break;
+        case 'expandAll':
+          this.expandAllRows();
+          break;
+      }
+    },
+    expandAllRows() {
+      const rows = this.paginatedLogs;
+      if (!rows) return;
+      const expand = !this.allRowsExpanded;
+      rows.forEach((row) => {
+        // _showDetails is the Bootstrap Vue Next internal flag that controls
+        // the #row-details slot. toggleDetails drives the chevron rotation class.
+        row._showDetails = expand;
+        row.toggleDetails = expand;
+      });
+      this.allRowsExpanded = expand;
+    },
+    async captureScreenshot() {
+      try {
+        const { default: html2canvas } = await import('html2canvas');
+        const canvas = await html2canvas(document.body, { useCORS: true });
+        this.screenshotDataUrl = canvas.toDataURL('image/png');
+        this.screenshotModalOpen = true;
+      } catch {
+        this.toast.infoToast(
+          this.$t('pageEventLogs.contextMenu.screenshotUnavailable'),
+        );
+      }
+    },
+    downloadScreenshot() {
+      if (!this.screenshotDataUrl) return;
+      const a = document.createElement('a');
+      a.href = this.screenshotDataUrl;
+      a.download = `event-logs-screenshot-${new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace(/:/g, '-')}.png`;
+      a.click();
+    },
+    // ── End context menu ─────────────────────────────────────────────────────
     onChangeSearchInput(event) {
       this.searchFilter = event;
     },
