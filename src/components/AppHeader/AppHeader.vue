@@ -334,7 +334,6 @@ const setFocus = (event) => {
       transition: $focus-transition;
     }
     .nav-tags {
-      color: #b9b9b9 !important;
       @include media-breakpoint-down(sm) {
         @include visually-hidden;
       }
@@ -406,9 +405,6 @@ const setFocus = (event) => {
 
 .header-text {
   font-size: 22px;
-}
-.header-logo {
-  width: 50px !important;
 }
 #page-header .container-fluid {
   --bs-gutter-x: 0 !important;
