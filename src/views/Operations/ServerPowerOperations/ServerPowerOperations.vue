@@ -135,13 +135,26 @@
                     aria-label="reboot"
                     @submit.prevent="rebootServer"
                   >
-                    <BFormGroup class="form-group">
-                      <label>{{
-                        $t('pageServerPowerOperations.rebootServer')
-                      }}</label>
-                      <div id="orderly-reboot">
+                    <BFormGroup
+                      class="form-group"
+                      :label="$t('pageServerPowerOperations.rebootServer')"
+                    >
+                      <BFormRadio
+                        v-model="form.rebootOption"
+                        name="reboot-option"
+                        data-test-id="serverPowerOperations-radio-rebootOrderly"
+                        value="orderly"
+                      >
                         {{ $t('pageServerPowerOperations.orderlyReboot') }}
-                      </div>
+                      </BFormRadio>
+                      <BFormRadio
+                        v-model="form.rebootOption"
+                        name="reboot-option"
+                        data-test-id="serverPowerOperations-radio-rebootImmediate"
+                        value="immediate"
+                      >
+                        {{ $t('pageServerPowerOperations.immediateReboot') }}
+                      </BFormRadio>
                     </BFormGroup>
                     <BButton
                       variant="primary"
