@@ -252,13 +252,21 @@ $loading-color-100: #2dbde5;
 
 // banner ASMI font color
 .app-header .navbar-nav .nav-tags {
-  color: #fff;
+  color: #fff !important;
 }
 
 // set ASMI position, move to right
 .pl-1,
 .px-1 {
   padding-left: 1.0rem !important;
+}
+
+.ps-1 {
+  padding-left: 1.0rem !important;
+}
+
+.header-logo {
+  width: 100px !important;
 }
 
 // table
