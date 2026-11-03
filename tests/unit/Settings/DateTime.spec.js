@@ -1,7 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
-import { nextTick, ref } from 'vue';
+import { nextTick } from 'vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 
 // ---------------------------------------------------------------------------
@@ -73,6 +73,10 @@ vi.mock('@/store/modules/SecurityAndAccess/UserManagementStore', () => ({
 }));
 
 // Mock the useDateTime composable
+const { mockUpdateDateTime } = vi.hoisted(() => ({
+  mockUpdateDateTime: vi.fn(),
+}));
+
 vi.mock('@/api/composables/useDateTime', () => ({
   useDateTime: vi.fn(() => ({
     ntpServers: { value: ['ntp1.example.com', 'ntp2.example.com', ''] },
@@ -83,7 +87,7 @@ vi.mock('@/api/composables/useDateTime', () => ({
     isError: { value: false },
     error: { value: null },
     refetch: vi.fn(),
-    updateDateTime: vi.fn().mockResolvedValue('Success'),
+    updateDateTime: mockUpdateDateTime,
     isUpdating: { value: false },
   })),
 }));
@@ -184,6 +188,7 @@ describe('DateTime.vue', () => {
             template:
               '<button v-bind="$attrs" @click="$emit(\'click\')"><slot /></button>',
             props: ['variant', 'type'],
+            emits: ['click'],
           },
           BCollapse: { template: '<div><slot /></div>' },
           Alert: { template: '<div class="alert"><slot /></div>' },
@@ -420,6 +425,230 @@ describe('DateTime.vue', () => {
       expect(ntp1.exists()).toBe(true);
       expect(ntp2.exists()).toBe(true);
       expect(ntp3.exists()).toBe(true);
+    });
+
+    it('should add an input box each time Add server is clicked', async () => {
+      wrapper = createWrapper();
+      await flushPromises();
+      wrapper.vm.form.configurationSelected = 'ntp';
+      await nextTick();
+
+      const inputs = () =>
+        wrapper.findAll('[data-test-id^="dateTime-input-ntpServer"]');
+      expect(inputs()).toHaveLength(3);
+
+      await wrapper
+        .find('[data-test-id="dateTime-button-addNtpServer"]')
+        .trigger('click');
+      expect(inputs()).toHaveLength(4);
+      expect(
+        wrapper.find('[data-test-id="dateTime-input-ntpServer4"]').exists(),
+      ).toBe(true);
+    });
+
+    it('should pad the saved servers with empty inputs up to 3', async () => {
+      wrapper = createWrapper();
+      await flushPromises();
+      expect(wrapper.vm.form.ntp.servers).toEqual([
+        'ntp1.example.com',
+        'ntp2.example.com',
+        '',
+      ]);
+    });
+  });
+
+  describe('Form Submission - Redfish payload', () => {
+    beforeEach(() => {
+      mockUpdateDateTime.mockReset();
+      mockUpdateDateTime.mockResolvedValue('Success');
+    });
+
+    it('should send only non-empty NTP servers, including added ones', async () => {
+      wrapper = createWrapper();
+      await flushPromises();
+
+      wrapper.vm.form.configurationSelected = 'ntp';
+      await wrapper
+        .find('[data-test-id="dateTime-button-addNtpServer"]')
+        .trigger('click');
+      wrapper.vm.form.ntp.servers = [
+        'ntp1.example.com',
+        '',
+        'ntp3.example.com',
+        'ntp4.example.com',
+      ];
+      await nextTick();
+
+      await wrapper.find('form').trigger('submit');
+      await flushPromises();
+
+      expect(mockUpdateDateTime).toHaveBeenCalledTimes(1);
+      expect(mockUpdateDateTime).toHaveBeenCalledWith({
+        ntpProtocolEnabled: true,
+        ntpServersArray: [
+          'ntp1.example.com',
+          'ntp3.example.com',
+          'ntp4.example.com',
+        ],
+      });
+    });
+
+    it('should not submit when a server is duplicated', async () => {
+      wrapper = createWrapper();
+      await flushPromises();
+
+      wrapper.vm.form.configurationSelected = 'ntp';
+      wrapper.vm.form.ntp.servers = [
+        'ntp1.example.com',
+        'ntp2.example.com',
+        'ntp1.example.com',
+      ];
+      await nextTick();
+
+      await wrapper.find('form').trigger('submit');
+      await flushPromises();
+
+      expect(mockUpdateDateTime).not.toHaveBeenCalled();
+    });
+
+    it('should not submit in NTP mode when server 1 is empty', async () => {
+      wrapper = createWrapper();
+      await flushPromises();
+
+      wrapper.vm.form.configurationSelected = 'ntp';
+      wrapper.vm.form.ntp.servers = ['', 'ntp2.example.com', ''];
+      await nextTick();
+
+      await wrapper.find('form').trigger('submit');
+      await flushPromises();
+
+      expect(mockUpdateDateTime).not.toHaveBeenCalled();
+    });
+
+    it('should drop empty extra inputs once the save completes', async () => {
+      vi.useFakeTimers();
+      try {
+        wrapper = createWrapper();
+        await flushPromises();
+
+        wrapper.vm.form.configurationSelected = 'ntp';
+        wrapper.vm.form.ntp.servers = [
+          'ntp1.example.com',
+          'ntp2.example.com',
+          'ntp3.example.com',
+          '',
+        ];
+        await nextTick();
+
+        await wrapper.find('form').trigger('submit');
+        await flushPromises();
+
+        // Progress bar still running: form stays as entered (4 inputs)
+        expect(wrapper.vm.form.ntp.servers).toHaveLength(4);
+
+        await vi.advanceTimersByTimeAsync(20000);
+        await flushPromises();
+
+        expect(wrapper.vm.form.ntp.servers).toEqual([
+          'ntp1.example.com',
+          'ntp2.example.com',
+          'ntp3.example.com',
+        ]);
+        expect(
+          wrapper.find('[data-test-id="dateTime-input-ntpServer4"]').exists(),
+        ).toBe(false);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('should pad back to 3 inputs after save when fewer than 3 servers remain', async () => {
+      vi.useFakeTimers();
+      try {
+        wrapper = createWrapper();
+        await flushPromises();
+
+        wrapper.vm.form.configurationSelected = 'ntp';
+        wrapper.vm.form.ntp.servers = ['ntp1.example.com', '', '', ''];
+        await nextTick();
+
+        await wrapper.find('form').trigger('submit');
+        await flushPromises();
+        await vi.advanceTimersByTimeAsync(20000);
+        await flushPromises();
+
+        expect(wrapper.vm.form.ntp.servers).toEqual([
+          'ntp1.example.com',
+          '',
+          '',
+        ]);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('should keep the entered NTP servers in the form after a successful save', async () => {
+      wrapper = createWrapper();
+      await flushPromises();
+
+      wrapper.vm.form.configurationSelected = 'ntp';
+      const entered = [
+        'a.example.com',
+        'b.example.com',
+        'c.example.com',
+        'd.example.com',
+      ];
+      wrapper.vm.form.ntp.servers = [...entered];
+      await nextTick();
+
+      await wrapper.find('form').trigger('submit');
+      await flushPromises();
+
+      expect(mockUpdateDateTime).toHaveBeenCalledTimes(1);
+      expect(wrapper.vm.form.ntp.servers).toEqual(entered);
+    });
+
+    it('should revert the form to the fetched values when the save fails', async () => {
+      mockUpdateDateTime.mockRejectedValue(new Error('save failed'));
+      wrapper = createWrapper();
+      await flushPromises();
+
+      wrapper.vm.form.configurationSelected = 'ntp';
+      wrapper.vm.form.ntp.servers = [
+        'x.example.com',
+        'y.example.com',
+        'z.example.com',
+        'w.example.com',
+      ];
+      await nextTick();
+
+      await wrapper.find('form').trigger('submit');
+      await flushPromises();
+
+      expect(wrapper.vm.form.ntp.servers).toEqual([
+        'ntp1.example.com',
+        'ntp2.example.com',
+        '',
+      ]);
+      expect(wrapper.vm.form.configurationSelected).toBe('manual');
+    });
+
+    it('should send manual date/time without NTP servers in manual mode', async () => {
+      wrapper = createWrapper();
+      await flushPromises();
+
+      wrapper.vm.form.configurationSelected = 'manual';
+      wrapper.vm.form.manual.date = '2024-01-15';
+      wrapper.vm.form.manual.time = '10:30';
+      await nextTick();
+
+      await wrapper.find('form').trigger('submit');
+      await flushPromises();
+
+      expect(mockUpdateDateTime).toHaveBeenCalledWith({
+        ntpProtocolEnabled: false,
+        updatedDateTime: '2024-01-15T10:30:00.000Z',
+      });
     });
   });
 

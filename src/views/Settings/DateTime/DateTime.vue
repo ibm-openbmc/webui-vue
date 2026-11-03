@@ -210,95 +210,72 @@
             {{ $t('pageDateTime.staticNtp') }}
           </BFormRadio>
           <BRow class="mt-3 ms-3">
-            <BCol sm="6" lg="4" xl="3">
-              <BFormGroup
-                aria-label="static-ntp-server-1-form-group"
-                :label="$t('pageDateTime.form.ntpServers.server1')"
-                label-for="input-ntp-1"
-              >
-                <BInputGroup aria-label="static-ntp-server-1-input-group">
-                  <BFormInput
-                    id="input-ntp-1"
-                    v-model="form.ntp.firstAddress"
-                    :state="getValidationState(v$.form.ntp.firstAddress)"
-                    :disabled="manualOptionSelected"
-                    data-test-id="dateTime-input-ntpServer1"
-                    @blur="v$.form.ntp.firstAddress.$touch()"
-                  />
-                  <BFormInvalidFeedback role="alert">
-                    <template
-                      v-if="
-                        v$.form.ntp.firstAddress.$errors.length > 0
-                          ? v$.form.ntp.firstAddress.$errors[0].$validator ===
+            <template v-for="(_server, index) in form.ntp.servers" :key="index">
+              <BCol sm="6" lg="4" xl="3">
+                <BFormGroup
+                  :aria-label="`static-ntp-server-${index + 1}-form-group`"
+                  :label="
+                    $t('pageDateTime.form.ntpServers.server', {
+                      number: index + 1,
+                    })
+                  "
+                  :label-for="`input-ntp-${index + 1}`"
+                >
+                  <BInputGroup
+                    :aria-label="`static-ntp-server-${index + 1}-input-group`"
+                  >
+                    <BFormInput
+                      :id="`input-ntp-${index + 1}`"
+                      v-model="form.ntp.servers[index]"
+                      :state="getValidationState(v$.form.ntp.servers[index])"
+                      :disabled="manualOptionSelected"
+                      :data-test-id="`dateTime-input-ntpServer${index + 1}`"
+                      @blur="v$.form.ntp.servers[index].$touch()"
+                    />
+                    <BFormInvalidFeedback role="alert">
+                      <template
+                        v-if="
+                          v$.form.ntp.servers[index].$errors.length > 0 &&
+                          v$.form.ntp.servers[index].$errors[0].$validator ===
                             'required'
-                          : false
-                      "
-                    >
-                      {{ $t('global.form.fieldRequired') }}
-                    </template>
-                  </BFormInvalidFeedback>
-                </BInputGroup>
-              </BFormGroup>
-            </BCol>
-            <BCol sm="6" lg="4" xl="3">
-              <BFormGroup
-                aria-label="static-ntp-server-2-form-group"
-                :label="$t('pageDateTime.form.ntpServers.server2')"
-                label-for="input-ntp-2"
+                        "
+                      >
+                        {{ $t('global.form.fieldRequired') }}
+                      </template>
+                      <template
+                        v-else-if="
+                          v$.form.ntp.servers[index].$errors.length > 0 &&
+                          v$.form.ntp.servers[index].$errors[0].$validator ===
+                            'isDuplicate'
+                        "
+                      >
+                        {{ $t('pageDateTime.form.validators.serverExists') }}
+                      </template>
+                    </BFormInvalidFeedback>
+                  </BInputGroup>
+                </BFormGroup>
+              </BCol>
+              <div
+                v-if="
+                  (index + 1) % 3 === 0 && index < form.ntp.servers.length - 1
+                "
+                class="w-100 d-none d-lg-block"
+              ></div>
+            </template>
+            <BCol sm="6" lg="4" xl="3" class="d-flex flex-column mb-3">
+              <span class="form-label invisible" aria-hidden="true">
+                &nbsp;
+              </span>
+              <BButton
+                variant="secondary"
+                class="add-ntp-server-button align-self-start"
+                :disabled="manualOptionSelected"
+                data-test-id="dateTime-button-addNtpServer"
+                @click="addNtpServer"
               >
-                <BInputGroup aria-label="static-ntp-server-2-input-group">
-                  <BFormInput
-                    id="input-ntp-2"
-                    v-model="form.ntp.secondAddress"
-                    :state="getValidationState(v$.form.ntp.secondAddress)"
-                    :disabled="manualOptionSelected"
-                    data-test-id="dateTime-input-ntpServer2"
-                  />
-                  <BFormInvalidFeedback role="alert">
-                    <template
-                      v-if="
-                        v$.form.ntp.secondAddress.$errors.length > 0
-                          ? v$.form.ntp.secondAddress.$errors[0].$validator ===
-                            'isSameAsFirstAddress'
-                          : false
-                      "
-                    >
-                      {{ $t('pageDateTime.form.validators.serverExists') }}
-                    </template>
-                  </BFormInvalidFeedback>
-                </BInputGroup>
-              </BFormGroup>
-            </BCol>
-            <BCol sm="6" lg="4" xl="3">
-              <BFormGroup
-                aria-label="static-ntp-server-3-form-group"
-                :label="$t('pageDateTime.form.ntpServers.server3')"
-                label-for="input-ntp-3"
-              >
-                <BInputGroup aria-label="static-ntp-server-3-input-group">
-                  <BFormInput
-                    id="input-ntp-3"
-                    v-model="form.ntp.thirdAddress"
-                    :state="getValidationState(v$.form.ntp.thirdAddress)"
-                    :disabled="manualOptionSelected"
-                    data-test-id="dateTime-input-ntpServer3"
-                  />
-                  <BFormInvalidFeedback role="alert">
-                    <template
-                      v-if="
-                        v$.form.ntp.thirdAddress.$errors.length > 0
-                          ? v$.form.ntp.thirdAddress.$errors[0].$validator ===
-                              'isSameAsFirstAddress' ||
-                            v$.form.ntp.thirdAddress.$errors[0].$validator ===
-                              'isSameAsSecondAddress'
-                          : false
-                      "
-                    >
-                      {{ $t('pageDateTime.form.validators.serverExists') }}
-                    </template>
-                  </BFormInvalidFeedback>
-                </BInputGroup>
-              </BFormGroup>
+                <icon-add />
+                {{ $t('pageDateTime.form.ntpServers.add') }}
+              </BButton>
             </BCol>
           </BRow>
           <BButton
@@ -315,16 +292,10 @@
 </template>
 
 <script setup>
-import {
-  ref,
-  onMounted,
-  watch,
-  computed,
-  onBeforeMount,
-  getCurrentInstance,
-} from 'vue';
+import { ref, onMounted, watch, computed, getCurrentInstance } from 'vue';
 import Alert from '@/components/Global/Alert.vue';
 import IconChevron from '@carbon/icons-vue/es/chevron--up/20';
+import IconAdd from '@carbon/icons-vue/es/add--alt/20';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
@@ -335,13 +306,7 @@ import { useVuelidate } from '@vuelidate/core';
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import stores from '@/store';
 import eventBus from '@/eventBus';
-import {
-  required,
-  helpers,
-  requiredIf,
-  sameAs,
-  not,
-} from '@vuelidate/validators';
+import { helpers, requiredIf } from '@vuelidate/validators';
 import UserManagementStore from '../../../store/modules/SecurityAndAccess/UserManagementStore';
 import { useDateTime } from '@/api/composables/useDateTime';
 
@@ -377,6 +342,7 @@ const isPageFetching = computed(
   () => isDateTimeFetching.value || isExtraLoading.value,
 );
 
+const MIN_NTP_INPUTS = 3;
 const isoDateRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 const isoTimeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
@@ -390,19 +356,18 @@ const globalMfaValue = computed({
 });
 
 const manualDate = ref('');
-const locale = ref(globalStore.languagePreferenceGetter);
 const form = ref({
   configurationSelected: '',
   manual: {
     date: '',
     time: '',
   },
-  ntp: { firstAddress: '', secondAddress: '', thirdAddress: '' },
+  ntp: { servers: ['', '', ''] },
 });
 const loading = ref('');
 const showDhcpNtpServers = ref(false);
-const dhcpNtp = ref([]);
 const showNtpAlert = ref(false);
+const isSaving = ref(false);
 
 usePageLoadingBar(isPageFetching, isDateTimeError);
 
@@ -473,30 +438,33 @@ const rules = computed(() => ({
       },
     },
     ntp: {
-      firstAddress: {
-        required: requiredIf(function () {
-          return form.value.configurationSelected === 'ntp';
-        }),
-      },
-      secondAddress: {
-        isSameAsFirstAddress: () =>
-          notSameAs(form.value.ntp.firstAddress, form.value.ntp.secondAddress),
-      },
-      thirdAddress: {
-        isSameAsFirstAddress: () =>
-          notSameAs(form.value.ntp.firstAddress, form.value.ntp.thirdAddress),
-        isSameAsSecondAddress: () =>
-          notSameAs(form.value.ntp.secondAddress, form.value.ntp.thirdAddress),
-      },
+      servers: form.value.ntp.servers.reduce((serverRules, _server, index) => {
+        serverRules[index] =
+          index === 0
+            ? {
+                required: requiredIf(function () {
+                  return form.value.configurationSelected === 'ntp';
+                }),
+              }
+            : {
+                isDuplicate: (value) =>
+                  form.value.ntp.servers
+                    .slice(0, index)
+                    .every((previous) => notSameAs(previous, value)),
+              };
+        return serverRules;
+      }, {}),
     },
   },
 }));
 const v$ = useVuelidate(rules, { form });
 
 watch(ntpServers, () => {
+  if (isSaving.value) return;
   setInitialNtpValues();
 });
 watch(isNtpProtocolEnabled, () => {
+  if (isSaving.value) return;
   setInitialNtpValues();
 });
 watch(manualDate, () => {
@@ -537,17 +505,19 @@ const setInitialNtpValues = () => {
   showNtpAlert.value = isNtpProtocolEnabled.value;
   setNtpValues();
 };
-const setNtpValues = () => {
-  [
-    form.value.ntp.firstAddress = '',
-    form.value.ntp.secondAddress = '',
-    form.value.ntp.thirdAddress = '',
-  ] = [ntpServers.value[0], ntpServers.value[1], ntpServers.value[2]];
+const setNtpValues = (savedServers = ntpServers.value) => {
+  const servers = [...savedServers];
+  while (servers.length < MIN_NTP_INPUTS) servers.push('');
+  form.value.ntp.servers = servers;
+};
+const addNtpServer = () => {
+  form.value.ntp.servers.push('');
 };
 const submitForm = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
   startLoader();
+  isSaving.value = true;
 
   let dateTimeForm = {};
   let isNTPEnabled = form.value.configurationSelected === 'ntp';
@@ -570,52 +540,32 @@ const submitForm = () => {
   } else {
     dateTimeForm.ntpProtocolEnabled = true;
 
-    const ntpArray = [
-      form.value.ntp.firstAddress,
-      form.value.ntp.secondAddress,
-      form.value.ntp.thirdAddress,
-    ];
-
-    // Filter the ntpArray to remove empty strings,
+    // Filter out empty strings,
     // per Redfish spec there should be no empty strings or null on the ntp array.
-    const ntpArrayFiltered = ntpArray.filter((x) => x);
+    const ntpArrayFiltered = form.value.ntp.servers.filter((x) => x);
 
     dateTimeForm.ntpServersArray = [...ntpArrayFiltered];
-
-    [ntpServers.value[0], ntpServers.value[1], ntpServers.value[2]] = [
-      ...dateTimeForm.ntpServersArray,
-    ];
-    setNtpValues();
   }
 
   updateDateTimeAction(dateTimeForm)
     .then(() => {
-      if (!isNTPEnabled) return;
-      // Shift address up if second address is empty
-      // to avoid refreshing after delay when updating NTP
-      if (!form.value.ntp.secondAddress && form.value.ntp.thirdAddress) {
-        form.value.ntp.secondAddress = form.value.ntp.thirdAddress;
-        form.value.ntp.thirdAddress = '';
-      }
-    })
-    .then(() => {
       if (!isNTPEnabled) {
+        isSaving.value = false;
         globalStore.getBmcTime();
         v$.value.form.$reset();
         endLoader();
       } else {
         setTimeout(() => {
+          setNtpValues(dateTimeForm.ntpServersArray);
+          isSaving.value = false;
           globalStore.getBmcTime();
           endLoader();
         }, 20000);
       }
     })
     .catch(() => {
-      // Revert to original configuration when save fails
-      form.value.configurationSelected = isNtpProtocolEnabled.value
-        ? 'ntp'
-        : 'manual';
-      setNtpValues();
+      isSaving.value = false;
+      setInitialNtpValues();
       v$.value.form.$reset();
       endLoader();
     });
@@ -647,6 +597,10 @@ const showCollapse = () => {
   svg {
     transform: rotate(180deg);
   }
+}
+.add-ntp-server-button {
+  margin-top: -3px;
+  margin-bottom: 14px;
 }
 .infoToolTipClass {
   margin-left: 2px !important;
