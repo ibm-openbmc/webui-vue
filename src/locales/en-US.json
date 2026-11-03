@@ -37,6 +37,16 @@
             "selectDate": "Select date",
             "useCursorKeysToNavigateCalendarDates": "Use cursor keys to navigate calendar dates"
         },
+        "contextMenu": {
+            "selectAll": "Select all",
+            "screenshot": "Full page screenshot",
+            "back": "Back",
+            "reload": "Reload",
+            "savePageAs": "Save page as…",
+            "screenshotTitle": "Page Screenshot",
+            "screenshotDownload": "Download",
+            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option."
+        },
         "fileUpload": {
             "browseText": "Add file",
             "clearSelectedFile": "Clear selected file"
@@ -1313,6 +1323,10 @@
         }
     },
     "pageOverview": {
+        "contextMenu": {
+            "refreshData": "Refresh overview data",
+            "viewEventLogs": "View event logs"
+        },
         "assetTag": "Asset tag",
         "accessKeyExpiration": "Access key expiration",
         "backupVersion": "Backup",
@@ -1641,6 +1655,9 @@
         }
     },
     "pageServerPowerOperations": {
+        "contextMenu": {
+            "refreshStatus": "Refresh status"
+        },
         "currentStatus": "Current status",
         "discardOsRuntimeButton": "Discard and continue to OS running",
         "discardOsRuntimeMessage": "Discard changes and continue to OS running state to continue to runtime.",
