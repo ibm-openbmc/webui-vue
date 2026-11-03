@@ -168,7 +168,7 @@ function toggleLampTestSwitch(lampTestState) {
   }
   changeLampTestState(lampTestState)
     .then((message) => {
-      successToast(message);
+      successToast(message, { progressNote: lampTestState });
       isLampTestEditable.value = false;
       setTimeout(() => {
         isLampTestEditable.value = true;

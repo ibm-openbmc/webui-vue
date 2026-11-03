@@ -426,7 +426,9 @@ function powerOn() {
     serverPowerOn()
       .then((response) => {
         if (response === true) {
-          infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
+          infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'), {
+            progressNote: true,
+          });
         }
       })
       .catch((error) => {
@@ -492,7 +494,9 @@ function operationConfirm() {
       serverSoftReboot()
         .then((response) => {
           if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
+            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'), {
+              progressNote: true,
+            });
           }
         })
         .catch((error) => {
@@ -505,7 +509,9 @@ function operationConfirm() {
       serverHardReboot()
         .then((response) => {
           if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
+            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'), {
+              progressNote: true,
+            });
           }
         })
         .catch((error) => {
@@ -520,7 +526,9 @@ function operationConfirm() {
       serverSoftPowerOff()
         .then((response) => {
           if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
+            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'), {
+              progressNote: true,
+            });
           }
         })
         .catch((error) => {
@@ -533,7 +541,9 @@ function operationConfirm() {
       serverHardPowerOff()
         .then((response) => {
           if (response === true) {
-            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'));
+            infoToast(i18n.global.t('pageServerPowerOperations.userRefresh'), {
+              progressNote: true,
+            });
           }
         })
         .catch((error) => {

@@ -95,7 +95,7 @@
               @click="toggleNotificationPanel"
             >
               <icon-notification-new
-                v-if="hasUnviewedNotifications"
+                v-if="hasNotificationIndicator"
                 :title="$t('appHeader.titleNotifications')"
               />
               <icon-notification
@@ -248,8 +248,8 @@ const healthStatusIcon = computed(() => {
 const username = computed(() => {
   return global.usernameGetter;
 });
-const hasUnviewedNotifications = computed(() => {
-  return global.hasUnviewedNotifications;
+const hasNotificationIndicator = computed(() => {
+  return global.hasActiveOperations || global.hasUnviewedNotifications;
 });
 
 const toggleNotificationPanel = () => {

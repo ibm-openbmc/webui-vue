@@ -181,6 +181,7 @@ function switchToRunning() {
         {
           title: i18n.global.t('pageFirmware.toast.switchToRunning.step1'),
           timestamp: true,
+          progressNote: true,
         },
       );
     }

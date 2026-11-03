@@ -85,7 +85,9 @@ function handleOK() {
   openModal.value = false;
   rebootBmc()
     .then(() => {
-      infoToast(i18n.global.t('pageRebootBmc.toast.successRebootStart'));
+      infoToast(i18n.global.t('pageRebootBmc.toast.successRebootStart'), {
+        progressNote: true,
+      });
       startLoader();
       globalStore.setBmcRebootInProgress({ inProgress: true, success: false });
 

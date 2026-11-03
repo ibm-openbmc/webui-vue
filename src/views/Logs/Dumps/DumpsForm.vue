@@ -292,6 +292,7 @@ const handleSubmit = () => {
         infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
           title: i18n.global.t('pageDumps.toast.successStartResourceDumpTitle'),
           timestamp: true,
+          progressNote: true,
         });
         checkTask();
       })
@@ -310,6 +311,7 @@ const handleSubmit = () => {
         infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
           title: i18n.global.t('pageDumps.toast.successStartBmcDumpTitle'),
           timestamp: true,
+          progressNote: true,
         }),
       )
       .catch(({ message }) => errorToast(message));
@@ -375,6 +377,7 @@ const onCreateSystemDump = (dumpType) => {
       infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
         title: i18n.global.t('pageDumps.toast.successStartSystemDumpTitle'),
         timestamp: true,
+        progressNote: true,
       }),
     )
     .catch(({ message }) => errorToast(message));

@@ -119,6 +119,7 @@ function updateFirmware() {
         {
           title: i18n.global.t('pageFirmware.toast.updateFirmware.step1'),
           timestamp: true,
+          progressNote: true,
         },
       );
     }

@@ -389,6 +389,7 @@ const updateImmediateTestRequestedState = async (value) => {
         i18n.global.t(
           'pageSystemParameters.toast.successStartingDiagnosticTestRun',
         ),
+        { progressNote: true },
       );
     } else {
       // Stop diagnostic test run — move from Active to Completed

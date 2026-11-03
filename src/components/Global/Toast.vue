@@ -8,6 +8,9 @@
     </template>
     <template #default>
       <p class="mb-0">{{ body }}</p>
+      <p v-if="progressNote" class="mb-0">
+        {{ i18n.global.t('global.action.progressNote') }}
+      </p>
       <p v-if="refreshAction">
         <BLink
           class="d-inline-block mt-3"
@@ -47,6 +50,10 @@ const props = defineProps({
     default: false,
   },
   refreshAction: {
+    type: Boolean,
+    default: false,
+  },
+  progressNote: {
     type: Boolean,
     default: false,
   },
