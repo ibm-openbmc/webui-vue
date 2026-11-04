@@ -45,7 +45,8 @@
             "savePageAs": "Save page as…",
             "screenshotTitle": "Page Screenshot",
             "screenshotDownload": "Download",
-            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option."
+            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option.",
+            "nativeMenuHint": "Right click on the left navigation panel for the original context menu."
         },
         "fileUpload": {
             "browseText": "Add file",
@@ -1655,9 +1656,6 @@
         }
     },
     "pageServerPowerOperations": {
-        "contextMenu": {
-            "refreshStatus": "Refresh status"
-        },
         "currentStatus": "Current status",
         "discardOsRuntimeButton": "Discard and continue to OS running",
         "discardOsRuntimeMessage": "Discard changes and continue to OS running state to continue to runtime.",

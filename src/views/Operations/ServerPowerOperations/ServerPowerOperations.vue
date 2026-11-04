@@ -264,7 +264,6 @@
 import { ref, computed } from 'vue';
 import eventBus from '@/eventBus';
 import i18n from '@/i18n';
-import { useContextMenu } from '@/components/ContextMenu';
 import { usePageLoadingBar } from '@/components/Composables/usePageLoadingBar';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
 import useToast from '@/components/Composables/useToastComposable';
@@ -357,27 +356,6 @@ const isPageFetching = computed(
     isBiosFetchingState.value || isSystemFetching.value || isBmcFetching.value,
 );
 usePageLoadingBar(isPageFetching);
-
-// Page specific context menu items (appended after the common items)
-useContextMenu({
-  items: computed(() => [
-    {
-      key: 'refreshStatus',
-      label: i18n.global.t(
-        'pageServerPowerOperations.contextMenu.refreshStatus',
-      ),
-      disabled: isPageFetching.value,
-    },
-  ]),
-  handlers: {
-    refreshStatus: () => {
-      refetchBios();
-      refetchSystem();
-      refetchBmc();
-      refetchLocationCodes();
-    },
-  },
-});
 
 const isInPhypStandby = computed(() => {
   if (!phypStandby.value) {

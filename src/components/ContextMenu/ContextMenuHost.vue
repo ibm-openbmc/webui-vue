@@ -1,6 +1,11 @@
 <template>
   <!-- Single right-click context menu for the authenticated app -->
-  <context-menu ref="contextMenuRef" :items="items" @action="onAction" />
+  <context-menu
+    ref="contextMenuRef"
+    :items="items"
+    :footer="$t('global.contextMenu.nativeMenuHint')"
+    @action="onAction"
+  />
 
   <!-- Screenshot preview modal -->
   <BModal

@@ -44,6 +44,17 @@
             <span>{{ item.label }}</span>
           </li>
         </template>
+        <!-- Optional small note attached to the bottom right of the menu -->
+        <li
+          v-if="footer"
+          class="context-menu__footer"
+          role="presentation"
+          aria-hidden="true"
+        >
+          <span class="context-menu__footer-text" :title="footer">
+            {{ footer }}
+          </span>
+        </li>
       </ul>
     </transition>
   </teleport>
@@ -57,6 +68,10 @@ export default {
       type: Array,
       default: () => [],
       // Each item: { key, label, icon?, disabled?, divider? }
+    },
+    footer: {
+      type: String,
+      default: '',
     },
   },
   emits: ['action'],
@@ -211,6 +226,34 @@ export default {
     color: #8d8d8d;
     margin-left: 24px;
     white-space: nowrap;
+  }
+
+  &__footer {
+    // width: 0 + min-width: 100% keeps the note from widening the menu.
+    // The row only positions the note; it is not styled like a menu option.
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
+    width: 0;
+    min-width: 100%;
+    margin-top: 4px;
+    padding: 4px 8px 2px;
+    cursor: default;
+    user-select: none;
+  }
+
+  // Small italic tag pinned to the right end; shows only a few words and is
+  // truncated with an ellipsis. The full text is available as a tooltip.
+  &__footer-text {
+    max-width: 130px;
+    overflow: hidden;
+    font-size: 10px;
+    font-style: italic;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #8d8d8d;
+    cursor: help;
   }
 
   &__icon {
