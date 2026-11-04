@@ -269,7 +269,7 @@ const handleSubmit = () => {
             v$.value.form.file.$touch();
             return;
           }
-        } else {
+        } else if (decoded.includes('service')) {
           if (currentCertificateType.value === 'ServiceLogin Certificate') {
             fileTypeMismatch.value = false;
           } else {
@@ -277,6 +277,10 @@ const handleSubmit = () => {
             v$.value.form.file.$touch();
             return;
           }
+        } else {
+          fileTypeMismatch.value = true;
+          v$.value.form.file.$touch();
+          return;
         }
         emit('ok', {
           addNew: !props.certificate,
