@@ -36,9 +36,10 @@ interface BiosResponse {
       '@odata.id': string;
     };
   };
-  Attributes?: {
-    fw_boot_side_current?: string;
-  };
+}
+
+interface UpdateServiceResponse {
+  CurrentBootSide?: string;
 }
 
 interface ManagerResponse {
@@ -105,12 +106,12 @@ export function useFirmware() {
     isLoading: isLoadingBootSide,
     isFetching: isFetchingBootSide,
   } = useQuery({
-    queryKey: ['redfish', 'systems', 'system', 'bios', 'bootSide'],
+    queryKey: ['redfish', 'updateService', 'bootSide'],
     queryFn: async (): Promise<string | null> => {
-      const response = await api.get<BiosResponse>(
-        '/redfish/v1/Systems/system/Bios',
+      const response = await api.get<UpdateServiceResponse>(
+        '/redfish/v1/UpdateService',
       );
-      return response.data?.Attributes?.fw_boot_side_current || null;
+      return response.data?.CurrentBootSide || null;
     },
     ...RedfishQueryPresets.firmware,
   });
