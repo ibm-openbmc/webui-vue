@@ -8,6 +8,7 @@
         role="menu"
         :style="{ top: `${top}px`, left: `${left}px` }"
         @keydown.esc="close"
+        @mouseleave="openSubmenu = null"
       >
         <template v-for="item in items" :key="item.key">
           <li
@@ -28,12 +29,29 @@
           <li
             v-else
             class="context-menu__item"
-            :class="{ 'context-menu__item--disabled': item.disabled }"
+            :class="{
+              'context-menu__item--disabled': item.disabled,
+              'context-menu__item--submenu': item.children,
+            }"
             role="menuitem"
             :tabindex="item.disabled ? -1 : 0"
-            @click="!item.disabled && onItemClick(item)"
-            @keydown.enter.prevent="!item.disabled && onItemClick(item)"
-            @keydown.space.prevent="!item.disabled && onItemClick(item)"
+            :aria-haspopup="item.children ? 'menu' : null"
+            :aria-expanded="
+              item.children ? String(openSubmenu === item.key) : null
+            "
+            @mouseenter="onItemEnter(item, $event)"
+            @click="!item.disabled && onItemClick(item, $event)"
+            @keydown.enter.self.prevent="
+              !item.disabled && onItemClick(item, $event)
+            "
+            @keydown.space.self.prevent="
+              !item.disabled && onItemClick(item, $event)
+            "
+            @keydown.right.self.prevent="
+              item.children &&
+              !item.disabled &&
+              openSubmenuFor(item, $event.currentTarget, true)
+            "
           >
             <component
               :is="item.icon"
@@ -42,6 +60,38 @@
               aria-hidden="true"
             />
             <span>{{ item.label }}</span>
+            <span
+              v-if="item.children"
+              class="context-menu__chevron"
+              aria-hidden="true"
+              >&rsaquo;</span
+            >
+            <!-- Submenu: opens on hover (or click / right arrow) -->
+            <ul
+              v-if="item.children && openSubmenu === item.key"
+              class="context-menu__submenu"
+              role="menu"
+              :style="submenuStyle"
+            >
+              <li
+                v-for="child in item.children"
+                :key="child.key"
+                class="context-menu__item"
+                :class="{ 'context-menu__item--disabled': child.disabled }"
+                role="menuitem"
+                :tabindex="child.disabled ? -1 : 0"
+                @click.stop="!child.disabled && onItemClick(child, $event)"
+                @keydown.enter.prevent="
+                  !child.disabled && onItemClick(child, $event)
+                "
+                @keydown.space.prevent="
+                  !child.disabled && onItemClick(child, $event)
+                "
+                @keydown.left.prevent="closeSubmenuFrom($event.currentTarget)"
+              >
+                <span>{{ child.label }}</span>
+              </li>
+            </ul>
           </li>
         </template>
         <!-- Optional small note attached to the bottom right of the menu -->
@@ -67,7 +117,9 @@ export default {
     items: {
       type: Array,
       default: () => [],
-      // Each item: { key, label, icon?, disabled?, divider? }
+      // Each item: { key, label, icon?, disabled?, divider?, children? }
+      // children: [{ key, label, disabled? }] shows a submenu on hover.
+      // Clicking a child emits its own key.
     },
     footer: {
       type: String,
@@ -80,7 +132,18 @@ export default {
       visible: false,
       top: 0,
       left: 0,
+      openSubmenu: null,
+      submenuFlip: false,
+      submenuShift: 0,
     };
+  },
+  computed: {
+    submenuStyle() {
+      return {
+        top: `${-4 + this.submenuShift}px`,
+        ...(this.submenuFlip ? { left: 'auto', right: '100%' } : {}),
+      };
+    },
   },
   mounted() {
     document.addEventListener('click', this.onDocumentClick);
@@ -100,6 +163,7 @@ export default {
       // Stop the event from reaching the document mousedown listener we set up,
       // so opening does not immediately trigger a close.
       event.stopPropagation();
+      this.openSubmenu = null;
       this.visible = true;
 
       this.$nextTick(() => {
@@ -125,17 +189,62 @@ export default {
         this.left = Math.max(MARGIN, x);
         this.top = Math.max(MARGIN, y);
 
-        // Focus first focusable item
-        const firstItem = menu.querySelector('[tabindex="0"]');
-        firstItem?.focus();
+        // Focus the first focusable item once the menu is at its final
+        // position, and never let the focus change scroll the page. Focusing
+        // while the menu is still at top: 0 scrolls the page to the top.
+        this.$nextTick(() => {
+          menu.querySelector('[tabindex="0"]')?.focus({ preventScroll: true });
+        });
       });
     },
     close() {
       this.visible = false;
+      this.openSubmenu = null;
     },
-    onItemClick(item) {
+    onItemClick(item, event) {
+      // An item with children only toggles its submenu
+      if (item.children) {
+        this.openSubmenuFor(item, event.currentTarget);
+        return;
+      }
       this.$emit('action', item.key);
       this.close();
+    },
+    onItemEnter(item, event) {
+      if (item.children && !item.disabled) {
+        this.openSubmenuFor(item, event.currentTarget);
+      } else {
+        this.openSubmenu = null;
+      }
+    },
+    // Opens the submenu of `item` (rendered inside `itemEl`) and keeps it
+    // inside the viewport: flipped to the left when there is no room on the
+    // right, shifted up when it would run past the bottom edge.
+    openSubmenuFor(item, itemEl, focusFirst = false) {
+      if (this.openSubmenu === item.key && !focusFirst) return;
+      const MARGIN = 8;
+      this.openSubmenu = item.key;
+      this.submenuFlip = false;
+      this.submenuShift = 0;
+      this.$nextTick(() => {
+        const submenu = itemEl.querySelector('.context-menu__submenu');
+        if (!submenu) return;
+        const rect = submenu.getBoundingClientRect();
+        this.submenuFlip = rect.right + MARGIN > window.innerWidth;
+        const overflowBottom = rect.bottom + MARGIN - window.innerHeight;
+        this.submenuShift = overflowBottom > 0 ? -overflowBottom : 0;
+        if (focusFirst) {
+          submenu
+            .querySelector('[tabindex="0"]')
+            ?.focus({ preventScroll: true });
+        }
+      });
+    },
+    // Left arrow inside a submenu: close it and return focus to its parent
+    closeSubmenuFrom(childEl) {
+      const parentEl = childEl.closest('.context-menu__submenu')?.parentElement;
+      this.openSubmenu = null;
+      parentEl?.focus({ preventScroll: true });
     },
     onDocumentClick(event) {
       if (
@@ -180,6 +289,7 @@ export default {
   }
 
   &__item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -215,6 +325,32 @@ export default {
         background: transparent;
       }
     }
+  }
+
+  &__chevron {
+    margin-left: auto;
+    padding-left: 16px;
+    font-size: 16px;
+    line-height: 1;
+    color: #525252;
+  }
+
+  // Opens to the right of its parent item; flipped / shifted in JS when it
+  // would leave the viewport.
+  &__submenu {
+    position: absolute;
+    top: -4px;
+    left: 100%;
+    z-index: 1;
+    min-width: 200px;
+    padding: 4px 0;
+    margin: 0;
+    list-style: none;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: default;
   }
 
   &__hint-label {
