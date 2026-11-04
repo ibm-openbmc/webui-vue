@@ -795,6 +795,16 @@
         }
     },
     "pageFieldCoreOverride": {
+        "contextMenu": {
+            "reboot": "Reboot server",
+            "rebootModalTitle": "Reboot server",
+            "rebootModalMessage": "Are you sure you want to reboot the server? This will perform an orderly reboot.",
+            "rebootStarted": "Server reboot started.",
+            "rebootCompleted": "Server reboot completed. The server is on.",
+            "rebootError": "Failed to reboot the server.",
+            "rebootNotOff": "The server did not power off after the reboot was requested.",
+            "rebootNotOn": "The server did not power back on within the expected time."
+        },
         "changeConfiguration": "Change configuration",
         "configuredCores": "Configured cores",
         "currentConfiguration": "Current configuration",

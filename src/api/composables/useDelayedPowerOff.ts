@@ -10,6 +10,26 @@ export const POWER_OFF_CHECK_DELAY_MS = 60_000;
 export const POWER_OFF_CHECK_DURATION_MS = 300_000;
 const POWER_OFF_CHECK_INTERVAL_MS = 5_000;
 
+/**
+ * Current server status mapped to 'on' | 'off' | 'error' | 'diagnosticMode',
+ * or 'unreachable' when it cannot be read (a failed request included).
+ */
+export const fetchServerStatus = async (): Promise<string> => {
+  try {
+    const { data } = await api.get<{
+      PowerState?: string;
+      Status?: { State?: string };
+    }>('/redfish/v1/Systems/system');
+    const state =
+      data.Status?.State === 'Quiesced' || data.Status?.State === 'InTest'
+        ? data.Status.State
+        : (data.PowerState ?? '');
+    return serverStateMapper(state);
+  } catch {
+    return 'unreachable';
+  }
+};
+
 interface PowerOffCallbacks {
   onPoweredOff?: () => void;
   onTimeout?: () => void;
@@ -40,22 +60,9 @@ export function useDelayedPowerOff() {
     clearTimeout(durationTimer);
   };
 
-  const isServerOff = async (): Promise<boolean> => {
-    try {
-      const { data } = await api.get<{
-        PowerState?: string;
-        Status?: { State?: string };
-      }>('/redfish/v1/Systems/system');
-      const state =
-        data.Status?.State === 'Quiesced' || data.Status?.State === 'InTest'
-          ? data.Status.State
-          : (data.PowerState ?? '');
-      return serverStateMapper(state) === 'off';
-    } catch {
-      // A failed poll counts as "not off yet"
-      return false;
-    }
-  };
+  // A failed poll counts as "not off yet"
+  const isServerOff = async (): Promise<boolean> =>
+    (await fetchServerStatus()) === 'off';
 
   const startChecking = ({ onPoweredOff, onTimeout }: PowerOffCallbacks) => {
     active = true;
