@@ -189,7 +189,9 @@ function handleSubmit() {
     lockoutThreshold = form.value.lockoutThreshold;
   }
   if (v$.value.form.unlockMethod.$dirty) {
-    lockoutDuration = form.value.unlockMethod ? form.value.lockoutDuration : 0;
+    lockoutDuration = form.value.unlockMethod
+      ? parseInt(form.value.lockoutDuration)
+      : 0;
   }
   emitUpdate('ok', { lockoutThreshold, lockoutDuration });
   closeModal();
