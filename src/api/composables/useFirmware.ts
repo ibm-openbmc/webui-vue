@@ -39,7 +39,11 @@ interface BiosResponse {
 }
 
 interface UpdateServiceResponse {
-  CurrentBootSide?: string;
+  Oem?: {
+    IBM?: {
+      CurrentBootSide?: string;
+    };
+  };
 }
 
 interface ManagerResponse {
@@ -111,7 +115,7 @@ export function useFirmware() {
       const response = await api.get<UpdateServiceResponse>(
         '/redfish/v1/UpdateService',
       );
-      return response.data?.CurrentBootSide || null;
+      return response.data?.Oem?.IBM?.CurrentBootSide || null;
     },
     ...RedfishQueryPresets.firmware,
   });
