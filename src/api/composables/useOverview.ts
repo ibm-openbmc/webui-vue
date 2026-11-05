@@ -218,7 +218,11 @@ export function useOverviewNetwork() {
   );
 
   const networkData = computed((): NetworkData => {
-    if (!ethernetInterfaces.value || ethernetInterfaces.value.length === 0) {
+    const visibleInterfaces = (ethernetInterfaces.value ?? []).filter(
+      (iface: EthernetInterface) => !iface['@odata.id']?.endsWith('/eth2'),
+    );
+
+    if (visibleInterfaces.length === 0) {
       return {
         hostname: null,
         staticAddress: null,
@@ -226,7 +230,7 @@ export function useOverviewNetwork() {
       };
     }
 
-    const firstInterface = ethernetInterfaces.value[0];
+    const firstInterface = visibleInterfaces[0];
     const dhcpAddresses = (firstInterface.IPv4Addresses || []).filter(
       (ipv4: IPv4Address) => ipv4.AddressOrigin === 'DHCP',
     );

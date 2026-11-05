@@ -401,6 +401,36 @@ describe('useNetwork', () => {
       expect(result[0].ipv6AutoConfigEnabled).toBe(false);
       expect(result[0].ipv6OperatingMode).toBe('');
     });
+    it('excludes eth2 interface from results', async () => {
+      const queryFns = [];
+      useQuery.mockImplementation((config) => {
+        queryFns.push(config.queryFn);
+        return makeMockQuery();
+      });
+
+      api.get.mockResolvedValueOnce({
+        data: {
+          Members: [
+            { '@odata.id': '/redfish/v1/Managers/bmc/EthernetInterfaces/eth0' },
+            { '@odata.id': '/redfish/v1/Managers/bmc/EthernetInterfaces/eth2' },
+          ],
+        },
+      });
+      // Only eth0 should be fetched — eth2 is filtered out
+      api.all.mockResolvedValueOnce([
+        { data: makeRawInterface({ Id: 'eth0' }) },
+      ]);
+
+      useNetwork();
+      const result = await queryFns[0]();
+
+      // api.all should only be called with eth0's URL
+      expect(api.all).toHaveBeenCalledWith([
+        api.get('/redfish/v1/Managers/bmc/EthernetInterfaces/eth0'),
+      ]);
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe('eth0');
+    });
   });
 
   // ── API: fetchLldpData ───────────────────────────────────────────────────────

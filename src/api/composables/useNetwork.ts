@@ -154,9 +154,9 @@ function transformEthernetInterface(
 
 async function fetchEthernetInterfaces(): Promise<NetworkSetting[]> {
   const response = await api.get(ETHERNET_INTERFACES_URL);
-  const ids: string[] = response.data.Members.map(
-    (m: { '@odata.id': string }) => m['@odata.id'],
-  );
+  const ids: string[] = response.data.Members.filter(
+    (m: { '@odata.id': string }) => !m['@odata.id'].endsWith('/eth2'),
+  ).map((m: { '@odata.id': string }) => m['@odata.id']);
   const responses = await api.all(ids.map((id) => api.get(id)));
   return responses.map((r: { data: EthernetInterfaceRaw }) =>
     transformEthernetInterface(r.data),
