@@ -137,12 +137,17 @@ export function useFirmware() {
       const promises = members.map((item) =>
         api.get<FirmwareItemResponse>(item['@odata.id']),
       );
-      const responses = await Promise.all(promises);
+      const results = await Promise.allSettled(promises);
 
       const bmcFirmware: FirmwareItem[] = [];
       const hostFirmware: FirmwareItem[] = [];
 
-      responses.forEach(({ data }) => {
+      results.forEach((result) => {
+        if (result.status !== 'fulfilled') {
+          console.error('Firmware inventory member failed:', result.reason);
+          return;
+        }
+        const { data } = result.value;
         const firmwareType = data?.RelatedItem?.[0]?.['@odata.id']
           ?.split('/')
           .pop();
