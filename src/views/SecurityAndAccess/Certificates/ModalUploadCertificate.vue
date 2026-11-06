@@ -71,9 +71,9 @@
             </BFormInvalidFeedback>
             <BFormInvalidFeedback
               v-else-if="
-                (currentCertificateType === 'ServiceLogin Certificate' ||
-                  currentCertificateType === 'BMC shell ACF certificate' ||
-                  currentCertificateType === 'Resource dump ACF certificate') &&
+                (form.certificateType === 'ServiceLogin Certificate' ||
+                  form.certificateType === 'BMC shell ACF certificate' ||
+                  form.certificateType === 'Resource dump ACF certificate') &&
                 v$.form.file.fileMatchesType.$invalid
               "
               role="alert"
@@ -138,11 +138,6 @@ const form = ref({
   certificateType: null,
   file: null,
 });
-const currentCertificateType = computed(() => {
-  return props.certificate
-    ? props.certificate.certificate
-    : form.value.certificateType;
-});
 const fileTypeMismatch = ref(false);
 const certificateTypes = computed(() => {
   return availableUploadTypes.value || [];
@@ -171,9 +166,12 @@ const certificateOptions = computed(() => {
 });
 const fileFormat = computed(() => {
   if (
-    currentCertificateType.value === 'ServiceLogin Certificate' ||
-    currentCertificateType.value === 'BMC shell ACF certificate' ||
-    currentCertificateType.value === 'Resource dump ACF certificate'
+    props.certificate?.certificate === 'ServiceLogin Certificate' ||
+    form.value.certificateType === 'ServiceLogin Certificate' ||
+    props.certificate?.certificate === 'BMC shell ACF certificate' ||
+    form.value.certificateType === 'BMC shell ACF certificate' ||
+    props.certificate?.certificate === 'Resource dump ACF certificate' ||
+    form.value.certificateType === 'Resource dump ACF certificate'
   ) {
     return '.acf';
   } else {
@@ -195,6 +193,16 @@ watch(
     v$.value.form.file.$reset();
     v$.value.form.file.$touch();
   },
+);
+// When replacing an existing certificate, use its type
+watch(
+  () => props.certificate?.certificate,
+  (certificateType) => {
+    if (certificateType) {
+      form.value.certificateType = certificateType;
+    }
+  },
+  { immediate: true },
 );
 // Only set initial certificateType when modal opens and form is empty
 // Don't reset on data refetch to preserve user's selection
@@ -239,9 +247,9 @@ const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
   if (
-    currentCertificateType.value === 'BMC shell ACF certificate' ||
-    currentCertificateType.value === 'Resource dump ACF certificate' ||
-    currentCertificateType.value === 'ServiceLogin Certificate'
+    form.value.certificateType === 'BMC shell ACF certificate' ||
+    form.value.certificateType === 'Resource dump ACF certificate' ||
+    form.value.certificateType === 'ServiceLogin Certificate'
   ) {
     const file = form.value.file;
     const reader = new FileReader();
@@ -252,9 +260,7 @@ const handleSubmit = () => {
         const cleanBase64 = base64String.replace(/^data:.*;base64,/, '');
         const decoded = atob(cleanBase64);
         if (decoded.includes('resourcedump')) {
-          if (
-            currentCertificateType.value === 'Resource dump ACF certificate'
-          ) {
+          if (form.value.certificateType === 'Resource dump ACF certificate') {
             fileTypeMismatch.value = false;
           } else {
             fileTypeMismatch.value = true;
@@ -262,7 +268,7 @@ const handleSubmit = () => {
             return;
           }
         } else if (decoded.includes('bmcshell')) {
-          if (currentCertificateType.value === 'BMC shell ACF certificate') {
+          if (form.value.certificateType === 'BMC shell ACF certificate') {
             fileTypeMismatch.value = false;
           } else {
             fileTypeMismatch.value = true;
@@ -270,7 +276,7 @@ const handleSubmit = () => {
             return;
           }
         } else if (decoded.includes('service')) {
-          if (currentCertificateType.value === 'ServiceLogin Certificate') {
+          if (form.value.certificateType === 'ServiceLogin Certificate') {
             fileTypeMismatch.value = false;
           } else {
             fileTypeMismatch.value = true;
@@ -286,7 +292,9 @@ const handleSubmit = () => {
           addNew: !props.certificate,
           file: form.value.file,
           location: props.certificate ? props.certificate.location : null,
-          type: currentCertificateType.value,
+          type: props.certificate
+            ? props.certificate.certificate
+            : form.value.certificateType,
         });
         closeModal();
       } catch (error) {
@@ -299,7 +307,9 @@ const handleSubmit = () => {
       addNew: !props.certificate,
       file: form.value.file,
       location: props.certificate ? props.certificate.location : null,
-      type: currentCertificateType.value,
+      type: props.certificate
+        ? props.certificate.certificate
+        : form.value.certificateType,
     });
     closeModal();
   }
@@ -309,9 +319,11 @@ const closeModal = () => {
   v$.value.form.file.$reset();
 };
 const resetForm = () => {
-  form.value.certificateType = certificateOptions.value.length
-    ? certificateOptions.value[0].value
-    : null;
+  form.value.certificateType = props.certificate?.certificate
+    ? props.certificate.certificate
+    : certificateOptions.value.length
+      ? certificateOptions.value[0].value
+      : null;
   form.value.file = null;
   fileTypeMismatch.value = false;
   eventBus.emit('clear-file');
