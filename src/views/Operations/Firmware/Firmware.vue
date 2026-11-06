@@ -47,11 +47,26 @@
         </BCol>
       </BRow>
     </page-section>
+
+    <!-- Power off confirmation (opened from the context menu) -->
+    <BModal
+      v-model="isPowerOffModalOpen"
+      :title="$t('pageFirmware.contextMenu.powerOffModalTitle')"
+      ok-variant="danger"
+      :ok-title="$t('pageFirmware.contextMenu.powerOff')"
+      :cancel-title="$t('global.action.cancel')"
+      @ok="onPowerOffConfirm"
+    >
+      <p>{{ $t('pageFirmware.contextMenu.powerOffModalMessage') }}</p>
+    </BModal>
   </BContainer>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useContextMenu } from '@/components/ContextMenu';
+import useToast from '@/components/Composables/useToastComposable';
 import useLoadingBar, {
   loading,
 } from '@/components/Composables/useLoadingBarComposable';
@@ -68,6 +83,7 @@ import stores from '@/store';
 import { useFirmware } from '@/api/composables/useFirmware';
 import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 import { useSystemInfo } from '@/api/composables/useSystemInfo';
+import { useDelayedPowerOff } from '@/api/composables/useDelayedPowerOff';
 
 const controlStore = stores.ControlStore();
 
@@ -83,7 +99,7 @@ const {
 useCapacityOnDemand();
 
 // Live server status from VueQuery (polls every 60 s via systemInfo preset)
-const { serverStatus } = useSystemInfo();
+const { serverStatus, refetch: refetchSystemInfo } = useSystemInfo();
 
 const isServerPowerOffRequired = ref('true');
 const isLoading = ref(loading.value);
@@ -116,6 +132,48 @@ const isPageDisabled = computed(() => {
 function loadingStatus(value) {
   isLoading.value = value;
 }
+
+// ── Context menu: power off server ──────────────────────────────────────────
+const { t } = useI18n();
+const { errorToast, warningToast, infoToast, successToast } = useToast();
+const { isPowerOffRequested, requestPowerOff } = useDelayedPowerOff();
+const isPowerOffModalOpen = ref(false);
+
+// Disabled while the server is off, and from the moment a power off has been
+// confirmed. After a confirmed power off it stays disabled until the page is
+// loaded again; it is enabled back only if the request or the check fails.
+const isPowerOffDisabled = computed(
+  () => isServerOff.value || isPowerOffRequested.value,
+);
+
+function onPowerOffConfirm() {
+  requestPowerOff({
+    onPoweredOff: () => {
+      successToast(t('pageFirmware.contextMenu.powerOffSuccess'));
+      refetchSystemInfo();
+    },
+    onTimeout: () =>
+      warningToast(t('pageFirmware.contextMenu.powerOffTimeout')),
+  })
+    .then(() => infoToast(t('pageFirmware.contextMenu.powerOffRequested')))
+    .catch(() => errorToast(t('pageFirmware.contextMenu.powerOffError')));
+}
+
+useContextMenu({
+  items: computed(() => [
+    {
+      key: 'powerOffServer',
+      label: t('pageFirmware.contextMenu.powerOff'),
+      disabled: isPowerOffDisabled.value,
+    },
+  ]),
+  handlers: {
+    powerOffServer: () => {
+      if (isPowerOffDisabled.value) return;
+      isPowerOffModalOpen.value = true;
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>

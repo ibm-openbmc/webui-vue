@@ -37,6 +37,18 @@
             "selectDate": "Select date",
             "useCursorKeysToNavigateCalendarDates": "Use cursor keys to navigate calendar dates"
         },
+        "contextMenu": {
+            "selectAll": "Select all",
+            "screenshot": "Full page screenshot",
+            "back": "Back",
+            "reload": "Reload",
+            "savePageAs": "Save page as…",
+            "screenshotTitle": "Page Screenshot",
+            "screenshotDownload": "Download",
+            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option.",
+            "nativeMenuHint": "Right click on the left navigation panel for the default context menu.",
+            "navigateTo": "Navigate to"
+        },
         "fileUpload": {
             "browseText": "Add file",
             "clearSelectedFile": "Clear selected file"
@@ -657,6 +669,20 @@
         }
     },
     "pageEventLogs": {
+        "contextMenu": {
+            "selectAll": "Select all",
+            "screenshot": "Full page screenshot",
+            "back": "Back",
+            "reload": "Reload",
+            "inspect": "Inspect",
+            "inspectHint": "F12 / ⌘⌥I",
+            "savePageAs": "Save page as…",
+            "expandAll": "Expand all",
+            "collapseAll": "Collapse all",
+            "screenshotTitle": "Page Screenshot",
+            "screenshotDownload": "Download",
+            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option."
+        },
         "additionalDataUri": "Download additional data",
         "bmcManager": "OpenBmc Manager",
         "resolve": "Resolve",
@@ -709,6 +735,28 @@
         }
     },
     "pageFactoryReset": {
+        "contextMenu": {
+            "selectAll": "Select all",
+            "screenshot": "Full page screenshot",
+            "back": "Back",
+            "reload": "Reload",
+            "inspect": "Inspect",
+            "inspectHint": "F12 / ⌘⌥I",
+            "savePageAs": "Save page as…",
+            "powerOn": "Power on",
+            "powerOff": "Power off",
+            "powerOnTitle": "Power on server",
+            "powerOnMessage": "Are you sure you want to power on the server?",
+            "powerOffTitle": "Power off server",
+            "powerOffMessage": "Are you sure you want to power off the server? This will perform an orderly shutdown.",
+            "powerOnSuccess": "Power on command sent successfully.",
+            "powerOnError": "Failed to power on the server.",
+            "powerOffSuccess": "Power off command sent successfully.",
+            "powerOffError": "Failed to power off the server.",
+            "screenshotTitle": "Page Screenshot",
+            "screenshotDownload": "Download",
+            "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option."
+        },
         "alert": "System must be powered off to reset",
         "description": "These functions do not perform a secure delete of any sensitive data.",
         "form": {
@@ -747,6 +795,16 @@
         }
     },
     "pageFieldCoreOverride": {
+        "contextMenu": {
+            "reboot": "Reboot server",
+            "rebootModalTitle": "Reboot server",
+            "rebootModalMessage": "Are you sure you want to reboot the server? This will perform an orderly reboot.",
+            "rebootStarted": "Server reboot started.",
+            "rebootCompleted": "Server reboot completed. The server is on.",
+            "rebootError": "Failed to reboot the server.",
+            "rebootNotOff": "The server did not power off after the reboot was requested.",
+            "rebootNotOn": "The server did not power back on within the expected time."
+        },
         "changeConfiguration": "Change configuration",
         "configuredCores": "Configured cores",
         "currentConfiguration": "Current configuration",
@@ -766,6 +824,15 @@
         }
     },
     "pageFirmware": {
+        "contextMenu": {
+            "powerOff": "Power off server",
+            "powerOffModalTitle": "Power off server",
+            "powerOffModalMessage": "Are you sure you want to power off the server? This will perform an orderly shutdown.",
+            "powerOffRequested": "Power off initiated",
+            "powerOffSuccess": "Power off completed successfully",
+            "powerOffError": "Failed to power off the server.",
+            "powerOffTimeout": "The server did not power off within the expected time."
+        },
         "cardActionSwitchToRunning": "Switch to running",
         "cardBodyVersion": "Version",
         "cardTitleBackup": "Backup image",
@@ -1277,6 +1344,10 @@
         }
     },
     "pageOverview": {
+        "contextMenu": {
+            "refreshData": "Refresh overview data",
+            "viewEventLogs": "View event logs"
+        },
         "assetTag": "Asset tag",
         "accessKeyExpiration": "Access key expiration",
         "backupVersion": "Backup",
