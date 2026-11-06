@@ -429,9 +429,8 @@
                 "timezone": "@:pageDateTime.form.time.label (%{timezone})"
             },
             "ntpServers": {
-                "server1": "Server 1",
-                "server2": "Server 2",
-                "server3": "Server 3"
+                "server": "Server %{number}",
+                "add": "Add server"
             },
             "validators": {
                 "serverExists": "Server address already exists"
