@@ -82,6 +82,7 @@ export interface Sensor extends Resource {
   Reading?: number;
   ReadingUnits?: string;
   ReadingType?: string;
+  SpeedRPM?: number;
   Status: Status;
   PhysicalContext?: string;
   PhysicalSubContext?: string;

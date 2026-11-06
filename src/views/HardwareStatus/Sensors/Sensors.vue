@@ -139,7 +139,16 @@
             <status-icon :status="statusIconValue(value)" /> {{ value }}
           </template>
           <template #cell(currentValue)="data">
-            {{ dataFormatter(data.value) }} {{ data.item.units }}
+            <!-- when the sensors data is fan -->
+            <template v-if="data.item.speedRPM != undefined">
+              {{ data.item.speedRPM }} RPM
+              <template v-if="data.item.readingType == 'Percent'">
+                ({{ dataFormatter(data.value) }} {{ data.item.units }})
+              </template>
+            </template>
+            <template v-else>
+              {{ dataFormatter(data.value) }} {{ data.item.units }}
+            </template>
           </template>
           <template #empty>
             <span v-if="isSensorsLoading">

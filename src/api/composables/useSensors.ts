@@ -16,6 +16,8 @@ export interface SensorData {
   status: string;
   currentValue: number | undefined;
   units: string | undefined;
+  speedRPM: number | undefined;
+  readingType: string | undefined;
 }
 
 export interface ChassisSensorGroup {
@@ -34,6 +36,8 @@ function mapSensor(sensor: Sensor): SensorData {
     status: sensor.Status?.Health || 'Unknown',
     currentValue: sensor.Reading,
     units: sensor.ReadingUnits,
+    speedRPM: sensor.SpeedRPM,
+    readingType: sensor.ReadingType,
   };
 }
 
