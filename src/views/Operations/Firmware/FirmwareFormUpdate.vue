@@ -283,6 +283,10 @@ function dispatchWorkstationUpload(activateFirmware) {
     })
     .catch((error) => {
       endLoader();
+      globalStore.setFirmwareUpdateInProgress({
+        inProgress: false,
+        success: false,
+      });
       errorToast(error.message);
     });
 }

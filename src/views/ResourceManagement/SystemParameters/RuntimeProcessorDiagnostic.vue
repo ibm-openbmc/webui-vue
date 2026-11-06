@@ -383,6 +383,7 @@ const updateImmediateTestRequestedState = async (value) => {
         i18n.global.t(
           'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
         ),
+        { progressNote: true },
       );
     } else if (value) {
       Toast.successToast(
@@ -403,9 +404,11 @@ const updateImmediateTestRequestedState = async (value) => {
   } catch (error) {
     // Revert optimistic update on error
     localImmediateTestRequested.value = !value;
-    global.setImmediateTestInProgress({ inProgress: false, success: false });
 
     if (value) {
+      // Start failed — the test never began, so clear the active entry.
+      // If a stop failed, the test is still running; leave the entry active.
+      global.setImmediateTestInProgress({ inProgress: false, success: false });
       Toast.errorToast(
         i18n.global.t(
           'pageSystemParameters.toast.errorStartingDiagnosticTestRun',
