@@ -194,6 +194,16 @@ watch(
     v$.value.form.file.$touch();
   },
 );
+// When replacing an existing certificate, use its type
+watch(
+  () => props.certificate?.certificate,
+  (certificateType) => {
+    if (certificateType) {
+      form.value.certificateType = certificateType;
+    }
+  },
+  { immediate: true },
+);
 // Only set initial certificateType when modal opens and form is empty
 // Don't reset on data refetch to preserve user's selection
 watch(certificateOptions, (options) => {
@@ -309,9 +319,11 @@ const closeModal = () => {
   v$.value.form.file.$reset();
 };
 const resetForm = () => {
-  form.value.certificateType = certificateOptions.value.length
-    ? certificateOptions.value[0].value
-    : null;
+  form.value.certificateType = props.certificate?.certificate
+    ? props.certificate.certificate
+    : certificateOptions.value.length
+      ? certificateOptions.value[0].value
+      : null;
   form.value.file = null;
   fileTypeMismatch.value = false;
   eventBus.emit('clear-file');
