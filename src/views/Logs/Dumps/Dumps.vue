@@ -377,7 +377,10 @@ const formatSize = (bytes) => {
   if (bytes >= 1000000) {
     return `${parseFloat((bytes / 1000000).toFixed(1))} MB`;
   }
-  return `${parseFloat((bytes / 1000).toFixed(1))} KB`;
+  if (bytes >= 1000) {
+    return `${parseFloat((bytes / 1000).toFixed(1))} KB`;
+  }
+  return `${Math.round(bytes)} bytes`;
 };
 const onFilterChange = ({ activeFilters }) => {
   activeFiltersRows.value = activeFilters;
