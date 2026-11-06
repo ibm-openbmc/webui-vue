@@ -372,12 +372,12 @@ const updateDumpInfo = (selectedDumpTypeVal) => {
 eventBus.on('updateDumpInfo', updateDumpInfo);
 const formatSize = (bytes) => {
   if (bytes >= 1000000000) {
-    return `${parseFloat((bytes / 1000000000).toFixed(3))} GB`;
+    return `${parseFloat((bytes / 1000000000).toFixed(1))} GB`;
   }
   if (bytes >= 1000000) {
-    return `${parseFloat((bytes / 1000000).toFixed(3))} MB`;
+    return `${parseFloat((bytes / 1000000).toFixed(1))} MB`;
   }
-  return `${parseFloat((bytes / 1000).toFixed(3))} KB`;
+  return `${parseFloat((bytes / 1000).toFixed(1))} KB`;
 };
 const onFilterChange = ({ activeFilters }) => {
   activeFiltersRows.value = activeFilters;
