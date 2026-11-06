@@ -111,8 +111,6 @@ export function useSensors() {
     perChassisQueries.value.flatMap((q) => q.data?.sensors ?? []),
   );
 
-  console.log('sensors', sensors);
-
   // Per-chassis grouping — only include chassis whose query has resolved
   const sensorsByChassis = computed<ChassisSensorGroup[]>(() =>
     perChassisQueries.value

@@ -375,7 +375,6 @@ const filteredSensorsData = computed(() => {
       );
     });
   }
-  console.log('data', data);
   return data;
 });
 
