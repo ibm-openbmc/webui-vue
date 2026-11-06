@@ -166,33 +166,41 @@
             aria-label="io-adapter-capacity"
             @submit.prevent="updateAdapterCapacity()"
           >
+            <span v-if="ioAdapterNodes.length === 0">
+              {{ '--' }}
+            </span>
             <BFormGroup
-              aria-label="slot-count-for-Node-0-io-adapter-enlarged-capacity"
-              :label="$t('pageMemory.slotCountForNode0')"
-              label-for="io-adapter-enlarged-capacity"
+              v-for="item in ioAdapterNodes"
+              :key="item.attributeName"
+              :aria-label="`slot-count-for-node-${item.node}-io-adapter-enlarged-capacity`"
+              :label="$t('pageMemory.slotCountForNode', { node: item.node })"
+              :label-for="`io-adapter-enlarged-capacity-${item.node}`"
               class="mb-3"
             >
               <BFormInput
-                id="io-adapter-enlarged-capacity"
-                v-model.number="ioAdapterCapacity"
-                data-test-id="io-adapter-capacity"
+                :id="`io-adapter-enlarged-capacity-${item.node}`"
+                v-model.number="ioAdapterValues[item.attributeName]"
+                :data-test-id="`io-adapter-capacity-${item.node}`"
                 type="number"
-                :min="ioAdapterCapacityMin"
-                :max="ioAdapterCapacityMax"
-                :state="getValidationState(v$.ioAdapterCapacity)"
+                :min="item.min"
+                :max="item.max"
+                :state="getNodeState(ioAdapterValues, item)"
                 :disabled="!isSectionEditable()"
-                @update:model-value="v$.ioAdapterCapacity.$touch()"
+                @update:model-value="
+                  ioAdapterTouched[item.attributeName] = true
+                "
               ></BFormInput>
               <BFormInvalidFeedback role="alert">
                 {{
                   $t('global.form.valueMustBeBetween', {
-                    min: ioAdapterCapacityMin,
-                    max: ioAdapterCapacityMax,
+                    min: item.min,
+                    max: item.max,
                   })
                 }}
               </BFormInvalidFeedback>
             </BFormGroup>
             <BButton
+              v-if="ioAdapterNodes.length > 0"
               variant="primary"
               type="submit"
               class="mt-3"
@@ -221,38 +229,42 @@
             aria-label="update-io-drawer-attachment"
             @submit.prevent="updateDynamicAdapterCapacity()"
           >
-            <span v-if="dynamicIoDrawerCapacityData === null">
+            <span v-if="dynamicIoDrawerNodes.length === 0">
               {{ '--' }}
             </span>
             <span v-else>
               <BFormGroup
-                :label="$t('pageMemory.slotCountForNode0')"
-                label-for="input-dynamic-io-adapter-drawer-capacity"
-                aria-label="slot-count-for-node0-io-drawer-capacity"
+                v-for="item in dynamicIoDrawerNodes"
+                :key="item.attributeName"
+                :label="$t('pageMemory.slotCountForNode', { node: item.node })"
+                :label-for="`input-dynamic-io-adapter-drawer-capacity-${item.node}`"
+                :aria-label="`slot-count-for-node-${item.node}-io-drawer-capacity`"
                 class="mb-3"
               >
                 <BFormInput
-                  id="input-dynamic-io-adapter-drawer-capacity"
-                  v-model.number="dynamicIoDrawerCapacity"
-                  data-test-id="dynamic-io-adapter-drawer-attachment"
+                  :id="`input-dynamic-io-adapter-drawer-capacity-${item.node}`"
+                  v-model.number="dynamicIoDrawerValues[item.attributeName]"
+                  :data-test-id="`dynamic-io-adapter-drawer-attachment-${item.node}`"
                   type="number"
-                  :min="0"
-                  :max="dynamicIoDrawerDefaultCapacity"
-                  :state="getValidationState(v$.dynamicIoDrawerCapacity)"
+                  :min="item.min"
+                  :max="item.max"
+                  :state="getNodeState(dynamicIoDrawerValues, item)"
                   :disabled="!isSectionEditable()"
-                  @update:model-value="v$.dynamicIoDrawerCapacity.$touch()"
+                  @update:model-value="
+                    dynamicIoDrawerTouched[item.attributeName] = true
+                  "
                 ></BFormInput>
                 <BFormInvalidFeedback role="alert">
                   {{
                     $t('global.form.valueMustBeBetween', {
-                      min: 0,
-                      max: dynamicIoDrawerDefaultCapacity,
+                      min: item.min,
+                      max: item.max,
                     })
                   }}
                 </BFormInvalidFeedback>
               </BFormGroup>
             </span>
-            <span v-if="dynamicIoDrawerCapacityData !== null">
+            <span v-if="dynamicIoDrawerNodes.length > 0">
               <BButton
                 variant="primary"
                 type="submit"
@@ -409,11 +421,8 @@ const { serverStatus } = useSystemInfo();
 const {
   logicalMemorySize,
   logicalMemorySizeOptions,
-  ioAdapterCapacity: ioAdapterCapacityData,
-  ioAdapterCapacityMin: ioAdapterCapacityMinData,
-  ioAdapterCapacityMax: ioAdapterCapacityMaxData,
-  dynamicIoDrawerCapacity: dynamicIoDrawerCapacityData,
-  dynamicIoDrawerDefaultCapacity,
+  ioAdapterNodes,
+  dynamicIoDrawerNodes,
   maxNumHugePages: maxHugePageLimit,
   numHugePages: numHugePagesData,
   memoryMirroringMode,
@@ -423,8 +432,7 @@ const {
   isError,
   saveLogicalMemorySize,
   savePageSetup,
-  saveEnlargedCapacity,
-  saveDynamicCapacity,
+  saveNodeAttributes,
   saveActiveMemoryMirroringMode,
   savePredictiveDynamicMemoryDeallocation,
   isUpdating,
@@ -494,21 +502,52 @@ const quickLinks = ref([
 usePageLoadingBar(isFetching, isError, isUpdating);
 
 // Local state for form inputs with validation
-const ioAdapterCapacity = ref(0);
-const dynamicIoDrawerCapacity = ref(0);
 const systemMemoryPageSetup = ref(0);
 
-const ioAdapterCapacityMin = computed(() => ioAdapterCapacityMinData.value);
-const ioAdapterCapacityMax = computed(() => ioAdapterCapacityMaxData.value);
+// Per-node input values and "edited" flags, keyed by BIOS attribute name
+const ioAdapterValues = ref({});
+const ioAdapterTouched = ref({});
+const dynamicIoDrawerValues = ref({});
+const dynamicIoDrawerTouched = ref({});
 
-// Sync local state with fetched data
-watch(ioAdapterCapacityData, (value) => {
-  if (value !== null) ioAdapterCapacity.value = value;
-});
+// Sync local state with fetched data without overwriting unsaved edits
+function syncNodeValues(nodes, values, touched) {
+  nodes.forEach((item) => {
+    if (!touched[item.attributeName]) {
+      values[item.attributeName] = item.value;
+    }
+  });
+}
 
-watch(dynamicIoDrawerCapacityData, (value) => {
-  if (value !== null) dynamicIoDrawerCapacity.value = value;
-});
+watch(
+  ioAdapterNodes,
+  (nodes) =>
+    syncNodeValues(nodes, ioAdapterValues.value, ioAdapterTouched.value),
+  { immediate: true },
+);
+
+watch(
+  dynamicIoDrawerNodes,
+  (nodes) =>
+    syncNodeValues(
+      nodes,
+      dynamicIoDrawerValues.value,
+      dynamicIoDrawerTouched.value,
+    ),
+  { immediate: true },
+);
+
+function isNodeValueValid(values, item) {
+  const value = values[item.attributeName];
+  if (typeof value !== 'number' || Number.isNaN(value)) return false;
+  if (item.min !== null && value < item.min) return false;
+  if (item.max !== null && value > item.max) return false;
+  return true;
+}
+
+function getNodeState(values, item) {
+  return isNodeValueValid(values, item) ? null : false;
+}
 
 watch(numHugePagesData, (value) => {
   if (value !== null) systemMemoryPageSetup.value = value;
@@ -544,14 +583,6 @@ const rules = computed(() => ({
   form: {
     logicalMemorySizeOption: {},
   },
-  ioAdapterCapacity: {
-    minValue: minValue(ioAdapterCapacityMin.value),
-    maxValue: maxValue(ioAdapterCapacityMax.value),
-  },
-  dynamicIoDrawerCapacity: {
-    minValue: minValue(0),
-    maxValue: maxValue(dynamicIoDrawerDefaultCapacity.value ?? 0),
-  },
   systemMemoryPageSetup: {
     minValue: minValue(0),
     maxValue: maxValue(maxHugePageLimit.value ?? 0),
@@ -560,8 +591,6 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, {
   form,
-  ioAdapterCapacity,
-  dynamicIoDrawerCapacity,
   systemMemoryPageSetup,
 });
 
@@ -598,15 +627,28 @@ async function updatePageSetup() {
   }
 }
 
+function collectNodeAttributes(nodes, values) {
+  return Object.fromEntries(
+    nodes.map((item) => [item.attributeName, values[item.attributeName]]),
+  );
+}
+
 async function updateAdapterCapacity() {
-  if (v$.value.ioAdapterCapacity.$invalid) return;
+  if (
+    !ioAdapterNodes.value.every((n) =>
+      isNodeValueValid(ioAdapterValues.value, n),
+    )
+  )
+    return;
 
   try {
-    await saveEnlargedCapacity(ioAdapterCapacity.value);
+    await saveNodeAttributes(
+      collectNodeAttributes(ioAdapterNodes.value, ioAdapterValues.value),
+    );
     successToast(
       i18n.global.t('pageMemory.toast.successSavingAdapterEnlargedCapacity'),
     );
-    v$.value.ioAdapterCapacity.$reset();
+    ioAdapterTouched.value = {};
   } catch (error) {
     errorToast(
       i18n.global.t('pageMemory.toast.errorSavingAdapterEnlargedCapacity'),
@@ -615,14 +657,24 @@ async function updateAdapterCapacity() {
 }
 
 async function updateDynamicAdapterCapacity() {
-  if (v$.value.dynamicIoDrawerCapacity.$invalid) return;
+  if (
+    !dynamicIoDrawerNodes.value.every((n) =>
+      isNodeValueValid(dynamicIoDrawerValues.value, n),
+    )
+  )
+    return;
 
   try {
-    await saveDynamicCapacity(dynamicIoDrawerCapacity.value);
+    await saveNodeAttributes(
+      collectNodeAttributes(
+        dynamicIoDrawerNodes.value,
+        dynamicIoDrawerValues.value,
+      ),
+    );
     successToast(
       i18n.global.t('pageMemory.toast.successSavingAdapterDynamicCapacity'),
     );
-    v$.value.dynamicIoDrawerCapacity.$reset();
+    dynamicIoDrawerTouched.value = {};
   } catch (error) {
     errorToast(
       i18n.global.t('pageMemory.toast.errorSavingAdapterDynamicCapacity'),

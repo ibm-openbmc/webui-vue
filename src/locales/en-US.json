@@ -1166,7 +1166,7 @@
         "predictiveDynamicMemoryDeallocationTitle": "Predictive dynamic memory deallocation",
         "predictiveDynamicMemoryDeallocationDescription": "The Hypervisor dynamically removes memory pages from memory that detected predictive failures. If this option is disabled, dynamic memory deallocation will not occur for the predictive memory failures.",
         "requestedHugePageMemory": "Requested huge page memory",
-        "slotCountForNode0": "Slot Count for Node 0",
+        "slotCountForNode": "Slot Count for Node {node}",
         "systemMemoryPageSetup": "Improve the application's performance by setting large virtual memory page sizes of 16GB each.",
         "systemMemoryPageSetupTitle": "System memory page setup",
         "updateIoAdapterEnlargedCapacity": "Update I/O Adapter Enlarged Capacity",
