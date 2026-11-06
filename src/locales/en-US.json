@@ -46,7 +46,7 @@
             "screenshotTitle": "Page Screenshot",
             "screenshotDownload": "Download",
             "screenshotUnavailable": "Screenshot feature requires html2canvas. Install it to enable this option.",
-            "nativeMenuHint": "Right click on the left navigation panel for the original context menu.",
+            "nativeMenuHint": "Right click on the left navigation panel for the default context menu.",
             "navigateTo": "Navigate to"
         },
         "fileUpload": {
@@ -828,6 +828,8 @@
             "powerOff": "Power off server",
             "powerOffModalTitle": "Power off server",
             "powerOffModalMessage": "Are you sure you want to power off the server? This will perform an orderly shutdown.",
+            "powerOffRequested": "Power off initiated",
+            "powerOffSuccess": "Power off completed successfully",
             "powerOffError": "Failed to power off the server.",
             "powerOffTimeout": "The server did not power off within the expected time."
         },

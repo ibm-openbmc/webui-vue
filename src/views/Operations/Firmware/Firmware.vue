@@ -135,7 +135,7 @@ function loadingStatus(value) {
 
 // ── Context menu: power off server ──────────────────────────────────────────
 const { t } = useI18n();
-const { errorToast, warningToast } = useToast();
+const { errorToast, warningToast, infoToast, successToast } = useToast();
 const { isPowerOffRequested, requestPowerOff } = useDelayedPowerOff();
 const isPowerOffModalOpen = ref(false);
 
@@ -148,10 +148,15 @@ const isPowerOffDisabled = computed(
 
 function onPowerOffConfirm() {
   requestPowerOff({
-    onPoweredOff: () => refetchSystemInfo(),
+    onPoweredOff: () => {
+      successToast(t('pageFirmware.contextMenu.powerOffSuccess'));
+      refetchSystemInfo();
+    },
     onTimeout: () =>
       warningToast(t('pageFirmware.contextMenu.powerOffTimeout')),
-  }).catch(() => errorToast(t('pageFirmware.contextMenu.powerOffError')));
+  })
+    .then(() => infoToast(t('pageFirmware.contextMenu.powerOffRequested')))
+    .catch(() => errorToast(t('pageFirmware.contextMenu.powerOffError')));
 }
 
 useContextMenu({

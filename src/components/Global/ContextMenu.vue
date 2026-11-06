@@ -300,8 +300,10 @@ export default {
     white-space: nowrap;
     outline: none;
 
+    // :focus-visible, not :focus, so the item focused on open (for keyboard
+    // use) is not highlighted after a mouse right-click.
     &:hover,
-    &:focus {
+    &:focus-visible {
       background: #e8e8e8;
     }
 
