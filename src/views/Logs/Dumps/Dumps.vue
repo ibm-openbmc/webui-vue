@@ -106,7 +106,7 @@
 
             <!-- Size column -->
             <template #cell(size)="{ value }">
-              {{ convertBytesToMegabytes(value) }} MB
+              {{ formatSize(value) }}
             </template>
 
             <!-- Actions column -->
@@ -370,8 +370,17 @@ const updateDumpInfo = (selectedDumpTypeVal) => {
   selectedDumpType.value = selectedDumpTypeVal.toString();
 };
 eventBus.on('updateDumpInfo', updateDumpInfo);
-const convertBytesToMegabytes = (bytes) => {
-  return parseFloat((bytes / 1000000).toFixed(3));
+const formatSize = (bytes) => {
+  if (bytes >= 1000000000) {
+    return `${parseFloat((bytes / 1000000000).toFixed(1))} GB`;
+  }
+  if (bytes >= 1000000) {
+    return `${parseFloat((bytes / 1000000).toFixed(1))} MB`;
+  }
+  if (bytes >= 1000) {
+    return `${parseFloat((bytes / 1000).toFixed(1))} KB`;
+  }
+  return `${Math.round(bytes)} bytes`;
 };
 const onFilterChange = ({ activeFilters }) => {
   activeFiltersRows.value = activeFilters;
