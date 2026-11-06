@@ -206,9 +206,11 @@ onBeforeUnmount(() => {
 
 async function onContextMenuAction(key) {
   switch (key) {
-    case 'selectAll':
-      window.getSelection()?.selectAllChildren(document.body);
+    case 'selectAll': {
+      const target = document.getElementById('app') || document.body;
+      window.getSelection()?.selectAllChildren(target);
       break;
+    }
     case 'screenshot':
       await captureScreenshot();
       break;
@@ -271,7 +273,13 @@ async function onPowerConfirm() {
 async function captureScreenshot() {
   try {
     const { default: html2canvas } = await import('html2canvas');
-    const canvas = await html2canvas(document.body, { useCORS: true });
+    const canvas = await html2canvas(document.body, {
+      useCORS: true,
+      ignoreElements: (element) =>
+        element.classList?.contains('context-menu') ||
+        element.closest?.('.context-menu') ||
+        element.hasAttribute?.('data-html2canvas-ignore'),
+    });
     screenshotDataUrl.value = canvas.toDataURL('image/png');
     screenshotModalOpen.value = true;
   } catch {

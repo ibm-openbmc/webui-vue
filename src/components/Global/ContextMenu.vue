@@ -5,6 +5,7 @@
         v-if="visible"
         ref="menuEl"
         class="context-menu"
+        data-html2canvas-ignore="true"
         role="menu"
         :style="{ top: `${top}px`, left: `${left}px` }"
         @keydown.esc="close"
@@ -207,8 +208,8 @@ export default {
         this.openSubmenuFor(item, event.currentTarget);
         return;
       }
-      this.$emit('action', item.key);
       this.close();
+      this.$emit('action', item.key);
     },
     onItemEnter(item, event) {
       if (item.children && !item.disabled) {
@@ -281,6 +282,9 @@ export default {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 
   &__divider {
     height: 1px;

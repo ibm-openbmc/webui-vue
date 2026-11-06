@@ -13,12 +13,19 @@ export const getCommonItems = () => [
     disabled: !window.history || window.history.length <= 1,
   },
   { key: 'reload', label: t('global.contextMenu.reload') },
-  { key: 'savePageAs', label: t('global.contextMenu.savePageAs') },
+  {
+    key: 'savePageAs',
+    label: t('global.contextMenu.savePageAs'),
+    disabled: true,
+  },
 ];
 
 // Shared actions. `screenshot` is handled by the host (it owns the modal).
 export const commonActions = {
-  selectAll: () => window.getSelection()?.selectAllChildren(document.body),
+  selectAll: () => {
+    const target = document.getElementById('app') || document.body;
+    window.getSelection()?.selectAllChildren(target);
+  },
   back: () => window.history.back(),
   reload: () => window.location.reload(),
   // Triggers the browser's native Save / Print dialog -

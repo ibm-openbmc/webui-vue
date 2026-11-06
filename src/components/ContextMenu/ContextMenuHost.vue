@@ -89,7 +89,13 @@ const onAction = async (key) => {
 const captureScreenshot = async () => {
   try {
     const { default: html2canvas } = await import('html2canvas');
-    const canvas = await html2canvas(document.body, { useCORS: true });
+    const canvas = await html2canvas(document.body, {
+      useCORS: true,
+      ignoreElements: (element) =>
+        element.classList?.contains('context-menu') ||
+        element.closest?.('.context-menu') ||
+        element.hasAttribute?.('data-html2canvas-ignore'),
+    });
     screenshotDataUrl.value = canvas.toDataURL('image/png');
     screenshotModalOpen.value = true;
   } catch {
