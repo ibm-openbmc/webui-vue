@@ -3,12 +3,16 @@
     <page-title :title="$t('appPageTitle.pcieTopology')" />
     <b-row>
       <b-col md="8" xl="6">
-        <alert v-if="isInPhypStandby" variant="info" class="mb-4">
+        <alert v-if="isInPhypStandby && !fetched" variant="info" class="mb-4">
           <span>
             {{ i18n.global.t('pagePcieTopology.alert') }}
           </span>
         </alert>
-        <alert v-else variant="warning" class="mb-4">
+        <alert
+          v-else-if="!isInPhypStandby && !fetched"
+          variant="warning"
+          class="mb-4"
+        >
           <span class="alert-message-link">
             {{ $t('pagePcieTopology.warning') }}
             <router-link to="/operations/server-power-operations">{{
