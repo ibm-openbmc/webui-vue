@@ -12,6 +12,7 @@
       <!-- Scroll to top button -->
       <button-back-to-top />
     </page-container>
+    <context-menu-host />
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import AppHeader from '@/components/AppHeader/AppHeader.vue';
 import AppNavigation from '@/components/AppNavigation/AppNavigation.vue';
 import PageContainer from '@/components/Global/PageContainer.vue';
 import ButtonBackToTop from '@/components/Global/ButtonBackToTop.vue';
+import { ContextMenuHost } from '@/components/ContextMenu';
 import useJumpLinkComposable from '@/components/Composables/useJumpLinkComposable';
 import stores from '@/store';
 import { useRoute } from 'vue-router';

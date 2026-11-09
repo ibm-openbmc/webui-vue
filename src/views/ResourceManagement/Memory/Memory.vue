@@ -395,6 +395,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { useContextMenu } from '@/components/ContextMenu';
 import { useVuelidate } from '@vuelidate/core';
 import { minValue, maxValue } from '@vuelidate/validators';
 import i18n from '@/i18n';
@@ -410,7 +411,7 @@ import stores from '@/store';
 import { useMemory } from '@/api/composables/useMemory';
 import { useSystemInfo } from '@/api/composables/useSystemInfo';
 
-const { scrollToOffset } = useJumpLinkComposable();
+const { scrollToOffset, scrollToRef } = useJumpLinkComposable();
 const { successToast, errorToast } = useToast();
 const { getValidationState } = useVuelidateComposable();
 
@@ -498,6 +499,26 @@ const quickLinks = ref([
     ),
   },
 ]);
+
+// Context menu: "Navigate to" with the quick links as a submenu
+useContextMenu({
+  items: computed(() => [
+    {
+      key: 'navigateTo',
+      label: i18n.global.t('global.contextMenu.navigateTo'),
+      children: quickLinks.value.map((link) => ({
+        key: `navigate-${link.id}`,
+        label: link.linkText,
+      })),
+    },
+  ]),
+  handlers: Object.fromEntries(
+    quickLinks.value.map((link) => [
+      `navigate-${link.id}`,
+      () => scrollToRef(refs, link.dataRef),
+    ]),
+  ),
+});
 
 usePageLoadingBar(isFetching, isError, isUpdating);
 

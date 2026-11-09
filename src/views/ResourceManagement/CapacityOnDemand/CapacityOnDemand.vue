@@ -45,6 +45,7 @@
 <script setup>
 import { ref, computed, reactive } from 'vue';
 import i18n from '@/i18n';
+import { useContextMenu } from '@/components/ContextMenu';
 import PageTitle from '@/components/Global/PageTitle.vue';
 import PageSection from '@/components/Global/PageSection.vue';
 import Alert from '@/components/Global/Alert.vue';
@@ -58,7 +59,7 @@ import stores from '@/store';
 import { useCapacityOnDemand } from '@/api/composables/useCapacityOnDemand';
 import { useSystemInfo } from '@/api/composables/useSystemInfo';
 
-const { scrollToOffset } = useJumpLinkComposable();
+const { scrollToOffset, scrollToRef } = useJumpLinkComposable();
 
 const global = stores.GlobalStore();
 const { serverStatus } = useSystemInfo();
@@ -101,6 +102,26 @@ const quickLinks = reactive([
     linkText: i18n.global.t('pageCapacityOnDemand.vetCapabilities'),
   },
 ]);
+
+// Context menu: "Navigate to" with the quick links as a submenu
+useContextMenu({
+  items: computed(() => [
+    {
+      key: 'navigateTo',
+      label: i18n.global.t('global.contextMenu.navigateTo'),
+      children: quickLinks.map((link) => ({
+        key: `navigate-${link.id}`,
+        label: link.linkText,
+      })),
+    },
+  ]),
+  handlers: Object.fromEntries(
+    quickLinks.map((link) => [
+      `navigate-${link.id}`,
+      () => scrollToRef(refs, link.dataRef),
+    ]),
+  ),
+});
 
 // 1120-vue3 waited for getLicenses() + getSystem(). Track the Vuex getSystem()
 // call as an extra loading flag and combine with licenses isFetching.
