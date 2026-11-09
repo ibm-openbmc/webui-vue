@@ -163,14 +163,32 @@ function toggleSystemAttentionLedSwitch(systemLedState) {
 }
 
 function toggleLampTestSwitch(lampTestState) {
+  if (lampTestState) {
+    globalStore.setLampTestInProgress({ inProgress: true, success: false });
+  }
   changeLampTestState(lampTestState)
     .then((message) => {
-      successToast(message);
+      successToast(message, { progressNote: lampTestState });
       isLampTestEditable.value = false;
       setTimeout(() => {
         isLampTestEditable.value = true;
+        // Lamp test auto-completes after 4 minutes — move to Completed now
+        if (lampTestState) {
+          globalStore.setLampTestInProgress({
+            inProgress: false,
+            success: true,
+          });
+        }
       }, 240000);
     })
-    .catch(({ message }) => errorToast(message));
+    .catch(({ message }) => {
+      if (lampTestState) {
+        globalStore.setLampTestInProgress({
+          inProgress: false,
+          success: false,
+        });
+      }
+      errorToast(message);
+    });
 }
 </script>

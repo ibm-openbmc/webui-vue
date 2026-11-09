@@ -370,6 +370,10 @@ const v$ = useVuelidate(rules, { rpdScheduledRun, rpdScheduledRunDuration });
 const updateImmediateTestRequestedState = async (value) => {
   // Optimistic update for immediate UI response
   localImmediateTestRequested.value = value;
+  if (value) {
+    // Run Now — mark as active immediately; stay active until the user stops
+    global.setImmediateTestInProgress({ inProgress: true, success: false });
+  }
 
   try {
     await saveImmediateTestRequested(value ? 'Enabled' : 'Disabled');
@@ -379,14 +383,18 @@ const updateImmediateTestRequestedState = async (value) => {
         i18n.global.t(
           'pageSystemParameters.toast.successStartingDiagnosticTestRunIfPoweredOff',
         ),
+        { progressNote: true },
       );
     } else if (value) {
       Toast.successToast(
         i18n.global.t(
           'pageSystemParameters.toast.successStartingDiagnosticTestRun',
         ),
+        { progressNote: true },
       );
     } else {
+      // Stop diagnostic test run — move from Active to Completed
+      global.setImmediateTestInProgress({ inProgress: false, success: true });
       Toast.successToast(
         i18n.global.t(
           'pageSystemParameters.toast.successStoppingDiagnosticTestRun',
@@ -398,6 +406,9 @@ const updateImmediateTestRequestedState = async (value) => {
     localImmediateTestRequested.value = !value;
 
     if (value) {
+      // Start failed — the test never began, so clear the active entry.
+      // If a stop failed, the test is still running; leave the entry active.
+      global.setImmediateTestInProgress({ inProgress: false, success: false });
       Toast.errorToast(
         i18n.global.t(
           'pageSystemParameters.toast.errorStartingDiagnosticTestRun',

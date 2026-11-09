@@ -191,7 +191,7 @@ const isButtonDisabled = computed(() => {
   }
 });
 
-const checkTask = async () => {
+const checkTask = async (dumpType = 'Resource') => {
   //getting list of all tasks and getting the api to the most recent task
   const taskObj = await getTask();
   taskProgress.value = taskObj.data.Members[taskObj.data.Members.length - 1];
@@ -204,6 +204,10 @@ const checkTask = async () => {
     checkCounter++;
     //if 'TaskState' is in running state for more than 20 mins, error message will be displayed to the user
     if (checkCounter > 40) {
+      global.setDumpGenerationInProgress({
+        inProgress: false,
+        success: false,
+      });
       return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
     }
     Promise.all([currentTask()]).then((res) => {
@@ -211,6 +215,11 @@ const checkTask = async () => {
       const taskState = res[0]['TaskState'];
       //if TaskState is completed
       if (taskState == 'Completed') {
+        global.setDumpGenerationInProgress({
+          inProgress: false,
+          success: true,
+          dumpType,
+        });
         successToast(i18n.global.t('pageDumps.toast.resourceDumpSuccess'));
         //if TaskState is running/in progress
       } else if (taskState == 'Running') {
@@ -220,6 +229,10 @@ const checkTask = async () => {
         }, 30000);
         //if TaskState is Cancelled
       } else if (taskState == 'Cancelled') {
+        global.setDumpGenerationInProgress({
+          inProgress: false,
+          success: false,
+        });
         errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
       }
     });
@@ -228,6 +241,10 @@ const checkTask = async () => {
   if (taskLink) {
     currentTaskProgress(0);
   } else {
+    global.setDumpGenerationInProgress({
+      inProgress: false,
+      success: false,
+    });
     return errorToast(i18n.global.t('pageDumps.toast.resourceDumpFailed'));
   }
 };
@@ -266,6 +283,10 @@ const handleSubmit = () => {
   }
   // Resource dump initiation
   else if (selectedDumpType.value === 'resource') {
+    global.setDumpGenerationInProgress({
+      inProgress: true,
+      dumpType: 'Resource',
+    });
     createResourceDump({
       resourceSelector: resourceSelectorValue.value,
       // If not logged as service, '' must be used
@@ -275,10 +296,17 @@ const handleSubmit = () => {
         infoToast(i18n.global.t('pageDumps.toast.successStartDump'), {
           title: i18n.global.t('pageDumps.toast.successStartResourceDumpTitle'),
           timestamp: true,
+          progressNote: true,
         });
         checkTask();
       })
-      .catch(({ message }) => errorToast(message));
+      .catch(({ message }) => {
+        global.setDumpGenerationInProgress({
+          inProgress: false,
+          success: false,
+        });
+        errorToast(message);
+      });
   }
   // BMC dump initiation
   else if (selectedDumpType.value === 'bmc') {

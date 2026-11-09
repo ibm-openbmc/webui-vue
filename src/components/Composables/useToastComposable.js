@@ -4,7 +4,14 @@ import { useToast } from 'bootstrap-vue-next';
 import Toast from '../Global/Toast.vue'; // Need to be removed when styling library is changed
 const useToastComposable = () => {
   const { show } = useToast();
-  const initToast = (title, body, statusPassed, timestamp, refreshAction) => {
+  const initToast = (
+    title,
+    body,
+    statusPassed,
+    timestamp,
+    refreshAction,
+    progressNote,
+  ) => {
     show?.({
       props: () => ({
         //Success toast autoHideDelay - 10 seconds, Error/Info toast autohidedelay - 30 minutes
@@ -17,6 +24,7 @@ const useToastComposable = () => {
         pos: 'top-right',
         timestamp: timestamp,
         refreshAction: refreshAction,
+        progressNote: progressNote,
       }),
     });
   };
@@ -26,9 +34,10 @@ const useToastComposable = () => {
       title: t = i18n.global.t('global.status.success'),
       timestamp,
       refreshAction,
+      progressNote,
     } = {},
   ) => {
-    initToast(t, message, 'success', timestamp, refreshAction);
+    initToast(t, message, 'success', timestamp, refreshAction, progressNote);
   };
   const errorToast = (
     message,
@@ -56,9 +65,10 @@ const useToastComposable = () => {
       title: t = i18n.global.t('global.status.informational'),
       timestamp,
       refreshAction,
+      progressNote,
     } = {},
   ) => {
-    initToast(t, message, 'info', timestamp, refreshAction);
+    initToast(t, message, 'info', timestamp, refreshAction, progressNote);
   };
 
   return {

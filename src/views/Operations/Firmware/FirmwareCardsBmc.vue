@@ -170,6 +170,9 @@ function switchToRunning() {
   startLoader();
   emit('loadingStatus', loading.value);
 
+  // Set firmware switch in progress
+  globalStore.setFirmwareSwitchInProgress({ inProgress: true, success: false });
+
   // Step 1 - Switch firmware
   const switchFirmware = () => {
     if (!isReadonly()) {
@@ -178,6 +181,7 @@ function switchToRunning() {
         {
           title: i18n.global.t('pageFirmware.toast.switchToRunning.step1'),
           timestamp: true,
+          progressNote: true,
         },
       );
     }
@@ -185,12 +189,17 @@ function switchToRunning() {
       .then(async () => bmcReboot())
       .catch((error) => {
         endLoader();
+        globalStore.setFirmwareSwitchInProgress({
+          inProgress: false,
+          success: false,
+        });
         errorToast(error.message);
       });
   };
 
   // Step 2 - BMC Reboot
   const bmcReboot = () => {
+    globalStore.setFirmwareSwitchStep(2);
     infoToast(
       i18n.global.t('pageFirmware.toast.switchToRunning.step2Message'),
       {
@@ -206,6 +215,10 @@ function switchToRunning() {
       // if this function runs more than 10 times, it won't run anymore
       if (checkCounter > 10) {
         endLoader();
+        globalStore.setFirmwareSwitchInProgress({
+          inProgress: false,
+          success: false,
+        });
         return errorToast(
           i18n.global.t('pageFirmware.toast.errorSwitchImages'),
         );
@@ -229,8 +242,13 @@ function switchToRunning() {
 
   // Step 3 - Firmware switch complete
   const step3 = () => {
+    globalStore.setFirmwareSwitchStep(3);
     setTimeout(() => {
       endLoader();
+      globalStore.setFirmwareSwitchInProgress({
+        inProgress: false,
+        success: true,
+      });
       return infoToast(
         i18n.global.t('pageFirmware.toast.switchToRunning.step3Message'),
         {

@@ -515,7 +515,14 @@ export function useLocationCodes() {
  */
 export function useServerPowerControl() {
   const queryClient = useQueryClient();
+  const globalStore = stores.GlobalStore();
   const isOperationInProgress = ref(false);
+
+  // Notification centre: mark the server power operation as finished.
+  // Called on failure (success=false) or once the target status is reached.
+  const finishNotification = (success: boolean) => {
+    globalStore.setServerPowerInProgress({ inProgress: false, success });
+  };
 
   const waitForStatus = (targetStatus: string): Promise<void> => {
     return new Promise((resolve) => {
@@ -557,8 +564,12 @@ export function useServerPowerControl() {
     });
   };
 
-  const powerChange = async (data: { ResetType: string }): Promise<boolean> => {
+  const powerChange = async (
+    data: { ResetType: string },
+    operationType: string,
+  ): Promise<boolean> => {
     isOperationInProgress.value = true;
+    globalStore.setServerPowerInProgress({ inProgress: true, operationType });
     await api.post(
       '/redfish/v1/Systems/system/Actions/ComputerSystem.Reset',
       data,
@@ -569,61 +580,82 @@ export function useServerPowerControl() {
   const afterOps = async (targetStatus: string) => {
     await waitForStatus(targetStatus);
     isOperationInProgress.value = false;
+    finishNotification(true);
     queryClient.invalidateQueries({ queryKey: ['spo', 'system'] });
   };
 
   const serverPowerOnMutation = useMutation({
     mutationFn: async () => {
-      const result = await powerChange({ ResetType: 'On' });
+      const result = await powerChange(
+        { ResetType: 'On' },
+        i18n.global.t('pageServerPowerOperations.powerOn'),
+      );
       afterOps('on');
       return result;
     },
     onError: () => {
       isOperationInProgress.value = false;
+      finishNotification(false);
     },
   });
 
   const serverSoftRebootMutation = useMutation({
     mutationFn: async () => {
-      const result = await powerChange({ ResetType: 'GracefulRestart' });
+      const result = await powerChange(
+        { ResetType: 'GracefulRestart' },
+        i18n.global.t('pageServerPowerOperations.reboot'),
+      );
       afterOps('on');
       return result;
     },
     onError: () => {
       isOperationInProgress.value = false;
+      finishNotification(false);
     },
   });
 
   const serverHardRebootMutation = useMutation({
     mutationFn: async () => {
-      const result = await powerChange({ ResetType: 'ForceRestart' });
+      const result = await powerChange(
+        { ResetType: 'ForceRestart' },
+        i18n.global.t('pageServerPowerOperations.reboot'),
+      );
       afterOps('on');
       return result;
     },
     onError: () => {
       isOperationInProgress.value = false;
+      finishNotification(false);
     },
   });
 
   const serverSoftPowerOffMutation = useMutation({
     mutationFn: async () => {
-      const result = await powerChange({ ResetType: 'GracefulShutdown' });
+      const result = await powerChange(
+        { ResetType: 'GracefulShutdown' },
+        i18n.global.t('pageServerPowerOperations.shutDown'),
+      );
       afterOps('off');
       return result;
     },
     onError: () => {
       isOperationInProgress.value = false;
+      finishNotification(false);
     },
   });
 
   const serverHardPowerOffMutation = useMutation({
     mutationFn: async () => {
-      const result = await powerChange({ ResetType: 'ForceOff' });
+      const result = await powerChange(
+        { ResetType: 'ForceOff' },
+        i18n.global.t('pageServerPowerOperations.shutDown'),
+      );
       afterOps('off');
       return result;
     },
     onError: () => {
       isOperationInProgress.value = false;
+      finishNotification(false);
     },
   });
 
