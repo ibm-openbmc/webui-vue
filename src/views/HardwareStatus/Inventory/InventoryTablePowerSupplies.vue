@@ -159,7 +159,7 @@
         </b-container>
       </template>
       <template #empty>
-        <span v-if="isBusy">
+        <span v-if="isBusy || psLoading">
           {{ $t('global.table.loading') }}
         </span>
         <span v-else-if="searchFilterInput">
@@ -184,7 +184,7 @@ import useTableRowExpandComposable from '../../../components/Composables/useTabl
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import { ref, reactive, computed, watch, onBeforeMount, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
-import stores from '../../../store';
+import { useSystemInfo } from '@/api/composables/useSystemInfo';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { BFormCheckbox } from 'bootstrap-vue-next';
@@ -210,7 +210,7 @@ const {
   isLoading: psLoading,
   updateIdentifyLed,
 } = usePowerSupplies(() => props.chassis);
-const globalStore = stores.GlobalStore();
+const { serverStatus: hostStatus } = useSystemInfo();
 
 const isBusy = ref(false);
 const fields = reactive([
@@ -281,14 +281,14 @@ onBeforeMount(() => {
 const serverStatus = computed(() => {
   if (props.chassis.endsWith('chassis')) {
     return false;
-  } else if (globalStore.serverStatusGetter !== 'on') {
+  } else if (hostStatus.value !== 'on') {
     return true;
   } else {
     return false;
   }
 });
 const isPoweredOff = computed(() => {
-  if (globalStore.serverStatusGetter === 'off') {
+  if (hostStatus.value === 'off') {
     return true;
   } else {
     return false;

@@ -114,7 +114,7 @@
         </b-container>
       </template>
       <template #empty>
-        <span v-if="isBusy">
+        <span v-if="isBusy || systemLoading">
           {{ $t('global.table.loading') }}
         </span>
         <span v-else>

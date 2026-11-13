@@ -154,7 +154,7 @@
         </b-container>
       </template>
       <template #empty>
-        <span v-if="isBusy">
+        <span v-if="isBusy || processorsLoading">
           {{ $t('global.table.loading') }}
         </span>
         <span v-else-if="searchFilterInput">

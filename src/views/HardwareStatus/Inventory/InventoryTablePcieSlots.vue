@@ -74,7 +74,7 @@
         </b-container>
       </template>
       <template #empty>
-        <span v-if="isBusy">
+        <span v-if="isBusy || pcieSlotsLoading">
           {{ $t('global.table.loading') }}
         </span>
         <span v-else-if="searchFilterInput">
@@ -95,7 +95,7 @@ import { reactive, ref, computed, watch, onBeforeMount, nextTick } from 'vue';
 
 import InfoTooltip from '@/components/Global/InfoTooltip.vue';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-import stores from '../../../store';
+import { useSystemInfo } from '@/api/composables/useSystemInfo';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { useI18n } from 'vue-i18n';
@@ -121,7 +121,7 @@ const {
   isLoading: pcieSlotsLoading,
   updateIdentifyLed,
 } = usePcieSlots(() => props.chassis);
-const globalStore = stores.GlobalStore();
+const { serverStatus: hostStatus } = useSystemInfo();
 
 const searchTotalFilteredRows = ref(0);
 const isBusy = ref(false);
@@ -175,7 +175,7 @@ const pcieSlots = computed(() => {
 const serverStatus = computed(() => {
   if (props.chassis.endsWith('chassis')) {
     return false;
-  } else if (globalStore.serverStatusGetter !== 'on') {
+  } else if (hostStatus.value !== 'on') {
     return true;
   } else {
     return false;

@@ -199,7 +199,7 @@ import { useI18n } from 'vue-i18n';
 import useJumpLinkComposable from '../../../components/Composables/useJumpLinkComposable';
 import { BLink } from 'bootstrap-vue-next';
 import { useInventory } from '@/api/composables/useInventory';
-import stores from '@/store';
+import { useSystemInfo } from '@/api/composables/useSystemInfo';
 
 const { startLoader, endLoader } = useLoadingBar();
 const { t } = useI18n();
@@ -210,7 +210,7 @@ const {
   refetch: fetchChassis,
   isLoading: inventoryLoading,
 } = useInventory();
-const global = stores.GlobalStore();
+const { serverStatus } = useSystemInfo();
 
 const isBusy = ref(false);
 const currentTab = ref(0);
@@ -314,7 +314,6 @@ const quicklinkColumns = computed(() => {
 const quicklinkMexColumns = computed(() => {
   return chunk(mexLinks, 2);
 });
-const serverStatus = computed(() => global.serverStatus);
 const isPoweredOff = computed(() =>
   serverStatus.value === 'off' ? true : false,
 );

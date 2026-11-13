@@ -154,7 +154,7 @@
         </b-container>
       </template>
       <template #empty>
-        <span v-if="isBusy">
+        <span v-if="isBusy || fansLoading">
           {{ $t('global.table.loading') }}
         </span>
         <span v-else-if="searchFilterInput">
@@ -177,7 +177,7 @@ import Search from '@/components/Global/Search.vue';
 import { reactive, ref, computed, watch, onBeforeMount, nextTick } from 'vue';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
-import stores from '../../../store';
+import { useSystemInfo } from '@/api/composables/useSystemInfo';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { useI18n } from 'vue-i18n';
@@ -204,7 +204,7 @@ const {
   isLoading: fansLoading,
   updateIdentifyLed,
 } = useFans(() => props.chassis);
-const globalStore = stores.GlobalStore();
+const { serverStatus: hostStatus } = useSystemInfo();
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
@@ -276,7 +276,7 @@ const filteredRows = computed(() => {
 const serverStatus = computed(() => {
   if (props.chassis.endsWith('chassis')) {
     return false;
-  } else if (globalStore.serverStatus !== 'on') {
+  } else if (hostStatus.value !== 'on') {
     return true;
   } else {
     return false;
@@ -284,7 +284,7 @@ const serverStatus = computed(() => {
 });
 
 const isPoweredOff = computed(() => {
-  if (globalStore.serverStatus === 'off') {
+  if (hostStatus.value === 'off') {
     return true;
   } else {
     return false;
