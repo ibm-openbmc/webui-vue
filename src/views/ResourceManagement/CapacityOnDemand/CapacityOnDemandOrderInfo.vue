@@ -41,7 +41,7 @@
               </p>
               <p>
                 {{ $t('pageCapacityOnDemand.orderInfo.systemCodPublicKey') }}:
-                <span class="fw-bold">
+                <span class="fw-bold public-key">
                   {{ dataFormatter(systemCodPublicKey) }}
                 </span>
               </p>
@@ -193,6 +193,10 @@ const systemAnchor = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+.public-key {
+  word-break: break-all;
+}
+
 .no-underline-link {
   :deep(a) {
     text-decoration: none;
