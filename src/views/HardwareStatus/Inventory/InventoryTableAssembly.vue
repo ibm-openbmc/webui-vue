@@ -148,7 +148,7 @@
         </BContainer>
       </template>
       <template #empty>
-        <span v-if="isBusy">
+        <span v-if="isBusy || assemblyLoading">
           {{ $t('global.table.loading') }}
         </span>
         <span v-else-if="searchFilterInput">
@@ -173,7 +173,7 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useTableRowExpandComposable from '../../../components/Composables/useTableRowExpandComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
-import stores from '../../../store';
+import { useSystemInfo } from '@/api/composables/useSystemInfo';
 import eventBus from '@/eventBus';
 import { useAssembly } from '@/api/composables/useAssembly';
 
@@ -191,12 +191,12 @@ const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 const { expandRowLabel, toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();
 
-const globalStore = stores.GlobalStore();
+const { serverStatus: hostStatus } = useSystemInfo();
 const {
   assemblies,
   isLoading: assemblyLoading,
   updateIdentifyLed,
-} = useAssembly();
+} = useAssembly(() => props.chassis);
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
@@ -269,7 +269,7 @@ const filteredRows = computed(() => {
 const serverStatus = computed(() => {
   if (props.chassis.endsWith('chassis')) {
     return false;
-  } else if (globalStore.serverStatusGetter !== 'on') {
+  } else if (hostStatus.value !== 'on') {
     return true;
   } else {
     return false;
@@ -277,7 +277,7 @@ const serverStatus = computed(() => {
 });
 
 const isPoweredOff = computed(() => {
-  if (globalStore.serverStatusGetter === 'off') {
+  if (hostStatus.value === 'off') {
     return true;
   } else {
     return false;

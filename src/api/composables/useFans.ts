@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue';
+import type { MaybeRefOrGetter } from 'vue';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore
 import api from '@/store/api';
@@ -79,9 +80,9 @@ function getDefaultUIState(): FanUIState {
 /**
  * Composable for fetching Fans via Chassis → ThermalSubsystem → Fans with TanStack Query.
  * Follows the same pattern as useAuditLogs — useAllSubResources handles multi-level
- * navigation; a watch converts raw data to the processed shape while preserving UI state.
+ * navigation, scoped to the selected chassis tab via `chassisUri`; a watch converts raw data to the processed shape while preserving UI state.
  */
-export function useFans() {
+export function useFans(chassisUri?: MaybeRefOrGetter<string | undefined>) {
   const queryClient = useQueryClient();
 
   const {
@@ -90,6 +91,8 @@ export function useFans() {
     refetch,
   } = useAllSubResources<RawFan>(PARENT_PATH, SUB_KEY, {
     queryConfig: RedfishQueryPresets.inventory,
+    parentUri: chassisUri,
+    nestedKeys: ['Fans'],
   });
 
   const fans = ref<ProcessedFan[]>([]);

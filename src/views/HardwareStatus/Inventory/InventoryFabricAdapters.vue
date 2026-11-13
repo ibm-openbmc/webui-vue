@@ -146,7 +146,7 @@
         </b-container>
       </template>
       <template #empty>
-        <span v-if="isBusy">
+        <span v-if="isBusy || faLoading">
           {{ $t('global.table.loading') }}
         </span>
         <span v-else-if="searchFilterInput">
@@ -170,7 +170,7 @@ import useDataFormatterGlobal from '../../../components/Composables/useDataForma
 import useSearchFilterComposable from '../../../components/Composables/useSearchFilterComposable';
 import { useI18n } from 'vue-i18n';
 import { reactive, ref, computed, watch, onBeforeMount, nextTick } from 'vue';
-import stores from '../../../store';
+import { useSystemInfo } from '@/api/composables/useSystemInfo';
 import eventBus from '@/eventBus';
 import useToast from '@/components/Composables/useToastComposable';
 import { useFabricAdapters } from '@/api/composables/useFabricAdapters';
@@ -182,20 +182,20 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
 const { toggleRow } = useTableRowExpandComposable();
 const { successToast, errorToast } = useToast();
 
-const globalStore = stores.GlobalStore();
-const {
-  fabricAdapters,
-  isLoading: faLoading,
-  updateIdentifyLed,
-} = useFabricAdapters();
-const { expandRowLabel } = useTableRowExpandComposable();
-
+const { serverStatus: hostStatus } = useSystemInfo();
 const props = defineProps({
   chassis: {
     type: String,
     default: '',
   },
 });
+
+const {
+  fabricAdapters,
+  isLoading: faLoading,
+  updateIdentifyLed,
+} = useFabricAdapters(() => props.chassis);
+const { expandRowLabel } = useTableRowExpandComposable();
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);
@@ -266,7 +266,7 @@ const filteredRows = computed(() => {
 const serverStatus = computed(() => {
   if (props.chassis.endsWith('chassis')) {
     return false;
-  } else if (globalStore.serverStatusGetter !== 'on') {
+  } else if (hostStatus.value !== 'on') {
     return true;
   } else {
     return false;
@@ -274,7 +274,7 @@ const serverStatus = computed(() => {
 });
 
 const isPoweredOff = computed(() => {
-  if (globalStore.serverStatusGetter === 'off') {
+  if (hostStatus.value === 'off') {
     return true;
   } else {
     return false;

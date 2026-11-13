@@ -1,10 +1,12 @@
-import { ref, watch } from 'vue';
+import { computed, ref, toValue, watch } from 'vue';
+import type { MaybeRefOrGetter } from 'vue';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore
 import api from '@/store/api';
 // @ts-ignore
 import i18n from '@/i18n';
 import { useRedfishCollection } from './useRedfishCollection';
+import { useAllSubResources } from './useAllSubResources';
 import { RedfishQueryPresets } from './shared/queryConfig';
 import type { Resource } from '@/types/redfish';
 
@@ -36,7 +38,12 @@ export interface ProcessedFabricAdapter
   extends FabricAdapterData,
     FabricAdapterUIState {}
 
+interface RawPcieSlotsContainer extends Resource {
+  Slots?: Array<{ Links?: { PCIeDevice?: Array<{ '@odata.id': string }> } }>;
+}
+
 interface RawFabricAdapter extends Resource {
+  Links?: { PCIeDevices?: Array<{ '@odata.id': string }> };
   Status?: { Health?: string; State?: string };
   LocationIndicatorActive?: boolean;
   Location?: { PartLocation?: { ServiceLabel?: string } };
@@ -78,20 +85,61 @@ function getDefaultUIState(): FabricAdapterUIState {
 }
 
 /**
- * Composable for fetching Fabric Adapters with TanStack Query.
- * Follows the same pattern as useAuditLogs — useRedfishCollection handles
- * OData $expand, batching and caching; a watch converts raw data to the
- * processed shape while preserving UI state.
+ * Composable for fetching the Fabric Adapters that belong to a single chassis.
+ * The chassis URI may be a ref/getter so the data follows the selected
+ * inventory tab.
+ *
+ * Fabric adapters live under the system, so they are assigned to a chassis by
+ * matching the adapter's PCIe device against the chassis' PCIeSlots. Adapters
+ * with no PCIe device link ("motherboard") belong to the system chassis
+ * (URI ending in `/chassis`).
  */
-export function useFabricAdapters() {
+export function useFabricAdapters(chassisUri: MaybeRefOrGetter<string>) {
   const queryClient = useQueryClient();
+  const chassisPath = computed(() => toValue(chassisUri));
 
   const {
-    data: fabricAdaptersRaw,
-    isLoading,
+    data: allFabricAdaptersRaw,
+    isLoading: adaptersLoading,
     refetch,
   } = useRedfishCollection<RawFabricAdapter>(COLLECTION_PATH, {
     queryConfig: RedfishQueryPresets.inventory,
+  });
+
+  // PCIeSlots of the selected chassis only (same lookup as the PCIe slots table)
+  const { data: pcieSlotsRaw, isLoading: slotsLoading } =
+    useAllSubResources<RawPcieSlotsContainer>(
+      '/redfish/v1/Chassis',
+      'PCIeSlots',
+      {
+        queryConfig: RedfishQueryPresets.inventory,
+        parentUri: chassisPath,
+      },
+    );
+
+  const isLoading = computed(() => adaptersLoading.value || slotsLoading.value);
+
+  const fabricAdaptersRaw = computed(() => {
+    const adapters = allFabricAdaptersRaw.value;
+    if (!adapters || !chassisPath.value) return undefined;
+    // Wait for the slots so the first render doesn't flash unfiltered adapters
+    if (slotsLoading.value) return undefined;
+
+    const slotDeviceUris = new Set(
+      (pcieSlotsRaw.value ?? [])
+        .flatMap((container) => container.Slots ?? [])
+        .map((slot) => slot.Links?.PCIeDevice?.[0]?.['@odata.id'])
+        .filter(Boolean),
+    );
+    const isSystemChassis = chassisPath.value.endsWith('chassis');
+
+    return adapters.filter((adapter) => {
+      const deviceUri = adapter.Links?.PCIeDevices?.[0]?.['@odata.id'];
+      if (adapter.Links?.PCIeDevices?.length) {
+        return !!deviceUri && slotDeviceUris.has(deviceUri);
+      }
+      return adapter['@odata.id'].includes('motherboard') && isSystemChassis;
+    });
   });
 
   const fabricAdapters = ref<ProcessedFabricAdapter[]>([]);

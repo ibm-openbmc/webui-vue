@@ -1,14 +1,12 @@
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, toValue } from 'vue';
+import type { MaybeRefOrGetter } from 'vue';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore
 import api from '@/store/api';
 // @ts-ignore
 import i18n from '@/i18n';
-import { useRedfishCollection } from './useRedfishCollection';
 import { RedfishQueryPresets } from './shared/queryConfig';
-import type { Chassis } from '@/types/redfish';
 
-const CHASSIS_PATH = '/redfish/v1/Chassis';
 const QUERY_KEY = ['redfish', 'inventory', 'assemblies'];
 
 // Base assembly item data interface (server data only)
@@ -70,52 +68,29 @@ function getDefaultUIState(): AssemblyItemUIState {
 }
 
 /**
- * Composable for fetching Assembly data with TanStack Query.
+ * Composable for fetching Assembly data of a single chassis with TanStack Query.
  *
  * Assembly is NOT a sub-collection — it is a single resource at
  * `{chassisUri}/Assembly` whose `Assemblies` array holds the items.
  * This matches exactly what the original AssemblyStore.getAssemblyInfo() did:
  *   api.get(`${chassis}/Assembly`).then(({ data }) => data.Assemblies)
  *
- * Follows the same pattern as useAuditLogs — a watch converts raw data to the
- * processed shape while preserving UI state.
+ * The chassis URI may be a ref/getter so the data follows the selected
+ * inventory tab. Follows the same pattern as useAuditLogs — a watch converts
+ * raw data to the processed shape while preserving UI state.
  */
-export function useAssembly() {
+export function useAssembly(chassisUri: MaybeRefOrGetter<string>) {
   const queryClient = useQueryClient();
+  const chassisPath = computed(() => toValue(chassisUri));
 
-  // Step 1: get the list of Chassis URIs
-  const { data: chassisRaw, isLoading: chassisLoading } =
-    useRedfishCollection<Chassis>(CHASSIS_PATH, {
-      queryConfig: RedfishQueryPresets.inventory,
-    });
-
-  const chassisUris = computed(
-    () => chassisRaw.value?.map((c: Chassis) => c['@odata.id']) ?? [],
-  );
-
-  const isSubQueryEnabled = computed(
-    () => !chassisLoading.value && chassisUris.value.length > 0,
-  );
-
-  // Step 2: for each chassis fetch {uri}/Assembly and collect data.Assemblies
   const assemblyQuery = useQuery({
-    queryKey: [...QUERY_KEY, chassisUris],
+    queryKey: [...QUERY_KEY, chassisPath],
     queryFn: async (): Promise<AssemblyItemData[]> => {
-      const uris = chassisUris.value;
-      if (uris.length === 0) return [];
-
-      const responses = await Promise.all(
-        uris.map((uri: string) =>
-          api
-            .get(`${uri}/Assembly`)
-            .then((r: any) => r.data?.Assemblies ?? [])
-            .catch(() => []),
-        ),
-      );
-
-      return (responses as RawAssemblyItem[][]).flat().map(processAssembly);
+      const response = await api.get(`${chassisPath.value}/Assembly`);
+      const items: RawAssemblyItem[] = response.data?.Assemblies ?? [];
+      return items.map(processAssembly);
     },
-    enabled: isSubQueryEnabled,
+    enabled: computed(() => !!chassisPath.value),
     ...RedfishQueryPresets.inventory,
   });
 
@@ -210,9 +185,7 @@ export function useAssembly() {
 
   return {
     assemblies,
-    isLoading: computed(
-      () => chassisLoading.value || assemblyQuery.isLoading.value,
-    ),
+    isLoading: assemblyQuery.isLoading,
     refetch: assemblyQuery.refetch,
     updateIdentifyLed,
   };
