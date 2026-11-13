@@ -198,19 +198,19 @@ const { statusIconValue } = useDataFormatterGlobal();
 const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
 
-const {
-  powerSupplies,
-  isLoading: psLoading,
-  updateIdentifyLed,
-} = usePowerSupplies();
-const globalStore = stores.GlobalStore();
-
 const props = defineProps({
   chassis: {
     type: String,
     default: '',
   },
 });
+
+const {
+  powerSupplies,
+  isLoading: psLoading,
+  updateIdentifyLed,
+} = usePowerSupplies(() => props.chassis);
+const globalStore = stores.GlobalStore();
 
 const isBusy = ref(false);
 const fields = reactive([

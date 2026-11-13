@@ -192,15 +192,19 @@ const { toggleRow } = useTableRowExpandComposable();
 const { t } = useI18n();
 const { dataFormatter, statusIconValue } = useDataFormatterGlobal();
 
-const { fans, isLoading: fansLoading, updateIdentifyLed } = useFans();
-const globalStore = stores.GlobalStore();
-
 const props = defineProps({
   chassis: {
     type: String,
     default: '',
   },
 });
+
+const {
+  fans,
+  isLoading: fansLoading,
+  updateIdentifyLed,
+} = useFans(() => props.chassis);
+const globalStore = stores.GlobalStore();
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);

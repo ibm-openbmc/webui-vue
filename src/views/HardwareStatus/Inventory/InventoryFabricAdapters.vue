@@ -183,19 +183,19 @@ const { toggleRow } = useTableRowExpandComposable();
 const { successToast, errorToast } = useToast();
 
 const globalStore = stores.GlobalStore();
-const {
-  fabricAdapters,
-  isLoading: faLoading,
-  updateIdentifyLed,
-} = useFabricAdapters();
-const { expandRowLabel } = useTableRowExpandComposable();
-
 const props = defineProps({
   chassis: {
     type: String,
     default: '',
   },
 });
+
+const {
+  fabricAdapters,
+  isLoading: faLoading,
+  updateIdentifyLed,
+} = useFabricAdapters(() => props.chassis);
+const { expandRowLabel } = useTableRowExpandComposable();
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);

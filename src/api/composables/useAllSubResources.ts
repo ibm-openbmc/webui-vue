@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/vue-query';
 import type { UseQueryOptions } from '@tanstack/vue-query';
-import { computed } from 'vue';
+import { computed, toValue } from 'vue';
+import type { MaybeRefOrGetter } from 'vue';
 import api from '@/store/api';
 import {
   useRedfishCollection,
@@ -13,10 +14,20 @@ import { batchFetch } from './shared/useBatchedRequests';
 // Re-export helpers for consistent imports across all composables
 export { useRedfishCollection, useRedfishResource };
 
+const normalizeUri = (uri: string) => uri.replace(/\/+$/, '');
+
 /**
  * Generic pattern for fetching nested resources from parent collections
  * Example: Fetch all Memory from all Systems
  * Example: Fetch all Sensors from all Chassis
+ *
+ * Options:
+ * - `parentUri`: restrict to a single parent (e.g. one chassis `@odata.id`).
+ *   May be a ref/getter so the data follows the selected tab. When provided
+ *   but empty, the query stays disabled.
+ * - `nestedKeys`: extra links to follow below the sub-resource before reading
+ *   the final collection. Example: key `ThermalSubsystem` + nestedKeys
+ *   `['Fans']` reads Chassis → ThermalSubsystem → Fans.
  */
 export function useAllSubResources<T extends Resource>(
   parentCollectionPath: string,
@@ -24,20 +35,36 @@ export function useAllSubResources<T extends Resource>(
   options: {
     enabled?: boolean;
     queryConfig?: Partial<UseQueryOptions<T[]>>;
+    parentUri?: MaybeRefOrGetter<string | undefined>;
+    nestedKeys?: string[];
   } = {},
 ) {
-  const { enabled = true, queryConfig } = options;
+  const { enabled = true, queryConfig, parentUri, nestedKeys = [] } = options;
 
   const parentQuery = useRedfishCollection<Resource>(parentCollectionPath, {
     enabled,
   });
+
+  // `undefined` option => no filtering; otherwise the (possibly empty) selected URI
+  const selectedParentUri = computed(() =>
+    parentUri === undefined ? undefined : (toValue(parentUri) ?? ''),
+  );
 
   const subResourcePaths = computed(() => {
     if (!parentQuery.data.value) {
       return [];
     }
 
-    const parentResources = parentQuery.data.value;
+    const selected = selectedParentUri.value;
+    if (selected === '') {
+      return [];
+    }
+
+    const parentResources = parentQuery.data.value.filter(
+      (parent: any) =>
+        selected === undefined ||
+        normalizeUri(parent?.['@odata.id'] ?? '') === normalizeUri(selected),
+    );
 
     const paths: string[] = [];
     parentResources.forEach((parent: any) => {
@@ -68,14 +95,28 @@ export function useAllSubResources<T extends Resource>(
 
   // Fetch all sub-resources
   const query = useQuery({
-    queryKey: [
+    queryKey: computed(() => [
       'redfish',
       'allSubResources',
       parentCollectionPath,
       subResourceKey,
-    ],
+      selectedParentUri.value ?? null,
+      nestedKeys,
+    ]),
     queryFn: async (): Promise<T[]> => {
-      const paths = subResourcePaths.value;
+      let paths = subResourcePaths.value;
+
+      // Follow any nested links (e.g. ThermalSubsystem → Fans)
+      for (const key of nestedKeys) {
+        if (paths.length === 0) break;
+        const resources = await batchFetch<Record<string, any>>(paths, {
+          concurrency: 6,
+          retry: true,
+        });
+        paths = resources
+          .map((resource) => resource?.[key]?.['@odata.id'] as string)
+          .filter(Boolean);
+      }
 
       if (paths.length === 0) {
         return [];

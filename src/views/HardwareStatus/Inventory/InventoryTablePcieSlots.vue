@@ -109,19 +109,19 @@ const { searchFilterInput, onChangeSearch, onClearSearch } =
   useSearchFilterComposable();
 const { dataFormatter } = useDataFormatterGlobal();
 
-const {
-  pcieSlots: allPcieSlots,
-  isLoading: pcieSlotsLoading,
-  updateIdentifyLed,
-} = usePcieSlots();
-const globalStore = stores.GlobalStore();
-
 const props = defineProps({
   chassis: {
     type: String,
     default: '',
   },
 });
+
+const {
+  pcieSlots: allPcieSlots,
+  isLoading: pcieSlotsLoading,
+  updateIdentifyLed,
+} = usePcieSlots(() => props.chassis);
+const globalStore = stores.GlobalStore();
 
 const searchTotalFilteredRows = ref(0);
 const isBusy = ref(false);

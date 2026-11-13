@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue';
+import type { MaybeRefOrGetter } from 'vue';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore
 import api from '@/store/api';
@@ -25,7 +26,9 @@ interface RawPcieSlots extends Resource {
   }>;
 }
 
-function processPcieSlot(slot: NonNullable<RawPcieSlots['Slots']>[number]): PcieSlotData {
+function processPcieSlot(
+  slot: NonNullable<RawPcieSlots['Slots']>[number],
+): PcieSlotData {
   return {
     type: slot.SlotType,
     identifyLed: slot.LocationIndicatorActive,
@@ -40,34 +43,43 @@ function processPcieSlot(slot: NonNullable<RawPcieSlots['Slots']>[number]): Pcie
  * NOTE: PCIeSlots is a sub-resource container, not a collection of individual resources.
  * The raw data comes back as objects with a `Slots` array, so we flatten those here.
  */
-export function usePcieSlots() {
+export function usePcieSlots(
+  chassisUri?: MaybeRefOrGetter<string | undefined>,
+) {
   const queryClient = useQueryClient();
 
   // PCIeSlots endpoint returns a single resource with a Slots array, not a collection.
   // useAllSubResources fetches Chassis members and then navigates to each PCIeSlots sub-resource.
-  const { data: pcieSlotsContainersRaw, isLoading, refetch } = useAllSubResources<RawPcieSlots>(
-    PARENT_PATH,
-    SUB_KEY,
-    { queryConfig: RedfishQueryPresets.inventory },
-  );
+  const {
+    data: pcieSlotsContainersRaw,
+    isLoading,
+    refetch,
+  } = useAllSubResources<RawPcieSlots>(PARENT_PATH, SUB_KEY, {
+    queryConfig: RedfishQueryPresets.inventory,
+    parentUri: chassisUri,
+  });
 
   const pcieSlots = ref<PcieSlotData[]>([]);
 
-  watch(pcieSlotsContainersRaw, (raw) => {
-    if (!raw) {
-      pcieSlots.value = [];
-      return;
-    }
-    // Each item is a PCIeSlots resource containing a Slots array
-    const allSlots: PcieSlotData[] = [];
-    for (const container of raw) {
-      const slots = (container as any).Slots ?? [];
-      for (const slot of slots) {
-        allSlots.push(processPcieSlot(slot));
+  watch(
+    pcieSlotsContainersRaw,
+    (raw) => {
+      if (!raw) {
+        pcieSlots.value = [];
+        return;
       }
-    }
-    pcieSlots.value = allSlots;
-  }, { immediate: true });
+      // Each item is a PCIeSlots resource containing a Slots array
+      const allSlots: PcieSlotData[] = [];
+      for (const container of raw) {
+        const slots = (container as any).Slots ?? [];
+        for (const slot of slots) {
+          allSlots.push(processPcieSlot(slot));
+        }
+      }
+      pcieSlots.value = allSlots;
+    },
+    { immediate: true },
+  );
 
   const updateIdentifyLedMutation = useMutation({
     mutationFn: async ({
@@ -92,10 +104,14 @@ export function usePcieSlots() {
         : i18n.global.t('pageInventory.toast.successDisableIdentifyLed');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['redfish', 'allSubResources', PARENT_PATH, SUB_KEY] });
+      queryClient.invalidateQueries({
+        queryKey: ['redfish', 'allSubResources', PARENT_PATH, SUB_KEY],
+      });
     },
     onError: () => {
-      queryClient.invalidateQueries({ queryKey: ['redfish', 'allSubResources', PARENT_PATH, SUB_KEY] });
+      queryClient.invalidateQueries({
+        queryKey: ['redfish', 'allSubResources', PARENT_PATH, SUB_KEY],
+      });
     },
   });
 

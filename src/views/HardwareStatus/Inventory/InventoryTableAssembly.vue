@@ -196,7 +196,7 @@ const {
   assemblies,
   isLoading: assemblyLoading,
   updateIdentifyLed,
-} = useAssembly();
+} = useAssembly(() => props.chassis);
 
 const isBusy = ref(false);
 const searchTotalFilteredRows = ref(0);

@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue';
+import type { MaybeRefOrGetter } from 'vue';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 // @ts-ignore
 import api from '@/store/api';
@@ -85,9 +86,11 @@ function getDefaultUIState(): PowerSupplyUIState {
 /**
  * Composable for fetching Power Supplies via Chassis → PowerSubsystem → PowerSupplies.
  * Follows the same pattern as useAuditLogs — useAllSubResources handles multi-level
- * navigation; a watch converts raw data to the processed shape while preserving UI state.
+ * navigation, scoped to the selected chassis tab via `chassisUri`; a watch converts raw data to the processed shape while preserving UI state.
  */
-export function usePowerSupplies() {
+export function usePowerSupplies(
+  chassisUri?: MaybeRefOrGetter<string | undefined>,
+) {
   const queryClient = useQueryClient();
 
   const {
@@ -96,6 +99,8 @@ export function usePowerSupplies() {
     refetch,
   } = useAllSubResources<RawPowerSupply>(PARENT_PATH, SUB_KEY, {
     queryConfig: RedfishQueryPresets.inventory,
+    parentUri: chassisUri,
+    nestedKeys: ['PowerSupplies'],
   });
 
   const powerSupplies = ref<ProcessedPowerSupply[]>([]);
