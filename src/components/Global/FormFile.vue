@@ -103,6 +103,7 @@ eventBus.on('clear-file', () => {
 .clear-selected-file {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
   background-color: $light;
   position: relative;
   z-index: 2;
@@ -111,15 +112,13 @@ eventBus.on('clear-file', () => {
     height: 36px;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
 
     &:focus {
       box-shadow: inset 0 0 0 2px $primary;
     }
   }
-}
-.clear-selected-file :deep(.btn) {
-  position: absolute;
-  right: 0px;
 }
 .label-class {
   height: 56px;
