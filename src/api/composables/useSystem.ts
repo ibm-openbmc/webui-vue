@@ -146,7 +146,16 @@ export function useSystem() {
         return i18n.global.t('pageInventory.toast.successEnableLampTest');
       }
     },
-    onError: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
+    onError: () => {
+      // The toggle's v-model mutated the local copy. A refetch returns
+      // structurally identical data, so the watch won't fire; reset explicitly.
+      if (systemRaw.value) {
+        systems.value = [
+          { ...processSystem(systemRaw.value), toggleDetails: false },
+        ];
+      }
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+    },
   });
 
   const changeIdentifyLedState = async (ledState: boolean): Promise<string> => {
