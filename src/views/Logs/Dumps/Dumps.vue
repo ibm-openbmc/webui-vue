@@ -78,8 +78,28 @@
                 :filters="tableFilters"
                 @filter-change="onFilterChange"
               />
+              <BButton
+                variant="link"
+                :disabled="allDumps.length === 0"
+                @click="deleteAllDumps"
+              >
+                <icon-delete /> {{ $t('global.action.deleteAll') }}
+              </BButton>
+              <BButton
+                :variant="allDumps.length === 0 ? 'light' : 'primary'"
+                :class="{ disabled: allDumps.length === 0 }"
+                @click="downloadDumps(allDumps)"
+              >
+                <icon-download /> {{ $t('global.action.downloadAll') }}
+              </BButton>
             </BCol>
           </BRow>
+          <table-toolbar
+            :selected-items-count="selectedRows.length"
+            :actions="batchActions"
+            :table="tableDumps"
+            @batch-action="onBatchAction"
+          />
           <BTable
             id="table-dumps"
             ref="tableDumps"
@@ -98,6 +118,46 @@
               onRowSelected($event, pagination.paginatedData.value.length)
             "
           >
+            <!-- Checkbox column -->
+            <template #head(checkbox)>
+              <BFormCheckbox
+                v-model="tableHeaderCheckbox"
+                aria-label="checkbox-head"
+                data-test-id="dumps-checkbox-selectAll"
+                :indeterminate="tableHeaderCheckboxIndeterminate"
+                @change="
+                  onChangeHeaderCheckbox(tableDumps, tableHeaderCheckbox)
+                "
+                @update:model-value="toggleAll"
+              >
+                <span class="visually-hidden">checkbox-head</span>
+              </BFormCheckbox>
+            </template>
+            <template #cell(checkbox)="row">
+              <BFormCheckbox
+                :model-value="selectedDumpIds.has(row.item.id)"
+                aria-label="checkbox"
+                :data-test-id="`dumps-checkbox-selectRow-${row.index}`"
+                @update:model-value="
+                  (checked) => {
+                    if (checked) {
+                      selectedDumpIds.add(row.item.id);
+                    } else {
+                      selectedDumpIds.delete(row.item.id);
+                    }
+                    toggleSelectRowById(
+                      tableDumps,
+                      row.index,
+                      checked,
+                      row.item,
+                    );
+                  }
+                "
+              >
+                <span class="visually-hidden">checkbox</span>
+              </BFormCheckbox>
+            </template>
+
             <!-- Date and Time column -->
             <template #cell(dateTime)="{ value }">
               <p class="mb-0">{{ $filters.formatDate(value) }}</p>
@@ -180,21 +240,23 @@
     </BRow>
     <BModal
       v-model="openModal"
-      :title="$t('pageDumps.modal.deleteDump')"
-      :ok-title="$t('pageDumps.modal.deleteDump')"
+      :title="$t('pageDumps.modal.deleteDump', { count: count }, count)"
+      :ok-title="$t('pageDumps.modal.deleteDump', { count: count }, count)"
       ok-variant="danger"
       :cancel-title="$t('global.action.cancel')"
       @ok="handleOk"
     >
       <p>
-        {{ $t('pageDumps.modal.deleteDumpConfirmation') }}
+        {{
+          $t('pageDumps.modal.deleteDumpConfirmation', { count: count }, count)
+        }}
       </p>
     </BModal>
   </BContainer>
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick, onBeforeMount } from 'vue';
 import i18n from '@/i18n';
 import { onBeforeRouteLeave } from 'vue-router';
 import { usePaginatedData } from '@/api/composables/shared/usePaginatedData';
@@ -208,6 +270,8 @@ import Search from '@/components/Global/Search.vue';
 import TableCellCount from '@/components/Global/TableCellCount.vue';
 import TableDateFilter from '@/components/Global/TableDateFilter.vue';
 import TableRowAction from '@/components/Global/TableRowAction.vue';
+import TableToolbar from '@/components/Global/TableToolbar.vue';
+import useTableSelectableComposable from '@/components/Composables/useTableSelectableComposable';
 import useToast from '@/components/Composables/useToastComposable';
 import usePaginationComposable from '@/components/Composables/usePaginationComposable';
 import useLoadingBar from '@/components/Composables/useLoadingBarComposable';
@@ -221,6 +285,15 @@ const { itemsPerPageOptions } = usePaginationComposable();
 const { getFilteredTableData, getFilteredTableDataByDate } =
   useTableFilterComposable();
 const { successToast, errorToast } = useToast();
+const {
+  clearSelectedRowsOptions,
+  toggleSelectRowById,
+  onRowSelected,
+  onChangeHeaderCheckbox,
+  selectedRowsList: selectedRows,
+  tableHeaderCheckboxModel: tableHeaderCheckbox,
+  tableHeaderCheckboxIndeterminate,
+} = useTableSelectableComposable();
 
 const { allDumps, isLoading, deleteDumps } = useDumps();
 const resourceMemory = stores.ResourceMemoryStore();
@@ -228,7 +301,15 @@ const global = stores.GlobalStore();
 
 const isBusy = computed(() => isLoading.value);
 const selectedDumpType = ref('');
+const tableDumps = ref(null);
+// Tracks selected dump ids for checkbox display
+const selectedDumpIds = ref(new Set());
 const fields = ref([
+  {
+    key: 'checkbox',
+    thAttr: { scope: 'col' },
+    tdAttr: { scope: null },
+  },
   {
     key: 'id',
     label: i18n.global.t('pageDumps.table.id'),
@@ -266,6 +347,16 @@ const fields = ref([
     tdAttr: { scope: null },
   },
 ]);
+const batchActions = ref([
+  {
+    value: 'download',
+    label: i18n.global.t('global.action.download'),
+  },
+  {
+    value: 'delete',
+    label: i18n.global.t('global.action.delete'),
+  },
+]);
 const tableFilters = ref([
   {
     key: 'dumpType',
@@ -289,10 +380,19 @@ const filterEndDate = ref(null);
 const filterStartDate = ref(null);
 const searchFilterInput = ref('');
 const openModal = ref(false);
-const dumpVal = ref();
+const dumpsToDelete = ref([]);
+const count = ref(0);
 
 onBeforeRouteLeave(() => {
   hideLoader();
+  eventBus.emit('clear-selected');
+});
+
+onBeforeMount(() => {
+  eventBus.on('clear-selected', () => {
+    selectedDumpIds.value.clear();
+    clearSelectedRowsOptions(tableDumps.value);
+  });
 });
 
 // Watch loading state to drive the loading bar
@@ -391,13 +491,52 @@ const onChangeDateTimeFilter = ({ fromDate, toDate }) => {
 };
 const onTableRowAction = (action, dump) => {
   if (action === 'delete') {
+    dumpsToDelete.value = [dump];
+    count.value = 1;
     openModal.value = true;
-    dumpVal.value = dump;
+  }
+};
+const downloadDumps = (dumps) => {
+  // Stagger downloads so browsers do not block multiple simultaneous ones
+  dumps
+    .filter((dump) => dump.data)
+    .forEach((dump, index) => {
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = dump.data;
+        link.download = `${dump.dumpType}_${dump.id}`.replace(/ /g, '_');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }, index * 500);
+    });
+};
+const deleteAllDumps = () => {
+  dumpsToDelete.value = [...allDumps.value];
+  count.value = dumpsToDelete.value.length;
+  openModal.value = true;
+};
+const onBatchAction = (action) => {
+  if (action === 'download') {
+    downloadDumps(selectedRows.value);
+  } else if (action === 'delete') {
+    dumpsToDelete.value = [...selectedRows.value];
+    count.value = dumpsToDelete.value.length;
+    openModal.value = true;
+  }
+};
+const toggleAll = (checked) => {
+  if (checked) {
+    pagination.paginatedData.value.forEach((dump) => {
+      selectedDumpIds.value.add(dump.id);
+    });
+  } else {
+    selectedDumpIds.value.clear();
   }
 };
 const handleOk = () => {
   openModal.value = false;
-  deleteDumps([dumpVal.value]).then((messages) => {
+  deleteDumps(dumpsToDelete.value).then((messages) => {
     messages.forEach(({ type, message }) => {
       if (type === 'success') {
         successToast(message);
@@ -405,6 +544,7 @@ const handleOk = () => {
         errorToast(message);
       }
     });
+    eventBus.emit('clear-selected');
   });
 };
 const onChangeSearch = (event) => {
