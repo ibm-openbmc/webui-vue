@@ -84,9 +84,9 @@
                   {{ $t('pageUserManagement.modal.timeoutDurationSeconds') }}
                 </BFormText>
                 <BFormInput
-                  v-model.number="form.lockoutDuration"
+                  v-model="form.lockoutDuration"
                   aria-describedby="lockout-duration-help-block"
-                  type="number"
+                  type="text"
                   data-test-id="userManagement-input-lockoutDuration"
                   :state="getValidationState(v$.form.lockoutDuration)"
                   :disabled="v$.form.unlockMethod.$model === 0"
@@ -97,7 +97,14 @@
                   <template v-if="v$.form.lockoutDuration.required.$invalid">
                     {{ $t('global.form.fieldRequired') }}
                   </template>
-                  <template v-else-if="!v$.form.lockoutDuration.minvalue">
+                  <template
+                    v-else-if="v$.form.lockoutDuration.numeric.$invalid"
+                  >
+                    {{ $t('global.form.invalidValue') }}
+                  </template>
+                  <template
+                    v-else-if="v$.form.lockoutDuration.minValue.$invalid"
+                  >
                     {{ $t('global.form.mustBeAtLeast', { value: 1 }) }}
                   </template>
                 </BFormInvalidFeedback>
@@ -132,6 +139,7 @@ import {
   requiredIf,
   minValue,
   maxValue,
+  numeric,
 } from '@vuelidate/validators';
 
 const { getValidationState } = useVuelidateComposable();
@@ -168,8 +176,10 @@ const rules = {
     },
     unlockMethod: { required },
     lockoutDuration: {
+      numeric,
       minValue: function (value) {
-        return form.value.unlockMethod === 0 || value > 0;
+        if (value === null || value === undefined || value === '') return true;
+        return form.value.unlockMethod === 0 || Number(value) > 0;
       },
       required: requiredIf(function () {
         return form.value.unlockMethod === 1;
