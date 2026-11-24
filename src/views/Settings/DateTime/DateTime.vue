@@ -1,5 +1,5 @@
 <template>
-  <BContainer fluid="xl">
+  <BContainer fluid="xl" :aria-disabled="isPassiveBmc">
     <page-title :title="$t('appPageTitle.dateTime')" />
     <BRow>
       <BCol md="8" xl="6">
@@ -72,12 +72,20 @@
     <page-section :section-title="$t('pageDateTime.configureSettings')">
       <BRow>
         <BCol md="8" xl="6">
-          <alert v-if="!isServerOff()" variant="warning" class="mb-4">
+          <alert
+            v-if="!isPassiveBmc && !isServerOff()"
+            variant="warning"
+            class="mb-4"
+          >
             <span>
               {{ $t('pageDateTime.alert.messagePowerOff') }}
             </span>
           </alert>
-          <alert v-if="globalMfaValue" variant="info" class="mb-2">
+          <alert
+            v-if="!isPassiveBmc && globalMfaValue"
+            variant="info"
+            class="mb-2"
+          >
             <span>
               {{ $t('pageDateTime.alert.mfaMessage') }}
             </span>
@@ -102,7 +110,7 @@
         <BFormGroup
           aria-label="configure-date-time-settings"
           label="Configure date and time"
-          :disabled="loading || !isServerOff()"
+          :disabled="loading || !isServerOff() || isPassiveBmc"
           label-sr-only
         >
           <BFormRadio
@@ -344,7 +352,9 @@ import {
 } from '@vuelidate/validators';
 import UserManagementStore from '../../../store/modules/SecurityAndAccess/UserManagementStore';
 import { useDateTime } from '@/api/composables/useDateTime';
+import { useBmcRole } from '@/api/composables/useSystemInfo';
 
+const { isPassiveBmc } = useBmcRole();
 const { proxy } = getCurrentInstance();
 const { startLoader, endLoader } = useLoadingBar();
 const userManagementStore = UserManagementStore();
