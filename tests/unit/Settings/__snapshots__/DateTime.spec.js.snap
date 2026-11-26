@@ -350,6 +350,8 @@ exports[`DateTime.vue > Component Rendering & Initialization > should render cor
             data-v-a1b7312e=""
           >
             
+            
+            
             <div
               data-v-a1b7312e=""
               lg="4"
@@ -369,7 +371,7 @@ exports[`DateTime.vue > Component Rendering & Initialization > should render cor
                   for="input-ntp-1"
                   id=""
                 >
-                  pageDateTime.form.ntpServers.server1
+                  pageDateTime.form.ntpServers.server
                 </label>
                 <div
                   class=""
@@ -402,6 +404,9 @@ exports[`DateTime.vue > Component Rendering & Initialization > should render cor
               </div>
               
             </div>
+            <!--v-if-->
+            
+            
             <div
               data-v-a1b7312e=""
               lg="4"
@@ -421,7 +426,7 @@ exports[`DateTime.vue > Component Rendering & Initialization > should render cor
                   for="input-ntp-2"
                   id=""
                 >
-                  pageDateTime.form.ntpServers.server2
+                  pageDateTime.form.ntpServers.server
                 </label>
                 <div
                   class=""
@@ -454,6 +459,9 @@ exports[`DateTime.vue > Component Rendering & Initialization > should render cor
               </div>
               
             </div>
+            <!--v-if-->
+            
+            
             <div
               data-v-a1b7312e=""
               lg="4"
@@ -473,7 +481,7 @@ exports[`DateTime.vue > Component Rendering & Initialization > should render cor
                   for="input-ntp-3"
                   id=""
                 >
-                  pageDateTime.form.ntpServers.server3
+                  pageDateTime.form.ntpServers.server
                 </label>
                 <div
                   class=""
@@ -504,6 +512,54 @@ exports[`DateTime.vue > Component Rendering & Initialization > should render cor
                   <!---->
                 </div>
               </div>
+              
+            </div>
+            <!--v-if-->
+            
+            
+            <div
+              class="d-flex flex-column mb-3"
+              data-v-a1b7312e=""
+              lg="4"
+              sm="6"
+              xl="3"
+            >
+              
+              <span
+                aria-hidden="true"
+                class="form-label invisible"
+                data-v-a1b7312e=""
+              >
+                   
+              </span>
+              <button
+                class="add-ntp-server-button align-self-start"
+                data-test-id="dateTime-button-addNtpServer"
+                data-v-a1b7312e=""
+                disabled=""
+              >
+                
+                <svg
+                  aria-hidden="true"
+                  data-v-a1b7312e=""
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16,4c6.6,0,12,5.4,12,12s-5.4,12-12,12S4,22.6,4,16S9.4,4,16,4 M16,2C8.3,2,2,8.3,2,16s6.3,14,14,14s14-6.3,14-14	S23.7,2,16,2z"
+                  />
+                  <path
+                    d="M24 15L17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17z"
+                  />
+                </svg>
+                 pageDateTime.form.ntpServers.add
+                
+              </button>
               
             </div>
             
