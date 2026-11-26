@@ -302,7 +302,8 @@ const fetchSrcDetails = (row) => {
 const generateSrcWords = (data) => {
   const decodedData = atob(data); // `atob` decodes base64 to ASCII string
   const hexData = Array.from(decodedData)
-    .map((c) => c.charCodeAt(0).toString(16))
+    // pad: bytes < 0x10 must stay 2 hex digits or the fixed offsets below shift
+    .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
     .join('');
   const srcBulk = hexData.substring(16, 80).toUpperCase();
   if (!isNaN(srcBulk) && !Number(srcBulk)) {
